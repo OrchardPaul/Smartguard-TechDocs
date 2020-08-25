@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30413.136
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gizmo V1.00", "Gizmo V1.00\Gizmo V1.00.csproj", "{60A8DC64-AF60-4F51-9A1C-1ADAB03F0CE0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gizmo V1_00", "Gizmo V1_00\Gizmo V1_00.csproj", "{AD07B510-947A-40CF-B09D-437FBC9FB000}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +11,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{60A8DC64-AF60-4F51-9A1C-1ADAB03F0CE0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{60A8DC64-AF60-4F51-9A1C-1ADAB03F0CE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{60A8DC64-AF60-4F51-9A1C-1ADAB03F0CE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{60A8DC64-AF60-4F51-9A1C-1ADAB03F0CE0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AD07B510-947A-40CF-B09D-437FBC9FB000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD07B510-947A-40CF-B09D-437FBC9FB000}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD07B510-947A-40CF-B09D-437FBC9FB000}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD07B510-947A-40CF-B09D-437FBC9FB000}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

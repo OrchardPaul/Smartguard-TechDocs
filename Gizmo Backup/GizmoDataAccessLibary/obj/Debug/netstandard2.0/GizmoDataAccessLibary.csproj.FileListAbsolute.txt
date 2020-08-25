@@ -1,0 +1,9 @@
+F:\WorkSpaces\JD\Gizmo\Project Gizmo\GizmoDataAccessLibary\bin\Debug\netstandard2.0\GizmoDataAccessLibary.deps.json
+F:\WorkSpaces\JD\Gizmo\Project Gizmo\GizmoDataAccessLibary\bin\Debug\netstandard2.0\GizmoDataAccessLibary.dll
+F:\WorkSpaces\JD\Gizmo\Project Gizmo\GizmoDataAccessLibary\obj\Debug\netstandard2.0\GizmoDataAccessLibary.csprojAssemblyReference.cache
+F:\WorkSpaces\JD\Gizmo\Project Gizmo\GizmoDataAccessLibary\obj\Debug\netstandard2.0\GizmoDataAccessLibary.AssemblyInfoInputs.cache
+F:\WorkSpaces\JD\Gizmo\Project Gizmo\GizmoDataAccessLibary\obj\Debug\netstandard2.0\GizmoDataAccessLibary.AssemblyInfo.cs
+F:\WorkSpaces\JD\Gizmo\Project Gizmo\GizmoDataAccessLibary\bin\Debug\netstandard2.0\GizmoDataAccessLibary.pdb
+F:\WorkSpaces\JD\Gizmo\Project Gizmo\GizmoDataAccessLibary\obj\Debug\netstandard2.0\GizmoDataAccessLibary.csproj.CoreCompileInputs.cache
+F:\WorkSpaces\JD\Gizmo\Project Gizmo\GizmoDataAccessLibary\obj\Debug\netstandard2.0\GizmoDataAccessLibary.dll
+F:\WorkSpaces\JD\Gizmo\Project Gizmo\GizmoDataAccessLibary\obj\Debug\netstandard2.0\GizmoDataAccessLibary.pdb
