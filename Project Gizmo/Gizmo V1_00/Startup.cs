@@ -16,6 +16,7 @@ using Microsoft.Extensions.Hosting;
 using Gizmo_V1_00.Areas.Identity;
 using Gizmo_V1_00.Data;
 using Gizmo_V1_00.Models;
+using Gizmo_V1_00.Data.OR_RESI_Chapters;
 
 namespace Gizmo_V1_00
 {
@@ -45,6 +46,10 @@ namespace Gizmo_V1_00
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
             services.AddSingleton<WeatherForecastService>();
             services.AddScoped<OR_RESI_DATA_Service>();
+            services.AddSingleton<CustomHttpClient>();
+            services.AddSingleton<AppSettingsService>();
+            services.AddTransient<IToDoListService, ToDoListService>();
+            services.AddTransient<IOR_RESI_Chapters_Service, OR_RESI_Chapters_Service>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

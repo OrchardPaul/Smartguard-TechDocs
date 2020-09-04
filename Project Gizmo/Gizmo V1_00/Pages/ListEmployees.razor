@@ -1,0 +1,56 @@
+﻿@using Gizmo_V1_00.Data
+@using Gizmo_V1_00.Models
+
+@page "/listemployees"
+
+@inject CustomHttpClient Http
+@inject AppSettingsService AppSettingsService
+
+<h2>Employee Details</h2>
+<p>
+    <a href="/addemployee">Create New Employee</a>
+</p>
+@if (employees == null)
+{
+    <p><em>Loading...</em></p>
+
+}
+else
+{
+    <table class='table'>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>City</th>
+                <th>Department</th>
+                <th>Gender</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var employee in employees)
+            {
+                <tr>
+                    <td>@employee.Name</td>
+                    <td>@employee.City</td>
+                    <td>@employee.Department</td>
+                    <td>@employee.Gender</td>
+                    <td>
+                        <a href='/editemployee/@employee.EmployeeId'>Edit</a>
+                        <a href='/deleteemployee/@employee.EmployeeId'>Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    TblEmployee[] employees;
+    string baseUrl;
+
+    protected override async Task OnInitializedAsync()
+    {
+        baseUrl = AppSettingsService.GetBaseUrl();
+        employees = await Http.GetJsonAsync<TblEmployee[]>(baseUrl + "/api/employees/get");
+    }
+}     

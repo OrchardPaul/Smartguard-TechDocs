@@ -15,8 +15,12 @@ namespace Gizmo_V1_00.Models
         {
         }
 
+        public virtual DbSet<TblEmployee> TblEmployee { get; set; }
+        public virtual DbSet<TblToDo> TblToDo { get; set; }
+        public virtual DbSet<UsrOrDefChapterManagement> UsrOrDefChapterManagement { get; set; }
         public virtual DbSet<UsrOrResiMt> UsrOrResiMt { get; set; }
         public virtual DbSet<UsrOrResiMtAdmin> UsrOrResiMtAdmin { get; set; }
+        public virtual DbSet<UsrOrResiMtChapterControl> UsrOrResiMtChapterControl { get; set; }
         public virtual DbSet<UsrOrResiMtFees> UsrOrResiMtFees { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -30,6 +34,96 @@ namespace Gizmo_V1_00.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<TblEmployee>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToTable("tblEmployee");
+
+                entity.Property(e => e.City)
+                    .IsRequired()
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Department)
+                    .IsRequired()
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.EmployeeId).ValueGeneratedOnAdd();
+
+                entity.Property(e => e.Gender)
+                    .IsRequired()
+                    .HasMaxLength(6)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<TblToDo>(entity =>
+            {
+                entity.ToTable("tblToDo");
+
+                entity.Property(e => e.DueDate).HasColumnType("datetime");
+
+                entity.Property(e => e.Name)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Status)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<UsrOrDefChapterManagement>(entity =>
+            {
+                entity.HasKey(e => e.Id)
+                    .IsClustered(false);
+
+                entity.ToTable("Usr_OR_DEF_Chapter_Management");
+
+                entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.AsName)
+                    .HasMaxLength(250)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.CaseType)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.CaseTypeGroup)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.CompleteName)
+                    .HasMaxLength(250)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.EntityType)
+                    .HasColumnName("Entity_Type")
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Name)
+                    .HasMaxLength(250)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.ParentId).HasColumnName("ParentID");
+
+                entity.Property(e => e.SuppressStep)
+                    .HasColumnName("Suppress_Step")
+                    .HasMaxLength(1)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Type)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+            });
+
             modelBuilder.Entity<UsrOrResiMt>(entity =>
             {
                 entity.HasKey(e => e.Id)
@@ -791,6 +885,67 @@ namespace Gizmo_V1_00.Models
 
                 entity.Property(e => e.SolicitorContractText)
                     .HasColumnName("Solicitor_Contract_Text")
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<UsrOrResiMtChapterControl>(entity =>
+            {
+                entity.HasKey(e => e.Id)
+                    .IsClustered(false);
+
+                entity.ToTable("Usr_OR_RESI_MT_Chapter_Control");
+
+                entity.HasIndex(e => new { e.EntityRef, e.MatterNo })
+                    .HasName("Usr_OR_RESI_MT_Chapter_Control_MPIndex");
+
+                entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.CompleteAsName)
+                    .HasColumnName("Complete_AsName")
+                    .HasMaxLength(500)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.CurrentChapter)
+                    .HasColumnName("Current_Chapter")
+                    .HasMaxLength(200)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.DateScheduleFor)
+                    .HasColumnName("Date_Schedule_For")
+                    .HasColumnType("datetime");
+
+                entity.Property(e => e.DefaultStep)
+                    .HasColumnName("Default_Step")
+                    .HasMaxLength(300)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.DefaultStepAsName)
+                    .HasColumnName("Default_Step_AsName")
+                    .HasMaxLength(300)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.DoNotReschedule)
+                    .HasColumnName("Do_Not_Reschedule")
+                    .HasMaxLength(1)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.EntityRef)
+                    .IsRequired()
+                    .HasMaxLength(15)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.ScheduleAsName)
+                    .HasColumnName("Schedule_AsName")
+                    .HasMaxLength(500)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.StepsToRun)
+                    .HasColumnName("Steps_to_Run")
+                    .IsUnicode(false);
+
+                entity.Property(e => e.SubViewName)
+                    .HasColumnName("Sub_View_Name")
+                    .HasMaxLength(500)
                     .IsUnicode(false);
             });
 
