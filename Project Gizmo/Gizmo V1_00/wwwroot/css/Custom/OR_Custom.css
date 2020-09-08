@@ -1,0 +1,11 @@
+﻿.MisiFirst {
+    border-color: green;
+    border-style: dotted;
+    color: blue;
+}
+
+.OR_btn-Nav:hover {
+    background-color: lightgrey;
+    border-radius: 5px;
+    cursor: hand;
+}
