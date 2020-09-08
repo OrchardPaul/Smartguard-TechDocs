@@ -19,13 +19,47 @@
             <div class="modal-body">
                 <EditForm Model="@TaskObject" OnValidSubmit="@HandleValidSubmit">
                     <div class="form-group">
-                        <label for="taskName">@CustomHeader Name</label>
+                        <label for="Name">@CustomHeader Name</label>
                         <input type="hidden" @bind-value="@TaskObject.Id" />
                         <InputText id="name" class="form-control" @bind-Value="@TaskObject.Name" />
                     </div>
+
+                    <div class="form-group">
+                        <label for="DocType">Type</label>
+                        <InputSelect id="Summary" class="form-control"
+                                     @bind-Value="TaskObject.Type">
+                            <option value="">Select</option>
+                            @foreach (var type in DocTypeList)
+                            {
+                                <option value="@type">
+                                    @type
+                                </option>
+                            }
+                        </InputSelect>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="AsName">Schedule As Name</label>
+                        <InputText id="name" class="form-control" @bind-Value="@TaskObject.AsName" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="CompleteName">Complete As Name</label>
+                        <InputText id="name" class="form-control" @bind-Value="@TaskObject.CompleteName" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="RescheduleDays">Reschedule Days</label>
+                        <InputNumber id="name" class="form-control" @bind-Value="@TaskObject.RescheduleDays" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="SeqNo">Seq number</label>
+                        <InputNumber id="name" class="form-control" @bind-Value="@TaskObject.SeqNo" />
+                    </div>
+
                     <input type="hidden" @bind-value="@TaskObject.CaseType" />
                     <input type="hidden" @bind-value="@TaskObject.CaseTypeGroup" />
-                    <input type="hidden" @bind-value="@TaskObject.Type" />
                     <input type="hidden" @bind-value="@TaskObject.ParentId" />
 
 
@@ -48,9 +82,14 @@
     [Parameter]
     public Action DataChanged { get; set; }
 
+    List<string> CaseTypeList = new List<string>() { "Purchase", "Sale", "Remortgage", "Plot Sales", "Transfer" };
+
+    List<string> DocTypeList = new List<string>() { "Agenda", "Chapter", "Doc", "Fee", "Form" , "Letter" , "Status", "Step" };
+
+
     private async Task ClosechapterModal()
     {
-        await jsRuntime.InvokeAsync<object>("CloseModal", "chapterModal");
+        await jsRuntime.InvokeAsync<object>("CloseModal", "taskModal");
     }
 
     private async void HandleValidSubmit()
