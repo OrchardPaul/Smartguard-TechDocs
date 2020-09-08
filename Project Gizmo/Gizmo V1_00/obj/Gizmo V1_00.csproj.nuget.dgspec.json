@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "F:\\WorkSpaces\\JD\\Gizmo\\Project Gizmo\\Gizmo V1_00\\Gizmo V1_00.csproj": {}
+    "F:\\WorkSpaces\\MS\\Gizmo\\Project Gizmo\\Gizmo V1_00\\Gizmo V1_00.csproj": {}
   },
   "projects": {
-    "F:\\WorkSpaces\\JD\\Gizmo\\Project Gizmo\\Gizmo V1_00\\Gizmo V1_00.csproj": {
+    "F:\\WorkSpaces\\MS\\Gizmo\\Project Gizmo\\Gizmo V1_00\\Gizmo V1_00.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "F:\\WorkSpaces\\JD\\Gizmo\\Project Gizmo\\Gizmo V1_00\\Gizmo V1_00.csproj",
+        "projectUniqueName": "F:\\WorkSpaces\\MS\\Gizmo\\Project Gizmo\\Gizmo V1_00\\Gizmo V1_00.csproj",
         "projectName": "Gizmo V1_00",
-        "projectPath": "F:\\WorkSpaces\\JD\\Gizmo\\Project Gizmo\\Gizmo V1_00\\Gizmo V1_00.csproj",
-        "packagesPath": "C:\\Users\\j_duggan\\.nuget\\packages\\",
-        "outputPath": "F:\\WorkSpaces\\JD\\Gizmo\\Project Gizmo\\Gizmo V1_00\\obj\\",
+        "projectPath": "F:\\WorkSpaces\\MS\\Gizmo\\Project Gizmo\\Gizmo V1_00\\Gizmo V1_00.csproj",
+        "packagesPath": "C:\\Users\\m_szijjarto\\.nuget\\packages\\",
+        "outputPath": "F:\\WorkSpaces\\MS\\Gizmo\\Project Gizmo\\Gizmo V1_00\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\j_duggan\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\m_szijjarto\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
