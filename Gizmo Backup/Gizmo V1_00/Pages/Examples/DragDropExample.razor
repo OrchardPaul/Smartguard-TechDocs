@@ -1,0 +1,43 @@
+﻿@page "/dragdropexample"
+@using Gizmo_V1_00.Data
+
+<h3>Drag Drop Example</h3>
+
+<JobsContainer Jobs="Jobs" OnStatusUpdated="HandleStatusUpdated">
+    <JobList ListStatus="JobStatuses.Todo" AllowedStatuses="@(new JobStatuses[] { JobStatuses.Started })"/>
+    <JobList ListStatus="JobStatuses.Started" AllowedStatuses="@(new JobStatuses[] { JobStatuses.Todo })"/>
+    <JobList ListStatus="JobStatuses.Completed" AllowedStatuses="@(new JobStatuses[] { JobStatuses.Started })"/>
+</JobsContainer>
+ 
+<hr />
+<p>Last Updated Job <strong>@lastUpdatedJob</strong></p>
+<hr />
+
+@foreach (var task in Jobs)
+{
+    <p>@task.Detail - <strong>@task.Status</strong></p>
+}
+
+@code {
+    List<JobModel> Jobs = new List<JobModel>();
+    string lastUpdatedJob = "";
+
+    protected override void OnInitialized()
+    {
+        for (int i = 1; i <= 5; i++)
+        {
+            Jobs.Add(new JobModel
+            {
+                Id = i,
+                Detail = "Job " + i,
+                Status = JobStatuses.Todo,
+                UpdatedTime = DateTime.Now
+            });
+        }
+    }
+
+    void HandleStatusUpdated(JobModel updatedJob)
+    {
+        lastUpdatedJob = updatedJob.Detail;
+    }
+}

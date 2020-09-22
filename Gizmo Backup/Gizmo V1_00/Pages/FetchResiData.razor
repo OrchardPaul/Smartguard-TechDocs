@@ -1,0 +1,44 @@
+﻿@page "/fetchresidata"
+
+@using Gizmo_V1_00.Data
+@using Gizmo_V1_00.Models
+@inject OR_RESI_DATA_Service ResiService
+
+<h1>usr_OR_RESI_MT</h1>
+
+<p>This demonstrates fetching data from RESI.</p>
+
+@if (dataRows == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>EntityRef</th>
+                <th>MatterNo</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var row in dataRows)
+            {
+                <tr>
+                    <td>@row.EntityRef</td>
+                    <td>@row.MatterNo</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+
+@code {
+    private UsrOrResiMt[] dataRows;
+
+    protected override async Task OnInitializedAsync()
+    {
+        dataRows = await ResiService.GetDataRows();
+    }
+}

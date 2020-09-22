@@ -1,0 +1,338 @@
+﻿@page "/chapterlist"
+
+@using Gizmo_V1_00.Data.OR_RESI_Chapters
+@using Gizmo_V1_00.Models
+
+
+@inject IOR_RESI_Chapters_Service service
+@inject IJSRuntime jsRuntime
+
+<ConfirmDialog OnClick="@Delete" />
+<ChapterDetail TaskObject=editObject DataChanged="@DataChanged">
+    <CustomHeader>@customHeader</CustomHeader>
+</ChapterDetail>
+
+<h1>Chapters</h1>
+
+<label class="btn-Nav" @onclick="() => selectHome()">Home</label>
+@if (selectedCaseType != "")
+{
+    <label class="btn-Nav" @onclick="() => selectCaseType(selectedCaseType)">/ @selectedCaseType</label>
+}
+@if (selectedChapter != "")
+{
+    <label>/ @selectedChapter</label>
+}
+
+<br>
+<br>
+
+@if (selectedCaseType == "")
+{
+    <div class="container-fluid">
+        <div class="row">
+            @foreach (var caseType in CaseTypeList)
+            {
+                <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12 p-2">
+                    <div class="shadow card bg-white rounded">
+                        <div class="card-body">
+                            @if (caseType == "Purchase")
+                            {
+                                <h5 class="card-title">PURCH</h5>
+                            }
+                            else
+                            {
+                                <h5 class="card-title">SALE</h5>
+                            }
+                            <p class="card-text">Residential - @caseType</p>
+                            <a @onclick="() => selectCaseType(caseType)" class="btn btn-primary">Select</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+}
+else if (selectedChapter == "")
+{
+
+    <h4 class="modal-title">Chapters</h4>
+    <div class="container-fluid">
+        <div class="row">
+            @foreach (var Chapter in lstChapters)
+            {
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 p-2">
+                    <div class="shadow card bg-white rounded">
+
+                        <a @onclick="() => selectDocList(Chapter.Name)" class="nav-link">@Chapter.Name</a>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}
+
+@if (selectedChapter != "")
+{
+    <h2>
+        Agendas (@lstAgendas.Count)
+        @if (displaySection == "Agenda")
+        {
+            <span @onclick='() => showAgenda("Hide", "Agenda")'> <i class="fas fa-arrow-circle-right fa-1x"></i></span>
+        }
+        else
+        {
+            <span @onclick='() => showAgenda("Show", "Agenda")'> <i class="fas fa-arrow-circle-down fa-1x"></i></span>
+        }
+    </h2>
+
+    @if (displaySection == "Agenda")
+    {
+        <table id="tblAgendaList" class="table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var Agenda in lstAgendas)
+                {
+                    <tr>
+                        <td>@Agenda.Name</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+
+    <h2>
+        Fees (@lstFees.Count)
+        @if (displaySection == "Fee")
+        {
+
+            <span @onclick='() => showAgenda("Hide", "Fee")'> <i class="fas fa-arrow-circle-right fa-1x"></i></span>
+
+        }
+        else
+        {
+            <span @onclick='() => showAgenda("Show", "Fee")'> <i class="fas fa-arrow-circle-down fa-1x"></i></span>
+        }
+    </h2>
+
+    @if (displaySection == "Fee")
+    {
+        <div class="fade-in">
+            <table id="tblFeeList" class="table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var Fee in lstFees)
+                    {
+                        <tr>
+                            <td>@Fee.Name</td>
+                            <td><input type="button" class="btn btn-primary" @onclick='(() => PrepareForEdit(Fee,"Fee"))' data-toggle="modal" data-target="#taskModal" value="Edit" /></td>
+                            <td><input type="button" class="btn btn-danger" @onclick="(() => PrepareForDelete(Fee))" data-toggle="modal" data-target="#confirmDeleteModal" value="Delete" /></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <input type="button" data-toggle="modal" data-target="#taskModal" class="btn btn-primary" value="Add Fee" />
+        </div>
+    }
+
+    <h2>
+        Documents / Steps (@lstDocs.Count)
+        @if (displaySection == "Docs")
+        {
+            <span @onclick='() => showAgenda("Hide", "Docs")'> <i class="fas fa-arrow-circle-right fa-1x"></i></span>
+        }
+        else
+        {
+            <span @onclick='() => showAgenda("Show", "Docs")'> <i class="fas fa-arrow-circle-down fa-1x"></i></span>
+        }
+    </h2>
+    @if (displaySection == "Docs")
+    {
+        <div class="fade-in">
+            <table id="tblDocsList" class="table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Type</th>
+                        <th>Seq.</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var docs in lstDocs)
+                    {
+                        <tr>
+                            <td>@docs.Name</td>
+                            <td>@docs.Type</td>
+                            <td>@docs.SeqNo</td>
+                            <td><input type="button" class="btn btn-primary" @onclick='(() => PrepareForEdit(docs,"Document / Step"))' data-toggle="modal" data-target="#taskModal" value="Edit" /></td>
+                            <td><input type="button" class="btn btn-danger" @onclick="(() => PrepareForDelete(docs))" data-toggle="modal" data-target="#confirmDeleteModal" value="Delete" /></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <input type="button" class="btn btn-primary" @onclick='(() => PrepareForInsert("Document / Step"))' data-toggle="modal" data-target="#taskModal" value="Add Letter" />
+        </div>
+    }
+
+    <h2>
+        Status (@lstStatus.Count)
+        @if (displaySection == "Status")
+        {
+            <span @onclick='() => showAgenda("Hide", "Status")'> <i class="fas fa-arrow-circle-right fa-1x"></i></span>
+        }
+        else
+        {
+            <span @onclick='() => showAgenda("Show", "Status")'> <i class="fas fa-arrow-circle-down fa-1x"></i></span>
+        }
+    </h2>
+    @if (displaySection == "Status")
+    {
+        <div class="fade-in">
+            <table id="tblStatusList" class="table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Type</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var status in lstStatus)
+                    {
+                        <tr>
+                            <td>@status.Name</td>
+                            <td>@status.Type</td>
+                            <td><input type="button" class="btn btn-primary" @onclick='(() => PrepareForEdit(status,"Status"))' data-toggle="modal" data-target="#taskModal" value="Edit" /></td>
+                            <td><input type="button" class="btn btn-danger" @onclick="(() => PrepareForDelete(status))" data-toggle="modal" data-target="#confirmDeleteModal" value="Delete" /></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <input type="button" data-toggle="modal" data-target="#taskModal" class="btn btn-primary" value="Add Letter" />
+        </div>
+    }
+
+
+}
+
+
+
+@code {
+    List<UsrOrDefChapterManagement> lstChapters;
+
+    List<UsrOrDefChapterManagement> lstAgendas;
+    List<UsrOrDefChapterManagement> lstFees;
+    List<UsrOrDefChapterManagement> lstDocs;
+    List<UsrOrDefChapterManagement> lstStatus;
+
+    int parentId;
+
+    UsrOrDefChapterManagement editObject = new UsrOrDefChapterManagement();
+
+    UsrOrDefChapterManagement ChpaterObject = new UsrOrDefChapterManagement();
+    string customHeader = string.Empty;
+
+    string displaySection { get; set; } = "";
+
+    string selectedCaseType { get; set; } = "";
+    string selectedCaseTypeGroup { get; set; } = "";
+    string selectedChapter { get; set; } = "";
+
+    List<string> CaseTypeList = new List<string>() { "Purchase", "Sale", "Remortgage", "Plot Sales", "Transfer" };
+
+    protected override async Task OnInitializedAsync()
+    {
+        lstChapters = await service.GetChapterListByCaseType("Chapter", "");
+    }
+
+    void selectHome()
+    {
+        selectedCaseType = "";
+        selectedChapter = "";
+    }
+
+    async Task selectCaseType(string caseType)
+    {
+        lstChapters = await service.GetChapterListByCaseType("Chapter", caseType);
+
+        selectedCaseType = caseType;
+        selectedChapter = "";
+    }
+
+    async Task selectDocList(String chapter)
+    {
+        lstAgendas = await service.GetDocListByChapterAndDocType(selectedCaseType, chapter, "Agenda");
+        lstFees = await service.GetDocListByChapterAndDocType(selectedCaseType, chapter, "Fee");
+        lstDocs = await service.GetDocListByChapter(selectedCaseType, chapter);
+        lstStatus = await service.GetDocListByChapterAndDocType(selectedCaseType, chapter, "Status");
+
+
+        selectedChapter = chapter;
+    }
+
+    private async void DataChanged()
+    {
+        lstAgendas = await service.GetDocListByChapterAndDocType(selectedCaseType, selectedChapter, "Agenda");
+        lstFees = await service.GetDocListByChapterAndDocType(selectedCaseType, selectedChapter, "Fee");
+        lstDocs = await service.GetDocListByChapter(selectedCaseType, selectedChapter);
+        lstStatus = await service.GetDocListByChapterAndDocType(selectedCaseType, selectedChapter, "Status");
+
+        StateHasChanged();
+    }
+
+    void showAgenda(String option, String type)
+    {
+        if (option == "Show")
+        {
+            displaySection = type;
+        }
+        else
+        {
+            displaySection = "";
+        }
+    }
+
+    private void PrepareForInsert(String header)
+    {
+        parentId = service.GetParentId(selectedCaseType, selectedChapter);
+
+        editObject = new UsrOrDefChapterManagement();
+        editObject.CaseType = "";
+        editObject.CaseTypeGroup = "";
+        editObject.ParentId = parentId;
+        editObject.SeqNo = service.GetMaxSeqNum(parentId);
+
+        customHeader = "Add New " + header;
+    }
+
+    private void PrepareForEdit(UsrOrDefChapterManagement item, String header)
+    {
+        customHeader = header;
+        editObject = item;
+    }
+
+    private void PrepareForDelete(UsrOrDefChapterManagement item)
+    {
+        editObject = item;
+    }
+
+    private async Task Delete()
+    {
+        var task = await service.Delete(editObject.Id);
+        await jsRuntime.InvokeAsync<object>("CloseModal", "confirmDeleteModal");
+        DataChanged();
+        editObject = new UsrOrDefChapterManagement();
+    }
+}
