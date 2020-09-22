@@ -1,0 +1,97 @@
+﻿@using Gizmo_V1_02.Data.OR_RESI_Chapters
+
+@inject IOR_RESI_Chapters_Service service
+@inject IJSRuntime jsRuntime
+
+
+<div class="modal" tabindex="-1" role="dialog" id="taskModal" >
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">@CustomHeader</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <EditForm Model="@TaskObject" OnValidSubmit="@HandleValidSubmit">
+                    @if (selectedList == "Document / Step")
+                    {
+                        <label for="DocName">Document / Step</label>
+                        <InputSelect id="documentList" class="form-control"
+                                     @bind-Value="TaskObject.Name">
+                            <option value="">Select</option>
+                            @foreach (var doc in dropDownDocumentList)
+                                {
+                                <option value="@doc">
+                                    @doc
+                                </option>
+                                }
+                        </InputSelect>
+                    }
+                    else
+                    {
+                        <div class="form-group">
+                            <label for="Name">@CustomHeader Name</label>
+                            <input type="hidden" @bind-value="@TaskObject.Id" />
+                            <InputText id="name" class="form-control" @bind-Value="@TaskObject.Name" />
+                        </div>
+                    }
+
+
+                    @if (selectedList == "Document / Step")
+                    {
+                        <div class="form-group">
+                            <label for="DocType">Type</label>
+                            <InputSelect id="Summary" class="form-control"
+                                         @bind-Value="TaskObject.Type">
+                                <option value="">Select</option>
+                                @foreach (var type in DocTypeList)
+                                    {
+                                    <option value="@type">
+                                        @type
+                                    </option>
+                                    }
+                            </InputSelect>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="AsName">Schedule As Name</label>
+                            <InputText id="name" class="form-control" @bind-Value="@TaskObject.AsName" />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="CompleteName">Complete As Name</label>
+                            <InputText id="name" class="form-control" @bind-Value="@TaskObject.CompleteName" />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="RescheduleDays">Reschedule Days</label>
+                            <InputNumber id="name" class="form-control" @bind-Value="@TaskObject.RescheduleDays" />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="SeqNo">Seq number</label>
+                            <InputNumber id="name" class="form-control" @bind-Value="@TaskObject.SeqNo" />
+                        </div>
+                    }
+
+                    <input type="hidden" @bind-value="@TaskObject.CaseType" />
+                    <input type="hidden" @bind-value="@TaskObject.CaseTypeGroup" />
+                    <input type="hidden" @bind-value="@TaskObject.ParentId" />
+
+
+
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+
+                    @if (TaskObject.Id != 0)
+                    {
+                        <button type="button" @onclick="HandleValidDelete" class="btn btn-secondary"></button>
+                    }
+
+                </EditForm>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,9 +1,9 @@
-﻿using Gizmo_V1_00.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Gizmo.Context.OR_RESI;
 
 namespace Gizmo_V1_00.Data.OR_RESI_Chapters
 {
@@ -14,6 +14,9 @@ namespace Gizmo_V1_00.Data.OR_RESI_Chapters
         Task<List<UsrOrDefChapterManagement>> GetChapterListByCaseType(string Type, string caseType);
         Task<List<UsrOrDefChapterManagement>> GetDocListByChapter(string caseType, string chapter);
         Task<List<UsrOrDefChapterManagement>> GetDocListByChapterAndDocType(string caseType, string chapter, string docType);
+        int? GetCaseTypeGroupRef();
+        int? GetCaseTypeCode(String caseType, int? caseTypeGroup);
+        List<String> GetDocumentList(String CaseType);
         int GetParentId(String caseType, String chapter);
         int? GetMaxSeqNum(int parentId);
         Task<UsrOrDefChapterManagement> Update(UsrOrDefChapterManagement item);
@@ -94,6 +97,57 @@ namespace Gizmo_V1_00.Data.OR_RESI_Chapters
                 seqRecord++;
 
             return seqRecord;
+        }
+
+        public int? GetCaseTypeGroupRef()
+        {
+            int? caseTypeGroupRef = _context.DmDocuments
+                .Where(D => D.Name == "FS-PRX-Pre-Exchange (P)")
+                .Select(D => D.CaseTypeGroupRef)
+                .Single();
+
+            if (caseTypeGroupRef is null)
+                caseTypeGroupRef = -1;
+
+            return caseTypeGroupRef;
+        }
+
+        public int? GetCaseTypeCode(String caseType, int? caseTypeGroup)
+        {
+            int? caseTypeCode = _context.CaseTypes
+                .Where(C => C.CaseTypeGroupRef == caseTypeGroup)
+                .Where(C => EF.Functions.Like(C.Description, "%" + caseType + "%"))
+                .Select(C => C.Code)
+                .Single();
+
+            if (caseTypeCode is null)
+                caseTypeCode = -1;
+
+            return caseTypeCode;
+        }
+
+        public List<String> GetDocumentList(String caseType)
+        {
+            int? caseTypeGroupRef = GetCaseTypeGroupRef();
+
+            int? caseTypeCode = GetCaseTypeCode(caseType, caseTypeGroupRef);
+
+            return (from d in _context.DmDocuments
+                    join dm in _context.DmDocumentsPermissions on d.Code equals dm.Doccode
+                    where dm.Casetype == caseTypeCode
+                    orderby d.Name
+                    select d.Name)
+                    .ToList();
+         
+
+            /*
+            return _context.DmDocuments
+                            .Join(_context.DmDocumentsPermissions,
+                                D => D.Code,
+                                Dm => Dm.Doccode,
+                                (D, Dm) => new { Name = D, DmDocumentsPermissions = Dm })
+                            .Select(x => x.Name);
+                         */       
         }
 
 

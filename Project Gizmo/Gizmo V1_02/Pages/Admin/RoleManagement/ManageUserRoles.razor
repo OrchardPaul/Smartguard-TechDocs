@@ -1,0 +1,41 @@
+﻿@page "/manageuserroles"
+
+@using Plk.Blazor.DragDrop
+@using Microsoft.AspNetCore.Components.Web
+
+<h3>ManageUserRoles</h3>
+
+@if (lstRoles is null)
+{
+    <div class="spinner"></div>
+}
+else
+{
+    <table id="tblRoleList" class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var role in lstRoles)
+            {
+                <tr>
+                    <td>@role.Name</td>
+                    <td><input type="button" class="btn btn-primary" @onclick='(() => PrepareForEdit(role))' data-toggle="modal" data-target="#roleModal" value="Edit" /></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <input type="button" data-toggle="modal" data-target="#roleModal" @onclick='(() => PrepareForInsert())' class="btn btn-primary" value="Add Role" />
+
+    <Dropzone Items="lstRoles">
+        <label @ondragstart="(() => PrepareForEdit(context))">@context.Name</label>
+    </Dropzone>
+
+}
+
+
+
+<RoleDetail TaskObject="@editRole" DataChanged="@DataChanged"></RoleDetail>
