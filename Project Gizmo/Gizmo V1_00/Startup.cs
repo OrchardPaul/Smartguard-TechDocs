@@ -15,7 +15,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Gizmo_V1_00.Areas.Identity;
 using Gizmo_V1_00.Data;
-using Gizmo_V1_00.Models;
+using Gizmo.Context.OR_RESI;
 using Gizmo_V1_00.Data.OR_RESI_Chapters;
 using Plk.Blazor.DragDrop;
 
