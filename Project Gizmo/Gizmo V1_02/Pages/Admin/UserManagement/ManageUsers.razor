@@ -1,0 +1,33 @@
+﻿@page "/manageusers"
+
+<h3>User Management</h3>
+
+@if (lstUsers is null)
+{
+    <div class="spinner"></div>
+}
+else
+{
+    <table id="tblUserList" class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in lstUsers)
+            {
+                <tr>
+                    <td>@user.UserName</td>
+                    <td><input type="button" class="btn btn-primary" @onclick='(() => PrepareForEdit(user))' data-toggle="modal" data-target="#roleModal" value="Edit" /></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <input type="button" data-toggle="modal" data-target="#roleModal" @onclick='(() => PrepareForInsert())' class="btn btn-primary" value="Add Role" />
+
+}
+
+
+<UserDetail TaskObject="@editObject" allRoles="@lstRoles" selectedOption="@editOption" selectedRoles="@editObjectRoles"></UserDetail>

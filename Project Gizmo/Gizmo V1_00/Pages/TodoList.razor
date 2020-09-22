@@ -1,7 +1,7 @@
 ﻿@page "/todolist"
 
 @using Gizmo_V1_00.Data
-@using Gizmo_V1_00.Models
+@using Gizmo.Context.OR_RESI
 @inject IToDoListService service
 @inject IJSRuntime jsRuntime
 
@@ -43,11 +43,12 @@ else
     <input type="button" data-toggle="modal" data-target="#taskModal" class="btn btn-primary" value="Add Task" />
 </div>
 
-<ConfirmDialog OnClick="@Delete" />
+
+
 <TaskDetail TaskObject=taskObject DataChanged="@DataChanged">
     <CustomHeader>@customHeader</CustomHeader>
 </TaskDetail>
-
+<ConfirmDialog OnClick="@Delete" />
 
 
 @code {

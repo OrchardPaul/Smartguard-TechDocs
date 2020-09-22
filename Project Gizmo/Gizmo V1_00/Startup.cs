@@ -15,8 +15,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Gizmo_V1_00.Areas.Identity;
 using Gizmo_V1_00.Data;
-using Gizmo_V1_00.Models;
+using Gizmo.Context.OR_RESI;
 using Gizmo_V1_00.Data.OR_RESI_Chapters;
+using Gizmo_V1_00.Services;
+using Gizmo_V1_00.Session_Data;
 
 namespace Gizmo_V1_00
 {
@@ -35,7 +37,7 @@ namespace Gizmo_V1_00
         {
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
+                    Configuration.GetConnectionString("AuthentificationConnection")));
             services.AddDbContext<P4W_OR_RESI_V5_DEVContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("OR_RESI_LIVE")));
@@ -43,6 +45,12 @@ namespace Gizmo_V1_00
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddRazorPages();
             services.AddServerSideBlazor();
+
+            services.AddHttpClient<IChapterManagementService, ChapterManagementService>(client => 
+            {
+                client.BaseAddress = new Uri("https://localhost:44399/");
+            });
+
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
             services.AddSingleton<WeatherForecastService>();
             services.AddScoped<OR_RESI_DATA_Service>();
@@ -51,6 +59,7 @@ namespace Gizmo_V1_00
             services.AddTransient<IToDoListService, ToDoListService>();
             services.AddTransient<IOR_RESI_Chapters_Service, OR_RESI_Chapters_Service>();
         }
+
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

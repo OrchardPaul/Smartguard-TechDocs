@@ -1,0 +1,9 @@
+F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo.Models\bin\Debug\netstandard2.0\Gizmo.Models.deps.json
+F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo.Models\bin\Debug\netstandard2.0\Gizmo.Models.dll
+F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo.Models\bin\Debug\netstandard2.0\Gizmo.Models.pdb
+F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo.Models\obj\Debug\netstandard2.0\Gizmo.Models.csprojAssemblyReference.cache
+F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo.Models\obj\Debug\netstandard2.0\Gizmo.Models.AssemblyInfoInputs.cache
+F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo.Models\obj\Debug\netstandard2.0\Gizmo.Models.AssemblyInfo.cs
+F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo.Models\obj\Debug\netstandard2.0\Gizmo.Models.csproj.CoreCompileInputs.cache
+F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo.Models\obj\Debug\netstandard2.0\Gizmo.Models.dll
+F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo.Models\obj\Debug\netstandard2.0\Gizmo.Models.pdb
