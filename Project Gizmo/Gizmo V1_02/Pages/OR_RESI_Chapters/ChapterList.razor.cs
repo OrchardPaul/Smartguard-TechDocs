@@ -15,7 +15,7 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
     public partial class ChapterList
     {
         [Inject]
-        IChapterManagementService chapterManagementService { get; set; }
+        private IChapterManagementService chapterManagementService { get; set; }
 
         [CascadingParameter]
         private Task<AuthenticationState> authenticationStateTask { get; set; }
@@ -23,14 +23,14 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
         [Inject]
         public NavigationManager NavigationManager { get; set; }
 
+        private List<UsrOrDefChapterManagement> lstAll;
+        private List<UsrOrDefChapterManagement> lstChapters;
+        private List<UsrOrDefChapterManagement> lstAgendas;
+        private List<UsrOrDefChapterManagement> lstFees;
+        private List<UsrOrDefChapterManagement> lstDocs;
+        private List<UsrOrDefChapterManagement> lstStatus;
 
-        List<UsrOrDefChapterManagement> lstChapters;
-        List<UsrOrDefChapterManagement> lstAgendas;
-        List<UsrOrDefChapterManagement> lstFees;
-        List<UsrOrDefChapterManagement> lstDocs;
-        List<UsrOrDefChapterManagement> lstStatus;
-
-        List<String> dropDownDocumentList;
+        public List<DmDocuments> dropDownDocumentList;
 
         int parentId;
 
@@ -43,6 +43,7 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
         string selectedCaseType { get; set; } = "";
         string selectedCaseTypeGroup { get; set; } = "";
         string selectedChapter { get; set; } = "";
+        private int selectedChapterId { get; set; } = -1;
 
         protected List<string> CaseTypeList;
 
@@ -56,8 +57,6 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
                 NavigationManager.NavigateTo($"/Identity/Account/Login?returnUrl={returnUrl}", true);
             }
 
-
-            lstChapters = await service.GetChapterListByCaseType("Chapter", "");
             CaseTypeList = await chapterManagementService.GetCaseTypes();
         }
 
@@ -69,29 +68,50 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
 
         async Task SelectCaseType(string caseType)
         {
-            lstChapters = await service.GetChapterListByCaseType("Chapter", caseType);
+            lstChapters = await chapterManagementService.GetChapterListByCaseType(caseType);
 
             selectedCaseType = caseType;
             selectedChapter = "";
         }
 
-        async Task selectDocList(String chapter)
+        async Task SelectDocList(String chapter, int chapterID)
         {
-            lstAgendas = await service.GetDocListByChapterAndDocType(selectedCaseType, chapter, "Agenda");
-            lstFees = await service.GetDocListByChapterAndDocType(selectedCaseType, chapter, "Fee");
-            lstDocs = await service.GetDocListByChapter(selectedCaseType, chapter);
-            lstStatus = await service.GetDocListByChapterAndDocType(selectedCaseType, chapter, "Status");
+            lstAll = await chapterManagementService.GetItemListByChapter(chapterID);
 
+            lstAgendas = lstAll.Where(A => A.Type == "Agenda").ToList();
+            lstFees = lstAll.Where(A => A.Type == "Fee").ToList();
+            lstStatus = lstAll.Where(A => A.Type == "Status").ToList();
 
+            lstDocs = lstAll
+                .Where(A => A.Type != "Agenda")
+                .Where(A => A.Type != "Fee")
+                .Where(A => A.Type != "Status")
+                .ToList();
+
+            /*
+            lstAgendas = await chapterManagementService.GetDocListByChapterAndDocType(selectedCaseType, chapter, "Agenda");
+            lstFees = await chapterManagementService.GetDocListByChapterAndDocType(selectedCaseType, chapter, "Fee");
+            lstDocs = await chapterManagementService.GetDocListByChapter(selectedCaseType, selectedChapter);
+            lstStatus = await chapterManagementService.GetDocListByChapterAndDocType(selectedCaseType, chapter, "Status");
+            */
+
+            selectedChapterId = chapterID;
             selectedChapter = chapter;
         }
 
         private async void DataChanged()
         {
-            lstAgendas = await service.GetDocListByChapterAndDocType(selectedCaseType, selectedChapter, "Agenda");
-            lstFees = await service.GetDocListByChapterAndDocType(selectedCaseType, selectedChapter, "Fee");
-            lstDocs = await service.GetDocListByChapter(selectedCaseType, selectedChapter);
-            lstStatus = await service.GetDocListByChapterAndDocType(selectedCaseType, selectedChapter, "Status");
+            lstAll = await chapterManagementService.GetItemListByChapter(selectedChapterId);
+
+            lstAgendas = lstAll.Where(A => A.Type == "Agenda").ToList();
+            lstFees = lstAll.Where(A => A.Type == "Fee").ToList();
+            lstStatus = lstAll.Where(A => A.Type == "Status").ToList();
+
+            lstDocs = lstAll
+                .Where(A => A.Type != "Agenda")
+                .Where(A => A.Type != "Fee")
+                .Where(A => A.Type != "Status")
+                .ToList();
 
             StateHasChanged();
         }
@@ -111,14 +131,17 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
         private void PrepareForInsert(String header)
         {
             PrepDocumentList();
-            parentId = service.GetParentId(selectedCaseType, selectedChapter);
+            parentId = selectedChapterId;
+
+            int? maxSeq = lstAll.Max(A => A.SeqNo);
+
 
             editObject = new UsrOrDefChapterManagement
             {
                 CaseType = "",
                 CaseTypeGroup = "",
                 ParentId = parentId,
-                SeqNo = service.GetMaxSeqNum(parentId)
+                SeqNo = maxSeq
             };
 
             if (header == "Agenda")
@@ -151,17 +174,11 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
             editObject = item;
         }
 
-        private async Task Delete()
+        private async void PrepDocumentList()
         {
-            await service.Delete(editObject.Id);
-            await jsRuntime.InvokeAsync<object>("CloseModal", "confirmDeleteModal");
-            DataChanged();
-            editObject = new UsrOrDefChapterManagement();
-        }
+            dropDownDocumentList = await chapterManagementService.GetDocumentList(selectedCaseType);
 
-        private void PrepDocumentList()
-        {
-            dropDownDocumentList = service.GetDocumentList(selectedCaseType);
+            StateHasChanged();
         }
     }
 }

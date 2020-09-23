@@ -1,6 +1,5 @@
 ﻿@using Gizmo_V1_02.Data.OR_RESI_Chapters
 
-@inject IOR_RESI_Chapters_Service service
 @inject IJSRuntime jsRuntime
 
 
@@ -18,16 +17,25 @@
                     @if (selectedList == "Document / Step")
                     {
                         <label for="DocName">Document / Step</label>
-                        <InputSelect id="documentList" class="form-control"
-                                     @bind-Value="TaskObject.Name">
-                            <option value="">Select</option>
-                            @foreach (var doc in dropDownDocumentList)
+
+                        @if (dropDownDocumentList is null)
+                        {
+                            <div class="spinner"></div>
+                        }
+                        else
+                        {
+                            <InputSelect id="documentList" class="form-control" @bind-Value="TaskObject.Name">
+                                <option value="">Select</option>
+
+                                @foreach (var doc in dropDownDocumentList)
                                 {
-                                <option value="@doc">
-                                    @doc
-                                </option>
+                                    <option value="@doc.Name">
+                                        @doc.Name
+                                    </option>
                                 }
-                        </InputSelect>
+                            </InputSelect>
+                        }
+
                     }
                     else
                     {

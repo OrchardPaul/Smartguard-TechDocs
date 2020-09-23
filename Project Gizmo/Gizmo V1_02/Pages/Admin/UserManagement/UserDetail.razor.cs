@@ -29,6 +29,8 @@ namespace Gizmo_V1_02.Pages.Admin.UserManagement
         [Inject]
         private IIdentityUserAccess service { get; set; }
 
+        string isChecked { get; set; } = "";
+
         private async Task ClosechapterModal()
         {
             await jsRuntime.InvokeAsync<object>("CloseModal", "roleModal");
@@ -50,9 +52,11 @@ namespace Gizmo_V1_02.Pages.Admin.UserManagement
             DataChanged?.Invoke();
         }
 
-        private void RoleChecked(bool IsChecked, string selectedRole)
+        private void RoleChecked(ChangeEventArgs checkBox, string selectedRole)
         {
-            if (IsChecked)
+            isChecked = checkBox.Value.ToString();
+
+            if (isChecked == "True")
             {
                 if (!selectedRoles.Contains(selectedRole))
                 {
@@ -66,6 +70,8 @@ namespace Gizmo_V1_02.Pages.Admin.UserManagement
                     selectedRoles.Remove(selectedRole);
                 }
             }
+
+            StateHasChanged();
         }
 
     }

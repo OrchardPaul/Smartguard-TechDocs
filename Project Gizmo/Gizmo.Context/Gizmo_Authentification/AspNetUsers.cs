@@ -26,6 +26,11 @@ namespace Gizmo.Context.Gizmo_Authentification
         [StringLength(256)]
         public string NormalizedEmail { get; set; }
         public bool EmailConfirmed { get; set; }
+
+        [Required]
+        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8}$",
+         ErrorMessage = "Password must meet requirements")]
+        [DataType(DataType.Password)]
         public string PasswordHash { get; set; }
         public string SecurityStamp { get; set; }
         public string ConcurrencyStamp { get; set; }

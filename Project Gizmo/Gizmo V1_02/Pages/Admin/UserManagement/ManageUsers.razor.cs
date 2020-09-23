@@ -17,7 +17,7 @@ namespace Gizmo_V1_02.Pages.Admin.UserManagement
         [Inject]
         private IIdentityRoleAccess roleAccess { get; set; }
 
-        public AspNetUsers editObject { get; set; }
+        public AspNetUsers editObject { get; set; } = new AspNetUsers();
 
         protected IList<string> editObjectRoles { get; set; }
 
@@ -35,9 +35,13 @@ namespace Gizmo_V1_02.Pages.Admin.UserManagement
 
         protected async void PrepareForEdit(AspNetUsers selectedUser)
         {
-            editOption = "edit";
+            editOption = "Edit";
             editObject = selectedUser;
+            editObject.PasswordHash = "************";
+            editObjectRoles = null;
             editObjectRoles = await userAccess.GetSelectedUserRoles(selectedUser);
+
+            StateHasChanged();
         }
 
         protected void PrepareForInsert()

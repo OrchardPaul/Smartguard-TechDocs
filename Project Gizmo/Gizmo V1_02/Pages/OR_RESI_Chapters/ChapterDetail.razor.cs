@@ -1,4 +1,5 @@
 ﻿using Gizmo.Context.OR_RESI;
+using Gizmo_V1_02.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using System;
@@ -10,6 +11,9 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
 {
     public partial class ChapterDetail : ComponentBase
     {
+        [Inject]
+        IChapterManagementService chapterManagementService { get; set; }
+
         [Parameter]
         public UsrOrDefChapterManagement TaskObject { get; set; }
 
@@ -26,7 +30,7 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
         public String selectedCaseType { get; set; }
 
         [Parameter]
-        public List<String> dropDownDocumentList { get; set; }
+        public List<DmDocuments> dropDownDocumentList { get; set; }
 
         List<string> CaseTypeList = new List<string>() { "Purchase", "Sale", "Remortgage", "Plot Sales", "Transfer" };
 
@@ -43,11 +47,11 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
         {
             if (TaskObject.Id == 0)
             {
-                await service.Add(TaskObject);
+                await chapterManagementService.Add(TaskObject);
             }
             else
             {
-                await service.Update(TaskObject);
+                await chapterManagementService.Update(TaskObject);
             }
             await ClosechapterModal();
             DataChanged?.Invoke();
@@ -55,7 +59,7 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
 
         private async void HandleValidDelete()
         {
-            await service.Delete(TaskObject.Id);
+            await chapterManagementService.Delete(TaskObject.Id);
 
             await ClosechapterModal();
             DataChanged?.Invoke();

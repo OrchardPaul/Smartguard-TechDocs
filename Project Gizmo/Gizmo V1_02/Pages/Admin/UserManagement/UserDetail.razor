@@ -10,39 +10,60 @@
                 </button>
             </div>
 
-            @if ((selectedOption == "edit") && (selectedRoles is null))
-            {
-                <div class="spinner"></div>
-            }
-            else
-            {
-                <div class="modal-body">
-                    <EditForm Model="@TaskObject" OnValidSubmit="@HandleValidSubmit">
-                        <DataAnnotationsValidator />
-                        <ValidationSummary />
+            <div class="modal-body">
+                <EditForm Model="@TaskObject" OnValidSubmit="@HandleValidSubmit">
+                    <DataAnnotationsValidator />
+                    <ValidationSummary />
 
-                        <div class="form-group">
-                            <label for="@TaskObject.UserName"></label>
-                            <InputText @bind-Value="TaskObject.UserName"></InputText>
+                    <div class="form-group">
+                        <label for="@TaskObject.UserName"></label>
+                        <InputText @bind-Value="TaskObject.UserName"></InputText>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="@TaskObject.PasswordHash"></label>
+
+                        <InputText @bind-Value="@TaskObject.PasswordHash" type="password"></InputText>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="container-fluid">
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-6 p-2">
+                                @if (allRoles is null | ((selectedOption == "Edit") && (selectedRoles is null)))
+                                {
+                                    <div class="spinner"></div>
+                                }
+                                else
+                                {
+                                    @foreach (var role in allRoles)
+                                    {
+                                        @if (!(selectedRoles is null) && (selectedRoles.Contains(role.Name)))
+                                        {
+                                            <label>@role.Name &nbsp;</label><Input checked="checked" type="checkbox" @onchange="(args) => RoleChecked(args,role.Name)">
+                                        }
+                                        else
+                                        {
+                                            <label>@role.Name &nbsp;</label><Input type="checkbox" @onchange="(args) => RoleChecked(args,role.Name)">
+                                        }
+                                    }
+                                }
+
+                            </div>
                         </div>
+                    </div>
 
-                        <div class="form-group">
-                            <label for="@TaskObject.PasswordHash"></label>
-                            <InputText @bind-Value="@TaskObject.PasswordHash"></InputText>
-                        </div>
+                    <div>@isChecked</div>
 
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
 
+                    @if (!(TaskObject.Id is null))
+                    {
+                        <button type="button" @onclick="HandleValidDelete" class="btn btn-secondary"></button>
+                    }
+                </EditForm>
+            </div>
 
-                        <button type="submit" class="btn btn-primary">Submit</button>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-
-                        @if (!(TaskObject.Id is null))
-                        {
-                            <button type="button" @onclick="HandleValidDelete" class="btn btn-secondary"></button>
-                        }
-                    </EditForm>
-                </div>
-            }
 
         </div>
     </div>

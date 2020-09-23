@@ -502,3 +502,5 @@ F:\WorkSpaces\PT\Gizmo\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\staticw
 F:\WorkSpaces\PT\Gizmo\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Gizmo V1_02.dll
 F:\WorkSpaces\PT\Gizmo\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Gizmo V1_02.pdb
 F:\WorkSpaces\PT\Gizmo\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Gizmo V1_02.genruntimeconfig.cache
+F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\RazorDeclaration\Pages\Admin\UserManagement\UserDetail.razor.g.cs
+F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\Admin\UserManagement\UserDetail.razor.g.cs

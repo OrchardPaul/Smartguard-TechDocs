@@ -21,6 +21,11 @@ namespace Gizmo.Api.Repository.OR_RESI
             return await _context.UsrOrDefChapterManagement.ToListAsync();
         }
 
+        public async Task<UsrOrDefChapterManagement> GetChapterItemById(int id)
+        {
+            return await _context.UsrOrDefChapterManagement.SingleAsync(C => C.Id == id);
+        }
+
         public async Task<UsrOrDefChapterManagement> Add(UsrOrDefChapterManagement item)
         {
             _context.UsrOrDefChapterManagement.Add(item);
@@ -30,8 +35,21 @@ namespace Gizmo.Api.Repository.OR_RESI
 
         public async Task<UsrOrDefChapterManagement> Update(UsrOrDefChapterManagement item)
         {
-            _context.Entry(item).State = EntityState.Modified;
+            var updatedItem = await _context.UsrOrDefChapterManagement.SingleAsync(U => U.Id == item.Id);
+
+            updatedItem.Name = item.Name;
+            updatedItem.RescheduleDays = item.RescheduleDays;
+            updatedItem.AsName = item.AsName;
+            updatedItem.Type = item.Type;
+            updatedItem.SeqNo = item.SeqNo;
+            updatedItem.CaseType = item.CaseType;
+            updatedItem.CaseTypeGroup = item.CaseTypeGroup;
+            updatedItem.CompleteName = item.CompleteName;
+            updatedItem.EntityType = item.EntityType;
+            updatedItem.SuppressStep = item.SuppressStep;
+
             await _context.SaveChangesAsync();
+            //_context.Entry(item).State = EntityState.Modified;
             return item;
         }
 
@@ -63,12 +81,31 @@ namespace Gizmo.Api.Repository.OR_RESI
 
         public async Task<List<UsrOrDefChapterManagement>> GetChapterListByCaseType(string caseType)
         {
-            return await _context.UsrOrDefChapterManagement
+            List<UsrOrDefChapterManagement> Test = await _context.UsrOrDefChapterManagement
                 .Where(C => C.Type == "Chapter")
                 .Where(C => C.CaseType == caseType)
                 .OrderBy(C => C.SeqNo)
                 .ToListAsync();
+
+            return Test;
         }
+
+        public async Task<List<UsrOrDefChapterManagement>> GetDocListByChapter(string caseType, string chapter)
+        {
+            List<string> Doctype = new List<string>() { "Doc", "Letter", "Form", "Step" };
+
+            var idRecord = _context.UsrOrDefChapterManagement
+                .Where(C => C.Name == chapter)
+                .Where(C => C.CaseType == caseType)
+                .Where(C => C.Type == "Chapter")
+                .Single();
+
+            return await _context.UsrOrDefChapterManagement
+                                .Where(C => C.ParentId == idRecord.Id)
+                                .Where(C => Doctype.Contains(C.Type))
+                                .ToListAsync();
+        }
+
 
         public async Task<List<UsrOrDefChapterManagement>> GetItemListByChapter(int chapterId)
         {
@@ -146,28 +183,29 @@ namespace Gizmo.Api.Repository.OR_RESI
             return caseTypeCode;
         }
 
-        public List<String> GetDocumentList(String caseType)
+        public async Task<List<DmDocuments>> GetDocumentList(String caseType)
         {
             int? caseTypeGroupRef = GetCaseTypeGroupRef();
 
             int? caseTypeCode = GetCaseTypeCode(caseType, caseTypeGroupRef);
 
+            /*
             return (from d in _context.DmDocuments
                     join dm in _context.DmDocumentsPermissions on d.Code equals dm.Doccode
                     where dm.Casetype == caseTypeCode
                     orderby d.Name
                     select d.Name)
                     .ToList();
+            */
 
-
-            /*
-            return _context.DmDocuments
+            return await _context.DmDocuments
                             .Join(_context.DmDocumentsPermissions,
                                 D => D.Code,
                                 Dm => Dm.Doccode,
                                 (D, Dm) => new { Name = D, DmDocumentsPermissions = Dm })
-                            .Select(x => x.Name);
-                         */
+                            .Select(x => x.Name)
+                            .ToListAsync(); 
+
         }
 
 
