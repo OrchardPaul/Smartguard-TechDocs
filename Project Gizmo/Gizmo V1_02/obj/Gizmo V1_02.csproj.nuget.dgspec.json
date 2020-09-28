@@ -91,6 +91,10 @@
               "target": "Package",
               "version": "[3.1.4, )"
             },
+            "SendGrid": {
+              "target": "Package",
+              "version": "[9.21.0, )"
+            },
             "blazor-dragdrop": {
               "target": "Package",
               "version": "[2.1.0, )"

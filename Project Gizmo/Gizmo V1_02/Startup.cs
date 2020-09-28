@@ -22,6 +22,8 @@ using Gizmo_V1_02.Data.Admin;
 using Gizmo_V1_02.Data.MapperProfiles;
 using AutoMapper;
 using Plk.Blazor.DragDrop;
+using Gizmo_V1_02.Services.Email;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 namespace Gizmo_V1_02
 {
@@ -64,6 +66,9 @@ namespace Gizmo_V1_02
 
             services.AddBlazorDragDrop();
             services.AddAutoMapper(typeof(UserRoleProfile));
+
+            services.AddTransient<IEmailSender, EmailSender>();
+            services.Configure<AuthMessageSenderOptions>(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

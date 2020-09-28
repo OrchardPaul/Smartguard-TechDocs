@@ -232,23 +232,6 @@ F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo V1_02\bin\Debug\netcoreapp3.1\Microso
 F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo V1_02\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Components.Web.dll
 F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo V1_02\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Metadata.dll
 F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo V1_02\bin\Debug\netcoreapp3.1\Microsoft.JSInterop.dll
-F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Gizmo V1_02.csproj.CoreCompileInputs.cache
-F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Gizmo V1_02.MvcApplicationPartsAssemblyInfo.cs
-F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Gizmo V1_02.MvcApplicationPartsAssemblyInfo.cache
-F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\RazorDeclaration\Gizmo V1_02.dll
-F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\App.razor.g.cs
-F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\Admin\RoleManagement\ManageUserRoles.razor.g.cs
-F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\Admin\RoleManagement\RoleDetail.razor.g.cs
-F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\Admin\UserManagement\ManageUsers.razor.g.cs
-F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\ConfirmDialog.razor.g.cs
-F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\Index.razor.g.cs
-F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\OR_RESI_Chapters\ChapterDetail.razor.g.cs
-F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\OR_RESI_Chapters\ChapterList.razor.g.cs
-F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Shared\LoginDisplay.razor.g.cs
-F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Shared\MainLayout.razor.g.cs
-F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Shared\NavMenu.razor.g.cs
-F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Shared\SurveyPrompt.razor.g.cs
-F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\_Imports.razor.g.cs
 F:\WorkSpaces\PT\Gizmo\Project Gizmo\Gizmo V1_02\bin\Debug\netcoreapp3.1\appsettings.Development.json
 F:\WorkSpaces\PT\Gizmo\Project Gizmo\Gizmo V1_02\bin\Debug\netcoreapp3.1\appsettings.json
 F:\WorkSpaces\PT\Gizmo\Project Gizmo\Gizmo V1_02\bin\Debug\netcoreapp3.1\Properties\launchSettings.json
@@ -503,4 +486,23 @@ F:\WorkSpaces\PT\Gizmo\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Gizmo V
 F:\WorkSpaces\PT\Gizmo\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Gizmo V1_02.pdb
 F:\WorkSpaces\PT\Gizmo\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Gizmo V1_02.genruntimeconfig.cache
 F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\RazorDeclaration\Pages\Admin\UserManagement\UserDetail.razor.g.cs
+F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo V1_02\bin\Debug\netcoreapp3.1\SendGrid.dll
+F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo V1_02\bin\Debug\netcoreapp3.1\StarkbankEcdsa.dll
+F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Gizmo V1_02.csproj.CoreCompileInputs.cache
+F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Gizmo V1_02.MvcApplicationPartsAssemblyInfo.cs
+F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Gizmo V1_02.MvcApplicationPartsAssemblyInfo.cache
+F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\RazorDeclaration\Gizmo V1_02.dll
+F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\App.razor.g.cs
+F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\Admin\RoleManagement\ManageUserRoles.razor.g.cs
+F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\Admin\RoleManagement\RoleDetail.razor.g.cs
+F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\Admin\UserManagement\ManageUsers.razor.g.cs
 F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\Admin\UserManagement\UserDetail.razor.g.cs
+F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\ConfirmDialog.razor.g.cs
+F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\Index.razor.g.cs
+F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\OR_RESI_Chapters\ChapterDetail.razor.g.cs
+F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\OR_RESI_Chapters\ChapterList.razor.g.cs
+F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Shared\LoginDisplay.razor.g.cs
+F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Shared\MainLayout.razor.g.cs
+F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Shared\NavMenu.razor.g.cs
+F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Shared\SurveyPrompt.razor.g.cs
+F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\_Imports.razor.g.cs
