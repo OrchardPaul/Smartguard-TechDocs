@@ -1,4 +1,5 @@
 ﻿using Gizmo.Context.Gizmo_Authentification;
+using Gizmo.Context.Gizmo_Authentification.Custom;
 using Gizmo_V1_02.Data.Admin;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
@@ -16,12 +17,9 @@ namespace Gizmo_V1_02.Pages.Admin.UserManagement
 
         [Parameter]
         public Action DataChanged { get; set; }
-
-        [Parameter]
-        public List<AspNetRoles> allRoles { get; set; }
         
         [Parameter]
-        public IList<string> selectedRoles { get; set; }
+        public List<RoleItem> selectedRoles { get; set; }
 
         [Parameter]
         public string selectedOption { get; set; }
@@ -33,12 +31,12 @@ namespace Gizmo_V1_02.Pages.Admin.UserManagement
 
         private async Task ClosechapterModal()
         {
-            await jsRuntime.InvokeAsync<object>("CloseModal", "roleModal");
+            await jsRuntime.InvokeAsync<object>("CloseModal", "userModal");
         }
 
         private async void HandleValidSubmit()
         {
-            await service.SubmitChanges(TaskObject, allRoles, selectedRoles);
+            await service.SubmitChanges(TaskObject, selectedRoles);
 
             await ClosechapterModal();
             DataChanged?.Invoke();
@@ -52,27 +50,7 @@ namespace Gizmo_V1_02.Pages.Admin.UserManagement
             DataChanged?.Invoke();
         }
 
-        private void RoleChecked(ChangeEventArgs checkBox, string selectedRole)
-        {
-            isChecked = checkBox.Value.ToString();
 
-            if (isChecked == "True")
-            {
-                if (!selectedRoles.Contains(selectedRole))
-                {
-                    selectedRoles.Add(selectedRole);
-                }
-            }
-            else
-            {
-                if (selectedRoles.Contains(selectedRole))
-                {
-                    selectedRoles.Remove(selectedRole);
-                }
-            }
-
-            StateHasChanged();
-        }
 
     }
 }

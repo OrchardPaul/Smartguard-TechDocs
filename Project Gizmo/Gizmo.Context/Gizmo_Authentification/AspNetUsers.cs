@@ -28,7 +28,7 @@ namespace Gizmo.Context.Gizmo_Authentification
         public bool EmailConfirmed { get; set; }
 
         [Required]
-        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8}$",
+        [RegularExpression(@"^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$",
          ErrorMessage = "Password must meet requirements")]
         [DataType(DataType.Password)]
         public string PasswordHash { get; set; }

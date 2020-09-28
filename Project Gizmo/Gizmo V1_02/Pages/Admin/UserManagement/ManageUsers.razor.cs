@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using Gizmo.Context.Gizmo_Authentification.Custom;
 
 namespace Gizmo_V1_02.Pages.Admin.UserManagement
 {
@@ -23,6 +24,8 @@ namespace Gizmo_V1_02.Pages.Admin.UserManagement
 
         public string editOption { get; set; }
 
+        public List<RoleItem> roles { get; set; } = new List<RoleItem>();
+
         public List<AspNetRoles> lstRoles { get; set; }
 
         protected List<AspNetUsers> lstUsers { get; set; }
@@ -38,9 +41,15 @@ namespace Gizmo_V1_02.Pages.Admin.UserManagement
             editOption = "Edit";
             editObject = selectedUser;
             editObject.PasswordHash = "************";
-            editObjectRoles = null;
             editObjectRoles = await userAccess.GetSelectedUserRoles(selectedUser);
 
+            roles = lstRoles
+                .Select(L => new RoleItem
+                {
+                    IsSubscribed = (editObjectRoles.Contains(L.Name)) ? true : false,
+                    RoleName = L.Name
+                })
+                .ToList();
             StateHasChanged();
         }
 

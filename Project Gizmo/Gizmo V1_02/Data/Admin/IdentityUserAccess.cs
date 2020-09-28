@@ -5,30 +5,31 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
+using Gizmo.Context.Gizmo_Authentification.Custom;
 
 namespace Gizmo_V1_02.Data.Admin
 {
     public interface IIdentityUserAccess
     {
         Task<IdentityResult> Delete(AspNetUsers item);
+        Task<IList<string>> GetSelectedUserRoles(AspNetUsers item);
         Task<List<AspNetUsers>> GetUsers();
-        Task<IList<string>> GetSelectedUserRoles(AspNetUsers selectedUser);
-        Task<AspNetUsers> SubmitChanges(AspNetUsers item, List<AspNetRoles> allRoles, IList<String> selectedRoles);
+        Task<AspNetUsers> SubmitChanges(AspNetUsers item, List<RoleItem> selectedRoles);
     }
 
     public class IdentityUserAccess : IIdentityUserAccess
     {
-        private readonly UserManager<IdentityUser> userManager;
-        private IdentityUser selectedUser { get; set; }
+        private readonly UserManager<ApplicationUser> userManager;
+        private ApplicationUser selectedUser { get; set; }
 
-        public IdentityUserAccess(UserManager<IdentityUser> userManager)
+        public IdentityUserAccess(UserManager<ApplicationUser> userManager)
         {
             this.userManager = userManager;
         }
 
         public async Task<IList<string>> GetSelectedUserRoles(AspNetUsers item)
         {
-            selectedUser = new IdentityUser
+            selectedUser = new ApplicationUser
             {
                 Id = item.Id,
                 UserName = item.UserName,
@@ -53,34 +54,34 @@ namespace Gizmo_V1_02.Data.Admin
         public async Task<List<AspNetUsers>> GetUsers()
         {
             return await userManager.Users
-                .Select(U => new AspNetUsers 
-                        {     
-                            Id = U.Id,
-                            UserName = U.UserName,
-                            NormalizedUserName = U.NormalizedUserName,
-                            Email = U.Email,
-                            NormalizedEmail = U.NormalizedEmail,
-                            EmailConfirmed = U.EmailConfirmed,
-                            PasswordHash = U.PasswordHash,
-                            SecurityStamp = U.SecurityStamp,
-                            ConcurrencyStamp = U.ConcurrencyStamp,
-                            PhoneNumber = U.PhoneNumber,
-                            PhoneNumberConfirmed = U.PhoneNumberConfirmed,
-                            TwoFactorEnabled = U.TwoFactorEnabled,
-                            LockoutEnd = U.LockoutEnd,
-                            LockoutEnabled = U.LockoutEnabled,
-                            AccessFailedCount = U.AccessFailedCount
-                        })
+                .Select(U => new AspNetUsers
+                {
+                    Id = U.Id,
+                    UserName = U.UserName,
+                    NormalizedUserName = U.NormalizedUserName,
+                    Email = U.Email,
+                    NormalizedEmail = U.NormalizedEmail,
+                    EmailConfirmed = U.EmailConfirmed,
+                    PasswordHash = U.PasswordHash,
+                    SecurityStamp = U.SecurityStamp,
+                    ConcurrencyStamp = U.ConcurrencyStamp,
+                    PhoneNumber = U.PhoneNumber,
+                    PhoneNumberConfirmed = U.PhoneNumberConfirmed,
+                    TwoFactorEnabled = U.TwoFactorEnabled,
+                    LockoutEnd = U.LockoutEnd,
+                    LockoutEnabled = U.LockoutEnabled,
+                    AccessFailedCount = U.AccessFailedCount
+                })
                 .ToListAsync();
         }
 
-        public async Task<AspNetUsers> SubmitChanges(AspNetUsers item, List<AspNetRoles> allRoles, IList<String> selectedRoles)
+        public async Task<AspNetUsers> SubmitChanges(AspNetUsers item, List<RoleItem> selectedRoles)
         {
             selectedUser = await userManager.FindByIdAsync(item.Id);
 
             if (selectedUser is null)
             {
-                IdentityUser NewUser = new IdentityUser
+                ApplicationUser NewUser = new ApplicationUser
                 {
                     UserName = item.UserName,
                     NormalizedUserName = item.NormalizedUserName,
@@ -106,7 +107,9 @@ namespace Gizmo_V1_02.Data.Admin
                 }
                 else
                 {
-                    await userManager.AddToRolesAsync(NewUser, selectedRoles);
+                    var strSelectedRoles = selectedRoles.Where(S => S.IsSubscribed = true).Select(S => S.RoleName).ToList();
+
+                    await userManager.AddToRolesAsync(NewUser, strSelectedRoles);
 
                     return item;
                 }
@@ -130,34 +133,31 @@ namespace Gizmo_V1_02.Data.Admin
                 await userManager.UpdateAsync(selectedUser);
 
                 var resetToken = await userManager.GeneratePasswordResetTokenAsync(selectedUser);
-                
+
                 await userManager.ResetPasswordAsync(
                         selectedUser,
                         resetToken,
                         item.PasswordHash);
 
-                foreach (AspNetRoles checkRole in allRoles)
+                foreach (RoleItem checkRole in selectedRoles)
                 {
-                    var queryResult = await userManager.IsInRoleAsync(selectedUser, checkRole.Name);
+                    var queryResult = await userManager.IsInRoleAsync(selectedUser, checkRole.RoleName);
 
                     if (queryResult)
                     {
-                        if (!selectedRoles.Contains(checkRole.Name))
+                        if (!checkRole.IsSubscribed)
                         {
-                            await userManager.RemoveFromRoleAsync(selectedUser, checkRole.Name);
+                            await userManager.RemoveFromRoleAsync(selectedUser, checkRole.RoleName);
                         }
                     }
                     else
                     {
-                        if (selectedRoles.Contains(checkRole.Name))
+                        if (checkRole.IsSubscribed)
                         {
-                            await userManager.AddToRoleAsync(selectedUser, checkRole.Name);
+                            await userManager.AddToRoleAsync(selectedUser, checkRole.RoleName);
                         }
                     }
                 }
-
-
-                await userManager.AddToRolesAsync(selectedUser, selectedRoles);
 
                 item = new AspNetUsers
                 {
