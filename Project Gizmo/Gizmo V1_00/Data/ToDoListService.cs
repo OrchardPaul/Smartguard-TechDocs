@@ -18,9 +18,9 @@ namespace Gizmo_V1_00.Data
     }
     public class ToDoListService : IToDoListService
     {
-        private readonly P4W_OR_RESI_V5_DEVContext _context;
+        private readonly P4W_OR_RESI_V6_DEVContext _context;
 
-        public ToDoListService(P4W_OR_RESI_V5_DEVContext context)
+        public ToDoListService(P4W_OR_RESI_V6_DEVContext context)
         {
             _context = context;
         }

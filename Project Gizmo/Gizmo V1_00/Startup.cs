@@ -37,7 +37,7 @@ namespace Gizmo_V1_00
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDbContext<P4W_OR_RESI_V5_DEVContext>(options =>
+            services.AddDbContext<P4W_OR_RESI_V6_DEVContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("OR_RESI_LIVE")));
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)

@@ -1,5 +1,5 @@
 ﻿08/09/2020
-Scaffold-DbContext “Data Source=dev\SQLEXPRESS;Initial Catalog=P4W_OR_RESI_V5_DEV;Integrated Security=True” Microsoft.EntityFrameworkCore.SqlServer -OutputDir OR_RESI -Tables usr_OR_RESI_MT, usr_OR_RESI_MT_Admin, usr_OR_RESI_MT_Fees, tblEmployee, tblToDo, Usr_OR_DEF_Chapter_Management, Usr_OR_RESI_MT_Chapter_Control, Dm_Documents, DM_DocumentsPermissions, CaseTypes, fn_OR_RESI_GetCaseTypeGroup -Force
+Scaffold-DbContext “Data Source=dev\SQLEXPRESS;Initial Catalog=P4W_OR_RESI_V6_DEV;Integrated Security=True” Microsoft.EntityFrameworkCore.SqlServer -OutputDir OR_RESI -Tables usr_OR_RESI_MT, usr_OR_RESI_MT_Admin, usr_OR_RESI_MT_Fees, tblEmployee, tblToDo, Usr_OR_DEF_Chapter_Management, Usr_OR_RESI_MT_Chapter_Control, Dm_Documents, DM_DocumentsPermissions, CaseTypes, fn_OR_RESI_GetCaseTypeGroup -DataAnnotations -Force
 
 25/08/2020
 Scaffold-DbContext “Data Source=dev\SQLEXPRESS;Initial Catalog=P4W_OR_RESI_V5_DEV;Integrated Security=True” Microsoft.EntityFrameworkCore.SqlServer -OutputDir OR_RESI -Tables usr_OR_RESI_MT, usr_OR_RESI_MT_Admin, usr_OR_RESI_MT_Fees, tblEmployee, tblToDo, Usr_OR_DEF_Chapter_Management, Usr_OR_RESI_MT_Chapter_Control -Force

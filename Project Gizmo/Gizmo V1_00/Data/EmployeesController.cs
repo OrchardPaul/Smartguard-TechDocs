@@ -13,9 +13,9 @@ namespace Gizmo_V1_00.Data
     [ApiController]
     public class EmployeesController : ControllerBase
     {
-        private readonly P4W_OR_RESI_V5_DEVContext _dbContext;
+        private readonly P4W_OR_RESI_V6_DEVContext _dbContext;
 
-        public EmployeesController(P4W_OR_RESI_V5_DEVContext dbContext)
+        public EmployeesController(P4W_OR_RESI_V6_DEVContext dbContext)
         {
             _dbContext = dbContext;
         }

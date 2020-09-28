@@ -29,7 +29,7 @@ namespace Gizmo.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddDbContext<P4W_OR_RESI_V5_DEVContext>(options =>
+            services.AddDbContext<P4W_OR_RESI_V6_DEVContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("OR_RESI_LIVE")));
 

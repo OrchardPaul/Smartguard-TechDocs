@@ -55,7 +55,7 @@ namespace Gizmo_V1_02
                 client.BaseAddress = new Uri("https://localhost:44399/");
             });
 
-            services.AddDbContext<P4W_OR_RESI_V5_DEVContext>(options =>
+            services.AddDbContext<P4W_OR_RESI_V6_DEVContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("OR_RESI_LIVE")));
 

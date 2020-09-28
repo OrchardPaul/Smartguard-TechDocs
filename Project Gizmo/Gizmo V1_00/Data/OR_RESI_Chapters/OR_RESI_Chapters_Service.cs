@@ -24,9 +24,9 @@ namespace Gizmo_V1_00.Data.OR_RESI_Chapters
 
     public class OR_RESI_Chapters_Service : IOR_RESI_Chapters_Service
     {
-        private readonly P4W_OR_RESI_V5_DEVContext _context;
+        private readonly P4W_OR_RESI_V6_DEVContext _context;
 
-        public OR_RESI_Chapters_Service(P4W_OR_RESI_V5_DEVContext context)
+        public OR_RESI_Chapters_Service(P4W_OR_RESI_V6_DEVContext context)
         {
             _context = context;
         }

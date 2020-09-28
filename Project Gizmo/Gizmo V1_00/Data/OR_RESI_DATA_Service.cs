@@ -9,9 +9,9 @@ namespace Gizmo_V1_00.Data
     public class OR_RESI_DATA_Service
     {
 
-        private readonly P4W_OR_RESI_V5_DEVContext _Context;
+        private readonly P4W_OR_RESI_V6_DEVContext _Context;
 
-        public OR_RESI_DATA_Service(P4W_OR_RESI_V5_DEVContext context)
+        public OR_RESI_DATA_Service(P4W_OR_RESI_V6_DEVContext context)
         {
             _Context = context;
         }
