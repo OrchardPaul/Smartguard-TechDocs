@@ -4,9 +4,12 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using Gizmo_V1_02.Data;
+using Gizmo_V1_02.Services.SessionState;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 
 namespace Gizmo_V1_02.Areas.Identity.Pages.Account.Manage
 {
@@ -15,13 +18,19 @@ namespace Gizmo_V1_02.Areas.Identity.Pages.Account.Manage
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
 
+        [Inject]
+        public IUserSessionState userState { get; set; }
+
         public IndexModel(
             UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager)
+            SignInManager<ApplicationUser> signInManager,
+            IUserSessionState userState)
         {
             _userManager = userManager;
             _signInManager = signInManager;
         }
+
+
 
         public string Username { get; set; }
 
@@ -36,18 +45,23 @@ namespace Gizmo_V1_02.Areas.Identity.Pages.Account.Manage
             [Phone]
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
+
+            public string FullName { get; set; }
         }
 
         private async Task LoadAsync(ApplicationUser user)
         {
             var userName = await _userManager.GetUserNameAsync(user);
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
+            var fullName = await _userManager.Users.Where(U => U.Id == user.Id).Select(U => U.FullName).SingleAsync();
+
 
             Username = userName;
 
             Input = new InputModel
             {
-                PhoneNumber = phoneNumber
+                PhoneNumber = phoneNumber,
+                FullName = fullName
             };
         }
 
@@ -87,6 +101,11 @@ namespace Gizmo_V1_02.Areas.Identity.Pages.Account.Manage
                     return RedirectToPage();
                 }
             }
+
+            user.FullName = Input.FullName;
+
+            await _userManager.UpdateAsync(user);
+
 
             await _signInManager.RefreshSignInAsync(user);
             StatusMessage = "Your profile has been updated";

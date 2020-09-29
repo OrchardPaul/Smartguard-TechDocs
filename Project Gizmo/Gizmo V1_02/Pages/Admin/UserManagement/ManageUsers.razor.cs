@@ -7,6 +7,7 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Gizmo.Context.Gizmo_Authentification.Custom;
+using Gizmo_V1_02.Services.SessionState;
 
 namespace Gizmo_V1_02.Pages.Admin.UserManagement
 {
@@ -17,6 +18,9 @@ namespace Gizmo_V1_02.Pages.Admin.UserManagement
 
         [Inject]
         private IIdentityRoleAccess roleAccess { get; set; }
+
+        [Inject]
+        private IUserSessionState sessionState { get; set; }
 
         public AspNetUsers editObject { get; set; } = new AspNetUsers();
 
@@ -32,8 +36,20 @@ namespace Gizmo_V1_02.Pages.Admin.UserManagement
 
         protected override async Task OnInitializedAsync()
         {
+            sessionState.OnChange += StateHasChanged;
+
             lstUsers = await userAccess.GetUsers();
             lstRoles = await roleAccess.GetUserRoles();
+        }
+
+        public void Dispose()
+        {
+            sessionState.OnChange -= StateHasChanged;
+        }
+
+        public void testState()
+        {
+            sessionState.SetFullName("John");
         }
 
         protected async void PrepareForEdit(AspNetUsers selectedUser)
@@ -59,5 +75,14 @@ namespace Gizmo_V1_02.Pages.Admin.UserManagement
             editObject = new AspNetUsers();
             editObjectRoles = null;
         }
+
+        private async void DataChanged()
+        {
+            lstUsers = await userAccess.GetUsers();
+            lstRoles = await roleAccess.GetUserRoles();
+
+            StateHasChanged();
+        }
+
     }
 }

@@ -1,4 +1,5 @@
 ﻿@page "/manageusers"
+@inject Gizmo_V1_02.Services.SessionState.IUserSessionState state
 
 <h3>User Management</h3>
 
@@ -25,9 +26,11 @@ else
         </tbody>
     </table>
 
-    <input type="button" data-toggle="modal" data-target="#userModal" @onclick='(() => PrepareForInsert())' class="btn btn-primary" value="Add Role" />
+    <input type="button" data-toggle="modal" data-target="#userModal" @onclick='(() => PrepareForInsert())' class="btn btn-primary" value="Add User" />
+    <input type="button" @onclick="() => testState()" class="btn btn-danger" value="change state">
 
+    <div>@state.FullName</div>
 }
 
 
-<UserDetail TaskObject="@editObject" selectedOption="@editOption" selectedRoles="@roles"></UserDetail>
+<UserDetail DataChanged="@DataChanged" TaskObject="@editObject" selectedOption="@editOption" selectedRoles="@roles"></UserDetail>

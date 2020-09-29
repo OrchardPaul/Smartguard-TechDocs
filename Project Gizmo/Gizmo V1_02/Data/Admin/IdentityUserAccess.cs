@@ -14,6 +14,7 @@ namespace Gizmo_V1_02.Data.Admin
         Task<IdentityResult> Delete(AspNetUsers item);
         Task<IList<string>> GetSelectedUserRoles(AspNetUsers item);
         Task<List<AspNetUsers>> GetUsers();
+        Task<AspNetUsers> GetUserByName(string userName);
         Task<AspNetUsers> SubmitChanges(AspNetUsers item, List<RoleItem> selectedRoles);
     }
 
@@ -33,6 +34,7 @@ namespace Gizmo_V1_02.Data.Admin
             {
                 Id = item.Id,
                 UserName = item.UserName,
+                FullName = item.FullName,
                 NormalizedUserName = item.NormalizedUserName,
                 Email = item.Email,
                 NormalizedEmail = item.NormalizedEmail,
@@ -58,6 +60,7 @@ namespace Gizmo_V1_02.Data.Admin
                 {
                     Id = U.Id,
                     UserName = U.UserName,
+                    FullName = U.FullName,
                     NormalizedUserName = U.NormalizedUserName,
                     Email = U.Email,
                     NormalizedEmail = U.NormalizedEmail,
@@ -75,6 +78,32 @@ namespace Gizmo_V1_02.Data.Admin
                 .ToListAsync();
         }
 
+        public async Task<AspNetUsers> GetUserByName(string userName)
+        {
+            return await userManager.Users
+                .Where(U => U.UserName == userName)
+                .Select(U => new AspNetUsers
+                {
+                    Id = U.Id,
+                    UserName = U.UserName,
+                    FullName = U.FullName,
+                    NormalizedUserName = U.NormalizedUserName,
+                    Email = U.Email,
+                    NormalizedEmail = U.NormalizedEmail,
+                    EmailConfirmed = U.EmailConfirmed,
+                    PasswordHash = U.PasswordHash,
+                    SecurityStamp = U.SecurityStamp,
+                    ConcurrencyStamp = U.ConcurrencyStamp,
+                    PhoneNumber = U.PhoneNumber,
+                    PhoneNumberConfirmed = U.PhoneNumberConfirmed,
+                    TwoFactorEnabled = U.TwoFactorEnabled,
+                    LockoutEnd = U.LockoutEnd,
+                    LockoutEnabled = U.LockoutEnabled,
+                    AccessFailedCount = U.AccessFailedCount
+                })
+                .SingleAsync();
+        }
+
         public async Task<AspNetUsers> SubmitChanges(AspNetUsers item, List<RoleItem> selectedRoles)
         {
             selectedUser = await userManager.FindByIdAsync(item.Id);
@@ -85,6 +114,7 @@ namespace Gizmo_V1_02.Data.Admin
                 {
                     UserName = item.UserName,
                     NormalizedUserName = item.NormalizedUserName,
+                    FullName = item.FullName,
                     Email = item.Email,
                     NormalizedEmail = item.NormalizedEmail,
                     EmailConfirmed = item.EmailConfirmed,
@@ -118,6 +148,7 @@ namespace Gizmo_V1_02.Data.Admin
             {
                 selectedUser.UserName = item.UserName;
                 selectedUser.NormalizedUserName = item.NormalizedUserName;
+                selectedUser.FullName = item.FullName;
                 selectedUser.Email = item.Email;
                 selectedUser.NormalizedEmail = item.NormalizedEmail;
                 selectedUser.EmailConfirmed = item.EmailConfirmed;
@@ -163,6 +194,7 @@ namespace Gizmo_V1_02.Data.Admin
                 {
                     Id = selectedUser.Id,
                     UserName = selectedUser.UserName,
+                    FullName = selectedUser.FullName,
                     NormalizedUserName = selectedUser.NormalizedUserName,
                     Email = selectedUser.Email,
                     NormalizedEmail = selectedUser.NormalizedEmail,

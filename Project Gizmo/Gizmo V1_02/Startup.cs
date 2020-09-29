@@ -24,6 +24,7 @@ using AutoMapper;
 using Plk.Blazor.DragDrop;
 using Gizmo_V1_02.Services.Email;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using Gizmo_V1_02.Services.SessionState;
 
 namespace Gizmo_V1_02
 {
@@ -69,6 +70,8 @@ namespace Gizmo_V1_02
 
             services.AddTransient<IEmailSender, EmailSender>();
             services.Configure<AuthMessageSenderOptions>(Configuration);
+
+            services.AddScoped<IUserSessionState, UserSessionState>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

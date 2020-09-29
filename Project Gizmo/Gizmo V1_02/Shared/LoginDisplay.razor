@@ -1,6 +1,9 @@
-﻿<AuthorizeView>
+﻿@using Gizmo_V1_02.Services.SessionState
+@inject IUserSessionState userState
+
+<AuthorizeView>
     <Authorized>
-        <a href="Identity/Account/Manage">Hello, @context.User.Identity.Name!</a>
+        <a href="Identity/Account/Manage">Hello, @(string.IsNullOrWhiteSpace(userState.FullName) ? context.User.Identity.Name : userState.FullName)!</a>
         <form method="post" action="Identity/Account/LogOut">
             <button type="submit" class="nav-link btn btn-link">Log out</button>
         </form>

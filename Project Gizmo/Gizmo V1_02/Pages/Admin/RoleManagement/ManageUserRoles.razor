@@ -1,7 +1,7 @@
 ﻿@page "/manageuserroles"
 
-@using Plk.Blazor.DragDrop
 @using Microsoft.AspNetCore.Components.Web
+@inject Gizmo_V1_02.Services.SessionState.IUserSessionState state
 
 <h3>ManageUserRoles</h3>
 
@@ -30,12 +30,7 @@ else
 
     <input type="button" data-toggle="modal" data-target="#roleModal" @onclick='(() => PrepareForInsert())' class="btn btn-primary" value="Add Role" />
 
-    <Dropzone Items="lstRoles">
-        <label @ondragstart="(() => PrepareForEdit(context))">@context.Name</label>
-    </Dropzone>
-
+    <div>@state.FullName</div>
 }
-
-
 
 <RoleDetail TaskObject="@editRole" DataChanged="@DataChanged"></RoleDetail>

@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gizmo.Context", "Gizmo.Cont
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gizmo.Api", "Gizmo.Api\Gizmo.Api.csproj", "{CD9F35A6-EF76-44FA-A9F4-0F2E3633E5A4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gizmo V1_02", "Gizmo V1_02\Gizmo V1_02.csproj", "{55D5E322-50AD-46F7-AF6C-F73CE931ADD0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gizmo V1_02", "Gizmo V1_02\Gizmo V1_02.csproj", "{55D5E322-50AD-46F7-AF6C-F73CE931ADD0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
