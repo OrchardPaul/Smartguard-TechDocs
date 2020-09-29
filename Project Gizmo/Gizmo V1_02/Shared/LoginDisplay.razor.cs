@@ -1,7 +1,9 @@
-﻿using Gizmo_V1_02.Data.Admin;
+﻿using Gizmo_V1_02.Data;
+using Gizmo_V1_02.Data.Admin;
 using Gizmo_V1_02.Services.SessionState;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
@@ -29,17 +31,22 @@ namespace Gizmo_V1_02.Shared
             {
                 var auth = await authenticationStateProvider.GetAuthenticationStateAsync();
 
-                if(!(auth is null))
+                if (!(auth is null))
                 {
                     var user = auth.User;
                     var userName = user.Identity.Name;
 
-                    var currentUser = await userAccess.GetUserByName(userName);
-
-                    if(!(currentUser is null))
+                    if (!(userName is null))
                     {
-                        sessionState.SetFullName(currentUser.FullName);
+                        var currentUser = await userAccess.GetUserByName(userName);
+
+                        if (!(currentUser is null))
+                        {
+                            sessionState.SetFullName(currentUser.FullName);
+                        }
                     }
+
+
                 }
             }
         }

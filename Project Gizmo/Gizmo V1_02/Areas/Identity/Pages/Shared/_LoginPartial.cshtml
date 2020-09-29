@@ -1,14 +1,19 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @using Gizmo_V1_02.Data
 @using Gizmo_V1_02.Services.SessionState
-@inject IUserSessionState userState
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
 
 @{
-    var signedInUser = await UserManager.GetUserAsync(User);
+    ApplicationUser signedInUser = null;
+
+    if (SignInManager.IsSignedIn(User))
+    {
+        signedInUser = await UserManager.GetUserAsync(User);
+    }
+
 }
 
 <ul class="navbar-nav">
@@ -16,22 +21,18 @@
     {
         @if (signedInUser is null)
         {
-            <li class="nav-item"></li>
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity.Name!</a>
+            </li>
         }
         else
         {
             <li class="nav-item">
-                <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @signedInUser.FullName!</a>
+                <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @(string.IsNullOrWhiteSpace(signedInUser.FullName) ? User.Identity.Name : signedInUser.FullName)!</a>
             </li>
         }
 
-        <!-- Old Implementation
 
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @(string.IsNullOrWhiteSpace(userState.FullName) ? User.Identity.Name : userState.FullName)!</a>
-        </li>
-
-        -->
         <li class="nav-item">
             <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="/" method="post">
                 <button type="submit" class="nav-link btn btn-link text-dark">Logout</button>

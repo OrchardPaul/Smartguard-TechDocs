@@ -1,5 +1,8 @@
 ﻿@using Gizmo_V1_02.Services.SessionState
+@using Microsoft.AspNetCore.Identity
+@using Gizmo_V1_02.Data
 @inject IUserSessionState userState
+@inject SignInManager<ApplicationUser> SignInManager
 
 <AuthorizeView>
     <Authorized>
