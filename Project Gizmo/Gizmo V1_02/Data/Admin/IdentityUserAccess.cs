@@ -113,23 +113,14 @@ namespace Gizmo_V1_02.Data.Admin
                 ApplicationUser NewUser = new ApplicationUser
                 {
                     UserName = item.UserName,
-                    NormalizedUserName = item.NormalizedUserName,
+                    NormalizedUserName = item.UserName.ToUpper(),
                     FullName = item.FullName,
                     Email = item.Email,
-                    NormalizedEmail = item.NormalizedEmail,
-                    EmailConfirmed = item.EmailConfirmed,
-                    PasswordHash = item.PasswordHash,
-                    SecurityStamp = item.SecurityStamp,
-                    ConcurrencyStamp = item.ConcurrencyStamp,
-                    PhoneNumber = item.PhoneNumber,
-                    PhoneNumberConfirmed = item.PhoneNumberConfirmed,
-                    TwoFactorEnabled = item.TwoFactorEnabled,
-                    LockoutEnd = item.LockoutEnd,
-                    LockoutEnabled = item.LockoutEnabled,
-                    AccessFailedCount = item.AccessFailedCount
+                    NormalizedEmail = item.Email.ToUpper(),
+                    PhoneNumber = item.PhoneNumber
                 };
 
-                var CreateResult = await userManager.CreateAsync(NewUser);
+                var CreateResult = await userManager.CreateAsync(NewUser,item.PasswordHash);
 
                 if (!CreateResult.Succeeded)
                 {
@@ -163,12 +154,15 @@ namespace Gizmo_V1_02.Data.Admin
 
                 await userManager.UpdateAsync(selectedUser);
 
-                var resetToken = await userManager.GeneratePasswordResetTokenAsync(selectedUser);
+                if(!(item.PasswordHash == "PasswordNotChanged115592!"))
+                {
+                    var resetToken = await userManager.GeneratePasswordResetTokenAsync(selectedUser);
 
-                await userManager.ResetPasswordAsync(
-                        selectedUser,
-                        resetToken,
-                        item.PasswordHash);
+                    await userManager.ResetPasswordAsync(
+                            selectedUser,
+                            resetToken,
+                            item.PasswordHash);
+                }
 
                 foreach (RoleItem checkRole in selectedRoles)
                 {

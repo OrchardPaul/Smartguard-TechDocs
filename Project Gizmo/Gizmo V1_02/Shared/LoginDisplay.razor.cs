@@ -57,7 +57,5 @@ namespace Gizmo_V1_02.Shared
         }
 
 
-
-
     }
 }

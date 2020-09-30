@@ -27,7 +27,27 @@ namespace Gizmo_V1_02.Pages.Admin.UserManagement
         [Inject]
         private IIdentityUserAccess service { get; set; }
 
+        [Parameter]
+        public bool enablePasswordSet { get; set; } = false;
+
         string isChecked { get; set; } = "";
+
+        private void TogglePasswordSet()
+        {
+            enablePasswordSet = !enablePasswordSet;
+
+            if (enablePasswordSet)
+            {
+                TaskObject.PasswordHash = "************";
+            }
+            else
+            {
+                TaskObject.PasswordHash = "PasswordNotChanged115592!";
+            }
+
+            StateHasChanged();
+        }
+
 
         private async Task ClosechapterModal()
         {

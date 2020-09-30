@@ -34,6 +34,8 @@ namespace Gizmo_V1_02.Pages.Admin.UserManagement
 
         protected List<AspNetUsers> lstUsers { get; set; }
 
+        private bool ResetPasswordDropBox = false;
+
         protected override async Task OnInitializedAsync()
         {
             sessionState.OnChange += StateHasChanged;
@@ -56,8 +58,9 @@ namespace Gizmo_V1_02.Pages.Admin.UserManagement
         {
             editOption = "Edit";
             editObject = selectedUser;
-            editObject.PasswordHash = "************";
+            editObject.PasswordHash = "PasswordNotChanged115592!";
             editObjectRoles = await userAccess.GetSelectedUserRoles(selectedUser);
+            
 
             roles = lstRoles
                 .Select(L => new RoleItem
