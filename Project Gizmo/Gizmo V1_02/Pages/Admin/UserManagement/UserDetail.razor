@@ -73,6 +73,24 @@
                         </div>
                     </div>
 
+                    <div class="form-group">
+                        <div class="container-fluid">
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-6 p-2">
+                                @if (companies is null)
+                                {
+                                    <div class="spinner"></div>
+                                }
+                                else
+                                {
+                                    @foreach (var company in companies)
+                                    {
+                                        <label>@company.CompanyName</label><InputCheckbox @onclick="() => ToggleCompanyStatus(company)" @bind-Value="company.IsSubscribed"></InputCheckbox>
+                                    }
+                                }
+                            </div>
+                        </div>
+                    </div>
+
                     <div>@isChecked</div>
 
                     <button type="submit" class="btn btn-primary">Submit</button>

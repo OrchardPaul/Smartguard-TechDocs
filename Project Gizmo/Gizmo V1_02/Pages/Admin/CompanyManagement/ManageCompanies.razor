@@ -1,0 +1,33 @@
+﻿@page "/managecompanies"
+
+<h3>Manage Companies</h3>
+
+@if (lstCompanyDetails is null)
+{
+    <div class="spinner"></div>
+}
+else
+{
+    <table id="tblCompanyList" class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Base Uri</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var company in lstCompanyDetails)
+            {
+                <tr>
+                    <td>@company.CompanyName</td>
+                    <td>@company.BaseUri</td>
+                    <td><input type="button" class="btn btn-primary" @onclick='(() => PrepareForEdit(company))' data-toggle="modal" data-target="#companyModal" value="Edit" /></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <input type="button" data-toggle="modal" data-target="#companyModal" @onclick='(() => PrepareForInsert())' class="btn btn-primary" value="Add Company" />
+}
+
+<CompanyEdit TaskObject="@editCompany" DataChanged="@DataChanged"></CompanyEdit>

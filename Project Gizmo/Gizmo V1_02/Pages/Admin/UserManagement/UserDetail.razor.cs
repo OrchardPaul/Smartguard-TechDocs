@@ -1,6 +1,7 @@
 ﻿using Gizmo.Context.Gizmo_Authentification;
 using Gizmo.Context.Gizmo_Authentification.Custom;
 using Gizmo_V1_02.Data.Admin;
+using Gizmo_V1_02.Services.SessionState;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using System;
@@ -17,7 +18,10 @@ namespace Gizmo_V1_02.Pages.Admin.UserManagement
 
         [Parameter]
         public Action DataChanged { get; set; }
-        
+
+        [Parameter]
+        public List<CompanyItem> companies { get; set; }
+
         [Parameter]
         public List<RoleItem> selectedRoles { get; set; }
 
@@ -27,10 +31,24 @@ namespace Gizmo_V1_02.Pages.Admin.UserManagement
         [Inject]
         private IIdentityUserAccess service { get; set; }
 
+        [Inject]
+        private IUserSessionState sessionState { get; set; }
+
         [Parameter]
         public bool enablePasswordSet { get; set; } = false;
 
         string isChecked { get; set; } = "";
+
+        protected override async Task OnInitializedAsync()
+        {
+            sessionState.OnChange += StateHasChanged;
+        }
+
+        public void Dispose()
+        {
+            sessionState.OnChange -= StateHasChanged;
+        }
+
 
         private void TogglePasswordSet()
         {
@@ -56,7 +74,15 @@ namespace Gizmo_V1_02.Pages.Admin.UserManagement
 
         private async void HandleValidSubmit()
         {
+            await service.SubmitCompanyCliams(companies, TaskObject);
             await service.SubmitChanges(TaskObject, selectedRoles);
+
+            var allClaims = await service.GetSignedInUserClaims();
+
+            if(!(allClaims is null))
+            {
+                sessionState.SetClaims(allClaims);
+            }
 
             await ClosechapterModal();
             DataChanged?.Invoke();
@@ -70,6 +96,10 @@ namespace Gizmo_V1_02.Pages.Admin.UserManagement
             DataChanged?.Invoke();
         }
 
+        private void ToggleCompanyStatus(CompanyItem companyItem)
+        {
+            companies.Where(C => C.Id != companyItem.Id).Select(C => C.IsSubscribed = false).ToList();
+        }
 
 
     }

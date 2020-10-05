@@ -31,10 +31,9 @@ else
     </table>
 
     <input type="button" data-toggle="modal" data-target="#userModal" @onclick='(() => PrepareForInsert())' class="btn btn-primary" value="Add User" />
-    <input type="button" @onclick="() => testState()" class="btn btn-danger" value="change state">
 
     <div>@state.FullName</div>
 }
 
 
-<UserDetail DataChanged="@DataChanged" TaskObject="@editObject" selectedOption="@editOption" selectedRoles="@roles" enablePasswordSet="@ResetPasswordDropBox"></UserDetail>
+<UserDetail DataChanged="@DataChanged" companies="@companyItems" TaskObject="@editObject" selectedOption="@editOption" selectedRoles="@roles" enablePasswordSet="@ResetPasswordDropBox"></UserDetail>

@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Data\Migrations\20200930134632_AddClaimStore.cs" />
+    <Compile Remove="Data\Migrations\20200930134632_AddClaimStore.Designer.cs" />
+    <Compile Remove="Data\Migrations\20201001123815_InitCompanyDetailss.cs" />
+    <Compile Remove="Data\Migrations\20201001123815_InitCompanyDetailss.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="10.0.0" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.0.1" />
     <PackageReference Include="blazor-dragdrop" Version="2.1.0" />

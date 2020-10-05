@@ -43,9 +43,16 @@ namespace Gizmo_V1_02.Shared
                         if (!(currentUser is null))
                         {
                             sessionState.SetFullName(currentUser.FullName);
+
+                            var allClaims = await userAccess.GetSignedInUserClaims();
+
+                            if(!(allClaims is null))
+                            {
+                                sessionState.SetClaims(allClaims);
+                            }
+
                         }
                     }
-
 
                 }
             }

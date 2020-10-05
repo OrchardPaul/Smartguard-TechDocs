@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Gizmo.Context.Gizmo_Authentification.Custom;
 using Gizmo_V1_02.Services.SessionState;
+using System.Security.Claims;
 
 namespace Gizmo_V1_02.Pages.Admin.UserManagement
 {
@@ -18,6 +19,9 @@ namespace Gizmo_V1_02.Pages.Admin.UserManagement
 
         [Inject]
         private IIdentityRoleAccess roleAccess { get; set; }
+
+        [Inject]
+        private ICompanyDbAccess companyDbAccess { get; set; }
 
         [Inject]
         private IUserSessionState sessionState { get; set; }
@@ -36,6 +40,12 @@ namespace Gizmo_V1_02.Pages.Admin.UserManagement
 
         private bool ResetPasswordDropBox = false;
 
+        public List<CompanyDetails> companies { get; set; }
+
+        public List<CompanyItem> companyItems { get; set; }
+
+        public IList<Claim> userCliams { get; set; }
+
         protected override async Task OnInitializedAsync()
         {
             sessionState.OnChange += StateHasChanged;
@@ -49,18 +59,24 @@ namespace Gizmo_V1_02.Pages.Admin.UserManagement
             sessionState.OnChange -= StateHasChanged;
         }
 
-        public void testState()
-        {
-            sessionState.SetFullName("John");
-        }
-
         protected async void PrepareForEdit(AspNetUsers selectedUser)
         {
             editOption = "Edit";
             editObject = selectedUser;
             editObject.PasswordHash = "PasswordNotChanged115592!";
             editObjectRoles = await userAccess.GetSelectedUserRoles(selectedUser);
-            
+
+            companies = await companyDbAccess.GetCompanies();
+            userCliams = await userAccess.GetCompanyClaims(editObject);
+
+            var userClaimId = userCliams.Select(U => U.Value).ToList();
+
+            companyItems = companies.Select(C => new CompanyItem 
+                                        {
+                                            Id = C.Id,
+                                            CompanyName = C.CompanyName,
+                                            IsSubscribed = (userClaimId.Contains(C.Id.ToString())) ? true : false
+                                        }).ToList();
 
             roles = lstRoles
                 .Select(L => new RoleItem
@@ -76,6 +92,7 @@ namespace Gizmo_V1_02.Pages.Admin.UserManagement
         {
             editOption = "Insert";
             editObject = new AspNetUsers();
+            companies = null;
             editObjectRoles = null;
         }
 

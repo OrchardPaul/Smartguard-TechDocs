@@ -60,8 +60,9 @@ namespace Gizmo_V1_02
                 options.UseSqlServer(
                     Configuration.GetConnectionString("OR_RESI_LIVE")));
 
-            services.AddTransient<IIdentityRoleAccess, IdentityRoleAccess>();
+            services.AddScoped<IIdentityRoleAccess, IdentityRoleAccess>();
             services.AddScoped<IIdentityUserAccess, IdentityUserAccess>();
+            services.AddScoped<ICompanyDbAccess, CompanyDbAccess>();
 
             services.AddTransient<IOR_RESI_Chapters_Service, OR_RESI_Chapters_Service>();
 

@@ -6,27 +6,162 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
 using Gizmo.Context.Gizmo_Authentification.Custom;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
+using Gizmo_V1_02.Services.SessionState;
 
 namespace Gizmo_V1_02.Data.Admin
 {
     public interface IIdentityUserAccess
     {
         Task<IdentityResult> Delete(AspNetUsers item);
+        Task<IList<Claim>> GetCompanyClaims(AspNetUsers user);
         Task<IList<string>> GetSelectedUserRoles(AspNetUsers item);
-        Task<List<AspNetUsers>> GetUsers();
+        Task<IList<Claim>> GetSignedInUserClaims();
+        Task<IList<Claim>> GetSignedInUserClaimViaType(string Type);
         Task<AspNetUsers> GetUserByName(string userName);
+        Task<List<AspNetUsers>> GetUsers();
         Task<AspNetUsers> SubmitChanges(AspNetUsers item, List<RoleItem> selectedRoles);
+        Task<AspNetUsers> SubmitCompanyCliams(List<CompanyItem> companies, AspNetUsers user);
     }
 
     public class IdentityUserAccess : IIdentityUserAccess
     {
         private readonly UserManager<ApplicationUser> userManager;
+        private readonly AuthenticationStateProvider authenticationStateProvider;
+        private readonly IUserSessionState userSessionState;
+
         private ApplicationUser selectedUser { get; set; }
 
-        public IdentityUserAccess(UserManager<ApplicationUser> userManager)
+        /*
+        [Inject]
+        protected AuthenticationStateProvider authenticationStateProvider { get; set; }
+        */
+
+        public IdentityUserAccess(UserManager<ApplicationUser> userManager,AuthenticationStateProvider authenticationStateProvider, IUserSessionState userSessionState)
         {
             this.userManager = userManager;
+            this.authenticationStateProvider = authenticationStateProvider;
+            this.userSessionState = userSessionState;
         }
+
+        public async Task<AspNetUsers> SubmitCompanyCliams(List<CompanyItem> companies, AspNetUsers user)
+        {
+            selectedUser = await userManager.FindByIdAsync(user.Id);
+
+            var removeClaims = companies.Where(C => !C.IsSubscribed)
+                .Select(C => new Claim("Company", C.Id.ToString()))
+                .ToList();
+
+            await userManager.RemoveClaimsAsync(selectedUser, removeClaims);
+
+            var claims = await userManager.GetClaimsAsync(selectedUser);
+
+            var claimsId = claims.Where(C => C.Type == "Company")
+                                .Select(C => C.Value)
+                                .ToList();
+
+            var currentCompanyClaims = userSessionState.allClaims
+                .Where(a => a.Type == "Company")
+                .Select(a => a.Value)
+                .ToList();
+
+            var addClaims = companies.Where(C => C.IsSubscribed)
+                .Where(C => !claimsId.Contains(C.Id.ToString()))
+                .Select(C => new Claim("Company", C.Id.ToString()))
+                .ToList();
+
+            await userManager.AddClaimsAsync(selectedUser, addClaims);
+
+            return user;
+        }
+
+        public async Task<IList<Claim>> GetSignedInUserClaims()
+        {
+            var auth = await authenticationStateProvider.GetAuthenticationStateAsync();
+
+            if (!(auth is null))
+            {
+                var user = auth.User;
+                var userName = user.Identity.Name;
+
+                if (!(userName is null))
+                {
+                    var currentUser = await userManager.Users
+                                            .Where(U => U.UserName == userName)
+                                            .SingleAsync();
+
+                    if (!(currentUser is null))
+                    {
+                        var claims = await userManager.GetClaimsAsync(currentUser);
+
+                        return claims.ToList();
+                    }
+                }
+            }
+
+            return null;
+        }
+
+
+        public async Task<IList<Claim>> GetSignedInUserClaimViaType(string Type)
+        {
+            var auth = await authenticationStateProvider.GetAuthenticationStateAsync();
+
+            if (!(auth is null))
+            {
+                var user = auth.User;
+                var userName = user.Identity.Name;
+
+                if (!(userName is null))
+                {
+                    var currentUser = await userManager.Users
+                                            .Where(U => U.UserName == userName)
+                                            .SingleAsync();
+
+                    if (!(currentUser is null))
+                    {
+                        var claims = await userManager.GetClaimsAsync(currentUser);
+
+                        return claims.Where(C => C.Type == Type)
+                                                .ToList();
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        public async Task<IList<Claim>> GetCompanyClaims(AspNetUsers user)
+        {
+            selectedUser = new ApplicationUser
+            {
+                Id = user.Id,
+                UserName = user.UserName,
+                FullName = user.FullName,
+                NormalizedUserName = user.NormalizedUserName,
+                Email = user.Email,
+                NormalizedEmail = user.NormalizedEmail,
+                EmailConfirmed = user.EmailConfirmed,
+                PasswordHash = user.PasswordHash,
+                SecurityStamp = user.SecurityStamp,
+                ConcurrencyStamp = user.ConcurrencyStamp,
+                PhoneNumber = user.PhoneNumber,
+                PhoneNumberConfirmed = user.PhoneNumberConfirmed,
+                TwoFactorEnabled = user.TwoFactorEnabled,
+                LockoutEnd = user.LockoutEnd,
+                LockoutEnabled = user.LockoutEnabled,
+                AccessFailedCount = user.AccessFailedCount
+            };
+
+            var claims = await userManager.GetClaimsAsync(selectedUser);
+
+            var claimsReturn = claims.Where(C => C.Type == "Company").ToList();
+
+            return claimsReturn;
+        }
+
 
         public async Task<IList<string>> GetSelectedUserRoles(AspNetUsers item)
         {
@@ -120,7 +255,7 @@ namespace Gizmo_V1_02.Data.Admin
                     PhoneNumber = item.PhoneNumber
                 };
 
-                var CreateResult = await userManager.CreateAsync(NewUser,item.PasswordHash);
+                var CreateResult = await userManager.CreateAsync(NewUser, item.PasswordHash);
 
                 if (!CreateResult.Succeeded)
                 {
@@ -154,7 +289,7 @@ namespace Gizmo_V1_02.Data.Admin
 
                 await userManager.UpdateAsync(selectedUser);
 
-                if(!(item.PasswordHash == "PasswordNotChanged115592!"))
+                if (!(item.PasswordHash == "PasswordNotChanged115592!"))
                 {
                     var resetToken = await userManager.GeneratePasswordResetTokenAsync(selectedUser);
 
