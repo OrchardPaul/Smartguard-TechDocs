@@ -1,4 +1,5 @@
 ﻿using Gizmo.Context.Gizmo_Authentification;
+using Gizmo_V1_02.Services.SessionState;
 using Microsoft.AspNetCore.Components;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -12,6 +13,7 @@ namespace Gizmo_V1_02.Data.Admin
     {
         Task<CompanyDetails> DeleteCompany(CompanyDetails company);
         Task<List<CompanyDetails>> GetCompanies();
+        Task<string> GetCompanyBaseUri(int id);
         Task<CompanyDetails> GetCompanyById(int id);
         Task<CompanyDetails> SubmitChanges(CompanyDetails company);
     }
@@ -33,6 +35,13 @@ namespace Gizmo_V1_02.Data.Admin
         public async Task<CompanyDetails> GetCompanyById(int id)
         {
             return await context.CompanyDetails.SingleAsync(C => C.Id == id);
+        }
+
+        public async Task<string> GetCompanyBaseUri(int id)
+        {
+            var selectedCompany = await context.CompanyDetails.SingleAsync(C => C.Id == id);
+
+            return (selectedCompany is null) ? null : selectedCompany.BaseUri;
         }
 
         public async Task<CompanyDetails> SubmitChanges(CompanyDetails company)

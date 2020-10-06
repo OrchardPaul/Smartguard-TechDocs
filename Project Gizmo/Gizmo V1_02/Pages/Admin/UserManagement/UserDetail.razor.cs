@@ -32,6 +32,9 @@ namespace Gizmo_V1_02.Pages.Admin.UserManagement
         private IIdentityUserAccess service { get; set; }
 
         [Inject]
+        private ICompanyDbAccess companyDbAccess { get; set; }
+
+        [Inject]
         private IUserSessionState sessionState { get; set; }
 
         [Parameter]
@@ -82,6 +85,14 @@ namespace Gizmo_V1_02.Pages.Admin.UserManagement
             if(!(allClaims is null))
             {
                 sessionState.SetClaims(allClaims);
+
+                var companyClaim = allClaims.Where(A => A.Type == "Company").SingleOrDefault();
+                var baseUri = await companyDbAccess.GetCompanyBaseUri(Int32.Parse(companyClaim.Value));
+
+                if (!(baseUri is null))
+                {
+                    sessionState.SetBaseUri(baseUri);
+                }
             }
 
             await ClosechapterModal();

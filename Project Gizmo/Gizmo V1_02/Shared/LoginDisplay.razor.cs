@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Gizmo_V1_02.Shared
@@ -21,9 +22,22 @@ namespace Gizmo_V1_02.Shared
         protected IIdentityUserAccess userAccess { get; set; }
 
         [Inject]
+        protected ICompanyDbAccess companyDbAccess { get; set; }
+
+        [Inject]
         protected AuthenticationStateProvider authenticationStateProvider { get; set; }
 
         protected override async Task OnInitializedAsync()
+        {
+            await SetSessionState();
+        }
+
+        public void Dispose()
+        {
+            sessionState.OnChange -= StateHasChanged;
+        }
+
+        public async Task<string> SetSessionState()
         {
             sessionState.OnChange += StateHasChanged;
 
@@ -46,22 +60,29 @@ namespace Gizmo_V1_02.Shared
 
                             var allClaims = await userAccess.GetSignedInUserClaims();
 
-                            if(!(allClaims is null))
+                            if (!(allClaims is null))
                             {
                                 sessionState.SetClaims(allClaims);
-                            }
 
+                                var companyClaim = allClaims.Where(A => A.Type == "Company").SingleOrDefault();
+                                var baseUri = await companyDbAccess.GetCompanyBaseUri(Int32.Parse(companyClaim.Value));
+
+                                if (!(baseUri is null))
+                                {
+                                    sessionState.SetBaseUri(baseUri);
+                                    return "Success";
+                                }
+
+                            }
                         }
                     }
-
                 }
             }
+
+            return "Failure";
         }
 
-        public void Dispose()
-        {
-            sessionState.OnChange -= StateHasChanged;
-        }
+
 
 
     }
