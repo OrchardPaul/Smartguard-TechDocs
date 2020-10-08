@@ -200,7 +200,7 @@ else
 #nullable disable
             __builder.AddMarkupContent(41, "\r\n");
             __builder.OpenComponent<Gizmo_V1_02.Pages.Admin.CompanyManagement.CompanyEdit>(42);
-            __builder.AddAttribute(43, "TaskObject", Microsoft.AspNetCore.Components.CompilerServices.RuntimeHelpers.TypeCheck<Gizmo.Context.Gizmo_Authentification.CompanyDetails>(
+            __builder.AddAttribute(43, "TaskObject", Microsoft.AspNetCore.Components.CompilerServices.RuntimeHelpers.TypeCheck<Gizmo.Context.Gizmo_Authentification.AppCompanyDetails>(
 #nullable restore
 #line 33 "F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo V1_02\Pages\Admin\CompanyManagement\ManageCompanies.razor"
                           editCompany

@@ -3,6 +3,7 @@ using Gizmo.Context.Gizmo_Authentification.Custom;
 using Gizmo_V1_02.Data.Admin;
 using Gizmo_V1_02.Services.SessionState;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.JSInterop;
 using System;
 using System.Collections.Generic;
@@ -36,6 +37,9 @@ namespace Gizmo_V1_02.Pages.Admin.UserManagement
 
         [Inject]
         private IUserSessionState sessionState { get; set; }
+
+        [Inject]
+        protected AuthenticationStateProvider authenticationStateProvider { get; set; }
 
         [Parameter]
         public bool enablePasswordSet { get; set; } = false;
@@ -77,21 +81,40 @@ namespace Gizmo_V1_02.Pages.Admin.UserManagement
 
         private async void HandleValidSubmit()
         {
+            TaskObject = await service.SubmitChanges(TaskObject, selectedRoles);
             await service.SubmitCompanyCliams(companies, TaskObject);
-            await service.SubmitChanges(TaskObject, selectedRoles);
 
-            var allClaims = await service.GetSignedInUserClaims();
+            var auth = await authenticationStateProvider.GetAuthenticationStateAsync();
 
-            if(!(allClaims is null))
+            if (!(auth is null))
             {
-                sessionState.SetClaims(allClaims);
+                var user = auth.User;
+                var userName = user.Identity.Name;
 
-                var companyClaim = allClaims.Where(A => A.Type == "Company").SingleOrDefault();
-                var baseUri = await companyDbAccess.GetCompanyBaseUri(Int32.Parse(companyClaim.Value));
-
-                if (!(baseUri is null))
+                if (!(userName is null))
                 {
-                    sessionState.SetBaseUri(baseUri);
+                    if(userName == TaskObject.UserName)
+                    {
+                        var allClaims = await service.GetSignedInUserClaims();
+
+                        if (!(allClaims is null))
+                        {
+                            sessionState.SetClaims(allClaims);
+
+                            var companyClaim = allClaims.Where(A => A.Type == "Company").SingleOrDefault();
+
+                            var baseUri = await companyDbAccess.GetCompanyBaseUri((companyClaim is null) ? 0 : Int32.Parse(companyClaim.Value));
+
+                            if (!(baseUri is null))
+                            {
+                                sessionState.SetBaseUri(baseUri);
+                            }
+                            else
+                            {
+                                sessionState.SetBaseUri("Not Set");
+                            }
+                        }
+                    }
                 }
             }
 

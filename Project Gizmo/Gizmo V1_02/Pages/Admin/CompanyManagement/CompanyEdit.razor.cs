@@ -13,7 +13,7 @@ namespace Gizmo_V1_02.Pages.Admin.CompanyManagement
     public partial class CompanyEdit
     {
         [Parameter]
-        public CompanyDetails TaskObject { get; set; }
+        public AppCompanyDetails TaskObject { get; set; }
 
         [Parameter]
         public Action DataChanged { get; set; }

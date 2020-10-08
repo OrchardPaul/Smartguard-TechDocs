@@ -11,6 +11,8 @@
     <Compile Remove="Data\Migrations\20200930134632_AddClaimStore.Designer.cs" />
     <Compile Remove="Data\Migrations\20201001123815_InitCompanyDetailss.cs" />
     <Compile Remove="Data\Migrations\20201001123815_InitCompanyDetailss.Designer.cs" />
+    <Compile Remove="Data\Migrations\20201007095624_ChangeCompanyDetails.cs" />
+    <Compile Remove="Data\Migrations\20201007095624_ChangeCompanyDetails.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

@@ -11,11 +11,11 @@ namespace Gizmo_V1_02.Data.Admin
 {
     public interface ICompanyDbAccess
     {
-        Task<CompanyDetails> DeleteCompany(CompanyDetails company);
-        Task<List<CompanyDetails>> GetCompanies();
+        Task<AppCompanyDetails> DeleteCompany(AppCompanyDetails company);
+        Task<List<AppCompanyDetails>> GetCompanies();
         Task<string> GetCompanyBaseUri(int id);
-        Task<CompanyDetails> GetCompanyById(int id);
-        Task<CompanyDetails> SubmitChanges(CompanyDetails company);
+        Task<AppCompanyDetails> GetCompanyById(int id);
+        Task<AppCompanyDetails> SubmitChanges(AppCompanyDetails company);
     }
 
     public class CompanyDbAccess : ICompanyDbAccess
@@ -27,30 +27,30 @@ namespace Gizmo_V1_02.Data.Admin
             this.context = context;
         }
 
-        public async Task<List<CompanyDetails>> GetCompanies()
+        public async Task<List<AppCompanyDetails>> GetCompanies()
         {
-            return await context.CompanyDetails.ToListAsync();
+            return await context.AppCompanyDetails.ToListAsync();
         }
 
-        public async Task<CompanyDetails> GetCompanyById(int id)
+        public async Task<AppCompanyDetails> GetCompanyById(int id)
         {
-            return await context.CompanyDetails.SingleAsync(C => C.Id == id);
+            return await context.AppCompanyDetails.SingleAsync(C => C.Id == id);
         }
 
         public async Task<string> GetCompanyBaseUri(int id)
         {
-            var selectedCompany = await context.CompanyDetails.SingleAsync(C => C.Id == id);
+            var selectedCompany = await context.AppCompanyDetails.SingleOrDefaultAsync(C => C.Id == id);
 
             return (selectedCompany is null) ? null : selectedCompany.BaseUri;
         }
 
-        public async Task<CompanyDetails> SubmitChanges(CompanyDetails company)
+        public async Task<AppCompanyDetails> SubmitChanges(AppCompanyDetails company)
         {
-            var selectedCompany = await context.CompanyDetails.SingleOrDefaultAsync(C => C.Id == company.Id);
+            var selectedCompany = await context.AppCompanyDetails.SingleOrDefaultAsync(C => C.Id == company.Id);
 
             if (selectedCompany is null)
             {
-                context.CompanyDetails.Add(company);
+                context.AppCompanyDetails.Add(company);
                 await context.SaveChangesAsync();
                 return company;
             }
@@ -64,11 +64,11 @@ namespace Gizmo_V1_02.Data.Admin
             }
         }
 
-        public async Task<CompanyDetails> DeleteCompany(CompanyDetails company)
+        public async Task<AppCompanyDetails> DeleteCompany(AppCompanyDetails company)
         {
-            var selectedCompany = await context.CompanyDetails.SingleOrDefaultAsync(C => C.Id == company.Id);
+            var selectedCompany = await context.AppCompanyDetails.SingleOrDefaultAsync(C => C.Id == company.Id);
 
-            context.CompanyDetails.Remove(selectedCompany);
+            context.AppCompanyDetails.Remove(selectedCompany);
             await context.SaveChangesAsync();
 
             return selectedCompany;

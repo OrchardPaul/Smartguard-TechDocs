@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Gizmo.Context.Gizmo_Authentification
 {
-    public partial class CompanyDetails
+    public partial class AppCompanyDetails
     {
         [Key]
         public int Id { get; set; }

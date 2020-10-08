@@ -13,9 +13,9 @@ namespace Gizmo_V1_02.Pages.Admin.CompanyManagement
         [Inject]
         ICompanyDbAccess companyDbAccess { get; set; }
 
-        private List<CompanyDetails> lstCompanyDetails;
+        private List<AppCompanyDetails> lstCompanyDetails;
 
-        public CompanyDetails editCompany = new CompanyDetails();
+        public AppCompanyDetails editCompany = new AppCompanyDetails();
 
         protected override async Task OnInitializedAsync()
         {
@@ -29,19 +29,19 @@ namespace Gizmo_V1_02.Pages.Admin.CompanyManagement
             StateHasChanged();
         }
 
-        protected void PrepareForEdit(CompanyDetails seletedRole)
+        protected void PrepareForEdit(AppCompanyDetails seletedRole)
         {
             editCompany = seletedRole;
         }
 
-        protected void PrepareForDelete(CompanyDetails seletedRole)
+        protected void PrepareForDelete(AppCompanyDetails seletedRole)
         {
             editCompany = seletedRole;
         }
 
         protected void PrepareForInsert()
         {
-            editCompany = new CompanyDetails();
+            editCompany = new AppCompanyDetails();
         }
     }
 }

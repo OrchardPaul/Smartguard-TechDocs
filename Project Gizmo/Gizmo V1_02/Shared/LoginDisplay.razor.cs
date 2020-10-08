@@ -60,7 +60,7 @@ namespace Gizmo_V1_02.Shared
 
                             var allClaims = await userAccess.GetSignedInUserClaims();
 
-                            if (!(allClaims is null))
+                            if (!(allClaims.Count() == 0))
                             {
                                 sessionState.SetClaims(allClaims);
 
@@ -71,6 +71,11 @@ namespace Gizmo_V1_02.Shared
                                 {
                                     sessionState.SetBaseUri(baseUri);
                                     return "Success";
+                                }
+                                else
+                                {
+                                    sessionState.SetBaseUri("Not Set");
+                                    return "Fail";
                                 }
 
                             }

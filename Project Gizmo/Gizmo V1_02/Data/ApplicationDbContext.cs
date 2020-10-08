@@ -14,7 +14,7 @@ namespace Gizmo_V1_02.Data
         {
         }
 
-        public virtual DbSet<CompanyDetails> CompanyDetails { get; set; }
+        public virtual DbSet<AppCompanyDetails> AppCompanyDetails { get; set; }
 
     }
 }

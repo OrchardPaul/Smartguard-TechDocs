@@ -10,6 +10,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Gizmo_V1_02.Services.SessionState;
+using AutoMapper;
 
 namespace Gizmo_V1_02.Data.Admin
 {
@@ -31,19 +32,19 @@ namespace Gizmo_V1_02.Data.Admin
         private readonly UserManager<ApplicationUser> userManager;
         private readonly AuthenticationStateProvider authenticationStateProvider;
         private readonly IUserSessionState userSessionState;
+        private readonly IMapper mapper;
 
         private ApplicationUser selectedUser { get; set; }
 
-        /*
-        [Inject]
-        protected AuthenticationStateProvider authenticationStateProvider { get; set; }
-        */
-
-        public IdentityUserAccess(UserManager<ApplicationUser> userManager,AuthenticationStateProvider authenticationStateProvider, IUserSessionState userSessionState)
+        public IdentityUserAccess(UserManager<ApplicationUser> userManager
+            , AuthenticationStateProvider authenticationStateProvider
+            , IUserSessionState userSessionState
+            , IMapper mapper)
         {
             this.userManager = userManager;
             this.authenticationStateProvider = authenticationStateProvider;
             this.userSessionState = userSessionState;
+            this.mapper = mapper;
         }
 
         public async Task<AspNetUsers> SubmitCompanyCliams(List<CompanyItem> companies, AspNetUsers user)
@@ -61,11 +62,6 @@ namespace Gizmo_V1_02.Data.Admin
             var claimsId = claims.Where(C => C.Type == "Company")
                                 .Select(C => C.Value)
                                 .ToList();
-
-            var currentCompanyClaims = userSessionState.allClaims
-                .Where(a => a.Type == "Company")
-                .Select(a => a.Value)
-                .ToList();
 
             var addClaims = companies.Where(C => C.IsSubscribed)
                 .Where(C => !claimsId.Contains(C.Id.ToString()))
@@ -135,6 +131,11 @@ namespace Gizmo_V1_02.Data.Admin
 
         public async Task<IList<Claim>> GetCompanyClaims(AspNetUsers user)
         {
+            selectedUser = new ApplicationUser();
+
+            mapper.Map(user, selectedUser);
+
+            /*
             selectedUser = new ApplicationUser
             {
                 Id = user.Id,
@@ -154,6 +155,7 @@ namespace Gizmo_V1_02.Data.Admin
                 LockoutEnabled = user.LockoutEnabled,
                 AccessFailedCount = user.AccessFailedCount
             };
+            */
 
             var claims = await userManager.GetClaimsAsync(selectedUser);
 
@@ -165,6 +167,11 @@ namespace Gizmo_V1_02.Data.Admin
 
         public async Task<IList<string>> GetSelectedUserRoles(AspNetUsers item)
         {
+            selectedUser = new ApplicationUser();
+
+            mapper.Map(item, selectedUser);
+
+            /*
             selectedUser = new ApplicationUser
             {
                 Id = item.Id,
@@ -184,12 +191,18 @@ namespace Gizmo_V1_02.Data.Admin
                 LockoutEnabled = item.LockoutEnabled,
                 AccessFailedCount = item.AccessFailedCount
             };
+            */
 
             return await userManager.GetRolesAsync(selectedUser);
         }
 
         public async Task<List<AspNetUsers>> GetUsers()
         {
+            return await userManager.Users
+                .Select(U => mapper.Map(U,new AspNetUsers()))
+                .ToListAsync();
+
+            /*
             return await userManager.Users
                 .Select(U => new AspNetUsers
                 {
@@ -211,10 +224,17 @@ namespace Gizmo_V1_02.Data.Admin
                     AccessFailedCount = U.AccessFailedCount
                 })
                 .ToListAsync();
+            */
         }
 
         public async Task<AspNetUsers> GetUserByName(string userName)
         {
+            return await userManager.Users
+                .Where(U => U.UserName == userName)
+                .Select(U => mapper.Map(U, new AspNetUsers()))
+                .SingleAsync();
+
+            /*
             return await userManager.Users
                 .Where(U => U.UserName == userName)
                 .Select(U => new AspNetUsers
@@ -237,6 +257,7 @@ namespace Gizmo_V1_02.Data.Admin
                     AccessFailedCount = U.AccessFailedCount
                 })
                 .SingleAsync();
+            */
         }
 
         public async Task<AspNetUsers> SubmitChanges(AspNetUsers item, List<RoleItem> selectedRoles)
@@ -263,9 +284,11 @@ namespace Gizmo_V1_02.Data.Admin
                 }
                 else
                 {
-                    var strSelectedRoles = selectedRoles.Where(S => S.IsSubscribed = true).Select(S => S.RoleName).ToList();
+                    var strSelectedRoles = selectedRoles.Where(S => S.IsSubscribed == true).Select(S => S.RoleName).ToList();
 
                     await userManager.AddToRolesAsync(NewUser, strSelectedRoles);
+
+                    mapper.Map(NewUser, item);
 
                     return item;
                 }
@@ -319,6 +342,9 @@ namespace Gizmo_V1_02.Data.Admin
                     }
                 }
 
+                mapper.Map(selectedUser, item);
+
+                /*
                 item = new AspNetUsers
                 {
                     Id = selectedUser.Id,
@@ -338,6 +364,7 @@ namespace Gizmo_V1_02.Data.Admin
                     LockoutEnabled = selectedUser.LockoutEnabled,
                     AccessFailedCount = selectedUser.AccessFailedCount
                 };
+                */
 
                 return item;
             }

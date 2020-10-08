@@ -18,6 +18,9 @@ namespace Gizmo_V1_02.Data.MapperProfiles
             CreateMap<IdentityRole, AspNetRoles>();
             CreateMap<AspNetRoles, IdentityRole>();
 
+            CreateMap<ApplicationUser, AspNetUsers>();
+            CreateMap<AspNetUsers, ApplicationUser>();
+
         }
 
     }

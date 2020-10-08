@@ -40,7 +40,7 @@ namespace Gizmo_V1_02.Pages.Admin.UserManagement
 
         private bool ResetPasswordDropBox = false;
 
-        public List<CompanyDetails> companies { get; set; }
+        public List<AppCompanyDetails> companies { get; set; }
 
         public List<CompanyItem> companyItems { get; set; }
 
@@ -52,6 +52,7 @@ namespace Gizmo_V1_02.Pages.Admin.UserManagement
 
             lstUsers = await userAccess.GetUsers();
             lstRoles = await roleAccess.GetUserRoles();
+            companies = await companyDbAccess.GetCompanies();
         }
 
         public void Dispose()
@@ -66,7 +67,6 @@ namespace Gizmo_V1_02.Pages.Admin.UserManagement
             editObject.PasswordHash = "PasswordNotChanged115592!";
             editObjectRoles = await userAccess.GetSelectedUserRoles(selectedUser);
 
-            companies = await companyDbAccess.GetCompanies();
             userCliams = await userAccess.GetCompanyClaims(editObject);
 
             var userClaimId = userCliams.Select(U => U.Value).ToList();
@@ -92,7 +92,22 @@ namespace Gizmo_V1_02.Pages.Admin.UserManagement
         {
             editOption = "Insert";
             editObject = new AspNetUsers();
-            companies = null;
+
+            companyItems = companies.Select(C => new CompanyItem
+            {
+                Id = C.Id,
+                CompanyName = C.CompanyName,
+                IsSubscribed = false
+            }).ToList();
+
+            roles = lstRoles
+                .Select(L => new RoleItem
+                {
+                    IsSubscribed = false,
+                    RoleName = L.Name
+                })
+                .ToList();
+
             editObjectRoles = null;
         }
 

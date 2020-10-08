@@ -62,7 +62,7 @@ namespace Gizmo_V1_02.Services
             {
                 return httpClient.GetJsonAsync<List<string>>($"{userSession.baseUri}api/ChapterManagement/GetCaseTypes");
             }
-            catch(Exception)
+            catch(HttpRequestException)
             {
                 return null;
             }
