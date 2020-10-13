@@ -17,7 +17,6 @@ using Gizmo_V1_02.Areas.Identity;
 using Gizmo_V1_02.Data;
 using Gizmo.Context.OR_RESI;
 using Gizmo_V1_02.Services;
-using Gizmo_V1_02.Data.OR_RESI_Chapters;
 using Gizmo_V1_02.Data.Admin;
 using Gizmo_V1_02.Data.MapperProfiles;
 using AutoMapper;
@@ -56,15 +55,9 @@ namespace Gizmo_V1_02
                 client.BaseAddress = new Uri("https://localhost:44399/");
             });
 
-            services.AddDbContext<P4W_OR_RESI_V6_DEVContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("OR_RESI_LIVE")));
-
             services.AddScoped<IIdentityRoleAccess, IdentityRoleAccess>();
             services.AddScoped<IIdentityUserAccess, IdentityUserAccess>();
             services.AddScoped<ICompanyDbAccess, CompanyDbAccess>();
-
-            services.AddTransient<IOR_RESI_Chapters_Service, OR_RESI_Chapters_Service>();
 
             services.AddBlazorDragDrop();
             services.AddAutoMapper(typeof(UserRoleProfile));

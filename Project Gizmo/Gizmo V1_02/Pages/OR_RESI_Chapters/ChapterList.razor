@@ -1,7 +1,5 @@
 ﻿@page "/chapterlist"
 
-@using Gizmo_V1_02.Data.OR_RESI_Chapters
-
 @inject IJSRuntime jsRuntime
 
 <h1>Chapters</h1>
@@ -172,11 +170,15 @@ else if (selectedChapter == "")
     @if (displaySection == "Status")
     {
         <div class="fade-in">
-            @foreach (var status in lstStatus)
+            @foreach (var status in statusObjects)
             {
                 <div class="OR_ChapterItemTable">
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 p-2 ">
-                        <span class="shadow card subCard rounded chapterItem_Status" @onclick='(() => PrepareForEdit(status,"Status"))' data-toggle="modal" data-target="#taskModal" value="Edit">@status.Name</span>
+                        <span class="shadow card subCard rounded chapterItem_Status" @onmouseout="() => ToggleStatusHover(status)" @onmouseover="() => ToggleStatusHover(status)" @onclick='(() => PrepareForEdit(status.management,"Status"))' data-toggle="modal" data-target="#taskModal" value="Edit">@status.management.Name</span>
+                        @if (status.hoveredOver)
+                        {
+                            <div>Hover</div>
+                        }
                     </div>
                 </div>
             }

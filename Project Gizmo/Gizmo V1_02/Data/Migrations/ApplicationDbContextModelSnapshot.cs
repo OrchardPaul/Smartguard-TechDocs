@@ -40,6 +40,77 @@ namespace Gizmo_V1_02.Data.Migrations
                     b.ToTable("AppCompanyDetails");
                 });
 
+            modelBuilder.Entity("Gizmo.Context.Gizmo_Authentification.AppCompanyWorkTypeGroups", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("CompanyID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("WorkTypeGroupId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AppCompanyWorkTypeGroups");
+                });
+
+            modelBuilder.Entity("Gizmo.Context.Gizmo_Authentification.AppWorkTypeGroups", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("GroupName")
+                        .HasColumnType("nvarchar(256)")
+                        .HasMaxLength(256);
+
+                    b.Property<int>("parentId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AppWorkTypeGroups");
+                });
+
+            modelBuilder.Entity("Gizmo.Context.Gizmo_Authentification.AppWorkTypeGroupsTypeAssignments", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("WorkTypeGroupId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("WorkTypeId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AppWorkTypeGroupsTypeAssignments");
+                });
+
+            modelBuilder.Entity("Gizmo.Context.Gizmo_Authentification.AppWorkTypes", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("TypeName")
+                        .HasColumnType("nvarchar(256)")
+                        .HasMaxLength(256);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AppWorkTypes");
+                });
+
             modelBuilder.Entity("Gizmo_V1_02.Data.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")

@@ -27,7 +27,7 @@
                     <button type="submit" class="btn btn-primary">Submit</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
 
-                    @if (!(TaskObject is null))
+                    @if (!(TaskObject.CompanyName is null))
                     {
                         <button type="button" @onclick="HandleValidDelete" class="btn btn-secondary"></button>
                     }

@@ -1,0 +1,45 @@
+﻿@page "/manageworktypes"
+
+<h3>Manage Work Types</h3>
+
+@if (workTypeGroups is null)
+{
+    <input type="button" data-toggle="modal" data-target="#GroupModal" @onclick='(() => PrepareGroupForInsert())' class="btn btn-primary" value="Add Group" />
+}
+else
+{
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 p-2">
+        @foreach (var group in workTypeGroups)
+        {
+
+            <div @onclick='(() => ToggleGroupWorkTypes(group))' class="shadow card rounded form-group">
+                @group.group.GroupName
+                <input type="button" class="align-self-end btn btn-primary" @onclick='(() => PrepareGroupForEdit(group))' data-toggle="modal" data-target="#GroupModal" value="Edit" />
+            </div>
+
+            @if (group.showWorkType)
+            {
+                @if (group.workTypes is null)
+                {
+                    <input type="button" data-toggle="modal" data-target="#GroupModal" @onclick='(() => PrepareTypeForInsert())' class="btn btn-primary" value="Add Type" />
+                }
+                else
+                {
+                    foreach (var type in group.workTypes)
+                    {
+                        <div class="shadow card rounded form-group" @onclick='(() => PrepareTypeForEdit(type))' data-toggle="modal" data-target="#TypeModal"> @type.workType.TypeName </div>
+                    }
+
+                    <input type="button" data-toggle="modal" data-target="#TypeModal" @onclick='(() => PrepareTypeForInsert())' class="btn btn-primary" value="Add Type" />
+                }
+            }
+        }
+    </div>
+
+    <input type="button" data-toggle="modal" data-target="#GroupModal" @onclick='(() => PrepareGroupForInsert())' class="btn btn-primary" value="Add Group" />
+}
+
+
+<WorkTypeGroupDetails TaskObject="@editGroup" DataChanged="@DataChanged"></WorkTypeGroupDetails>
+
+<WorkTypeDetails TaskObject="@editType" Groups="@groupAssignments" DataChanged="@DataChanged"></WorkTypeDetails>

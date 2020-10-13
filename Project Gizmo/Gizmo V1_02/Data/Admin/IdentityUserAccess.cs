@@ -273,7 +273,8 @@ namespace Gizmo_V1_02.Data.Admin
                     FullName = item.FullName,
                     Email = item.Email,
                     NormalizedEmail = item.Email.ToUpper(),
-                    PhoneNumber = item.PhoneNumber
+                    PhoneNumber = item.PhoneNumber,
+                    EmailConfirmed = true
                 };
 
                 var CreateResult = await userManager.CreateAsync(NewUser, item.PasswordHash);

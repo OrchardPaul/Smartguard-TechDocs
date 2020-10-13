@@ -13,6 +13,8 @@
     <Compile Remove="Data\Migrations\20201001123815_InitCompanyDetailss.Designer.cs" />
     <Compile Remove="Data\Migrations\20201007095624_ChangeCompanyDetails.cs" />
     <Compile Remove="Data\Migrations\20201007095624_ChangeCompanyDetails.Designer.cs" />
+    <Compile Remove="Data\Migrations\20201009075228_changeCompanyWorkTypeGroupKey.cs" />
+    <Compile Remove="Data\Migrations\20201009075228_changeCompanyWorkTypeGroupKey.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

@@ -14,6 +14,13 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
 {
     public partial class ChapterList
     {
+
+        private class StatusObject
+        {
+            public UsrOrDefChapterManagement management { get; set; }
+            public bool hoveredOver { get; set; }
+        }
+
         [Inject]
         private IChapterManagementService chapterManagementService { get; set; }
 
@@ -29,6 +36,9 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
         private List<UsrOrDefChapterManagement> lstFees;
         private List<UsrOrDefChapterManagement> lstDocs;
         private List<UsrOrDefChapterManagement> lstStatus;
+
+        private List<StatusObject> statusObjects;
+
 
         public List<DmDocuments> dropDownDocumentList;
 
@@ -74,6 +84,11 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
             selectedChapter = "";
         }
 
+        private void ToggleStatusHover(StatusObject statusObject)
+        {
+            statusObject.hoveredOver = !statusObject.hoveredOver;
+        }
+
         async Task SelectDocList(String chapter, int chapterID)
         {
             lstAll = await chapterManagementService.GetItemListByChapter(chapterID);
@@ -81,6 +96,14 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
             lstAgendas = lstAll.Where(A => A.Type == "Agenda").ToList();
             lstFees = lstAll.Where(A => A.Type == "Fee").ToList();
             lstStatus = lstAll.Where(A => A.Type == "Status").ToList();
+
+            statusObjects = lstAll.Where(A => A.Type == "Status")
+                .Select(A => new StatusObject
+                {
+                    management = A,
+                    hoveredOver = false
+                })
+                .ToList();
 
             lstDocs = lstAll
                 .Where(A => A.Type != "Agenda")
@@ -106,6 +129,14 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
             lstAgendas = lstAll.Where(A => A.Type == "Agenda").ToList();
             lstFees = lstAll.Where(A => A.Type == "Fee").ToList();
             lstStatus = lstAll.Where(A => A.Type == "Status").ToList();
+
+            statusObjects = lstAll.Where(A => A.Type == "Status")
+            .Select(A => new StatusObject
+            {
+                management = A,
+                hoveredOver = false
+            })
+            .ToList();
 
             lstDocs = lstAll
                 .Where(A => A.Type != "Agenda")
