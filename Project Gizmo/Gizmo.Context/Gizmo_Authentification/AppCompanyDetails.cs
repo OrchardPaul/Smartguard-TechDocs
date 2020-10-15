@@ -15,6 +15,9 @@ namespace Gizmo.Context.Gizmo_Authentification
         public string CompanyName { get; set; }
 
         [StringLength(256)]
-        public string BaseUri { get; set; }
+        public string DevUri { get; set; }
+
+        [StringLength(256)]
+        public string LiveUri { get; set; }
     }
 }

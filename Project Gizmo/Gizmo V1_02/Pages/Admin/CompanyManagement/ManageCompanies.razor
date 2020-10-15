@@ -12,7 +12,6 @@ else
         <thead>
             <tr>
                 <th>Name</th>
-                <th>Base Uri</th>
             </tr>
         </thead>
         <tbody>
@@ -20,7 +19,6 @@ else
             {
                 <tr>
                     <td>@company.CompanyName</td>
-                    <td>@company.BaseUri</td>
                     <td><input type="button" class="btn btn-primary" @onclick='(() => PrepareForEdit(company))' data-toggle="modal" data-target="#companyModal" value="Edit" /></td>
                 </tr>
             }

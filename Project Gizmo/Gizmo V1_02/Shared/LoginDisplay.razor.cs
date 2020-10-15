@@ -65,7 +65,8 @@ namespace Gizmo_V1_02.Shared
                                 sessionState.SetClaims(allClaims);
 
                                 var companyClaim = allClaims.Where(A => A.Type == "Company").SingleOrDefault();
-                                var baseUri = await companyDbAccess.GetCompanyBaseUri(Int32.Parse(companyClaim.Value));
+                                var baseUri = await companyDbAccess.GetCompanyBaseUri(Int32.Parse(companyClaim.Value)
+                                                                                        , (currentUser.SelectedUri is null) ? "" : currentUser.SelectedUri);
 
                                 if (!(baseUri is null))
                                 {

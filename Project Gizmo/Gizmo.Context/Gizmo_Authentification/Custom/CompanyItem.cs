@@ -8,7 +8,7 @@ namespace Gizmo.Context.Gizmo_Authentification.Custom
     {
         public int Id { get; set; }
 
-        public string CompanyName { get; set; }
+        public AppCompanyDetails Company { get; set; }
 
         public bool IsSubscribed { get; set; }
     }

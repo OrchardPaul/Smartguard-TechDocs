@@ -10,8 +10,6 @@ F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo.Api\bin\Debug\netcoreapp3.1\Gizmo.Api
 F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo.Api\obj\Debug\netcoreapp3.1\Gizmo.Api.csprojAssemblyReference.cache
 F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo.Api\obj\Debug\netcoreapp3.1\Gizmo.Api.AssemblyInfoInputs.cache
 F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo.Api\obj\Debug\netcoreapp3.1\Gizmo.Api.AssemblyInfo.cs
-F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo.Api\obj\Debug\netcoreapp3.1\Gizmo.Api.csproj.CoreCompileInputs.cache
-F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo.Api\obj\Debug\netcoreapp3.1\Gizmo.Api.MvcApplicationPartsAssemblyInfo.cache
 F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo.Api\obj\Debug\netcoreapp3.1\Gizmo.Api.RazorTargetAssemblyInfo.cache
 F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo.Api\obj\Debug\netcoreapp3.1\staticwebassets\Gizmo.Api.StaticWebAssets.Manifest.cache
 F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo.Api\obj\Debug\netcoreapp3.1\staticwebassets\Gizmo.Api.StaticWebAssets.xml
@@ -122,3 +120,6 @@ F:\WorkSpaces\PT\Gizmo\Project Gizmo\Gizmo.Api\obj\Debug\netcoreapp3.1\staticweb
 F:\WorkSpaces\PT\Gizmo\Project Gizmo\Gizmo.Api\obj\Debug\netcoreapp3.1\Gizmo.Api.dll
 F:\WorkSpaces\PT\Gizmo\Project Gizmo\Gizmo.Api\obj\Debug\netcoreapp3.1\Gizmo.Api.pdb
 F:\WorkSpaces\PT\Gizmo\Project Gizmo\Gizmo.Api\obj\Debug\netcoreapp3.1\Gizmo.Api.genruntimeconfig.cache
+F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo.Api\bin\Debug\netcoreapp3.1\Microsoft.EntityFrameworkCore.Design.dll
+F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo.Api\obj\Debug\netcoreapp3.1\Gizmo.Api.csproj.CoreCompileInputs.cache
+F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo.Api\obj\Debug\netcoreapp3.1\Gizmo.Api.MvcApplicationPartsAssemblyInfo.cache

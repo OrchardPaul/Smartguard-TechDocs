@@ -27,7 +27,7 @@ namespace Gizmo_V1_02.Data.Admin
 
         Task<List<AppCompanyDetails>> GetCompanies();
         Task<AppCompanyDetails> GetCompanyById(int id);
-        Task<string> GetCompanyBaseUri(int id);
+        Task<string> GetCompanyBaseUri(int id, string selectedUri);
         Task<AppCompanyDetails> SubmitChanges(AppCompanyDetails company);
         Task<AppCompanyDetails> DeleteCompany(AppCompanyDetails company);
         Task<AppCompanyDetails> AssignWorkTypeGroupToCompany(AppCompanyDetails company, AppWorkTypeGroups workTypeGroup);
@@ -76,7 +76,6 @@ namespace Gizmo_V1_02.Data.Admin
                                                     .ToList()
                             })
                             .ToListAsync();
-
         }
         
 
@@ -250,11 +249,17 @@ namespace Gizmo_V1_02.Data.Admin
             return await context.AppCompanyDetails.SingleAsync(C => C.Id == id);
         }
 
-        public async Task<string> GetCompanyBaseUri(int id)
+        public async Task<string> GetCompanyBaseUri(int id, string selectedServer)
         {
             var selectedCompany = await context.AppCompanyDetails.SingleOrDefaultAsync(C => C.Id == id);
+            var selectedUri = "";
 
-            return (selectedCompany is null) ? null : selectedCompany.BaseUri;
+            if (!(selectedCompany is null))
+            {
+                selectedUri = (selectedServer == "Live") ? selectedCompany.LiveUri : selectedCompany.DevUri;
+            }
+
+            return (selectedCompany is null) ? null : selectedUri;
         }
 
         public async Task<AppCompanyDetails> SubmitChanges(AppCompanyDetails company)
@@ -270,7 +275,8 @@ namespace Gizmo_V1_02.Data.Admin
             else
             {
                 selectedCompany.CompanyName = company.CompanyName;
-                selectedCompany.BaseUri = company.BaseUri;
+                selectedCompany.DevUri = company.DevUri;
+                selectedCompany.LiveUri = company.LiveUri;
 
                 await context.SaveChangesAsync();
                 return selectedCompany;

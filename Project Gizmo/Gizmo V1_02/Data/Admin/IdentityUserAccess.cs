@@ -135,30 +135,7 @@ namespace Gizmo_V1_02.Data.Admin
 
             mapper.Map(user, selectedUser);
 
-            /*
-            selectedUser = new ApplicationUser
-            {
-                Id = user.Id,
-                UserName = user.UserName,
-                FullName = user.FullName,
-                NormalizedUserName = user.NormalizedUserName,
-                Email = user.Email,
-                NormalizedEmail = user.NormalizedEmail,
-                EmailConfirmed = user.EmailConfirmed,
-                PasswordHash = user.PasswordHash,
-                SecurityStamp = user.SecurityStamp,
-                ConcurrencyStamp = user.ConcurrencyStamp,
-                PhoneNumber = user.PhoneNumber,
-                PhoneNumberConfirmed = user.PhoneNumberConfirmed,
-                TwoFactorEnabled = user.TwoFactorEnabled,
-                LockoutEnd = user.LockoutEnd,
-                LockoutEnabled = user.LockoutEnabled,
-                AccessFailedCount = user.AccessFailedCount
-            };
-            */
-
             var claims = await userManager.GetClaimsAsync(selectedUser);
-
             var claimsReturn = claims.Where(C => C.Type == "Company").ToList();
 
             return claimsReturn;
@@ -171,28 +148,6 @@ namespace Gizmo_V1_02.Data.Admin
 
             mapper.Map(item, selectedUser);
 
-            /*
-            selectedUser = new ApplicationUser
-            {
-                Id = item.Id,
-                UserName = item.UserName,
-                FullName = item.FullName,
-                NormalizedUserName = item.NormalizedUserName,
-                Email = item.Email,
-                NormalizedEmail = item.NormalizedEmail,
-                EmailConfirmed = item.EmailConfirmed,
-                PasswordHash = item.PasswordHash,
-                SecurityStamp = item.SecurityStamp,
-                ConcurrencyStamp = item.ConcurrencyStamp,
-                PhoneNumber = item.PhoneNumber,
-                PhoneNumberConfirmed = item.PhoneNumberConfirmed,
-                TwoFactorEnabled = item.TwoFactorEnabled,
-                LockoutEnd = item.LockoutEnd,
-                LockoutEnabled = item.LockoutEnabled,
-                AccessFailedCount = item.AccessFailedCount
-            };
-            */
-
             return await userManager.GetRolesAsync(selectedUser);
         }
 
@@ -201,30 +156,6 @@ namespace Gizmo_V1_02.Data.Admin
             return await userManager.Users
                 .Select(U => mapper.Map(U,new AspNetUsers()))
                 .ToListAsync();
-
-            /*
-            return await userManager.Users
-                .Select(U => new AspNetUsers
-                {
-                    Id = U.Id,
-                    UserName = U.UserName,
-                    FullName = U.FullName,
-                    NormalizedUserName = U.NormalizedUserName,
-                    Email = U.Email,
-                    NormalizedEmail = U.NormalizedEmail,
-                    EmailConfirmed = U.EmailConfirmed,
-                    PasswordHash = U.PasswordHash,
-                    SecurityStamp = U.SecurityStamp,
-                    ConcurrencyStamp = U.ConcurrencyStamp,
-                    PhoneNumber = U.PhoneNumber,
-                    PhoneNumberConfirmed = U.PhoneNumberConfirmed,
-                    TwoFactorEnabled = U.TwoFactorEnabled,
-                    LockoutEnd = U.LockoutEnd,
-                    LockoutEnabled = U.LockoutEnabled,
-                    AccessFailedCount = U.AccessFailedCount
-                })
-                .ToListAsync();
-            */
         }
 
         public async Task<AspNetUsers> GetUserByName(string userName)
@@ -233,31 +164,6 @@ namespace Gizmo_V1_02.Data.Admin
                 .Where(U => U.UserName == userName)
                 .Select(U => mapper.Map(U, new AspNetUsers()))
                 .SingleAsync();
-
-            /*
-            return await userManager.Users
-                .Where(U => U.UserName == userName)
-                .Select(U => new AspNetUsers
-                {
-                    Id = U.Id,
-                    UserName = U.UserName,
-                    FullName = U.FullName,
-                    NormalizedUserName = U.NormalizedUserName,
-                    Email = U.Email,
-                    NormalizedEmail = U.NormalizedEmail,
-                    EmailConfirmed = U.EmailConfirmed,
-                    PasswordHash = U.PasswordHash,
-                    SecurityStamp = U.SecurityStamp,
-                    ConcurrencyStamp = U.ConcurrencyStamp,
-                    PhoneNumber = U.PhoneNumber,
-                    PhoneNumberConfirmed = U.PhoneNumberConfirmed,
-                    TwoFactorEnabled = U.TwoFactorEnabled,
-                    LockoutEnd = U.LockoutEnd,
-                    LockoutEnabled = U.LockoutEnabled,
-                    AccessFailedCount = U.AccessFailedCount
-                })
-                .SingleAsync();
-            */
         }
 
         public async Task<AspNetUsers> SubmitChanges(AspNetUsers item, List<RoleItem> selectedRoles)
@@ -274,7 +180,8 @@ namespace Gizmo_V1_02.Data.Admin
                     Email = item.Email,
                     NormalizedEmail = item.Email.ToUpper(),
                     PhoneNumber = item.PhoneNumber,
-                    EmailConfirmed = true
+                    EmailConfirmed = true,
+                    SelectedUri = item.SelectedUri
                 };
 
                 var CreateResult = await userManager.CreateAsync(NewUser, item.PasswordHash);
@@ -310,6 +217,7 @@ namespace Gizmo_V1_02.Data.Admin
                 selectedUser.LockoutEnd = item.LockoutEnd;
                 selectedUser.LockoutEnabled = item.LockoutEnabled;
                 selectedUser.AccessFailedCount = item.AccessFailedCount;
+                selectedUser.SelectedUri = item.SelectedUri;
 
                 await userManager.UpdateAsync(selectedUser);
 
@@ -344,28 +252,6 @@ namespace Gizmo_V1_02.Data.Admin
                 }
 
                 mapper.Map(selectedUser, item);
-
-                /*
-                item = new AspNetUsers
-                {
-                    Id = selectedUser.Id,
-                    UserName = selectedUser.UserName,
-                    FullName = selectedUser.FullName,
-                    NormalizedUserName = selectedUser.NormalizedUserName,
-                    Email = selectedUser.Email,
-                    NormalizedEmail = selectedUser.NormalizedEmail,
-                    EmailConfirmed = selectedUser.EmailConfirmed,
-                    PasswordHash = selectedUser.PasswordHash,
-                    SecurityStamp = selectedUser.SecurityStamp,
-                    ConcurrencyStamp = selectedUser.ConcurrencyStamp,
-                    PhoneNumber = selectedUser.PhoneNumber,
-                    PhoneNumberConfirmed = selectedUser.PhoneNumberConfirmed,
-                    TwoFactorEnabled = selectedUser.TwoFactorEnabled,
-                    LockoutEnd = selectedUser.LockoutEnd,
-                    LockoutEnabled = selectedUser.LockoutEnabled,
-                    AccessFailedCount = selectedUser.AccessFailedCount
-                };
-                */
 
                 return item;
             }

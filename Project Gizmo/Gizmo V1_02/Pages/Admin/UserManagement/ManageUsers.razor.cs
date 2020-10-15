@@ -64,6 +64,7 @@ namespace Gizmo_V1_02.Pages.Admin.UserManagement
         {
             editOption = "Edit";
             editObject = selectedUser;
+            editObject.SelectedUri = "Live";
             editObject.PasswordHash = "PasswordNotChanged115592!";
             editObjectRoles = await userAccess.GetSelectedUserRoles(selectedUser);
 
@@ -74,7 +75,7 @@ namespace Gizmo_V1_02.Pages.Admin.UserManagement
             companyItems = companies.Select(C => new CompanyItem 
                                         {
                                             Id = C.Id,
-                                            CompanyName = C.CompanyName,
+                                            Company = C,
                                             IsSubscribed = (userClaimId.Contains(C.Id.ToString())) ? true : false
                                         }).ToList();
 
@@ -92,11 +93,12 @@ namespace Gizmo_V1_02.Pages.Admin.UserManagement
         {
             editOption = "Insert";
             editObject = new AspNetUsers();
+            editObject.SelectedUri = "Live";
 
             companyItems = companies.Select(C => new CompanyItem
             {
                 Id = C.Id,
-                CompanyName = C.CompanyName,
+                Company = C,
                 IsSubscribed = false
             }).ToList();
 

@@ -50,5 +50,7 @@ namespace Gizmo.Context.Gizmo_Authentification
         [InverseProperty("User")]
         public virtual ICollection<AspNetUserTokens> AspNetUserTokens { get; set; }
         public string FullName { get; set; }
+        [StringLength(256)]
+        public string SelectedUri { get; set; }
     }
 }

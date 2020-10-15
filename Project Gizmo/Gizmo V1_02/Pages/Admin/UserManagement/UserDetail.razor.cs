@@ -96,6 +96,7 @@ namespace Gizmo_V1_02.Pages.Admin.UserManagement
                     if(userName == TaskObject.UserName)
                     {
                         var allClaims = await service.GetSignedInUserClaims();
+                        var signedInUser = await service.GetUserByName(userName);
 
                         if (!(allClaims is null))
                         {
@@ -103,7 +104,8 @@ namespace Gizmo_V1_02.Pages.Admin.UserManagement
 
                             var companyClaim = allClaims.Where(A => A.Type == "Company").SingleOrDefault();
 
-                            var baseUri = await companyDbAccess.GetCompanyBaseUri((companyClaim is null) ? 0 : Int32.Parse(companyClaim.Value));
+                            var baseUri = await companyDbAccess.GetCompanyBaseUri((companyClaim is null) ? 0 : Int32.Parse(companyClaim.Value)
+                                                                                , (signedInUser.SelectedUri is null) ? "" : signedInUser.SelectedUri);
 
                             if (!(baseUri is null))
                             {

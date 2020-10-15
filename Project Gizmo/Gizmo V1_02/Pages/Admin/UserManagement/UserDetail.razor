@@ -35,6 +35,28 @@
                         <InputText @bind-Value="TaskObject.PhoneNumber"></InputText>
                     </div>
 
+                    <div class="form-group">
+                        @if (companies is null)
+                        {
+                            <div class="spinner"></div>
+                        }
+                        else
+                        {
+                            @if (!(companies.Where(C => C.IsSubscribed).SingleOrDefault() is null))
+                            {
+                                <label for="@TaskObject.SelectedUri">Base Uri</label>
+                                <InputSelect @bind-Value="TaskObject.SelectedUri">
+                                    <option selected value="Live">
+                                        Live
+                                    </option>
+                                    <option value="Dev">
+                                        Dev
+                                    </option>
+                                </InputSelect>
+                            }
+                        }
+                    </div>
+
                     @if ((selectedOption == "Insert") | (enablePasswordSet))
                     {
                         <div class="form-group">
@@ -84,7 +106,7 @@
                                 {
                                     @foreach (var company in companies)
                                     {
-                                        <label>@company.CompanyName</label><InputCheckbox @onclick="() => ToggleCompanyStatus(company)" @bind-Value="company.IsSubscribed"></InputCheckbox>
+                                        <label>@company.Company.CompanyName</label><InputCheckbox @onclick="() => ToggleCompanyStatus(company)" @bind-Value="company.IsSubscribed"></InputCheckbox>
                                     }
                                 }
                             </div>

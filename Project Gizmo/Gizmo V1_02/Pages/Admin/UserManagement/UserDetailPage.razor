@@ -1,0 +1,124 @@
+﻿@page "/userdetailpage"
+
+<div class="modal-header">
+    <h5 class="modal-title">User</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">×</span>
+    </button>
+</div>
+
+<div class="modal-body">
+    <EditForm Model="@TaskObject" OnValidSubmit="@HandleValidSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="form-group">
+            <label for="@TaskObject.UserName">User Name</label>
+            <InputText @bind-Value="TaskObject.UserName"></InputText>
+        </div>
+
+        <div class="form-group">
+            <label for="@TaskObject.FullName">Full Name</label>
+            <InputText @bind-Value="TaskObject.FullName"></InputText>
+        </div>
+
+        <div class="form-group">
+            <label for="@TaskObject.UserName">Email</label>
+            <InputText @bind-Value="TaskObject.Email"></InputText>
+        </div>
+
+        <div class="form-group">
+            <label for="@TaskObject.PhoneNumber">Phone Number</label>
+            <InputText @bind-Value="TaskObject.PhoneNumber"></InputText>
+        </div>
+
+        <div class="form-group">
+            @if (companies is null)
+            {
+                <div class="spinner"></div>
+            }
+            else
+            {
+                @if (!(companies.Where(C => C.IsSubscribed).SingleOrDefault() is null))
+                {
+                    <label for="@TaskObject.SelectedUri">Base Uri</label>
+                    <InputSelect @bind-Value="TaskObject.SelectedUri">
+                        <option selected value="Live">
+                            Live
+                        </option>
+                        <option value="Dev">
+                            Dev
+                        </option>
+                    </InputSelect>
+                }
+            }
+        </div>
+
+        @if ((selectedOption == "Insert") | (enablePasswordSet))
+        {
+            <div class="form-group">
+                <label for="@TaskObject.PasswordHash">Password</label>
+                <InputText @bind-Value="@TaskObject.PasswordHash" type="password"></InputText>
+            </div>
+
+            @if (selectedOption == "Edit")
+            {
+                <button type="button" class="btn btn-secondary" @onclick="() => TogglePasswordSet()">Close</button>
+            }
+        }
+        else
+        {
+            <div class="form-group">
+                <button type="button" class="btn btn-secondary" @onclick="() => TogglePasswordSet()">Edit Password</button>
+            </div>
+        }
+
+
+        <div class="form-group">
+            <div class="container-fluid">
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-6 p-2">
+                    @if (selectedRoles is null)
+                    {
+                        <div class="spinner"></div>
+                    }
+                    else
+                    {
+                        @foreach (var role in selectedRoles)
+                        {
+                            <label>@role.RoleName</label><InputCheckbox @bind-Value="role.IsSubscribed"></InputCheckbox>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="container-fluid">
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-6 p-2">
+                    @if (companies is null)
+                    {
+                        <div class="spinner"></div>
+                    }
+                    else
+                    {
+                        @foreach (var company in companies)
+                        {
+                            <label>@company.Company.CompanyName</label><InputCheckbox @onclick="() => ToggleCompanyStatus(company)" @bind-Value="company.IsSubscribed"></InputCheckbox>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div>@isChecked</div>
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+
+        @if (!(TaskObject.Id is null))
+        {
+            <button type="button" @onclick="HandleValidDelete" class="btn btn-secondary"></button>
+        }
+    </EditForm>
+</div>
+

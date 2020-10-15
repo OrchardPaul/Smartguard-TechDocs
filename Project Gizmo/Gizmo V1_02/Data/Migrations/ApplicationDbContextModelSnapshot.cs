@@ -26,12 +26,16 @@ namespace Gizmo_V1_02.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("BaseUri")
+                    b.Property<string>("CompanyName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
 
-                    b.Property<string>("CompanyName")
-                        .IsRequired()
+                    b.Property<string>("DevUri")
+                        .HasColumnType("nvarchar(256)")
+                        .HasMaxLength(256);
+
+                    b.Property<string>("LiveUri")
                         .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
 
@@ -158,6 +162,10 @@ namespace Gizmo_V1_02.Data.Migrations
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SelectedUri")
+                        .HasColumnType("nvarchar(256)")
+                        .HasMaxLength(256);
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");

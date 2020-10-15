@@ -30,8 +30,6 @@ namespace Gizmo_V1_02.Areas.Identity.Pages.Account.Manage
             _signInManager = signInManager;
         }
 
-
-
         public string Username { get; set; }
 
         [TempData]
@@ -54,7 +52,6 @@ namespace Gizmo_V1_02.Areas.Identity.Pages.Account.Manage
             var userName = await _userManager.GetUserNameAsync(user);
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
             var fullName = await _userManager.Users.Where(U => U.Id == user.Id).Select(U => U.FullName).SingleAsync();
-
 
             Username = userName;
 
