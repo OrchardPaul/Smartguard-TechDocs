@@ -66,6 +66,7 @@ namespace Gizmo_V1_02
             services.Configure<AuthMessageSenderOptions>(Configuration);
 
             services.AddScoped<IUserSessionState, UserSessionState>();
+            services.AddScoped<IUserManagementSelectedUserState, UserManagementSelectedUserState>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

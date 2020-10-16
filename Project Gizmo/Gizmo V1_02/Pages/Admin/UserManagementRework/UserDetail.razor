@@ -33,13 +33,13 @@
         </div>
 
         <div class="form-group">
-            @if (companies is null)
+            @if (companyItems is null)
             {
                 <div class="spinner"></div>
             }
             else
             {
-                @if (!(companies.Where(C => C.IsSubscribed).SingleOrDefault() is null))
+                @if (!(companyItems.Where(C => C.IsSubscribed).SingleOrDefault() is null))
                 {
                     <label for="@TaskObject.SelectedUri">Base Uri</label>
                     <InputSelect @bind-Value="TaskObject.SelectedUri">
@@ -95,13 +95,13 @@
         <div class="form-group">
             <div class="container-fluid">
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-6 p-2">
-                    @if (companies is null)
+                    @if (companyItems is null)
                     {
                         <div class="spinner"></div>
                     }
                     else
                     {
-                        @foreach (var company in companies)
+                        @foreach (var company in companyItems)
                         {
                             <label>@company.Company.CompanyName</label><InputCheckbox @onclick="() => ToggleCompanyStatus(company)" @bind-Value="company.IsSubscribed"></InputCheckbox>
                         }
@@ -109,8 +109,6 @@
                 </div>
             </div>
         </div>
-
-        <div>@isChecked</div>
 
         <button type="submit" class="btn btn-primary">Submit</button>
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
