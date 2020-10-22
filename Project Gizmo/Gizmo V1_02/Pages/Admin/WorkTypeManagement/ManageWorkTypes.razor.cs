@@ -17,28 +17,35 @@ namespace Gizmo_V1_02.Pages.Admin.WorkTypeManagement
 
         private List<WorkTypeGroupItem> workTypeGroups { get; set; }
         public List<AppWorkTypeGroups> groups { get; set; }
+        public List<WorkTypeGroupItem> refreshedWorkTypeGroups { get; set; }
+
         public List<WorkTypeAssignment> groupAssignments { get; set; }
 
         public WorkTypeGroupItem editGroup = new WorkTypeGroupItem();
         public WorkTypeItem editType = new WorkTypeItem();
+        public WorkTypeGroupItem selectedGroup;
+
+        public bool blockGroupDisplay = false;
 
         protected override async Task OnInitializedAsync()
         {
-            groups = await companyDbAccess.GetWorkTypeGroups();
-            if(groups.Count > 0)
+            refreshedWorkTypeGroups = await companyDbAccess.GetGroupsWithWorkTypes();
+            
+            if (refreshedWorkTypeGroups.Count > 0)
             {
-                workTypeGroups = groups
+                workTypeGroups = refreshedWorkTypeGroups
                                     .Select(G => new WorkTypeGroupItem
                                     {
-                                        group = G,
+                                        group = G.group,
+                                        workTypes = G.workTypes,
                                         showWorkType = false
                                     })
                                     .ToList();
 
-                groupAssignments = groups
+                groupAssignments = refreshedWorkTypeGroups
                             .Select(G => new WorkTypeAssignment
                             {
-                                WorkTypeGroup = G,
+                                WorkTypeGroup = G.group,
                                 IsAssigned = false
                             })
                             .ToList();
@@ -48,24 +55,28 @@ namespace Gizmo_V1_02.Pages.Admin.WorkTypeManagement
 
         private async void DataChanged()
         {
-            groups = await companyDbAccess.GetWorkTypeGroups();
+            refreshedWorkTypeGroups = await companyDbAccess.GetGroupsWithWorkTypes();
 
-
-            if (groups.Count > 0)
+            if (refreshedWorkTypeGroups.Count > 0)
             {
-                workTypeGroups = groups
-                    .Select(G => new WorkTypeGroupItem
-                    {
-                        group = G,
-                        showWorkType = (editGroup.group == G) ? true : false,
-                        workTypes = (editGroup.group == G) ? editGroup.workTypes : null
-                    })
-                    .ToList();
+                workTypeGroups = refreshedWorkTypeGroups
+                            .Join(workTypeGroups
+                                    , RWT => RWT.group.Id
+                                    , WT => WT.group.Id
+                                    , (RWT, WT) => new { RWT, WT }
+                                    )
+                            .Select(combined => new WorkTypeGroupItem
+                            {
+                                group = combined.RWT.group,
+                                showWorkType = combined.WT.showWorkType,
+                                workTypes = combined.RWT.workTypes
+                            })
+                            .ToList();
 
-                groupAssignments = groups
+                groupAssignments = refreshedWorkTypeGroups
                             .Select(G => new WorkTypeAssignment
                             {
-                                WorkTypeGroup = G,
+                                WorkTypeGroup = G.group,
                                 IsAssigned = false
                             })
                             .ToList();
@@ -77,11 +88,14 @@ namespace Gizmo_V1_02.Pages.Admin.WorkTypeManagement
         protected void PrepareGroupForEdit(WorkTypeGroupItem seletedGroup)
         {
             editGroup = seletedGroup;
+
+            blockGroupDisplay = true;
         }
 
-        protected void PrepareTypeForEdit(WorkTypeItem seletedType)
+        protected void PrepareTypeForEdit(WorkTypeItem seletedType, WorkTypeGroupItem selectedGroup)
         {
             editType = seletedType;
+            this.selectedGroup = selectedGroup;
 
             var selectedAssignments = seletedType
                                             .assignment
@@ -109,30 +123,32 @@ namespace Gizmo_V1_02.Pages.Admin.WorkTypeManagement
             editGroup = new WorkTypeGroupItem();
         }
 
-        protected void PrepareTypeForInsert()
+        protected void PrepareTypeForInsert(WorkTypeGroupItem selectedGroup)
         {
+            this.selectedGroup = selectedGroup;
+
             editType = new WorkTypeItem();
 
-            groupAssignments = groups
+            groupAssignments = refreshedWorkTypeGroups
                                 .Select(G => new WorkTypeAssignment
                                 {
-                                    WorkTypeGroup = G,
+                                    WorkTypeGroup = G.group,
                                     IsAssigned = false
                                 })
                                 .ToList();
         }
 
 
-        protected async Task<WorkTypeGroupItem> ToggleGroupWorkTypes(WorkTypeGroupItem workTypeGroup)
+        protected void ToggleGroupWorkTypes(WorkTypeGroupItem workTypeGroup)
         {
-            workTypeGroup.showWorkType = !workTypeGroup.showWorkType;
-
-            if (workTypeGroup.showWorkType)
+            if(blockGroupDisplay)
             {
-                workTypeGroup.workTypes = await companyDbAccess.GetWorkTypesAssignedToGroup(workTypeGroup.group);
+                blockGroupDisplay = false;
             }
-                
-            return workTypeGroup;
+            else
+            {
+                workTypeGroup.showWorkType = !workTypeGroup.showWorkType;
+            }
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿@page "/manageusers"
-@inject Gizmo_V1_02.Services.SessionState.IUserSessionState state
+﻿@inject Gizmo_V1_02.Services.SessionState.IUserSessionState state
 
 <h3>User Management</h3>
 
@@ -31,10 +30,4 @@ else
     </table>
 
     <input type="button" data-toggle="modal" data-target="#userModal" @onclick='(() => PrepareForInsert())' class="btn btn-primary" value="Add User" />
-
-
 }
-
-
-<UserDetail DataChanged="@DataChanged" companies="@companyItems" TaskObject="@editObject" selectedOption="@editOption" selectedRoles="@roles" enablePasswordSet="@ResetPasswordDropBox"></UserDetail>
-

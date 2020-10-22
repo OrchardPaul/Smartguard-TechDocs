@@ -21,16 +21,16 @@ else
             {
                 @if (group.workTypes is null)
                 {
-                    <input type="button" data-toggle="modal" data-target="#GroupModal" @onclick='(() => PrepareTypeForInsert())' class="btn btn-primary" value="Add Type" />
+                    <input type="button" data-toggle="modal" data-target="#GroupModal" @onclick='(() => PrepareTypeForInsert(group))' class="btn btn-primary" value="Add Type" />
                 }
                 else
                 {
                     foreach (var type in group.workTypes)
                     {
-                        <div class="shadow card rounded form-group" @onclick='(() => PrepareTypeForEdit(type))' data-toggle="modal" data-target="#TypeModal"> @type.workType.TypeName </div>
+                        <div class="shadow card rounded form-group" @onclick='(() => PrepareTypeForEdit(type,group))' data-toggle="modal" data-target="#TypeModal"> @type.workType.TypeName </div>
                     }
 
-                    <input type="button" data-toggle="modal" data-target="#TypeModal" @onclick='(() => PrepareTypeForInsert())' class="btn btn-primary" value="Add Type" />
+                    <input type="button" data-toggle="modal" data-target="#TypeModal" @onclick='(() => PrepareTypeForInsert(group))' class="btn btn-primary" value="Add Type" />
                 }
             }
         }

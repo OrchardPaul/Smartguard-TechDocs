@@ -1,10 +1,6 @@
-﻿@page "/userdetailpage"
-
+﻿
 <div class="modal-header">
     <h5 class="modal-title">User</h5>
-    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-        <span aria-hidden="true">×</span>
-    </button>
 </div>
 
 <div class="modal-body">
@@ -111,7 +107,7 @@
         </div>
 
         <button type="submit" class="btn btn-primary">Submit</button>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-secondary" @onclick="NavigateBack">Cancel</button>
 
         @if (!(TaskObject.Id is null))
         {

@@ -14,7 +14,7 @@ namespace Gizmo_V1_02.Data.Admin
     {
         Task<List<AppWorkTypeGroups>> GetWorkTypeGroups();
         Task<List<AppWorkTypes>> GetWorkTypes();
-        Task<List<WorkTypeItem>> GetWorkTypesAssignedToGroup(AppWorkTypeGroups workTypeGroup);
+        Task<List<WorkTypeGroupItem>> GetGroupsWithWorkTypes();
         Task<List<AppWorkTypeGroups>> GetWorkTypeGroupsByCompany(int companyId);
         Task<AppWorkTypes> SubmitWorkType(AppWorkTypes workType);
         Task<AppWorkTypeGroups> SubmitWorkTypeGroup(AppWorkTypeGroups workTypeGroup);
@@ -59,25 +59,29 @@ namespace Gizmo_V1_02.Data.Admin
             return await context.AppWorkTypes.ToListAsync();
         }
 
-        
-        public async Task<List<WorkTypeItem>> GetWorkTypesAssignedToGroup(AppWorkTypeGroups workTypeGroup)
+        public async Task<List<WorkTypeGroupItem>> GetGroupsWithWorkTypes()
         {
-            return await context.AppWorkTypes
-                            .Join(context.AppWorkTypeGroupsTypeAssignments,
-                                workType => workType.Id,
-                                assignment => assignment.WorkTypeId,
-                                (workType, assignment) => new { workType, assignment })
-                            .Where(combined => combined.assignment.WorkTypeGroupId == workTypeGroup.Id)
-                            .Select(combined => new WorkTypeItem
-                            {
-                                workType = combined.workType,
-                                assignment = context.AppWorkTypeGroupsTypeAssignments
-                                                    .Where(A => A.WorkTypeId == combined.assignment.WorkTypeId)
-                                                    .ToList()
-                            })
-                            .ToListAsync();
+            return await context.AppWorkTypeGroups
+                                .Select(G => new WorkTypeGroupItem
+                                {
+                                    group = G,
+                                    workTypes = context.AppWorkTypes
+                                                            .Join(context.AppWorkTypeGroupsTypeAssignments,
+                                                                workType => workType.Id,
+                                                                assignment => assignment.WorkTypeId,
+                                                                (workType, assignment) => new { workType, assignment })
+                                                            .Where(combined => combined.assignment.WorkTypeGroupId == G.Id)
+                                                            .Select(combined => new WorkTypeItem
+                                                            {
+                                                                workType = combined.workType,
+                                                                assignment = context.AppWorkTypeGroupsTypeAssignments
+                                                                                    .Where(A => A.WorkTypeId == combined.assignment.WorkTypeId)
+                                                                                    .ToList()
+                                                            })
+                                                            .ToList()
+                                })
+                                .ToListAsync();
         }
-        
 
         public async Task<List<AppWorkTypeGroups>> GetWorkTypeGroupsByCompany(int companyId)
         {
@@ -110,7 +114,6 @@ namespace Gizmo_V1_02.Data.Admin
             }
         }
 
-        
         public async Task<WorkTypeItem> AssignWorkTypeToGroup(WorkTypeItem workType, List<WorkTypeAssignment> assignments)
         {
             bool changed = false;

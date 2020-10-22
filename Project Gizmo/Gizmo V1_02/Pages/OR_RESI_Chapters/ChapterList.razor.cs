@@ -64,10 +64,26 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
             if (!authenticationState.User.IsInRole("Admin"))
             {
                 string returnUrl = HttpUtility.UrlEncode($"/chapterlist");
-                NavigationManager.NavigateTo($"/Identity/Account/Login?returnUrl={returnUrl}", true);
+                NavigationManager.NavigateTo($"Identity/Account/Login?returnUrl={returnUrl}", true);
             }
 
-            CaseTypeList = await chapterManagementService.GetCaseTypes();
+            if (!(authenticationState.User.Identity.Name is null))
+            {
+                try
+                {
+                    CaseTypeList = await chapterManagementService.GetCaseTypes();
+                }
+                catch(Exception)
+                {
+                    NavigationManager.NavigateTo($"/", true);
+                }
+            }
+        }
+
+        public void DirectToLogin()
+        {
+            string returnUrl = HttpUtility.UrlEncode($"/");
+            NavigationManager.NavigateTo($"Identity/Account/Login?returnUrl={returnUrl}", true);
         }
 
         void SelectHome()

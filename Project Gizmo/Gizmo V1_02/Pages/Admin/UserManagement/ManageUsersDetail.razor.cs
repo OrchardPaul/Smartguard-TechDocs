@@ -4,20 +4,21 @@ using Gizmo_V1_02.Data.Admin;
 using Gizmo_V1_02.Services.SessionState;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.JSInterop;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Gizmo_V1_02.Pages.Admin.UserManagementRework
+namespace Gizmo_V1_02.Pages.Admin.UserManagement
 {
-    public partial class UserDetail
+    public partial class ManageUsersDetail
     {
         [Parameter]
-        public AspNetUsers TaskObject { get; set; }
+        public Action ToggleDetail { get; set; }
 
         [Parameter]
-        public Action DataChanged { get; set; }
+        public AspNetUsers TaskObject { get; set; }
 
         [Parameter]
         public List<CompanyItem> companyItems { get; set; }
@@ -72,12 +73,12 @@ namespace Gizmo_V1_02.Pages.Admin.UserManagementRework
             companies = selectedUserState.allCompanies;
             lstRoles = selectedUserState.allRoles;
 
-            TaskObject = await service.GetUserByName(TaskObject.UserName);
+            var selectedUser = await service.GetUserByName(TaskObject.UserName);
 
             if (selectedOption == "Edit")
             {
-                editObjectRoles = await service.GetSelectedUserRoles(TaskObject);
-                var userCliams = await service.GetCompanyClaims(TaskObject);
+                editObjectRoles = await service.GetSelectedUserRoles(selectedUser);
+                var userCliams = await service.GetCompanyClaims(selectedUser);
                 usersClaimId = userCliams.Select(U => U.Value).ToList();
 
                 companyItems = companies.Select(C => new CompanyItem
@@ -142,20 +143,14 @@ namespace Gizmo_V1_02.Pages.Admin.UserManagementRework
 
         private async void HandleValidSubmit()
         {
-            //var Test = SubmitChange();
+            await SubmitChange();
 
-            selectedUserState.TaskObject = TaskObject;
-            selectedUserState.selectedRoles = selectedRoles;
-            selectedUserState.companyItems = companyItems;
-
-            //await Test;
-            
             NavigateBack();
         }
 
         private async Task<AspNetUsers> SubmitChange()
         {
-            
+
             var returnObject = await service.SubmitChanges(TaskObject, selectedRoles);
             await service.SubmitCompanyCliams(companyItems, returnObject);
 
@@ -198,21 +193,20 @@ namespace Gizmo_V1_02.Pages.Admin.UserManagementRework
 
         private void NavigateBack()
         {
-            NavigationManager.NavigateTo($"/manageusersrework/edit");
+            ToggleDetail?.Invoke();
         }
 
         private async void HandleValidDelete()
         {
             await service.Delete(TaskObject);
 
-            NavigationManager.NavigateTo($"/manageusersrework", true);
+            NavigateBack();
         }
 
         private void ToggleCompanyStatus(CompanyItem companyItem)
         {
             companyItems.Where(C => C.Id != companyItem.Id).Select(C => C.IsSubscribed = false).ToList();
         }
-
 
     }
 }

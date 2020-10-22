@@ -58,11 +58,13 @@ namespace Gizmo_V1_02.Services
 
         public Task<List<string>> GetCaseTypes()
         {
-            try
+            var result = httpClient.GetJsonAsync<List<string>>($"{userSession.baseUri}api/ChapterManagement/GetCaseTypes");
+
+            if(result.Exception is null)
             {
-                return httpClient.GetJsonAsync<List<string>>($"{userSession.baseUri}api/ChapterManagement/GetCaseTypes");
+                return result;
             }
-            catch(HttpRequestException)
+            else
             {
                 return null;
             }

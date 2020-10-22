@@ -1,0 +1,12 @@
+﻿@page "/manageusers"
+
+<h3>ManageUsersMainPage</h3>
+
+@if (!showDetail)
+{
+    <ManageUsersOverview ToggleDetail="@ToggleDetail"></ManageUsersOverview>
+}
+else
+{
+    <ManageUsersDetail ToggleDetail="@ToggleDetail"></ManageUsersDetail>
+}

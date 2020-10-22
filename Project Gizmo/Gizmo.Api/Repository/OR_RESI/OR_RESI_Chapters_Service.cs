@@ -49,7 +49,7 @@ namespace Gizmo.Api.Repository.OR_RESI
             updatedItem.SuppressStep = item.SuppressStep;
 
             await _context.SaveChangesAsync();
-            //_context.Entry(item).State = EntityState.Modified;
+
             return item;
         }
 
