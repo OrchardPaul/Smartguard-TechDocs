@@ -31,19 +31,16 @@ namespace Gizmo_V1_02.Data.Admin
     {
         private readonly UserManager<ApplicationUser> userManager;
         private readonly AuthenticationStateProvider authenticationStateProvider;
-        private readonly IUserSessionState userSessionState;
         private readonly IMapper mapper;
 
         private ApplicationUser selectedUser { get; set; }
 
         public IdentityUserAccess(UserManager<ApplicationUser> userManager
             , AuthenticationStateProvider authenticationStateProvider
-            , IUserSessionState userSessionState
             , IMapper mapper)
         {
             this.userManager = userManager;
             this.authenticationStateProvider = authenticationStateProvider;
-            this.userSessionState = userSessionState;
             this.mapper = mapper;
         }
 

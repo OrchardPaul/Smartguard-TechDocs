@@ -36,9 +36,9 @@ namespace Gizmo_V1_02.Data.Admin
 
     public class CompanyDbAccess : ICompanyDbAccess
     {
-        private readonly ApplicationDbContext context;
+        private readonly AuthorisationDBContext context;
 
-        public CompanyDbAccess(ApplicationDbContext context)
+        public CompanyDbAccess(AuthorisationDBContext context)
         {
             this.context = context;
         }

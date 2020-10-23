@@ -1,15 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Gizmo.Context.Gizmo_Authentification;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Gizmo.Context.Gizmo_Authentification;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Gizmo_V1_02.Data
 {
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+    /*
+     * Duplicate of ApplicationDbContext
+     * To avoid concurrency errors on company managament screens with the setup of the session state on refresh
+     */
+
+    public class AuthorisationDBContext : DbContext
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+        public AuthorisationDBContext()
+        {
+        }
+
+        public AuthorisationDBContext(DbContextOptions<AuthorisationDBContext> options)
             : base(options)
         {
         }
@@ -20,6 +29,5 @@ namespace Gizmo_V1_02.Data
         public virtual DbSet<AppWorkTypeGroupsTypeAssignments> AppWorkTypeGroupsTypeAssignments { get; set; }
         public virtual DbSet<AppWorkTypes> AppWorkTypes { get; set; }
         public virtual DbSet<AppCompanyWorkTypeMapping> AppCompanyWorkTypeMapping { get; set; }
-
     }
 }

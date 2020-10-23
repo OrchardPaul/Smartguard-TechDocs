@@ -43,6 +43,10 @@ namespace Gizmo_V1_02
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("AuthentificationConnection")));
+            services.AddDbContext<AuthorisationDBContext>(options =>
+                options.UseSqlServer(
+                    Configuration.GetConnectionString("AuthentificationConnection")));
+
             services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();

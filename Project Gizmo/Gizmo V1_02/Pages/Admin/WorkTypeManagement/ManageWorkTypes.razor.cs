@@ -15,6 +15,9 @@ namespace Gizmo_V1_02.Pages.Admin.WorkTypeManagement
         [Inject]
         ICompanyDbAccess companyDbAccess { get; set; }
 
+        [Inject]
+        NavigationManager NavigationManager { get; set; }
+
         private List<WorkTypeGroupItem> workTypeGroups { get; set; }
         public List<AppWorkTypeGroups> groups { get; set; }
         public List<WorkTypeGroupItem> refreshedWorkTypeGroups { get; set; }
@@ -29,27 +32,35 @@ namespace Gizmo_V1_02.Pages.Admin.WorkTypeManagement
 
         protected override async Task OnInitializedAsync()
         {
-            refreshedWorkTypeGroups = await companyDbAccess.GetGroupsWithWorkTypes();
-            
-            if (refreshedWorkTypeGroups.Count > 0)
+            try
             {
-                workTypeGroups = refreshedWorkTypeGroups
-                                    .Select(G => new WorkTypeGroupItem
-                                    {
-                                        group = G.group,
-                                        workTypes = G.workTypes,
-                                        showWorkType = false
-                                    })
-                                    .ToList();
+                refreshedWorkTypeGroups = await companyDbAccess.GetGroupsWithWorkTypes();
 
-                groupAssignments = refreshedWorkTypeGroups
-                            .Select(G => new WorkTypeAssignment
-                            {
-                                WorkTypeGroup = G.group,
-                                IsAssigned = false
-                            })
-                            .ToList();
+                if (refreshedWorkTypeGroups.Count > 0)
+                {
+                    workTypeGroups = refreshedWorkTypeGroups
+                                        .Select(G => new WorkTypeGroupItem
+                                        {
+                                            group = G.group,
+                                            workTypes = G.workTypes,
+                                            showWorkType = false
+                                        })
+                                        .ToList();
+
+                    groupAssignments = refreshedWorkTypeGroups
+                                .Select(G => new WorkTypeAssignment
+                                {
+                                    WorkTypeGroup = G.group,
+                                    IsAssigned = false
+                                })
+                                .ToList();
+                }
             }
+            catch(Exception)
+            {
+                NavigationManager.NavigateTo($"/", true);
+            }
+
 
         }
 
@@ -60,18 +71,22 @@ namespace Gizmo_V1_02.Pages.Admin.WorkTypeManagement
             if (refreshedWorkTypeGroups.Count > 0)
             {
                 workTypeGroups = refreshedWorkTypeGroups
-                            .Join(workTypeGroups
-                                    , RWT => RWT.group.Id
-                                    , WT => WT.group.Id
-                                    , (RWT, WT) => new { RWT, WT }
-                                    )
-                            .Select(combined => new WorkTypeGroupItem
+                            .Select(RWT => new WorkTypeGroupItem
                             {
-                                group = combined.RWT.group,
-                                showWorkType = combined.WT.showWorkType,
-                                workTypes = combined.RWT.workTypes
+                                group = RWT.group,
+                                showWorkType = (workTypeGroups
+                                        .Where(WT => RWT.group.Id == WT.group.Id)
+                                        .SingleOrDefault() is null) 
+                                                ? false 
+                                                : workTypeGroups
+                                                    .Where(WT => RWT.group.Id == WT.group.Id)
+                                                    .SingleOrDefault()
+                                                    .showWorkType,
+                                workTypes = RWT.workTypes
                             })
                             .ToList();
+
+
 
                 groupAssignments = refreshedWorkTypeGroups
                             .Select(G => new WorkTypeAssignment

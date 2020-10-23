@@ -9,6 +9,7 @@ using Gizmo_V1_02.Services;
 using Microsoft.AspNetCore.Components.Authorization;
 using System.Net;
 using System.Web;
+using Gizmo_V1_02.Services.SessionState;
 
 namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
 {
@@ -29,6 +30,9 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
 
         [Inject]
         public NavigationManager NavigationManager { get; set; }
+
+        [Inject]
+        public IUserSessionState sessionState { get; set; }
 
         private List<UsrOrDefChapterManagement> lstAll;
         private List<UsrOrDefChapterManagement> lstChapters;
@@ -66,6 +70,14 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
                 string returnUrl = HttpUtility.UrlEncode($"/chapterlist");
                 NavigationManager.NavigateTo($"Identity/Account/Login?returnUrl={returnUrl}", true);
             }
+
+            bool gotLock = sessionState.Lock;
+            while (gotLock)
+            {
+                await Task.Yield();
+                gotLock = sessionState.Lock;
+            }
+
 
             if (!(authenticationState.User.Identity.Name is null))
             {

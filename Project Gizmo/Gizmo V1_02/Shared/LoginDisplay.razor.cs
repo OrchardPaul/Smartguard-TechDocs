@@ -18,77 +18,10 @@ namespace Gizmo_V1_02.Shared
         [Inject]
         protected IUserSessionState sessionState { get; set; }
 
-        [Inject]
-        protected IIdentityUserAccess userAccess { get; set; }
-
-        [Inject]
-        protected ICompanyDbAccess companyDbAccess { get; set; }
-
-        [Inject]
-        protected AuthenticationStateProvider authenticationStateProvider { get; set; }
-
         protected override async Task OnInitializedAsync()
         {
-            await SetSessionState();
+            await sessionState.SetSessionState();
         }
-
-        public void Dispose()
-        {
-            sessionState.OnChange -= StateHasChanged;
-        }
-
-        public async Task<string> SetSessionState()
-        {
-            sessionState.OnChange += StateHasChanged;
-
-            if (string.IsNullOrWhiteSpace(sessionState.FullName))
-            {
-                var auth = await authenticationStateProvider.GetAuthenticationStateAsync();
-
-                if (!(auth is null))
-                {
-                    var user = auth.User;
-                    var userName = user.Identity.Name;
-
-                    if (!(userName is null))
-                    {
-                        var currentUser = await userAccess.GetUserByName(userName);
-
-                        if (!(currentUser is null))
-                        {
-                            sessionState.SetFullName(currentUser.FullName);
-
-                            var allClaims = await userAccess.GetSignedInUserClaims();
-
-                            if (!(allClaims.Count() == 0))
-                            {
-                                sessionState.SetClaims(allClaims);
-
-                                var companyClaim = allClaims.Where(A => A.Type == "Company").SingleOrDefault();
-                                var baseUri = await companyDbAccess.GetCompanyBaseUri(Int32.Parse(companyClaim.Value)
-                                                                                        , (currentUser.SelectedUri is null) ? "" : currentUser.SelectedUri);
-
-                                if (!(baseUri is null))
-                                {
-                                    sessionState.SetBaseUri(baseUri);
-                                    return "Success";
-                                }
-                                else
-                                {
-                                    sessionState.SetBaseUri("Not Set");
-                                    return "Fail";
-                                }
-
-                            }
-                        }
-                    }
-                }
-            }
-
-            return "Failure";
-        }
-
-
 
 
     }

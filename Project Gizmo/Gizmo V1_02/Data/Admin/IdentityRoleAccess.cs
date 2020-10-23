@@ -14,6 +14,8 @@ namespace Gizmo_V1_02.Data.Admin
         Task<IdentityResult> Delete(AspNetRoles item);
         Task<List<AspNetRoles>> GetUserRoles();
         Task<AspNetRoles> SubmitChanges(AspNetRoles item);
+
+        void Dispose();
     }
 
     public class IdentityRoleAccess : IIdentityRoleAccess
@@ -40,6 +42,11 @@ namespace Gizmo_V1_02.Data.Admin
                     ConcurrencyStamp = x.ConcurrencyStamp
                 })
                 .ToListAsync();
+        }
+
+        public void Dispose()
+        {
+            roleManager.Dispose();
         }
 
         public async Task<AspNetRoles> SubmitChanges(AspNetRoles item)

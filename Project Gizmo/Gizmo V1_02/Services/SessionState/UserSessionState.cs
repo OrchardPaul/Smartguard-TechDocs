@@ -1,7 +1,11 @@
-﻿using System;
+﻿using Gizmo_V1_02.Data.Admin;
+using Microsoft.AspNetCore.Components.Authorization;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Gizmo_V1_02.Services.SessionState
 {
@@ -10,24 +14,52 @@ namespace Gizmo_V1_02.Services.SessionState
         IList<Claim> allClaims { get; }
         string baseUri { get; }
         string FullName { get; }
+        SpinLock IdentityLock { get; set; }
+        bool Lock { get; set; }
 
         event Action OnChange;
 
         Claim getCompanyClaim();
+        bool GetLock();
         void SetBaseUri(string baseUri);
         void SetClaims(IList<Claim> claims);
         void SetFullName(string FullName);
+        Task<string> SetSessionState();
     }
 
     public class UserSessionState : IUserSessionState
     {
+        private readonly AuthenticationStateProvider authenticationStateProvider;
+        private readonly IIdentityUserAccess userAccess;
+        private readonly ICompanyDbAccess companyDbAccess;
+
         public IList<Claim> allClaims { get; protected set; }
 
         public string FullName { get; protected set; }
 
         public string baseUri { get; protected set; }
 
+        public SpinLock IdentityLock { get; set; }
+
+        public bool Lock { get; set; }
+
         public event Action OnChange;
+
+        private string sessionStateSet;
+
+        public UserSessionState(AuthenticationStateProvider authenticationStateProvider
+                                , IIdentityUserAccess userAccess
+                                , ICompanyDbAccess companyDbAccess)
+        {
+            this.authenticationStateProvider = authenticationStateProvider;
+            this.userAccess = userAccess;
+            this.companyDbAccess = companyDbAccess;
+        }
+
+        public bool GetLock()
+        {
+            return Lock;
+        }
 
         public void SetFullName(string FullName)
         {
@@ -60,6 +92,65 @@ namespace Gizmo_V1_02.Services.SessionState
                 return (companyClaim is null) ? null : companyClaim;
             }
         }
+
+        public async Task<string> SetSessionState()
+        {
+            Lock = true;
+
+            try
+            {
+                if (string.IsNullOrWhiteSpace(FullName))
+                {
+                    var auth = await authenticationStateProvider.GetAuthenticationStateAsync();
+
+                    sessionStateSet = "Not Set";
+                    SetBaseUri("Not Set");
+
+                    if (!(auth is null))
+                    {
+                        var user = auth.User;
+                        var userName = user.Identity.Name;
+
+                        if (!(userName is null))
+                        {
+                            var currentUser = await userAccess.GetUserByName(userName);
+
+                            if (!(currentUser is null))
+                            {
+                                SetFullName(currentUser.FullName);
+
+                                var allClaims = await userAccess.GetSignedInUserClaims();
+
+                                if (!(allClaims.Count() == 0))
+                                {
+                                    SetClaims(allClaims);
+
+                                    var companyClaim = allClaims.Where(A => A.Type == "Company").SingleOrDefault();
+                                    var baseUri = await companyDbAccess.GetCompanyBaseUri(Int32.Parse(companyClaim.Value)
+                                                                                            , (currentUser.SelectedUri is null) ? "" : currentUser.SelectedUri);
+
+                                    if (!(baseUri is null))
+                                    {
+                                        SetBaseUri(baseUri);
+                                        sessionStateSet = "Success";
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            finally
+            {
+                Lock = false;
+            }
+
+            NotifyStateChanged();
+            return sessionStateSet;
+
+        }
+
+
 
         private void NotifyStateChanged() => OnChange?.Invoke();
     }

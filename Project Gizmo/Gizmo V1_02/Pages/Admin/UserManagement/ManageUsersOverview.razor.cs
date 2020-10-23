@@ -48,8 +48,6 @@ namespace Gizmo_V1_02.Pages.Admin.UserManagement
 
         protected List<AspNetUsers> lstUsers { get; set; }
 
-        private bool ResetPasswordDropBox = false;
-
         private AuthenticationState auth { get; set; }
 
         public List<AppCompanyDetails> companies { get; set; }
@@ -60,9 +58,15 @@ namespace Gizmo_V1_02.Pages.Admin.UserManagement
 
         protected override async Task OnInitializedAsync()
         {
-            auth = await authenticationStateProvider.GetAuthenticationStateAsync();
+            //Wait for session state to finish to prevent concurrency error on refresh
+            bool gotLock = sessionState.Lock;
+            while (gotLock)
+            {
+                await Task.Yield();
+                gotLock = sessionState.Lock;
+            }
 
-            sessionState.OnChange += StateHasChanged;
+            auth = await authenticationStateProvider.GetAuthenticationStateAsync();
 
             lstUsers = await userAccess.GetUsers();
             lstRoles = await roleAccess.GetUserRoles();
@@ -72,14 +76,6 @@ namespace Gizmo_V1_02.Pages.Admin.UserManagement
             selectedUserState.allCompanies = companies;
             selectedUserState.allRoles = lstRoles;
         }
-
-
-        public void Dispose()
-        {
-            sessionState.OnChange -= StateHasChanged;
-        }
-
-
 
         protected void PrepareForEdit(AspNetUsers selectedUser)
         {

@@ -83,21 +83,3 @@
     </ul>
 </div>
 
-@code {
-    private bool collapseNavMenu = true;
-
-    private bool collapseAdminMenu = true;
-
-    private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
-
-    private void ToggleNavMenu()
-    {
-        collapseNavMenu = !collapseNavMenu;
-    }
-
-    private void ToggleAdminMenu()
-    {
-        collapseAdminMenu = !collapseAdminMenu;
-        StateHasChanged();
-    }
-}
