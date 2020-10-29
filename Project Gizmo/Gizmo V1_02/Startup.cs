@@ -54,10 +54,8 @@ namespace Gizmo_V1_02
             services.AddServerSideBlazor();
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<ApplicationUser>>();
 
-            services.AddHttpClient<IChapterManagementService, ChapterManagementService>(client =>
-            {
-                client.BaseAddress = new Uri("https://localhost:44399/");
-            });
+            services.AddHttpClient<IChapterManagementService, ChapterManagementService>();
+            services.AddHttpClient<IPartnerAccessService, PartnerAccessService>();
 
             services.AddScoped<IIdentityRoleAccess, IdentityRoleAccess>();
             services.AddScoped<IIdentityUserAccess, IdentityUserAccess>();
@@ -70,6 +68,7 @@ namespace Gizmo_V1_02
             services.Configure<AuthMessageSenderOptions>(Configuration);
 
             services.AddScoped<IUserSessionState, UserSessionState>();
+            services.AddScoped<IMappingSessionState, MappingSessionState>();
             services.AddScoped<IUserManagementSelectedUserState, UserManagementSelectedUserState>();
         }
 

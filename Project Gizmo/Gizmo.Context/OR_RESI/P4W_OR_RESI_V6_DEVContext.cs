@@ -6,9 +6,6 @@ namespace Gizmo.Context.OR_RESI
 {
     public partial class P4W_OR_RESI_V6_DEVContext : DbContext
     {
-        public P4W_OR_RESI_V6_DEVContext()
-        {
-        }
 
         public P4W_OR_RESI_V6_DEVContext(DbContextOptions<P4W_OR_RESI_V6_DEVContext> options)
             : base(options)

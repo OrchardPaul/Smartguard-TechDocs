@@ -70,6 +70,7 @@ namespace Gizmo_V1_02.Services
             }
         }
 
+
         public Task<List<UsrOrDefChapterManagement>> GetChapterListByCaseType(string caseType)
         {
             return httpClient.GetJsonAsync<List<UsrOrDefChapterManagement>>($"{userSession.baseUri}api/ChapterManagement/GetChapterListByCaseType/{caseType}");

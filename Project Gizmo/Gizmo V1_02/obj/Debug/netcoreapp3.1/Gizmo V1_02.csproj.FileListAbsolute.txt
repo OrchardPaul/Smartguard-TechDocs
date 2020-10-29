@@ -522,3 +522,7 @@ F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\P
 F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\Admin\UserManagement\ManageUsersOverview.razor.g.cs
 F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\RazorDeclaration\Pages\Admin\CompanyWorkTypeManagement\CompanyWorkTypeManagementDetails.razor.g.cs
 F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\Admin\CompanyWorkTypeManagement\CompanyWorkTypeManagementDetails.razor.g.cs
+F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\RazorDeclaration\Pages\Admin\CompanyWorkTypeManagement\CompanyWorkTypeManagementMapping.razor.g.cs
+F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\RazorDeclaration\Pages\Admin\CompanyWorkTypeManagement\CompanyWorkTypeManagementOverview.razor.g.cs
+F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\Admin\CompanyWorkTypeManagement\CompanyWorkTypeManagementMapping.razor.g.cs
+F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\Admin\CompanyWorkTypeManagement\CompanyWorkTypeManagementOverview.razor.g.cs

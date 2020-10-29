@@ -208,7 +208,5 @@ namespace Gizmo.Api.Repository.OR_RESI
 
         }
 
-
-
     }
 }

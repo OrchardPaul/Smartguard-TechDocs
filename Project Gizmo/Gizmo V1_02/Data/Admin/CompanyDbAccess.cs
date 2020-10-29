@@ -1,5 +1,7 @@
 ﻿using Gizmo.Context.Gizmo_Authentification;
 using Gizmo.Context.Gizmo_Authentification.Custom;
+using Gizmo.Context.OR_RESI;
+using Gizmo_V1_02.Services;
 using Gizmo_V1_02.Services.SessionState;
 using Microsoft.AspNetCore.Components;
 using Microsoft.EntityFrameworkCore;
@@ -14,6 +16,8 @@ namespace Gizmo_V1_02.Data.Admin
     {
         Task<List<AppWorkTypeGroups>> GetWorkTypeGroups();
         Task<List<AppWorkTypes>> GetWorkTypes();
+        Task<WorkTypeMapping> GetWorkTypeMappingsByCompany(AppCompanyDetails company, List<CaseTypes> allCaseTypes, AppWorkTypes workType, string system);
+        Task<List<AppCompanyWorkTypeMapping>> UpdateWorkTypeMapping(WorkTypeMapping typeMapping, AppCompanyDetails company, string system);
         Task<List<WorkTypeGroupItem>> GetGroupsWithWorkTypes();
         Task<List<AppWorkTypeGroups>> GetWorkTypeGroupsByCompany(int companyId);
         Task<AppWorkTypes> SubmitWorkType(AppWorkTypes workType);
@@ -57,6 +61,104 @@ namespace Gizmo_V1_02.Data.Admin
         public async Task<List<AppWorkTypes>> GetWorkTypes() 
         {
             return await context.AppWorkTypes.ToListAsync();
+        }
+        
+        public async Task<WorkTypeMapping> GetWorkTypeMappingsByCompany(AppCompanyDetails company
+                                                                                ,List<CaseTypes> allCaseTypes
+                                                                                ,AppWorkTypes workType
+                                                                                ,string system)
+        {
+
+            var caseTypeAssignments = allCaseTypes
+                                            .Select(C => new CaseTypeAssignment
+                                            {
+                                                CaseType = C
+                                                , IsAssigned = context.AppCompanyWorkTypeMapping
+                                                                .Where(M => M.WorkTypeId == workType.Id)
+                                                                .Where(M => M.CaseTypeCode == C.Code)
+                                                                .Where(M => M.CompanyId == company.Id)
+                                                                .Where(M => M.System == system)
+                                                                .SingleOrDefault() != null
+                                            })
+                                            .ToList();
+
+
+            return await context.AppWorkTypes
+                .Where(T => T.Id == workType.Id)
+                .Select(T => new WorkTypeMapping
+                {
+                    workType = T
+                    ,caseTypeAssignments = caseTypeAssignments
+                })
+                .SingleOrDefaultAsync();
+        }
+       
+        public async Task<List<AppCompanyWorkTypeMapping>> UpdateWorkTypeMapping(WorkTypeMapping typeMapping
+                                                                                , AppCompanyDetails company
+                                                                                , string system)
+        {
+            var addMappings = typeMapping.caseTypeAssignments
+                                .Where(C => C.IsAssigned)
+                                .Select(C => new AppCompanyWorkTypeMapping
+                                {
+                                    WorkTypeId = typeMapping.workType.Id
+                                    ,CaseTypeCode = C.CaseType.Code
+                                    ,CompanyId = company.Id
+                                    ,System = system
+                                })
+                                .ToList();
+
+            
+
+            if (addMappings.Count > 0)
+            {
+                addMappings = addMappings
+                                .Where(A => A.CaseTypeCode != context.AppCompanyWorkTypeMapping
+                                                                .Where(M => M.WorkTypeId == A.WorkTypeId)
+                                                                .Where(M => M.CaseTypeCode == A.CaseTypeCode)
+                                                                .Where(M => M.CompanyId == A.CompanyId)
+                                                                .Where(M => M.System == A.System)
+                                                                .Select(M => M.CaseTypeCode)
+                                                                .SingleOrDefault())
+                                .ToList();
+
+                context.AppCompanyWorkTypeMapping.AddRange(addMappings);
+                await context.SaveChangesAsync();
+            }
+
+            var removeMappings = typeMapping.caseTypeAssignments
+                                .Where(C => !C.IsAssigned)
+                                .Select(C => new AppCompanyWorkTypeMapping
+                                {
+                                    WorkTypeId = typeMapping.workType.Id
+                                    ,
+                                    CaseTypeCode = C.CaseType.Code
+                                    ,
+                                    CompanyId = company.Id
+                                    ,
+                                    System = system
+                                })
+                                .ToList();
+
+            if (removeMappings.Count > 0)
+            {
+                removeMappings = removeMappings
+                                .Select(A =>  context.AppCompanyWorkTypeMapping
+                                                                                .Where(M => M.WorkTypeId == A.WorkTypeId)
+                                                                                .Where(M => M.CaseTypeCode == A.CaseTypeCode)
+                                                                                .Where(M => M.CompanyId == A.CompanyId)
+                                                                                .Where(M => M.System == A.System)
+                                                                                .SingleOrDefault())
+                                .Where(A => !(A is null))
+                                .ToList();
+
+                context.AppCompanyWorkTypeMapping.RemoveRange(removeMappings);
+                await context.SaveChangesAsync();
+            }
+
+            addMappings.AddRange(removeMappings);
+            return addMappings;
+
         }
 
         public async Task<List<WorkTypeGroupItem>> GetGroupsWithWorkTypes()

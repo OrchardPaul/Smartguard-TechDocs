@@ -14,6 +14,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Gizmo.Api.Repository.OR_RESI;
 
+
 namespace Gizmo.Api
 {
     public class Startup
@@ -34,6 +35,7 @@ namespace Gizmo.Api
                     Configuration.GetConnectionString("OR_RESI_LIVE")));
 
             services.AddScoped<IOR_RESI_Chapters_Service, OR_RESI_Chapters_Service>();
+            services.AddScoped<IPartner_Access_Service, Partner_Access_Service>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -1,4 +1,5 @@
-﻿using Gizmo_V1_02.Data.Admin;
+﻿using Gizmo.Context.Gizmo_Authentification;
+using Gizmo_V1_02.Data.Admin;
 using Microsoft.AspNetCore.Components.Authorization;
 using System;
 using System.Collections.Generic;
@@ -13,9 +14,11 @@ namespace Gizmo_V1_02.Services.SessionState
     {
         IList<Claim> allClaims { get; }
         string baseUri { get; }
+        AppCompanyDetails Company { get; }
         string FullName { get; }
         SpinLock IdentityLock { get; set; }
         bool Lock { get; set; }
+        string selectedSystem { get; }
 
         event Action OnChange;
 
@@ -23,7 +26,9 @@ namespace Gizmo_V1_02.Services.SessionState
         bool GetLock();
         void SetBaseUri(string baseUri);
         void SetClaims(IList<Claim> claims);
+        void SetCompany(AppCompanyDetails companyDetails);
         void SetFullName(string FullName);
+        void SetSelectedSystem(string selectedSystem);
         Task<string> SetSessionState();
     }
 
@@ -37,7 +42,11 @@ namespace Gizmo_V1_02.Services.SessionState
 
         public string FullName { get; protected set; }
 
+        public AppCompanyDetails Company { get; protected set; }
+
         public string baseUri { get; protected set; }
+
+        public string selectedSystem { get; protected set; }
 
         public SpinLock IdentityLock { get; set; }
 
@@ -73,9 +82,20 @@ namespace Gizmo_V1_02.Services.SessionState
             NotifyStateChanged();
         }
 
+        public void SetSelectedSystem(string selectedSystem)
+        {
+            this.selectedSystem = selectedSystem;
+        }
+
         public void SetClaims(IList<Claim> claims)
         {
             allClaims = claims;
+            NotifyStateChanged();
+        }
+
+        public void SetCompany(AppCompanyDetails companyDetails)
+        {
+            Company = companyDetails;
             NotifyStateChanged();
         }
 
@@ -99,46 +119,54 @@ namespace Gizmo_V1_02.Services.SessionState
 
             try
             {
-                if (string.IsNullOrWhiteSpace(FullName))
+                var auth = await authenticationStateProvider.GetAuthenticationStateAsync();
+
+                sessionStateSet = "Not Set";
+                SetBaseUri("Not Set");
+
+                if (!(auth is null))
                 {
-                    var auth = await authenticationStateProvider.GetAuthenticationStateAsync();
+                    var user = auth.User;
+                    var userName = user.Identity.Name;
 
-                    sessionStateSet = "Not Set";
-                    SetBaseUri("Not Set");
-
-                    if (!(auth is null))
+                    if (!(userName is null))
                     {
-                        var user = auth.User;
-                        var userName = user.Identity.Name;
+                        var currentUser = await userAccess.GetUserByName(userName);
 
-                        if (!(userName is null))
+                        if (!(currentUser is null))
                         {
-                            var currentUser = await userAccess.GetUserByName(userName);
+                            SetFullName(currentUser.FullName);
 
-                            if (!(currentUser is null))
+                            var allClaims = await userAccess.GetSignedInUserClaims();
+
+                            if (!(allClaims.Count() == 0))
                             {
-                                SetFullName(currentUser.FullName);
+                                SetClaims(allClaims);
 
-                                var allClaims = await userAccess.GetSignedInUserClaims();
+                                var companyClaim = allClaims.Where(A => A.Type == "Company").SingleOrDefault();
+                                var baseUri = await companyDbAccess.GetCompanyBaseUri(Int32.Parse(companyClaim.Value)
+                                                                                        , (currentUser.SelectedUri is null) ? "" : currentUser.SelectedUri);
 
-                                if (!(allClaims.Count() == 0))
+
+                                if (!(companyClaim is null))
                                 {
-                                    SetClaims(allClaims);
+                                    var companyDetails = await companyDbAccess.GetCompanyById(Int32.Parse(companyClaim.Value));
 
-                                    var companyClaim = allClaims.Where(A => A.Type == "Company").SingleOrDefault();
-                                    var baseUri = await companyDbAccess.GetCompanyBaseUri(Int32.Parse(companyClaim.Value)
-                                                                                            , (currentUser.SelectedUri is null) ? "" : currentUser.SelectedUri);
+                                    SetCompany(companyDetails);
+                                }
 
-                                    if (!(baseUri is null))
-                                    {
-                                        SetBaseUri(baseUri);
-                                        sessionStateSet = "Success";
-                                    }
+
+                                if (!(baseUri is null))
+                                {
+                                    SetBaseUri(baseUri);
+                                    SetSelectedSystem(currentUser.SelectedUri);
+                                    sessionStateSet = "Success";
                                 }
                             }
                         }
                     }
                 }
+                
             }
             finally
             {

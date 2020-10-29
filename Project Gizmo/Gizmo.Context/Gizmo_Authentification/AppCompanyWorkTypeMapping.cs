@@ -17,6 +17,9 @@ namespace Gizmo.Context.Gizmo_Authentification
         public int WorkTypeId { get; set; }
 
         [Required]
+        public int CompanyId { get; set; }
+
+        [Required]
         [StringLength(10)]
         public string System { get; set; }
     }

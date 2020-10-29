@@ -154,39 +154,7 @@ namespace Gizmo_V1_02.Pages.Admin.UserManagement
             var returnObject = await service.SubmitChanges(TaskObject, selectedRoles);
             await service.SubmitCompanyCliams(companyItems, returnObject);
 
-            if (!(auth is null))
-            {
-                var user = auth.User;
-                var userName = user.Identity.Name;
-
-                if (!(userName is null))
-                {
-                    if (userName == TaskObject.UserName)
-                    {
-                        var allClaims = await service.GetSignedInUserClaims();
-                        var signedInUser = await service.GetUserByName(userName);
-
-                        if (!(allClaims is null))
-                        {
-                            sessionState.SetClaims(allClaims);
-
-                            var companyClaim = allClaims.Where(A => A.Type == "Company").SingleOrDefault();
-
-                            var baseUri = await companyDbAccess.GetCompanyBaseUri((companyClaim is null) ? 0 : Int32.Parse(companyClaim.Value)
-                                                                                , (signedInUser.SelectedUri is null) ? "" : signedInUser.SelectedUri);
-
-                            if (!(baseUri is null))
-                            {
-                                sessionState.SetBaseUri(baseUri);
-                            }
-                            else
-                            {
-                                sessionState.SetBaseUri("Not Set");
-                            }
-                        }
-                    }
-                }
-            }
+            await sessionState.SetSessionState();
 
             return returnObject;
         }
