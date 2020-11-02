@@ -69,6 +69,7 @@ namespace Gizmo_V1_02
 
             services.AddScoped<IUserSessionState, UserSessionState>();
             services.AddScoped<IMappingSessionState, MappingSessionState>();
+            services.AddScoped<IPageAuthorisationState, PageAuthorisationState>();
             services.AddScoped<IUserManagementSelectedUserState, UserManagementSelectedUserState>();
         }
 

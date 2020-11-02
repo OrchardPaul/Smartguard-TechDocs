@@ -86,5 +86,11 @@ namespace Gizmo_V1_02.Pages.Admin.CompanyWorkTypeManagement
             var action = mappingSessionState.ToggleMapping;
             action?.Invoke();
         }
+
+        protected void ReturnToDetailsScreen()
+        {
+            var action = mappingSessionState.ToggleMappingOverviewScreen;
+            action?.Invoke();
+        }
     }
 }

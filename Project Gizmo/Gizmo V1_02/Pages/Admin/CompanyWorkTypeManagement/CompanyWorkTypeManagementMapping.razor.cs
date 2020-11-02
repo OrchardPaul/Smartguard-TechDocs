@@ -58,6 +58,18 @@ namespace Gizmo_V1_02.Pages.Admin.CompanyWorkTypeManagement
             return workTypeMapping;
         }
 
+        protected void OpenWorkTypeMappingOverview()
+        {
+            var action = mappingSessionState.ToggleMapping;
+            action?.Invoke();
+        }
+
+        protected void ReturnToDetailsScreen()
+        {
+            var action = mappingSessionState.ToggleMappingOverviewScreen;
+            action?.Invoke();
+        }
+
 
     }
 }

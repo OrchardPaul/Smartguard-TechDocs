@@ -25,6 +25,9 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
         [Inject]
         private IChapterManagementService chapterManagementService { get; set; }
 
+        [Inject]
+        private IPageAuthorisationState pageAuthorisationState { get; set; }
+
         [CascadingParameter]
         private Task<AuthenticationState> authenticationStateTask { get; set; }
 
@@ -65,7 +68,7 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
         {
             var authenticationState = await authenticationStateTask;
 
-            if (!authenticationState.User.IsInRole("Admin"))
+            if (!pageAuthorisationState.ChapterListAuthorisation(authenticationState))
             {
                 string returnUrl = HttpUtility.UrlEncode($"/chapterlist");
                 NavigationManager.NavigateTo($"Identity/Account/Login?returnUrl={returnUrl}", true);

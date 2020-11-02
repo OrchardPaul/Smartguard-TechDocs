@@ -81,7 +81,7 @@ namespace Gizmo_V1_02.Pages.Admin.UserManagement
         {
             editOption = "Edit";
             editObject = selectedUser;
-            editObject.SelectedUri = "Live";
+            editObject.SelectedUri = (sessionState.selectedSystem is null) ? "Live" : sessionState.selectedSystem;
             editObject.PasswordHash = "PasswordNotChanged115592!";
 
             selectedUserState.TaskObject = editObject;

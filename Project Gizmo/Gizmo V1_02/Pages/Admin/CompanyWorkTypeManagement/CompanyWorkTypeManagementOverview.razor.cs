@@ -30,5 +30,6 @@ namespace Gizmo_V1_02.Pages.Admin.CompanyWorkTypeManagement
         }
 
 
+
     }
 }

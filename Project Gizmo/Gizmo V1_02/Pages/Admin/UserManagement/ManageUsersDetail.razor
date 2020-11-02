@@ -37,7 +37,7 @@
             {
                 @if (!(companyItems.Where(C => C.IsSubscribed).SingleOrDefault() is null))
                 {
-                    <label for="@TaskObject.SelectedUri">Base Uri</label>
+                    <label for="@TaskObject.SelectedUri">System</label>
                     <InputSelect @bind-Value="TaskObject.SelectedUri">
                         <option selected value="Live">
                             Live

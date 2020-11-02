@@ -58,8 +58,7 @@ namespace Gizmo_V1_02.Data.Admin
                 IdentityRole newItem = new IdentityRole 
                 {
                     Name = item.Name,
-                    NormalizedName = item.NormalizedName,
-                    ConcurrencyStamp = item.ConcurrencyStamp
+                    NormalizedName = item.NormalizedName
                 };
 
                 var CreateResult = await roleManager.CreateAsync(newItem);

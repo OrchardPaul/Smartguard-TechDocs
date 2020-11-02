@@ -155,6 +155,18 @@ namespace Gizmo_V1_02.Data.Admin
                 .ToListAsync();
         }
 
+        public async Task<List<AspNetUsers>> GetUsersByCurrentUserCompany()
+        {
+            var auth = await authenticationStateProvider.GetAuthenticationStateAsync();
+
+            auth.User.IsInRole("");
+
+            return await userManager.Users
+                .Select(U => mapper.Map(U, new AspNetUsers()))
+                .ToListAsync();
+        }
+
+
         public async Task<AspNetUsers> GetUserByName(string userName)
         {
             return await userManager.Users

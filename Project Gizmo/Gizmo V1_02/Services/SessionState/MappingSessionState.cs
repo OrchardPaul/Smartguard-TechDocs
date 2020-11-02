@@ -11,9 +11,11 @@ namespace Gizmo_V1_02.Services.SessionState
         AppWorkTypes selectedWorkType { get; }
         bool showMapping { get; }
         Action ToggleMapping { get; }
+        Action ToggleMappingOverviewScreen { get; }
 
         void SetSelectedWorkType(AppWorkTypes selectedWorkType);
         void SetToggleMappingAction(Action action);
+        void SetToggleMappingOverviewAction(Action action);
         void ToggleMappingScreen();
     }
 
@@ -24,6 +26,8 @@ namespace Gizmo_V1_02.Services.SessionState
         public AppWorkTypes selectedWorkType { get; protected set; }
 
         public Action ToggleMapping { get; protected set; }
+
+        public Action ToggleMappingOverviewScreen { get; protected set; }
 
         public MappingSessionState()
         {
@@ -43,6 +47,11 @@ namespace Gizmo_V1_02.Services.SessionState
         public void SetToggleMappingAction(Action action)
         {
             ToggleMapping = action;
+        }
+
+        public void SetToggleMappingOverviewAction(Action action)
+        {
+            ToggleMappingOverviewScreen = action;
         }
 
     }
