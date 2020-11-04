@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+https://go.microsoft.com/fwlink/?LinkID=208121. 
+-->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <_PublishTargetUrl>F:\WorkSpaces\JD\Gizmo v1 publish</_PublishTargetUrl>
+  </PropertyGroup>
+  <ItemGroup>
+    <DestinationConnectionStrings Include="AuthentificationConnection">
+      <Value>Data Source=dev\SQLEXPRESS%3bInitial Catalog=Gizmo_Authentication%3bIntegrated Security=True%3bPooling=False</Value>
+    </DestinationConnectionStrings>
+  </ItemGroup>
+</Project>

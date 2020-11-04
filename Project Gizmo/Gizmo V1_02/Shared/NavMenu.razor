@@ -19,6 +19,12 @@
             </NavLink>
         </li>
 
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href="chapterlistPaul">
+                <span class="oi oi-list-rich" aria-hidden="true"></span> Chapter List Paul
+            </NavLink>
+        </li>
+
         <AuthorizeView Roles="Site Admin, SuperUser">
             <Authorized>
                 <li class="nav-item px-3">
@@ -28,37 +34,37 @@
                 </li>
                 @if (!collapseAdminMenu)
                 {
-            <ul class="nav flex-column">
-                <li class="nav-item px-3">
-                    <NavLink class="nav-link" href="manageuserroles">
-                        <span class="oi oi-list-rich" aria-hidden="true"></span> Manage Roles
-                    </NavLink>
-                </li>
-                <li class="nav-item px-3">
-                    <NavLink class="nav-link" href="manageusers">
-                        <span class="oi oi-list-rich" aria-hidden="true"></span> Manage Users
-                    </NavLink>
-                </li>
+                <ul class="nav flex-column">
+                    <li class="nav-item px-3">
+                        <NavLink class="nav-link" href="manageuserroles">
+                            <span class="oi oi-list-rich" aria-hidden="true"></span> Manage Roles
+                        </NavLink>
+                    </li>
+                    <li class="nav-item px-3">
+                        <NavLink class="nav-link" href="manageusers">
+                            <span class="oi oi-list-rich" aria-hidden="true"></span> Manage Users
+                        </NavLink>
+                    </li>
 
-                <li class="nav-item px-3">
-                    <NavLink class="nav-link" href="manageworktypes">
-                        <span class="oi oi-list-rich" aria-hidden="true"></span> Manage Work Types
-                    </NavLink>
-                </li>
+                    <li class="nav-item px-3">
+                        <NavLink class="nav-link" href="manageworktypes">
+                            <span class="oi oi-list-rich" aria-hidden="true"></span> Manage Work Types
+                        </NavLink>
+                    </li>
 
-                <li class="nav-item px-3">
-                    <NavLink class="nav-link" href="managecompanies">
-                        <span class="oi oi-list-rich" aria-hidden="true"></span> Manage Company
-                    </NavLink>
-                </li>
+                    <li class="nav-item px-3">
+                        <NavLink class="nav-link" href="managecompanies">
+                            <span class="oi oi-list-rich" aria-hidden="true"></span> Manage Company
+                        </NavLink>
+                    </li>
 
-                <li class="nav-item px-3">
-                    <NavLink class="nav-link" href="companydetails">
-                        <span class="oi oi-list-rich" aria-hidden="true"></span> Company Details
-                    </NavLink>
-                </li>
+                    <li class="nav-item px-3">
+                        <NavLink class="nav-link" href="companydetails">
+                            <span class="oi oi-list-rich" aria-hidden="true"></span> Company Details
+                        </NavLink>
+                    </li>
 
-            </ul>
+                </ul>
                 }
 
             </Authorized>
