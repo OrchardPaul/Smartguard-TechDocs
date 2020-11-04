@@ -20,12 +20,12 @@ namespace Gizmo_V1_02.Data.Admin
 
     public class IdentityRoleAccess : IIdentityRoleAccess
     {
-        private readonly RoleManager<IdentityRole> roleManager;
+        private readonly RoleManager<ApplicationRole> roleManager;
         private readonly IMapper mapper;
 
-        private IdentityRole selectedRole { get; set; }
+        private ApplicationRole selectedRole { get; set; }
 
-        public IdentityRoleAccess(RoleManager<IdentityRole> roleManager, IMapper mapper)
+        public IdentityRoleAccess(RoleManager<ApplicationRole> roleManager, IMapper mapper)
         {
             this.roleManager = roleManager;
             this.mapper = mapper;
@@ -39,7 +39,8 @@ namespace Gizmo_V1_02.Data.Admin
                     Id = x.Id,
                     Name = x.Name,
                     NormalizedName = x.NormalizedName,
-                    ConcurrencyStamp = x.ConcurrencyStamp
+                    ConcurrencyStamp = x.ConcurrencyStamp,
+                    RoleDescription = x.RoleDescription
                 })
                 .ToListAsync();
         }
@@ -55,10 +56,11 @@ namespace Gizmo_V1_02.Data.Admin
 
             if (selectedRole is null)
             {
-                IdentityRole newItem = new IdentityRole 
+                ApplicationRole newItem = new ApplicationRole
                 {
                     Name = item.Name,
-                    NormalizedName = item.NormalizedName
+                    NormalizedName = item.NormalizedName,
+                    RoleDescription = item.RoleDescription
                 };
 
                 var CreateResult = await roleManager.CreateAsync(newItem);
@@ -74,7 +76,8 @@ namespace Gizmo_V1_02.Data.Admin
                         Id = newItem.Id,
                         Name = newItem.Name,
                         NormalizedName = newItem.NormalizedName,
-                        ConcurrencyStamp = newItem.ConcurrencyStamp
+                        ConcurrencyStamp = newItem.ConcurrencyStamp,
+                        RoleDescription = newItem.RoleDescription
                     };
 
                     return item;
@@ -85,6 +88,7 @@ namespace Gizmo_V1_02.Data.Admin
                 selectedRole.Name = item.Name;
                 selectedRole.NormalizedName = item.NormalizedName;
                 selectedRole.ConcurrencyStamp = item.ConcurrencyStamp;
+                selectedRole.RoleDescription = item.RoleDescription;
 
                 await roleManager.UpdateAsync(selectedRole);
 
@@ -93,7 +97,8 @@ namespace Gizmo_V1_02.Data.Admin
                     Id = selectedRole.Id,
                     Name = selectedRole.Name,
                     NormalizedName = selectedRole.NormalizedName,
-                    ConcurrencyStamp = selectedRole.ConcurrencyStamp
+                    ConcurrencyStamp = selectedRole.ConcurrencyStamp,
+                    RoleDescription = selectedRole.RoleDescription
                 };
 
                 return item;

@@ -12,11 +12,11 @@ namespace Gizmo_V1_02.Data.MapperProfiles
     {
         public UserRoleProfile()
         {
-            CreateMap<List<IdentityRole>, List<AspNetRoles>>();
-            CreateMap<List<AspNetRoles> , List<IdentityRole>>();
+            CreateMap<List<ApplicationRole>, List<AspNetRoles>>();
+            CreateMap<List<AspNetRoles> , List<ApplicationRole>>();
 
-            CreateMap<IdentityRole, AspNetRoles>();
-            CreateMap<AspNetRoles, IdentityRole>();
+            CreateMap<ApplicationRole, AspNetRoles>();
+            CreateMap<AspNetRoles, ApplicationRole>();
 
             CreateMap<ApplicationUser, AspNetUsers>();
             CreateMap<AspNetUsers, ApplicationUser>();

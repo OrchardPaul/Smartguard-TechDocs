@@ -17,6 +17,7 @@ namespace Gizmo.Context.Gizmo_Authentification
         public string Id { get; set; }
         [StringLength(256)]
         public string Name { get; set; }
+
         [StringLength(256)]
         public string NormalizedName { get; set; }
         public string ConcurrencyStamp { get; set; }
@@ -25,5 +26,8 @@ namespace Gizmo.Context.Gizmo_Authentification
         public virtual ICollection<AspNetRoleClaims> AspNetRoleClaims { get; set; }
         [InverseProperty("Role")]
         public virtual ICollection<AspNetUserRoles> AspNetUserRoles { get; set; }
+
+        [StringLength(500)]
+        public string RoleDescription { get; set; }
     }
 }

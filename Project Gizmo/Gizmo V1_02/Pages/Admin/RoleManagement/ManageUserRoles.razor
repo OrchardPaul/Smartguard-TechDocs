@@ -12,6 +12,7 @@ else
         <thead>
             <tr>
                 <th>Name</th>
+                <th>Role Description</th>
             </tr>
         </thead>
         <tbody>
@@ -19,6 +20,7 @@ else
             {
                 <tr>
                     <td>@role.Name</td>
+                    <td>@role.RoleDescription</td>
                     <td><input type="button" class="btn btn-primary" @onclick='(() => PrepareForEdit(role))' data-toggle="modal" data-target="#roleModal" value="Edit" /></td>
                 </tr>
             }

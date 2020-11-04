@@ -22,13 +22,13 @@ namespace Gizmo_V1_02.Data
                 {
                     await dbContext.Database.MigrateAsync();
 
-                    var roleManager = serviceScope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+                    var roleManager = serviceScope.ServiceProvider.GetRequiredService<RoleManager<ApplicationRole>>();
 
                     foreach (var role in Roles)
                     {
                         if (!await roleManager.RoleExistsAsync(role))
                         {
-                            await roleManager.CreateAsync(new IdentityRole(role));
+                            await roleManager.CreateAsync(new ApplicationRole { Name = role });
                         }
                     }
                 }

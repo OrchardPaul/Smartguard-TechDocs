@@ -19,6 +19,11 @@
                         <InputText @bind-Value="TaskObject.Name"></InputText>
                     </div>
 
+                    <div class="form-group">
+                        <label for="@TaskObject.RoleDescription">Role Description</label>
+                        <InputTextArea  @bind-Value="TaskObject.RoleDescription"></InputTextArea>
+                    </div>
+
                     <button type="submit" class="btn btn-primary">Submit</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
 
