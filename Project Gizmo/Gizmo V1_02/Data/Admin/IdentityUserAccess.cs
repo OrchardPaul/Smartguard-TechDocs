@@ -150,22 +150,42 @@ namespace Gizmo_V1_02.Data.Admin
 
         public async Task<List<AspNetUsers>> GetUsers()
         {
-            return await userManager.Users
-                .Select(U => mapper.Map(U,new AspNetUsers()))
-                .ToListAsync();
+            //Get signed in user in proper format
+            var signedInUserState = await authenticationStateProvider.GetAuthenticationStateAsync();
+            var signedInUserAsp = await userManager.FindByNameAsync(signedInUserState.User.Identity.Name);
+            var signedInUser = mapper.Map(signedInUserAsp, new AspNetUsers());
+
+            var returnedUsers = new List<AspNetUsers>();
+
+            if (signedInUserState.User.IsInRole("Super User"))
+            {
+                return await userManager.Users
+                            .Select(U => mapper.Map(U, new AspNetUsers()))
+                            .ToListAsync(); 
+            }
+            else
+            {
+                var signedInUsersCompany = await GetCompanyClaims(signedInUser);
+
+                foreach(var company in signedInUsersCompany)
+                {
+                    /*
+                     * 1. Grab all users in company
+                     * 2. format returned applicationusers into usefull aspnetusers
+                     * 3. check if users exist in return list
+                     * 4. add any applicable return users to list
+                     */
+
+                    var usersInCompanyUnformatted = await userManager.GetUsersForClaimAsync(company);
+                    var usersInCompanyFormatted = usersInCompanyUnformatted.Select(U => mapper.Map(U, new AspNetUsers())).ToList();
+                    var usersInCompanySorted = usersInCompanyFormatted.Where(U => !returnedUsers.Contains(U)).ToList();
+
+                    returnedUsers.AddRange(usersInCompanySorted);
+                }
+
+                return returnedUsers;
+            }
         }
-
-        public async Task<List<AspNetUsers>> GetUsersByCurrentUserCompany()
-        {
-            var auth = await authenticationStateProvider.GetAuthenticationStateAsync();
-
-            auth.User.IsInRole("");
-
-            return await userManager.Users
-                .Select(U => mapper.Map(U, new AspNetUsers()))
-                .ToListAsync();
-        }
-
 
         public async Task<AspNetUsers> GetUserByName(string userName)
         {

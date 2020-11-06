@@ -1,9 +1,12 @@
-﻿using Gizmo.Context.Gizmo_Authentification;
+﻿using AutoMapper;
+using Gizmo.Context.Gizmo_Authentification;
 using Gizmo.Context.Gizmo_Authentification.Custom;
 using Gizmo.Context.OR_RESI;
 using Gizmo_V1_02.Services;
 using Gizmo_V1_02.Services.SessionState;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -41,10 +44,22 @@ namespace Gizmo_V1_02.Data.Admin
     public class CompanyDbAccess : ICompanyDbAccess
     {
         private readonly AuthorisationDBContext context;
+        private readonly AuthenticationStateProvider authenticationStateProvider;
+        private readonly UserManager<ApplicationUser> userManager;
+        private readonly IIdentityUserAccess identityUserAccess;
+        private readonly IMapper mapper;
 
-        public CompanyDbAccess(AuthorisationDBContext context)
+        public CompanyDbAccess(AuthorisationDBContext context
+                                ,AuthenticationStateProvider authenticationStateProvider
+                                ,UserManager<ApplicationUser> userManager
+                                ,IIdentityUserAccess identityUserAccess
+                                ,IMapper mapper)
         {
             this.context = context;
+            this.authenticationStateProvider = authenticationStateProvider;
+            this.userManager = userManager;
+            this.identityUserAccess = identityUserAccess;
+            this.mapper = mapper;
         }
 
         /*
@@ -346,7 +361,25 @@ namespace Gizmo_V1_02.Data.Admin
 
         public async Task<List<AppCompanyDetails>> GetCompanies()
         {
-            return await context.AppCompanyDetails.ToListAsync();
+            var signedInUserState = await authenticationStateProvider.GetAuthenticationStateAsync();
+            var signedInUserAsp = await userManager.FindByNameAsync(signedInUserState.User.Identity.Name);
+            var signedInUser = mapper.Map(signedInUserAsp, new AspNetUsers());
+
+            if (signedInUserState.User.IsInRole("Super User"))
+            {
+                return await context.AppCompanyDetails.ToListAsync();
+            }
+            else
+            {
+                var signedInUsersCompany = await identityUserAccess.GetCompanyClaims(signedInUser);
+                var signedInUsersCompanyIds = signedInUsersCompany.Select(C => C.Value).ToList();
+
+
+                return await context.AppCompanyDetails
+                                    .Where(A => signedInUsersCompanyIds.Contains(A.Id.ToString()))
+                                    .ToListAsync(); 
+            }
+
         }
 
         public async Task<AppCompanyDetails> GetCompanyById(int id)
