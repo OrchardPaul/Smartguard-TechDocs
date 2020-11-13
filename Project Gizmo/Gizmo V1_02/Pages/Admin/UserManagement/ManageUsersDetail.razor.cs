@@ -36,6 +36,9 @@ namespace Gizmo_V1_02.Pages.Admin.UserManagement
         private IIdentityUserAccess service { get; set; }
 
         [Inject]
+        private IIdentityRoleAccess roleAccess { get; set; }
+
+        [Inject]
         private ICompanyDbAccess companyDbAccess { get; set; }
 
         [Inject]
@@ -58,6 +61,8 @@ namespace Gizmo_V1_02.Pages.Admin.UserManagement
 
         private List<string> usersClaimId { get; set; }
 
+        private AspNetUsers currentUser { get; set; }
+
         string isChecked { get; set; } = "";
 
         private AuthenticationState auth { get; set; }
@@ -73,12 +78,14 @@ namespace Gizmo_V1_02.Pages.Admin.UserManagement
             companies = selectedUserState.allCompanies;
             lstRoles = selectedUserState.allRoles;
 
-            var selectedUser = await service.GetUserByName(TaskObject.UserName);
+            currentUser = await service.GetUserByName(TaskObject.UserName);
 
             if (selectedOption == "Edit")
             {
-                editObjectRoles = await service.GetSelectedUserRoles(selectedUser);
-                var userCliams = await service.GetCompanyClaims(selectedUser);
+                editObjectRoles = await roleAccess.GetCurrentUserRolesForCompany(currentUser, currentUser.SelectedCompanyId);
+
+                //editObjectRoles = await service.GetSelectedUserRoles(selectedUser);
+                var userCliams = await service.GetCompanyClaims(currentUser);
                 usersClaimId = userCliams.Select(U => U.Value).ToList();
 
                 companyItems = companies.Select(C => new CompanyItem
@@ -92,7 +99,8 @@ namespace Gizmo_V1_02.Pages.Admin.UserManagement
                     .Select(L => new RoleItem
                     {
                         IsSubscribed = (editObjectRoles.Contains(L.Name)) ? true : false,
-                        RoleName = L.Name
+                        RoleName = L.Name,
+                        RoleId = L.Id
                     })
                     .ToList();
             }
@@ -111,7 +119,8 @@ namespace Gizmo_V1_02.Pages.Admin.UserManagement
                     .Select(L => new RoleItem
                     {
                         IsSubscribed = false,
-                        RoleName = L.Name
+                        RoleName = L.Name,
+                        RoleId = L.Id
                     })
                     .ToList();
             }
@@ -136,6 +145,24 @@ namespace Gizmo_V1_02.Pages.Admin.UserManagement
             {
                 TaskObject.PasswordHash = "PasswordNotChanged115592!";
             }
+
+            StateHasChanged();
+        }
+
+        private async void ToggleCompany(int selectedId)
+        {
+            TaskObject.SelectedCompanyId = selectedId;
+
+            editObjectRoles = await roleAccess.GetCurrentUserRolesForCompany(currentUser, TaskObject.SelectedCompanyId);
+
+            selectedRoles = lstRoles
+                .Select(L => new RoleItem
+                {
+                    IsSubscribed = (editObjectRoles.Contains(L.Name)) ? true : false,
+                    RoleName = L.Name,
+                    RoleId = L.Id
+                })
+                .ToList();
 
             StateHasChanged();
         }
@@ -171,10 +198,6 @@ namespace Gizmo_V1_02.Pages.Admin.UserManagement
             NavigateBack();
         }
 
-        private void ToggleCompanyStatus(CompanyItem companyItem)
-        {
-            companyItems.Where(C => C.Id != companyItem.Id).Select(C => C.IsSubscribed = false).ToList();
-        }
 
     }
 }

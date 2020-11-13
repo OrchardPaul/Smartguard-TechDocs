@@ -17,6 +17,8 @@
     <Compile Remove="Data\Migrations\20201009075228_changeCompanyWorkTypeGroupKey.Designer.cs" />
     <Compile Remove="Data\Migrations\20201014130255_addSelectedUriFlagForUsers.cs" />
     <Compile Remove="Data\Migrations\20201014130255_addSelectedUriFlagForUsers.Designer.cs" />
+    <Compile Remove="Data\Migrations\20201109161110_addCompanyUserRoles.cs" />
+    <Compile Remove="Data\Migrations\20201109161110_addCompanyUserRoles.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

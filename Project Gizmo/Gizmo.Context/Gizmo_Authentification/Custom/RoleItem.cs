@@ -6,6 +6,8 @@ namespace Gizmo.Context.Gizmo_Authentification.Custom
 {
     public partial class RoleItem
     {
+        public string RoleId { get; set; }
+
         public string RoleName { get; set; }
 
         public bool IsSubscribed { get; set; }

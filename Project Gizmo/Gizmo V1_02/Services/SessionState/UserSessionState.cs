@@ -12,9 +12,16 @@ namespace Gizmo_V1_02.Services.SessionState
 {
     public interface IUserSessionState
     {
+        AspNetUsers User { get; }
         IList<Claim> allClaims { get; }
+
+        string CompCol1 { get; set; }
+        string CompCol2 { get; set; }
+        string CompCol3 { get; set; }
+        string CompCol4 { get; set; }
         string baseUri { get; }
         AppCompanyDetails Company { get; }
+        List<AppCompanyDetails> allAssignedCompanies { get; }
         string FullName { get; }
         SpinLock IdentityLock { get; set; }
         bool Lock { get; set; }
@@ -27,8 +34,10 @@ namespace Gizmo_V1_02.Services.SessionState
         void SetBaseUri(string baseUri);
         void SetClaims(IList<Claim> claims);
         void SetCompany(AppCompanyDetails companyDetails);
+        void SetAllAssignedCompanies(List<AppCompanyDetails> allAssignedCompanies);
         void SetFullName(string FullName);
         void SetSelectedSystem(string selectedSystem);
+        Task<AppCompanyDetails> switchSelectedCompany(int companyId);
         Task<string> SetSessionState();
     }
 
@@ -38,11 +47,23 @@ namespace Gizmo_V1_02.Services.SessionState
         private readonly IIdentityUserAccess userAccess;
         private readonly ICompanyDbAccess companyDbAccess;
 
+        public AspNetUsers User { get; protected set; }
+
         public IList<Claim> allClaims { get; protected set; }
 
         public string FullName { get; protected set; }
 
+        public string CompCol1 { get; set; }
+
+        public string CompCol2 { get; set; }
+
+        public string CompCol3 { get; set; }
+
+        public string CompCol4 { get; set; }
+
         public AppCompanyDetails Company { get; protected set; }
+
+        public List<AppCompanyDetails> allAssignedCompanies { get; protected set; }
 
         public string baseUri { get; protected set; }
 
@@ -65,6 +86,12 @@ namespace Gizmo_V1_02.Services.SessionState
             this.companyDbAccess = companyDbAccess;
         }
 
+        public void SetCurrentUser(AspNetUsers user)
+        {
+            User = user;
+            NotifyStateChanged();
+        }
+
         public bool GetLock()
         {
             return Lock;
@@ -85,6 +112,7 @@ namespace Gizmo_V1_02.Services.SessionState
         public void SetSelectedSystem(string selectedSystem)
         {
             this.selectedSystem = selectedSystem;
+            NotifyStateChanged();
         }
 
         public void SetClaims(IList<Claim> claims)
@@ -96,6 +124,12 @@ namespace Gizmo_V1_02.Services.SessionState
         public void SetCompany(AppCompanyDetails companyDetails)
         {
             Company = companyDetails;
+            NotifyStateChanged();
+        }
+
+        public void SetAllAssignedCompanies(List<AppCompanyDetails> allAssignedCompanies)
+        {
+            this.allAssignedCompanies = allAssignedCompanies;
             NotifyStateChanged();
         }
 
@@ -111,6 +145,18 @@ namespace Gizmo_V1_02.Services.SessionState
 
                 return (companyClaim is null) ? null : companyClaim;
             }
+        }
+
+        public async Task<AppCompanyDetails> switchSelectedCompany(int companyId)
+        {
+            //Get new 
+            var selectedCompany = await companyDbAccess.GetCompanyById(companyId);
+            SetCompany(selectedCompany);
+
+            User = await userAccess.SwitchSelectedCompany(User, companyId);
+
+            await SetSessionState();
+            return selectedCompany;
         }
 
         public async Task<string> SetSessionState()
@@ -132,10 +178,12 @@ namespace Gizmo_V1_02.Services.SessionState
                     if (!(userName is null))
                     {
                         var currentUser = await userAccess.GetUserByName(userName);
-
+                        
                         if (!(currentUser is null))
                         {
+                            SetCurrentUser(currentUser);
                             SetFullName(currentUser.FullName);
+                            SetSelectedSystem(currentUser.SelectedUri);
 
                             var allClaims = await userAccess.GetSignedInUserClaims();
 
@@ -143,26 +191,35 @@ namespace Gizmo_V1_02.Services.SessionState
                             {
                                 SetClaims(allClaims);
 
-                                var companyClaim = allClaims.Where(A => A.Type == "Company").SingleOrDefault();
-                                var baseUri = await companyDbAccess.GetCompanyBaseUri(Int32.Parse(companyClaim.Value)
-                                                                                        , (currentUser.SelectedUri is null) ? "" : currentUser.SelectedUri);
+                                var companies = await companyDbAccess.GetCompanies();
+                                SetAllAssignedCompanies(companies);
+                            }
 
+                            var selectedCompany = await companyDbAccess.GetSelectedCompanyOfUser(currentUser);
 
-                                if (!(companyClaim is null))
-                                {
-                                    var companyDetails = await companyDbAccess.GetCompanyById(Int32.Parse(companyClaim.Value));
+                            if (!(selectedCompany is null))
+                            {
+                                SetCompany(selectedCompany);
+                                
+                                CompCol1 = selectedCompany.CompCol1;
+                                CompCol2 = selectedCompany.CompCol2;
+                                CompCol3 = selectedCompany.CompCol3;
+                                CompCol4 = selectedCompany.CompCol4;
 
-                                    SetCompany(companyDetails);
-                                }
-
-
+                                var baseUri = await companyDbAccess.GetCompanyBaseUri(selectedCompany.Id
+                                                                                    , (currentUser.SelectedUri is null) ? "" : currentUser.SelectedUri);
+                                
                                 if (!(baseUri is null))
                                 {
                                     SetBaseUri(baseUri);
-                                    SetSelectedSystem(currentUser.SelectedUri);
+                                    
                                     sessionStateSet = "Success";
                                 }
                             }
+
+
+                            
+                            
                         }
                     }
                 }

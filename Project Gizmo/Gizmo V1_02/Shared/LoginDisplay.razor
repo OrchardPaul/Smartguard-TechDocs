@@ -1,12 +1,6 @@
-﻿@using Gizmo_V1_02.Services.SessionState
-@using Microsoft.AspNetCore.Identity
-@using Gizmo_V1_02.Data
-@inject IUserSessionState userState
-@inject SignInManager<ApplicationUser> SignInManager
-
-<AuthorizeView>
+﻿<AuthorizeView>
     <Authorized>
-        <a href="Identity/Account/Manage">Hello, @(string.IsNullOrWhiteSpace(userState.FullName) ? context.User.Identity.Name : userState.FullName)!</a>
+        <a href="Identity/Account/Manage">Hello, @(string.IsNullOrWhiteSpace(userFullName) ? context.User.Identity.Name : userFullName)!</a>
         <form method="post" action="Identity/Account/LogOut">
             <button type="submit" class="nav-link btn btn-link">Log out</button>
         </form>

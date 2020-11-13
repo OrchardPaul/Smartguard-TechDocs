@@ -15,14 +15,8 @@ namespace Gizmo_V1_02.Shared
 {
     public partial class LoginDisplay
     {
-        [Inject]
-        protected IUserSessionState sessionState { get; set; }
-
-        protected override async Task OnInitializedAsync()
-        {
-            await sessionState.SetSessionState();
-        }
-
+        [Parameter]
+        public string userFullName { get; set; }
 
     }
 }

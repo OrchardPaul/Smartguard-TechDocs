@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Gizmo_V1_02.Data.Admin
@@ -34,6 +35,7 @@ namespace Gizmo_V1_02.Data.Admin
 
         Task<List<AppCompanyDetails>> GetCompanies();
         Task<AppCompanyDetails> GetCompanyById(int id);
+        Task<AppCompanyDetails> GetSelectedCompanyOfUser(AspNetUsers user);
         Task<string> GetCompanyBaseUri(int id, string selectedUri);
         Task<AppCompanyDetails> SubmitChanges(AppCompanyDetails company);
         Task<AppCompanyDetails> DeleteCompany(AppCompanyDetails company);
@@ -382,9 +384,15 @@ namespace Gizmo_V1_02.Data.Admin
 
         }
 
+
         public async Task<AppCompanyDetails> GetCompanyById(int id)
         {
             return await context.AppCompanyDetails.SingleAsync(C => C.Id == id);
+        }
+
+        public async Task<AppCompanyDetails> GetSelectedCompanyOfUser(AspNetUsers user)
+        {
+            return await context.AppCompanyDetails.SingleOrDefaultAsync(C => C.Id == user.SelectedCompanyId);
         }
 
         public async Task<string> GetCompanyBaseUri(int id, string selectedServer)
@@ -415,6 +423,10 @@ namespace Gizmo_V1_02.Data.Admin
                 selectedCompany.CompanyName = company.CompanyName;
                 selectedCompany.DevUri = company.DevUri;
                 selectedCompany.LiveUri = company.LiveUri;
+                selectedCompany.CompCol1 = company.CompCol1;
+                selectedCompany.CompCol2 = company.CompCol2;
+                selectedCompany.CompCol3 = company.CompCol3;
+                selectedCompany.CompCol4 = company.CompCol4;
 
                 await context.SaveChangesAsync();
                 return selectedCompany;
@@ -485,5 +497,7 @@ namespace Gizmo_V1_02.Data.Admin
 
             return selectedCompany;
         }
+
+
     }
 }

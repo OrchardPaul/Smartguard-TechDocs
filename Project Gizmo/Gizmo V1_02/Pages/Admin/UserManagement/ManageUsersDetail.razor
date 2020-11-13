@@ -1,4 +1,5 @@
-﻿
+﻿@using Gizmo_V1_02.Data.CustomFormObjects
+
 <div class="modal-header">
     <h5 class="modal-title">User</h5>
 </div>
@@ -28,6 +29,29 @@
             <InputText @bind-Value="TaskObject.PhoneNumber"></InputText>
         </div>
 
+        @if (!(companyItems is null))
+        {
+            <div class="form-group">
+                <label for="@TaskObject.SelectedUri">Selected Company</label>
+                <InputSelectInteger ValueExpression="@(() => TaskObject.SelectedCompanyId)"
+                                    Value="@TaskObject.SelectedCompanyId"
+                                    ValueChanged="@((int value) => ToggleCompany(value))">
+                    @if (companyItems.Where(C => C.IsSubscribed).Count() > 0)
+                    {
+                        @foreach (var company in companyItems.Where(C => C.IsSubscribed))
+                        {
+                            <option value="@company.Company.Id">
+                                @company.Company.CompanyName
+                            </option>
+                        }
+
+                    }
+                </InputSelectInteger>
+            </div>
+        }
+
+
+
         <div class="form-group">
             @if (companyItems is null)
             {
@@ -35,8 +59,9 @@
             }
             else
             {
-                @if (!(companyItems.Where(C => C.IsSubscribed).SingleOrDefault() is null))
+                @if (!(companyItems.Where(C => C.IsSubscribed) is null))
                 {
+
                     <label for="@TaskObject.SelectedUri">System</label>
                     <InputSelect @bind-Value="TaskObject.SelectedUri">
                         <option selected value="Live">
@@ -99,7 +124,7 @@
                     {
                         @foreach (var company in companyItems)
                         {
-                            <label>@company.Company.CompanyName</label><InputCheckbox @onclick="() => ToggleCompanyStatus(company)" @bind-Value="company.IsSubscribed"></InputCheckbox>
+                            <label>@company.Company.CompanyName</label><InputCheckbox @bind-Value="company.IsSubscribed"></InputCheckbox>
                         }
                     }
                 </div>

@@ -530,3 +530,6 @@ F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\RazorDe
 F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\Admin\CompanyDetails\CompanyDetails.razor.g.cs
 F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\RazorDeclaration\Pages\OR_RESI_Chapters\ChapterListPaul.razor.g.cs
 F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\OR_RESI_Chapters\ChapterListPaul.razor.g.cs
+F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Areas\Identity\Pages\Account\LogOutOnGet.cshtml.g.cs
+F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\RazorDeclaration\Pages\Admin\NewPage\NewPage.razor.g.cs
+F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\Admin\NewPage\NewPage.razor.g.cs

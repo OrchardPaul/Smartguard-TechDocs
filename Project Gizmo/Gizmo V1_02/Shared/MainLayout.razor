@@ -1,4 +1,10 @@
 ﻿@inherits LayoutComponentBase
+@using Gizmo_V1_02.Services.SessionState
+@using Microsoft.AspNetCore.Identity
+@using Gizmo_V1_02.Data
+@using Gizmo_V1_02.Data.CustomFormObjects
+@inject IUserSessionState userState
+@inject SignInManager<ApplicationUser> SignInManager
 
 <div class="sidebar">
     <NavMenu />
@@ -6,7 +12,29 @@
 
 <div class="main">
     <div class="top-row px-4 auth">
-        <LoginDisplay />
+        @if (!(userState.allAssignedCompanies is null))
+        {
+            @if (userState.allAssignedCompanies.Count() > 0)
+            {
+                <EditForm Model="currentUser">
+                    <InputSelectInteger ValueExpression="@(() => currentUser.SelectedCompanyId)"
+                                        Value="@currentUser.SelectedCompanyId"
+                                        ValueChanged="@((int value) => ToggleCompany(value))">
+
+                        @foreach (var company in userState.allAssignedCompanies)
+                        {
+                            <option value="@company.Id">
+                                @company.CompanyName
+                            </option>
+                        }
+                    </InputSelectInteger>
+                </EditForm>
+                
+            }
+        }
+
+
+        <LoginDisplay userFullName="@userState.FullName" />
     </div>
 
     <div class="content px-4">

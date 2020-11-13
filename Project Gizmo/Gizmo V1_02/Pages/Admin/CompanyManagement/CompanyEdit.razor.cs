@@ -1,5 +1,6 @@
 ﻿using Gizmo.Context.Gizmo_Authentification;
 using Gizmo_V1_02.Data.Admin;
+using Gizmo_V1_02.Services.SessionState;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.JSInterop;
@@ -21,6 +22,8 @@ namespace Gizmo_V1_02.Pages.Admin.CompanyManagement
         [Inject]
         private ICompanyDbAccess service { get; set; }
 
+        [Inject]
+        private IUserSessionState sessionState { get; set; }
         private async Task ClosechapterModal()
         {
             await jsRuntime.InvokeAsync<Object>("CloseModal", "companyModal");
@@ -29,6 +32,7 @@ namespace Gizmo_V1_02.Pages.Admin.CompanyManagement
         private async void HandleValidSubmit()
         {
             await service.SubmitChanges(TaskObject);
+            await sessionState.SetSessionState();
 
             await ClosechapterModal();
             DataChanged?.Invoke();

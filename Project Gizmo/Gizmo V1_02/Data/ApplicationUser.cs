@@ -13,5 +13,7 @@ namespace Gizmo_V1_02.Data
 
         [StringLength(256)]
         public string SelectedUri { get; set; }
+
+        public int SelectedCompanyId { get; set; }
     }
 }

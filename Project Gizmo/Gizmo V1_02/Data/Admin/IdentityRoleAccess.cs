@@ -13,6 +13,7 @@ namespace Gizmo_V1_02.Data.Admin
     {
         Task<IdentityResult> Delete(AspNetRoles item);
         Task<List<AspNetRoles>> GetUserRoles();
+        Task<IList<string>> GetCurrentUserRolesForCompany(AspNetUsers user, int selectedCompany);
         Task<AspNetRoles> SubmitChanges(AspNetRoles item);
 
         void Dispose();
@@ -21,14 +22,15 @@ namespace Gizmo_V1_02.Data.Admin
     public class IdentityRoleAccess : IIdentityRoleAccess
     {
         private readonly RoleManager<ApplicationRole> roleManager;
-        private readonly IMapper mapper;
+        private readonly AuthorisationDBContext dBContext;
 
         private ApplicationRole selectedRole { get; set; }
 
-        public IdentityRoleAccess(RoleManager<ApplicationRole> roleManager, IMapper mapper)
+        public IdentityRoleAccess(RoleManager<ApplicationRole> roleManager
+                                    , AuthorisationDBContext dBContext)
         {
             this.roleManager = roleManager;
-            this.mapper = mapper;
+            this.dBContext = dBContext;
         }
 
         public async Task<List<AspNetRoles>> GetUserRoles()
@@ -45,6 +47,21 @@ namespace Gizmo_V1_02.Data.Admin
                 .ToListAsync();
         }
 
+        public async Task<IList<string>> GetCurrentUserRolesForCompany(AspNetUsers user, int selectedCompany)
+        {
+            var SelectedUserRoles = await dBContext.AppCompanyUserRoles
+                                            .Where(A => A.UserId == user.Id
+                                                        & A.CompanyId == selectedCompany)
+                                            .Select(A => A.RoleId)
+                                            .ToListAsync();
+
+            return await roleManager.Roles
+                                    .Where(x => SelectedUserRoles.Contains(x.Id))
+                                    .Select(x => x.Name)
+                                    .ToListAsync();
+
+            
+        }
         public void Dispose()
         {
             roleManager.Dispose();
@@ -115,6 +132,15 @@ namespace Gizmo_V1_02.Data.Admin
             }
             else
             {
+                var userRoles = await dBContext.AppCompanyUserRoles
+                                                .Where(C => C.RoleId == selectedRole.Id)
+                                                .ToListAsync();
+
+                if (userRoles.Count > 0)
+                {
+                    dBContext.AppCompanyUserRoles.RemoveRange(userRoles);
+                }
+
                 return await roleManager.DeleteAsync(selectedRole);
             }
 

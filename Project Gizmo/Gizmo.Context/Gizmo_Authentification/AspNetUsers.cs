@@ -52,5 +52,6 @@ namespace Gizmo.Context.Gizmo_Authentification
         public string FullName { get; set; }
         [StringLength(256)]
         public string SelectedUri { get; set; }
+        public int SelectedCompanyId { get; set; }
     }
 }

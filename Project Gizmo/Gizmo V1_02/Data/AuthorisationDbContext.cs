@@ -24,6 +24,7 @@ namespace Gizmo_V1_02.Data
         }
 
         public virtual DbSet<AppCompanyDetails> AppCompanyDetails { get; set; }
+        public virtual DbSet<AppCompanyUserRoles> AppCompanyUserRoles { get; set; }
         public virtual DbSet<AppCompanyWorkTypeGroups> AppCompanyWorkTypeGroups { get; set; }
         public virtual DbSet<AppWorkTypeGroups> AppWorkTypeGroups { get; set; }
         public virtual DbSet<AppWorkTypeGroupsTypeAssignments> AppWorkTypeGroupsTypeAssignments { get; set; }

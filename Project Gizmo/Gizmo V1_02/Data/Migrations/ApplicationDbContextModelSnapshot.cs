@@ -26,6 +26,22 @@ namespace Gizmo_V1_02.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("CompCol1")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
+                    b.Property<string>("CompCol2")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
+                    b.Property<string>("CompCol3")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
+                    b.Property<string>("CompCol4")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
                     b.Property<string>("CompanyName")
                         .IsRequired()
                         .HasColumnType("nvarchar(256)")
@@ -42,6 +58,29 @@ namespace Gizmo_V1_02.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("AppCompanyDetails");
+                });
+
+            modelBuilder.Entity("Gizmo.Context.Gizmo_Authentification.AppCompanyUserRoles", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("CompanyId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("RoleId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AppCompanyUserRoles");
                 });
 
             modelBuilder.Entity("Gizmo.Context.Gizmo_Authentification.AppCompanyWorkTypeGroups", b =>
@@ -219,6 +258,9 @@ namespace Gizmo_V1_02.Data.Migrations
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("SelectedCompanyId")
+                        .HasColumnType("int");
 
                     b.Property<string>("SelectedUri")
                         .HasColumnType("nvarchar(256)")

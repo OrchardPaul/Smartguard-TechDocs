@@ -16,6 +16,7 @@ namespace Gizmo_V1_02.Data.Admin
 {
     public interface IIdentityUserAccess
     {
+        Task<AspNetUsers> SwitchSelectedCompany(AspNetUsers user, int companyId);
         Task<IdentityResult> Delete(AspNetUsers item);
         Task<IList<Claim>> GetCompanyClaims(AspNetUsers user);
         Task<IList<string>> GetSelectedUserRoles(AspNetUsers item);
@@ -30,18 +31,60 @@ namespace Gizmo_V1_02.Data.Admin
     public class IdentityUserAccess : IIdentityUserAccess
     {
         private readonly UserManager<ApplicationUser> userManager;
+        private readonly RoleManager<ApplicationRole> roleManager;
         private readonly AuthenticationStateProvider authenticationStateProvider;
+        private readonly ApplicationDbContext context;
         private readonly IMapper mapper;
 
         private ApplicationUser selectedUser { get; set; }
 
         public IdentityUserAccess(UserManager<ApplicationUser> userManager
+            , RoleManager<ApplicationRole> roleManager
             , AuthenticationStateProvider authenticationStateProvider
+            , ApplicationDbContext context
             , IMapper mapper)
         {
             this.userManager = userManager;
+            this.roleManager = roleManager;
             this.authenticationStateProvider = authenticationStateProvider;
+            this.context = context;
             this.mapper = mapper;
+        }
+
+        public async Task<AspNetUsers> SwitchSelectedCompany(AspNetUsers user, int companyId)
+        {
+            selectedUser = await userManager.FindByNameAsync(user.UserName);
+            selectedUser.SelectedCompanyId = companyId;
+
+            await userManager.UpdateAsync(selectedUser);
+
+            var selectedCompanyUserRoles = await context.AppCompanyUserRoles
+                                                    .Where(A => A.UserId == user.Id
+                                                                & A.CompanyId == companyId)
+                                                    .Select(A => A.RoleId)
+                                                    .ToListAsync();
+
+            var newRoles = await roleManager.Roles
+                                        .Where(R => selectedCompanyUserRoles.Contains(R.Id))
+                                        .Select(R => R.Name)
+                                        .ToListAsync();
+
+            
+
+            var currentRoles = await userManager.GetRolesAsync(selectedUser);
+
+            if(currentRoles.Count > 0)
+            {
+                await userManager.RemoveFromRolesAsync(selectedUser, currentRoles);
+            }
+            
+            if(newRoles.Count > 0)
+            {
+                await userManager.AddToRolesAsync(selectedUser, newRoles);
+            }
+            
+
+            return mapper.Map(selectedUser, new AspNetUsers());
         }
 
         public async Task<AspNetUsers> SubmitCompanyCliams(List<CompanyItem> companies, AspNetUsers user)
@@ -210,7 +253,8 @@ namespace Gizmo_V1_02.Data.Admin
                     NormalizedEmail = item.Email.ToUpper(),
                     PhoneNumber = item.PhoneNumber,
                     EmailConfirmed = true,
-                    SelectedUri = item.SelectedUri
+                    SelectedUri = item.SelectedUri,
+                    SelectedCompanyId = item.SelectedCompanyId
                 };
 
                 var CreateResult = await userManager.CreateAsync(NewUser, item.PasswordHash);
@@ -221,9 +265,24 @@ namespace Gizmo_V1_02.Data.Admin
                 }
                 else
                 {
-                    var strSelectedRoles = selectedRoles.Where(S => S.IsSubscribed == true).Select(S => S.RoleName).ToList();
+                    var strSelectedRoles = selectedRoles
+                                                    .Where(S => S.IsSubscribed)
+                                                    .Select(S => S.RoleName)
+                                                    .ToList();
 
                     await userManager.AddToRolesAsync(NewUser, strSelectedRoles);
+
+                    var selectedCompanyUserRoles = selectedRoles
+                                                        .Where(S => S.IsSubscribed)
+                                                        .Select(S => new AppCompanyUserRoles
+                                                        {
+                                                            UserId = NewUser.Id,
+                                                            CompanyId = NewUser.SelectedCompanyId,
+                                                            RoleId = S.RoleId
+                                                        })
+                                                        .ToList();
+
+                    context.AppCompanyUserRoles.AddRange(selectedCompanyUserRoles);
 
                     mapper.Map(NewUser, item);
 
@@ -247,6 +306,7 @@ namespace Gizmo_V1_02.Data.Admin
                 selectedUser.LockoutEnabled = item.LockoutEnabled;
                 selectedUser.AccessFailedCount = item.AccessFailedCount;
                 selectedUser.SelectedUri = item.SelectedUri;
+                selectedUser.SelectedCompanyId = item.SelectedCompanyId;
 
                 await userManager.UpdateAsync(selectedUser);
 
@@ -279,6 +339,55 @@ namespace Gizmo_V1_02.Data.Admin
                         }
                     }
                 }
+
+                var addSelectedCompanyUserRoles = selectedRoles
+                                                        .Where(S => S.IsSubscribed)
+                                                        .Select(S => new AppCompanyUserRoles
+                                                        {
+                                                            UserId = selectedUser.Id,
+                                                            CompanyId = selectedUser.SelectedCompanyId,
+                                                            RoleId = S.RoleId
+                                                        })
+                                                        .ToList();
+
+                foreach(var company in addSelectedCompanyUserRoles) 
+                {
+                    var selectedCompany = await context.AppCompanyUserRoles
+                                                    .Where(A => A.RoleId == company.RoleId
+                                                                & A.CompanyId == company.CompanyId
+                                                                & A.UserId == company.UserId)
+                                                    .SingleOrDefaultAsync();
+
+                    if(selectedCompany is null)
+                    {
+                        context.AppCompanyUserRoles.Add(company);
+                    }
+                }
+
+                var removeSelectedCompanyUserRoles = selectedRoles
+                                                            .Where(S => !S.IsSubscribed)
+                                                            .Select(S => new AppCompanyUserRoles
+                                                            {
+                                                                UserId = selectedUser.Id,
+                                                                CompanyId = selectedUser.SelectedCompanyId,
+                                                                RoleId = S.RoleId
+                                                            })
+                                                            .ToList();
+
+                foreach (var company in removeSelectedCompanyUserRoles)
+                {
+                    var selectedCompany = await context.AppCompanyUserRoles
+                                                    .Where(A => A.RoleId == company.RoleId
+                                                                & A.CompanyId == company.CompanyId
+                                                                & A.UserId == company.UserId)
+                                                    .SingleOrDefaultAsync();
+
+                    if (!(selectedCompany is null))
+                    {
+                        context.AppCompanyUserRoles.Remove(selectedCompany);
+                    }
+                }
+
 
                 mapper.Map(selectedUser, item);
 
