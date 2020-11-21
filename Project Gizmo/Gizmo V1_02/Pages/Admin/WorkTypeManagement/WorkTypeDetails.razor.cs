@@ -1,7 +1,8 @@
 ﻿using Gizmo.Context.Gizmo_Authentification;
-using Gizmo.Context.Gizmo_Authentification.Custom;
 using Gizmo_V1_02.Data.Admin;
+using Gizmo_V1_02.Services.SessionState;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.JSInterop;
 using System;
 using System.Collections.Generic;
@@ -14,16 +15,16 @@ namespace Gizmo_V1_02.Pages.Admin.WorkTypeManagement
     {
 
         [Parameter]
-        public WorkTypeItem TaskObject { get; set; }
-
-        [Parameter]
-        public List<WorkTypeAssignment> Groups { get; set; }
+        public AppWorkTypes TaskObject { get; set; }
 
         [Parameter]
         public Action DataChanged { get; set; }
 
         [Inject]
         private ICompanyDbAccess service { get; set; }
+
+        [Inject]
+        private IUserSessionState sessionState { get; set; }
 
         private async Task ClosechapterModal()
         {
@@ -32,16 +33,17 @@ namespace Gizmo_V1_02.Pages.Admin.WorkTypeManagement
 
         private async void HandleValidSubmit()
         {
-            TaskObject.workType = await service.SubmitWorkType(TaskObject.workType);
-            await service.AssignWorkTypeToGroup(TaskObject,Groups);
+            await service.SubmitWorkType(TaskObject);
+            await sessionState.SetSessionState();
 
             await ClosechapterModal();
             DataChanged?.Invoke();
+
         }
 
         private async void HandleValidDelete()
         {
-            await service.DeleteWorkType(TaskObject.workType);
+            await service.DeleteWorkType(TaskObject);
 
             await ClosechapterModal();
             DataChanged?.Invoke();

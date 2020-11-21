@@ -3,63 +3,105 @@
 <div class="modal" tabindex="-1" role="dialog" id="companyModal">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Company Setup</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <EditForm Model="@TaskObject" OnValidSubmit="@HandleValidSubmit">
-                    <DataAnnotationsValidator />
-                    <ValidationSummary />
-
-                    <div class="form-group">
-                        <label for="@TaskObject.CompanyName">Company Name</label>
-                        <InputText @bind-Value="TaskObject.CompanyName"></InputText>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="@TaskObject.DevUri">Dev</label>
-                        <InputText @bind-Value="TaskObject.DevUri"></InputText>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="@TaskObject.LiveUri">Live</label>
-                        <InputText @bind-Value="TaskObject.LiveUri"></InputText>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="@TaskObject.CompCol1">Comp Col 1</label>
-                        <InputText @bind-Value="TaskObject.CompCol1"></InputText>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="@TaskObject.CompCol2">Comp Col 2</label>
-                        <InputText @bind-Value="TaskObject.CompCol2"></InputText>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="@TaskObject.CompCol3">Comp Col 3</label>
-                        <InputText @bind-Value="TaskObject.CompCol3"></InputText>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="@TaskObject.CompCol4">Comp Col 4</label>
-                        <InputText @bind-Value="TaskObject.CompCol4"></InputText>
-                    </div>
-
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-
-                    @if (!(TaskObject.CompanyName is null))
+            <EditForm Model="@TaskObject" OnValidSubmit="@HandleValidSubmit">
+                <div class="modal-header">
+                    <h3 class="modal-title">Company Setup</h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" class="fa fa-window-close"></span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    @if (ShowForm)
                     {
-                        <button type="button" @onclick="HandleValidDelete" class="btn btn-secondary"></button>
+                        <DataAnnotationsValidator />
+                        <ValidationSummary />
+
+                        <div class="form-group">
+                            <label for="@TaskObject.CompanyName">Company Name</label>
+                            <InputText class="form-control" style="width: 200px" @bind-Value="TaskObject.CompanyName"></InputText>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="@TaskObject.DevUri">Dev</label>
+                            <InputText class="form-control" @bind-Value="TaskObject.DevUri"></InputText>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="@TaskObject.LiveUri">Live</label>
+                            <InputText class="form-control"  @bind-Value="TaskObject.LiveUri"></InputText>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="@TaskObject.CompCol1">Main Background</label>
+                            <InputText class="form-control" style="width: 100px" @bind-Value="TaskObject.CompCol1"></InputText>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="@TaskObject.CompCol2">Main Contrast</label>
+                            <InputText class="form-control" style="width: 100px" @bind-Value="TaskObject.CompCol2"></InputText>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="@TaskObject.CompCol3">Alternative Background</label>
+                            <InputText class="form-control" style="width: 100px" @bind-Value="TaskObject.CompCol3"></InputText>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="@TaskObject.CompCol4">Alternative Contrast</label>
+                            <InputText class="form-control" style="width: 100px" @bind-Value="TaskObject.CompCol4"></InputText>
+                        </div>
                     }
+                    else
+                    {
+                        <div class="alert alert-danger" style="margin: 40px 0 40px 0" role="alert">
+                            Are you sure you wish to delete this company?
+                        </div>
+                    }
+                </div>
+                <div class="modal-footer">
+                    <div class="container-fluid ">
+                        <div class="row">
+                            @if (ShowForm)
+                            {
+                                <div class="col-6 text-left">
+                                    <button type="button" @onclick="@SubmitForm" class="btn btn-secondary">Delete</button>
+                                </div>
+                                <div class="col-6 text-right">
+                                    <button type="submit" class="btn btn-sub">Save</button>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="col-6 text-left">
+                                    <button type="button" data-dismiss="modal" @onclick="@CancelForm" class="btn btn-secondary">Cancel</button>
+                                </div>
+                                <div class="col-6 text-right">
+                                    <button type="button" @onclick="HandleValidDelete" class="btn btn-sub">Confirm</button>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
 
-
-                </EditForm>
-            </div>
+            </EditForm>
         </div>
     </div>
 </div>
+
+
+
+@functions {
+    bool ShowForm { get; set; } = true;
+    string FirstName { get; set; }
+    string LastName { get; set; }
+
+    void SubmitForm()
+    {
+        ShowForm = false;
+    }
+
+    void CancelForm()
+    {
+        ShowForm = true;
+    }
+}

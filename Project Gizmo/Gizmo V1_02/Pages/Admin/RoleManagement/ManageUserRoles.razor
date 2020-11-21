@@ -1,6 +1,13 @@
 ﻿@page "/admin/manageuserroles"
 
-<h3><NavLink href="admin">Admin</NavLink> / Manage User Roles</h3>
+
+<div class="text-block rounded ">
+    <div class="float-left back-link">
+        <NavLink href="admin"><span class="col-main fa fa-angle-double-left fa-2x"></span></NavLink>
+    </div>
+    <h2>Manage User Roles</h2>
+</div>
+
 
 @if (lstRoles is null)
 {
@@ -8,26 +15,31 @@
 }
 else
 {
-    <table id="tblRoleList" class="table">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Role Description</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var role in lstRoles)
-            {
-                <tr>
-                    <td>@role.Name</td>
-                    <td>@role.RoleDescription</td>
-                    <td><input type="button" class="btn btn-primary" @onclick='(() => PrepareForEdit(role))' data-toggle="modal" data-target="#roleModal" value="Edit" /></td>
-                </tr>
-            }
-        </tbody>
-    </table>
+        <div class="mt-5 col-xl-8 col-lg-12 col-md-12 col-sm-12">
+            <div class="mb-3">
+                <button data-toggle="modal" data-target="#roleModal" @onclick='(() => PrepareForInsert())' class="btn btn-main btn-shadow"><i class="fa fa-plus"></i> Add New Role</button>
+            </div>
+            <div class="grid-tran">
+                <div class="container-fluid ">
+                    <div class="row grid-header hidden-lg-down">
+                        <div class="col-xl-4 col-lg-11 col-md-11 col-sm-11 data-item"><div class="data-item-sub">Name</div></div>
+                        <div class="col-7 hidden-lg-down data-item"><div class="data-item-sub">Description</div></div>
+                        <div class="col-1 data-item no-border"><div class="data-item-sub no-tran"></div></div>
+                    </div>
+                    @foreach (var role in lstRoles)
+                    {
+                        <div class="row grid-row">
+                            <div class="col-xl-4 col-lg-11 col-md-11 col-sm-11 data-item"><div class="data-item-sub"><span class="fa fa-user-alt "></span> @role.Name</div></div>
+                            <div class="col-7 hidden-lg-down data-item"><div class="data-item-sub">@role.RoleDescription</div></div>
+                            <div class="col-1 data-item"><div class="data-item-sub data-item-edit"><button class="btn btn-edit" @onclick='(() => PrepareForEdit(role))' data-toggle="modal" data-target="#roleModal" value=""><i class="fa fa-pencil-alt"></i></button></div></div>
+                        </div>
 
-    <input type="button" data-toggle="modal" data-target="#roleModal" @onclick='(() => PrepareForInsert())' class="btn btn-primary" value="Add Role" />
-}
+                    }
 
-<RoleDetail TaskObject="@editRole" DataChanged="@DataChanged"></RoleDetail>
+                </div>
+            </div>
+        </div>
+
+        }
+
+        <RoleDetail TaskObject="@editRole" DataChanged="@DataChanged"></RoleDetail>

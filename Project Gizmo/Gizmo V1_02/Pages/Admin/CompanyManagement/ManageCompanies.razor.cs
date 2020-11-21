@@ -1,5 +1,6 @@
 ﻿using Gizmo.Context.Gizmo_Authentification;
 using Gizmo_V1_02.Data.Admin;
+using Gizmo_V1_02.Services.SessionState;
 using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
@@ -13,13 +14,27 @@ namespace Gizmo_V1_02.Pages.Admin.CompanyManagement
         [Inject]
         ICompanyDbAccess companyDbAccess { get; set; }
 
+        
+
+        [Inject]
+        IUserSessionState sessionState { get; set; }
+
         private List<AppCompanyDetails> lstCompanyDetails;
 
         public AppCompanyDetails editCompany = new AppCompanyDetails();
 
         protected override async Task OnInitializedAsync()
         {
+            bool gotLock = sessionState.Lock;
+            while (gotLock)
+            {
+                await Task.Yield();
+                gotLock = sessionState.Lock;
+            }
+
             lstCompanyDetails = await companyDbAccess.GetCompanies();
+
+
         }
 
         private async void DataChanged()
