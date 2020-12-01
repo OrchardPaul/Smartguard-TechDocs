@@ -1,10 +1,10 @@
 ﻿@inject IJSRuntime jsRuntime
 
-<div class="modal" tabindex="-1" role="dialog" id="GroupModal">
+<div class="modal" tabindex="-1" role="dialog" id="GroupingModal">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Work Type Group</h5>
+                <h5 class="modal-title">Work Type Grouping</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
@@ -17,8 +17,10 @@
                         <ValidationSummary />
 
                         <div class="form-group">
-                            <label for="@TaskObject.group.GroupName">Group Name</label>
-                            <InputText @bind-Value="TaskObject.group.GroupName"></InputText>
+                            @foreach (var a in Assignments)
+                            {
+                                <label>@a.WorkType.TypeName</label><InputCheckbox @bind-Value="a.IsAssigned"></InputCheckbox>
+                            }
                         </div>
 
                     }

@@ -21,7 +21,7 @@ namespace Gizmo_V1_02.Pages.Admin.RoleManagement
 
         [Inject]
         private IIdentityRoleAccess service { get; set; }
-
+        private bool ShowForm { get; set; } = true;
         private async Task ClosechapterModal()
         {
             await jsRuntime.InvokeAsync<object>("CloseModal", "roleModal");
@@ -39,8 +39,21 @@ namespace Gizmo_V1_02.Pages.Admin.RoleManagement
         {
             await service.Delete(TaskObject);
 
+            ShowForm = true;
+
             await ClosechapterModal();
             DataChanged?.Invoke();
+        }
+
+
+        private void SubmitForm()
+        {
+            ShowForm = false;
+        }
+
+        private void CancelForm()
+        {
+            ShowForm = true;
         }
 
     }

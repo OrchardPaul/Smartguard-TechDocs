@@ -26,7 +26,7 @@ namespace Gizmo_V1_02.Data.Admin
         Task<List<AppWorkTypeGroups>> GetWorkTypeGroupsByCompany(int companyId);
         Task<AppWorkTypes> SubmitWorkType(AppWorkTypes workType);
         Task<AppWorkTypeGroups> SubmitWorkTypeGroup(AppWorkTypeGroups workTypeGroup);
-        Task<WorkTypeItem> AssignWorkTypeToGroup(WorkTypeItem workType, List<WorkTypeAssignment> assignments);
+        Task<WorkTypeGroupItem> AssignWorkTypeToGroup(WorkTypeGroupItem workTypeGroup, List<WorkTypeGroupAssignment> assignments);
         Task<AppWorkTypes> DeleteWorkType(AppWorkTypes workType);
         Task<AppWorkTypeGroups> DeleteWorkTypeGroup(AppWorkTypeGroups group);
         Task<AppWorkTypeGroupsTypeAssignments> DeleteAssignment(AppWorkTypeGroupsTypeAssignments assignment);
@@ -233,6 +233,53 @@ namespace Gizmo_V1_02.Data.Admin
             }
         }
 
+        public async Task<WorkTypeGroupItem> AssignWorkTypeToGroup(WorkTypeGroupItem workTypeGroup, List<WorkTypeGroupAssignment> assignments)
+        {
+            bool changed = false;
+
+            var AssignmentsToRemove = await context
+                                                .AppWorkTypeGroupsTypeAssignments
+                                                .Where(A => A.WorkTypeGroupId == workTypeGroup.group.Id)
+                                                .ToListAsync();
+
+            if(AssignmentsToRemove.Count > 0)
+            {
+                context.AppWorkTypeGroupsTypeAssignments.RemoveRange(AssignmentsToRemove);
+
+                changed = true;
+            }
+
+
+            if (assignments
+                    .Where(A => A.IsAssigned)
+                    .ToList()
+                    .Count > 0)
+            {
+                var newAssignments = assignments
+                                        .Where(A => A.IsAssigned)
+                                        .Select(A => new AppWorkTypeGroupsTypeAssignments
+                                        {
+                                            WorkTypeGroupId = workTypeGroup.group.Id,
+                                            WorkTypeId = A.WorkType.Id
+                                        })
+                                        .ToList();
+
+                context.AppWorkTypeGroupsTypeAssignments.AddRange(newAssignments);
+
+                changed = true;
+            }
+
+            if (changed)
+            {
+                await context.SaveChangesAsync();
+            }
+            
+            return workTypeGroup;
+
+        }
+
+
+        /*
         public async Task<WorkTypeItem> AssignWorkTypeToGroup(WorkTypeItem workType, List<WorkTypeAssignment> assignments)
         {
             bool changed = false;
@@ -291,7 +338,7 @@ namespace Gizmo_V1_02.Data.Admin
                 return workType;
             }
         }
-        
+        */
         public async Task<AppWorkTypeGroups> SubmitWorkTypeGroup(AppWorkTypeGroups workTypeGroup)
         {
             var selectedWorkTypeGroup = await context.AppWorkTypeGroups.SingleOrDefaultAsync(A => A.Id == workTypeGroup.Id);

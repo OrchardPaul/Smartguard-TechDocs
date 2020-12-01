@@ -26,6 +26,7 @@ namespace Gizmo_V1_02.Pages.Admin.WorkTypeManagement
         [Inject]
         private IUserSessionState sessionState { get; set; }
 
+        private bool ShowForm { get; set; } = true;
         private async Task ClosechapterModal()
         {
             await jsRuntime.InvokeAsync<object>("CloseModal", "TypeModal");
@@ -45,8 +46,20 @@ namespace Gizmo_V1_02.Pages.Admin.WorkTypeManagement
         {
             await service.DeleteWorkType(TaskObject);
 
+            ShowForm = true;
+
             await ClosechapterModal();
             DataChanged?.Invoke();
+        }
+
+        private void SubmitForm()
+        {
+            ShowForm = false;
+        }
+
+        private void CancelForm()
+        {
+            ShowForm = true;
         }
     }
 }

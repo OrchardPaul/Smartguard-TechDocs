@@ -30,7 +30,7 @@ h3{
     /* Full height */
     height: calc(100% - 55px);
     /* The image used */
-    background-image: url(../images/parallax_7.jpg);
+    background-image: url(../images/parallax_4.jpg);
     /* Create the parallax scrolling effect */
     background-attachment: fixed;
     background-position: center;
@@ -48,8 +48,15 @@ h3{
 
 .sidebar {
     z-index: 99999;
-    /*background-color: #FFFFFF !important;*/
+    background-color: #FFFFFF !important;
     box-shadow: 0px 0 4px 4px rgba(0, 0, 0, 0.4);
+}
+
+.sidebar .top-row {
+    background-color: #000000;
+    background-image: url(../images/GadgIT_logo_vsmall.jpg); 
+    background-repeat: no-repeat;
+    background-position: center;
 }
 
 .page-footer{
@@ -285,9 +292,11 @@ h3{
     }
 
         .sidebar .logo {
+            /*
             background-image: url("../images/GadgIT_logo2.jpg");
             background-repeat: no-repeat;
             background-position: center top;
+            */
             width: 100%;
             height: 310px;
             position: absolute;
@@ -295,9 +304,9 @@ h3{
         }
 
         .sidebar .logo {
-            background-image: url("../images/GadgIT_logo2.jpg");
+/*            background-image: url("../images/GadgIT_logo2.jpg");
             background-repeat: no-repeat;
-            background-position: center top;
+            background-position: center top;*/
             width: 100%;
             height: 310px;
             position: absolute;

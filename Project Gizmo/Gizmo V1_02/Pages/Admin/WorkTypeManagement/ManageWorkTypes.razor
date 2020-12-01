@@ -25,13 +25,14 @@ else
         <li class="nav-item">
             <a class="nav-link @(navDisplay == "Work Type" ? "active" : "")" href="javascript:void(0);" @onclick='(() => ShowNav("Work Type"))'>Work Types</a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link @(navDisplay == "Grouping" ? "active" : "")" href="javascript:void(0);" @onclick='(() => ShowNav("Grouping"))'>Grouping</a>
+        </li>
 
     </ul>
 
     @if (navDisplay == "Group")
     {
-
-
         <div class="mb-3 mt-2">
             <button data-toggle="modal" data-target="#GroupModal" @onclick='(() => PrepareGroupForInsert())' class="btn btn-main btn-shadow"><i class="fa fa-plus"></i> Add New Group</button>
         </div>
@@ -53,7 +54,7 @@ else
     @if (navDisplay == "Work Type")
     {
         <div class="mb-3">
-            <button data-toggle="modal" data-target="#GroupModal" @onclick='(() => PrepareTypeForInsert())' class="btn btn-main btn-shadow"><i class="fa fa-plus"></i> Add New Work Type</button>
+            <button data-toggle="modal" data-target="#TypeModal" @onclick='(() => PrepareTypeForInsert())' class="btn btn-main btn-shadow"><i class="fa fa-plus"></i> Add New Work Type</button>
         </div>
         <div class="grid-tran">
             <div class="container-fluid ">
@@ -70,13 +71,36 @@ else
         </div>
     }
 
+    @if (navDisplay == "Grouping")
+    {
+        <div class="grid-tran">
+            <div class="container-fluid ">
+                @foreach (var wtg in workTypeGroups)
+                {
+                    <div class="row grid-row">
+                        <div class="col-10 data-item"><div class="data-item-sub"> @wtg.group.GroupName </div></div>
+                        <div class="col-2 data-item"><div class="data-item-sub data-item-edit"><button class="btn btn-edit" @onclick='(() => PrepareGroupingForEdit(wtg))' data-toggle="modal" data-target="#GroupingModal" value=""><i class="fa fa-pencil-alt"></i></button></div></div>
+                    </div>
+
+                    <div class="row grid-row">
+                        @foreach(var wt in wtg.workTypes)
+                        {
+                            <div class="col-2 data-item-sub">@wt.workType.TypeName</div>
+                        }
+                    </div>
+                }
+
+            </div>
+        </div>
+    }
+
+
 </div>
-
-
-
 }
 
 
 <WorkTypeGroupDetails TaskObject="@editGroup" DataChanged="@DataChanged"></WorkTypeGroupDetails>
 
 <WorkTypeDetails TaskObject="@editType" DataChanged="@DataChanged"></WorkTypeDetails>
+
+<WorkTypeGroupingDetails TaskObject="@editGrouping" DataChanged="@DataChanged" Assignments="@editAssignments"></WorkTypeGroupingDetails>

@@ -1,5 +1,4 @@
-﻿using Gizmo.Context.Gizmo_Authentification;
-using Gizmo.Context.Gizmo_Authentification.Custom;
+﻿using Gizmo.Context.Gizmo_Authentification.Custom;
 using Gizmo_V1_02.Data.Admin;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
@@ -10,10 +9,13 @@ using System.Threading.Tasks;
 
 namespace Gizmo_V1_02.Pages.Admin.WorkTypeManagement
 {
-    public partial class WorkTypeGroupDetails
+    public partial class WorkTypeGroupingDetails
     {
         [Parameter]
         public WorkTypeGroupItem TaskObject { get; set; }
+
+        [Parameter]
+        public List<WorkTypeGroupAssignment> Assignments { get; set; }
 
         [Parameter]
         public Action DataChanged { get; set; }
@@ -29,7 +31,7 @@ namespace Gizmo_V1_02.Pages.Admin.WorkTypeManagement
 
         private async void HandleValidSubmit()
         {
-            await service.SubmitWorkTypeGroup(TaskObject.group);
+            await service.AssignWorkTypeToGroup(TaskObject, Assignments);
 
             await ClosechapterModal();
             DataChanged?.Invoke();
