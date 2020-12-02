@@ -5,7 +5,7 @@
     <div class="float-left back-link">
         <NavLink href="admin"><span class="col-main fa fa-angle-double-left fa-2x"></span></NavLink>
     </div>
-    <h2>Manage User Roles</h2>
+    <h3>Manage User Roles</h3>
 </div>
 
 
@@ -31,7 +31,7 @@ else
                         <div class="row grid-row">
                             <div class="col-xl-4 col-lg-11 col-md-11 col-sm-11 data-item"><div class="data-item-sub"><span class="fa fa-user-alt "></span> @role.Name</div></div>
                             <div class="col-7 hidden-lg-down data-item"><div class="data-item-sub">@role.RoleDescription</div></div>
-                            <div class="col-1 data-item"><div class="data-item-sub data-item-edit"><button class="btn btn-edit" @onclick='(() => PrepareForEdit(role))' data-toggle="modal" data-target="#roleModal" value=""><i class="fa fa-pencil-alt"></i></button></div></div>
+                            <div class="col-1 data-item"><div class="data-item-edit"><button class="btn btn-edit" @onclick='(() => PrepareForEdit(role))' data-toggle="modal" data-target="#roleModal" value=""><i class="fa fa-pencil-alt"></i></button></div></div>
                         </div>
 
                     }

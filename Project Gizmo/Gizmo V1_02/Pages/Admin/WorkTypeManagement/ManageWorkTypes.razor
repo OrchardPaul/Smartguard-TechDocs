@@ -4,7 +4,7 @@
     <div class="float-left back-link" >
         <NavLink href="admin"><span class="col-main fa fa-angle-double-left fa-2x"></span></NavLink>
     </div>
-    <h2>Manage Work Types</h2>
+    <h3>Manage Work Types</h3>
 </div>
 
 
@@ -17,90 +17,116 @@
 else
 {
 
-<div class="mt-5 col-xl-5 col-lg-8 col-md-12 col-sm-12">
-    <ul class="nav nav-tabs tran-tabs">
-        <li class="nav-item">
-            <a class="nav-link @(navDisplay == "Group" ? "active" : "")" href="javascript:void(0);" @onclick='(() => ShowNav("Group"))'>Groups</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link @(navDisplay == "Work Type" ? "active" : "")" href="javascript:void(0);" @onclick='(() => ShowNav("Work Type"))'>Work Types</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link @(navDisplay == "Grouping" ? "active" : "")" href="javascript:void(0);" @onclick='(() => ShowNav("Grouping"))'>Grouping</a>
-        </li>
+<div class="mt-5 mb-4 col-xl-5 col-lg-8 col-md-12 col-sm-12">
 
-    </ul>
+    <div class="page-navbar hidden-md-down">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark ">
 
-    @if (navDisplay == "Group")
-    {
-        <div class="mb-3 mt-2">
-            <button data-toggle="modal" data-target="#GroupModal" @onclick='(() => PrepareGroupForInsert())' class="btn btn-main btn-shadow"><i class="fa fa-plus"></i> Add New Group</button>
-        </div>
-        <div class="grid-tran">
-            <div class="container-fluid ">
-                @foreach (var wtg in workTypeGroups)
-                {
-                    <div class="row grid-row">
-                        <div class="col-10 data-item"><div class="data-item-sub"> @wtg.group.GroupName </div></div>
-                        <div class="col-2 data-item"><div class="data-item-sub data-item-edit"><button class="btn btn-edit" @onclick='(() => PrepareGroupForEdit(wtg))' data-toggle="modal" data-target="#GroupModal" value=""><i class="fa fa-pencil-alt"></i></button></div></div>
-                    </div>
+            <ul class="navbar-nav">
+                <li class="@(navDisplay == "Group" ? "active" : "")">
+                    <a href="javascript:void(0);" @onclick='(() => ShowNav("Group"))'><span>Groups</span></a>
+                </li>
+                <li class="@(navDisplay == "Work Type" ? "active" : "")">
+                    <a href="javascript:void(0);" @onclick='(() => ShowNav("Work Type"))'><span>Work Types</span></a>
+                </li>
+                <li class="last @(navDisplay == "Grouping" ? "active" : "")">
+                    <a href="javascript:void(0);" @onclick='(() => ShowNav("Grouping"))'><span>Grouping</span></a>
+                </li>
 
-                }
+            </ul>
 
+        </nav>
+    </div>
+    <div class="page-navbar hidden-lg-up">
+        <ul class="nav nav-pills tran-tabs">
+            <li class="nav-item @(navDisplay == "Group" ? "active" : "")">
+                <a class="nav-link" href="javascript:void(0);" @onclick='(() => ShowNav("Group"))'>Groups</a>
+            </li>
+            <li class="nav-item @(navDisplay == "Work Type" ? "active" : "")">
+                <a class="nav-link" href="javascript:void(0);" @onclick='(() => ShowNav("Work Type"))'>Work Types</a>
+            </li>
+            <li class="nav-item @(navDisplay == "Grouping" ? "active" : "")">
+                <a class="nav-link " href="javascript:void(0);" @onclick='(() => ShowNav("Grouping"))'>Grouping</a>
+            </li>
+            
+        </ul>
+    </div>
+        @if (navDisplay == "Group")
+        {
+            <div class="mb-3 mt-2">
+                <button data-toggle="modal" data-target="#GroupModal" @onclick='(() => PrepareGroupForInsert())' class="btn btn-main btn-shadow"><i class="fa fa-plus"></i> Add New Group</button>
             </div>
-        </div>
+            <div class="grid-tran">
+                <div class="container-fluid ">
+                    @foreach (var wtg in workTypeGroups)
+                    {
+                        <div class="row grid-row">
+                            <div class="col-10 data-item"><div class="data-item-sub"> @wtg.group.GroupName </div></div>
+                            <div class="col-2 data-item"><div class="data-item-edit"><button class="btn btn-edit" @onclick='(() => PrepareGroupForEdit(wtg))' data-toggle="modal" data-target="#GroupModal" value=""><i class="fa fa-pencil-alt"></i></button></div></div>
+                        </div>
+
+                    }
+
+                </div>
+            </div>
+        }
+
+        @if (navDisplay == "Work Type")
+        {
+            <div class="mb-3">
+                <button data-toggle="modal" data-target="#TypeModal" @onclick='(() => PrepareTypeForInsert())' class="btn btn-main btn-shadow"><i class="fa fa-plus"></i> Add New Work Type</button>
+            </div>
+            <div class="grid-tran">
+                <div class="container-fluid ">
+                    @foreach (var wt in workTypeItems)
+                    {
+                        <div class="row grid-row">
+                            <div class="col-10 data-item"><div class="data-item-sub"> @wt.TypeName </div></div>
+                            <div class="col-2 data-item"><div class="data-item-edit"><button class="btn btn-edit" @onclick='(() => PrepareTypeForEdit(wt))' data-toggle="modal" data-target="#TypeModal" value=""><i class="fa fa-pencil-alt"></i></button></div></div>
+                        </div>
+
+                    }
+
+                </div>
+            </div>
+        }
+
+        @if (navDisplay == "Grouping")
+        {
+            <div class="grid-tran">
+                <div class="container-fluid ">
+                    @foreach (var wtg in workTypeGroups)
+                    {
+                        <div class="row grid-row mt-3">
+                            <div class="col-10 data-item">
+                                <div class="data-item-sub "> @wtg.group.GroupName </div>
+                            </div>
+                            <div class="col-2 data-item"><div class="data-item-edit"><button class="btn btn-edit" @onclick='(() => PrepareGroupingForEdit(wtg))' data-toggle="modal" data-target="#GroupingModal" value=""><i class="fa fa-pencil-alt"></i></button></div></div>
+                        </div>
+
+                        <div class="row grid-row">
+
+                            <div class="col-12 ">
+                                @foreach (var wt in wtg.workTypes)
+                                {
+                                    <span class="badge badge-tran">@wt.workType.TypeName</span>
+                                }
+                            </div>
+                        </div>
+
+                    }
+
+                </div>
+            </div>
+        }
+
+
+    </div>
     }
 
-    @if (navDisplay == "Work Type")
-    {
-        <div class="mb-3">
-            <button data-toggle="modal" data-target="#TypeModal" @onclick='(() => PrepareTypeForInsert())' class="btn btn-main btn-shadow"><i class="fa fa-plus"></i> Add New Work Type</button>
-        </div>
-        <div class="grid-tran">
-            <div class="container-fluid ">
-                @foreach (var wt in workTypeItems)
-                {
-                    <div class="row grid-row">
-                        <div class="col-10 data-item"><div class="data-item-sub"> @wt.TypeName </div></div>
-                        <div class="col-2 data-item"><div class="data-item-sub data-item-edit"><button class="btn btn-edit" @onclick='(() => PrepareTypeForEdit(wt))' data-toggle="modal" data-target="#TypeModal" value=""><i class="fa fa-pencil-alt"></i></button></div></div>
-                    </div>
 
-                }
+    <WorkTypeGroupDetails TaskObject="@editGroup" DataChanged="@DataChanged"></WorkTypeGroupDetails>
 
-            </div>
-        </div>
-    }
+    <WorkTypeDetails TaskObject="@editType" DataChanged="@DataChanged"></WorkTypeDetails>
 
-    @if (navDisplay == "Grouping")
-    {
-        <div class="grid-tran">
-            <div class="container-fluid ">
-                @foreach (var wtg in workTypeGroups)
-                {
-                    <div class="row grid-row">
-                        <div class="col-10 data-item"><div class="data-item-sub"> @wtg.group.GroupName </div></div>
-                        <div class="col-2 data-item"><div class="data-item-sub data-item-edit"><button class="btn btn-edit" @onclick='(() => PrepareGroupingForEdit(wtg))' data-toggle="modal" data-target="#GroupingModal" value=""><i class="fa fa-pencil-alt"></i></button></div></div>
-                    </div>
-
-                    <div class="row grid-row">
-                        @foreach(var wt in wtg.workTypes)
-                        {
-                            <div class="col-2 data-item-sub">@wt.workType.TypeName</div>
-                        }
-                    </div>
-                }
-
-            </div>
-        </div>
-    }
-
-
-</div>
-}
-
-
-<WorkTypeGroupDetails TaskObject="@editGroup" DataChanged="@DataChanged"></WorkTypeGroupDetails>
-
-<WorkTypeDetails TaskObject="@editType" DataChanged="@DataChanged"></WorkTypeDetails>
-
-<WorkTypeGroupingDetails TaskObject="@editGrouping" DataChanged="@DataChanged" Assignments="@editAssignments"></WorkTypeGroupingDetails>
+    <WorkTypeGroupingDetails TaskObject="@editGrouping" DataChanged="@DataChanged" Assignments="@editAssignments"></WorkTypeGroupingDetails>

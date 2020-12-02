@@ -26,7 +26,7 @@ namespace Gizmo_V1_02.Pages.Admin.WorkTypeManagement
         private bool ShowForm { get; set; } = true;
         private async Task ClosechapterModal()
         {
-            await jsRuntime.InvokeAsync<object>("CloseModal", "GroupModal");
+            await jsRuntime.InvokeAsync<object>("CloseModal", "GroupingModal");
         }
 
         private async void HandleValidSubmit()
@@ -45,16 +45,6 @@ namespace Gizmo_V1_02.Pages.Admin.WorkTypeManagement
 
             await ClosechapterModal();
             DataChanged?.Invoke();
-        }
-
-        private void SubmitForm()
-        {
-            ShowForm = false;
-        }
-
-        private void CancelForm()
-        {
-            ShowForm = true;
         }
     }
 }

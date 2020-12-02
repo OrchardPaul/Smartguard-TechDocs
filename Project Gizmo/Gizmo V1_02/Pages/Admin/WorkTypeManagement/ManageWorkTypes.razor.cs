@@ -176,21 +176,22 @@ namespace Gizmo_V1_02.Pages.Admin.WorkTypeManagement
             editType = new AppWorkTypes();
         }
 
-        protected void PrepareGroupingForEdit(WorkTypeGroupItem workTypeGroup)
+        protected void PrepareGroupingForEdit(WorkTypeGroupItem selectedGroup)
         {
-            var workTypeIds = workTypeGroup
-                                .workTypes
-                                .Select(W => W.workType.Id)
-                                .ToList();
+            var workTypeIds = selectedGroup
+            .workTypes
+            .Select(W => W.workType.Id)
+            .ToList();
+
+            editGrouping = selectedGroup;
 
             editAssignments = workTypeItems
-                                    .Select(W => new WorkTypeGroupAssignment
-                                    {
-                                        WorkType = W,
-                                        IsAssigned = workTypeIds.Contains(W.Id) ? true : false 
-                                    })
-                                    .ToList();
-
+           .Select(W => new WorkTypeGroupAssignment
+           {
+               WorkType = W,
+               IsAssigned = workTypeIds.Contains(W.Id) ? true : false
+           })
+           .ToList();
 
         }
 

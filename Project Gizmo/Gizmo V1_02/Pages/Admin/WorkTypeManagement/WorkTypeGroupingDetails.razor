@@ -3,65 +3,45 @@
 <div class="modal" tabindex="-1" role="dialog" id="GroupingModal">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Work Type Grouping</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <EditForm Model="@TaskObject" OnValidSubmit="@HandleValidSubmit">
-                    @if (ShowForm)
-                    {
-                        <DataAnnotationsValidator />
-                        <ValidationSummary />
+            <EditForm Model="@TaskObject" OnValidSubmit="@HandleValidSubmit">
+                <div class="modal-header">
+                    <h5 class="modal-title">Work Type Grouping</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" class="fa fa-window-close"></span>
+                    </button>
+                </div>
+                <div class="modal-body">
 
-                        <div class="form-group">
-                            @foreach (var a in Assignments)
-                            {
-                                <label>@a.WorkType.TypeName</label><InputCheckbox @bind-Value="a.IsAssigned"></InputCheckbox>
-                            }
+                    <DataAnnotationsValidator />
+                    <ValidationSummary />
+
+                    <div class="form-group">
+                        @foreach (var a in Assignments)
+                        {
+                        <div>
+                            <InputCheckbox @bind-Value="a.IsAssigned"></InputCheckbox><span class="pl-2">@a.WorkType.TypeName</span>
                         </div>
+                        }
+                    </div>
 
-                    }
-                    else
-                    {
-                        <div class="alert alert-danger" style="margin: 40px 0 40px 0" role="alert">
-                            Are you sure you wish to delete this group?
-                        </div>
-                    }
-
+                    
                     <div class="modal-footer">
                         <div class="container-fluid ">
                             <div class="row">
-                                @if (ShowForm)
-                                {
-                                    <div class="col-6 text-left">
-                                        @if (!(TaskObject is null))
-                                        {
-                                            <button type="button" @onclick="@SubmitForm" class="btn btn-secondary">Delete</button>
-                                        }
-                                    </div>
 
-                                    <div class="col-6 text-right">
-                                        <button type="submit" class="btn btn-sub">Save</button>
-                                    </div>
-                                }
-                                else
-                                {
-                                    <div class="col-6 text-left">
-                                        <button type="button" data-dismiss="modal" @onclick="@CancelForm" class="btn btn-secondary">Cancel</button>
-                                    </div>
-                                    <div class="col-6 text-right">
-                                        <button type="button" @onclick="HandleValidDelete" class="btn btn-sub">Confirm</button>
-                                    </div>
-                                }
+                                <div class="col-6 text-left">
+                                        
+                                </div>
+
+                                <div class="col-6 text-right">
+                                    <button type="submit" class="btn btn-sub">Save</button>
+                                </div>
+                                
                             </div>
                         </div>
                     </div>
-
-                </EditForm>
-            </div>
+                </div>
+            </EditForm>
         </div>
     </div>
 </div>
