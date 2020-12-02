@@ -1,7 +1,7 @@
 ﻿@page "/admin/manageworktypes"
 
 <div class="text-block rounded ">
-    <div class="float-left back-link" >
+    <div class="float-left back-link">
         <NavLink href="admin"><span class="col-main fa fa-angle-double-left fa-2x"></span></NavLink>
     </div>
     <h3>Manage Work Types</h3>
@@ -12,45 +12,70 @@
 @if (workTypeGroups is null)
 {
     <div class="spinner"></div>
-
 }
 else
 {
+    <div class="mt-5 mb-4 col-xl-8 col-lg-12 col-md-12 col-sm-12">
 
-<div class="mt-5 mb-4 col-xl-5 col-lg-8 col-md-12 col-sm-12">
+        <div class="page-navbar hidden-md-down">
+            <nav class="navbar navbar-expand-lg navbar-dark bg-dark ">
 
-    <div class="page-navbar hidden-md-down">
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark ">
+                <ul class="navbar-nav">
+                    <li class="@(navDisplay == "Department" ? "active" : "")">
+                        <a href="javascript:void(0);" @onclick='(() => ShowNav("Department"))'><span>Departments</span></a>
+                    </li>
+                    <li class="@(navDisplay == "Group" ? "active" : "")">
+                        <a href="javascript:void(0);" @onclick='(() => ShowNav("Group"))'><span>Groups</span></a>
+                    </li>
+                    <li class="@(navDisplay == "Work Type" ? "active" : "")">
+                        <a href="javascript:void(0);" @onclick='(() => ShowNav("Work Type"))'><span>Work Types</span></a>
+                    </li>
+                    <li class="last @(navDisplay == "Grouping" ? "active" : "")">
+                        <a href="javascript:void(0);" @onclick='(() => ShowNav("Grouping"))'><span>Grouping</span></a>
+                    </li>
 
-            <ul class="navbar-nav">
-                <li class="@(navDisplay == "Group" ? "active" : "")">
-                    <a href="javascript:void(0);" @onclick='(() => ShowNav("Group"))'><span>Groups</span></a>
+                </ul>
+
+            </nav>
+        </div>
+        <div class="page-navbar hidden-lg-up">
+            <ul class="nav nav-pills tran-tabs">
+                <li class="nav-item @(navDisplay == "Department" ? "active" : "")">
+                    <a class="nav-link" href="javascript:void(0);" @onclick='(() => ShowNav("Department"))'>Departments</a>
                 </li>
-                <li class="@(navDisplay == "Work Type" ? "active" : "")">
-                    <a href="javascript:void(0);" @onclick='(() => ShowNav("Work Type"))'><span>Work Types</span></a>
+                <li class="nav-item @(navDisplay == "Group" ? "active" : "")">
+                    <a class="nav-link" href="javascript:void(0);" @onclick='(() => ShowNav("Group"))'>Groups</a>
                 </li>
-                <li class="last @(navDisplay == "Grouping" ? "active" : "")">
-                    <a href="javascript:void(0);" @onclick='(() => ShowNav("Grouping"))'><span>Grouping</span></a>
+                <li class="nav-item @(navDisplay == "Work Type" ? "active" : "")">
+                    <a class="nav-link" href="javascript:void(0);" @onclick='(() => ShowNav("Work Type"))'>Work Types</a>
+                </li>
+                <li class="nav-item @(navDisplay == "Grouping" ? "active" : "")">
+                    <a class="nav-link " href="javascript:void(0);" @onclick='(() => ShowNav("Grouping"))'>Grouping</a>
                 </li>
 
             </ul>
+        </div>
 
-        </nav>
-    </div>
-    <div class="page-navbar hidden-lg-up">
-        <ul class="nav nav-pills tran-tabs">
-            <li class="nav-item @(navDisplay == "Group" ? "active" : "")">
-                <a class="nav-link" href="javascript:void(0);" @onclick='(() => ShowNav("Group"))'>Groups</a>
-            </li>
-            <li class="nav-item @(navDisplay == "Work Type" ? "active" : "")">
-                <a class="nav-link" href="javascript:void(0);" @onclick='(() => ShowNav("Work Type"))'>Work Types</a>
-            </li>
-            <li class="nav-item @(navDisplay == "Grouping" ? "active" : "")">
-                <a class="nav-link " href="javascript:void(0);" @onclick='(() => ShowNav("Grouping"))'>Grouping</a>
-            </li>
-            
-        </ul>
-    </div>
+
+        @if (navDisplay == "Department")
+        {
+            <div class="mb-3 mt-2">
+                <button data-toggle="modal" data-target="#DepartmentModal" @onclick='(() => PrepareDepartmentForInsert())' class="btn btn-main btn-shadow"><i class="fa fa-plus"></i> Add New Department</button>
+            </div>
+            <div class="grid-tran">
+                <div class="container-fluid ">
+                    @foreach (var d in departments)
+                    {
+                        <div class="row grid-row">
+                            <div class="col-10 data-item"><div class="data-item-sub"> @d.DepartmentName </div></div>
+                            <div class="col-2 data-item"><div class="data-item-edit"><button class="btn btn-edit" @onclick='(() => PrepareDepartmentForEdit(d))' data-toggle="modal" data-target="#DepartmentModal" value=""><i class="fa fa-pencil-alt"></i></button></div></div>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+
+
         @if (navDisplay == "Group")
         {
             <div class="mb-3 mt-2">
@@ -60,13 +85,29 @@ else
                 <div class="container-fluid ">
                     @foreach (var wtg in workTypeGroups)
                     {
+                        
                         <div class="row grid-row">
-                            <div class="col-10 data-item"><div class="data-item-sub"> @wtg.group.GroupName </div></div>
+                            <div class="col-5 data-item">
+                                <div class="data-item-sub">
+                                    @(!(departments
+                                        .Where(D => D.Id == wtg.group.parentId)
+                                        .Select(D => D.DepartmentName)
+                                        .SingleOrDefault() is null)
+                                        ?
+                                        departments
+                                        .Where(D => D.Id == wtg.group.parentId)
+                                        .Select(D => D.DepartmentName)
+                                        .SingleOrDefault()
+                                        :
+                                        ""
+                                        )
+                                </div>
+                            </div>
+
+                            <div class="col-5 data-item"><div class="data-item-sub"> @wtg.group.GroupName </div></div>
                             <div class="col-2 data-item"><div class="data-item-edit"><button class="btn btn-edit" @onclick='(() => PrepareGroupForEdit(wtg))' data-toggle="modal" data-target="#GroupModal" value=""><i class="fa fa-pencil-alt"></i></button></div></div>
                         </div>
-
                     }
-
                 </div>
             </div>
         }
@@ -122,11 +163,13 @@ else
 
 
     </div>
-    }
+}
 
 
-    <WorkTypeGroupDetails TaskObject="@editGroup" DataChanged="@DataChanged"></WorkTypeGroupDetails>
+<WorkTypeGroupDetails TaskObject="@editGroup" Departments="@departments" DataChanged="@DataChanged"></WorkTypeGroupDetails>
 
-    <WorkTypeDetails TaskObject="@editType" DataChanged="@DataChanged"></WorkTypeDetails>
+<WorkTypeDetails TaskObject="@editType" DataChanged="@DataChanged"></WorkTypeDetails>
 
-    <WorkTypeGroupingDetails TaskObject="@editGrouping" DataChanged="@DataChanged" Assignments="@editAssignments"></WorkTypeGroupingDetails>
+<WorkTypeDepartmentDetails TaskObject="@editDepartment" DataChanged="@DataChanged"></WorkTypeDepartmentDetails>
+
+<WorkTypeGroupingDetails TaskObject="@editGrouping" DataChanged="@DataChanged" Assignments="@editAssignments"></WorkTypeGroupingDetails>

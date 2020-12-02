@@ -127,6 +127,22 @@ namespace Gizmo_V1_02.Data.Migrations
                     b.ToTable("AppCompanyWorkTypeMapping");
                 });
 
+            modelBuilder.Entity("Gizmo.Context.Gizmo_Authentification.AppDepartments", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("DepartmentName")
+                        .HasColumnType("nvarchar(256)")
+                        .HasMaxLength(256);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AppDepartments");
+                });
+
             modelBuilder.Entity("Gizmo.Context.Gizmo_Authentification.AppWorkTypeGroups", b =>
                 {
                     b.Property<int>("Id")

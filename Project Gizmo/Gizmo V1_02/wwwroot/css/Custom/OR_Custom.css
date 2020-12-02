@@ -272,11 +272,11 @@ h3{
     /*  DATA GRIDS                 */
     /*-----------------------------*/
     .grid-header, .grid-row {
-        height: 60px;
+        height: 40px;
     }
 
     .data-item {
-        line-height: 50px;
+        line-height: 40px;
     }
 
     .data-item-sub {
@@ -289,7 +289,7 @@ h3{
     }
 
     .data-item em {
-        font-size: 1.2em;
+        font-size: 1em;
     }
 
 
@@ -318,13 +318,13 @@ h3{
     .grid-tran .grid-header {
         font-weight: bold;
         padding: 2px 0 2px 0;
-        font-size: 1.1em;
+        font-size: 0.9rem;
     }
 
     .grid-tran .grid-row {
         padding-top: 2px;
         padding-bottom: 2px;
-        font-size: 1.1em;
+        font-size: 0.9rem;
     }
 
     .grid-tran .grid-header .data-item {

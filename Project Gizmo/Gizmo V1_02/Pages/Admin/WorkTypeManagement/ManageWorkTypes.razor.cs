@@ -18,22 +18,21 @@ namespace Gizmo_V1_02.Pages.Admin.WorkTypeManagement
         [Inject]
         NavigationManager NavigationManager { get; set; }
 
+        private List<AppDepartments> departments { get; set; }
         private List<WorkTypeGroupItem> workTypeGroups { get; set; }
         public List<AppWorkTypes> workTypeItems { get; set; }
-
         public List<WorkTypeGroupItem> refreshedWorkTypeGroups { get; set; }
-
         public List<WorkTypeAssignment> groupAssignments { get; set; }
 
+        public AppDepartments editDepartment = new AppDepartments();
         public WorkTypeGroupItem editGroup = new WorkTypeGroupItem();
         public WorkTypeGroupItem editGrouping = new WorkTypeGroupItem();
+
         public List<WorkTypeGroupAssignment> editAssignments = new List<WorkTypeGroupAssignment>();
         public AppWorkTypes editType = new AppWorkTypes();
         public WorkTypeGroupItem selectedGroup;
 
-        public bool blockGroupDisplay = false;
-
-        public string navDisplay = "Group";
+        public string navDisplay = "Department";
 
         protected override async Task OnInitializedAsync()
         {
@@ -43,6 +42,8 @@ namespace Gizmo_V1_02.Pages.Admin.WorkTypeManagement
 
                 if (refreshedWorkTypeGroups.Count > 0)
                 {
+                    departments = await companyDbAccess.GetDepartments();
+
                     workTypeGroups = refreshedWorkTypeGroups
                                         .Select(G => new WorkTypeGroupItem
                                         {
@@ -50,6 +51,7 @@ namespace Gizmo_V1_02.Pages.Admin.WorkTypeManagement
                                             workTypes = G.workTypes,
                                             showWorkType = false
                                         })
+                                        .OrderBy(C => C.group.GroupName)
                                         .ToList();
 
                     groupAssignments = refreshedWorkTypeGroups
@@ -85,6 +87,8 @@ namespace Gizmo_V1_02.Pages.Admin.WorkTypeManagement
 
             if (refreshedWorkTypeGroups.Count > 0)
             {
+                departments = await companyDbAccess.GetDepartments();
+
                 workTypeGroups = refreshedWorkTypeGroups
                             .Select(RWT => new WorkTypeGroupItem
                             {
@@ -99,6 +103,7 @@ namespace Gizmo_V1_02.Pages.Admin.WorkTypeManagement
                                                     .showWorkType,
                                 workTypes = RWT.workTypes
                             })
+                            .OrderBy(C => C.group.GroupName)
                             .ToList();
 
 
@@ -125,45 +130,24 @@ namespace Gizmo_V1_02.Pages.Admin.WorkTypeManagement
             StateHasChanged();
         }
 
+        protected void PrepareDepartmentForEdit(AppDepartments selectedDepartment)
+        {
+            editDepartment = selectedDepartment;
+        }
+
         protected void PrepareGroupForEdit(WorkTypeGroupItem seletedGroup)
         {
             editGroup = seletedGroup;
-
-            blockGroupDisplay = true;
         }
-
-        //protected void PrepareTypeForEdit(WorkTypeItem seletedType, WorkTypeGroupItem selectedGroup)
-        //{
-        //    editType = seletedType;
-        //    this.selectedGroup = selectedGroup;
-
-        //    var selectedAssignments = seletedType
-        //                                    .assignment
-        //                                    .ToList();
-
-        //    var selectedAssignmentGroupIds = selectedAssignments
-        //                                                .Select(A => A.WorkTypeGroupId)
-        //                                                .ToList();
-
-        //    if(selectedAssignments.Count > 0)
-        //    {
-        //        groupAssignments = groupAssignments
-        //                            .Select(G => new WorkTypeAssignment
-        //                            {
-        //                                WorkTypeGroup = G.WorkTypeGroup,
-        //                                IsAssigned = (selectedAssignmentGroupIds.Contains(G.WorkTypeGroup.Id)) ? true : false
-        //                            }).ToList();
-        //    }
-
-
-        //}
 
         protected void PrepareTypeForEdit(AppWorkTypes seletedType)
         {
             editType = seletedType;
+        }
 
-            blockGroupDisplay = true;
-
+        protected void PrepareDepartmentForInsert()
+        {
+            editDepartment = new AppDepartments();
         }
 
         protected void PrepareGroupForInsert()
@@ -195,18 +179,6 @@ namespace Gizmo_V1_02.Pages.Admin.WorkTypeManagement
 
         }
 
-
-        protected void ToggleGroupWorkTypes(WorkTypeGroupItem workTypeGroup)
-        {
-            if(blockGroupDisplay)
-            {
-                blockGroupDisplay = false;
-            }
-            else
-            {
-                workTypeGroup.showWorkType = !workTypeGroup.showWorkType;
-            }
-        }
 
         protected void ShowNav(string displayChange)
         {

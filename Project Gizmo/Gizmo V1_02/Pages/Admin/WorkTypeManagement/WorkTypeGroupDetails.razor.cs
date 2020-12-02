@@ -16,6 +16,9 @@ namespace Gizmo_V1_02.Pages.Admin.WorkTypeManagement
         public WorkTypeGroupItem TaskObject { get; set; }
 
         [Parameter]
+        public List<AppDepartments> Departments { get; set; }
+
+        [Parameter]
         public Action DataChanged { get; set; }
 
         [Inject]
