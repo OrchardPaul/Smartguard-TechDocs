@@ -9,12 +9,15 @@ namespace Gizmo.Context.Gizmo_Authentification.Custom
     public partial class WorkTypeGroupItem
     {
         public AppWorkTypeGroups group { get; set; }
+        public AppDepartments department { get; set; }
         public List<WorkTypeItem> workTypes { get; set; }
         public bool showWorkType { get; set; }
 
         public WorkTypeGroupItem()
         {
             group = new AppWorkTypeGroups();
+
+            department = new AppDepartments();
         }
     }
 }

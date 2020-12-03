@@ -43,15 +43,27 @@ namespace Gizmo_V1_02.Pages.Admin.WorkTypeManagement
                 if (refreshedWorkTypeGroups.Count > 0)
                 {
                     departments = await companyDbAccess.GetDepartments();
+                    departments = departments.OrderBy(D => D.DepartmentName).ToList();
 
                     workTypeGroups = refreshedWorkTypeGroups
                                         .Select(G => new WorkTypeGroupItem
                                         {
                                             group = G.group,
+                                            department =
+                                                        (departments
+                                                                .Where(D => D.Id == G.group.parentId)
+                                                                .SingleOrDefault() is null)
+                                                                ?
+                                                                new AppDepartments { DepartmentName = "" }
+                                                                :
+                                                                departments
+                                                                .Where(D => D.Id == G.group.parentId)
+                                                                .SingleOrDefault(),
                                             workTypes = G.workTypes,
                                             showWorkType = false
                                         })
                                         .OrderBy(C => C.group.GroupName)
+                                        .OrderBy(C => C.department.DepartmentName)
                                         .ToList();
 
                     groupAssignments = refreshedWorkTypeGroups
@@ -88,11 +100,23 @@ namespace Gizmo_V1_02.Pages.Admin.WorkTypeManagement
             if (refreshedWorkTypeGroups.Count > 0)
             {
                 departments = await companyDbAccess.GetDepartments();
+                departments = departments.OrderBy(D => D.DepartmentName).ToList();
 
                 workTypeGroups = refreshedWorkTypeGroups
                             .Select(RWT => new WorkTypeGroupItem
                             {
                                 group = RWT.group,
+                                department = 
+                                        (departments
+                                                .Where(D => D.Id == RWT.group.parentId)
+                                                .SingleOrDefault() is null)
+                                                ?
+                                                new AppDepartments { DepartmentName = "" }
+                                                : 
+                                                departments
+                                                .Where(D => D.Id == RWT.group.parentId)
+                                                .SingleOrDefault(),
+                                
                                 showWorkType = (workTypeGroups
                                         .Where(WT => RWT.group.Id == WT.group.Id)
                                         .SingleOrDefault() is null) 
@@ -104,6 +128,7 @@ namespace Gizmo_V1_02.Pages.Admin.WorkTypeManagement
                                 workTypes = RWT.workTypes
                             })
                             .OrderBy(C => C.group.GroupName)
+                            .OrderBy(C => C.department.DepartmentName)
                             .ToList();
 
 
@@ -117,6 +142,8 @@ namespace Gizmo_V1_02.Pages.Admin.WorkTypeManagement
                             .ToList();
 
                 workTypeItems = await companyDbAccess.GetWorkTypes();
+
+
 
                 editAssignments = workTypeItems
                                 .Select(W => new WorkTypeGroupAssignment
