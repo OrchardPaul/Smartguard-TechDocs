@@ -26,7 +26,6 @@ namespace Gizmo_V1_02.Data.Admin
         Task<List<WorkTypeGroupItem>> GetGroupsWithWorkTypes();
         Task<List<AppWorkTypeGroups>> GetWorkTypeGroupsByCompany(int companyId);
         Task<WorkTypeGroupItem> AssignWorkTypeToGroup(WorkTypeGroupItem workTypeGroup, List<WorkTypeGroupAssignment> assignments);
-        Task<AppWorkTypeGroups> AssignGroupToDepartment(AppWorkTypeGroups group, AppDepartments department);
         Task<AppDepartments> SubmitDepartment(AppDepartments department);
         Task<AppWorkTypeGroups> SubmitWorkTypeGroup(AppWorkTypeGroups workTypeGroup);
         Task<AppWorkTypes> SubmitWorkType(AppWorkTypes workType);
@@ -266,22 +265,6 @@ namespace Gizmo_V1_02.Data.Admin
             
             return workTypeGroup;
 
-        }
-
-        public async Task<AppWorkTypeGroups> AssignGroupToDepartment(AppWorkTypeGroups group,AppDepartments department)
-        {
-            var selectedGroup = await context.AppWorkTypeGroups.SingleOrDefaultAsync(A => A.Id == group.Id);
-        
-            if(!(selectedGroup is null))
-            {
-                selectedGroup.parentId = department.Id;
-                await context.SaveChangesAsync();
-                return selectedGroup;
-            }
-            else
-            {
-                return group;
-            }
         }
 
 
