@@ -9,5 +9,7 @@ namespace Gizmo.Context.Gizmo_Authentification
 
         [StringLength(256)]
         public string TypeName { get; set; }
+
+        public int DepartmentId { get; set; }
     }
 }

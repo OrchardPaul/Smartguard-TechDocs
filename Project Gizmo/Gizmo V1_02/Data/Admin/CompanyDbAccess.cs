@@ -308,6 +308,9 @@ namespace Gizmo_V1_02.Data.Admin
         public async Task<AppWorkTypes> SubmitWorkType(AppWorkTypes workType)
         {
             var selectedWorkType = await context.AppWorkTypes.SingleOrDefaultAsync(A => A.Id == workType.Id);
+            var selectedWorkTypeWithNoTracking = await context.AppWorkTypes
+                                                                .AsNoTracking()
+                                                                .SingleOrDefaultAsync(A => A.Id == workType.Id);
 
             if (selectedWorkType is null)
             {
@@ -317,6 +320,29 @@ namespace Gizmo_V1_02.Data.Admin
             }
             else
             {
+                if(selectedWorkTypeWithNoTracking.DepartmentId != workType.DepartmentId)
+                {
+                    var assignedGroups = await context
+                                                .AppWorkTypeGroupsTypeAssignments
+                                                .Where(A => A.WorkTypeId == selectedWorkTypeWithNoTracking.Id)
+                                                .Join(context.AppWorkTypeGroups,
+                                                            A => A.WorkTypeGroupId,
+                                                            AWG => AWG.Id,
+                                                            (A,AWG) => new { A,AWG})
+                                                .Where(C => C.AWG.parentId == selectedWorkTypeWithNoTracking.DepartmentId)
+                                                .Select(C => C.A)
+                                                .ToListAsync();
+
+                    if(assignedGroups.Count() > 0)
+                    {
+                        context.AppWorkTypeGroupsTypeAssignments.RemoveRange(assignedGroups);
+                    }
+                }
+
+
+
+
+
                 selectedWorkType = workType;
                 await context.SaveChangesAsync();
                 return selectedWorkType;
@@ -343,6 +369,22 @@ namespace Gizmo_V1_02.Data.Admin
                                 .ToList();
 
                     context.AppWorkTypeGroups.UpdateRange(groups);
+                }
+
+                var workTypes = await context.AppWorkTypes
+                        .Where(A => A.DepartmentId == department.Id)
+                        .ToListAsync();
+
+                if (!(workTypes.Count == 0))
+                {
+                    workTypes = workTypes
+                                .Select(d => {
+                                    d.DepartmentId = 0;
+                                    return d;
+                                })
+                                .ToList();
+
+                    context.AppWorkTypes.UpdateRange(workTypes);
                 }
 
                 context.AppDepartments.Remove(selectedDepartment);

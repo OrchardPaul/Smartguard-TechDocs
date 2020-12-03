@@ -119,11 +119,30 @@ else
             </div>
             <div class="grid-tran">
                 <div class="container-fluid ">
-                    @foreach (var wt in workTypeItems)
+                    @foreach (var wt in workTypeWithDepartmentItems)
                     {
+
+
                         <div class="row grid-row">
-                            <div class="col-11 col-xl-6 data-item"><div class="data-item-sub"><input type="text" value="@wt.TypeName" /> </div></div>
-                            <div class="col-1 data-item"><div class="data-item-edit"><button class="btn btn-edit" @onclick='(() => PrepareTypeForEdit(wt))' data-toggle="modal" data-target="#TypeModal" value=""><i class="fa fa-pencil-alt"></i></button></div></div>
+                            <div class="col-5 data-item">
+                                <div class="data-item-sub">
+                                    <input type="text" value="@(!(departments
+                                                                                            .Where(D => D.Id == wt.workType.DepartmentId)
+                                                                                            .Select(D => D.DepartmentName)
+                                                                                            .SingleOrDefault() is null)
+                                                                                            ?
+                                                                                            departments
+                                                                                            .Where(D => D.Id == wt.workType.DepartmentId)
+                                                                                            .Select(D => D.DepartmentName)
+                                                                                            .SingleOrDefault()
+                                                                                            :
+                                                                                            ""
+                                                                                            )" />
+                                </div>
+                            </div>
+
+                            <div class="col-11 col-xl-6 data-item"><div class="data-item-sub"><input type="text" value="@wt.workType.TypeName" /> </div></div>
+                            <div class="col-1 data-item"><div class="data-item-edit"><button class="btn btn-edit" @onclick='(() => PrepareTypeForEdit(wt.workType))' data-toggle="modal" data-target="#TypeModal" value=""><i class="fa fa-pencil-alt"></i></button></div></div>
                         </div>
 
                     }
@@ -136,26 +155,37 @@ else
         {
             <div class="grid-tran">
                 <div class="container-fluid ">
-                    @foreach (var wtg in workTypeGroups)
+                    @foreach (var d in departments)
                     {
                         <div class="row grid-row mt-3">
                             <div class="col-11 col-xl-6 data-item">
-                                <div class="data-item-sub "><input type="text" value="@wtg.group.GroupName" /> </div>
-                            </div>
-                            <div class="col-1 data-item"><div class="data-item-edit"><button class="btn btn-edit" @onclick='(() => PrepareGroupingForEdit(wtg))' data-toggle="modal" data-target="#GroupingModal" value=""><i class="fa fa-pencil-alt"></i></button></div></div>
-                        </div>
-
-                        <div class="row grid-row">
-
-                            <div class="col-11 col-xl-6 ">
-                                @foreach (var wt in wtg.workTypes)
-                                {
-                                    <span class="badge badge-tran">@wt.workType.TypeName</span>
-                                }
+                                <div class="data-item-sub "><input type="text" value="@d.DepartmentName" /> </div>
                             </div>
                         </div>
 
+                        foreach (var wtg in workTypeGroups.Where(W => W.department.Id == d.Id))
+                        {
+                            <div class="row grid-row mt-3">
+                                <div class="col-11 col-xl-6 data-item">
+                                    <div class="data-item-sub "><input type="text" value="@wtg.group.GroupName" /> </div>
+                                </div>
+                                <div class="col-1 data-item"><div class="data-item-edit"><button class="btn btn-edit" @onclick='(() => PrepareGroupingForEdit(wtg))' data-toggle="modal" data-target="#GroupingModal" value=""><i class="fa fa-pencil-alt"></i></button></div></div>
+                            </div>
+
+                            <div class="row grid-row">
+
+                                <div class="col-11 col-xl-6 ">
+                                    @foreach (var wt in wtg.workTypes)
+                                    {
+                                        <span class="badge badge-tran">@wt.workType.TypeName</span>
+                                    }
+                                </div>
+                            </div>
+                        }
                     }
+
+
+
 
                 </div>
             </div>
@@ -168,7 +198,7 @@ else
 
 <WorkTypeGroupDetails TaskObject="@editGroup" Departments="@departments" DataChanged="@DataChanged"></WorkTypeGroupDetails>
 
-<WorkTypeDetails TaskObject="@editType" DataChanged="@DataChanged"></WorkTypeDetails>
+<WorkTypeDetails TaskObject="@editType" Departments="@departments" DataChanged="@DataChanged"></WorkTypeDetails>
 
 <WorkTypeDepartmentDetails TaskObject="@editDepartment" DataChanged="@DataChanged"></WorkTypeDepartmentDetails>
 
