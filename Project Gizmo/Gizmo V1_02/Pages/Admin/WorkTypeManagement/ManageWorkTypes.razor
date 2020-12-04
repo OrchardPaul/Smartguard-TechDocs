@@ -67,7 +67,7 @@ else
                     @foreach (var d in departments)
                     {
                         <div class="row grid-row">
-                            <div class="col-11 col-xl-6 data-item"><div class="data-item-sub"><input type="text" value="@d.DepartmentName" /></div></div>
+                            <div class="col-11 col-xl-6 data-item"><div class="data-item-sub">@d.DepartmentName</div></div>
                             <div class="col-1 data-item"><div class="data-item-edit"><button class="btn btn-edit" @onclick='(() => PrepareDepartmentForEdit(d))' data-toggle="modal" data-target="#DepartmentModal" value=""><i class="fa fa-pencil-alt"></i></button></div></div>
                         </div>
                     }
@@ -88,23 +88,21 @@ else
 
                         <div class="row grid-row">
                             <div class="col-5 data-item">
-                                <div class="data-item-sub">
-                                    <input type="text" value="@(!(departments
-                                                                                            .Where(D => D.Id == wtg.group.parentId)
-                                                                                            .Select(D => D.DepartmentName)
-                                                                                            .SingleOrDefault() is null)
-                                                                                            ?
-                                                                                            departments
-                                                                                            .Where(D => D.Id == wtg.group.parentId)
-                                                                                            .Select(D => D.DepartmentName)
-                                                                                            .SingleOrDefault()
-                                                                                            :
-                                                                                            ""
-                                                                                            )" />
-                                </div>
+                                <div class="data-item-sub">@(!(departments
+                                                                        .Where(D => D.Id == wtg.group.parentId)
+                                                                        .Select(D => D.DepartmentName)
+                                                                        .SingleOrDefault() is null)
+                                                                        ?
+                                                                        departments
+                                                                        .Where(D => D.Id == wtg.group.parentId)
+                                                                        .Select(D => D.DepartmentName)
+                                                                        .SingleOrDefault()
+                                                                        :
+                                                                        ""
+                                                                        )</div>
                             </div>
 
-                            <div class="col-5 data-item"><div class="data-item-sub"><input type="text" value="@wtg.group.GroupName" /></div></div>
+                            <div class="col-5 data-item"><div class="data-item-sub">@wtg.group.GroupName</div></div>
                             <div class="col-1 data-item"><div class="data-item-edit"><button class="btn btn-edit" @onclick='(() => PrepareGroupForEdit(wtg))' data-toggle="modal" data-target="#GroupModal" value=""><i class="fa fa-pencil-alt"></i></button></div></div>
                         </div>
                     }
@@ -125,23 +123,21 @@ else
 
                         <div class="row grid-row">
                             <div class="col-5 data-item">
-                                <div class="data-item-sub">
-                                    <input type="text" value="@(!(departments
-                                                                                            .Where(D => D.Id == wt.workType.DepartmentId)
-                                                                                            .Select(D => D.DepartmentName)
-                                                                                            .SingleOrDefault() is null)
-                                                                                            ?
-                                                                                            departments
-                                                                                            .Where(D => D.Id == wt.workType.DepartmentId)
-                                                                                            .Select(D => D.DepartmentName)
-                                                                                            .SingleOrDefault()
-                                                                                            :
-                                                                                            ""
-                                                                                            )" />
-                                </div>
+                                <div class="data-item-sub">@(!(departments
+                                                .Where(D => D.Id == wt.workType.DepartmentId)
+                                                .Select(D => D.DepartmentName)
+                                                .SingleOrDefault() is null)
+                                                ?
+                                                departments
+                                                .Where(D => D.Id == wt.workType.DepartmentId)
+                                                .Select(D => D.DepartmentName)
+                                                .SingleOrDefault()
+                                                :
+                                                ""
+                                                )</div>
                             </div>
 
-                            <div class="col-11 col-xl-6 data-item"><div class="data-item-sub"><input type="text" value="@wt.workType.TypeName" /> </div></div>
+                            <div class="col-11 col-xl-6 data-item"><div class="data-item-sub">@wt.workType.TypeName</div></div>
                             <div class="col-1 data-item"><div class="data-item-edit"><button class="btn btn-edit" @onclick='(() => PrepareTypeForEdit(wt.workType))' data-toggle="modal" data-target="#TypeModal" value=""><i class="fa fa-pencil-alt"></i></button></div></div>
                         </div>
 
@@ -159,7 +155,7 @@ else
                     {
                         <div class="row grid-row mt-3">
                             <div class="col-11 col-xl-6 data-item">
-                                <div class="data-item-sub "><input type="text" value="@d.DepartmentName" /> </div>
+                                <div class="data-item-sub ">@d.DepartmentName </div>
                             </div>
                         </div>
 
@@ -167,12 +163,12 @@ else
                         {
                             <div class="row grid-row mt-3">
                                 <div class="col-11 col-xl-6 data-item">
-                                    <div class="data-item-sub "><input type="text" value="@wtg.group.GroupName" /> </div>
+                                    <div class="data-item-sub ">@wtg.group.GroupName </div>
                                 </div>
                                 <div class="col-1 data-item"><div class="data-item-edit"><button class="btn btn-edit" @onclick='(() => PrepareGroupingForEdit(wtg))' data-toggle="modal" data-target="#GroupingModal" value=""><i class="fa fa-pencil-alt"></i></button></div></div>
                             </div>
 
-                            <div class="row grid-row">
+                            <div class="row">
 
                                 <div class="col-11 col-xl-6 ">
                                     @foreach (var wt in wtg.workTypes)

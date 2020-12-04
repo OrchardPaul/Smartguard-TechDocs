@@ -24,17 +24,19 @@ h3 {
 }
 
 .badge-tran {
-    background-color: rgba(180, 180, 180, 0.8);
-    color: #000;
+    background-color: #555;
+    color: #CCC;
     font-weight: normal;
-    border: 1pt solid #444;
+    border: 1pt solid;
+    border-color: #999;
+    margin: 1px;
 }
 
 @media (max-width: 767.98px) {
     .badge-tran {
         background-color: #FFF;
-        color: #888;
-        border: 1pt solid #AAA;
+        color: #666;
+        border: 1pt solid #999;
         font-weight: normal;
     }
 }
@@ -299,6 +301,9 @@ h3 {
 .data-item-sub {
     padding-left: 20px !important;
     border-radius: 5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .data-item-edit {
@@ -335,13 +340,13 @@ h3 {
 .grid-tran .grid-header {
     font-weight: bold;
     padding: 2px 0 2px 0;
-    font-size: 0.95rem;
+    font-size: 1rem;
 }
 
 .grid-tran .grid-row {
     padding-top: 2px;
     padding-bottom: 2px;
-    font-size: 0.95rem;
+    font-size: 1rem;
 }
 
 .grid-tran .grid-header .data-item {
