@@ -34,6 +34,8 @@ namespace Gizmo_V1_02.Pages.Admin.WorkTypeManagement
         public WorkTypeGroupItem selectedGroup;
 
         public string navDisplay = "Department";
+        public string showGrouping = "Hide";
+        public string groupingDept = "";
 
         protected override async Task OnInitializedAsync()
         {
@@ -247,6 +249,13 @@ namespace Gizmo_V1_02.Pages.Admin.WorkTypeManagement
         protected void ShowNav(string displayChange)
         {
             navDisplay = displayChange;
+            ShowGroupingDept("Hide", "");
+        }
+
+        protected void ShowGroupingDept(string displayChange, string displayDept)
+        {
+            showGrouping = displayChange;
+            groupingDept = displayDept;
         }
 
 
