@@ -176,17 +176,23 @@ h3 {
 }
 
 .tran-block {
-    background-color: rgba(160, 160, 160, 0.4);
+    background-color: rgba(255, 255, 255, 0.9);
     padding: 10px;
     margin-bottom: 20px;
 }
 
+.detail-box{
+    width: 100%;
+    margin: 20px 10px 20px 0px;
+    border-radius: 3px;
+    padding: 20px;
+}
 
 
 /*-----------------------------*/
 /*  DATA GRIDS                 */
 /*-----------------------------*/
-.grid-header{
+.grid-header {
     height: 35px;
 }
 
@@ -266,8 +272,6 @@ h3 {
         width: calc(100% - 20px);
     }
 }
-
-
 
 
 

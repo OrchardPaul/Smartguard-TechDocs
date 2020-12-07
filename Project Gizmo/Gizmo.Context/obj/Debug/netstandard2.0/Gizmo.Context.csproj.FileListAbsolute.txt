@@ -16,3 +16,12 @@ F:\WorkSpaces\PT\Gizmo\Project Gizmo\Gizmo.Context\obj\Debug\netstandard2.0\Gizm
 F:\WorkSpaces\PT\Gizmo\Project Gizmo\Gizmo.Context\obj\Debug\netstandard2.0\Gizmo.Context.dll
 F:\WorkSpaces\PT\Gizmo\Project Gizmo\Gizmo.Context\obj\Debug\netstandard2.0\Gizmo.Context.pdb
 F:\WorkSpaces\PT\Gizmo\Project Gizmo\Gizmo.Context\obj\Debug\netstandard2.0\Gizmo.Context.csprojAssemblyReference.cache
+F:\WorkSpaces\MS\Gizmo\Project Gizmo\Gizmo.Context\bin\Debug\netstandard2.0\Gizmo.Context.deps.json
+F:\WorkSpaces\MS\Gizmo\Project Gizmo\Gizmo.Context\bin\Debug\netstandard2.0\Gizmo.Context.dll
+F:\WorkSpaces\MS\Gizmo\Project Gizmo\Gizmo.Context\bin\Debug\netstandard2.0\Gizmo.Context.pdb
+F:\WorkSpaces\MS\Gizmo\Project Gizmo\Gizmo.Context\obj\Debug\netstandard2.0\Gizmo.Context.csprojAssemblyReference.cache
+F:\WorkSpaces\MS\Gizmo\Project Gizmo\Gizmo.Context\obj\Debug\netstandard2.0\Gizmo.Context.AssemblyInfoInputs.cache
+F:\WorkSpaces\MS\Gizmo\Project Gizmo\Gizmo.Context\obj\Debug\netstandard2.0\Gizmo.Context.AssemblyInfo.cs
+F:\WorkSpaces\MS\Gizmo\Project Gizmo\Gizmo.Context\obj\Debug\netstandard2.0\Gizmo.Context.csproj.CoreCompileInputs.cache
+F:\WorkSpaces\MS\Gizmo\Project Gizmo\Gizmo.Context\obj\Debug\netstandard2.0\Gizmo.Context.dll
+F:\WorkSpaces\MS\Gizmo\Project Gizmo\Gizmo.Context\obj\Debug\netstandard2.0\Gizmo.Context.pdb

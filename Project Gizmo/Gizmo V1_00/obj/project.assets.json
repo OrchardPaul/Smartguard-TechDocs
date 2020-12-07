@@ -9463,23 +9463,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\p_taylor\\.nuget\\packages\\": {},
+    "C:\\Users\\m_szijjarto\\.nuget\\packages\\": {},
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "F:\\WorkSpaces\\PT\\Gizmo\\Project Gizmo\\Gizmo V1_00\\Gizmo V1_00.csproj",
+      "projectUniqueName": "F:\\WorkSpaces\\MS\\Gizmo\\Project Gizmo\\Gizmo V1_00\\Gizmo V1_00.csproj",
       "projectName": "Gizmo V1_00",
-      "projectPath": "F:\\WorkSpaces\\PT\\Gizmo\\Project Gizmo\\Gizmo V1_00\\Gizmo V1_00.csproj",
-      "packagesPath": "C:\\Users\\p_taylor\\.nuget\\packages\\",
-      "outputPath": "F:\\WorkSpaces\\PT\\Gizmo\\Project Gizmo\\Gizmo V1_00\\obj\\",
+      "projectPath": "F:\\WorkSpaces\\MS\\Gizmo\\Project Gizmo\\Gizmo V1_00\\Gizmo V1_00.csproj",
+      "packagesPath": "C:\\Users\\m_szijjarto\\.nuget\\packages\\",
+      "outputPath": "F:\\WorkSpaces\\MS\\Gizmo\\Project Gizmo\\Gizmo V1_00\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\p_taylor\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\m_szijjarto\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -9492,8 +9492,8 @@
       "frameworks": {
         "netcoreapp3.1": {
           "projectReferences": {
-            "F:\\WorkSpaces\\PT\\Gizmo\\Project Gizmo\\Gizmo.Context\\Gizmo.Context.csproj": {
-              "projectPath": "F:\\WorkSpaces\\PT\\Gizmo\\Project Gizmo\\Gizmo.Context\\Gizmo.Context.csproj"
+            "F:\\WorkSpaces\\MS\\Gizmo\\Project Gizmo\\Gizmo.Context\\Gizmo.Context.csproj": {
+              "projectPath": "F:\\WorkSpaces\\MS\\Gizmo\\Project Gizmo\\Gizmo.Context\\Gizmo.Context.csproj"
             }
           }
         }

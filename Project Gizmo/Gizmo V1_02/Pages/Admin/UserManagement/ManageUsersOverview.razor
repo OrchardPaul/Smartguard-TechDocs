@@ -1,6 +1,11 @@
 ﻿@inject Gizmo_V1_02.Services.SessionState.IUserSessionState state
 
-<h3><NavLink href="admin">Admin</NavLink> / User Management</h3>
+<div class="text-block rounded ">
+    <div class="float-left back-link">
+        <NavLink href="admin"><span class="col-main fa fa-angle-double-left fa-2x"></span></NavLink>
+    </div>
+    <h3>User Management</h3>
+</div>
 
 @if (lstUsers is null)
 {
@@ -8,6 +13,32 @@
 }
 else
 {
+    <div class="mt-5 col-xl-8 col-12">
+        <div class="mb-3">
+            <button data-toggle="modal" data-target="#roleModal" @onclick='(() => PrepareForInsert())' class="btn btn-main btn-shadow"><i class="fa fa-plus"></i> Add New Role</button>
+        </div>
+        <div class="grid-tran">
+            <div class="container-fluid ">
+                <div class="row grid-header hidden-lg-down">
+                    <div class="col-xl-4 col-11 data-item"><div class="data-item-sub">Username</div></div>
+                    <div class="col-7 hidden-lg-down data-item"><div class="data-item-sub">Full Name</div></div>
+                    <div class="col-1 data-item no-border"><div class="data-item-sub no-tran"></div></div>
+                </div>
+                @foreach (var user in lstUsers)
+                {
+                    <div class="row grid-row">
+                        <div class="col-xl-4 col-11 data-item"><div class="data-item-sub"><span class="fa fa-user-alt "></span> @user.UserName</div></div>
+                        <div class="col-7 hidden-lg-down data-item"><div class="data-item-sub">@user.FullName</div></div>
+                        <div class="col-1 data-item"><div class="data-item-edit"><button class="btn btn-edit" @onclick='(() => PrepareForEdit(user))' data-toggle="modal" data-target="#roleModal" value=""><i class="fa fa-pencil-alt"></i></button></div></div>
+                    </div>
+
+                }
+
+            </div>
+        </div>
+    </div>
+    /*
+
     <table id="tblUserList" class="table">
         <thead>
             <tr>
@@ -30,4 +61,5 @@ else
     </table>
 
     <input type="button" data-toggle="modal" data-target="#userModal" @onclick='(() => PrepareForInsert())' class="btn btn-primary" value="Add User" />
+    */
 }
