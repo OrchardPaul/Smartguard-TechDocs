@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components.Authorization;
+﻿using Gizmo.Context.Gizmo_Authentification;
+using Microsoft.AspNetCore.Components.Authorization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,7 @@ namespace Gizmo_V1_02.Services.SessionState
 
     public class PageAuthorisationState : IPageAuthorisationState
     {
+
         public bool ChapterListAuthorisation(AuthenticationState authenticationState)
         {
             bool returnValue = false;
@@ -35,5 +37,6 @@ namespace Gizmo_V1_02.Services.SessionState
 
             return returnValue;
         }
+
     }
 }

@@ -24,6 +24,7 @@ namespace Gizmo_V1_02.Data.Admin
         Task<IList<Claim>> GetSignedInUserClaimViaType(string Type);
         Task<AspNetUsers> GetUserByName(string userName);
         Task<List<AspNetUsers>> GetUsers();
+        Task<List<UserDataCollectionItem>> GetUsersWithCompanyInfo();
         Task<AspNetUsers> SubmitChanges(AspNetUsers item, List<RoleItem> selectedRoles);
         Task<AspNetUsers> SubmitCompanyCliams(List<CompanyItem> companies, AspNetUsers user);
     }
@@ -228,6 +229,99 @@ namespace Gizmo_V1_02.Data.Admin
 
                 return returnedUsers;
             }
+        }
+
+        public async Task<List<UserDataCollectionItem>> GetUsersWithCompanyInfo()
+        {
+            /*
+             * 
+             * 1. Get Signed in user
+             * 2. Get all users in signed in user company
+             * 3. Gather User,Role and company data in single class
+             * 
+             */
+
+            //Can't get from session state (Circular dependany error)
+            var signedInUserState = await authenticationStateProvider.GetAuthenticationStateAsync();
+            var signedInUserAsp = await userManager.FindByNameAsync(signedInUserState.User.Identity.Name);
+            var signedInUser = mapper.Map(signedInUserAsp, new AspNetUsers());
+
+            var UserInFormat = await userManager.FindByNameAsync(signedInUser.UserName); 
+
+            var allUsers = await userManager.Users
+                                        .Select(U => mapper.Map(U, new AspNetUsers()))
+                                        .ToListAsync();
+
+            var allCompanies = await context
+                                        .AppCompanyDetails
+                                        .ToListAsync();
+
+            var signedInUserSelectedCompany = await context
+                                            .AppCompanyDetails
+                                            .Where(C => C.Id == signedInUser.SelectedCompanyId)
+                                            .SingleOrDefaultAsync();
+
+            var companyUserRoles = await context
+                                            .AppCompanyUserRoles
+                                            .Where(C => C.CompanyId == signedInUserSelectedCompany.Id)
+                                            .ToListAsync();
+
+            var companyUserIds = companyUserRoles.Select(C => C.UserId).ToList();
+
+            var companyUsers = allUsers
+                                    .Where(U => companyUserIds.Contains(U.Id))
+                                    .ToList();
+
+            if (signedInUserSelectedCompany.CompanyName == "Orchard Rock")
+            {
+                return companyUsers
+                            .Select(U => new UserDataCollectionItem
+                            {
+                                User = U,
+
+                                UserCompanies = allCompanies
+                                                        .Where(C => companyUserRoles
+                                                                            .Where(UR => UR.UserId == U.Id)
+                                                                            .Select(UR => UR.CompanyId)
+                                                                            .ToList()
+                                                                            .Contains(C.Id))
+                                                        .ToList(),
+
+                                UserRoles = companyUserRoles
+                                                        .Where(UR => UR.UserId == U.Id)
+                                                        .ToList()
+                            })
+                            .ToList();
+            }
+            else 
+            {
+                var superUserRole = await roleManager.FindByNameAsync("Super User");
+
+                return companyUsers
+                            .Select(U => new UserDataCollectionItem
+                            {
+                                User = U,
+
+                                UserCompanies = allCompanies
+                                                        .Where(C => companyUserRoles
+                                                                            .Where(UR => UR.UserId == U.Id)
+                                                                            .Select(UR => UR.CompanyId)
+                                                                            .ToList()
+                                                                            .Contains(C.Id))
+                                                        .ToList(),
+
+                                UserRoles = companyUserRoles
+                                                        .Where(UR => UR.UserId == U.Id)
+                                                        .ToList()
+                            })
+                            .Where(CU => !CU.UserRoles
+                                                .Select(UR => UR.RoleId)
+                                                .ToList()
+                                                .Contains(superUserRole.Id))
+                            .ToList();
+            }
+
+
         }
 
         public async Task<AspNetUsers> GetUserByName(string userName)

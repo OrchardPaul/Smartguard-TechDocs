@@ -78,10 +78,11 @@ namespace Gizmo_V1_02.Pages.Admin.UserManagement
             companies = selectedUserState.allCompanies;
             lstRoles = selectedUserState.allRoles;
 
-            currentUser = await service.GetUserByName(TaskObject.UserName);
-
             if (selectedOption == "Edit")
             {
+
+                currentUser = await service.GetUserByName(TaskObject.UserName);
+
                 editObjectRoles = await roleAccess.GetCurrentUserRolesForCompany(currentUser, currentUser.SelectedCompanyId);
 
                 //editObjectRoles = await service.GetSelectedUserRoles(selectedUser);
@@ -112,7 +113,7 @@ namespace Gizmo_V1_02.Pages.Admin.UserManagement
                 {
                     Id = C.Id,
                     Company = C,
-                    IsSubscribed = false
+                    IsSubscribed = C.CompanyName == sessionState.Company.CompanyName ? true : false
                 }).ToList();
 
                 selectedRoles = lstRoles

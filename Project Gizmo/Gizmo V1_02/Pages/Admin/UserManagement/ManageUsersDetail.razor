@@ -32,27 +32,29 @@
             <InputText @bind-Value="TaskObject.PhoneNumber"></InputText>
         </div>
 
-        @if (!(companyItems is null))
+        @if (sessionState.Company.CompanyName == "Orchard Rock" & (selectedOption == "Edit"))
         {
-            <div class="form-group">
-                <label for="@TaskObject.SelectedUri">Selected Company</label>
-                <InputSelectInteger ValueExpression="@(() => TaskObject.SelectedCompanyId)"
-                                    Value="@TaskObject.SelectedCompanyId"
-                                    ValueChanged="@((int value) => ToggleCompany(value))">
-                    @if (companyItems.Where(C => C.IsSubscribed).Count() > 0)
-                    {
-                        @foreach (var company in companyItems.Where(C => C.IsSubscribed))
+            @if (!(companyItems is null))
+            {
+                <div class="form-group">
+                    <label for="@TaskObject.SelectedUri">Selected Company</label>
+                    <InputSelectInteger ValueExpression="@(() => TaskObject.SelectedCompanyId)"
+                                        Value="@TaskObject.SelectedCompanyId"
+                                        ValueChanged="@((int value) => ToggleCompany(value))">
+                        @if (companyItems.Where(C => C.IsSubscribed).Count() > 0 )
                         {
-                            <option value="@company.Company.Id">
-                                @company.Company.CompanyName
-                            </option>
+                            @foreach (var company in companyItems.Where(C => C.IsSubscribed))
+                            {
+                                <option value="@company.Company.Id">
+                                    @company.Company.CompanyName
+                                </option>
+                            }
+
                         }
-
-                    }
-                </InputSelectInteger>
-            </div>
+                    </InputSelectInteger>
+                </div>
+            }
         }
-
 
 
         <div class="form-group">
@@ -107,10 +109,26 @@
                     }
                     else
                     {
-                        @foreach (var role in selectedRoles)
+                        @if (sessionState.Company.CompanyName == "Orchard Rock")
                         {
-                            <label>@role.RoleName</label><InputCheckbox @bind-Value="role.IsSubscribed"></InputCheckbox>
+                            @if (sessionState.isSuperUser)
+                            {
+                                @foreach (var role in selectedRoles)
+                                {
+                                    <label>@role.RoleName</label><InputCheckbox @bind-Value="role.IsSubscribed"></InputCheckbox>
+                                }
+                            }
                         }
+                        else
+                        {
+                            @foreach (var role in selectedRoles
+                                                          .Where(R => R.RoleName != "Super User")
+                                                          .ToList())
+                            {
+                                <label>@role.RoleName</label><InputCheckbox @bind-Value="role.IsSubscribed"></InputCheckbox>
+                            }
+                        }
+
                     }
                 </div>
             </div>

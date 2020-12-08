@@ -275,3 +275,12 @@ F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\stati
 F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Gizmo V1_02.dll
 F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Gizmo V1_02.pdb
 F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Gizmo V1_02.genruntimeconfig.cache
+F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\RazorDeclaration\Pages\Admin\NewPage\NewPage.razor.g.cs
+F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\RazorDeclaration\Pages\Admin\WorkTypeManagement\WorkTypeDepartmentDetails.razor.g.cs
+F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\RazorDeclaration\Pages\Admin\WorkTypeManagement\WorkTypeGroupingDetails.razor.g.cs
+F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\RazorDeclaration\Pages\OR_RESI_Chapters\ChapterListPaul.razor.g.cs
+F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Pages\Admin\NewPage\NewPage.razor.g.cs
+F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Pages\Admin\WorkTypeManagement\WorkTypeDepartmentDetails.razor.g.cs
+F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Pages\Admin\WorkTypeManagement\WorkTypeGroupingDetails.razor.g.cs
+F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Pages\OR_RESI_Chapters\ChapterListPaul.razor.g.cs
+F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Areas\Identity\Pages\Account\LogOutOnGet.cshtml.g.cs

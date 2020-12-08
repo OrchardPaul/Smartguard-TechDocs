@@ -46,7 +46,7 @@ namespace Gizmo_V1_02.Pages.Admin.UserManagement
 
         public List<AspNetRoles> lstRoles { get; set; }
 
-        protected List<AspNetUsers> lstUsers { get; set; }
+        protected List<UserDataCollectionItem> lstUserDataItems { get; set; }
 
         private AuthenticationState auth { get; set; }
 
@@ -68,7 +68,7 @@ namespace Gizmo_V1_02.Pages.Admin.UserManagement
 
             auth = await authenticationStateProvider.GetAuthenticationStateAsync();
 
-            lstUsers = await userAccess.GetUsers();
+            lstUserDataItems = await userAccess.GetUsersWithCompanyInfo();
             lstRoles = await roleAccess.GetUserRoles();
             companies = await companyDbAccess.GetCompanies();
 
@@ -95,6 +95,7 @@ namespace Gizmo_V1_02.Pages.Admin.UserManagement
             editOption = "Insert";
             editObject = new AspNetUsers();
             editObject.SelectedUri = "Live";
+            editObject.SelectedCompanyId = sessionState.User.SelectedCompanyId;
 
             selectedUserState.TaskObject = editObject;
             selectedUserState.selectedOption = editOption;
@@ -104,7 +105,7 @@ namespace Gizmo_V1_02.Pages.Admin.UserManagement
 
         private async void DataChanged()
         {
-            lstUsers = await userAccess.GetUsers();
+            lstUserDataItems = await userAccess.GetUsersWithCompanyInfo();
             lstRoles = await roleAccess.GetUserRoles();
 
             StateHasChanged();

@@ -22,6 +22,7 @@ namespace Gizmo_V1_02.Services.SessionState
         string baseUri { get; }
         AppCompanyDetails Company { get; }
         List<AppCompanyDetails> allAssignedCompanies { get; }
+        bool isSuperUser { get;  }
         string FullName { get; }
         SpinLock IdentityLock { get; set; }
         bool Lock { get; set; }
@@ -70,6 +71,8 @@ namespace Gizmo_V1_02.Services.SessionState
         public string selectedSystem { get; protected set; }
 
         public SpinLock IdentityLock { get; set; }
+
+        public bool isSuperUser { get; protected set; }
 
         public bool Lock { get; set; }
 
@@ -184,6 +187,8 @@ namespace Gizmo_V1_02.Services.SessionState
                             SetCurrentUser(currentUser);
                             SetFullName(currentUser.FullName);
                             SetSelectedSystem(currentUser.SelectedUri);
+
+                            isSuperUser = auth.User.IsInRole("Super User");
 
                             var allClaims = await userAccess.GetSignedInUserClaims();
 

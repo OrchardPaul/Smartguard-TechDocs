@@ -7,7 +7,7 @@
     <h3>User Management</h3>
 </div>
 
-@if (lstUsers is null)
+@if (lstUserDataItems is null)
 {
     <div class="spinner"></div>
 }
@@ -15,7 +15,7 @@ else
 {
     <div class="mt-5 col-xl-8 col-12">
         <div class="mb-3">
-            <button data-toggle="modal" data-target="#roleModal" @onclick='(() => PrepareForInsert())' class="btn btn-main btn-shadow"><i class="fa fa-plus"></i> Add New Role</button>
+            <button data-toggle="modal" data-target="#roleModal" @onclick='(() => PrepareForInsert())' class="btn btn-main btn-shadow"><i class="fa fa-plus"></i> Add New User</button>
         </div>
         <div class="grid-tran">
             <div class="container-fluid ">
@@ -24,12 +24,12 @@ else
                     <div class="col-7 hidden-lg-down data-item"><div class="data-item-sub">Full Name</div></div>
                     <div class="col-1 data-item no-border"><div class="data-item-sub no-tran"></div></div>
                 </div>
-                @foreach (var user in lstUsers)
+                @foreach (var userDataItem in lstUserDataItems)
                 {
                     <div class="row grid-row">
-                        <div class="col-xl-4 col-11 data-item"><div class="data-item-sub"><span class="fa fa-user-alt "></span> @user.UserName</div></div>
-                        <div class="col-7 hidden-lg-down data-item"><div class="data-item-sub">@user.FullName</div></div>
-                        <div class="col-1 data-item"><div class="data-item-edit"><button class="btn btn-edit" @onclick='(() => PrepareForEdit(user))' data-toggle="modal" data-target="#roleModal" value=""><i class="fa fa-pencil-alt"></i></button></div></div>
+                        <div class="col-xl-4 col-11 data-item"><div class="data-item-sub"><span class="fa fa-user-alt "></span> @userDataItem.User.UserName</div></div>
+                        <div class="col-7 hidden-lg-down data-item"><div class="data-item-sub">@userDataItem.User.FullName</div></div>
+                        <div class="col-1 data-item"><div class="data-item-edit"><button class="btn btn-edit" @onclick='(() => PrepareForEdit(userDataItem.User))' data-toggle="modal" data-target="#roleModal" value=""><i class="fa fa-pencil-alt"></i></button></div></div>
                     </div>
 
                 }
@@ -37,29 +37,4 @@ else
             </div>
         </div>
     </div>
-    /*
-
-    <table id="tblUserList" class="table">
-        <thead>
-            <tr>
-                <th>User Name</th>
-                <th>Full Name</th>
-                <th>Email</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var user in lstUsers)
-            {
-                <tr>
-                    <td>@user.UserName</td>
-                    <td>@user.FullName</td>
-                    <td>@user.Email</td>
-                    <td><input type="button" class="btn btn-primary" @onclick='(() => PrepareForEdit(user))' data-toggle="modal" data-target="#userModal" value="Edit" /></td>
-                </tr>
-            }
-        </tbody>
-    </table>
-
-    <input type="button" data-toggle="modal" data-target="#userModal" @onclick='(() => PrepareForInsert())' class="btn btn-primary" value="Add User" />
-    */
 }
