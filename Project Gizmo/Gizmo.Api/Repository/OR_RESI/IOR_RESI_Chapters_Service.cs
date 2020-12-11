@@ -9,7 +9,10 @@ namespace Gizmo.Api.Repository.OR_RESI
         Task<List<UsrOrDefChapterManagement>> GetAllChapters();
         Task<UsrOrDefChapterManagement> GetChapterItemById(int id);
         Task<UsrOrDefChapterManagement> Add(UsrOrDefChapterManagement item);
+        Task<List<UsrOrDefChapterManagement>> UpdateCaseType(string newCaseType, string originalCaseType, string caseTypeGroup);
+        Task<List<UsrOrDefChapterManagement>> UpdateCaseTypeGroups(string newCaseTypeGroup, string originalCaseTypeGroup);
         Task<UsrOrDefChapterManagement> Update(UsrOrDefChapterManagement item);
+        Task<UsrOrDefChapterManagement> DeleteChapter(int id);
         Task<UsrOrDefChapterManagement> Delete(int id);
         Task<List<string>> GetCaseTypeGroup();
         Task<List<string>> GetCaseTypes();

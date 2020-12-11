@@ -9,12 +9,30 @@ using System.Threading.Tasks;
 
 namespace Gizmo_V1_02.Services
 {
+    public interface IChapterManagementService
+    {
+        Task<UsrOrDefChapterManagement> Add(UsrOrDefChapterManagement item);
+        Task Delete(int id);
+        Task DeleteChapter(int id);
+        Task<List<UsrOrDefChapterManagement>> GetAllChapters();
+        Task<List<string>> GetCaseTypeGroup();
+        Task<List<string>> GetCaseTypes();
+        Task<List<UsrOrDefChapterManagement>> GetChapterListByCaseType(string caseType);
+        Task<List<UsrOrDefChapterManagement>> GetDocListByChapter(string caseType, string chapter);
+        Task<List<UsrOrDefChapterManagement>> GetDocListByChapterAndDocType(string caseType, string chapter, string docType);
+        Task<List<DmDocuments>> GetDocumentList(string caseType);
+        Task<List<UsrOrDefChapterManagement>> GetItemListByChapter(int chapterId);
+        Task<UsrOrDefChapterManagement> Update(UsrOrDefChapterManagement item);
+        Task<List<UsrOrDefChapterManagement>> UpdateCaseType(string newCaseTypeName, string originalCaseTypeName, string caseTypeGroup);
+        Task<List<UsrOrDefChapterManagement>> UpdateCaseTypeGroups(string newCaseTypeGroupName, string originalCaseTypeGroupName);
+    }
+
     public class ChapterManagementService : IChapterManagementService
     {
         private readonly HttpClient httpClient;
         private readonly IUserSessionState userSession;
 
-        public ChapterManagementService(HttpClient httpClient,IUserSessionState userSession)
+        public ChapterManagementService(HttpClient httpClient, IUserSessionState userSession)
         {
             this.httpClient = httpClient;
             this.userSession = userSession;
@@ -31,9 +49,32 @@ namespace Gizmo_V1_02.Services
             return httpClient.PutJsonAsync<UsrOrDefChapterManagement>($"{userSession.baseUri}api/ChapterManagement/Update/{item.Id}", item);
         }
 
+        public Task<List<UsrOrDefChapterManagement>> UpdateCaseType(string newCaseTypeName, string originalCaseTypeName, string caseTypeGroup)
+        {
+            var item = new UsrOrDefChapterManagement();
+            return httpClient.PutJsonAsync<List<UsrOrDefChapterManagement>>($"{userSession.baseUri}api/ChapterManagement/UpdateCaseType/{newCaseTypeName}/{originalCaseTypeName}/{caseTypeGroup}", item);
+        }
+
+
+        public Task<List<UsrOrDefChapterManagement>> UpdateCaseTypeGroups(string newCaseTypeGroupName, string originalCaseTypeGroupName)
+        {
+            var item = new UsrOrDefChapterManagement();
+            return httpClient.PutJsonAsync<List<UsrOrDefChapterManagement>>($"{userSession.baseUri}api/ChapterManagement/UpdateCaseTypeGroups/{newCaseTypeGroupName}/{originalCaseTypeGroupName}", item);
+        }
+
         public Task Delete(int id)
         {
             return httpClient.DeleteAsync($"{userSession.baseUri}api/ChapterManagement/Delete/{id}");
+        }
+
+        public Task DeleteChapter(int id)
+        {
+            return httpClient.DeleteAsync($"{userSession.baseUri}api/ChapterManagement/DeleteChapter/{id}");
+        }
+
+        public Task<List<UsrOrDefChapterManagement>> GetAllChapters()
+        {
+            return httpClient.GetJsonAsync<List<UsrOrDefChapterManagement>>($"{userSession.baseUri}api/ChapterManagement/GetAllChapters");
         }
 
         public Task<List<UsrOrDefChapterManagement>> GetItemListByChapter(int chapterId)
@@ -60,7 +101,7 @@ namespace Gizmo_V1_02.Services
         {
             var result = httpClient.GetJsonAsync<List<string>>($"{userSession.baseUri}api/ChapterManagement/GetCaseTypes");
 
-            if(result.Exception is null)
+            if (result.Exception is null)
             {
                 return result;
             }

@@ -18,6 +18,7 @@ namespace Gizmo.Context.Gizmo_Authentification
         [Key]
         public string Id { get; set; }
         [StringLength(256)]
+        [EmailAddress(ErrorMessage = "User name must be a valid email address")]
         public string UserName { get; set; }
         [StringLength(256)]
         public string NormalizedUserName { get; set; }

@@ -170,6 +170,32 @@ namespace Gizmo.Api.Controllers
             }
         }
 
+        [HttpPut("{newCaseType}/{originalCaseType}/{caseTypeGroup}")]
+        public async Task<ActionResult<List<UsrOrDefChapterManagement>>> UpdateCaseType(string newCaseType, string originalCaseType, string caseTypeGroup)
+        {
+            try
+            {
+                return await chapterRepository.UpdateCaseType(newCaseType, originalCaseType,caseTypeGroup);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error Updating Data");
+            }
+        }
+
+        [HttpPut("{newCaseTypeGroup}/{originalCaseTypeGroup}")]
+        public async Task<ActionResult<List<UsrOrDefChapterManagement>>> UpdateCaseTypeGroups(string newCaseTypeGroup, string originalCaseTypeGroup)
+        {
+            try
+            {
+                return await chapterRepository.UpdateCaseTypeGroups(newCaseTypeGroup, originalCaseTypeGroup);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error Updating Data");
+            }
+        }
+
 
         [HttpDelete("{id:int}")]
         public async Task<ActionResult> Delete(int id)
@@ -184,6 +210,26 @@ namespace Gizmo.Api.Controllers
                 }
 
                 return Ok(await chapterRepository.Delete(id));
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error Deleting Data");
+            }
+        }
+
+        [HttpDelete("{id:int}")]
+        public async Task<ActionResult> DeleteChapter(int id)
+        {
+            try
+            {
+                var selectedItem = await chapterRepository.GetChapterItemById(id);
+
+                if (selectedItem is null)
+                {
+                    return NotFound($"Item with ID = {selectedItem.Id} not found");
+                }
+
+                return Ok(await chapterRepository.DeleteChapter(id));
             }
             catch (Exception)
             {

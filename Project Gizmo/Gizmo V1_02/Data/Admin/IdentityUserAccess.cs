@@ -343,7 +343,7 @@ namespace Gizmo_V1_02.Data.Admin
                     UserName = item.UserName,
                     NormalizedUserName = item.UserName.ToUpper(),
                     FullName = item.FullName,
-                    Email = item.Email,
+                    Email = item.UserName,
                     NormalizedEmail = item.Email.ToUpper(),
                     PhoneNumber = item.PhoneNumber,
                     EmailConfirmed = true,
@@ -388,7 +388,7 @@ namespace Gizmo_V1_02.Data.Admin
                 selectedUser.UserName = item.UserName;
                 selectedUser.NormalizedUserName = item.NormalizedUserName;
                 selectedUser.FullName = item.FullName;
-                selectedUser.Email = item.Email;
+                selectedUser.Email = item.UserName;
                 selectedUser.NormalizedEmail = item.NormalizedEmail;
                 selectedUser.EmailConfirmed = item.EmailConfirmed;
                 selectedUser.SecurityStamp = item.SecurityStamp;

@@ -56,6 +56,10 @@ namespace Gizmo_V1_02.Pages.Admin.UserManagement
 
         public IList<Claim> userCliams { get; set; }
 
+        public string selectedRole { get; set; } = "None";
+
+        public string filterName { get; set; } = "";
+
         protected override async Task OnInitializedAsync()
         {
             //Wait for session state to finish to prevent concurrency error on refresh
@@ -109,6 +113,11 @@ namespace Gizmo_V1_02.Pages.Admin.UserManagement
             lstRoles = await roleAccess.GetUserRoles();
 
             StateHasChanged();
+        }
+
+        private void changeNameFilter(ChangeEventArgs eventArgs)
+        {
+            filterName = eventArgs.Value.ToString();
         }
 
     }

@@ -15,7 +15,6 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
 {
     public partial class ChapterList
     {
-
         private class StatusObject
         {
             public UsrOrDefChapterManagement management { get; set; }
@@ -37,8 +36,9 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
         [Inject]
         public IUserSessionState sessionState { get; set; }
 
+        private List<UsrOrDefChapterManagement> lstAllObjects;
+
         private List<UsrOrDefChapterManagement> lstAll;
-        private List<UsrOrDefChapterManagement> lstChapters;
         private List<UsrOrDefChapterManagement> lstAgendas;
         private List<UsrOrDefChapterManagement> lstFees;
         private List<UsrOrDefChapterManagement> lstDocs;
@@ -51,7 +51,11 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
 
         int parentId;
 
-        UsrOrDefChapterManagement editObject = new UsrOrDefChapterManagement();
+        public string editCaseType { get; set; } = "";
+        public string isCaseTypeOrGroup { get; set; } = "";
+        
+        public UsrOrDefChapterManagement editObject = new UsrOrDefChapterManagement();
+        public UsrOrDefChapterManagement editChapterObject = new UsrOrDefChapterManagement();
 
         string customHeader = string.Empty;
         string selectedList = string.Empty;
@@ -86,6 +90,7 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
             {
                 try
                 {
+                    lstAllObjects = await chapterManagementService.GetAllChapters();
                     CaseTypeList = await chapterManagementService.GetCaseTypes();
                 }
                 catch(Exception)
@@ -103,15 +108,21 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
 
         void SelectHome()
         {
+            selectedCaseTypeGroup = "";
             selectedCaseType = "";
             selectedChapter = "";
         }
 
-        async Task SelectCaseType(string caseType)
+        void SelectCaseTypeGroup(string caseTypeGroup)
         {
-            lstChapters = await chapterManagementService.GetChapterListByCaseType(caseType);
+            selectedCaseTypeGroup = (selectedCaseTypeGroup == caseTypeGroup) ? "" : caseTypeGroup;
+            selectedCaseType = "";
+            selectedChapter = "";
+        }
 
-            selectedCaseType = caseType;
+        void SelectCaseType(string caseType)
+        {
+            selectedCaseType = (selectedCaseType == caseType) ? "" : caseType;
             selectedChapter = "";
         }
 
@@ -142,13 +153,6 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
                 .Where(A => A.Type != "Status")
                 .ToList();
 
-            /*
-            lstAgendas = await chapterManagementService.GetDocListByChapterAndDocType(selectedCaseType, chapter, "Agenda");
-            lstFees = await chapterManagementService.GetDocListByChapterAndDocType(selectedCaseType, chapter, "Fee");
-            lstDocs = await chapterManagementService.GetDocListByChapter(selectedCaseType, selectedChapter);
-            lstStatus = await chapterManagementService.GetDocListByChapterAndDocType(selectedCaseType, chapter, "Status");
-            */
-
             selectedChapterId = chapterID;
             selectedChapter = chapter;
         }
@@ -156,6 +160,7 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
         private async void DataChanged()
         {
             lstAll = await chapterManagementService.GetItemListByChapter(selectedChapterId);
+            lstAllObjects = await chapterManagementService.GetAllChapters();
 
             lstAgendas = lstAll.Where(A => A.Type == "Agenda").ToList();
             lstFees = lstAll.Where(A => A.Type == "Fee").ToList();
@@ -231,9 +236,44 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
             editObject = item;
         }
 
-        private void PrepareForDelete(UsrOrDefChapterManagement item)
+        private void PrepareChapterForInsert()
         {
-            editObject = item;
+            editChapterObject = new UsrOrDefChapterManagement();
+
+            if(!(selectedCaseTypeGroup == ""))
+            {
+                editChapterObject.CaseTypeGroup = selectedCaseTypeGroup;
+            }
+            else
+            {
+                editChapterObject.CaseTypeGroup = "";
+            }
+
+            if(!(selectedCaseType == ""))
+            {
+                editChapterObject.CaseType = selectedCaseType;
+            }
+            else
+            {
+                editChapterObject.CaseType = "";
+            }
+
+            editChapterObject.Type = "Chapter";
+            editChapterObject.ParentId = 0;
+            editChapterObject.SeqNo = 0;
+            editChapterObject.SuppressStep = "";
+            editChapterObject.EntityType = "";
+        }
+
+        private void PrepareChapterForEdit(UsrOrDefChapterManagement selectedChapter)
+        {
+            editChapterObject = selectedChapter;
+        }
+
+        private void PrepareCaseTypeForEdit(string caseType, string option)
+        {
+            editCaseType = caseType;
+            isCaseTypeOrGroup = option;
         }
 
         private async void PrepDocumentList()

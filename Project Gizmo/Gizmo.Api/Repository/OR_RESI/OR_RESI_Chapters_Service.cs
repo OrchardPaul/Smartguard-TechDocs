@@ -53,6 +53,54 @@ namespace Gizmo.Api.Repository.OR_RESI
             return item;
         }
 
+        public async Task<List<UsrOrDefChapterManagement>> UpdateCaseType(string newCaseType, string originalCaseType, string caseTypeGroup)
+        {
+            var updatedItems = await _context.UsrOrDefChapterManagement
+                                                                    .Where(C => C.CaseTypeGroup == caseTypeGroup)
+                                                                    .Where(C => C.CaseType == originalCaseType)
+                                                                    .ToListAsync();
+
+            if (updatedItems.Count() > 0)
+            {
+                updatedItems = updatedItems.Select(C => { C.CaseType = newCaseType; return C; }).ToList();
+                _context.UpdateRange(updatedItems);
+                await _context.SaveChangesAsync();
+            }
+
+            return updatedItems;
+        }
+
+
+        public async Task<List<UsrOrDefChapterManagement>> UpdateCaseTypeGroups(string newCaseTypeGroup, string originalCaseTypeGroup)
+        {
+            var updatedItems = await _context.UsrOrDefChapterManagement.Where(C => C.CaseTypeGroup == originalCaseTypeGroup).ToListAsync();
+
+            if (updatedItems.Count() > 0)
+            {
+                updatedItems = updatedItems.Select(C => { C.CaseTypeGroup = newCaseTypeGroup; return C; }).ToList();
+                _context.UpdateRange(updatedItems);
+                await _context.SaveChangesAsync();
+            }
+
+            return updatedItems;
+        }
+
+        public async Task<UsrOrDefChapterManagement> DeleteChapter(int id)
+        {
+            var toDo = await _context.UsrOrDefChapterManagement.FindAsync(id);
+
+            var chapterItems = await _context.UsrOrDefChapterManagement.Where(C => C.ParentId == toDo.Id).ToListAsync(); 
+
+            if(chapterItems.Count() > 0)
+            {
+                _context.RemoveRange(chapterItems);
+            }
+
+            _context.UsrOrDefChapterManagement.Remove(toDo);
+            await _context.SaveChangesAsync();
+            return toDo;
+        }
+
         public async Task<UsrOrDefChapterManagement> Delete(int id)
         {
             var toDo = await _context.UsrOrDefChapterManagement.FindAsync(id);
