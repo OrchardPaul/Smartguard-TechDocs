@@ -4,44 +4,10 @@
     @media (min-width: 992px) 
     @media (min-width: 1200px) 
 */
-body {
-    font-family: Verdana;
-    font-size: 11pt !important;
-}
 
-h2 {
-    font-weight: bold;
-}
 
-h3 {
-    font-weight: normal;
-    font-family: Geneva, Tahoma, sans-serif;
-}
 
-.badge {
-    padding: 7px 15px 7px 15px;
-    font-size: 0.9rem;
-    border-radius: 12px;
-}
 
-.badge-tran {
-    background-color: #222;
-    color: #FFF;
-    font-weight: normal;
-    border: 1pt solid;
-    border-color: #555;
-    margin: 1px;
-    font-size: 0.85rem;
-}
-
-@media (max-width: 767.98px) {
-    .badge-tran {
-        background-color: #FFF;
-        color: #666;
-        border: 1pt solid #999;
-        font-weight: normal;
-    }
-}
 
 .container, .container-fluid {
     padding: 0;
@@ -200,8 +166,36 @@ h3 {
     height: 45px;
 }
 
+.grid-row-sub {
+    height: 35px;
+}
+
+.grid-row-sub-sub {
+    height: 27px;
+}
+
+.grid-row-sub .data-item {
+    line-height: 35px;
+}
+
+.grid-row-sub-sub .data-item {
+    line-height: 27px;
+}
+
 .data-item {
     line-height: 45px;
+}
+
+.data-item-sub {
+    background-color: rgba(255, 255, 255, 0.8)
+}
+
+.grid-row-sub .data-item {
+    line-height: 35px;
+}
+
+.grid-row-sub .data-item {
+    line-height: 27px;
 }
 
 .grid-header .data-item{
@@ -320,10 +314,7 @@ h3 {
     font-weight: bold;
 }
 
-.grid-tran .grid-row .data-item-sub {
-    background-color: rgba(255, 255, 255, 0.8);
-    color: #000;
-}
+
 
 
 @media (max-width: 767.98px) {
@@ -336,9 +327,7 @@ h3 {
     }
 }
 
-.grid-tran .grid-row .no-tran, .grid-tran .grid-header .no-tran {
-    background-color: rgba(245, 245, 245, 0);
-}
+
 
 .spinner {
     border: 16px solid silver;

@@ -108,8 +108,6 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
 
         void SelectHome()
         {
-            selectedCaseTypeGroup = "";
-            selectedCaseType = "";
             selectedChapter = "";
         }
 

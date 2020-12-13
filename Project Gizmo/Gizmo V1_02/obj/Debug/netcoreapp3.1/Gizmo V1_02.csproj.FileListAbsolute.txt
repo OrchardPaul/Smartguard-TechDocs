@@ -860,3 +860,7 @@ F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\RazorDe
 F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\OR_RESI_Chapters\ChapterAddOrEdit.razor.g.cs
 F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\RazorDeclaration\Pages\OR_RESI_Chapters\ChapterCaseTypeEdit.razor.g.cs
 F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\OR_RESI_Chapters\ChapterCaseTypeEdit.razor.g.cs
+F:\WorkSpaces\PT\Gizmo\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\RazorDeclaration\Pages\OR_RESI_Chapters\ChapterAddOrEdit.razor.g.cs
+F:\WorkSpaces\PT\Gizmo\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\RazorDeclaration\Pages\OR_RESI_Chapters\ChapterCaseTypeEdit.razor.g.cs
+F:\WorkSpaces\PT\Gizmo\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\OR_RESI_Chapters\ChapterAddOrEdit.razor.g.cs
+F:\WorkSpaces\PT\Gizmo\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\OR_RESI_Chapters\ChapterCaseTypeEdit.razor.g.cs
