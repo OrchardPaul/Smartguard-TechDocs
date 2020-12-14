@@ -66,7 +66,17 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
         string selectedChapter { get; set; } = "";
         private int selectedChapterId { get; set; } = -1;
 
+
+        private bool editChapterDetail { get; set; } = false;
+
         protected List<string> CaseTypeList;
+
+        public string ModalInfoHeader { get; set; }
+        public string ModalInfoText { get; set; }
+        public string ModalHeight { get; set; }
+        public string ModalWidth { get; set; }
+
+
 
         protected override async Task OnInitializedAsync()
         {
@@ -279,6 +289,17 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
             dropDownDocumentList = await chapterManagementService.GetDocumentList(selectedCaseType);
 
             StateHasChanged();
+        }
+
+        private void PrepareModalInfoDisplay(string modalHeader
+                                                , string modalText
+                                                , string modalHeight
+                                                , string modalWidth)
+        {
+            ModalInfoHeader = modalHeader;
+            ModalInfoText = modalText;
+            ModalHeight = modalHeight;
+            ModalWidth = modalWidth;
         }
     }
 }

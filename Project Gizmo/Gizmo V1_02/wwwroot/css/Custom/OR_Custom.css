@@ -147,13 +147,25 @@
     margin-bottom: 20px;
 }
 
-.detail-box{
+.detail-block{
     width: 100%;
     margin: 20px 10px 20px 0px;
     border-radius: 3px;
     padding: 20px;
 }
 
+.detail-box{
+    min-width:500px;
+}
+
+.detail-group-box {
+    border: 1px solid #BBB;
+    border-radius: 5px;
+    margin: 5px 0px 10px 0px;
+    padding: 2px;
+    overflow-y:scroll;
+    overflow-x:hidden;
+}
 
 /*-----------------------------*/
 /*  DATA GRIDS                 */
@@ -490,30 +502,3 @@
 }
 
 
-/*---------------------------------------*/
-/*   POPUP DIALOG MODAL FORMS            */
-/*---------------------------------------*/
-
-.modal {
-    padding: 20px !important;
-}
-
-.modal-dialog, .modal-content {
-    border-radius: 25px;
-    padding: 0 20px;
-}
-
-.modal-header {
-    font-weight: bold !important
-}
-
-/*    .modal-body {
-    }*/
-
-.modal-footer {
-    border-top: 1pt solid #DDD;
-}
-
-.modal .form-control {
-    color: #888;
-}
