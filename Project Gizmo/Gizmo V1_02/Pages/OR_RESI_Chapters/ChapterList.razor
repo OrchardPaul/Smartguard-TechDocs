@@ -29,10 +29,10 @@ else
 
                     <!-- SHOW ALL GROUPS -->
                     @foreach (var caseTypeGroup in lstAllObjects.Where(C => C.ParentId == 0)
-                             .Where(C => !(C.CaseTypeGroup is null))
-                             .Select(C => C.CaseTypeGroup)
-                             .Distinct()
-                             .ToList())
+                          .Where(C => !(C.CaseTypeGroup is null))
+                          .Select(C => C.CaseTypeGroup)
+                          .Distinct()
+                          .ToList())
                     {
 
                         <div class="row grid-row mt-3">
@@ -49,11 +49,11 @@ else
                         {
 
                             @foreach (var caseType in lstAllObjects.Where(C => C.ParentId == 0)
-                                     .Where(C => !(C.CaseType is null))
-                                     .Where(C => C.CaseTypeGroup == selectedCaseTypeGroup)
-                                     .Select(C => C.CaseType)
-                                     .Distinct()
-                                     .ToList())
+                                  .Where(C => !(C.CaseType is null))
+                                  .Where(C => C.CaseTypeGroup == selectedCaseTypeGroup)
+                                  .Select(C => C.CaseType)
+                                  .Distinct()
+                                  .ToList())
                             {
 
                                 <div class="row grid-row-sub mt-3">
@@ -121,12 +121,12 @@ else
                                     </h5>
 
                                     <div style="float:right;">
-                                        <button class="btn btn-edit" value=""><i class="fa fa-pencil-alt"></i></button>
+                                        <button class="btn btn-edit" value="" @onclick='() => ToggleChapterDetailEdit("Agenda")'><i class="fa fa-pencil-alt"></i></button>
                                     </div>
 
                                 </div>
-                                
-                                <div class="detail-group-box" style="height:60px">
+
+                                <div class="detail-list-box" style="height:60px">
 
                                     @foreach (var Agenda in lstAgendas)
                                     {
@@ -150,7 +150,7 @@ else
                                     </a>
                                 </h5>
 
-                                <div class="detail-group-box" style="height:80px">
+                                <div class="detail-list-box" style="height:80px">
 
                                     @foreach (var status in statusObjects)
                                     {
@@ -173,7 +173,7 @@ else
                                 <span class="fa fa-info-circle col-alt"></span>
                             </a>
                         </h5>
-                        <div class="detail-group-box" style="height:184px">
+                        <div class="detail-list-box" style="height:184px">
                             @foreach (var Fee in lstFees)
                             {
                                 <div class="row grid-row">
@@ -196,7 +196,7 @@ else
                             </a>
                         </h5>
 
-                        <div class="detail-group-box" style="height:220px; margin-bottom:5px;">
+                        <div class="detail-list-box" style="height:220px; margin-bottom:5px;">
                             @foreach (var doc in lstDocs)
                             {
                                 <div class="row grid-row">
@@ -205,7 +205,7 @@ else
                                 </div>
                             }
                         </div>
-                        
+
 
 
                     </div>
@@ -213,145 +213,82 @@ else
             </div>
         </div>
     }
+    else
+    {
+        <div class="tran-block detail-block">
 
+            <input type="button" @onclick='() => ToggleChapterDetailEdit("")' class="btn btn-primary" value="Back" />
 
-
-}
-
-
-@if (1 == 0)
-{
-    <div class="tran-block rounded ">
-        <div class="float-left back-link">
-            <a href="javascript: void(0);" @onclick="SelectHome"><span class="col-main fa fa-angle-double-left fa-2x"></span></a>
-        </div>
-        <h3>Chapter: @selectedChapter</h3>
-    </div>
-
-    <div class="tran-block detail-block">
-        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 p-2">
             @if (displaySection == "Agenda")
             {
-                <span class="shadow card rounded chapterItem_Agenda" @onclick='() => ShowAgenda("Hide", "Agenda")'>Agendas (@lstAgendas.Count) </span>
-            }
-            else
-            {
-                <span class="shadow card rounded chapterItem_Agenda" @onclick='() => ShowAgenda("Show", "Agenda")'>Agendas (@lstAgendas.Count)</span>
-            }
-        </div>
-
-        @if (displaySection == "Agenda")
-        {
-            <div class="fade-in">
-                @foreach (var Agenda in lstAgendas)
-                {
-                    <div class="OR_ChapterItemTable">
-                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 p-2 ">
-                            <span class="shadow card subCard rounded chapterItem_Agenda">@Agenda.Name</span>
-                        </div>
-                    </div>
-                }
-            </div>
-        }
-
-
-        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 p-2">
-            @if (displaySection == "Fee")
-            {
-                <span class="shadow card rounded chapterItem_Fee" @onclick='() => ShowAgenda("Hide", "Fee")'>Fees (@lstFees.Count)</span>
-            }
-            else
-            {
-                <span class="shadow card rounded chapterItem_Fee" @onclick='() => ShowAgenda("Show", "Fee")'>Fees (@lstFees.Count)</span>
-            }
-        </div>
-
-        @if (displaySection == "Fee")
-        {
-            <div class="fade-in">
-                @foreach (var Fee in lstFees)
-                {
-                    <div class="OR_ChapterItemTable">
-                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 p-2 ">
-                            <span class="shadow card subCard rounded chapterItem_Fee" @onclick='(() => PrepareForEdit(Fee,"Fee"))' data-toggle="modal" data-target="#taskModal" value="Edit">@Fee.Name</span>
-                        </div>
-                    </div>
-                }
-
-                <input type="button" data-toggle="modal" data-target="#taskModal" class="btn btn-primary" value="Add Fee" />
-            </div>
-        }
-
-        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 p-2">
-            @if (displaySection == "Docs")
-            {
-                <span class="shadow card rounded chapterItem_Documents" @onclick='() => ShowAgenda("Hide", "Docs")'>Documents / Steps (@lstDocs.Count)</span>
-            }
-            else
-            {
-                <span class="shadow card rounded chapterItem_Documents" @onclick='() => ShowAgenda("Show", "Docs")'>Documents / Steps (@lstDocs.Count)</span>
-            }
-        </div>
-
-        @if (displaySection == "Docs")
-        {
-            <ul ondragover="event.preventDefault();" class="fade-in">
-                @foreach (var docs in lstDocs)
-                {
-                    <li draggable="true" style="list-style-type:none;" @key="docs.Id" tabindex="1">
+                
+                <div class="fade-in">
+                    @foreach (var Agenda in lstAgendas)
+                    {
                         <div class="OR_ChapterItemTable">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 p-2 ">
-                                <span class="shadow card subCard rounded chapterItem_Documents"
-                                      @onclick='(() => PrepareForEdit(docs,"Document / Step"))'
-                                      data-toggle="modal"
-                                      data-target="#taskModal"
-                                      value="Edit">
-                                    <i class="fas fa-sort"></i> @docs.Name
-
-                                </span>
+                                <span class="shadow card subCard rounded chapterItem_Agenda" @onclick='(() => PrepareForEdit(Agenda,"Agenda"))' data-toggle="modal" data-target="#taskModal">@Agenda.Name</span>
                             </div>
                         </div>
-                    </li>
-                }
+                    }
+                </div>
 
-            </ul>
-            <input type="button" class="btn btn-primary" @onclick='(() => PrepareForInsert("Document / Step"))' data-toggle="modal" data-target="#taskModal" value="Add Letter" />
-        }
+                <input type="button" data-toggle="modal" data-target="#taskModal" class="btn btn-primary" value="Add Agenda" />
+            }
 
-        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 p-2">
+
+            @if (displaySection == "Fee")
+            {
+                <div class="fade-in">
+                    @foreach (var Fee in lstFees)
+                    {
+                        <div class="OR_ChapterItemTable">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 p-2 ">
+                                <span class="shadow card subCard rounded chapterItem_Fee" @onclick='(() => PrepareForEdit(Fee,"Fee"))' data-toggle="modal" data-target="#taskModal" value="Edit">@Fee.Name</span>
+                            </div>
+                        </div>
+                    }
+
+                    <input type="button" data-toggle="modal" data-target="#taskModal" class="btn btn-primary" value="Add Fee" />
+                </div>
+            }
+
+            @if (displaySection == "Docs")
+            {
+                <div class="fade-in">
+                    @foreach (var Doc in lstDocs)
+                    {
+                        <div class="OR_ChapterItemTable">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 p-2 ">
+                                <span class="shadow card subCard rounded chapterItem_Doc" @onclick='(() => PrepareForEdit(Doc,"Document / Step"))' data-toggle="modal" data-target="#taskModal" value="Edit">@Doc.Name</span>
+                            </div>
+                        </div>
+                    }
+
+                    <input type="button" data-toggle="modal" data-target="#taskModal" class="btn btn-primary" value="Add Fee" />
+                </div>
+            }
+
             @if (displaySection == "Status")
             {
-                <span class="shadow card rounded chapterItem_Status" @onclick='() => ShowAgenda("Hide", "Status")'>Status (@lstStatus.Count)</span>
-            }
-            else
-            {
-                <span class="shadow card rounded chapterItem_Status" @onclick='() => ShowAgenda("Show", "Status")'>Status (@lstStatus.Count)</span>
+                <div class="fade-in">
+                    @foreach (var status in statusObjects)
+                    {
+                        <div class="OR_ChapterItemTable">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 p-2 ">
+                                <span class="shadow card subCard rounded chapterItem_Status" @onclick='(() => PrepareForEdit(status.management,"Status"))' data-toggle="modal" data-target="#taskModal" value="Edit">@status.management.Name</span>
+                            </div>
+                        </div>
+                    }
+
+                    <input type="button" data-toggle="modal" data-target="#taskModal" class="btn btn-primary" value="Add Letter" />
+                </div>
             }
         </div>
-
-        @if (displaySection == "Status")
-        {
-            <div class="fade-in">
-                @foreach (var status in statusObjects)
-                {
-                    <div class="OR_ChapterItemTable">
-                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 p-2 ">
-                            <span class="shadow card subCard rounded chapterItem_Status" @onmouseout="() => ToggleStatusHover(status)" @onmouseover="() => ToggleStatusHover(status)" @onclick='(() => PrepareForEdit(status.management,"Status"))' data-toggle="modal" data-target="#taskModal" value="Edit">@status.management.Name</span>
-                            @if (status.hoveredOver)
-                            {
-                                <div>Hover</div>
-                            }
-                        </div>
-                    </div>
-                }
-
-                <input type="button" data-toggle="modal" data-target="#taskModal" class="btn btn-primary" value="Add Letter" />
-            </div>
-        }
-
-    </div>
+    }
 
 }
+
 
 <ChapterDetail TaskObject=editObject DataChanged="@DataChanged" selectedCaseType="@selectedCaseType" selectedList="@selectedList" dropDownDocumentList="@dropDownDocumentList">
     <CustomHeader>@customHeader</CustomHeader>
