@@ -159,12 +159,20 @@
 }
 
 .detail-group-box {
+    border-top: 1px solid #BBB;
+    margin: 5px 0px 10px 0px;
+    padding: 15px;
+    overflow-y:auto;
+    overflow-x:hidden;
+}
+
+.detail-list-box {
     border: 1px solid #BBB;
     border-radius: 5px;
     margin: 5px 0px 10px 0px;
     padding: 2px;
-    overflow-y:scroll;
-    overflow-x:hidden;
+    overflow-y: scroll;
+    overflow-x: hidden;
 }
 
 /*-----------------------------*/
@@ -321,8 +329,8 @@
 
 
 .grid-tran .grid-Header .data-item-sub {
-    background-color: #999;
-    color: #333;
+    background-color: #FFF;
+    color: #000;
     font-weight: bold;
 }
 
@@ -455,6 +463,8 @@
     align-items: center !important;
     margin: auto;
 }
+
+
 
 /* Responsive columns - one column layout (vertical) on small screens */
 @media (max-width: 1800px) {

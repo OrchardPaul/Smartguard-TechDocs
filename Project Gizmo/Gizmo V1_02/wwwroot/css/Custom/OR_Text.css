@@ -19,6 +19,13 @@ h5{
     margin: 0;
 }
 
+ul.ul-simple {
+    list-style-type: none;
+    padding: 0;
+    margin: 0 !important;
+}
+
+
 .text-circle {
     color: #fff;
     padding: 4px 4px;

@@ -7,158 +7,158 @@
     <h3>User Details</h3>
 </div>
 
-<div class="tran-block detail-block">
-    <EditForm Model="@TaskObject" OnValidSubmit="@HandleValidSubmit">
-        <DataAnnotationsValidator />
-        <ValidationSummary />
+<EditForm Model="@TaskObject" OnValidSubmit="@HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class="tran-block detail-block">
+        <div class="container-fluid">
+            <div class="row">
+                   
+                <div class="col-6 detail-box ">
+                    <h5>Personal Details</h5>
+                    <div class="detail-group-box">
+                        <div class="form-group">
+                            <label for="@TaskObject.UserName">User Name (Email)</label>
+                            <InputText class="form-control" style="width: 350px;" @bind-Value="TaskObject.UserName"></InputText>
+                        </div>
 
-        <div class="form-group">
-            <label for="@TaskObject.UserName">User Name (Email)</label>
-            <InputText @bind-Value="TaskObject.UserName"></InputText>
-        </div>
+                        <div class="form-group">
+                            <label for="@TaskObject.FullName">Name (Alias)</label>
+                            <InputText class="form-control" style="width: 350px;" @bind-Value="TaskObject.FullName"></InputText>
+                        </div>
 
-        <div class="form-group">
-            <label for="@TaskObject.FullName">Name</label>
-            <InputText @bind-Value="TaskObject.FullName"></InputText>
-        </div>
-
-        <div class="form-group">
-            <label for="@TaskObject.PhoneNumber">Phone Number</label>
-            <InputText @bind-Value="TaskObject.PhoneNumber"></InputText>
-        </div>
-
-        @if (sessionState.Company.CompanyName == "Orchard Rock" & (selectedOption == "Edit"))
-        {
-            @if (!(companyItems is null))
-            {
-                <div class="form-group">
-                    <label for="@TaskObject.SelectedUri">Selected Company</label>
-                    <InputSelectInteger ValueExpression="@(() => TaskObject.SelectedCompanyId)"
-                                        Value="@TaskObject.SelectedCompanyId"
-                                        ValueChanged="@((int value) => ToggleCompany(value))">
-                        @if (companyItems.Where(C => C.IsSubscribed).Count() > 0)
-                        {
-                            @foreach (var company in companyItems.Where(C => C.IsSubscribed))
+                        <div class="form-group">
+                            <label for="@TaskObject.PhoneNumber">Phone Number</label>
+                            <InputText class="form-control" style="width: 150px;" @bind-Value="TaskObject.PhoneNumber"></InputText>
+                        </div>
+                        <div class="form-group">
+                            @if ((selectedOption == "Insert") | (enablePasswordSet))
                             {
-                                <option value="@company.Company.Id">
-                                    @company.Company.CompanyName
-                                </option>
-                            }
+                                    <label for="@TaskObject.PasswordHash">Password</label>
+                                    <InputText class="form-control" style="display: inline; width: 250px;" @bind-Value="@TaskObject.PasswordHash" type="password"></InputText>
 
-                        }
-                    </InputSelectInteger>
-                </div>
-            }
-        }
-
-
-        <div class="form-group">
-            @if (companyItems is null)
-            {
-                <div class="spinner"></div>
-            }
-            else
-            {
-                @if (!(companyItems.Where(C => C.IsSubscribed) is null))
-                {
-
-                    <label for="@TaskObject.SelectedUri">System</label>
-                    <InputSelect @bind-Value="TaskObject.SelectedUri">
-                        <option selected value="Live">
-                            Live
-                        </option>
-                        <option value="Dev">
-                            Dev
-                        </option>
-                    </InputSelect>
-                }
-            }
-        </div>
-
-        @if ((selectedOption == "Insert") | (enablePasswordSet))
-        {
-            <div class="form-group">
-                <label for="@TaskObject.PasswordHash">Password</label>
-                <InputText @bind-Value="@TaskObject.PasswordHash" type="password"></InputText>
-            </div>
-
-            @if (selectedOption == "Edit")
-            {
-                <button type="button" class="btn btn-secondary" @onclick="() => TogglePasswordSet()">Close</button>
-            }
-        }
-        else
-        {
-            <div class="form-group">
-                <button type="button" class="btn btn-secondary" @onclick="() => TogglePasswordSet()">Edit Password</button>
-            </div>
-        }
-
-
-        <div class="form-group">
-            <div class="container-fluid">
-                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-6 p-2">
-                    @if (selectedRoles is null)
-                    {
-                        <div class="spinner"></div>
-                    }
-                    else
-                    {
-                        @if (sessionState.Company.CompanyName == "Orchard Rock")
-                        {
-                            @if (sessionState.isSuperUser)
-                            {
-                                @foreach (var role in selectedRoles)
+                                @if (selectedOption == "Edit")
                                 {
-                                    <label>@role.RoleName</label><InputCheckbox @bind-Value="role.IsSubscribed"></InputCheckbox>
+                                    <button type="button" class="btn btn-main" @onclick="() => TogglePasswordSet()">Save</button>
                                 }
                             }
-                        }
-                        else
-                        {
-                            @foreach (var role in selectedRoles
-                                                        .Where(R => R.RoleName != "Super User")
-                                                        .ToList())
+                            else
                             {
-                                <label>@role.RoleName</label><InputCheckbox @bind-Value="role.IsSubscribed"></InputCheckbox>
+                                    <button type="button" class="btn btn-main" @onclick="() => TogglePasswordSet()">Edit Password</button>
+                            }
+                            </div>
+                        </div>
+                </div>
+                <div class="col-6 detail-box">
+                    <h5>Company Details</h5>
+                    <div class="detail-group-box">
+                        @if (sessionState.Company.CompanyName == "Orchard Rock" & (selectedOption == "Edit"))
+                        {
+                            @if (!(companyItems is null))
+                            {
+                                <div class="form-group">
+                                    <label for="@TaskObject.SelectedUri">Selected Company</label>
+                                    <InputSelectInteger class="form-control" style="width: 300px;" ValueExpression="@(() => TaskObject.SelectedCompanyId)"
+                                                        Value="@TaskObject.SelectedCompanyId"
+                                                        ValueChanged="@((int value) => ToggleCompany(value))">
+                                        @if (companyItems.Where(C => C.IsSubscribed).Count() > 0)
+                                        {
+                                            @foreach (var company in companyItems.Where(C => C.IsSubscribed))
+                                            {
+                                                <option value="@company.Company.Id">
+                                                    @company.Company.CompanyName
+                                                </option>
+                                            }
+
+                                        }
+                                    </InputSelectInteger>
+                                </div>
                             }
                         }
 
-                    }
-                </div>
-            </div>
-        </div>
 
-        <!--
-    <div class="form-group">
-        <div class="container-fluid">
-            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-6 p-2">
-                @if (companyItems is null)
+                        <div class="form-group">
+                            @if (companyItems is null)
+                            {
+                                <div class="spinner"></div>
+                            }
+                            else
+                            {
+                                @if (!(companyItems.Where(C => C.IsSubscribed) is null))
+                                {
+
+                                    <label for="@TaskObject.SelectedUri">System</label>
+                                    <InputSelect class="form-control" style="width: 200px;" @bind-Value="TaskObject.SelectedUri">
+                                        <option selected value="Live">
+                                            Live
+                                        </option>
+                                        <option value="Dev">
+                                            Dev
+                                        </option>
+                                    </InputSelect>
+                                }
+                            }
+                        </div>
+                    </div>
+                    <h5>Roles</h5>
+                    <div class="detail-group-box">
+                        <div class="form-group">
+                            <div class="container-fluid">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-6 p-2">
+                                    @if (selectedRoles is null)
+                                    {
+                                        <div class="spinner"></div>
+                                    }
+                                    else
+                                    {
+                                        @if (sessionState.Company.CompanyName == "Orchard Rock")
+                                        {
+                                            @if (sessionState.isSuperUser)
+                                            {
+                                                <ul class="ul-simple">
+                                                    @foreach (var role in selectedRoles)
+                                                    {
+                                                        <li><InputCheckbox class="mr-2" @bind-Value="role.IsSubscribed"></InputCheckbox><label>@role.RoleName</label></li>
+                                                    }
+                                                </ul>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <ul class="ul-simple">
+                                                @foreach (var role in selectedRoles
+                                                               .Where(R => R.RoleName != "Super User")
+                                                               .ToList())
+                                                {
+                                                    
+                                                    <li><InputCheckbox class="mr-2" @bind-Value="role.IsSubscribed"></InputCheckbox><label>@role.RoleName</label></li>
+                                                }
+                                            </ul>
+                                        }
+
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="detail-group-box ">
+                <button type="submit" class="btn btn-alt">Save Changes</button>
+                <button type="button" class="btn btn-secondary" @onclick="NavigateBack">Cancel</button>
+
+                @if (!(TaskObject.Id is null))
                 {
-                    <div class="spinner"></div>
-                }
-                else
-                {
-                    @foreach (var company in companyItems)
+                    @if (!(TaskObject.Id == sessionState.User.Id))
                     {
-                        <label>@company.Company.CompanyName</label><InputCheckbox @bind-Value="company.IsSubscribed"></InputCheckbox>
+                        <button type="button" @onclick="HandleValidDelete" class="btn btn-secondary ml-4">Delete</button>
                     }
+
                 }
             </div>
         </div>
     </div>
-        -->
-        <button type="submit" class="btn btn-primary">Submit</button>
-        <button type="button" class="btn btn-secondary" @onclick="NavigateBack">Cancel</button>
 
-        @if (!(TaskObject.Id is null))
-        {
-            @if (!(TaskObject.Id == sessionState.User.Id))
-            {
-                <button type="button" @onclick="HandleValidDelete" class="btn btn-secondary"></button>
-            }
-
-        }
-    </EditForm>
-</div>
-
+</EditForm>
