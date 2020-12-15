@@ -69,6 +69,8 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
 
         private bool editChapterDetail { get; set; } = false;
 
+        private string selectedChapterDetial { get; set; }
+
         protected List<string> CaseTypeList;
 
         public string ModalInfoHeader { get; set; }
@@ -289,6 +291,12 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
             dropDownDocumentList = await chapterManagementService.GetDocumentList(selectedCaseType);
 
             StateHasChanged();
+        }
+
+        private void ToggleChapterDetailEdit(string selectedDetail)
+        {
+            editChapterDetail = !editChapterDetail;
+            displaySection = selectedDetail;
         }
 
         private void PrepareModalInfoDisplay(string modalHeader

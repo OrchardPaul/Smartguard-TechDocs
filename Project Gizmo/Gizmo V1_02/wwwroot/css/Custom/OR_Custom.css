@@ -158,6 +158,15 @@
     min-width:500px;
 }
 
+.detail-list-box {
+    border: 1px solid #BBB;
+    border-radius: 5px;
+    margin: 5px 0px 10px 0px;
+    padding: 2px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
 .detail-group-box {
     border-top: 1px solid #BBB;
     margin: 5px 0px 10px 0px;
