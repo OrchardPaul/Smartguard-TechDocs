@@ -344,7 +344,7 @@ namespace Gizmo_V1_02.Data.Admin
                     NormalizedUserName = item.UserName.ToUpper(),
                     FullName = item.FullName,
                     Email = item.UserName,
-                    NormalizedEmail = item.Email.ToUpper(),
+                    NormalizedEmail = item.UserName.ToUpper(),
                     PhoneNumber = item.PhoneNumber,
                     EmailConfirmed = true,
                     SelectedUri = item.SelectedUri,

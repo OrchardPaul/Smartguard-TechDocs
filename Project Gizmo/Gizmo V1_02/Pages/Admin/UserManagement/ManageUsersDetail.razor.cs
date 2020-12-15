@@ -199,6 +199,10 @@ namespace Gizmo_V1_02.Pages.Admin.UserManagement
             NavigateBack();
         }
 
+        private async Task ShowModal()
+        {
+            await jsRuntime.InvokeAsync<object>("ShowModal", "modalDelete");
+        }
 
     }
 }

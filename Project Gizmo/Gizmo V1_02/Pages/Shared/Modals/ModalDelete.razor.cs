@@ -8,9 +8,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+
 namespace Gizmo_V1_02.Pages.Shared.Modals
 {
-    public partial class ModalInfo
+    public partial class ModalDelete
     {
         [Parameter]
         public string InfoHeader { get; set; }
@@ -24,6 +25,24 @@ namespace Gizmo_V1_02.Pages.Shared.Modals
         [Parameter]
         public string ModalWidth { get; set; }
 
+        [Parameter]
+        public Action DeleteAction { get; set; }
+        public bool WishToDelete { get; set; } = false;
+
+        public void ToggleDeleteWish()
+        {
+            WishToDelete = !WishToDelete;
+        }
+
+        private void HandleValidSubmit()
+        {
+            DeleteAction?.Invoke();
+        }
+
+        private async Task CloseModal()
+        {
+            await jsRuntime.InvokeAsync<object>("CloseModal", "modalDelete");
+        }
 
     }
 }

@@ -7,10 +7,17 @@
 <script>
     function ShowModal(modalId) {
         $('#' + modalId).modal('show');
+        $('#' + modalId).appendTo(document.body);
     }
+
     function CloseModal(modalId) {
         $('#' + modalId).modal('hide');
     }
+
+    function HideAll() {
+        $('.modal').modal('hide');
+    }
+
 </script>
 
 <!DOCTYPE html>
@@ -65,3 +72,5 @@
 
 </body>
 </html>
+
+

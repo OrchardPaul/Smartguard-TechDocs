@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,9 +15,16 @@ namespace Gizmo_V1_02.Shared
         private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 
 
-        private void ToggleNavMenu()
+        private async Task ToggleNavMenu()
         {
             collapseNavMenu = !collapseNavMenu;
+
+            await CloseAllModels();
+        }
+
+        private async Task CloseAllModels()
+        {
+            await jsRuntime.InvokeAsync<object>("HideAll");
         }
 
     }

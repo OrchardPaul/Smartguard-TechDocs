@@ -868,3 +868,5 @@ F:\WorkSpaces\MS\Gizmo\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\staticw
 F:\WorkSpaces\MS\Gizmo\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Gizmo V1_02.dll
 F:\WorkSpaces\MS\Gizmo\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Gizmo V1_02.pdb
 F:\WorkSpaces\MS\Gizmo\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Gizmo V1_02.genruntimeconfig.cache
+F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\RazorDeclaration\Pages\Shared\Modals\ModalDelete.razor.g.cs
+F:\WorkSpaces\JD\Gizmo\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\Shared\Modals\ModalDelete.razor.g.cs

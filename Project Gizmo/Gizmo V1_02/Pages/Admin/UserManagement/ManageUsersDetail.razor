@@ -1,4 +1,8 @@
-﻿@using Gizmo_V1_02.Data.CustomFormObjects
+﻿@inject IJSRuntime jsRuntime
+
+@using Gizmo_V1_02.Data.CustomFormObjects
+@using Gizmo_V1_02.Pages.Shared.Modals
+
 
 <div class="tran-block rounded ">
     <a class="float-left back-link" href="javascript:void(0);" @onclick="@ToggleDetail">
@@ -13,7 +17,7 @@
     <div class="tran-block detail-block">
         <div class="container-fluid">
             <div class="row">
-                   
+
                 <div class="col-6 detail-box ">
                     <h5>Personal Details</h5>
                     <div class="detail-group-box">
@@ -34,8 +38,8 @@
                         <div class="form-group">
                             @if ((selectedOption == "Insert") | (enablePasswordSet))
                             {
-                                    <label for="@TaskObject.PasswordHash">Password</label>
-                                    <InputText class="form-control" style="display: inline; width: 250px;" @bind-Value="@TaskObject.PasswordHash" type="password"></InputText>
+                                <label for="@TaskObject.PasswordHash">Password</label>
+                                <InputText class="form-control" style="display: inline; width: 250px;" @bind-Value="@TaskObject.PasswordHash" type="password"></InputText>
 
                                 @if (selectedOption == "Edit")
                                 {
@@ -44,10 +48,10 @@
                             }
                             else
                             {
-                                    <button type="button" class="btn btn-main" @onclick="() => TogglePasswordSet()">Edit Password</button>
+                                <button type="button" class="btn btn-main" @onclick="() => TogglePasswordSet()">Edit Password</button>
                             }
-                            </div>
                         </div>
+                    </div>
                 </div>
                 <div class="col-6 detail-box">
                     <h5>Company Details</h5>
@@ -127,10 +131,10 @@
                                         {
                                             <ul class="ul-simple">
                                                 @foreach (var role in selectedRoles
-                                                               .Where(R => R.RoleName != "Super User")
-                                                               .ToList())
+                                                              .Where(R => R.RoleName != "Super User")
+                                                              .ToList())
                                                 {
-                                                    
+
                                                     <li><InputCheckbox class="mr-2" @bind-Value="role.IsSubscribed"></InputCheckbox><label>@role.RoleName</label></li>
                                                 }
                                             </ul>
@@ -153,7 +157,7 @@
                 {
                     @if (!(TaskObject.Id == sessionState.User.Id))
                     {
-                        <button type="button" @onclick="HandleValidDelete" class="btn btn-secondary ml-4">Delete</button>
+                        <button type="button" @onclick="ShowModal" class="btn btn-secondary ml-4">Delete</button>
                     }
 
                 }
@@ -162,3 +166,6 @@
     </div>
 
 </EditForm>
+
+
+<ModalDelete DeleteAction="HandleValidDelete" ModalWidth="500px" ModalHeight="300px" InfoHeader="Delete?"></ModalDelete>
