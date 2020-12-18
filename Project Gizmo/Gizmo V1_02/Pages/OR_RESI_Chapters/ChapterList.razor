@@ -94,6 +94,8 @@ else
 
 @if (selectedChapter != "")
 {
+    
+
     <div class="tran-block rounded ">
         <div class="float-left back-link">
             <a href="javascript: void(0);" @onclick="SelectHome"><span class="col-main fa fa-angle-double-left fa-2x"></span></a>
@@ -118,20 +120,20 @@ else
                                                                                                                 ,"400px")' data-toggle="modal" data-target="#modalInfo">
                                             <span class="fa fa-info-circle col-alt"></span>
                                         </a>
+                                        <button class="btn btn-edit" id="ChapterItemEdit" value="" @onclick='() => ToggleChapterDetailEdit("Agenda")'><i class="fa fa-pencil-alt col-alt"></i></button>
                                     </h5>
-
-                                    <div style="float:right;">
-                                        <button class="btn btn-edit" value="" @onclick='() => ToggleChapterDetailEdit("Agenda")'><i class="fa fa-pencil-alt"></i></button>
-                                    </div>
 
                                 </div>
 
-                                <div class="detail-list-box" style="height:60px">
+                                <div class="col-12 detail-list-box" id="agendaWrapper">
 
                                     @foreach (var Agenda in lstAgendas)
                                     {
                                         <div class="row grid-row">
-                                            <div class="col-12 data-item"><div class="data-item-sub"><span class="fa fa-user-alt "></span> @Agenda.Name</div></div>
+                                            <div class="col-12 data-item">
+                                                <div class="data-item-sub"><span class="fas fa-stream "></span> @Agenda.Name
+                                                </div>
+                                            </div>
                                         </div>
                                     }
 
@@ -148,14 +150,15 @@ else
                                                                                                                 ,"400px")' data-toggle="modal" data-target="#modalInfo">
                                         <span class="fa fa-info-circle col-alt"></span>
                                     </a>
+                                    <button class="btn btn-edit" id="ChapterItemEdit" value="" @onclick='() => ToggleChapterDetailEdit("Status")'><i class="fa fa-pencil-alt col-alt"></i></button>
                                 </h5>
 
-                                <div class="detail-list-box" style="height:80px">
+                                <div class="col-12  detail-list-box" style="height:80px">
 
                                     @foreach (var status in statusObjects)
                                     {
                                         <div class="row grid-row">
-                                            <div class="col-12 data-item"><div class="data-item-sub"><span class="fa fa-user-alt "></span> @status.management.Name</div></div>
+                                            <div class="col-12 data-item"><div class="data-item-sub"><span class="far fa-calendar-check"></span> @status.management.Name</div></div>
                                         </div>
                                     }
 
@@ -172,12 +175,13 @@ else
                                                                                                           ,"400px")' data-toggle="modal" data-target="#modalInfo">
                                 <span class="fa fa-info-circle col-alt"></span>
                             </a>
+                            <button class="btn btn-edit" id="ChapterItemEdit" value="" @onclick='() => ToggleChapterDetailEdit("Fees")'><i class="fa fa-pencil-alt col-alt"></i></button>
                         </h5>
-                        <div class="detail-list-box" style="height:184px">
+                        <div class="col-12  detail-list-box" style="height:184px">
                             @foreach (var Fee in lstFees)
                             {
                                 <div class="row grid-row">
-                                    <div class="col-12 data-item"><div class="data-item-sub"><span class="fa fa-user-alt "></span> @Fee.Name</div></div>
+                                    <div class="col-12 data-item"><div class="data-item-sub"><span class="fas fa-pound-sign"></span> @Fee.Name</div></div>
                                 </div>
                             }
 
@@ -194,14 +198,15 @@ else
                                                                                                          ,"400px")' data-toggle="modal" data-target="#modalInfo">
                                 <span class="fa fa-info-circle col-alt"></span>
                             </a>
+                            <button class="btn btn-edit" id="ChapterItemEdit" value="" @onclick='() => ToggleChapterDetailEdit("Docs")'><i class="fa fa-pencil-alt col-alt"></i></button>
                         </h5>
 
-                        <div class="detail-list-box" style="height:220px; margin-bottom:5px;">
+                        <div class="col-12  detail-list-box" style="height:220px; margin-bottom:5px;">
                             @foreach (var doc in lstDocs)
                             {
                                 <div class="row grid-row">
-                                    <div class="col-12 col-xl-5 data-item"><div class="data-item-sub"><span class="fa fa-user-alt "></span> @doc.Name</div></div>
-                                    <div class="col-7 hidden-lg-down data-item"><div class="data-item-sub"><span class="fa fa-user-alt "></span> @doc.Name</div></div>
+                                    <div class="col-12 col-xl-5 data-item"><div class="data-item-sub"><span class="far fa-file-word"></span> @doc.Name</div></div>
+                                    <div class="col-7 hidden-lg-down data-item"><div class="data-item-sub"><span class="far fa-file-word"></span> @doc.Name</div></div>
                                 </div>
                             }
                         </div>
@@ -237,14 +242,14 @@ else
             }
 
 
-            @if (displaySection == "Fee")
+            @if (displaySection == "Fees")
             {
                 <div class="fade-in">
                     @foreach (var Fee in lstFees)
                     {
                         <div class="OR_ChapterItemTable">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 p-2 ">
-                                <span class="shadow card subCard rounded chapterItem_Fee" @onclick='(() => PrepareForEdit(Fee,"Fee"))' data-toggle="modal" data-target="#taskModal" value="Edit">@Fee.Name</span>
+                                <span class="shadow card subCard rounded chapterItem_Fee" @onclick='(() => PrepareForEdit(Fee,"Fees"))' data-toggle="modal" data-target="#taskModal" value="Edit">@Fee.Name</span>
                             </div>
                         </div>
                     }
@@ -265,7 +270,7 @@ else
                         </div>
                     }
 
-                    <input type="button" data-toggle="modal" data-target="#taskModal" class="btn btn-primary" value="Add Fee" />
+                    <input type="button" data-toggle="modal" data-target="#taskModal" class="btn btn-primary" value="Add Document" />
                 </div>
             }
 
@@ -281,7 +286,7 @@ else
                         </div>
                     }
 
-                    <input type="button" data-toggle="modal" data-target="#taskModal" class="btn btn-primary" value="Add Letter" />
+                    <input type="button" data-toggle="modal" data-target="#taskModal" class="btn btn-primary" value="Add Status" />
                 </div>
             }
         </div>
