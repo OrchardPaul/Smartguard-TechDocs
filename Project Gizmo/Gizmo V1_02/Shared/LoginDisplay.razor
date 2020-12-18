@@ -1,8 +1,14 @@
 ﻿<AuthorizeView>
     <Authorized>
+        <!--
         <a class="nav-link" href="Identity/Account/Manage" title="Account details: @(string.IsNullOrWhiteSpace(userFullName) ? context.User.Identity.Name : userFullName)">
             <span class="fa fa-user-cog"></span>
-       </a>
+        </a>
+        -->
+        <NavLink class="nav-link" href="userprofile">
+            <span class="fa fa-user-cog"></span>
+        </NavLink>
+
         <form method="post" action="Identity/Account/LogOut">
             <button type="submit" class="nav-link btn btn-link">Log out</button>
         </form>
