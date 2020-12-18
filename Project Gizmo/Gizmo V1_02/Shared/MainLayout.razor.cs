@@ -11,6 +11,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Reflection;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace Gizmo_V1_02.Shared
 {
@@ -23,7 +24,6 @@ namespace Gizmo_V1_02.Shared
         [Inject]
         public NavigationManager NavigationManager { get; set; }
 
-
         public AspNetUsers currentUser { get; set; }
 
         public int selectedCompanyId { get; set; }
@@ -33,6 +33,12 @@ namespace Gizmo_V1_02.Shared
             await sessionState.SetSessionState();
 
             currentUser = sessionState.User;
+
+            if(currentUser is null)
+            {
+                string returnUrl = HttpUtility.UrlEncode($"/admin");
+                NavigationManager.NavigateTo($"Identity/Account/Login?returnUrl={returnUrl}", true);
+            } 
 
             StateHasChanged();
         }

@@ -4,41 +4,27 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web;
 
-namespace Gizmo_V1_02.Pages.Admin.UserManagement
+namespace Gizmo_V1_02.Pages.Admin
 {
-    public partial class ManageUsersMainPage
+    public partial class AdminNav
     {
-        [Inject]
-        private IUserSessionState sessionState { get; set; }
-
         [Inject]
         IPageAuthorisationState PageAuthorisationState { get; set; }
 
         [Inject]
         NavigationManager NavigationManager { get; set; }
 
-        public bool showDetail { get; set; } = false;
-
-        public void ToggleDetail() 
-        {
-            showDetail = !showDetail;
-
-            StateHasChanged();
-        }
-
         protected override async Task OnInitializedAsync()
         {
-            var authenticationState = await PageAuthorisationState.UserManagementAuthorisation();
+            var authenticationState = await PageAuthorisationState.AdminNavAuthorisation();
 
             if (!(authenticationState == "Authorised"))
             {
                 NavigationManager.NavigateTo(authenticationState, true);
             }
 
-
         }
-
-
     }
 }

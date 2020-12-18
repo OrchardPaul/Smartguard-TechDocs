@@ -82,9 +82,9 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
 
         protected override async Task OnInitializedAsync()
         {
-            var authenticationState = await authenticationStateTask;
+            var authenticationState = await pageAuthorisationState.ChapterListAuthorisation();
 
-            if (!pageAuthorisationState.ChapterListAuthorisation(authenticationState))
+            if (!authenticationState)
             {
                 string returnUrl = HttpUtility.UrlEncode($"/chapterlist");
                 NavigationManager.NavigateTo($"Identity/Account/Login?returnUrl={returnUrl}", true);
@@ -98,7 +98,7 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
             }
 
 
-            if (!(authenticationState.User.Identity.Name is null))
+            if (authenticationState)
             {
                 try
                 {

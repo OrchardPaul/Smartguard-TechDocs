@@ -39,19 +39,10 @@ namespace Gizmo_V1_02.Pages.Admin.UserManagement
         private IIdentityRoleAccess roleAccess { get; set; }
 
         [Inject]
-        private ICompanyDbAccess companyDbAccess { get; set; }
-
-        [Inject]
         private IUserSessionState sessionState { get; set; }
 
         [Inject]
         private IUserManagementSelectedUserState selectedUserState { get; set; }
-
-        [Inject]
-        protected AuthenticationStateProvider authenticationStateProvider { get; set; }
-
-        [Inject]
-        public NavigationManager NavigationManager { get; set; }
 
         private IList<string> editObjectRoles { get; set; }
 
@@ -63,15 +54,19 @@ namespace Gizmo_V1_02.Pages.Admin.UserManagement
 
         private AspNetUsers currentUser { get; set; }
 
-        string isChecked { get; set; } = "";
-
-        private AuthenticationState auth { get; set; }
-
         protected override async Task OnInitializedAsync()
         {
-            sessionState.OnChange += StateHasChanged;
 
-            auth = await authenticationStateProvider.GetAuthenticationStateAsync();
+            //Wait for session state to finish to prevent concurrency error on refresh
+            bool gotLock = sessionState.Lock;
+            while (gotLock)
+            {
+                await Task.Yield();
+                gotLock = sessionState.Lock;
+            }
+
+
+            sessionState.OnChange += StateHasChanged;
 
             TaskObject = selectedUserState.TaskObject;
             selectedOption = selectedUserState.selectedOption;

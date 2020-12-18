@@ -33,9 +33,6 @@ namespace Gizmo_V1_02.Pages.Admin.UserManagement
         [Inject]
         private IUserSessionState sessionState { get; set; }
 
-        [Inject]
-        protected AuthenticationStateProvider authenticationStateProvider { get; set; }
-
         public AspNetUsers editObject { get; set; } = new AspNetUsers();
 
         protected IList<string> editObjectRoles { get; set; }
@@ -48,13 +45,7 @@ namespace Gizmo_V1_02.Pages.Admin.UserManagement
 
         protected List<UserDataCollectionItem> lstUserDataItems { get; set; }
 
-        private AuthenticationState auth { get; set; }
-
         public List<AppCompanyDetails> companies { get; set; }
-
-        public List<CompanyItem> companyItems { get; set; }
-
-        public IList<Claim> userCliams { get; set; }
 
         public string selectedRole { get; set; } = "None";
 
@@ -62,6 +53,7 @@ namespace Gizmo_V1_02.Pages.Admin.UserManagement
 
         protected override async Task OnInitializedAsync()
         {
+
             //Wait for session state to finish to prevent concurrency error on refresh
             bool gotLock = sessionState.Lock;
             while (gotLock)
@@ -69,8 +61,6 @@ namespace Gizmo_V1_02.Pages.Admin.UserManagement
                 await Task.Yield();
                 gotLock = sessionState.Lock;
             }
-
-            auth = await authenticationStateProvider.GetAuthenticationStateAsync();
 
             lstUserDataItems = await userAccess.GetUsersWithCompanyInfo();
             lstRoles = await roleAccess.GetUserRoles();
