@@ -1,0 +1,47 @@
+﻿@inject IJSRuntime jsRuntime
+
+<div class="modal" tabindex="-1" role="dialog" id="GroupingModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <EditForm Model="@TaskObject" OnValidSubmit="@HandleValidSubmit">
+                <div class="modal-header">
+                    <h5 class="modal-title">Work Type Grouping</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" class="fa fa-window-close"></span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <DataAnnotationsValidator />
+                    <ValidationSummary />
+
+                    <div class="form-group">
+                        @foreach (var a in Assignments.Where(A => A.WorkType.DepartmentId == TaskObject.group.parentId))
+                        {
+                            <div>
+                                <InputCheckbox @bind-Value="a.IsAssigned"></InputCheckbox><span class="pl-2">@a.WorkType.TypeName</span>
+                            </div>
+                        }
+                    </div>
+
+
+                    <div class="modal-footer">
+                        <div class="container-fluid ">
+                            <div class="row">
+
+                                <div class="col-6 text-left">
+
+                                </div>
+
+                                <div class="col-6 text-right">
+                                    <button type="submit" class="btn btn-sub">Save</button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </EditForm>
+        </div>
+    </div>
+</div>

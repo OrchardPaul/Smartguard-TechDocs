@@ -1,0 +1,38 @@
+﻿@page "/system/managecompanies"
+
+
+<div class="tran-block rounded ">
+    <div class="float-left back-link">
+        <NavLink href="system"><span class="col-main fa fa-angle-double-left fa-2x"></span></NavLink>
+    </div>
+    <h3>Manage Companies</h3>
+</div>
+
+@if (lstCompanyDetails is null)
+{
+    <div class="spinner"></div>
+}
+else
+{
+    <div class="mt-5 col-xl-5 col-lg-8 col-12">
+        <div class="mb-3">
+            <button data-toggle="modal" data-target="#companyModal" @onclick='(() => PrepareForInsert())' class="btn btn-main btn-shadow"><i class="fa fa-plus"></i> Add New Company</button>
+        </div>
+        <div class="grid-tran">
+            <div class="container-fluid ">
+                @foreach (var company in lstCompanyDetails)
+                {
+                    <div class="row grid-row">
+                        <div class="col-11 data-item"><div class="data-item-sub"> @company.CompanyName</div></div>
+                        <div class="col-1 data-item"><div class="data-item-edit"><button class="btn btn-edit" @onclick='(() => PrepareForEdit(company))' data-toggle="modal" data-target="#companyModal" value=""><i class="fa fa-pencil-alt"></i></button></div></div>
+                    </div>
+
+                }
+
+            </div>
+        </div>
+    </div>
+
+}
+
+<CompanyEdit TaskObject="@editCompany" DataChanged="@DataChanged"></CompanyEdit>

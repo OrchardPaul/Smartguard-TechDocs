@@ -36,20 +36,21 @@
                             <InputText class="form-control" style="width: 150px;" @bind-Value="TaskObject.PhoneNumber"></InputText>
                         </div>
                         <div class="form-group">
+
+                            <label for="@TaskObject.PasswordHash">Password</label>
+
                             @if ((selectedOption == "Insert") | (enablePasswordSet))
                             {
-                                <label for="@TaskObject.PasswordHash">Password</label>
                                 <InputText class="form-control" style="display: inline; width: 250px;" @bind-Value="@TaskObject.PasswordHash" type="password"></InputText>
-
-                                @if (selectedOption == "Edit")
-                                {
-                                    <button type="button" class="btn btn-main" @onclick="() => TogglePasswordSet()">Save</button>
-                                }
                             }
                             else
                             {
-                                <button type="button" class="btn btn-main" @onclick="() => TogglePasswordSet()">Edit Password</button>
+                                <input type="password" disabled="disabled" class="form-control" style="display: inline; width: 250px;" @bind="@TaskObject.PasswordHash" />
+                                <button class="btn btn-edit" style="display: inline; height:auto;" @onclick="() => TogglePasswordSet()" value=""><i class="fa fa-pencil-alt"></i></button>
                             }
+
+
+
                         </div>
                     </div>
                 </div>

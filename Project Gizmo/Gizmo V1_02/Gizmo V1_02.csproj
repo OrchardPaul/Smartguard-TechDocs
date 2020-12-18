@@ -19,15 +19,6 @@
     <Compile Remove="Data\Migrations\20201014130255_addSelectedUriFlagForUsers.Designer.cs" />
     <Compile Remove="Data\Migrations\20201109161110_addCompanyUserRoles.cs" />
     <Compile Remove="Data\Migrations\20201109161110_addCompanyUserRoles.Designer.cs" />
-    <Compile Remove="Pages\Admin\WorkTypeManagement\ManageWorkTypes - Copy %282%29.razor.cs" />
-    <Compile Remove="Pages\Admin\WorkTypeManagement\ManageWorkTypes - Copy.razor.cs" />
-    <Compile Remove="Pages\Admin\WorkTypeManagement\WorkTypeDetails - Copy.razor.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Remove="Pages\Admin\WorkTypeManagement\ManageWorkTypes - Copy %282%29.razor" />
-    <Content Remove="Pages\Admin\WorkTypeManagement\ManageWorkTypes - Copy.razor" />
-    <Content Remove="Pages\Admin\WorkTypeManagement\WorkTypeDetails - Copy.razor" />
   </ItemGroup>
 
   <ItemGroup>

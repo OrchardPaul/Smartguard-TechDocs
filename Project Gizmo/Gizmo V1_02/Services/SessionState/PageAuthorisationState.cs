@@ -12,8 +12,8 @@ namespace Gizmo_V1_02.Services.SessionState
     {
         Task<bool> ChapterListAuthorisation();
         Task<string> AdminNavAuthorisation();
+        Task<string> SystemNavAuthorisation();
         Task<string> UserManagementAuthorisation();
-        Task<string> IsLoggedIn();
     }
 
     public class PageAuthorisationState : IPageAuthorisationState
@@ -24,22 +24,6 @@ namespace Gizmo_V1_02.Services.SessionState
         {
             this.stateProvider = stateProvider;
         }
-
-        public async Task<string> IsLoggedIn()
-        {
-            var authenticationState = await stateProvider.GetAuthenticationStateAsync();
-
-            if(authenticationState.User.Identity.Name is null)
-            {
-                string returnUrl = HttpUtility.UrlEncode($"/admin");
-                return $"Identity/Account/Login?returnUrl={returnUrl}";
-            }
-            else
-            {
-                return "LoggedIn";
-            }
-        }
-
 
         public async Task<bool> ChapterListAuthorisation()
         {
@@ -74,6 +58,38 @@ namespace Gizmo_V1_02.Services.SessionState
             {
                 "Super User"
                 ,"Site Admin"
+            };
+
+            foreach (var role in roles)
+            {
+                if (authenticationState.User.IsInRole(role))
+                {
+                    return "Authorised";
+                }
+            }
+
+            /*
+             * if not signed in direct user to login
+             * else homepage
+             */
+            if (authenticationState.User.Identity.Name is null)
+            {
+                string returnUrl = HttpUtility.UrlEncode($"/admin");
+                return $"Identity/Account/Login?returnUrl={returnUrl}";
+            }
+            else
+            {
+                return "/";
+            }
+        }
+
+        public async Task<string> SystemNavAuthorisation()
+        {
+            var authenticationState = await stateProvider.GetAuthenticationStateAsync();
+
+            List<string> roles = new List<string>()
+            {
+                "Super User"
             };
 
             foreach (var role in roles)
