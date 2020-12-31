@@ -3,7 +3,7 @@
 
 <div class="tran-block rounded ">
     <div class="float-left back-link">
-        <NavLink href="system"><span class="col-main fa fa-angle-double-left fa-2x"></span></NavLink>
+        <NavLink href="system"><span class="col-alt fa fa-angle-double-left fa-2x"></span></NavLink>
     </div>
     <h3>Manage User Roles</h3>
 </div>
@@ -15,12 +15,13 @@
 }
 else
 {
-    <div class="mt-5 col-xl-8 col-12">
-        <div class="mb-3">
-            <button data-toggle="modal" data-target="#roleModal" @onclick='(() => PrepareForInsert())' class="btn btn-main btn-shadow"><i class="fa fa-plus"></i> Add New Role</button>
-        </div>
-        <div class="grid-tran">
+    <div class="mt-5 col-xl-8 col-12 ml-0 pl-0">
+
+        <div class="mb-3 tran-block rounded">
             <div class="container-fluid ">
+                <div class="mb-3">
+                    <button data-toggle="modal" data-target="#roleModal" @onclick='(() => PrepareForInsert())' class="btn btn-main btn-shadow"><i class="fa fa-plus"></i> Add New Role</button>
+                </div>
                 <div class="row grid-header hidden-lg-down">
                     <div class="col-xl-4 col-11 data-item"><div class="data-item-sub">Name</div></div>
                     <div class="col-7 hidden-lg-down data-item"><div class="data-item-sub">Description</div></div>
@@ -29,9 +30,9 @@ else
                 @foreach (var role in lstRoles)
                 {
                     <div class="row grid-row">
-                        <div class="col-xl-4 col-11 data-item"><div class="data-item-sub"><span class="fa fa-user-alt "></span> @role.Name</div></div>
+                        <div class="col-xl-4 col-11 data-item"><div class="data-item-sub"><span class="fa fa-user-alt mr-1"></span> @role.Name</div></div>
                         <div class="col-7 hidden-lg-down data-item"><div class="data-item-sub">@role.RoleDescription</div></div>
-                        <div class="col-1 data-item"><div class="data-item-edit"><button class="btn btn-edit" @onclick='(() => PrepareForEdit(role))' data-toggle="modal" data-target="#roleModal" value=""><i class="fa fa-pencil-alt"></i></button></div></div>
+                        <div class="col-1 data-item-edit"><button class="btn btn-edit" @onclick='(() => PrepareForEdit(role))' data-toggle="modal" data-target="#roleModal" value=""><i class="fa fa-pencil-alt"></i></button></div>
                     </div>
 
                 }

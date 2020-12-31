@@ -2,7 +2,7 @@
 
 <div class="tran-block rounded ">
     <div class="float-left back-link">
-        <NavLink href="system"><span class="col-main fa fa-angle-double-left fa-2x"></span></NavLink>
+        <NavLink href="system"><span class="col-alt fa fa-angle-double-left fa-2x"></span></NavLink>
     </div>
     <h3>Manage Work Types</h3>
 </div>
@@ -15,7 +15,7 @@
 }
 else
 {
-    <div class="mt-5 mb-4 col-xl-8 col-lg-12 col-md-12 col-sm-12">
+    <div class="mt-5 mb-4 col-xl-6 col-lg-12 col-md-12 col-sm-12 ml-0 pl-0">
 
         <div class="page-navbar hidden-md-down" style="max-width: 800px">
             <nav class="navbar navbar-expand-lg navbar-dark bg-dark ">
@@ -59,17 +59,17 @@ else
 
         @if (navDisplay == "Department")
         {
-            <div class="mb-3 mt-2">
-                <button data-toggle="modal" data-target="#DepartmentModal" @onclick='(() => PrepareDepartmentForInsert())' class="btn btn-main btn-shadow"><i class="fa fa-plus"></i> Add New Department</button>
-            </div>
-            <div class="grid-tran">
-                <div class="container-fluid ">
 
+            <div class="tran-block rounded">
+                <div class="container-fluid ">
+                    <div class="mb-3 mt-2">
+                        <button data-toggle="modal" data-target="#DepartmentModal" @onclick='(() => PrepareDepartmentForInsert())' class="btn btn-main btn-shadow"><i class="fa fa-plus"></i> Add New Department</button>
+                    </div>
                     @foreach (var d in departments)
                     {
                         <div class="row grid-row">
                             <div class="col-11 col-xl-6 data-item"><div class="data-item-sub">@d.DepartmentName</div></div>
-                            <div class="col-1 data-item"><div class="data-item-edit"><button class="btn btn-edit" @onclick='(() => PrepareDepartmentForEdit(d))' data-toggle="modal" data-target="#DepartmentModal" value=""><i class="fa fa-pencil-alt"></i></button></div></div>
+                            <div class="col-1 data-item-edit"><button class="btn btn-edit" @onclick='(() => PrepareDepartmentForEdit(d))' data-toggle="modal" data-target="#DepartmentModal" value=""><i class="fa fa-pencil-alt"></i></button></div>
                         </div>
                     }
                 </div>
@@ -79,11 +79,12 @@ else
 
         @if (navDisplay == "Group")
         {
-            <div class="mb-3 mt-2">
-                <button data-toggle="modal" data-target="#GroupModal" @onclick='(() => PrepareGroupForInsert())' class="btn btn-main btn-shadow"><i class="fa fa-plus"></i> Add New Group</button>
-            </div>
-            <div class="grid-tran">
+
+            <div class="tran-block rounded ">
                 <div class="container-fluid ">
+                    <div class="mb-3 mt-2">
+                        <button data-toggle="modal" data-target="#GroupModal" @onclick='(() => PrepareGroupForInsert())' class="btn btn-main btn-shadow"><i class="fa fa-plus"></i> Add New Group</button>
+                    </div>
                     <div class="row grid-header ">
                         <div class="col-5 data-item"><div class="data-item-sub">Department</div></div>
                         <div class="col-6 data-item"><div class="data-item-sub">Group</div></div>
@@ -110,7 +111,7 @@ else
                             </div>
 
                             <div class="col-6 data-item"><div class="data-item-sub">@wtg.group.GroupName</div></div>
-                            <div class="col-1 data-item"><div class="data-item-edit"><button class="btn btn-edit" @onclick='(() => PrepareGroupForEdit(wtg))' data-toggle="modal" data-target="#GroupModal" value=""><i class="fa fa-pencil-alt"></i></button></div></div>
+                            <div class="col-1 data-item-edit"><button class="btn btn-edit" @onclick='(() => PrepareGroupForEdit(wtg))' data-toggle="modal" data-target="#GroupModal" value=""><i class="fa fa-pencil-alt"></i></button></div>
                         </div>
                     }
                 </div>
@@ -119,11 +120,11 @@ else
 
         @if (navDisplay == "Work Type")
         {
-            <div class="mb-3">
-                <button data-toggle="modal" data-target="#TypeModal" @onclick='(() => PrepareTypeForInsert())' class="btn btn-main btn-shadow"><i class="fa fa-plus"></i> Add New Work Type</button>
-            </div>
-            <div class="grid-tran">
+            <div class="tran-block rounded">
                 <div class="container-fluid ">
+                    <div class="mb-3">
+                        <button data-toggle="modal" data-target="#TypeModal" @onclick='(() => PrepareTypeForInsert())' class="btn btn-main btn-shadow"><i class="fa fa-plus"></i> Add New Work Type</button>
+                    </div>
                     <div class="row grid-header ">
                         <div class="col-5 data-item"><div class="data-item-sub">Department</div></div>
                         <div class="col-6 data-item"><div class="data-item-sub">Group</div></div>
@@ -151,7 +152,7 @@ else
                             </div>
 
                             <div class="col-6 data-item"><div class="data-item-sub">@wt.workType.TypeName</div></div>
-                            <div class="col-1 data-item"><div class="data-item-edit"><button class="btn btn-edit" @onclick='(() => PrepareTypeForEdit(wt.workType))' data-toggle="modal" data-target="#TypeModal" value=""><i class="fa fa-pencil-alt"></i></button></div></div>
+                            <div class="col-1 data-item-edit"><button class="btn btn-edit" @onclick='(() => PrepareTypeForEdit(wt.workType))' data-toggle="modal" data-target="#TypeModal" value=""><i class="fa fa-pencil-alt"></i></button></div>
                         </div>
 
                     }
@@ -163,23 +164,31 @@ else
         @if (navDisplay == "Grouping")
         {
 
-            <div class="grid-tran">
+            <div class="tran-block rounded">
                 <div class="container-fluid ">
 
                     @if (showGrouping == "Show")
                     {
-                        <div class="mb-3">
+                        <div class="mb-4">
                             <button @onclick='(() => ShowNav("Grouping"))' class="btn btn-alt btn-shadow"><i class="fa fa-angle-left"></i> Back to departments</button>
                         </div>
+                    }
+                    else
+                    {
+                        <div><h4>Select Department</h4></div>
                     }
                     @foreach (var d in departments)
                     {
                         @if (showGrouping == "Hide")
                         {
+
+
                             <div class="row grid-row mt-3">
-                                <div class="col-12 col-xl-6 data-item">
+                                <div class="col-12 col-xl-6 data-item-nav">
                                     <a href="javascript:void(0);" @onclick='(() => ShowGroupingDept("Show",d.DepartmentName))'>
-                                        <div class="data-item-main bg-alt">@d.DepartmentName</div>
+                                        <div class="data-item-sub ">
+                                            @d.DepartmentName<span class="nav-link-right fa fa-chevron-circle-right"></span>
+                                        </div>
                                     </a>
                                 </div>
                             </div>
@@ -187,26 +196,31 @@ else
                         @if (showGrouping == "Show")
                         {
 
+
                             foreach (var wtg in workTypeGroups.Where(W => W.department.Id == d.Id))
                             {
                                 @if (groupingDept == d.DepartmentName)
                                 {
-                                    <div class="row grid-row mt-3">
-                                        <div class="col-11 col-xl-6 data-item">
-                                            <div class="data-item-sub ">@wtg.group.GroupName </div>
+                                    <div class="row mt-4 ">
+                                        <div class="col-11 " style="border-bottom: 1pt solid #AAA">
+                                            <div class="row">
+                                                <div class="col-5 ">
+                                                    @wtg.group.GroupName
+                                                </div>
+                                                <div class="col-7  p-1">
+
+                                                    @foreach (var wt in wtg.workTypes)
+                                                    {
+                                                        <span class="badge badge-tran float-left">@wt.workType.TypeName</span>
+                                                    }
+
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="col-1 data-item"><div class="data-item-edit"><button class="btn btn-edit" @onclick='(() => PrepareGroupingForEdit(wtg))' data-toggle="modal" data-target="#GroupingModal" value=""><i class="fa fa-pencil-alt"></i></button></div></div>
+                                        <div class="col-1 data-item-edit grid-row"><button class="btn btn-edit" @onclick='(() => PrepareGroupingForEdit(wtg))' data-toggle="modal" data-target="#GroupingModal" value=""><i class="fa fa-pencil-alt"></i></button></div>
+
                                     </div>
 
-                                    <div class="row">
-
-                                        <div class="col-11 col-xl-6 ">
-                                            @foreach (var wt in wtg.workTypes)
-                                            {
-                                                <span class="badge badge-tran">@wt.workType.TypeName</span>
-                                            }
-                                        </div>
-                                    </div>
                                 }
                             }
                         }

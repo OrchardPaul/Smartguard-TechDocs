@@ -6,7 +6,7 @@
 
 <div class="tran-block rounded ">
     <a class="float-left back-link" href="javascript:void(0);" @onclick="@ToggleDetail">
-        <span class="col-main fa fa-angle-double-left fa-2x"></span>
+        <span class="col-alt fa fa-angle-double-left fa-2x"></span>
     </a>
     <h3>User Details</h3>
 </div>
@@ -151,14 +151,14 @@
             </div>
 
             <div class="detail-group-box ">
-                <button type="submit" class="btn btn-alt">Save Changes</button>
-                <button type="button" class="btn btn-secondary" @onclick="NavigateBack">Cancel</button>
+                <button type="submit" class="float-left btn btn-alt">Save Changes</button>
+                <button type="button" class="float-left ml-2 btn btn-secondary" @onclick="NavigateBack">Cancel</button>
 
                 @if (!(TaskObject.Id is null))
                 {
                     @if (!(TaskObject.Id == sessionState.User.Id))
                     {
-                        <button type="button" @onclick="ShowModal" class="btn btn-secondary ml-4">Delete</button>
+                        <button type="button" @onclick="ShowModal" class="btn btn-secondary float-left ml-4">Delete</button>
                     }
 
                 }

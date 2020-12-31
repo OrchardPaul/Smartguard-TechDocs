@@ -19,6 +19,11 @@
     <Compile Remove="Data\Migrations\20201014130255_addSelectedUriFlagForUsers.Designer.cs" />
     <Compile Remove="Data\Migrations\20201109161110_addCompanyUserRoles.cs" />
     <Compile Remove="Data\Migrations\20201109161110_addCompanyUserRoles.Designer.cs" />
+    <Compile Remove="Pages\Admin\UserManagement\ManageUsersOverview - Copy.razor.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="Pages\Admin\UserManagement\ManageUsersOverview - Copy.razor" />
   </ItemGroup>
 
   <ItemGroup>
@@ -47,7 +52,6 @@
 
   <ItemGroup>
     <Folder Include="Pages\Shared\GridTemplates\" />
-    <Folder Include="wwwroot\css\images\" />
   </ItemGroup>
 
   <ItemGroup>

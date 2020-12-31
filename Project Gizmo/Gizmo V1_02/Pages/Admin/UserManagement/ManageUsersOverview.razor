@@ -5,7 +5,7 @@
 
 <div class="tran-block rounded ">
     <div class="float-left back-link">
-        <NavLink href="admin"><span class="col-main fa fa-angle-double-left fa-2x"></span></NavLink>
+        <NavLink href="admin"><span class="col-alt fa fa-angle-double-left fa-2x"></span></NavLink>
     </div>
     <h3>User Management</h3>
 </div>
@@ -16,30 +16,41 @@
 }
 else
 {
-<div class="mt-5 col-xl-8 col-12">
-    <div class="mb-3">
-        <div class="tran-block rounded ">
-            <h4>Filter by</h4>
-            <h5>Role</h5>
-            <EditForm Model="selectedRole">
-                <InputSelect @bind-Value="selectedRole">
-                    <option value="None"></option>
-                    @foreach (var r in lstRoles)
-                        {
-                        <option value="@r.Id">
-                            @r.Name
-                        </option>}
-                </InputSelect>
-            </EditForm>
-            <h5>Name</h5>
-            <input type="text" value="@filterName" @oninput="changeNameFilter" />
-        </div>
+<div class="mt-5 col-xl-8 col-12 ml-0 pl-0">
 
-    </div>
-    <button data-toggle="modal" data-target="#roleModal" @onclick='(() => PrepareForInsert())' class="btn btn-main btn-shadow"><i class="fa fa-plus"></i> Add New User</button>
+    <div class="mb-3 tran-block rounded ">
 
-    <div class="grid-tran">
-        <div class="container-fluid ">
+        <div class="container-fluid " >
+            
+            <div class="row filter-block" >
+                <div class="col-2">
+                    <h4>Filter:</h4>
+                </div>
+                <div class="col-3 form-group">
+                    <label >Role</label>
+                    <EditForm Model="selectedRole">
+                        <InputSelect class="form-control" @bind-Value="selectedRole">
+                            <option value="None"></option>
+                            @foreach (var r in lstRoles)
+                                {
+                                <option value="@r.Id">
+                                    @r.Name
+                                </option>}
+                        </InputSelect>
+                    </EditForm>
+                </div>
+                <div class="col-4 form-group">
+                    <label >Name</label>
+                    <input type="text" class="form-control" value="@filterName" @oninput="changeNameFilter" />
+                </div>
+            </div>
+
+
+
+
+            <div class="mt-3 mb-2">
+                <button data-toggle="modal" data-target="#roleModal" @onclick='(() => PrepareForInsert())' class="btn btn-main btn-shadow" style="margin-bottom: 12px"><i class="fa fa-plus"></i> Add New User</button>
+            </div>
             <div class="row grid-header hidden-lg-down">
                 <div class="col-xl-4 col-11 data-item"><div class="data-item-sub">Email</div></div>
                 <div class="col-7 hidden-lg-down data-item"><div class="data-item-sub">Name</div></div>
@@ -47,24 +58,29 @@ else
             </div>
 
             @foreach (var userDataItem in lstUserDataItems
-                                                .Where(U => selectedRole == "None" ? true : U.UserRoles
-                                                                                                .Select(R => R.RoleId)
-                                                                                                .ToList()
-                                                                                                .Contains(selectedRole))
-                                                .Where(U => filterName == "" ? true : U.User
-                                                                                        .FullName
-                                                                                        .ToUpper()
-                                                                                        .StartsWith(filterName.ToUpper()))
-                                                .ToList())
+                                             .Where(U => selectedRole == "None" ? true : U.UserRoles
+                                                                                             .Select(R => R.RoleId)
+                                                                                             .ToList()
+                                                                                             .Contains(selectedRole))
+                                             .Where(U => filterName == "" ? true : U.User
+                                                                                     .FullName
+                                                                                     .ToUpper()
+                                                                                     .StartsWith(filterName.ToUpper()))
+                                             .ToList())
             {
                 <div class="row grid-row">
-                    <div class="col-xl-4 col-11 data-item"><div class="data-item-sub"><span class="fa fa-user-alt "></span> @userDataItem.User.UserName</div></div>
+                    <div class="col-xl-4 col-11 data-item"><div class="data-item-sub"><span class="fa fa-user-alt mr-1"></span> @userDataItem.User.UserName</div></div>
                     <div class="col-7 hidden-lg-down data-item"><div class="data-item-sub">@userDataItem.User.FullName</div></div>
-                    <div class="col-1 data-item"><div class="data-item-edit"><button class="btn btn-edit" @onclick='(() => PrepareForEdit(userDataItem.User))' data-toggle="modal" data-target="#roleModal" value=""><i class="fa fa-pencil-alt"></i></button></div></div>
+                    <div class="col-1 data-item-edit"><button class="btn btn-edit" @onclick='(() => PrepareForEdit(userDataItem.User))' data-toggle="modal" data-target="#roleModal" value=""><i class="fa fa-pencil-alt"></i></button></div>
                 </div>
             }
 
         </div>
+    </div>
+    
+
+    <div class="grid-tran">
+        
     </div>
 </div>
 }

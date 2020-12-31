@@ -147,10 +147,6 @@
 .btn {
     border: 2pt solid !important;
     border-radius: 10px !important;
-    min-height: 40px;
-    min-width: 35px;
-    display: flex;
-    align-items: center;
 }
 
 .btn:hover {
@@ -163,19 +159,15 @@
 .btn-edit {
     display: block;
     height: 100%;
-    width: 35px;
-    margin: 0 0 0 5px;
+    width: 40px;
+    margin: 0;
     border: none !important;
+    background-color: #DDD;
     border-radius: 5px !important;
-    background-color: rgba(245, 245, 245, 0.5) !important;
-}
-
-.tran-block .btn-edit {
-    background-color: rgba(245, 245, 245, 0) !important;
 }
 
 .btn-shadow {
-    box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.7);
+    box-shadow: 0 8px 12px 0 rgba(0, 0, 0, 0.7);
 }
 
 .back-link {
@@ -185,7 +177,6 @@
 .data-item-edit {
     padding: 0 !important;
     background-color: rgba(245, 245, 245, 0) !important;
-
 }
 
 .text-block {
@@ -195,25 +186,16 @@
 }
 
 .tran-block {
-    background-color: rgba(255, 255, 255, 0.8);
-    padding: 10px 10px 20px 10px;
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 10px;
     margin-bottom: 20px;
 }
-
-
 
 .detail-block{
     width: 100%;
     margin: 20px 10px 20px 0px;
     border-radius: 3px;
     padding: 20px;
-}
-
-@media (max-width: 767.98px) {
-    .detail-block {
-        margin-bottom: 20px;
-        padding: 0;
-    }
 }
 
 .detail-box{
@@ -241,72 +223,45 @@
 /*-----------------------------*/
 /*  DATA GRIDS                 */
 /*-----------------------------*/
-.row{ 
-    margin-left: 0; 
-    margin-right: 0;
-}
-
 .grid-header {
-    height: 45px;
+    height: 35px;
 }
 
 .grid-row {
     height: 45px;
 }
 
-.grid-row-lg {
-    height: 65px;
+.grid-row-sub {
+    height: 35px;
 }
 
-.grid-row-md {
-    height: 38px;
+.grid-row-sub-sub {
+    height: 27px;
 }
-
-.grid-row-sm {
-    height: 33px;
-}
-
-.grid-row-auto {
-    min-height: 45px;
-    height: auto;
-
-}
-
 
 .data-item {
-    padding: 0;
-    height: 100%;
-    
-    border: 1pt solid;
-    background-color: rgba(255, 255, 255, 0.5);
-    border-color: #FFF #DDD #DDD #FFF;
-    font-size: 0.85rem !important;
+    line-height: 45px;
 }
 
-@media (max-width: 767.98px) {
-    .data-item {
-        border-color: #FAFAFA #CCC #CCC #FAFAFA;
-    }
+.grid-row-sub .data-item {
+    line-height: 35px;
 }
 
-.grid-header .data-item {
-    border: none;
-    font-weight: bold;
+.grid-row-sub-sub .data-item {
+    line-height: 27px;
 }
 
 .data-item-sub {
-    padding-left: 20px !important;
-    text-overflow: ellipsis;
-}
-
-.grid-header .data-item-sub {
-    background-color: rgba(255, 255, 255, 0);
+    background-color: rgba(255, 255, 255, 0.8)
 }
 
 .detail-list-box .data-item-sub {
     background-color: rgba(255, 255, 255, 0)
 }
 
+.grid-header .data-item{
+    line-height: 35px;
+}
 
 .data-item a:hover{
     text-decoration: none;
@@ -328,48 +283,12 @@
 
 
 .data-item-main, .data-item-alt {
-    height: 100%;
-    display: flex;
-    align-items: center;
     padding-left: 20px !important;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    font-size: 0.95rem !important;
-    background-color: rgba(255, 255, 255, 0);
-    box-shadow: 0 8px 12px 0 rgba(0, 0, 0, 0.5);
-}
-
-.data-item-nav {
-    height: 100%;
-    display: flex;
-    align-items: center;
-    padding: 0;
-    font-size: 0.95rem !important;
-    background-color: rgba(255, 255, 255, 0.8);
-    box-shadow: 0 8px 12px 0 rgba(0, 0, 0, 0.5);
     border-radius: 5px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-}
-
-.data-item-nav a{
-    display: block;
-    height: 100%;
-    width: 100%;
-    text-decoration: none !important;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-
-.data-item-nav:hover, .data-item-nav a:hover {
-    background-color: #000;
-    color: #FFF;
-    transition-duration: 1s;
-    transition-property: background-color, color;
+    font-size: 0.95rem !important;
 }
 
 .data-item a:hover .data-item-main, .data-item a:hover .data-item-alt {
@@ -378,99 +297,38 @@
     transition-duration: 1s;
     transition-property: background-color, color;
 }
-
+ 
 .data-item-sub {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    position: relative;
+    padding-left: 20px !important;
+    border-radius: 5px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    font-size: 0.85rem !important;
 }
 
-.data-item-detail {
-    height: 20px !important;
-    margin: 0;
-    padding: 0;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.data-item-detail-sm {
-    font-size: 0.8em;
-    height: 17px !important;
-    margin: 0;
-    padding: 0;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.data-item-detail label {
-    display: inline-block;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    margin: 0 5px 0 0;
-}
-
-.data-item-detail span, .data-item-detail-sm span {
-    display: inline-block;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    margin: 0;
-    color: #555;
-}
-
-
-
-.edit-link-right, .nav-link-right, .data-item-nav .data-item-sub .nav-link-right {
-    display: block;
-    width: 20px;
-    margin-left: auto;
-    margin-right: 15px;
-    height: 1.4em;
-    float: right;
-}
-
-.data-item-right {
-    display: block;
-    margin-left: auto;
-    margin-right: 5px;
-    float: right;
-}
-
-.data-item-wrap {
-    display: flex;
-    flex-wrap: wrap;
+.data-item-edit {
+    border-radius: 5px;
 }
 
 .data-item em {
     font-size: 1em;
 }
 
-
-
 /*  DETAIL LIST     */
 
 .detail-list-box .grid-row {
-    height: 30px;
+    height: 25px;
 }
 
 .detail-list-box .data-item-sub {
-    height: 100%;
-    display: flex;
-    align-items: center;
+    line-height: 25px;
 }
 
 /*   GRID TRAN    */
 .grid-tran {
     margin-bottom: 10px;
-    margin-left: 0px;
+    margin-left: 10px;
 }
 
 @media (max-width: 767.98px) {
@@ -479,9 +337,7 @@
     }
 }
 
-.grid-tran .btn {
-    box-shadow: 0 8px 12px 0 rgba(0, 0, 0, 0.5);
-}
+
 
 .grid-tran .btn:hover {
     box-shadow: none;
@@ -513,17 +369,11 @@
     width: calc(100% - 7px);
 }
 
-.grid-tran .data-item-alt {
-    border: 1pt solid;
-    border-radius: 5px;
-}
-
 .grid-tran .data-item-sub {
     height: 100%;
     width: 100%;
     padding: 0 5px 0 5px;
     margin: 0px;
-
 }
 
 
@@ -536,10 +386,18 @@
 
 
 
-/*  FILTER BLOCK   */
-.filter-block {
-    border-bottom: 1pt solid #AAA;
+
+@media (max-width: 767.98px) {
+    .grid-tran .grid-Header .data-item-sub {
+        background-color: none;
+    }
+
+    .grid-tran .grid-row .data-item-sub {
+        background-color: #DFDFDF;
+    }
 }
+
+
 
 .spinner {
     border: 16px solid silver;
@@ -706,30 +564,19 @@
 
 /******************/
 /*   TESTING ONLY */
-#agendaWrapper, #statusWrapper {
-    margin-left: 0px;
-    margin-right: 0px;
-    padding-left: 0px;
-    padding-right: 0px;
-}
-
-#agendaWrapper, #statusWrapper, #docsWrapper, #feesWrapper {
-    margin-bottom: 10px;
-}
-
-#agendaWrapper .detail-list-box {
+#agendaWrapper {
     height: 70px;
 }
 
-#statusWrapper .detail-list-box {
+#statusWrapper {
     height: 100px;
 }
 
-#docsWrapper .detail-list-box {
+#docWrapper {
     height: 220px;
 }
 
-#feesWrapper .detail-list-box {
+#feesWrapper {
     height: 205px;
 }
 

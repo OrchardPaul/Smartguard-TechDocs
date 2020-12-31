@@ -34,24 +34,36 @@ ul.ul-simple {
 
 .badge {
     padding: 7px 15px 7px 15px;
-    font-size: 0.9rem;
     border-radius: 12px;
-}
-
-.badge-tran {
-    background-color: #222;
-    color: #FFF;
+    background-color: rgba(0, 0, 0, 0) !important;
+    border: 1pt solid #888;
+    color: #555;
     font-weight: normal;
-    border: 1pt solid;
-    border-color: #555;
     margin: 1px;
     font-size: 0.85rem;
 }
 
+.badge-tran {
+    background-color: rgba(0, 0, 0, 0.4) !important;
+    color: #FFF;
+    font-weight: normal;
+    margin: 1px;
+    font-size: 0.85rem;
+}
+
+.badge-sm {
+    font-weight: normal;
+    margin: 1px;
+    font-size: 0.70rem;
+    padding: 4px 7px 4px 7px;
+}
+
+.square {
+    border-radius: 0px !important;
+}
+
 @media (max-width: 767.98px) {
     .badge-tran {
-        background-color: #FFF;
-        color: #666;
         border: 1pt solid #999;
         font-weight: normal;
     }
