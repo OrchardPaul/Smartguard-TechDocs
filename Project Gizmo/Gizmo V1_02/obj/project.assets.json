@@ -3258,7 +3258,7 @@
           "lib/netstandard1.3/System.Xml.XmlSerializer.dll": {}
         }
       },
-      "Gizmo.Context/1.0.0": {
+      "GadjIT.Context/1.0.0": {
         "type": "project",
         "framework": ".NETStandard,Version=v2.0",
         "dependencies": {
@@ -3266,10 +3266,10 @@
           "Microsoft.EntityFrameworkCore.SqlServer": "3.1.8"
         },
         "compile": {
-          "bin/placeholder/Gizmo.Context.dll": {}
+          "bin/placeholder/GadjIT.Context.dll": {}
         },
         "runtime": {
-          "bin/placeholder/Gizmo.Context.dll": {}
+          "bin/placeholder/GadjIT.Context.dll": {}
         }
       }
     }
@@ -10156,17 +10156,17 @@
         "system.xml.xmlserializer.nuspec"
       ]
     },
-    "Gizmo.Context/1.0.0": {
+    "GadjIT.Context/1.0.0": {
       "type": "project",
-      "path": "../Gizmo.Context/Gizmo.Context.csproj",
-      "msbuildProject": "../Gizmo.Context/Gizmo.Context.csproj"
+      "path": "../Gizmo.Context/GadjIT.Context.csproj",
+      "msbuildProject": "../Gizmo.Context/GadjIT.Context.csproj"
     }
   },
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v3.1": [
       "AutoMapper >= 10.0.0",
       "AutoMapper.Extensions.Microsoft.DependencyInjection >= 8.0.1",
-      "Gizmo.Context >= 1.0.0",
+      "GadjIT.Context >= 1.0.0",
       "Microsoft.AspNetCore.Blazor.HttpClient >= 3.2.0-preview3.20168.3",
       "Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore >= 3.1.8",
       "Microsoft.AspNetCore.Identity >= 2.2.0",
@@ -10182,23 +10182,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\p_taylor\\.nuget\\packages\\": {},
+    "C:\\Users\\m_szijjarto\\.nuget\\packages\\": {},
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "F:\\WorkSpaces\\PT\\Gizmo\\Project Gizmo\\Gizmo V1_02\\Gizmo V1_02.csproj",
-      "projectName": "Gizmo V1_02",
-      "projectPath": "F:\\WorkSpaces\\PT\\Gizmo\\Project Gizmo\\Gizmo V1_02\\Gizmo V1_02.csproj",
-      "packagesPath": "C:\\Users\\p_taylor\\.nuget\\packages\\",
-      "outputPath": "F:\\WorkSpaces\\PT\\Gizmo\\Project Gizmo\\Gizmo V1_02\\obj\\",
+      "projectUniqueName": "F:\\WorkSpaces\\MS\\GadjIT\\Project Gizmo\\Gizmo V1_02\\GadjIT V1_02.csproj",
+      "projectName": "GadjIT V1_02",
+      "projectPath": "F:\\WorkSpaces\\MS\\GadjIT\\Project Gizmo\\Gizmo V1_02\\GadjIT V1_02.csproj",
+      "packagesPath": "C:\\Users\\m_szijjarto\\.nuget\\packages\\",
+      "outputPath": "F:\\WorkSpaces\\MS\\GadjIT\\Project Gizmo\\Gizmo V1_02\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\p_taylor\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\m_szijjarto\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -10211,8 +10211,8 @@
       "frameworks": {
         "netcoreapp3.1": {
           "projectReferences": {
-            "F:\\WorkSpaces\\PT\\Gizmo\\Project Gizmo\\Gizmo.Context\\Gizmo.Context.csproj": {
-              "projectPath": "F:\\WorkSpaces\\PT\\Gizmo\\Project Gizmo\\Gizmo.Context\\Gizmo.Context.csproj"
+            "F:\\WorkSpaces\\MS\\GadjIT\\Project Gizmo\\Gizmo.Context\\GadjIT.Context.csproj": {
+              "projectPath": "F:\\WorkSpaces\\MS\\GadjIT\\Project Gizmo\\Gizmo.Context\\GadjIT.Context.csproj"
             }
           }
         }
