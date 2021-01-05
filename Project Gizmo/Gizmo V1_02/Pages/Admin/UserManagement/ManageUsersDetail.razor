@@ -4,12 +4,14 @@
 @using Gizmo_V1_02.Pages.Shared.Modals
 
 
-<div class="tran-block rounded ">
+<div class="tran-block page-header-block ">
     <a class="float-left back-link" href="javascript:void(0);" @onclick="@ToggleDetail">
-        <span class="col-alt fa fa-angle-double-left fa-2x"></span>
-    </a>
+        <NavLink href="system"><span class="col-alt fa fa-angle-double-left"></span></NavLink>
+</a>
     <h3>User Details</h3>
 </div>
+
+
 
 <EditForm Model="@TaskObject" OnValidSubmit="@HandleValidSubmit">
     <DataAnnotationsValidator />

@@ -1,8 +1,8 @@
 ﻿@page "/system/manageworktypes"
 
-<div class="tran-block rounded ">
+<div class="tran-block page-header-block ">
     <div class="float-left back-link">
-        <NavLink href="system"><span class="col-alt fa fa-angle-double-left fa-2x"></span></NavLink>
+        <NavLink href="system"><span class="col-alt fa fa-angle-double-left"></span></NavLink>
     </div>
     <h3>Manage Work Types</h3>
 </div>
@@ -15,55 +15,56 @@
 }
 else
 {
-    <div class="mt-5 mb-4 col-xl-6 col-lg-12 col-md-12 col-sm-12 ml-0 pl-0">
+    <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 ml-0 pl-0">
+        <div class="tran-block rounded">
 
-        <div class="page-navbar hidden-md-down" style="max-width: 800px">
-            <nav class="navbar navbar-expand-lg navbar-dark bg-dark ">
+            <div class="page-navbar hidden-md-down" style="max-width: 800px">
+                <nav class="navbar navbar-expand-lg navbar-dark bg-dark ">
 
-                <ul class="navbar-nav">
-                    <li class="@(navDisplay == "Department" ? "active" : "")">
-                        <a href="javascript:void(0);" @onclick='(() => ShowNav("Department"))'><span>Departments</span></a>
+                    <ul class="navbar-nav">
+                        <li class="@(navDisplay == "Department" ? "active" : "")">
+                            <a href="javascript:void(0);" @onclick='(() => ShowNav("Department"))'><span>Departments</span></a>
+                        </li>
+                        <li class="@(navDisplay == "Group" ? "active" : "")">
+                            <a href="javascript:void(0);" @onclick='(() => ShowNav("Group"))'><span>Groups</span></a>
+                        </li>
+                        <li class="@(navDisplay == "Work Type" ? "active" : "")">
+                            <a href="javascript:void(0);" @onclick='(() => ShowNav("Work Type"))'><span>Work Types</span></a>
+                        </li>
+                        <li class="last @(navDisplay == "Grouping" ? "active" : "")">
+                            <a href="javascript:void(0);" @onclick='(() => ShowNav("Grouping"))'><span>Grouping</span></a>
+                        </li>
+
+                    </ul>
+
+                </nav>
+            </div>
+            <div class="page-navbar hidden-lg-up">
+                <ul class="nav nav-pills tran-tabs">
+                    <li class="nav-item @(navDisplay == "Department" ? "active" : "")">
+                        <a class="nav-link" href="javascript:void(0);" @onclick='(() => ShowNav("Department"))'>Departments</a>
                     </li>
-                    <li class="@(navDisplay == "Group" ? "active" : "")">
-                        <a href="javascript:void(0);" @onclick='(() => ShowNav("Group"))'><span>Groups</span></a>
+                    <li class="nav-item @(navDisplay == "Group" ? "active" : "")">
+                        <a class="nav-link" href="javascript:void(0);" @onclick='(() => ShowNav("Group"))'>Groups</a>
                     </li>
-                    <li class="@(navDisplay == "Work Type" ? "active" : "")">
-                        <a href="javascript:void(0);" @onclick='(() => ShowNav("Work Type"))'><span>Work Types</span></a>
+                    <li class="nav-item @(navDisplay == "Work Type" ? "active" : "")">
+                        <a class="nav-link" href="javascript:void(0);" @onclick='(() => ShowNav("Work Type"))'>Work Types</a>
                     </li>
-                    <li class="last @(navDisplay == "Grouping" ? "active" : "")">
-                        <a href="javascript:void(0);" @onclick='(() => ShowNav("Grouping"))'><span>Grouping</span></a>
+                    <li class="nav-item @(navDisplay == "Grouping" ? "active" : "")">
+                        <a class="nav-link " href="javascript:void(0);" @onclick='(() => ShowNav("Grouping"))'>Grouping</a>
                     </li>
 
                 </ul>
-
-            </nav>
-        </div>
-        <div class="page-navbar hidden-lg-up">
-            <ul class="nav nav-pills tran-tabs">
-                <li class="nav-item @(navDisplay == "Department" ? "active" : "")">
-                    <a class="nav-link" href="javascript:void(0);" @onclick='(() => ShowNav("Department"))'>Departments</a>
-                </li>
-                <li class="nav-item @(navDisplay == "Group" ? "active" : "")">
-                    <a class="nav-link" href="javascript:void(0);" @onclick='(() => ShowNav("Group"))'>Groups</a>
-                </li>
-                <li class="nav-item @(navDisplay == "Work Type" ? "active" : "")">
-                    <a class="nav-link" href="javascript:void(0);" @onclick='(() => ShowNav("Work Type"))'>Work Types</a>
-                </li>
-                <li class="nav-item @(navDisplay == "Grouping" ? "active" : "")">
-                    <a class="nav-link " href="javascript:void(0);" @onclick='(() => ShowNav("Grouping"))'>Grouping</a>
-                </li>
-
-            </ul>
-        </div>
+            </div>
 
 
-        @if (navDisplay == "Department")
-        {
+            @if (navDisplay == "Department")
+            {
 
-            <div class="tran-block rounded">
+
                 <div class="container-fluid ">
                     <div class="mb-3 mt-2">
-                        <button data-toggle="modal" data-target="#DepartmentModal" @onclick='(() => PrepareDepartmentForInsert())' class="btn btn-main btn-shadow"><i class="fa fa-plus"></i> Add New Department</button>
+                        <button data-toggle="modal" data-target="#DepartmentModal" @onclick='(() => PrepareDepartmentForInsert())' class="btn btn-main btn-shadow"><i class="fa fa-plus pr-1"></i> Add New Department</button>
                     </div>
                     @foreach (var d in departments)
                     {
@@ -73,17 +74,17 @@ else
                         </div>
                     }
                 </div>
-            </div>
-        }
+
+            }
 
 
-        @if (navDisplay == "Group")
-        {
+            @if (navDisplay == "Group")
+            {
 
-            <div class="tran-block rounded ">
+
                 <div class="container-fluid ">
                     <div class="mb-3 mt-2">
-                        <button data-toggle="modal" data-target="#GroupModal" @onclick='(() => PrepareGroupForInsert())' class="btn btn-main btn-shadow"><i class="fa fa-plus"></i> Add New Group</button>
+                        <button data-toggle="modal" data-target="#GroupModal" @onclick='(() => PrepareGroupForInsert())' class="btn btn-main btn-shadow"><i class="fa fa-plus pr-1"></i> Add New Group</button>
                     </div>
                     <div class="row grid-header ">
                         <div class="col-5 data-item"><div class="data-item-sub">Department</div></div>
@@ -115,15 +116,15 @@ else
                         </div>
                     }
                 </div>
-            </div>
-        }
 
-        @if (navDisplay == "Work Type")
-        {
-            <div class="tran-block rounded">
+            }
+
+            @if (navDisplay == "Work Type")
+            {
+
                 <div class="container-fluid ">
                     <div class="mb-3">
-                        <button data-toggle="modal" data-target="#TypeModal" @onclick='(() => PrepareTypeForInsert())' class="btn btn-main btn-shadow"><i class="fa fa-plus"></i> Add New Work Type</button>
+                        <button data-toggle="modal" data-target="#TypeModal" @onclick='(() => PrepareTypeForInsert())' class="btn btn-main btn-shadow"><i class="fa fa-plus pr-1"></i> Add New Work Type</button>
                     </div>
                     <div class="row grid-header ">
                         <div class="col-5 data-item"><div class="data-item-sub">Department</div></div>
@@ -158,19 +159,18 @@ else
                     }
 
                 </div>
-            </div>
-        }
 
-        @if (navDisplay == "Grouping")
-        {
+            }
 
-            <div class="tran-block rounded">
+            @if (navDisplay == "Grouping")
+            {
+
                 <div class="container-fluid ">
 
                     @if (showGrouping == "Show")
                     {
                         <div class="mb-4">
-                            <button @onclick='(() => ShowNav("Grouping"))' class="btn btn-alt btn-shadow"><i class="fa fa-angle-left"></i> Back to departments</button>
+                            <button @onclick='(() => ShowNav("Grouping"))' class="btn btn-alt btn-shadow"><i class="fa fa-angle-left pr-1 fa-2x"></i> Back to departments</button>
                         </div>
                     }
                     else
@@ -230,10 +230,9 @@ else
 
 
                 </div>
-            </div>
-        }
+            }
 
-
+        </div>
     </div>
 }
 
