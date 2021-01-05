@@ -179,7 +179,11 @@
 }
 
 .back-link {
-    margin: 10px 10px 0 0;
+    margin: 12px 10px 0 0;
+}
+
+.back-link a {
+    font-size: 25px;
 }
 
 .data-item-edit {
@@ -198,20 +202,23 @@
     background-color: rgba(255, 255, 255, 0.8);
     padding: 10px 10px 20px 10px;
     margin-bottom: 20px;
+    border-radius: 5px;
+    width: auto;
 }
 
 .page-header-block {
-    padding: 0 0 0 10px;
-    margin-bottom: 5px;
+    padding: 5px 0 5px 10px;
+    margin-bottom: 10px !important;
     width: auto;
     font-size: 0.8rem;
 }
 
-.page-header-block {
-    padding: 0 0 0 10px;
-    margin-bottom: 5px;
-    width: auto;
-    font-size: 0.8rem;
+.page-header-block h3 {
+        
+}
+
+.page-header-block p{
+        color: #555;
 }
 
 .detail-block {
