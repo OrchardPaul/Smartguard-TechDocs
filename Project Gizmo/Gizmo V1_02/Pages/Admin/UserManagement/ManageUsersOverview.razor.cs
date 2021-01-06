@@ -115,5 +115,10 @@ namespace Gizmo_V1_02.Pages.Admin.UserManagement
             hoveredItem.OnHover = !hoveredItem.OnHover;
         }
 
+        private void ToggleMoreShow(UserDataCollectionItem hoveredItem)
+        {
+            hoveredItem.MoreOptionShow = !hoveredItem.MoreOptionShow;
+        }
+
     }
 }

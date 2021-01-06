@@ -336,7 +336,7 @@
     margin: 0;
     float: right;
     height: 100%;
-    visibility: hidden;
+    visibility: visible;
 }
 
 .data-item-ellipses .btn, .data-item-ellipses .btn-edit{
@@ -578,12 +578,13 @@
     box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.5);
 }
 
-
-
-.grid-can-edit .grid-row-hover .data-item {
+.grid-can-edit .grid-row:hover .data-item {
     background-color: rgba(200, 200, 200, 0.5);
 }
 
+.grid-can-edit .grid-row:hover .data-item-ellipses {
+    visibility: visible;
+}
 /*  FILTER BLOCK   */
 .filter-block {
     border-bottom: 1pt solid #AAA;

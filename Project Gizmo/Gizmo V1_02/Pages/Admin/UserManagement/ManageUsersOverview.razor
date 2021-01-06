@@ -59,24 +59,44 @@ else
                     </div>
 
                     @foreach (var userDataItem in lstUserDataItems
-                                                  .Where(U => selectedRole == "None" ? true : U.UserRoles
-                                                                                                  .Select(R => R.RoleId)
-                                                                                                  .ToList()
-                                                                                                  .Contains(selectedRole))
-                                                  .Where(U => filterName == "" ? true : U.User
-                                                                                          .FullName
-                                                                                          .ToUpper()
-                                                                                          .StartsWith(filterName.ToUpper()))
-                                                  .ToList())
+                                                 .Where(U => selectedRole == "None" ? true : U.UserRoles
+                                                                                                 .Select(R => R.RoleId)
+                                                                                                 .ToList()
+                                                                                                 .Contains(selectedRole))
+                                                 .Where(U => filterName == "" ? true : U.User
+                                                                                         .FullName
+                                                                                         .ToUpper()
+                                                                                         .StartsWith(filterName.ToUpper()))
+                                                 .ToList())
                     {
-                        <div class="row grid-row @(userDataItem.OnHover ? "grid-row-hover" : "")" @onmouseover="() => ToggleMoreOption(userDataItem)" @onmouseout="() => ToggleMoreOption(userDataItem)">
+                        <div class="row grid-row " >
                             <div class="col-xl-5 col-12 data-item">
                                 <div class="data-item-sub"><span class="fa fa-user-alt mr-1"></span> @userDataItem.User.UserName</div>
                                 <div class="hidden-xl-up data-item-ellipses visible"><button class="btn-edit" @onclick='(() => PrepareForEdit(userDataItem.User))' data-toggle="modal" data-target="#chapterCaseTypeEdit" value=""><span class="fa fa-ellipsis-v"></span></button></div>
                             </div>
                             <div class="col-7 hidden-lg-down data-item">
                                 <div class="data-item-sub">@userDataItem.User.FullName</div>
-                                <div class="data-item-ellipses @(userDataItem.OnHover ? "visible" : "")"><button class="btn-edit" @onclick='(() => PrepareForEdit(userDataItem.User))' data-toggle="modal" data-target="#chapterCaseTypeEdit" value=""><span class="fa fa-ellipsis-v"></span></button></div>
+
+                                
+                                <div class="data-item-ellipses">
+                                    <div class="dropdon">
+                                        <button class="btn-edit" value="" @onclick="() => ToggleMoreShow(userDataItem)">
+                                            <span class="fa fa-ellipsis-v"></span>
+                                        </button>
+
+                                        @if (userDataItem.MoreOptionShow)
+                                        {
+                                            <div class="dropdon-content">
+                                                <a @onclick='(() => PrepareForEdit(userDataItem.User))'>Edit</a>
+                                            </div>
+                                        }
+
+
+
+                                    </div>
+                                </div>
+
+
                             </div>
 
                             @*
