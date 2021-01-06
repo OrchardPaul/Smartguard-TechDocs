@@ -79,7 +79,7 @@ else
 
                                 
                                 <div class="data-item-ellipses">
-                                    <div class="dropdon">
+                                    @*<div class="dropdon">
                                         <button class="btn-edit" value="" @onclick="() => ToggleMoreShow(userDataItem)">
                                             <span class="fa fa-ellipsis-v"></span>
                                         </button>
@@ -93,6 +93,15 @@ else
 
 
 
+                                    </div>*@
+
+                                    <div class="btn-group">
+                                        <button type="button" class="btn-edit" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <span class="fa fa-ellipsis-v"></span>
+                                        </button>
+                                        <div class="dropdown-menu">
+                                            <a class="dropdown-item"  @onclick='(() => PrepareForEdit(userDataItem.User))'>Edit</a>
+                                        </div>
                                     </div>
                                 </div>
 
