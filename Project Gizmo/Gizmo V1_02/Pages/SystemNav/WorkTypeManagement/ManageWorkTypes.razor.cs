@@ -18,7 +18,7 @@ namespace Gizmo_V1_02.Pages.SystemNav.WorkTypeManagement
         [Inject]
         NavigationManager NavigationManager { get; set; }
 
-        private List<AppDepartments> departments { get; set; }
+        private List<VmDepartments> departments { get; set; }
         private List<WorkTypeGroupItem> workTypeGroups { get; set; }
         public List<AppWorkTypes> workTypeItems { get; set; }
         public List<WorkTypeWithDepartment> workTypeWithDepartmentItems { get; set; }
@@ -45,8 +45,10 @@ namespace Gizmo_V1_02.Pages.SystemNav.WorkTypeManagement
 
                 if (refreshedWorkTypeGroups.Count > 0)
                 {
-                    departments = await companyDbAccess.GetDepartments();
-                    departments = departments.OrderBy(D => D.DepartmentName).ToList();
+                    var lstAppDepartments = await companyDbAccess.GetDepartments();
+                    departments = lstAppDepartments.Select(A => new VmDepartments { department = A }).ToList();
+
+                    departments = departments.OrderBy(D => D.department.DepartmentName).ToList();
 
                     workTypeGroups = refreshedWorkTypeGroups
                                         .Select(G => new WorkTypeGroupItem
@@ -54,13 +56,14 @@ namespace Gizmo_V1_02.Pages.SystemNav.WorkTypeManagement
                                             group = G.group,
                                             department =
                                                         (departments
-                                                                .Where(D => D.Id == G.group.parentId)
+                                                                .Where(D => D.department.Id == G.group.parentId)
                                                                 .SingleOrDefault() is null)
                                                                 ?
                                                                 new AppDepartments { DepartmentName = "" }
                                                                 :
                                                                 departments
-                                                                .Where(D => D.Id == G.group.parentId)
+                                                                .Where(D => D.department.Id == G.group.parentId)
+                                                                .Select(D => D.department)
                                                                 .SingleOrDefault(),
                                             workTypes = G.workTypes,
                                             showWorkType = false
@@ -84,14 +87,15 @@ namespace Gizmo_V1_02.Pages.SystemNav.WorkTypeManagement
                                                         {
                                                             workType = W,
                                                             department = (departments
-                                                                                                .Where(D => D.Id == W.DepartmentId)
+                                                                                                .Where(D => D.department.Id == W.DepartmentId)
                                                                                                 .SingleOrDefault()
                                                                                                 is null)
 
                                                                             ? new AppDepartments { DepartmentName = "" }
 
                                                                             : departments
-                                                                                    .Where(D => D.Id == W.DepartmentId)
+                                                                                    .Where(D => D.department.Id == W.DepartmentId)
+                                                                                    .Select(D => D.department)
                                                                                     .SingleOrDefault()
                                                         })
                                                         .OrderBy(C => C.workType.TypeName)
@@ -121,8 +125,10 @@ namespace Gizmo_V1_02.Pages.SystemNav.WorkTypeManagement
 
             if (refreshedWorkTypeGroups.Count > 0)
             {
-                departments = await companyDbAccess.GetDepartments();
-                departments = departments.OrderBy(D => D.DepartmentName).ToList();
+                var lstAppDepartments = await companyDbAccess.GetDepartments();
+                departments = lstAppDepartments.Select(A => new VmDepartments { department = A }).ToList();
+
+                departments = departments.OrderBy(D => D.department.DepartmentName).ToList();
 
                 workTypeGroups = refreshedWorkTypeGroups
                             .Select(RWT => new WorkTypeGroupItem
@@ -130,13 +136,14 @@ namespace Gizmo_V1_02.Pages.SystemNav.WorkTypeManagement
                                 group = RWT.group,
                                 department =
                                         (departments
-                                                .Where(D => D.Id == RWT.group.parentId)
+                                                .Where(D => D.department.Id == RWT.group.parentId)
                                                 .SingleOrDefault() is null)
                                                 ?
                                                 new AppDepartments { DepartmentName = "" }
                                                 :
                                                 departments
-                                                .Where(D => D.Id == RWT.group.parentId)
+                                                .Where(D => D.department.Id == RWT.group.parentId)
+                                                .Select(D => D.department)
                                                 .SingleOrDefault(),
 
                                 showWorkType = (workTypeGroups
@@ -169,14 +176,15 @@ namespace Gizmo_V1_02.Pages.SystemNav.WorkTypeManagement
                                                     {
                                                         workType = W,
                                                         department = (departments
-                                                                                            .Where(D => D.Id == W.DepartmentId)
+                                                                                            .Where(D => D.department.Id == W.DepartmentId)
                                                                                             .SingleOrDefault()
                                                                                             is null)
 
                                                                         ? new AppDepartments { DepartmentName = "" }
 
                                                                         : departments
-                                                                                .Where(D => D.Id == W.DepartmentId)
+                                                                                .Where(D => D.department.Id == W.DepartmentId)
+                                                                                .Select(D => D.department)
                                                                                 .SingleOrDefault()
                                                     })
                                                     .OrderBy(C => C.workType.TypeName)
@@ -256,6 +264,22 @@ namespace Gizmo_V1_02.Pages.SystemNav.WorkTypeManagement
         {
             showGrouping = displayChange;
             groupingDept = displayDept;
+        }
+
+        private void ToggleMoreOption(VmDepartments hoveredItem)
+        {
+            hoveredItem.OnHover = !hoveredItem.OnHover;
+        }
+
+
+        private void ToggleMoreOption(WorkTypeGroupItem hoveredItem)
+        {
+            hoveredItem.OnHover = !hoveredItem.OnHover;
+        }
+
+        private void ToggleMoreOption(WorkTypeWithDepartment hoveredItem)
+        {
+            hoveredItem.OnHover = !hoveredItem.OnHover;
         }
 
 

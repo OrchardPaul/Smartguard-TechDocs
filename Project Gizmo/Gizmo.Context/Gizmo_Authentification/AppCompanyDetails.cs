@@ -31,5 +31,6 @@ namespace Gizmo.Context.Gizmo_Authentification
 
         [StringLength(50)]
         public string CompCol4 { get; set; }
+
     }
 }

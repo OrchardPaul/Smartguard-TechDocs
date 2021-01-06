@@ -302,7 +302,6 @@
 .data-item {
     padding: 0;
     height: 100%;
-    
     border: 1pt solid;
     background-color: rgba(255, 255, 255, 0.5);
     border-color: #FFF #DDD #DDD #FFF;
@@ -321,8 +320,31 @@
 }
 
 .data-item-sub {
-    padding-left: 20px !important;
-    text-overflow: ellipsis;
+    height: 100%;
+    padding-left: 10px !important;
+    padding-top: 10px !important;
+    width: Calc(100% - 22px) !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis !important;
+    float: left;
+}
+
+.data-item-ellipses{
+    width: 20px;
+    padding: 0;
+    margin: 0;
+    float: right;
+    height: 100%;
+    visibility: hidden;
+}
+
+.data-item-ellipses .btn, .data-item-ellipses .btn-edit{
+    width: 20px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    height: 100%;
+    font-size: 1.1rem;
 }
 
 .grid-header .data-item-sub {
@@ -405,16 +427,6 @@
     transition-property: background-color, color;
 }
 
-.data-item-sub {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    position: relative;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
 
 .data-item-detail {
     height: 20px !important;
@@ -560,7 +572,17 @@
     font-weight: bold;
 }
 
+.grid-can-edit {
+    padding: 0;
+    margin: 0;
+    box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.5);
+}
 
+
+
+.grid-can-edit .grid-row-hover .data-item {
+    background-color: rgba(200, 200, 200, 0.5);
+}
 
 /*  FILTER BLOCK   */
 .filter-block {
@@ -741,6 +763,9 @@
     }
 }
 
+.visible{
+    visibility: visible;
+}
 
 /******************/
 /*   TESTING ONLY */

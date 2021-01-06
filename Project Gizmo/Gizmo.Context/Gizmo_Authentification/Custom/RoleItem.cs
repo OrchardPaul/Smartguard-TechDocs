@@ -11,5 +11,6 @@ namespace Gizmo.Context.Gizmo_Authentification.Custom
         public string RoleName { get; set; }
 
         public bool IsSubscribed { get; set; }
+
     }
 }

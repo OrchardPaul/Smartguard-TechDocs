@@ -61,5 +61,10 @@ namespace Gizmo_V1_02.Pages.SystemNav.RoleManagement
         {
             editRole = new AspNetRoles();
         }
+
+        private void ToggleMoreOption(AspNetRoles hoveredItem)
+        {
+            hoveredItem.OnHover = !hoveredItem.OnHover;
+        }
     }
 }

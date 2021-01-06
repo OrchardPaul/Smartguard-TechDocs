@@ -19,5 +19,7 @@ namespace Gizmo.Context.Gizmo_Authentification.Custom
 
             department = new AppDepartments();
         }
+
+        public bool OnHover { get; set; } = false;
     }
 }

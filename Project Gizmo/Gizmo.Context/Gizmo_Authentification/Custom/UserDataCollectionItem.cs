@@ -11,5 +11,7 @@ namespace Gizmo.Context.Gizmo_Authentification.Custom
         public List<AppCompanyUserRoles> UserRoles { get; set; }
 
         public List<AppCompanyDetails> UserCompanies { get; set; }
+
+        public bool OnHover { get; set; } = false;
     }
 }
