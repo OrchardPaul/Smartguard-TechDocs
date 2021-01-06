@@ -1,0 +1,294 @@
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\appsettings.Development.json
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\appsettings.json
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\Properties\launchSettings.json
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\Properties\serviceDependencies.json
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\Properties\serviceDependencies.local.json
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\libman.json
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\GadjIT V1_02.StaticWebAssets.xml
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\GadjIT V1_02.exe
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\GadjIT V1_02.deps.json
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\GadjIT V1_02.runtimeconfig.json
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\GadjIT V1_02.runtimeconfig.dev.json
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\GadjIT V1_02.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\GadjIT V1_02.pdb
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\GadjIT V1_02.Views.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\GadjIT V1_02.Views.pdb
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\AutoMapper.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\Plk.Blazor.DragDrop.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\EntityFramework.SqlServer.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\EntityFramework.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\Microsoft.AspNetCore.Authorization.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\Microsoft.AspNetCore.Blazor.HttpClient.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\Microsoft.AspNetCore.Components.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\Microsoft.AspNetCore.Components.Forms.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\Microsoft.AspNetCore.Components.Web.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\Microsoft.AspNetCore.Cryptography.Internal.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\Microsoft.AspNetCore.Identity.UI.Views.V3.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\Microsoft.AspNetCore.Identity.UI.Views.V4.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\Microsoft.AspNetCore.Identity.UI.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\Microsoft.AspNetCore.Metadata.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\Microsoft.AspNetCore.Razor.Language.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\Microsoft.Bcl.AsyncInterfaces.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\Microsoft.Bcl.HashCode.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\Microsoft.CodeAnalysis.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\Microsoft.CodeAnalysis.CSharp.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\Microsoft.CodeAnalysis.CSharp.Workspaces.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\Microsoft.CodeAnalysis.Razor.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\Microsoft.CodeAnalysis.Workspaces.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\Microsoft.Data.SqlClient.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\Microsoft.EntityFrameworkCore.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\Microsoft.EntityFrameworkCore.Abstractions.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\Microsoft.EntityFrameworkCore.Design.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\Microsoft.EntityFrameworkCore.Relational.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\Microsoft.EntityFrameworkCore.SqlServer.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\Microsoft.Extensions.Caching.Abstractions.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\Microsoft.Extensions.Caching.Memory.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\Microsoft.Extensions.Configuration.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\Microsoft.Extensions.Configuration.Abstractions.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\Microsoft.Extensions.Configuration.Binder.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\Microsoft.Extensions.DependencyInjection.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\Microsoft.Extensions.FileProviders.Abstractions.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\Microsoft.Extensions.FileProviders.Embedded.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\Microsoft.Extensions.Identity.Core.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\Microsoft.Extensions.Identity.Stores.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\Microsoft.Extensions.Logging.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\Microsoft.Extensions.Logging.Abstractions.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\Microsoft.Extensions.Options.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\Microsoft.Extensions.Primitives.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\Microsoft.Identity.Client.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\Microsoft.IdentityModel.JsonWebTokens.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\Microsoft.IdentityModel.Logging.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\Microsoft.IdentityModel.Protocols.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\Microsoft.IdentityModel.Tokens.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\Microsoft.JSInterop.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\Microsoft.VisualStudio.Web.CodeGeneration.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\Microsoft.VisualStudio.Web.CodeGeneration.Contracts.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\Microsoft.VisualStudio.Web.CodeGeneration.Core.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\dotnet-aspnet-codegenerator-design.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\Microsoft.VisualStudio.Web.CodeGeneration.EntityFrameworkCore.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\Microsoft.VisualStudio.Web.CodeGeneration.Templating.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\Microsoft.VisualStudio.Web.CodeGeneration.Utils.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\Microsoft.VisualStudio.Web.CodeGenerators.Mvc.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\Newtonsoft.Json.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\NuGet.Frameworks.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\SendGrid.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\StarkbankEcdsa.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\System.CodeDom.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\System.Collections.Immutable.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\System.Composition.AttributedModel.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\System.Composition.Convention.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\System.Composition.Hosting.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\System.Composition.Runtime.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\System.Composition.TypedParts.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\System.Configuration.ConfigurationManager.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\System.Data.SqlClient.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\System.Diagnostics.DiagnosticSource.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\System.IdentityModel.Tokens.Jwt.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\System.Runtime.Caching.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\System.Security.Cryptography.ProtectedData.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\System.Text.Json.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\cs\Microsoft.CodeAnalysis.resources.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\de\Microsoft.CodeAnalysis.resources.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\es\Microsoft.CodeAnalysis.resources.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\fr\Microsoft.CodeAnalysis.resources.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\it\Microsoft.CodeAnalysis.resources.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\ja\Microsoft.CodeAnalysis.resources.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\ko\Microsoft.CodeAnalysis.resources.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\pl\Microsoft.CodeAnalysis.resources.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\pt-BR\Microsoft.CodeAnalysis.resources.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\ru\Microsoft.CodeAnalysis.resources.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\tr\Microsoft.CodeAnalysis.resources.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\zh-Hans\Microsoft.CodeAnalysis.resources.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\zh-Hant\Microsoft.CodeAnalysis.resources.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\cs\Microsoft.CodeAnalysis.CSharp.resources.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\de\Microsoft.CodeAnalysis.CSharp.resources.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\es\Microsoft.CodeAnalysis.CSharp.resources.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\fr\Microsoft.CodeAnalysis.CSharp.resources.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\it\Microsoft.CodeAnalysis.CSharp.resources.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\ja\Microsoft.CodeAnalysis.CSharp.resources.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\ko\Microsoft.CodeAnalysis.CSharp.resources.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\pl\Microsoft.CodeAnalysis.CSharp.resources.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\pt-BR\Microsoft.CodeAnalysis.CSharp.resources.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\ru\Microsoft.CodeAnalysis.CSharp.resources.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\tr\Microsoft.CodeAnalysis.CSharp.resources.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\zh-Hans\Microsoft.CodeAnalysis.CSharp.resources.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\zh-Hant\Microsoft.CodeAnalysis.CSharp.resources.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\cs\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\de\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\es\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\fr\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\it\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\ja\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\ko\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\pl\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\pt-BR\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\ru\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\tr\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\zh-Hans\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\zh-Hant\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\cs\Microsoft.CodeAnalysis.Workspaces.resources.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\de\Microsoft.CodeAnalysis.Workspaces.resources.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\es\Microsoft.CodeAnalysis.Workspaces.resources.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\fr\Microsoft.CodeAnalysis.Workspaces.resources.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\it\Microsoft.CodeAnalysis.Workspaces.resources.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\ja\Microsoft.CodeAnalysis.Workspaces.resources.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\ko\Microsoft.CodeAnalysis.Workspaces.resources.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\pl\Microsoft.CodeAnalysis.Workspaces.resources.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\pt-BR\Microsoft.CodeAnalysis.Workspaces.resources.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\ru\Microsoft.CodeAnalysis.Workspaces.resources.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\tr\Microsoft.CodeAnalysis.Workspaces.resources.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\zh-Hans\Microsoft.CodeAnalysis.Workspaces.resources.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\zh-Hant\Microsoft.CodeAnalysis.Workspaces.resources.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\runtimes\unix\lib\netcoreapp2.1\Microsoft.Data.SqlClient.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\runtimes\win\lib\netcoreapp2.1\Microsoft.Data.SqlClient.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\runtimes\win-arm64\native\sni.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\runtimes\win-x64\native\sni.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\runtimes\win-x86\native\sni.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\runtimes\unix\lib\netcoreapp2.1\System.Data.SqlClient.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\runtimes\win\lib\netcoreapp2.1\System.Data.SqlClient.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\runtimes\unix\lib\netcoreapp2.0\System.Runtime.Caching.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\runtimes\win\lib\netcoreapp2.0\System.Runtime.Caching.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\GadjIT.Context.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\GadjIT.Context.pdb
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\GadjIT V1_02.csprojAssemblyReference.cache
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\GadjIT V1_02.AssemblyInfoInputs.cache
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\GadjIT V1_02.AssemblyInfo.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\GadjIT V1_02.csproj.CoreCompileInputs.cache
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\GadjIT V1_02.MvcApplicationPartsAssemblyInfo.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\GadjIT V1_02.MvcApplicationPartsAssemblyInfo.cache
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\GadjIT V1_02.RazorComponent.input.cache
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\RazorDeclaration\App.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\RazorDeclaration\Pages\Admin\AdminNav.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\RazorDeclaration\Pages\Admin\CompanyDetails\CompanyDetails.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\RazorDeclaration\Pages\Admin\CompanyWorkTypeManagement\CompanyWorkTypeManagementDetails.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\RazorDeclaration\Pages\Admin\CompanyWorkTypeManagement\CompanyWorkTypeManagementMapping.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\RazorDeclaration\Pages\Admin\CompanyWorkTypeManagement\CompanyWorkTypeManagementOverview.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\RazorDeclaration\Pages\Admin\UserManagement\ManageUsersDetail.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\RazorDeclaration\Pages\Admin\UserManagement\ManageUsersMainPage.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\RazorDeclaration\Pages\Admin\UserManagement\ManageUsersOverview.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\RazorDeclaration\Pages\ConfirmDialog.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\RazorDeclaration\Pages\Index.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\RazorDeclaration\Pages\OR_RESI_Chapters\ChapterAddOrEdit.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\RazorDeclaration\Pages\OR_RESI_Chapters\ChapterCaseTypeEdit.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\RazorDeclaration\Pages\OR_RESI_Chapters\ChapterDetail.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\RazorDeclaration\Pages\OR_RESI_Chapters\ChapterList.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\RazorDeclaration\Pages\Shared\Modals\ModalDelete.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\RazorDeclaration\Pages\Shared\Modals\ModalInfo.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\RazorDeclaration\Pages\SystemNav\CompanyManagement\CompanyEdit.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\RazorDeclaration\Pages\SystemNav\CompanyManagement\ManageCompanies.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\RazorDeclaration\Pages\SystemNav\RoleManagement\ManageUserRoles.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\RazorDeclaration\Pages\SystemNav\RoleManagement\RoleDetail.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\RazorDeclaration\Pages\SystemNav\SystemNav.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\RazorDeclaration\Pages\SystemNav\WorkTypeManagement\ManageWorkTypes.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\RazorDeclaration\Pages\SystemNav\WorkTypeManagement\WorkTypeDepartmentDetails.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\RazorDeclaration\Pages\SystemNav\WorkTypeManagement\WorkTypeDetails.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\RazorDeclaration\Pages\SystemNav\WorkTypeManagement\WorkTypeGroupDetails.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\RazorDeclaration\Pages\SystemNav\WorkTypeManagement\WorkTypeGroupingDetails.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\RazorDeclaration\Pages\UserProfile\UserProfile.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\RazorDeclaration\Shared\LoginDisplay.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\RazorDeclaration\Shared\MainLayout.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\RazorDeclaration\Shared\NavMenu.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\RazorDeclaration\Shared\SurveyPrompt.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\RazorDeclaration\_Imports.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\RazorDeclaration\GadjIT V1_02.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\GadjIT V1_02.TagHelpers.input.cache
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\GadjIT V1_02.TagHelpers.output.cache
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\GadjIT V1_02.RazorCoreGenerate.cache
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\App.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Pages\Admin\AdminNav.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Pages\Admin\CompanyDetails\CompanyDetails.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Pages\Admin\CompanyWorkTypeManagement\CompanyWorkTypeManagementDetails.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Pages\Admin\CompanyWorkTypeManagement\CompanyWorkTypeManagementMapping.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Pages\Admin\CompanyWorkTypeManagement\CompanyWorkTypeManagementOverview.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Pages\Admin\UserManagement\ManageUsersDetail.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Pages\Admin\UserManagement\ManageUsersMainPage.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Pages\Admin\UserManagement\ManageUsersOverview.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Pages\ConfirmDialog.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Pages\Index.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Pages\OR_RESI_Chapters\ChapterAddOrEdit.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Pages\OR_RESI_Chapters\ChapterCaseTypeEdit.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Pages\OR_RESI_Chapters\ChapterDetail.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Pages\OR_RESI_Chapters\ChapterList.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Pages\Shared\Modals\ModalDelete.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Pages\Shared\Modals\ModalInfo.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Pages\SystemNav\CompanyManagement\CompanyEdit.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Pages\SystemNav\CompanyManagement\ManageCompanies.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Pages\SystemNav\RoleManagement\ManageUserRoles.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Pages\SystemNav\RoleManagement\RoleDetail.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Pages\SystemNav\SystemNav.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Pages\SystemNav\WorkTypeManagement\ManageWorkTypes.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Pages\SystemNav\WorkTypeManagement\WorkTypeDepartmentDetails.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Pages\SystemNav\WorkTypeManagement\WorkTypeDetails.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Pages\SystemNav\WorkTypeManagement\WorkTypeGroupDetails.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Pages\SystemNav\WorkTypeManagement\WorkTypeGroupingDetails.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Pages\UserProfile\UserProfile.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Shared\LoginDisplay.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Shared\MainLayout.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Shared\NavMenu.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Shared\SurveyPrompt.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\_Imports.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Areas\Identity\Pages\Account\AccessDenied.cshtml.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Areas\Identity\Pages\Account\ConfirmEmail.cshtml.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Areas\Identity\Pages\Account\ConfirmEmailChange.cshtml.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Areas\Identity\Pages\Account\ExternalLogin.cshtml.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Areas\Identity\Pages\Account\ForgotPassword.cshtml.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Areas\Identity\Pages\Account\ForgotPasswordConfirmation.cshtml.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Areas\Identity\Pages\Account\Lockout.cshtml.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Areas\Identity\Pages\Account\Login.cshtml.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Areas\Identity\Pages\Account\LoginWith2fa.cshtml.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Areas\Identity\Pages\Account\LoginWithRecoveryCode.cshtml.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Areas\Identity\Pages\Account\LogOut.cshtml.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Areas\Identity\Pages\Account\LogOutOnGet.cshtml.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Areas\Identity\Pages\Account\Manage\ChangePassword.cshtml.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Areas\Identity\Pages\Account\Manage\DeletePersonalData.cshtml.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Areas\Identity\Pages\Account\Manage\Disable2fa.cshtml.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Areas\Identity\Pages\Account\Manage\DownloadPersonalData.cshtml.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Areas\Identity\Pages\Account\Manage\Email.cshtml.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Areas\Identity\Pages\Account\Manage\EnableAuthenticator.cshtml.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Areas\Identity\Pages\Account\Manage\ExternalLogins.cshtml.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Areas\Identity\Pages\Account\Manage\GenerateRecoveryCodes.cshtml.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Areas\Identity\Pages\Account\Manage\Index.cshtml.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Areas\Identity\Pages\Account\Manage\PersonalData.cshtml.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Areas\Identity\Pages\Account\Manage\ResetAuthenticator.cshtml.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Areas\Identity\Pages\Account\Manage\SetPassword.cshtml.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Areas\Identity\Pages\Account\Manage\ShowRecoveryCodes.cshtml.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Areas\Identity\Pages\Account\Manage\TwoFactorAuthentication.cshtml.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Areas\Identity\Pages\Account\Manage\_Layout.cshtml.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Areas\Identity\Pages\Account\Manage\_ManageNav.cshtml.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Areas\Identity\Pages\Account\Manage\_StatusMessage.cshtml.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Areas\Identity\Pages\Account\Manage\_ViewImports.cshtml.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Areas\Identity\Pages\Account\Register.cshtml.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Areas\Identity\Pages\Account\RegisterConfirmation.cshtml.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Areas\Identity\Pages\Account\ResetPassword.cshtml.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Areas\Identity\Pages\Account\ResetPasswordConfirmation.cshtml.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Areas\Identity\Pages\Account\_StatusMessage.cshtml.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Areas\Identity\Pages\Account\_ViewImports.cshtml.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Areas\Identity\Pages\Error.cshtml.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Areas\Identity\Pages\Shared\_LoginPartial.cshtml.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Areas\Identity\Pages\_ViewImports.cshtml.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Areas\Identity\Pages\_ViewStart.cshtml.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Pages\Error.cshtml.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Pages\Shared\_Layout.cshtml.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Pages\Shared\_LoginPartial.cshtml.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Pages\Shared\_ValidationScriptsPartial.cshtml.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Pages\_Host.cshtml.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Pages\_ViewImports.cshtml.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Pages\_ViewStart.cshtml.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\GadjIT V1_02.RazorAssemblyInfo.cache
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\GadjIT V1_02.RazorAssemblyInfo.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\GadjIT V1_02.RazorTargetAssemblyInfo.cache
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\GadjIT V1_02.RazorTargetAssemblyInfo.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\GadjIT V1_02.Views.pdb
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\GadjIT V1_02.csproj.CopyComplete
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\staticwebassets\GadjIT V1_02.StaticWebAssets.Manifest.cache
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\staticwebassets\GadjIT V1_02.StaticWebAssets.xml
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\GadjIT V1_02.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\GadjIT V1_02.pdb
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\GadjIT V1_02.genruntimeconfig.cache

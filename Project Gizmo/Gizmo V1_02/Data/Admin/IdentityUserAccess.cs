@@ -16,7 +16,7 @@ namespace Gizmo_V1_02.Data.Admin
 {
     public interface IIdentityUserAccess
     {
-        Task<AspNetUsers> SwitchSelectedCompany(AspNetUsers user, int companyId);
+        Task<AspNetUsers> SwitchSelectedCompany(AspNetUsers user);
         Task<IdentityResult> Delete(AspNetUsers item);
         Task<IList<Claim>> GetCompanyClaims(AspNetUsers user);
         Task<IList<string>> GetSelectedUserRoles(AspNetUsers item);
@@ -52,16 +52,17 @@ namespace Gizmo_V1_02.Data.Admin
             this.mapper = mapper;
         }
 
-        public async Task<AspNetUsers> SwitchSelectedCompany(AspNetUsers user, int companyId)
+        public async Task<AspNetUsers> SwitchSelectedCompany(AspNetUsers user)
         {
             selectedUser = await userManager.FindByNameAsync(user.UserName);
-            selectedUser.SelectedCompanyId = companyId;
+            selectedUser.SelectedCompanyId = user.SelectedCompanyId;
+            selectedUser.SelectedUri = user.SelectedUri;
 
             await userManager.UpdateAsync(selectedUser);
 
             var selectedCompanyUserRoles = await context.AppCompanyUserRoles
-                                                    .Where(A => A.UserId == user.Id
-                                                                & A.CompanyId == companyId)
+                                                    .Where(A => A.UserId == selectedUser.Id
+                                                                & A.CompanyId == selectedUser.SelectedCompanyId)
                                                     .Select(A => A.RoleId)
                                                     .ToListAsync();
 

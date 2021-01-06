@@ -1,12 +1,19 @@
-﻿<AuthorizeView>
+﻿@using Gizmo_V1_02.Pages.Shared.Modals
+
+@inject IJSRuntime jsRuntime
+
+<AuthorizeView>
     <Authorized>
-        <!--
-        <a class="nav-link" href="Identity/Account/Manage" title="Account details: @(string.IsNullOrWhiteSpace(userFullName) ? context.User.Identity.Name : userFullName)">
+
+        <NavLink @onclick="() => setReturnURI()" class="nav-link" href="userprofile">
             <span class="fa fa-user-cog"></span>
-        </a>
-        -->
-        <NavLink class="nav-link" href="userprofile">
-            <span class="fa fa-user-cog"></span>
+
+        </NavLink>
+
+        <NavLink @onclick='() => PrepareModalDelete("System Setting"
+                                                ,"500px"
+                                                ,"400px")' class="nav-link" data-toggle="modal" data-target="#modalSystemSelect">
+            <span class="fa fa-cog"></span>
         </NavLink>
 
         <form method="post" action="Identity/Account/LogOut">
@@ -18,3 +25,7 @@
         <a class="nav-link" href="Identity/Account/Login">Log in</a>
     </NotAuthorized>
 </AuthorizeView>
+
+
+
+<ModalSystemSelect currentUser="@userSession.User" InfoHeader="@ModalInfoHeader" ModalHeight="@ModalHeight" ModalWidth="@ModalWidth"></ModalSystemSelect>

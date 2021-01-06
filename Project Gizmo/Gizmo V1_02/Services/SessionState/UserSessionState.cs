@@ -14,7 +14,7 @@ namespace Gizmo_V1_02.Services.SessionState
     {
         AspNetUsers User { get; }
         IList<Claim> allClaims { get; }
-
+        string userProfileReturnURI { get; }
         string CompCol1 { get; set; }
         string CompCol2 { get; set; }
         string CompCol3 { get; set; }
@@ -32,13 +32,15 @@ namespace Gizmo_V1_02.Services.SessionState
 
         Claim getCompanyClaim();
         bool GetLock();
+        void SetCurrentUser(AspNetUsers user);
+        void SetUserProfileReturnURI(string returnURI);
         void SetBaseUri(string baseUri);
         void SetClaims(IList<Claim> claims);
         void SetCompany(AppCompanyDetails companyDetails);
         void SetAllAssignedCompanies(List<AppCompanyDetails> allAssignedCompanies);
         void SetFullName(string FullName);
         void SetSelectedSystem(string selectedSystem);
-        Task<AppCompanyDetails> switchSelectedCompany(int companyId);
+        Task<AppCompanyDetails> switchSelectedCompany();
         Task<string> SetSessionState();
     }
 
@@ -70,6 +72,8 @@ namespace Gizmo_V1_02.Services.SessionState
 
         public string selectedSystem { get; protected set; }
 
+        public string userProfileReturnURI { get; protected set; }
+
         public SpinLock IdentityLock { get; set; }
 
         public bool isSuperUser { get; protected set; }
@@ -87,6 +91,12 @@ namespace Gizmo_V1_02.Services.SessionState
             this.authenticationStateProvider = authenticationStateProvider;
             this.userAccess = userAccess;
             this.companyDbAccess = companyDbAccess;
+        }
+
+        public void SetUserProfileReturnURI(string returnURI)
+        {
+            userProfileReturnURI = returnURI;
+            NotifyStateChanged();
         }
 
         public void SetCurrentUser(AspNetUsers user)
@@ -150,13 +160,13 @@ namespace Gizmo_V1_02.Services.SessionState
             }
         }
 
-        public async Task<AppCompanyDetails> switchSelectedCompany(int companyId)
+        public async Task<AppCompanyDetails> switchSelectedCompany()
         {
             //Get new 
-            var selectedCompany = await companyDbAccess.GetCompanyById(companyId);
+            var selectedCompany = await companyDbAccess.GetCompanyById(User.SelectedCompanyId);
             SetCompany(selectedCompany);
 
-            User = await userAccess.SwitchSelectedCompany(User, companyId);
+            User = await userAccess.SwitchSelectedCompany(User);
 
             await SetSessionState();
             return selectedCompany;

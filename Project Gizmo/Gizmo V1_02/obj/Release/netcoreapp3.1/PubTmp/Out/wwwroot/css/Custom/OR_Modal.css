@@ -1,0 +1,29 @@
+﻿/*---------------------------------------*/
+/*   POPUP DIALOG MODAL FORMS            */
+/*---------------------------------------*/
+
+.modal {
+    padding-top: 70px !important;
+}
+
+.modal-dialog, .modal-content {
+    border-radius: 25px;
+    padding: 0 20px;
+}
+
+.modal-header {
+    font-weight: bold !important
+}
+
+.modal-footer {
+    border-top: 1pt solid #DDD;
+}
+
+.modal .form-control {
+    color: #888;
+}
+
+.modal .info-text{
+    color: #888;
+    font-size: 0.9rem;
+}

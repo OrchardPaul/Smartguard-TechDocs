@@ -38,13 +38,13 @@
                         <div class="form-group">
                             <label for="@TaskObject.PasswordHash">Password</label>
 
-                            @if ((selectedOption == "Insert") | (enablePasswordSet))
+                            @if (enablePasswordSet)
                             {
                                 <InputText class="form-control" style="display: inline; width: 250px;" @bind-Value="@TaskObject.PasswordHash" type="password"></InputText>
                             }
                             else
                             {
-                                <input type="password" disabled="disabled" class="form-control" style="display: inline; width: 250px;" @bind="@TaskObject.PasswordHash" />
+                                <input type="password" disabled="disabled" class="form-control" style="display: inline; width: 250px;" value="PasswordNotChanged115592!" />
                                 <button class="btn btn-edit" style="display: inline; height:auto;" @onclick="() => TogglePasswordSet()" value=""><i class="fa fa-pencil-alt"></i></button>
                             }
 
@@ -54,7 +54,7 @@
                 <div class="col-6 detail-box">
                     <h5>Company Details</h5>
                     <div class="detail-group-box">
-                        @if (sessionState.Company.CompanyName == "Orchard Rock" & (selectedOption == "Edit"))
+                        @if (sessionState.Company.CompanyName == "Orchard Rock")
                         {
                             @if (!(companyItems is null))
                             {
@@ -129,8 +129,8 @@
                                         {
                                             <ul class="ul-simple">
                                                 @foreach (var role in selectedRoles
-                                                            .Where(R => R.RoleName != "Super User")
-                                                            .ToList())
+                                                           .Where(R => R.RoleName != "Super User")
+                                                           .ToList())
                                                 {
 
                                                     <li><InputCheckbox class="mr-2" @bind-Value="role.IsSubscribed"></InputCheckbox><label>@role.RoleName</label></li>
@@ -148,7 +148,8 @@
             </div>
 
             <div class="detail-group-box ">
-                <button type="submit" class="btn btn-alt">Save Changes</button>
+                <button type="submit" class="float-left btn btn-alt">Save Changes</button>
+                <button type="button" class="float-left ml-2 btn btn-secondary" @onclick="NavigateBack">Cancel</button>
             </div>
         </div>
     </div>
