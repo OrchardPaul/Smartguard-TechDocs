@@ -1,4 +1,5 @@
 ﻿using Gizmo.Context.Gizmo_Authentification;
+using Gizmo.Context.Gizmo_Authentification.Custom;
 using Gizmo_V1_02.Data.Admin;
 using Gizmo_V1_02.Services.SessionState;
 using Microsoft.AspNetCore.Components;
@@ -17,7 +18,7 @@ namespace Gizmo_V1_02.Pages.SystemNav.CompanyManagement
         [Inject]
         IUserSessionState sessionState { get; set; }
 
-        private List<AppCompanyDetails> lstCompanyDetails;
+        private List<VmCompanyDetails> lstCompanyDetails;
 
         public AppCompanyDetails editCompany = new AppCompanyDetails();
 
@@ -30,14 +31,19 @@ namespace Gizmo_V1_02.Pages.SystemNav.CompanyManagement
                 gotLock = sessionState.Lock;
             }
 
-            lstCompanyDetails = await companyDbAccess.GetCompanies();
-
+            var lstAppCompanyDetails = await companyDbAccess.GetCompanies();
+            lstCompanyDetails = lstAppCompanyDetails
+                                            .Select(A => new VmCompanyDetails { Company = A, OnHover = false })
+                                            .ToList();
 
         }
 
         private async void DataChanged()
         {
-            lstCompanyDetails = await companyDbAccess.GetCompanies();
+            var lstAppCompanyDetails = await companyDbAccess.GetCompanies();
+            lstCompanyDetails = lstAppCompanyDetails
+                                            .Select(A => new VmCompanyDetails { Company = A })
+                                            .ToList();
 
             StateHasChanged();
         }
@@ -55,6 +61,11 @@ namespace Gizmo_V1_02.Pages.SystemNav.CompanyManagement
         protected void PrepareForInsert()
         {
             editCompany = new AppCompanyDetails();
+        }
+
+        private void ToggleMoreOption(VmCompanyDetails hoveredItem)
+        {
+            hoveredItem.OnHover = !hoveredItem.OnHover;
         }
     }
 }

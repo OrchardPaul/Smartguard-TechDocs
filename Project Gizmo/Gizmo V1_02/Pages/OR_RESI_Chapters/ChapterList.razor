@@ -15,21 +15,21 @@ else
 
     @if (selectedChapter == "")
     {
-        <div class="tran-block rounded ">
-            <h3>Chapters</h3>
+        <div class="tran-block page-header-block ">
+            <h3>P4W Chapters</h3>
+            <p>Create and maintain chapters for all case types. <em>Note: please make sure you are pointing to the appropriate system.</em></p>
         </div>
-
-        <div class="mt-3 mb-4 col-xl-8 col-lg-12 col-md-12 col-sm-12">
+        <div class="mb-4 col-xl-8 col-lg-12 col-md-12 col-sm-12">
             <div class="grid-tran">
                 <button data-toggle="modal" data-target="#chapterAddOrEditModel" @onclick='PrepareChapterForInsert' class="btn btn-main btn-shadow"><i class="fa fa-plus mr-1"></i> Add</button>
                 <div class="container-fluid">
 
                     <!-- SHOW ALL GROUPS -->
                     @foreach (var caseTypeGroup in lstAllObjects.Where(C => C.ParentId == 0)
-                       .Where(C => !(C.CaseTypeGroup is null))
-                       .Select(C => C.CaseTypeGroup)
-                       .Distinct()
-                       .ToList())
+                    .Where(C => !(C.CaseTypeGroup is null))
+                    .Select(C => C.CaseTypeGroup)
+                    .Distinct()
+                    .ToList())
                     {
 
                         <div class="row grid-row mt-3">
@@ -47,11 +47,11 @@ else
                         {
 
                             @foreach (var caseType in lstAllObjects.Where(C => C.ParentId == 0)
-                               .Where(C => !(C.CaseType is null))
-                               .Where(C => C.CaseTypeGroup == selectedCaseTypeGroup)
-                               .Select(C => C.CaseType)
-                               .Distinct()
-                               .ToList())
+                            .Where(C => !(C.CaseType is null))
+                            .Where(C => C.CaseTypeGroup == selectedCaseTypeGroup)
+                            .Select(C => C.CaseType)
+                            .Distinct()
+                            .ToList())
                             {
 
                                 <div class="row grid-row-md mt-3">
@@ -94,10 +94,9 @@ else
 @if (selectedChapter != "")
 {
 
-
-    <div class="tran-block rounded ">
+    <div class="tran-block page-header-block ">
         <div class="float-left back-link">
-            <a href="javascript: void(0);" @onclick="SelectHome"><span class="col-alt fa fa-angle-double-left fa-2x"></span></a>
+            <a href="javascript: void(0);" @onclick="SelectHome"><span class="col-alt fa fa-angle-double-left"></span></a>
         </div>
         <h3>Chapter: @selectedChapter</h3>
     </div>
@@ -225,7 +224,7 @@ else
                                                 <span class="badge badge-tran">@doc.SeqNo</span>
                                             </div>
                                         </div>
-                                        
+
                                     </div>
                                     <div class="col-4 hidden-lg-down data-item ">
                                         <div class="data-item-detail-sm"><span>Schedule:</span></div>
@@ -233,7 +232,7 @@ else
                                         <div class="pl-3">
                                             @if (doc.RescheduleDays.HasValue)
                                             {
-                                            <span class="badge badge-sm square">@doc.RescheduleDays.ToString() days</span>
+                                                <span class="badge badge-sm square">@doc.RescheduleDays.ToString() days</span>
                                             }
                                         </div>
                                     </div>
@@ -251,7 +250,7 @@ else
 
 
                                     </div>
-                                    
+
 
                                 </div>
                             }

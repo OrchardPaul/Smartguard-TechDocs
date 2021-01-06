@@ -12,5 +12,6 @@ namespace Gizmo.Context.Gizmo_Authentification
 
         [StringLength(256)]
         public string DepartmentName { get; set; }
+
     }
 }

@@ -49,7 +49,10 @@
     font-size: 0.9rem;
 }
 
-
+.main > div {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
 
 .container, .container-fluid {
     padding: 0;
@@ -60,8 +63,8 @@
 }
 
 .content {
-    margin: 0;
-    padding-top: 20px;
+    margin: 0 !important;
+    padding: 0 !important;
 }
 
 
@@ -75,9 +78,8 @@
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
-    margin: 0;
-    padding: 0;
-
+    margin: 0 !important;
+    padding: 0 !important;
 }
 
 .topbar {
@@ -159,6 +161,9 @@
     transition-property: box-shadow, background-color, border;
 }
 
+.btn-secondary{
+    border-color: #aaa !important;
+}
 
 .btn-edit {
     display: block;
@@ -179,7 +184,11 @@
 }
 
 .back-link {
-    margin: 10px 10px 0 0;
+    margin: 12px 10px 0 0;
+}
+
+.back-link a {
+    font-size: 25px;
 }
 
 .data-item-edit {
@@ -198,20 +207,25 @@
     background-color: rgba(255, 255, 255, 0.8);
     padding: 10px 10px 20px 10px;
     margin-bottom: 20px;
+    margin-left: 15px;
+    border-radius: 5px;
+    width: auto;
 }
 
 .page-header-block {
-    padding: 0 0 0 10px;
-    margin-bottom: 5px;
+    padding: 5px 0 5px 20px;
+    margin: 0 0 20px 0 !important;
     width: auto;
     font-size: 0.8rem;
+    border-radius: 0px;
 }
 
-.page-header-block {
-    padding: 0 0 0 10px;
-    margin-bottom: 5px;
-    width: auto;
-    font-size: 0.8rem;
+.page-header-block h3 {
+    
+}
+
+.page-header-block p{
+        color: #555;
 }
 
 .detail-block {
@@ -288,7 +302,6 @@
 .data-item {
     padding: 0;
     height: 100%;
-    
     border: 1pt solid;
     background-color: rgba(255, 255, 255, 0.5);
     border-color: #FFF #DDD #DDD #FFF;
@@ -307,8 +320,31 @@
 }
 
 .data-item-sub {
-    padding-left: 20px !important;
-    text-overflow: ellipsis;
+    height: 100%;
+    padding-left: 10px !important;
+    padding-top: 10px !important;
+    width: Calc(100% - 22px) !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis !important;
+    float: left;
+}
+
+.data-item-ellipses{
+    width: 20px;
+    padding: 0;
+    margin: 0;
+    float: right;
+    height: 100%;
+    visibility: hidden;
+}
+
+.data-item-ellipses .btn, .data-item-ellipses .btn-edit{
+    width: 20px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    height: 100%;
+    font-size: 1.1rem;
 }
 
 .grid-header .data-item-sub {
@@ -391,16 +427,6 @@
     transition-property: background-color, color;
 }
 
-.data-item-sub {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    position: relative;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
 
 .data-item-detail {
     height: 20px !important;
@@ -546,11 +572,33 @@
     font-weight: bold;
 }
 
+.grid-can-edit {
+    padding: 0;
+    margin: 0;
+    box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.5);
+}
 
+
+
+.grid-can-edit .grid-row-hover .data-item {
+    background-color: rgba(200, 200, 200, 0.5);
+}
 
 /*  FILTER BLOCK   */
 .filter-block {
     border-bottom: 1pt solid #AAA;
+    font-size: 0.9rem;
+}
+
+.filter-block label {
+    margin-bottom: 2px;
+}
+
+.filter-block .form-control {
+    color: #888;
+    height: 30px;
+    font-size: 0.8rem;
+
 }
 
 .spinner {
@@ -715,6 +763,9 @@
     }
 }
 
+.visible{
+    visibility: visible;
+}
 
 /******************/
 /*   TESTING ONLY */

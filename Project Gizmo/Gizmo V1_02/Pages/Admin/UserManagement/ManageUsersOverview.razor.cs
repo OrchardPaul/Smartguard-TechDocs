@@ -110,5 +110,10 @@ namespace Gizmo_V1_02.Pages.Admin.UserManagement
             filterName = eventArgs.Value.ToString();
         }
 
+        private void ToggleMoreOption(UserDataCollectionItem hoveredItem)
+        {
+            hoveredItem.OnHover = !hoveredItem.OnHover;
+        }
+
     }
 }

@@ -29,5 +29,7 @@ namespace Gizmo.Context.Gizmo_Authentification
 
         [StringLength(500)]
         public string RoleDescription { get; set; }
+
+        public bool OnHover { get; set; } = false;
     }
 }

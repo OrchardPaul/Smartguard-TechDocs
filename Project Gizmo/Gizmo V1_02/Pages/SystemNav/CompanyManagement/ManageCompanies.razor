@@ -1,9 +1,9 @@
 ﻿@page "/system/managecompanies"
 
 
-<div class="tran-block rounded ">
+<div class="tran-block page-header-block">
     <div class="float-left back-link">
-        <NavLink href="system"><span class="col-alt fa fa-angle-double-left fa-2x"></span></NavLink>
+        <NavLink href="system"><span class="col-alt fa fa-angle-double-left"></span></NavLink>
     </div>
     <h3>Manage Companies</h3>
 </div>
@@ -14,23 +14,24 @@
 }
 else
 {
-    <div class="mt-5 col-xl-5 col-lg-8 col-12 ml-0 pl-0">
-        <div class="mb-3">
-            <button data-toggle="modal" data-target="#companyModal" @onclick='(() => PrepareForInsert())' class="btn btn-main btn-shadow"><i class="fa fa-plus"></i> Add New Company</button>
-        </div>
-        <div class="tran-block rounded">
-            <div class="container-fluid ">
-                @foreach (var company in lstCompanyDetails)
-                {
-                    <div class="row grid-row">
-                        <div class="col-11 data-item"><div class="data-item-sub"><span class="fa fa-building mr-1"></span> @company.CompanyName</div></div>
-                        <div class="col-1 data-item-edit"><button class="btn btn-edit" @onclick='(() => PrepareForEdit(company))' data-toggle="modal" data-target="#companyModal" value=""><i class="fa fa-pencil-alt"></i></button></div>
-                    </div>
+    <div class="col-xl-5 col-lg-8 col-12 ml-0 pl-0">
+       <div class="tran-block rounded">
+           <div class="container-fluid ">
+               <div class="mb-3">
+                   <button data-toggle="modal" data-target="#companyModal" @onclick='(() => PrepareForInsert())' class="btn btn-main btn-shadow"><i class="fa fa-plus pr-1"></i> Add New Company</button>
+               </div>
+                <div class="grid-can-edit">
+                   @foreach (var vmCompany in lstCompanyDetails)
+                   {
+                       <div class="row grid-row @(vmCompany.OnHover ? "grid-row-hover" : "")" @onmouseover="() => ToggleMoreOption(vmCompany)" @onmouseout="() => ToggleMoreOption(vmCompany)">
+                           <div class="col-11 data-item"><div class="data-item-sub"><span class="fa fa-building mr-1"></span> @vmCompany.Company.CompanyName</div></div>
+                           <div class="col-1 data-item-edit"><button class="btn btn-edit" @onclick='(() => PrepareForEdit(vmCompany.Company))' data-toggle="modal" data-target="#companyModal" value=""><i class="fa fa-pencil-alt"></i></button></div>
+                       </div>
 
-                }
-
-            </div>
-        </div>
+                   }
+                   </div>
+               </div>
+           </div>
     </div>
 
 }

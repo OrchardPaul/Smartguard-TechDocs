@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "F:\\WorkSpaces\\JD\\GadjIT\\Project Gizmo\\Gizmo.Context\\GadjIT.Context.csproj": {}
+    "C:\\Users\\p_taylor\\Source\\Repos\\GadjIT\\Project Gizmo\\Gizmo.Context\\GadjIT.Context.csproj": {}
   },
   "projects": {
-    "F:\\WorkSpaces\\JD\\GadjIT\\Project Gizmo\\Gizmo.Context\\GadjIT.Context.csproj": {
+    "C:\\Users\\p_taylor\\Source\\Repos\\GadjIT\\Project Gizmo\\Gizmo.Context\\GadjIT.Context.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "F:\\WorkSpaces\\JD\\GadjIT\\Project Gizmo\\Gizmo.Context\\GadjIT.Context.csproj",
+        "projectUniqueName": "C:\\Users\\p_taylor\\Source\\Repos\\GadjIT\\Project Gizmo\\Gizmo.Context\\GadjIT.Context.csproj",
         "projectName": "GadjIT.Context",
-        "projectPath": "F:\\WorkSpaces\\JD\\GadjIT\\Project Gizmo\\Gizmo.Context\\GadjIT.Context.csproj",
-        "packagesPath": "C:\\Users\\j_duggan\\.nuget\\packages\\",
-        "outputPath": "F:\\WorkSpaces\\JD\\GadjIT\\Project Gizmo\\Gizmo.Context\\obj\\",
+        "projectPath": "C:\\Users\\p_taylor\\Source\\Repos\\GadjIT\\Project Gizmo\\Gizmo.Context\\GadjIT.Context.csproj",
+        "packagesPath": "C:\\Users\\p_taylor\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\p_taylor\\Source\\Repos\\GadjIT\\Project Gizmo\\Gizmo.Context\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\j_duggan\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\p_taylor\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [

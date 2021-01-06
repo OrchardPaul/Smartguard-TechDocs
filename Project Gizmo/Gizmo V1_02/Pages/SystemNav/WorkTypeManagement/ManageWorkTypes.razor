@@ -1,8 +1,8 @@
 ﻿@page "/system/manageworktypes"
 
-<div class="tran-block rounded ">
+<div class="tran-block page-header-block ">
     <div class="float-left back-link">
-        <NavLink href="system"><span class="col-alt fa fa-angle-double-left fa-2x"></span></NavLink>
+        <NavLink href="system"><span class="col-alt fa fa-angle-double-left"></span></NavLink>
     </div>
     <h3>Manage Work Types</h3>
 </div>
@@ -15,232 +15,205 @@
 }
 else
 {
-    <div class="mt-5 mb-4 col-xl-6 col-lg-12 col-md-12 col-sm-12 ml-0 pl-0">
+    <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 ml-0 pl-0">
+        <div class="tran-block rounded">
 
-        <div class="page-navbar hidden-md-down" style="max-width: 800px">
-            <nav class="navbar navbar-expand-lg navbar-dark bg-dark ">
+            <div class="page-navbar hidden-md-down" style="max-width: 800px">
+                <nav class="navbar navbar-expand-lg navbar-dark bg-dark ">
 
-                <ul class="navbar-nav">
-                    <li class="@(navDisplay == "Department" ? "active" : "")">
-                        <a href="javascript:void(0);" @onclick='(() => ShowNav("Department"))'><span>Departments</span></a>
+                    <ul class="navbar-nav">
+                        <li class="@(navDisplay == "Department" ? "active" : "")">
+                            <a href="javascript:void(0);" @onclick='(() => ShowNav("Department"))'><span>Departments</span></a>
+                        </li>
+                        <li class="@(navDisplay == "Group" ? "active" : "")">
+                            <a href="javascript:void(0);" @onclick='(() => ShowNav("Group"))'><span>Groups</span></a>
+                        </li>
+                        <li class="@(navDisplay == "Work Type" ? "active" : "")">
+                            <a href="javascript:void(0);" @onclick='(() => ShowNav("Work Type"))'><span>Work Types</span></a>
+                        </li>
+                        <li class="last @(navDisplay == "Grouping" ? "active" : "")">
+                            <a href="javascript:void(0);" @onclick='(() => ShowNav("Grouping"))'><span>Grouping</span></a>
+                        </li>
+
+                    </ul>
+
+                </nav>
+            </div>
+            <div class="page-navbar hidden-lg-up">
+                <ul class="nav nav-pills tran-tabs">
+                    <li class="nav-item @(navDisplay == "Department" ? "active" : "")">
+                        <a class="nav-link" href="javascript:void(0);" @onclick='(() => ShowNav("Department"))'>Departments</a>
                     </li>
-                    <li class="@(navDisplay == "Group" ? "active" : "")">
-                        <a href="javascript:void(0);" @onclick='(() => ShowNav("Group"))'><span>Groups</span></a>
+                    <li class="nav-item @(navDisplay == "Group" ? "active" : "")">
+                        <a class="nav-link" href="javascript:void(0);" @onclick='(() => ShowNav("Group"))'>Groups</a>
                     </li>
-                    <li class="@(navDisplay == "Work Type" ? "active" : "")">
-                        <a href="javascript:void(0);" @onclick='(() => ShowNav("Work Type"))'><span>Work Types</span></a>
+                    <li class="nav-item @(navDisplay == "Work Type" ? "active" : "")">
+                        <a class="nav-link" href="javascript:void(0);" @onclick='(() => ShowNav("Work Type"))'>Work Types</a>
                     </li>
-                    <li class="last @(navDisplay == "Grouping" ? "active" : "")">
-                        <a href="javascript:void(0);" @onclick='(() => ShowNav("Grouping"))'><span>Grouping</span></a>
+                    <li class="nav-item @(navDisplay == "Grouping" ? "active" : "")">
+                        <a class="nav-link " href="javascript:void(0);" @onclick='(() => ShowNav("Grouping"))'>Grouping</a>
                     </li>
 
                 </ul>
+            </div>
 
-            </nav>
-        </div>
-        <div class="page-navbar hidden-lg-up">
-            <ul class="nav nav-pills tran-tabs">
-                <li class="nav-item @(navDisplay == "Department" ? "active" : "")">
-                    <a class="nav-link" href="javascript:void(0);" @onclick='(() => ShowNav("Department"))'>Departments</a>
-                </li>
-                <li class="nav-item @(navDisplay == "Group" ? "active" : "")">
-                    <a class="nav-link" href="javascript:void(0);" @onclick='(() => ShowNav("Group"))'>Groups</a>
-                </li>
-                <li class="nav-item @(navDisplay == "Work Type" ? "active" : "")">
-                    <a class="nav-link" href="javascript:void(0);" @onclick='(() => ShowNav("Work Type"))'>Work Types</a>
-                </li>
-                <li class="nav-item @(navDisplay == "Grouping" ? "active" : "")">
-                    <a class="nav-link " href="javascript:void(0);" @onclick='(() => ShowNav("Grouping"))'>Grouping</a>
-                </li>
+            
+            <div class="container-fluid ">
+                @if (navDisplay == "Department")
+                {
 
-            </ul>
-        </div>
-
-
-        @if (navDisplay == "Department")
-        {
-
-            <div class="tran-block rounded">
-                <div class="container-fluid ">
                     <div class="mb-3 mt-2">
-                        <button data-toggle="modal" data-target="#DepartmentModal" @onclick='(() => PrepareDepartmentForInsert())' class="btn btn-main btn-shadow"><i class="fa fa-plus"></i> Add New Department</button>
+                        <button data-toggle="modal" data-target="#DepartmentModal" @onclick='(() => PrepareDepartmentForInsert())' class="btn btn-main btn-shadow"><i class="fa fa-plus pr-1"></i> Add New Department</button>
                     </div>
-                    @foreach (var d in departments)
-                    {
-                        <div class="row grid-row">
-                            <div class="col-11 col-xl-6 data-item"><div class="data-item-sub">@d.DepartmentName</div></div>
-                            <div class="col-1 data-item-edit"><button class="btn btn-edit" @onclick='(() => PrepareDepartmentForEdit(d))' data-toggle="modal" data-target="#DepartmentModal" value=""><i class="fa fa-pencil-alt"></i></button></div>
-                        </div>
-                    }
-                </div>
-            </div>
-        }
-
-
-        @if (navDisplay == "Group")
-        {
-
-            <div class="tran-block rounded ">
-                <div class="container-fluid ">
-                    <div class="mb-3 mt-2">
-                        <button data-toggle="modal" data-target="#GroupModal" @onclick='(() => PrepareGroupForInsert())' class="btn btn-main btn-shadow"><i class="fa fa-plus"></i> Add New Group</button>
-                    </div>
-                    <div class="row grid-header ">
-                        <div class="col-5 data-item"><div class="data-item-sub">Department</div></div>
-                        <div class="col-6 data-item"><div class="data-item-sub">Group</div></div>
-                    </div>
-                    @foreach (var wtg in workTypeGroups)
-                    {
-
-                        <div class="row grid-row">
-                            <div class="col-5 data-item">
-                                <div class="data-item-sub">
-                                    @(!(departments
-                                                                        .Where(D => D.Id == wtg.group.parentId)
-                                                                        .Select(D => D.DepartmentName)
-                                                                        .SingleOrDefault() is null)
-                                                                        ?
-                                                                        departments
-                                                                        .Where(D => D.Id == wtg.group.parentId)
-                                                                        .Select(D => D.DepartmentName)
-                                                                        .SingleOrDefault()
-                                                                        :
-                                                                        ""
-                                                                        )
-                                </div>
-                            </div>
-
-                            <div class="col-6 data-item"><div class="data-item-sub">@wtg.group.GroupName</div></div>
-                            <div class="col-1 data-item-edit"><button class="btn btn-edit" @onclick='(() => PrepareGroupForEdit(wtg))' data-toggle="modal" data-target="#GroupModal" value=""><i class="fa fa-pencil-alt"></i></button></div>
-                        </div>
-                    }
-                </div>
-            </div>
-        }
-
-        @if (navDisplay == "Work Type")
-        {
-            <div class="tran-block rounded">
-                <div class="container-fluid ">
-                    <div class="mb-3">
-                        <button data-toggle="modal" data-target="#TypeModal" @onclick='(() => PrepareTypeForInsert())' class="btn btn-main btn-shadow"><i class="fa fa-plus"></i> Add New Work Type</button>
-                    </div>
-                    <div class="row grid-header ">
-                        <div class="col-5 data-item"><div class="data-item-sub">Department</div></div>
-                        <div class="col-6 data-item"><div class="data-item-sub">Group</div></div>
-                    </div>
-                    @foreach (var wt in workTypeWithDepartmentItems)
-                    {
-
-
-                        <div class="row grid-row">
-                            <div class="col-5 data-item">
-                                <div class="data-item-sub">
-                                    @(!(departments
-                                                .Where(D => D.Id == wt.workType.DepartmentId)
-                                                .Select(D => D.DepartmentName)
-                                                .SingleOrDefault() is null)
-                                                ?
-                                                departments
-                                                .Where(D => D.Id == wt.workType.DepartmentId)
-                                                .Select(D => D.DepartmentName)
-                                                .SingleOrDefault()
-                                                :
-                                                ""
-                                                )
-                                </div>
-                            </div>
-
-                            <div class="col-6 data-item"><div class="data-item-sub">@wt.workType.TypeName</div></div>
-                            <div class="col-1 data-item-edit"><button class="btn btn-edit" @onclick='(() => PrepareTypeForEdit(wt.workType))' data-toggle="modal" data-target="#TypeModal" value=""><i class="fa fa-pencil-alt"></i></button></div>
-                        </div>
-
-                    }
-
-                </div>
-            </div>
-        }
-
-        @if (navDisplay == "Grouping")
-        {
-
-            <div class="tran-block rounded">
-                <div class="container-fluid ">
-
-                    @if (showGrouping == "Show")
-                    {
-                        <div class="mb-4">
-                            <button @onclick='(() => ShowNav("Grouping"))' class="btn btn-alt btn-shadow"><i class="fa fa-angle-left"></i> Back to departments</button>
-                        </div>
-                    }
-                    else
-                    {
-                        <div><h4>Select Department</h4></div>
-                    }
-                    @foreach (var d in departments)
-                    {
-                        @if (showGrouping == "Hide")
+                    <div class="grid-can-edit">
+                        @foreach (var vmDepartment in departments)
                         {
-
-
-                            <div class="row grid-row mt-3">
-                                <div class="col-12 col-xl-6 data-item-nav">
-                                    <a href="javascript:void(0);" @onclick='(() => ShowGroupingDept("Show",d.DepartmentName))'>
-                                        <div class="data-item-sub ">
-                                            @d.DepartmentName<span class="nav-link-right fa fa-chevron-circle-right"></span>
-                                        </div>
-                                    </a>
-                                </div>
+                            <div class="row grid-row @(vmDepartment.OnHover ? "grid-row-hover" : "")" @onmouseover="() => ToggleMoreOption(vmDepartment)" @onmouseout="() => ToggleMoreOption(vmDepartment)">
+                                <div class="col-11 col-xl-6 data-item"><div class="data-item-sub">@vmDepartment.department.DepartmentName</div></div>
+                                <div class="col-1 data-item-edit"><button class="btn btn-edit" @onclick='(() => PrepareDepartmentForEdit(vmDepartment.department))' data-toggle="modal" data-target="#DepartmentModal" value=""><i class="fa fa-pencil-alt"></i></button></div>
                             </div>
                         }
-                        @if (showGrouping == "Show")
+                    </div>
+                }
+
+
+                @if (navDisplay == "Group")
+                {
+
+                    <div class="mb-3 mt-2">
+                        <button data-toggle="modal" data-target="#GroupModal" @onclick='(() => PrepareGroupForInsert())' class="btn btn-main btn-shadow"><i class="fa fa-plus pr-1"></i> Add New Group</button>
+                    </div>
+                    <div class="grid-can-edit">
+                        <div class="row grid-header ">
+                            <div class="col-5 data-item"><div class="data-item-sub">Department</div></div>
+                            <div class="col-6 data-item"><div class="data-item-sub">Group</div></div>
+                        </div>
+                        @foreach (var wtg in workTypeGroups)
+                        {
+
+                            <div class="row grid-row @(wtg.OnHover ? "grid-row-hover" : "")" @onmouseover="() => ToggleMoreOption(wtg)" @onmouseout="() => ToggleMoreOption(wtg)">
+                                <div class="col-5 data-item">
+                                    <div class="data-item-sub">
+                                        @wtg.department.DepartmentName
+                                    </div>
+                                </div>
+
+                                <div class="col-6 data-item"><div class="data-item-sub">@wtg.group.GroupName</div></div>
+                                <div class="col-1 data-item-edit"><button class="btn btn-edit" @onclick='(() => PrepareGroupForEdit(wtg))' data-toggle="modal" data-target="#GroupModal" value=""><i class="fa fa-pencil-alt"></i></button></div>
+                            </div>
+                        }
+                    </div>
+
+                }
+
+                @if (navDisplay == "Work Type")
+                {
+
+                    <div class="mb-3">
+                        <button data-toggle="modal" data-target="#TypeModal" @onclick='(() => PrepareTypeForInsert())' class="btn btn-main btn-shadow"><i class="fa fa-plus pr-1"></i> Add New Work Type</button>
+                    </div>
+                    <div class="grid-can-edit">
+                        <div class="row grid-header ">
+                            <div class="col-5 data-item"><div class="data-item-sub">Department</div></div>
+                            <div class="col-6 data-item"><div class="data-item-sub">Group</div></div>
+                        </div>
+                        @foreach (var wt in workTypeWithDepartmentItems)
                         {
 
 
-                            foreach (var wtg in workTypeGroups.Where(W => W.department.Id == d.Id))
-                            {
-                                @if (groupingDept == d.DepartmentName)
-                                {
-                                    <div class="row mt-4 ">
-                                        <div class="col-11 " style="border-bottom: 1pt solid #AAA">
-                                            <div class="row">
-                                                <div class="col-5 ">
-                                                    @wtg.group.GroupName
-                                                </div>
-                                                <div class="col-7  p-1">
-
-                                                    @foreach (var wt in wtg.workTypes)
-                                                    {
-                                                        <span class="badge badge-tran float-left">@wt.workType.TypeName</span>
-                                                    }
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-1 data-item-edit grid-row"><button class="btn btn-edit" @onclick='(() => PrepareGroupingForEdit(wtg))' data-toggle="modal" data-target="#GroupingModal" value=""><i class="fa fa-pencil-alt"></i></button></div>
-
+                            <div class="row grid-row @(wt.OnHover ? "grid-row-hover" : "")" @onmouseover="() => ToggleMoreOption(wt)" @onmouseout="() => ToggleMoreOption(wt)">
+                                <div class="col-5 data-item">
+                                    <div class="data-item-sub">
+                                        @wt.department.DepartmentName
                                     </div>
+                                </div>
 
+                                <div class="col-6 data-item"><div class="data-item-sub">@wt.workType.TypeName</div></div>
+                                <div class="col-1 data-item-edit"><button class="btn btn-edit" @onclick='(() => PrepareTypeForEdit(wt.workType))' data-toggle="modal" data-target="#TypeModal" value=""><i class="fa fa-pencil-alt"></i></button></div>
+                            </div>
+
+                        }
+                        </div>
+                        }
+
+                        @if (navDisplay == "Grouping")
+                        {
+
+
+                            @if (showGrouping == "Show")
+                            {
+                                <div class="mb-4">
+                                    <button @onclick='(() => ShowNav("Grouping"))' class="btn btn-alt btn-shadow"><i class="fa fa-angle-left pr-1 fa-2x"></i> Back to departments</button>
+                                </div>
+                            }
+                            else
+                            {
+                                <div><h4>Select Department</h4></div>
+                            }
+                            @foreach (var vmDepartment in departments)
+                            {
+                                @if (showGrouping == "Hide")
+                                {
+
+
+                                    <div class="row grid-row mt-3">
+                                        <div class="col-12 col-xl-6 data-item-nav">
+                                            <a href="javascript:void(0);" @onclick='(() => ShowGroupingDept("Show",vmDepartment.department.DepartmentName))'>
+                                                <div class="data-item-sub ">
+                                                    @vmDepartment.department.DepartmentName<span class="nav-link-right fa fa-chevron-circle-right"></span>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                }
+                                @if (showGrouping == "Show")
+                                {
+
+
+                                    foreach (var wtg in workTypeGroups.Where(W => W.department.Id == vmDepartment.department.Id))
+                                    {
+                                        @if (groupingDept == vmDepartment.department.DepartmentName)
+                                        {
+                                            <div class="row mt-4 ">
+                                                <div class="col-11 " style="border-bottom: 1pt solid #AAA">
+                                                    <div class="row">
+                                                        <div class="col-5 ">
+                                                            @wtg.group.GroupName
+                                                        </div>
+                                                        <div class="col-7  p-1">
+
+                                                            @foreach (var wt in wtg.workTypes)
+                                                            {
+                                                                <span class="badge badge-tran float-left">@wt.workType.TypeName</span>
+                                                            }
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-1 data-item-edit grid-row"><button class="btn btn-edit" @onclick='(() => PrepareGroupingForEdit(wtg))' data-toggle="modal" data-target="#GroupingModal" value=""><i class="fa fa-pencil-alt"></i></button></div>
+
+                                            </div>
+
+                                        }
+                                    }
                                 }
                             }
+
+
+
+
+
                         }
-                    }
-
-
-
-
+                    </div>
                 </div>
-            </div>
-        }
+        </div>
 
-
-    </div>
 }
 
 
-<WorkTypeGroupDetails TaskObject="@editGroup" Departments="@departments" DataChanged="@DataChanged"></WorkTypeGroupDetails>
+<WorkTypeGroupDetails TaskObject="@editGroup" Departments="@departments.Select(D => D.department).ToList()" DataChanged="@DataChanged"></WorkTypeGroupDetails>
 
-<WorkTypeDetails TaskObject="@editType" Departments="@departments" DataChanged="@DataChanged"></WorkTypeDetails>
+<WorkTypeDetails TaskObject="@editType" Departments="@departments.Select(D => D.department).ToList()" DataChanged="@DataChanged"></WorkTypeDetails>
 
 <WorkTypeDepartmentDetails TaskObject="@editDepartment" DataChanged="@DataChanged"></WorkTypeDepartmentDetails>
 

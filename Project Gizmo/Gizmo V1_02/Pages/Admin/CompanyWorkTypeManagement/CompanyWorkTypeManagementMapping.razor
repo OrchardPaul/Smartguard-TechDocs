@@ -4,7 +4,9 @@
 }
 else
 {
-    <h3><NavLink href="admin">Admin</NavLink>/<label @onclick="(() => ReturnToDetailsScreen())">Company Details</label><label>/</label><label @onclick="(() => OpenWorkTypeMappingOverview())">Mapping Overview</label><label>/</label><label>@workTypeMapping.workType.TypeName</label></h3>
+    <div class="tran-block rounded ">
+          <h3><NavLink href="admin">Admin</NavLink>/<label @onclick="(() => ReturnToDetailsScreen())">Company Details</label><label>/</label><label @onclick="(() => OpenWorkTypeMappingOverview())">Mapping Overview</label><label>/</label><label>@workTypeMapping.workType.TypeName</label></h3>
+    </div>
 }
 
 
