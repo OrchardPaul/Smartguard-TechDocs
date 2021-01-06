@@ -21,22 +21,20 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
         public RenderFragment CustomHeader { get; set; }
 
         [Parameter]
-        public String selectedList { get; set; }
+        public string selectedList { get; set; }
 
         [Parameter]
         public Action DataChanged { get; set; }
 
         [Parameter]
-        public String selectedCaseType { get; set; }
+        public string selectedCaseType { get; set; }
 
         [Parameter]
         public List<DmDocuments> dropDownDocumentList { get; set; }
 
-        List<string> CaseTypeList = new List<string>() { "Purchase", "Sale", "Remortgage", "Plot Sales", "Transfer" };
-
         List<string> DocTypeList = new List<string>() { "Chapter", "Doc", "Form", "Letter", "Step" };
 
-        public List<String> documentList;
+        public List<string> documentList;
 
         private async Task ClosechapterModal()
         {
@@ -53,8 +51,19 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
             {
                 await chapterManagementService.Update(TaskObject);
             }
+
+            TaskObject = new UsrOrDefChapterManagement();
+
             await ClosechapterModal();
             DataChanged?.Invoke();
+
+        }
+
+        private async void Cancel()
+        {
+            TaskObject = new UsrOrDefChapterManagement();
+
+            await ClosechapterModal();
         }
 
         private async void HandleValidDelete()

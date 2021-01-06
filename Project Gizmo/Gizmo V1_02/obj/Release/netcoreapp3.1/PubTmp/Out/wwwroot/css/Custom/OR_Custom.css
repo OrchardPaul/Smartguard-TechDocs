@@ -4,44 +4,52 @@
     @media (min-width: 992px) 
     @media (min-width: 1200px) 
 */
-body {
-    font-family: Verdana;
-    font-size: 11pt !important;
+
+
+
+.modal {
+    padding-top: 70px !important;
 }
 
-h2 {
-    font-weight: bold;
+
+
+.modal-open {
+    margin-right: -17px;
 }
 
-h3 {
-    font-weight: normal;
-    font-family: Geneva, Tahoma, sans-serif;
+
+
+.modal-dialog, .modal-content {
+    border-radius: 25px;
+    padding: 0 20px;
 }
 
-.badge {
-    padding: 7px 15px 7px 15px;
+
+
+.modal-header {
+    font-weight: bold !important
+}
+
+
+
+.modal-footer {
+    border-top: 1pt solid #DDD;
+}
+
+
+
+.modal .form-control {
+    color: #888;
+}
+
+
+
+.modal .info-text {
+    color: #888;
     font-size: 0.9rem;
-    border-radius: 12px;
 }
 
-.badge-tran {
-    background-color: #222;
-    color: #FFF;
-    font-weight: normal;
-    border: 1pt solid;
-    border-color: #555;
-    margin: 1px;
-    font-size: 0.85rem;
-}
 
-@media (max-width: 767.98px) {
-    .badge-tran {
-        background-color: #FFF;
-        color: #666;
-        border: 1pt solid #999;
-        font-weight: normal;
-    }
-}
 
 .container, .container-fluid {
     padding: 0;
@@ -56,6 +64,7 @@ h3 {
     padding-top: 20px;
 }
 
+
 .parallax {
     /* Full height */
     height: calc(100% - 53px);
@@ -68,6 +77,7 @@ h3 {
     background-size: cover;
     margin: 0;
     padding: 0;
+
 }
 
 .topbar {
@@ -88,7 +98,7 @@ h3 {
 
 .sidebar .top-row {
     background-color: #000000;
-    background-image: url(../images/GadgIT_logo_vsmall.jpg);
+    background-image: url(../images/GadJIT_logo_vsmall.jpg);
     background-repeat: no-repeat;
     background-position: center;
 }
@@ -137,6 +147,10 @@ h3 {
 .btn {
     border: 2pt solid !important;
     border-radius: 10px !important;
+    min-height: 40px;
+    min-width: 35px;
+    display: flex;
+    align-items: center;
 }
 
 .btn:hover {
@@ -149,15 +163,19 @@ h3 {
 .btn-edit {
     display: block;
     height: 100%;
-    width: 40px;
-    margin: 0;
+    width: 35px;
+    margin: 0 0 0 5px;
     border: none !important;
-    background-color: #DDD;
     border-radius: 5px !important;
+    background-color: rgba(245, 245, 245, 0.5) !important;
+}
+
+.tran-block .btn-edit {
+    background-color: rgba(245, 245, 245, 0) !important;
 }
 
 .btn-shadow {
-    box-shadow: 0 8px 12px 0 rgba(0, 0, 0, 0.7);
+    box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.7);
 }
 
 .back-link {
@@ -167,6 +185,7 @@ h3 {
 .data-item-edit {
     padding: 0 !important;
     background-color: rgba(245, 245, 245, 0) !important;
+
 }
 
 .text-block {
@@ -176,37 +195,130 @@ h3 {
 }
 
 .tran-block {
-    background-color: rgba(255, 255, 255, 0.9);
-    padding: 10px;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 10px 10px 20px 10px;
     margin-bottom: 20px;
 }
 
-.detail-box{
+.page-header-block {
+    padding: 0 0 0 10px;
+    margin-bottom: 5px;
+    width: auto;
+    font-size: 0.8rem;
+}
+
+.page-header-block {
+    padding: 0 0 0 10px;
+    margin-bottom: 5px;
+    width: auto;
+    font-size: 0.8rem;
+}
+
+.detail-block {
     width: 100%;
     margin: 20px 10px 20px 0px;
     border-radius: 3px;
     padding: 20px;
 }
 
+@media (max-width: 767.98px) {
+    .detail-block {
+        margin-bottom: 20px;
+        padding: 0;
+    }
+}
+
+.detail-box{
+    min-width:470px;
+}
+
+.detail-list-box {
+    border: 1px solid #DDD !important;
+    border-radius: 5px;
+    margin: 5px 0px 10px 0px;
+    padding: 2px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    background-color: rgba(255, 255, 255, 0.8)
+}
+
+.detail-group-box {
+    border-top: 1px solid #BBB;
+    margin: 5px 0px 10px 0px;
+    padding: 15px;
+    overflow-y:auto;
+    overflow-x:hidden;
+}
 
 /*-----------------------------*/
 /*  DATA GRIDS                 */
 /*-----------------------------*/
+.row{ 
+    margin-left: 0; 
+    margin-right: 0;
+}
+
 .grid-header {
-    height: 35px;
+    height: 45px;
 }
 
 .grid-row {
     height: 45px;
 }
 
-.data-item {
-    line-height: 45px;
+.grid-row-lg {
+    height: 65px;
 }
 
-.grid-header .data-item{
-    line-height: 35px;
+.grid-row-md {
+    height: 38px;
 }
+
+.grid-row-sm {
+    height: 33px;
+}
+
+.grid-row-auto {
+    min-height: 45px;
+    height: auto;
+
+}
+
+
+.data-item {
+    padding: 0;
+    height: 100%;
+    
+    border: 1pt solid;
+    background-color: rgba(255, 255, 255, 0.5);
+    border-color: #FFF #DDD #DDD #FFF;
+    font-size: 0.85rem !important;
+}
+
+@media (max-width: 767.98px) {
+    .data-item {
+        border-color: #FAFAFA #CCC #CCC #FAFAFA;
+    }
+}
+
+.grid-header .data-item {
+    border: none;
+    font-weight: bold;
+}
+
+.data-item-sub {
+    padding-left: 20px !important;
+    text-overflow: ellipsis;
+}
+
+.grid-header .data-item-sub {
+    background-color: rgba(255, 255, 255, 0);
+}
+
+.detail-list-box .data-item-sub {
+    background-color: rgba(255, 255, 255, 0)
+}
+
 
 .data-item a:hover{
     text-decoration: none;
@@ -227,33 +339,126 @@ h3 {
 }
 
 
-.data-item-main {
+.data-item-main, .data-item-alt {
+    height: 100%;
+    display: flex;
+    align-items: center;
     padding-left: 20px !important;
-    border-radius: 5px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     font-size: 0.95rem !important;
+    background-color: rgba(255, 255, 255, 0);
+    box-shadow: 0 8px 12px 0 rgba(0, 0, 0, 0.5);
 }
 
-.data-item a:hover .data-item-main {
+.data-item-nav {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    padding: 0;
+    font-size: 0.95rem !important;
+    background-color: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 8px 12px 0 rgba(0, 0, 0, 0.5);
+    border-radius: 5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.data-item-nav a{
+    display: block;
+    height: 100%;
+    width: 100%;
+    text-decoration: none !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+.data-item-nav:hover, .data-item-nav a:hover {
     background-color: #000;
     color: #FFF;
     transition-duration: 1s;
     transition-property: background-color, color;
 }
- 
+
+.data-item a:hover .data-item-main, .data-item a:hover .data-item-alt {
+    background-color: #000;
+    color: #FFF;
+    transition-duration: 1s;
+    transition-property: background-color, color;
+}
+
 .data-item-sub {
-    padding-left: 20px !important;
-    border-radius: 5px;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    position: relative;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    font-size: 0.85rem !important;
 }
 
-.data-item-edit {
-    border-radius: 5px;
+.data-item-detail {
+    height: 20px !important;
+    margin: 0;
+    padding: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.data-item-detail-sm {
+    font-size: 0.8em;
+    height: 17px !important;
+    margin: 0;
+    padding: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.data-item-detail label {
+    display: inline-block;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    margin: 0 5px 0 0;
+}
+
+.data-item-detail span, .data-item-detail-sm span {
+    display: inline-block;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    margin: 0;
+    color: #555;
+}
+
+
+
+.edit-link-right, .nav-link-right, .data-item-nav .data-item-sub .nav-link-right {
+    display: block;
+    width: 20px;
+    margin-left: auto;
+    margin-right: 15px;
+    height: 1.4em;
+    float: right;
+}
+
+.data-item-right {
+    display: block;
+    margin-left: auto;
+    margin-right: 5px;
+    float: right;
+}
+
+.data-item-wrap {
+    display: flex;
+    flex-wrap: wrap;
 }
 
 .data-item em {
@@ -261,10 +466,23 @@ h3 {
 }
 
 
+
+/*  DETAIL LIST     */
+
+.detail-list-box .grid-row {
+    height: 30px;
+}
+
+.detail-list-box .data-item-sub {
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
 /*   GRID TRAN    */
 .grid-tran {
     margin-bottom: 10px;
-    margin-left: 10px;
+    margin-left: 0px;
 }
 
 @media (max-width: 767.98px) {
@@ -273,12 +491,14 @@ h3 {
     }
 }
 
-
+.grid-tran .btn {
+    box-shadow: 0 8px 12px 0 rgba(0, 0, 0, 0.5);
+}
 
 .grid-tran .btn:hover {
     box-shadow: none;
     transition-duration: 1s;
-    transition-property: box-shadow, background-color;
+    transition-property: box-shadow, background-color, border;
 }
 
 .grid-tran .grid-header {
@@ -305,39 +525,32 @@ h3 {
     width: calc(100% - 7px);
 }
 
+.grid-tran .data-item-alt {
+    border: 1pt solid;
+    border-radius: 5px;
+}
+
 .grid-tran .data-item-sub {
     height: 100%;
     width: 100%;
     padding: 0 5px 0 5px;
     margin: 0px;
+
 }
 
 
 
 .grid-tran .grid-Header .data-item-sub {
-    background-color: #999;
-    color: #333;
+    background-color: #FFF;
+    color: #000;
     font-weight: bold;
 }
 
-.grid-tran .grid-row .data-item-sub {
-    background-color: rgba(255, 255, 255, 0.8);
-    color: #000;
-}
 
 
-@media (max-width: 767.98px) {
-    .grid-tran .grid-Header .data-item-sub {
-        background-color: none;
-    }
-
-    .grid-tran .grid-row .data-item-sub {
-        background-color: #DFDFDF;
-    }
-}
-
-.grid-tran .grid-row .no-tran, .grid-tran .grid-header .no-tran {
-    background-color: rgba(245, 245, 245, 0);
+/*  FILTER BLOCK   */
+.filter-block {
+    border-bottom: 1pt solid #AAA;
 }
 
 .spinner {
@@ -455,6 +668,8 @@ h3 {
     margin: auto;
 }
 
+
+
 /* Responsive columns - one column layout (vertical) on small screens */
 @media (max-width: 1800px) {
     .main-nav .card {
@@ -501,30 +716,36 @@ h3 {
 }
 
 
-/*---------------------------------------*/
-/*   POPUP DIALOG MODAL FORMS            */
-/*---------------------------------------*/
-
-.modal {
-    padding: 20px !important;
+/******************/
+/*   TESTING ONLY */
+#agendaWrapper, #statusWrapper {
+    margin-left: 0px;
+    margin-right: 0px;
+    padding-left: 0px;
+    padding-right: 0px;
 }
 
-.modal-dialog, .modal-content {
-    border-radius: 25px;
-    padding: 0 20px;
+#agendaWrapper, #statusWrapper, #docsWrapper, #feesWrapper {
+    margin-bottom: 10px;
 }
 
-.modal-header {
-    font-weight: bold !important
+#agendaWrapper .detail-list-box {
+    height: 70px;
 }
 
-/*    .modal-body {
-    }*/
-
-.modal-footer {
-    border-top: 1pt solid #DDD;
+#statusWrapper .detail-list-box {
+    height: 100px;
 }
 
-.modal .form-control {
-    color: #888;
+#docsWrapper .detail-list-box {
+    height: 220px;
 }
+
+#feesWrapper .detail-list-box {
+    height: 205px;
+}
+
+a[title="Information"] {
+    color: #999;
+}
+

@@ -18,7 +18,7 @@ namespace Gizmo_V1_02.Pages.SystemNav.WorkTypeManagement
         [Inject]
         NavigationManager NavigationManager { get; set; }
 
-        private List<VmDepartments> departments { get; set; }
+        private List<VmDepartments> departments { get; set; } = new List<VmDepartments>();
         private List<WorkTypeGroupItem> workTypeGroups { get; set; }
         public List<AppWorkTypes> workTypeItems { get; set; }
         public List<WorkTypeWithDepartment> workTypeWithDepartmentItems { get; set; }

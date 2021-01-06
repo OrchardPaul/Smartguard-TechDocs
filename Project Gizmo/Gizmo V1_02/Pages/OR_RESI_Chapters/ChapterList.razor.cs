@@ -78,8 +78,6 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
         public string ModalHeight { get; set; }
         public string ModalWidth { get; set; }
 
-
-
         protected override async Task OnInitializedAsync()
         {
             var authenticationState = await pageAuthorisationState.ChapterListAuthorisation();
@@ -134,11 +132,7 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
         {
             selectedCaseType = (selectedCaseType == caseType) ? "" : caseType;
             selectedChapter = "";
-        }
-
-        private void ToggleStatusHover(StatusObject statusObject)
-        {
-            statusObject.hoveredOver = !statusObject.hoveredOver;
+            PrepDocumentList();
         }
 
         async Task SelectDocList(String chapter, int chapterID)
@@ -190,57 +184,13 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
                 .Where(A => A.Type != "Status")
                 .ToList();
 
+            editObject = new UsrOrDefChapterManagement();
+
             StateHasChanged();
         }
 
-        void ShowAgenda(String option, String type)
+        private void PrepareForEdit(UsrOrDefChapterManagement item, string header)
         {
-            if (option == "Show")
-            {
-                displaySection = type;
-            }
-            else
-            {
-                displaySection = "";
-            }
-        }
-
-        private void PrepareForInsert(String header)
-        {
-            PrepDocumentList();
-            parentId = selectedChapterId;
-
-            int? maxSeq = lstAll.Max(A => A.SeqNo);
-
-
-            editObject = new UsrOrDefChapterManagement
-            {
-                CaseType = "",
-                CaseTypeGroup = "",
-                ParentId = parentId,
-                SeqNo = maxSeq
-            };
-
-            if (header == "Agenda")
-            {
-                editObject.Type = "Agenda";
-            }
-            else if (header == "Fee")
-            {
-                editObject.Type = "Fee";
-            }
-            else if (header == "Status")
-            {
-                editObject.Type = "Status";
-            }
-
-            customHeader = "Add New " + header;
-            selectedList = header;
-        }
-
-        private void PrepareForEdit(UsrOrDefChapterManagement item, String header)
-        {
-            PrepDocumentList();
             customHeader = header;
             selectedList = header;
             editObject = item;
@@ -273,11 +223,6 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
             editChapterObject.SeqNo = 0;
             editChapterObject.SuppressStep = "";
             editChapterObject.EntityType = "";
-        }
-
-        private void PrepareChapterForEdit(UsrOrDefChapterManagement selectedChapter)
-        {
-            editChapterObject = selectedChapter;
         }
 
         private void PrepareCaseTypeForEdit(string caseType, string option)

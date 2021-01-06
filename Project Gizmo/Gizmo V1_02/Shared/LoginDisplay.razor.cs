@@ -18,5 +18,30 @@ namespace Gizmo_V1_02.Shared
         [Parameter]
         public string userFullName { get; set; }
 
+        [Inject]
+        public IUserSessionState userSession { get; set; }
+
+        [Inject]
+        public NavigationManager navigationManager { get; set; }
+
+        public string ModalInfoHeader { get; set; }
+        public string ModalHeight { get; set; }
+        public string ModalWidth { get; set; }
+
+        public void setReturnURI()
+        {
+            userSession.SetUserProfileReturnURI(navigationManager.Uri);
+        }
+
+
+        private void PrepareModalDelete(string modalHeader
+                                        , string modalHeight
+                                        , string modalWidth)
+        {
+            ModalInfoHeader = modalHeader;
+            ModalHeight = modalHeight;
+            ModalWidth = modalWidth;
+        }
+
     }
 }

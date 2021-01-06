@@ -27,7 +27,9 @@ namespace Gizmo_V1_02.Shared
         public AspNetUsers currentUser { get; set; }
 
         public int selectedCompanyId { get; set; }
-        
+
+
+
         protected override async Task OnInitializedAsync()
         {
             await sessionState.SetSessionState();
@@ -46,7 +48,7 @@ namespace Gizmo_V1_02.Shared
         private async void ToggleCompany(int companyId)
         {
             currentUser.SelectedCompanyId = companyId;
-            await sessionState.switchSelectedCompany(companyId);
+            //await sessionState.switchSelectedCompany(companyId);
 
             /*
              * Need to redirect to Identity Section
@@ -56,5 +58,7 @@ namespace Gizmo_V1_02.Shared
 
             NavigationManager.NavigateTo("/Identity/Account/LogOutOnGet", true);
         }
+
+
     }
 }

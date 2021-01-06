@@ -42,6 +42,9 @@ namespace Gizmo_V1_02.Pages.UserProfile
         private IUserSessionState sessionState { get; set; }
 
         [Inject]
+        private NavigationManager navigationManager { get; set; }
+
+        [Inject]
         private ICompanyDbAccess companyDbAccess { get; set; }
 
         private IList<string> editObjectRoles { get; set; }
@@ -51,8 +54,6 @@ namespace Gizmo_V1_02.Pages.UserProfile
         private List<AspNetRoles> lstRoles { get; set; }
 
         private List<string> usersClaimId { get; set; }
-
-        private AspNetUsers currentUser { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
@@ -64,62 +65,36 @@ namespace Gizmo_V1_02.Pages.UserProfile
                 await Task.Yield();
                 gotLock = sessionState.Lock;
             }
-
-
             sessionState.OnChange += StateHasChanged;
 
             TaskObject = sessionState.User;
-            selectedOption = "Edit";
+            TaskObject.PasswordHash = "PasswordNotChanged115592!";
+
+
             companies = await companyDbAccess.GetCompanies();
             lstRoles = await roleAccess.GetUserRoles();
 
-            if (selectedOption == "Edit")
+            editObjectRoles = await roleAccess.GetCurrentUserRolesForCompany(TaskObject, TaskObject.SelectedCompanyId);
+
+            //editObjectRoles = await service.GetSelectedUserRoles(selectedUser);
+            var userCliams = await service.GetCompanyClaims(TaskObject);
+            usersClaimId = userCliams.Select(U => U.Value).ToList();
+
+            companyItems = companies.Select(C => new CompanyItem
             {
+                Id = C.Id,
+                Company = C,
+                IsSubscribed = (usersClaimId.Contains(C.Id.ToString())) ? true : false
+            }).ToList();
 
-                currentUser = await service.GetUserByName(TaskObject.UserName);
-
-                editObjectRoles = await roleAccess.GetCurrentUserRolesForCompany(currentUser, currentUser.SelectedCompanyId);
-
-                //editObjectRoles = await service.GetSelectedUserRoles(selectedUser);
-                var userCliams = await service.GetCompanyClaims(currentUser);
-                usersClaimId = userCliams.Select(U => U.Value).ToList();
-
-                companyItems = companies.Select(C => new CompanyItem
+            selectedRoles = lstRoles
+                .Select(L => new RoleItem
                 {
-                    Id = C.Id,
-                    Company = C,
-                    IsSubscribed = (usersClaimId.Contains(C.Id.ToString())) ? true : false
-                }).ToList();
-
-                selectedRoles = lstRoles
-                    .Select(L => new RoleItem
-                    {
-                        IsSubscribed = (editObjectRoles.Contains(L.Name)) ? true : false,
-                        RoleName = L.Name,
-                        RoleId = L.Id
-                    })
-                    .ToList();
-            }
-            else
-            {
-                editObjectRoles = null;
-
-                companyItems = companies.Select(C => new CompanyItem
-                {
-                    Id = C.Id,
-                    Company = C,
-                    IsSubscribed = C.CompanyName == sessionState.Company.CompanyName ? true : false
-                }).ToList();
-
-                selectedRoles = lstRoles
-                    .Select(L => new RoleItem
-                    {
-                        IsSubscribed = false,
-                        RoleName = L.Name,
-                        RoleId = L.Id
-                    })
-                    .ToList();
-            }
+                    IsSubscribed = (editObjectRoles.Contains(L.Name)) ? true : false,
+                    RoleName = L.Name,
+                    RoleId = L.Id
+                })
+                .ToList();
 
         }
 
@@ -149,7 +124,7 @@ namespace Gizmo_V1_02.Pages.UserProfile
         {
             TaskObject.SelectedCompanyId = selectedId;
 
-            editObjectRoles = await roleAccess.GetCurrentUserRolesForCompany(currentUser, TaskObject.SelectedCompanyId);
+            editObjectRoles = await roleAccess.GetCurrentUserRolesForCompany(TaskObject, TaskObject.SelectedCompanyId);
 
             selectedRoles = lstRoles
                 .Select(L => new RoleItem
@@ -167,6 +142,12 @@ namespace Gizmo_V1_02.Pages.UserProfile
         private async void HandleValidSubmit()
         {
             await SubmitChange();
+            NavigateBack();
+        }
+
+        public void NavigateBack()
+        {
+            navigationManager.NavigateTo(sessionState.userProfileReturnURI, true);
         }
 
         private async Task<AspNetUsers> SubmitChange()

@@ -55,10 +55,10 @@ namespace Gizmo_V1_02.Data.Admin
         private readonly IMapper mapper;
 
         public CompanyDbAccess(AuthorisationDBContext context
-                                ,AuthenticationStateProvider authenticationStateProvider
-                                ,UserManager<ApplicationUser> userManager
-                                ,IIdentityUserAccess identityUserAccess
-                                ,IMapper mapper)
+                                , AuthenticationStateProvider authenticationStateProvider
+                                , UserManager<ApplicationUser> userManager
+                                , IIdentityUserAccess identityUserAccess
+                                , IMapper mapper)
         {
             this.context = context;
             this.authenticationStateProvider = authenticationStateProvider;
@@ -83,22 +83,23 @@ namespace Gizmo_V1_02.Data.Admin
             return await context.AppWorkTypeGroups.ToListAsync();
         }
 
-        public async Task<List<AppWorkTypes>> GetWorkTypes() 
+        public async Task<List<AppWorkTypes>> GetWorkTypes()
         {
             return await context.AppWorkTypes.ToListAsync();
         }
-        
+
         public async Task<WorkTypeMapping> GetWorkTypeMappingsByCompany(AppCompanyDetails company
-                                                                                ,List<CaseTypes> allCaseTypes
-                                                                                ,AppWorkTypes workType
-                                                                                ,string system)
+                                                                                , List<CaseTypes> allCaseTypes
+                                                                                , AppWorkTypes workType
+                                                                                , string system)
         {
 
             var caseTypeAssignments = allCaseTypes
                                             .Select(C => new CaseTypeAssignment
                                             {
                                                 CaseType = C
-                                                , IsAssigned = context.AppCompanyWorkTypeMapping
+                                                ,
+                                                IsAssigned = context.AppCompanyWorkTypeMapping
                                                                 .Where(M => M.WorkTypeId == workType.Id)
                                                                 .Where(M => M.CaseTypeCode == C.Code)
                                                                 .Where(M => M.CompanyId == company.Id)
@@ -113,11 +114,12 @@ namespace Gizmo_V1_02.Data.Admin
                 .Select(T => new WorkTypeMapping
                 {
                     workType = T
-                    ,caseTypeAssignments = caseTypeAssignments
+                    ,
+                    caseTypeAssignments = caseTypeAssignments
                 })
                 .SingleOrDefaultAsync();
         }
-       
+
         public async Task<List<AppCompanyWorkTypeMapping>> UpdateWorkTypeMapping(WorkTypeMapping typeMapping
                                                                                 , AppCompanyDetails company
                                                                                 , string system)
@@ -127,13 +129,16 @@ namespace Gizmo_V1_02.Data.Admin
                                 .Select(C => new AppCompanyWorkTypeMapping
                                 {
                                     WorkTypeId = typeMapping.workType.Id
-                                    ,CaseTypeCode = C.CaseType.Code
-                                    ,CompanyId = company.Id
-                                    ,System = system
+                                    ,
+                                    CaseTypeCode = C.CaseType.Code
+                                    ,
+                                    CompanyId = company.Id
+                                    ,
+                                    System = system
                                 })
                                 .ToList();
 
-            
+
 
             if (addMappings.Count > 0)
             {
@@ -168,7 +173,7 @@ namespace Gizmo_V1_02.Data.Admin
             if (removeMappings.Count > 0)
             {
                 removeMappings = removeMappings
-                                .Select(A =>  context.AppCompanyWorkTypeMapping
+                                .Select(A => context.AppCompanyWorkTypeMapping
                                                                                 .Where(M => M.WorkTypeId == A.WorkTypeId)
                                                                                 .Where(M => M.CaseTypeCode == A.CaseTypeCode)
                                                                                 .Where(M => M.CompanyId == A.CompanyId)
@@ -188,6 +193,8 @@ namespace Gizmo_V1_02.Data.Admin
 
         public async Task<List<WorkTypeGroupItem>> GetGroupsWithWorkTypes()
         {
+            var cp = await context.AppCompanyUserRoles.ToListAsync();
+
             return await context.AppWorkTypeGroups
                                 .Select(G => new WorkTypeGroupItem
                                 {
@@ -231,7 +238,7 @@ namespace Gizmo_V1_02.Data.Admin
                                                 .Where(A => A.WorkTypeGroupId == workTypeGroup.group.Id)
                                                 .ToListAsync();
 
-            if(AssignmentsToRemove.Count > 0)
+            if (AssignmentsToRemove.Count > 0)
             {
                 context.AppWorkTypeGroupsTypeAssignments.RemoveRange(AssignmentsToRemove);
 
@@ -262,7 +269,7 @@ namespace Gizmo_V1_02.Data.Admin
             {
                 await context.SaveChangesAsync();
             }
-            
+
             return workTypeGroup;
 
         }
@@ -291,7 +298,7 @@ namespace Gizmo_V1_02.Data.Admin
         {
             var selectedWorkTypeGroup = await context.AppWorkTypeGroups.SingleOrDefaultAsync(A => A.Id == workTypeGroup.Id);
 
-            if(selectedWorkTypeGroup is null)
+            if (selectedWorkTypeGroup is null)
             {
                 context.AppWorkTypeGroups.Add(workTypeGroup);
                 await context.SaveChangesAsync();
@@ -320,7 +327,7 @@ namespace Gizmo_V1_02.Data.Admin
             }
             else
             {
-                if(selectedWorkTypeWithNoTracking.DepartmentId != workType.DepartmentId)
+                if (selectedWorkTypeWithNoTracking.DepartmentId != workType.DepartmentId)
                 {
                     var assignedGroups = await context
                                                 .AppWorkTypeGroupsTypeAssignments
@@ -328,12 +335,12 @@ namespace Gizmo_V1_02.Data.Admin
                                                 .Join(context.AppWorkTypeGroups,
                                                             A => A.WorkTypeGroupId,
                                                             AWG => AWG.Id,
-                                                            (A,AWG) => new { A,AWG})
+                                                            (A, AWG) => new { A, AWG })
                                                 .Where(C => C.AWG.parentId == selectedWorkTypeWithNoTracking.DepartmentId)
                                                 .Select(C => C.A)
                                                 .ToListAsync();
 
-                    if(assignedGroups.Count() > 0)
+                    if (assignedGroups.Count() > 0)
                     {
                         context.AppWorkTypeGroupsTypeAssignments.RemoveRange(assignedGroups);
                     }
@@ -353,7 +360,7 @@ namespace Gizmo_V1_02.Data.Admin
         {
             var selectedDepartment = await context.AppDepartments.SingleOrDefaultAsync(C => C.Id == department.Id);
 
-            if(!(selectedDepartment is null))
+            if (!(selectedDepartment is null))
             {
                 var groups = await context.AppWorkTypeGroups
                                         .Where(A => A.parentId == department.Id)
@@ -439,7 +446,7 @@ namespace Gizmo_V1_02.Data.Admin
 
             return selectedAssignment;
         }
-        
+
 
         /*
          * 
@@ -465,7 +472,7 @@ namespace Gizmo_V1_02.Data.Admin
 
                 return await context.AppCompanyDetails
                                     .Where(A => signedInUsersCompanyIds.Contains(A.Id.ToString()))
-                                    .ToListAsync(); 
+                                    .ToListAsync();
             }
 
         }
@@ -523,17 +530,21 @@ namespace Gizmo_V1_02.Data.Admin
         {
             var selectedCompany = await context.AppCompanyDetails.SingleOrDefaultAsync(C => C.Id == company.Id);
 
-            if(!(selectedCompany is null))
+            if (!(selectedCompany is null))
             {
-                var newAssignment = new AppCompanyWorkTypeGroups { CompanyID = selectedCompany.Id
-                                                                    , WorkTypeGroupId = workTypeGroup.Id };
+                var newAssignment = new AppCompanyWorkTypeGroups
+                {
+                    CompanyID = selectedCompany.Id
+                                                                    ,
+                    WorkTypeGroupId = workTypeGroup.Id
+                };
 
                 var existingAssignment = await context.AppCompanyWorkTypeGroups
                                                     .Where(A => A.CompanyID == newAssignment.CompanyID)
                                                     .Where(A => A.WorkTypeGroupId == newAssignment.WorkTypeGroupId)
                                                     .SingleOrDefaultAsync();
 
-                if(existingAssignment is null)
+                if (existingAssignment is null)
                 {
                     context.AppCompanyWorkTypeGroups.Add(newAssignment);
                     await context.SaveChangesAsync();
