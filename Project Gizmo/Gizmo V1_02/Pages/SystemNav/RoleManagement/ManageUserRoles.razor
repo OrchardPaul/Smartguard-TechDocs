@@ -30,7 +30,7 @@ else
                     </div>
                     @foreach (var role in lstRoles)
                     {
-                        <div class="row grid-row @(role.OnHover ? "grid-row-hover" : "")" @onmouseover="() => ToggleMoreOption(role)" @onmouseout="() => ToggleMoreOption(role)">
+                        <div class="row grid-row">
                             <div class="col-xl-4 col-11 data-item"><div class="data-item-sub"><span class="fa fa-user-alt mr-1"></span> @role.Name</div></div>
                             <div class="col-7 hidden-lg-down data-item"><div class="data-item-sub">@role.RoleDescription</div></div>
                             <div class="col-1 data-item-edit"><button class="btn btn-edit" @onclick='(() => PrepareForEdit(role))' data-toggle="modal" data-target="#roleModal" value=""><i class="fa fa-pencil-alt"></i></button></div>

@@ -5,8 +5,8 @@
 
 
 <div class="tran-block page-header-block ">
-    <a class="float-left back-link" href="javascript:void(0);" >
-        <NavLink @onclick="NavigateBack"><span class="col-alt fa fa-angle-double-left"></span></NavLink>
+    <a class="float-left back-link" href="javascript:void(0);" @onclick="@ToggleDetail">
+        <NavLink href="system"><span class="col-alt fa fa-angle-double-left"></span></NavLink>
 </a>
     <h3>User Details</h3>
 </div>
@@ -156,14 +156,14 @@
                 <button type="submit" class="float-left btn btn-alt">Save Changes</button>
                 <button type="button" class="float-left ml-2 btn btn-secondary" @onclick="NavigateBack">Cancel</button>
 
-                @if (!(TaskObject.Id is null))
+                @*@if (!(TaskObject.Id is null))
                 {
                     @if (!(TaskObject.Id == sessionState.User.Id))
                     {
                         <button type="button" @onclick="ShowModal" class="btn btn-secondary float-left ml-4">Delete</button>
                     }
 
-                }
+                }*@
             </div>
         </div>
     </div>

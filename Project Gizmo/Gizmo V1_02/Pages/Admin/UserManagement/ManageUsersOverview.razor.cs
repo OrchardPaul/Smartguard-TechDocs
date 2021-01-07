@@ -4,6 +4,7 @@ using Gizmo_V1_02.Data.Admin;
 using Gizmo_V1_02.Services.SessionState;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.JSInterop;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -71,6 +72,18 @@ namespace Gizmo_V1_02.Pages.Admin.UserManagement
             selectedUserState.allRoles = lstRoles;
         }
 
+        protected void PrepareForDelete(AspNetUsers selectedUser)
+        {
+            editOption = "Delete";
+            editObject = selectedUser;
+
+            selectedUserState.TaskObject = editObject;
+            selectedUserState.selectedOption = editOption;
+
+            ToggleDetail?.Invoke();
+        }
+
+
         protected void PrepareForEdit(AspNetUsers selectedUser)
         {
             editOption = "Edit";
@@ -115,9 +128,16 @@ namespace Gizmo_V1_02.Pages.Admin.UserManagement
             hoveredItem.OnHover = !hoveredItem.OnHover;
         }
 
-        private void ToggleMoreShow(UserDataCollectionItem hoveredItem)
+        protected void PrepareModalForDelete(AspNetUsers selectedUser)
         {
-            hoveredItem.MoreOptionShow = !hoveredItem.MoreOptionShow;
+            editObject = selectedUser;
+        }
+
+        private async void HandleValidDelete()
+        {
+            await userAccess.Delete(editObject);
+
+            DataChanged();
         }
 
     }

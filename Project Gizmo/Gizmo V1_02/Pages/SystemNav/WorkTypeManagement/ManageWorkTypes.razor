@@ -68,7 +68,7 @@ else
                 <div class="grid-can-edit">
                     @foreach (var vmDepartment in departments)
                     {
-                        <div class="row grid-row @(vmDepartment.OnHover ? "grid-row-hover" : "")" @onmouseover="() => ToggleMoreOption(vmDepartment)" @onmouseout="() => ToggleMoreOption(vmDepartment)">
+                        <div class="row grid-row">
                             <div class="col-11 col-xl-6 data-item"><div class="data-item-sub">@vmDepartment.department.DepartmentName</div></div>
                             <div class="col-1 data-item-edit"><button class="btn btn-edit" @onclick='(() => PrepareDepartmentForEdit(vmDepartment.department))' data-toggle="modal" data-target="#DepartmentModal" value=""><i class="fa fa-pencil-alt"></i></button></div>
                         </div>
@@ -91,7 +91,7 @@ else
                     @foreach (var wtg in workTypeGroups)
                     {
 
-                        <div class="row grid-row @(wtg.OnHover ? "grid-row-hover" : "")" @onmouseover="() => ToggleMoreOption(wtg)" @onmouseout="() => ToggleMoreOption(wtg)">
+                        <div class="row grid-row" >
                             <div class="col-5 data-item">
                                 <div class="data-item-sub">
                                     @wtg.department.DepartmentName
@@ -121,7 +121,7 @@ else
                     {
 
 
-                        <div class="row grid-row @(wt.OnHover ? "grid-row-hover" : "")" @onmouseover="() => ToggleMoreOption(wt)" @onmouseout="() => ToggleMoreOption(wt)">
+                        <div class="row grid-row">
                             <div class="col-5 data-item">
                                 <div class="data-item-sub">
                                     @wt.department.DepartmentName

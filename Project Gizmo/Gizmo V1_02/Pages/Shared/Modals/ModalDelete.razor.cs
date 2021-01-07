@@ -34,9 +34,10 @@ namespace Gizmo_V1_02.Pages.Shared.Modals
             WishToDelete = !WishToDelete;
         }
 
-        private void HandleValidSubmit()
+        private async Task HandleValidSubmit()
         {
             DeleteAction?.Invoke();
+            await CloseModal();
         }
 
         private async Task CloseModal()

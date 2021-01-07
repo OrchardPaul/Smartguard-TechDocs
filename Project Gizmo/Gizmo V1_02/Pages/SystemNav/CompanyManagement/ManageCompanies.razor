@@ -23,7 +23,7 @@ else
                 <div class="grid-can-edit">
                    @foreach (var vmCompany in lstCompanyDetails)
                    {
-                       <div class="row grid-row @(vmCompany.OnHover ? "grid-row-hover" : "")" @onmouseover="() => ToggleMoreOption(vmCompany)" @onmouseout="() => ToggleMoreOption(vmCompany)">
+                       <div class="row grid-row" >
                            <div class="col-11 data-item"><div class="data-item-sub"><span class="fa fa-building mr-1"></span> @vmCompany.Company.CompanyName</div></div>
                            <div class="col-1 data-item-edit"><button class="btn btn-edit" @onclick='(() => PrepareForEdit(vmCompany.Company))' data-toggle="modal" data-target="#companyModal" value=""><i class="fa fa-pencil-alt"></i></button></div>
                        </div>
