@@ -19,7 +19,7 @@ else
     <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 ml-0 pl-0">
         <div class="tran-block rounded">
 
-            <div class="page-navbar hidden-md-down" style="max-width: 800px">
+            <div class="page-navbar hidden-md-down" >
                 <nav class="navbar navbar-expand-lg navbar-dark bg-dark ">
 
                     <ul class="navbar-nav">
@@ -70,9 +70,29 @@ else
                         @foreach (var vmDepartment in departments)
                         {
                             <div class="row grid-row">
-                                <div class="col-11 col-xl-6 data-item"><div class="data-item-sub">@vmDepartment.department.DepartmentName</div></div>
-                                <div class="col-1 data-item-edit"><button class="btn btn-edit" @onclick='(() => PrepareDepartmentForEdit(vmDepartment.department))' data-toggle="modal" data-target="#DepartmentModal" value=""><i class="fa fa-pencil-alt"></i></button></div>
-                                <div class="col-1 data-item-edit"><button class="btn btn-edit" @onclick='(() => PrepareDepartmentForDelete(vmDepartment.department))' data-toggle="modal" data-target="#modalDelete" value=""><i class="fa fa-pencil-alt"></i></button></div>
+                                <div class="col-12 data-item">
+                                    <div class="btn-ellipses float-left">
+                                        <span class="fa fa-ellipsis-v"></span>
+                                        <div class="ellipsis-menu">
+                                            <ul>
+                                                <li>
+                                                    <a href="javascript: void(0);" @onclick='(() => PrepareDepartmentForEdit(vmDepartment.department))'  data-toggle="modal" data-target="#DepartmentModal" >
+                                                        <span class="fa fa-pencil-alt mr-2"></span>Edit
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="javascript: void(0);" @onclick='(() => PrepareDepartmentForDelete(vmDepartment.department))' data-toggle="modal" data-target="#modalDelete">
+                                                        <span class="fa fa-trash-alt mr-2"></span>Delete
+                                                    </a>
+                                                </li>
+
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="data-item-sub ">@vmDepartment.department.DepartmentName</div>
+                                </div>
+                                @*<div class="col-1 data-item-edit"><button class="btn btn-edit" @onclick='(() => PrepareDepartmentForEdit(vmDepartment.department))' data-toggle="modal" data-target="#DepartmentModal" value=""><i class="fa fa-pencil-alt"></i></button></div>
+                                <div class="col-1 data-item-edit"><button class="btn btn-edit" @onclick='(() => PrepareDepartmentForDelete(vmDepartment.department))' data-toggle="modal" data-target="#modalDelete" value=""><i class="fa fa-pencil-alt"></i></button></div>*@
                             </div>
                         }
                     </div>
@@ -87,23 +107,39 @@ else
                     </div>
                     <div class="grid-can-edit">
                         <div class="row grid-header ">
-                            <div class="col-5 data-item"><div class="data-item-sub">Department</div></div>
+                            <div class="col-6 data-item"><div class="data-item-sub">Department</div></div>
                             <div class="col-6 data-item"><div class="data-item-sub">Group</div></div>
                         </div>
                         @foreach (var wtg in workTypeGroups)
                         {
 
-                            <div class="row grid-row">
-                                <div class="col-5 data-item">
-                                    <div class="data-item-sub">
-                                        @wtg.department.DepartmentName
+                        <div class="row grid-row">
+                            <div class="col-6 data-item">
+                                <div class="btn-ellipses float-left">
+                                    <span class="fa fa-ellipsis-v"></span>
+                                    <div class="ellipsis-menu">
+                                        <ul>
+                                            <li>
+                                                <a href="javascript: void(0);" @onclick='(() => PrepareGroupForEdit(wtg))' data-toggle="modal" data-target="#GroupModal">
+                                                    <span class="fa fa-pencil-alt mr-2"></span>Edit
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="javascript: void(0);" @onclick='(() => PrepareGroupForDelete(wtg))' data-toggle="modal" data-target="#modalDelete">
+                                                    <span class="fa fa-trash-alt mr-2"></span>Delete
+                                                </a>
+                                            </li>
+
+                                        </ul>
                                     </div>
                                 </div>
-
-                                <div class="col-6 data-item"><div class="data-item-sub">@wtg.group.GroupName</div></div>
-                                <div class="col-1 data-item-edit"><button class="btn btn-edit" @onclick='(() => PrepareGroupForEdit(wtg))' data-toggle="modal" data-target="#GroupModal" value=""><i class="fa fa-pencil-alt"></i></button></div>
+                                <div class="data-item-sub">
+                                    @wtg.department.DepartmentName
+                                </div>
                             </div>
-                        }
+                            <div class="col-6 data-item"><div class="data-item-sub">@wtg.group.GroupName</div></div>
+                        </div>
+                            }
                     </div>
 
                 }
@@ -116,7 +152,7 @@ else
                     </div>
                     <div class="grid-can-edit">
                         <div class="row grid-header ">
-                            <div class="col-5 data-item"><div class="data-item-sub">Department</div></div>
+                            <div class="col-6 data-item"><div class="data-item-sub">Department</div></div>
                             <div class="col-6 data-item"><div class="data-item-sub">Group</div></div>
                         </div>
                         @foreach (var wt in workTypeWithDepartmentItems)
@@ -124,14 +160,30 @@ else
 
 
                             <div class="row grid-row">
-                                <div class="col-5 data-item">
+                                <div class="col-6 data-item">
+                                    <div class="btn-ellipses float-left">
+                                        <span class="fa fa-ellipsis-v"></span>
+                                        <div class="ellipsis-menu">
+                                            <ul>
+                                                <li>
+                                                    <a href="javascript: void(0);" @onclick='(() => PrepareTypeForEdit(wt.workType))' data-toggle="modal" data-target="#TypeModal">
+                                                        <span class="fa fa-pencil-alt mr-2"></span>Edit
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="javascript: void(0);" @onclick='(() => PrepareTypeForDelete(wt.workType))' data-toggle="modal" data-target="#modalDelete">
+                                                        <span class="fa fa-trash-alt mr-2"></span>Delete
+                                                    </a>
+                                                </li>
+
+                                            </ul>
+                                        </div>
+                                    </div>
                                     <div class="data-item-sub">
                                         @wt.department.DepartmentName
                                     </div>
                                 </div>
-
                                 <div class="col-6 data-item"><div class="data-item-sub">@wt.workType.TypeName</div></div>
-                                <div class="col-1 data-item-edit"><button class="btn btn-edit" @onclick='(() => PrepareTypeForEdit(wt.workType))' data-toggle="modal" data-target="#TypeModal" value=""><i class="fa fa-pencil-alt"></i></button></div>
                             </div>
 
                         }

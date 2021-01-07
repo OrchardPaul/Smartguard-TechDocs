@@ -72,19 +72,21 @@ else
                     <div class="col-xl-6 col-12 data-item">
                         <div class="btn-ellipses float-left">
                             <span class="fa fa-ellipsis-v"></span>
-                            <ul>
-                                <li>
-                                    <a href="javascript: void(0);" @onclick='(() => PrepareForEdit(userDataItem.User))'>
-                                        <span class="fa fa-pencil-alt mr-2"></span>Edit
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="javascript: void(0);" @onclick='(() => PrepareModalForDelete(userDataItem.User))' data-toggle="modal" data-target="#modalDelete">
-                                        <span class="fa fa-trash-alt mr-2"></span>Delete
-                                    </a>
-                                </li>
+                            <div class="ellipsis-menu">
+                                <ul>
+                                    <li>
+                                        <a href="javascript: void(0);" @onclick='(() => PrepareForEdit(userDataItem.User))'>
+                                            <span class="fa fa-pencil-alt mr-2"></span>Edit
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript: void(0);" @onclick='(() => PrepareModalForDelete(userDataItem.User))' data-toggle="modal" data-target="#modalDelete">
+                                            <span class="fa fa-trash-alt mr-2"></span>Delete
+                                        </a>
+                                    </li>
 
-                            </ul>
+                                </ul>
+                            </div>
                         </div>
                         <div class="data-item-sub"> @userDataItem.User.FullName</div>
                     </div>

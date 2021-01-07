@@ -33,19 +33,21 @@ else
                             <div class="col-xl-5 col-12 data-item">
                                 <div class="btn-ellipses float-left">
                                     <span class="fa fa-ellipsis-v"></span>
-                                    <ul>
-                                        <li>
-                                            <a href="javascript: void(0);" @onclick='(() => PrepareForEdit(role))' data-toggle="modal" data-target="#roleModal">
-                                                <span class="fa fa-pencil-alt mr-2"></span>Edit
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript: void(0);" @onclick='(() => PrepareForDelete(role))' data-toggle="modal" data-target="#modalDelete">
-                                                <span class="fa fa-trash-alt mr-2"></span>Delete
-                                            </a>
-                                        </li>
+                                    <div class="ellipsis-menu">
+                                        <ul>
+                                            <li>
+                                                <a href="javascript: void(0);" @onclick='(() => PrepareForEdit(role))' data-toggle="modal" data-target="#roleModal">
+                                                    <span class="fa fa-pencil-alt mr-2"></span>Edit
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="javascript: void(0);" @onclick='(() => PrepareForDelete(role))' data-toggle="modal" data-target="#modalDelete">
+                                                    <span class="fa fa-trash-alt mr-2"></span>Delete
+                                                </a>
+                                            </li>
 
-                                    </ul>
+                                        </ul>
+                                    </div>
                                 </div>
                                 <div class="data-item-sub"><span class="fa fa-user-alt mr-1"></span> @role.Name</div>
                             </div>

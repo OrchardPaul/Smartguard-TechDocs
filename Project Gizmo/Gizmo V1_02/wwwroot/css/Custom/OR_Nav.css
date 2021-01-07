@@ -180,13 +180,20 @@
 /*--------------------*/
 /*   DROP DOWN NAV    */
 /*--------------------*/
-
-.btn-ellipses ul {
+.btn-ellipses .ellipsis-menu {
     position: absolute;
     display: none;
-    width: 120px;
-    top: 33px;
-    left: 15px;
+    width: 180px;
+    top: 8px;
+    left: 0px;
+    margin: 0;
+    padding: 25px 15px 15px 15px;
+    background-color: none;
+    z-index: 100;
+}
+
+.btn-ellipses ul {
+    width: 100%;
     margin: 0;
     padding: 5px;
     background-color: #fff;
@@ -194,10 +201,10 @@
     color: #555;
     box-shadow: 0 5px 8px rgba(0,0,0,0.4);
     border-radius: 3px;
-    z-index: 100;
+    display: block;
 }
 
-.btn-ellipses:hover ul{
+.btn-ellipses:hover .ellipsis-menu {
     display: block;
 }
 
@@ -206,7 +213,7 @@
 }
 
 .btn-ellipses ul li a {
-    padding-top: 7px;
+    padding: 5px 5px 5px 7px;
     display: block;
     text-decoration: none;
     border-radius: 3px;
