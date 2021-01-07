@@ -53,8 +53,8 @@ else
                 </div>
                 <div class="grid-can-edit">
                     <div class="row grid-header hidden-lg-down ">
-                        <div class="col-7 hidden-lg-down data-item"><div class="data-item-sub">Name</div></div>
-                        <div class="col-xl-5 col-12 data-item"><div class="data-item-sub">Email</div></div>
+                        <div class="col-xl-6 col-12 data-item"><div class="data-item-sub">Name</div></div>
+                        <div class="col-6 hidden-lg-down data-item"><div class="data-item-sub">Email</div></div>
                     </div>
 
                     @foreach (var userDataItem in lstUserDataItems
@@ -70,29 +70,27 @@ else
                     {
                 <div class="row grid-row">
                     <div class="col-xl-6 col-12 data-item">
-                        <div class="data-item-ellipses float-left">
-                            <div class="btn-ellipses float-left">
-                                <span class="fa fa-ellipsis-v"></span>
-                                <ul>
-                                    <li>
-                                        <a href="javascript: void(0);" @onclick='(() => PrepareForEdit(userDataItem.User))'>
-                                            <span class="fa fa-pencil-alt mr-2"></span>Edit
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript: void(0);" @onclick='(() => PrepareModalForDelete(userDataItem.User))' data-toggle="modal" data-target="#modalDelete">
-                                            <span class="fa fa-trash-alt mr-2"></span>Delete
-                                        </a>
-                                    </li>
-                      
-                                </ul>
-                            </div>
+                        <div class="btn-ellipses float-left">
+                            <span class="fa fa-ellipsis-v"></span>
+                            <ul>
+                                <li>
+                                    <a href="javascript: void(0);" @onclick='(() => PrepareForEdit(userDataItem.User))'>
+                                        <span class="fa fa-pencil-alt mr-2"></span>Edit
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="javascript: void(0);" @onclick='(() => PrepareModalForDelete(userDataItem.User))' data-toggle="modal" data-target="#modalDelete">
+                                        <span class="fa fa-trash-alt mr-2"></span>Delete
+                                    </a>
+                                </li>
+
+                            </ul>
                         </div>
                         <div class="data-item-sub"> @userDataItem.User.FullName</div>
                     </div>
                     <div class="col-6 hidden-lg-down data-item">
                         <div class="data-item-sub"> @userDataItem.User.UserName</div>
-                        
+
                     </div>
 
 

@@ -109,7 +109,7 @@
 .btn {
     border: 2pt solid !important;
     border-radius: 5px !important;
-    min-height: 40px;
+    min-height: 35px;
     text-align: center;
 }
 
@@ -294,11 +294,31 @@
     height: 100%;
     padding-left: 10px !important;
     padding-top: 10px !important;
-    width: Calc(100% - 22px) !important;
+    width: 100%;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis !important;
     float: left;
+}
+
+.grid-row .data-item-sub {
+    padding-top: 11px !important;
+}
+
+.grid-row-lg .data-item-sub {
+    padding-top: 14px !important;
+}
+
+.grid-row-md .data-item-sub {
+    padding-top: 7px !important;
+}
+
+.grid-row-sm .data-item-sub {
+    padding-top: 5px !important;
+}
+
+.grid-can-edit .data-item:first-of-type .data-item-sub {
+    width: Calc(100% - 22px) !important;
 }
 
 .grid-header .data-item-sub {
@@ -424,8 +444,8 @@
     display: block;
     width: 20px;
     margin-left: auto;
-    margin-right: 15px;
-    height: 1.4em;
+    margin-right: 10px;
+    height: 1.2em;
     float: right;
 }
 
