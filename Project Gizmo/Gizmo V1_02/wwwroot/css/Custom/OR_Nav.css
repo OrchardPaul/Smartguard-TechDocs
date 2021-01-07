@@ -173,3 +173,49 @@
 .tran-tabs .active a, .tran-tabs .active a:hover {
     color: #FFF !important;
 }
+
+
+
+
+/*--------------------*/
+/*   DROP DOWN NAV    */
+/*--------------------*/
+
+.btn-ellipses ul {
+    position: absolute;
+    display: none;
+    width: 120px;
+    top: 33px;
+    left: 15px;
+    margin: 0;
+    padding: 5px;
+    background-color: #fff;
+    font-size: 0.9rem;
+    color: #555;
+    box-shadow: 0 5px 8px rgba(0,0,0,0.4);
+    border-radius: 3px;
+    z-index: 100;
+}
+
+.btn-ellipses:hover ul{
+    display: block;
+}
+
+.btn-ellipses ul li {
+    list-style-type: none;
+}
+
+.btn-ellipses ul li a {
+    padding: 7px;
+    display: block;
+    text-decoration: none;
+    border-radius: 3px;
+    color: #555;
+    text-align: left;
+}
+
+.btn-ellipses ul li a:hover {
+    background-color: #ddd;
+    color: #000;
+}
+

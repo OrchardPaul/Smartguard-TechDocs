@@ -53,8 +53,8 @@ else
                 </div>
                 <div class="grid-can-edit">
                     <div class="row grid-header hidden-lg-down ">
-                        <div class="col-xl-5 col-12 data-item"><div class="data-item-sub">Email</div></div>
                         <div class="col-7 hidden-lg-down data-item"><div class="data-item-sub">Name</div></div>
+                        <div class="col-xl-5 col-12 data-item"><div class="data-item-sub">Email</div></div>
                     </div>
 
                     @foreach (var userDataItem in lstUserDataItems
@@ -68,26 +68,41 @@ else
                                                                                         .StartsWith(filterName.ToUpper()))
                                                 .ToList())
                     {
-                        <div class="row grid-row">
-                            <div class="col-xl-5 col-12 data-item">
-                                <div class="data-item-sub"><span class="fa fa-user-alt mr-1"></span> @userDataItem.User.UserName</div>
-                                <div class="hidden-xl-up data-item-ellipses visible"><button class="btn btn-ellipses" @onclick='(() => PrepareForEdit(userDataItem.User))' data-toggle="modal" data-target="#chapterCaseTypeEdit" value=""><span class="fa fa-ellipsis-v"></span></button></div>
+                <div class="row grid-row">
+                    <div class="col-xl-6 col-12 data-item">
+                        <div class="data-item-ellipses float-left">
+                            <div class="btn-ellipses float-left">
+                                <span class="fa fa-ellipsis-v"></span>
+                                <ul>
+                                    <li>
+                                        <a href="javascript: void(0);" @onclick='(() => PrepareForEdit(userDataItem.User))'>
+                                            <span class="fa fa-pencil-alt mr-2"></span>Edit
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript: void(0);" @onclick='(() => PrepareModalForDelete(userDataItem.User))' data-toggle="modal" data-target="#modalDelete">
+                                            <span class="fa fa-trash-alt mr-2"></span>Delete
+                                        </a>
+                                    </li>
+                      
+                                </ul>
                             </div>
-                            <div class="col-7 hidden-lg-down data-item">
-                                <div class="data-item-sub">@userDataItem.User.FullName</div>
-                                <div class="data-item-ellipses">
-                                    <button class="btn btn-ellipses" @onclick='(() => PrepareModalForDelete(userDataItem.User))' data-toggle="modal" data-target="#modalDelete"  value="">
-                                        <span class="fa fa-ellipsis-v"></span>
-                                    </button>
-                                </div>
-                            </div>
-
-                            @*
-                                    <div class="data-item-ellipses"><a href="javascript: void(0);" @onclick='(() => PrepareForEdit(userDataItem.User))'><span class="fa fa-ellipsis-v"></span></a></div>
-                                        <div class="col-1 data-item-edit"><button class="btn btn-edit" @onclick='(() => PrepareForEdit(userDataItem.User))' data-toggle="modal" data-target="#roleModal" value=""><i class="fa fa-pencil-alt"></i></button></div>
-                                <div class="col-1 data-item-edit"><button class="btn btn-edit" @onclick='(() => PrepareForEdit(userDataItem.User))' data-toggle="modal" data-target="#roleModal" value=""><i class="fa fa-trash-alt"></i></button></div>*@
-
                         </div>
+                        <div class="data-item-sub"> @userDataItem.User.FullName</div>
+                    </div>
+                    <div class="col-6 hidden-lg-down data-item">
+                        <div class="data-item-sub"> @userDataItem.User.UserName</div>
+                        
+                    </div>
+
+
+
+                    @*
+            <div class="data-item-ellipses"><a href="javascript: void(0);" @onclick='(() => PrepareForEdit(userDataItem.User))'><span class="fa fa-ellipsis-v"></span></a></div>
+                <div class="col-1 data-item-edit"><button class="btn btn-edit" @onclick='(() => PrepareForEdit(userDataItem.User))' data-toggle="modal" data-target="#roleModal" value=""><i class="fa fa-pencil-alt"></i></button></div>
+        <div class="col-1 data-item-edit"><button class="btn btn-edit" @onclick='(() => PrepareForEdit(userDataItem.User))' data-toggle="modal" data-target="#roleModal" value=""><i class="fa fa-trash-alt"></i></button></div>*@
+
+                </div>
 
                     }
 

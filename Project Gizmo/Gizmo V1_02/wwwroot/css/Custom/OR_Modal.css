@@ -2,8 +2,16 @@
 /*   POPUP DIALOG MODAL FORMS            */
 /*---------------------------------------*/
 
+
+
 .modal {
     padding-top: 70px !important;
+}
+
+
+.modal-open {
+    margin-right: -0px;
+    overflow-y: hidden;
 }
 
 .modal-dialog, .modal-content {
