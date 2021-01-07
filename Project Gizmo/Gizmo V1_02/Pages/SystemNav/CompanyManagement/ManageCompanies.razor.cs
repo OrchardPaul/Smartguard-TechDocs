@@ -62,10 +62,11 @@ namespace Gizmo_V1_02.Pages.SystemNav.CompanyManagement
         {
             editCompany = new AppCompanyDetails();
         }
-
-        private void ToggleMoreOption(VmCompanyDetails hoveredItem)
+        private async void HandleValidDelete()
         {
-            hoveredItem.OnHover = !hoveredItem.OnHover;
+            await companyDbAccess.DeleteCompany(editCompany);
+
+            DataChanged();
         }
     }
 }

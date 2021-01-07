@@ -1,5 +1,5 @@
 ﻿@page "/system/managecompanies"
-
+@using Gizmo_V1_02.Pages.Shared.Modals
 
 <div class="tran-block page-header-block">
     <div class="float-left back-link">
@@ -15,25 +15,43 @@
 else
 {
     <div class="col-xl-5 col-lg-8 col-12 ml-0 pl-0">
-       <div class="tran-block rounded">
-           <div class="container-fluid ">
-               <div class="mb-3">
-                   <button data-toggle="modal" data-target="#companyModal" @onclick='(() => PrepareForInsert())' class="btn btn-main btn-shadow"><i class="fa fa-plus pr-1"></i> Add New Company</button>
-               </div>
+        <div class="tran-block rounded">
+            <div class="container-fluid ">
+                <div class="mb-3">
+                    <button data-toggle="modal" data-target="#companyModal" @onclick='(() => PrepareForInsert())' class="btn btn-main btn-shadow"><i class="fa fa-plus pr-1"></i> Add New Company</button>
+                </div>
                 <div class="grid-can-edit">
-                   @foreach (var vmCompany in lstCompanyDetails)
-                   {
-                       <div class="row grid-row" >
-                           <div class="col-11 data-item"><div class="data-item-sub"><span class="fa fa-building mr-1"></span> @vmCompany.Company.CompanyName</div></div>
-                           <div class="col-1 data-item-edit"><button class="btn btn-edit" @onclick='(() => PrepareForEdit(vmCompany.Company))' data-toggle="modal" data-target="#companyModal" value=""><i class="fa fa-pencil-alt"></i></button></div>
-                       </div>
+                    @foreach (var vmCompany in lstCompanyDetails)
+                    {
+                        <div class="row grid-row">
+                            <div class="col-12 data-item">
+                                <div class="btn-ellipses float-left">
+                                    <span class="fa fa-ellipsis-v"></span>
+                                    <ul>
+                                        <li>
+                                            <a href="javascript: void(0);" @onclick='() => PrepareForEdit(vmCompany.Company)' data-toggle="modal" data-target="#companyModal">
+                                                <span class="fa fa-pencil-alt mr-2"></span>Edit
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="javascript: void(0);" @onclick='() => PrepareForDelete(vmCompany.Company)' data-toggle="modal" data-target="#modalDelete">
+                                                <span class="fa fa-trash-alt mr-2"></span>Delete
+                                            </a>
+                                        </li>
 
-                   }
-                   </div>
-               </div>
-           </div>
+                                    </ul>
+                                </div>
+                                <div class="data-item-sub"><span class="fa fa-building mr-1"></span> @vmCompany.Company.CompanyName</div>
+                            </div>
+                        </div>
+
+                    }
+                </div>
+            </div>
+        </div>
     </div>
 
 }
 
 <CompanyEdit TaskObject="@editCompany" DataChanged="@DataChanged"></CompanyEdit>
+<ModalDelete DeleteAction="HandleValidDelete" ModalWidth="500px" ModalHeight="300px" InfoHeader="Delete?"></ModalDelete>

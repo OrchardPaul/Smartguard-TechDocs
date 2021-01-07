@@ -37,6 +37,8 @@ namespace Gizmo_V1_02.Pages.SystemNav.WorkTypeManagement
         public string showGrouping = "Hide";
         public string groupingDept = "";
 
+        public Action SelectedDeleteAction { get; set; } 
+
         protected override async Task OnInitializedAsync()
         {
             try
@@ -209,14 +211,32 @@ namespace Gizmo_V1_02.Pages.SystemNav.WorkTypeManagement
             editDepartment = selectedDepartment;
         }
 
+        protected void PrepareDepartmentForDelete(AppDepartments selectedDepartment)
+        {
+            editDepartment = selectedDepartment;
+            SelectedDeleteAction = HandleDepartmentDelete;
+        }
+
         protected void PrepareGroupForEdit(WorkTypeGroupItem seletedGroup)
         {
             editGroup = seletedGroup;
         }
 
+        protected void PrepareGroupForDelete(WorkTypeGroupItem seletedGroup)
+        {
+            editGroup = seletedGroup;
+            SelectedDeleteAction = HandleGroupDelete;
+        }
+
         protected void PrepareTypeForEdit(AppWorkTypes seletedType)
         {
             editType = seletedType;
+        }
+
+        protected void PrepareTypeForDelete(AppWorkTypes seletedType)
+        {
+            editType = seletedType;
+            SelectedDeleteAction = HandleWorkTypeDelete;
         }
 
         protected void PrepareDepartmentForInsert()
@@ -266,22 +286,26 @@ namespace Gizmo_V1_02.Pages.SystemNav.WorkTypeManagement
             groupingDept = displayDept;
         }
 
-        private void ToggleMoreOption(VmDepartments hoveredItem)
+        private async void HandleDepartmentDelete()
         {
-            hoveredItem.OnHover = !hoveredItem.OnHover;
+            await companyDbAccess.DeleteDepartment(editDepartment);
+
+            DataChanged();
         }
 
-
-        private void ToggleMoreOption(WorkTypeGroupItem hoveredItem)
+        private async void HandleWorkTypeDelete()
         {
-            hoveredItem.OnHover = !hoveredItem.OnHover;
+            await companyDbAccess.DeleteWorkType(editType);
+
+            DataChanged();
         }
 
-        private void ToggleMoreOption(WorkTypeWithDepartment hoveredItem)
+        private async void HandleGroupDelete()
         {
-            hoveredItem.OnHover = !hoveredItem.OnHover;
-        }
+            await companyDbAccess.DeleteWorkTypeGroup(editGroup.group);
 
+            DataChanged();
+        }
 
     }
 }

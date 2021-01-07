@@ -37,14 +37,5 @@ namespace Gizmo_V1_02.Pages.SystemNav.WorkTypeManagement
             DataChanged?.Invoke();
         }
 
-        private async void HandleValidDelete()
-        {
-            await service.DeleteWorkTypeGroup(TaskObject.group);
-
-            ShowForm = true;
-
-            await ClosechapterModal();
-            DataChanged?.Invoke();
-        }
     }
 }

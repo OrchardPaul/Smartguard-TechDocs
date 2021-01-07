@@ -38,12 +38,6 @@ namespace Gizmo_V1_02.Pages.SystemNav.CompanyManagement
             DataChanged?.Invoke();
         }
 
-        private async void HandleValidDelete()
-        {
-            await service.DeleteCompany(TaskObject);
 
-            await ClosechapterModal();
-            DataChanged?.Invoke();
-        }
     }
 }

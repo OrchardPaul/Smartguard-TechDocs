@@ -19,6 +19,8 @@ namespace Gizmo_V1_02.Pages.SystemNav.RoleManagement
         [Inject]
         IIdentityRoleAccess IdentityService { get; set; }
 
+
+
         [Inject]
         IUserSessionState sessionState { get; set; }
 
@@ -38,6 +40,12 @@ namespace Gizmo_V1_02.Pages.SystemNav.RoleManagement
 
             lstRoles = await IdentityService.GetUserRoles();
 
+        }
+        private async void HandleValidDelete()
+        {
+            await IdentityService.Delete(editRole);
+
+            DataChanged();
         }
 
         private async void DataChanged()

@@ -1,5 +1,5 @@
 ﻿@page "/system/manageuserroles"
-
+@using Gizmo_V1_02.Pages.Shared.Modals
 
 <div class="tran-block page-header-block ">
     <div class="float-left back-link">
@@ -24,24 +24,43 @@ else
                 </div>
                 <div class="grid-can-edit">
                     <div class="row grid-header hidden-lg-down">
-                        <div class="col-xl-4 col-11 data-item"><div class="data-item-sub">Name</div></div>
+                        <div class="col-xl-5 col-12 data-item"><div class="data-item-sub">Name</div></div>
                         <div class="col-7 hidden-lg-down data-item"><div class="data-item-sub">Description</div></div>
-                        <div class="col-1"></div>
                     </div>
                     @foreach (var role in lstRoles)
                     {
                         <div class="row grid-row">
-                            <div class="col-xl-4 col-11 data-item"><div class="data-item-sub"><span class="fa fa-user-alt mr-1"></span> @role.Name</div></div>
+                            <div class="col-xl-5 col-12 data-item">
+                                <div class="btn-ellipses float-left">
+                                    <span class="fa fa-ellipsis-v"></span>
+                                    <ul>
+                                        <li>
+                                            <a href="javascript: void(0);" @onclick='(() => PrepareForEdit(role))' data-toggle="modal" data-target="#roleModal">
+                                                <span class="fa fa-pencil-alt mr-2"></span>Edit
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="javascript: void(0);" @onclick='(() => PrepareForDelete(role))' data-toggle="modal" data-target="#modalDelete">
+                                                <span class="fa fa-trash-alt mr-2"></span>Delete
+                                            </a>
+                                        </li>
+
+                                    </ul>
+                                </div>
+                                <div class="data-item-sub"><span class="fa fa-user-alt mr-1"></span> @role.Name</div>
+                            </div>
                             <div class="col-7 hidden-lg-down data-item"><div class="data-item-sub">@role.RoleDescription</div></div>
-                            <div class="col-1 data-item-edit"><button class="btn btn-edit" @onclick='(() => PrepareForEdit(role))' data-toggle="modal" data-target="#roleModal" value=""><i class="fa fa-pencil-alt"></i></button></div>
                         </div>
 
                     }
-                    </div>
                 </div>
             </div>
+        </div>
     </div>
 
 }
 
 <RoleDetail TaskObject="@editRole" DataChanged="@DataChanged"></RoleDetail>
+
+
+<ModalDelete DeleteAction="HandleValidDelete" ModalWidth="500px" ModalHeight="300px" InfoHeader="Delete?"></ModalDelete>
