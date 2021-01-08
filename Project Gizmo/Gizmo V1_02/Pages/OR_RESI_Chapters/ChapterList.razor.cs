@@ -46,10 +46,7 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
 
         private List<StatusObject> statusObjects;
 
-
         public List<DmDocuments> dropDownDocumentList;
-
-        int parentId;
 
         public string editCaseType { get; set; } = "";
         public string isCaseTypeOrGroup { get; set; } = "";
@@ -233,9 +230,13 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
 
         private async void PrepDocumentList()
         {
-            dropDownDocumentList = await chapterManagementService.GetDocumentList(selectedCaseType);
+            if(selectedCaseType != "")
+            {
+                dropDownDocumentList = await chapterManagementService.GetDocumentList(selectedCaseType);
 
-            StateHasChanged();
+                StateHasChanged();
+            }
+           
         }
 
         private void ToggleChapterDetailEdit(string selectedDetail)

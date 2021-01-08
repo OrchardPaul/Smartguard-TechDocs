@@ -20,7 +20,7 @@ else
         <div class="mb-3 tran-block rounded">
             <div class="container-fluid ">
                 <div class="mb-3">
-                    <button data-toggle="modal" data-target="#roleModal" @onclick='(() => PrepareForInsert())' class="btn btn-main btn-shadow"><i class="fa fa-plus"></i> Add New Role</button>
+                    <button @onclick='(() => PrepareForInsert())' class="btn btn-main btn-shadow"><i class="fa fa-plus"></i> Add New Role</button>
                 </div>
                 <div class="grid-can-edit">
                     <div class="row grid-header hidden-lg-down">
@@ -36,7 +36,7 @@ else
                                     <div class="ellipsis-menu">
                                         <ul>
                                             <li>
-                                                <a href="javascript: void(0);" @onclick='(() => PrepareForEdit(role))' data-toggle="modal" data-target="#roleModal">
+                                                <a href="javascript: void(0);" @onclick='(() => PrepareForEdit(role))' >
                                                     <span class="fa fa-pencil-alt mr-2"></span>Edit
                                                 </a>
                                             </li>
@@ -61,8 +61,6 @@ else
     </div>
 
 }
-
-<RoleDetail TaskObject="@editRole" DataChanged="@DataChanged"></RoleDetail>
 
 
 <ModalDelete DeleteAction="HandleValidDelete" ModalWidth="500px" ModalHeight="300px" InfoHeader="Delete?"></ModalDelete>

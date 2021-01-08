@@ -1,4 +1,5 @@
-﻿using Gizmo.Context.Gizmo_Authentification;
+﻿using Blazored.Modal;
+using Gizmo.Context.Gizmo_Authentification;
 using Gizmo.Context.Gizmo_Authentification.Custom;
 using Gizmo_V1_02.Data.Admin;
 using Microsoft.AspNetCore.Components;
@@ -10,6 +11,9 @@ namespace Gizmo_V1_02.Pages.SystemNav.WorkTypeManagement
 {
     public partial class WorkTypeDepartmentDetails
     {
+        [CascadingParameter]
+        BlazoredModalInstance ModalInstance { get; set; }
+
         [Parameter]
         public AppDepartments TaskObject { get; set; }
 
@@ -19,38 +23,17 @@ namespace Gizmo_V1_02.Pages.SystemNav.WorkTypeManagement
         [Inject]
         private ICompanyDbAccess service { get; set; }
 
-        private bool ShowForm { get; set; } = true;
-        private async Task ClosechapterModal()
+        private async void Close()
         {
-            await jsRuntime.InvokeAsync<object>("CloseModal", "DepartmentModal");
+            await ModalInstance.CloseAsync();
         }
 
         private async void HandleValidSubmit()
         {
             await service.SubmitDepartment(TaskObject);
 
-            await ClosechapterModal();
             DataChanged?.Invoke();
-        }
-
-        private async void HandleValidDelete()
-        {
-            await service.DeleteDepartment(TaskObject);
-
-            ShowForm = true;
-
-            await ClosechapterModal();
-            DataChanged?.Invoke();
-        }
-
-        private void SubmitForm()
-        {
-            ShowForm = false;
-        }
-
-        private void CancelForm()
-        {
-            ShowForm = true;
+            Close();
         }
     }
 }
