@@ -46,7 +46,9 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
 
         private List<StatusObject> statusObjects;
 
+
         public List<DmDocuments> dropDownDocumentList;
+
 
         public string editCaseType { get; set; } = "";
         public string isCaseTypeOrGroup { get; set; } = "";
@@ -75,15 +77,18 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
         public string ModalHeight { get; set; }
         public string ModalWidth { get; set; }
 
+        public string navDisplay = "Agenda";
+
+
         protected override async Task OnInitializedAsync()
         {
-            var authenticationState = await pageAuthorisationState.ChapterListAuthorisation();
+            //var authenticationState = await pageAuthorisationState.ChapterListAuthorisation();
 
-            if (!authenticationState)
-            {
-                string returnUrl = HttpUtility.UrlEncode($"/chapterlist");
-                NavigationManager.NavigateTo($"Identity/Account/Login?returnUrl={returnUrl}", true);
-            }
+            //if (!authenticationState)
+            //{
+            //    string returnUrl = HttpUtility.UrlEncode($"/chapterlist");
+            //    NavigationManager.NavigateTo($"Identity/Account/Login?returnUrl={returnUrl}", true);
+            //}
 
             bool gotLock = sessionState.Lock;
             while (gotLock)
@@ -93,8 +98,8 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
             }
 
 
-            if (authenticationState)
-            {
+            //if (authenticationState)
+            //{
                 try
                 {
                     lstAllObjects = await chapterManagementService.GetAllChapters();
@@ -104,7 +109,7 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
                 {
                     NavigationManager.NavigateTo($"/", true);
                 }
-            }
+            //}
         }
 
         public void DirectToLogin()
@@ -230,13 +235,9 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
 
         private async void PrepDocumentList()
         {
-            if(selectedCaseType != "")
-            {
-                dropDownDocumentList = await chapterManagementService.GetDocumentList(selectedCaseType);
+            dropDownDocumentList = await chapterManagementService.GetDocumentList(selectedCaseType);
 
-                StateHasChanged();
-            }
-           
+            StateHasChanged();
         }
 
         private void ToggleChapterDetailEdit(string selectedDetail)
@@ -254,6 +255,11 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
             ModalInfoText = modalText;
             ModalHeight = modalHeight;
             ModalWidth = modalWidth;
+        }
+
+        protected void ShowNav(string displayChange)
+        {
+            navDisplay = displayChange;
         }
     }
 }
