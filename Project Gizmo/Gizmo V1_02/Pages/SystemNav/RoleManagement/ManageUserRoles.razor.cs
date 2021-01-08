@@ -86,7 +86,12 @@ namespace Gizmo_V1_02.Pages.SystemNav.RoleManagement
             parameters.Add("TaskObject", editRole);
             parameters.Add("DataChanged", Action);
 
-            Modal.Show<RoleDetail>("Edit Role", parameters);
+            var options = new ModalOptions()
+            {
+                Class = "blazored-custom-modal"
+            };
+
+            Modal.Show<RoleDetail>("Edit Role", parameters, options);
         }
 
     }
