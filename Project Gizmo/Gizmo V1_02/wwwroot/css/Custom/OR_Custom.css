@@ -176,9 +176,10 @@
 
 .tran-block {
     background-color: rgba(255, 255, 255, 0.8);
-    padding: 15px;
+    padding: 15px 15px 30px 15px;
     margin-bottom: 20px;
     margin-left: 20px;
+    margin-right: 20px;
     border-radius: 5px;
     width: auto;
 }
@@ -276,7 +277,7 @@
     border: 1pt solid;
     background-color: rgba(255, 255, 255, 0.5);
     border-color: #FFF #DDD #DDD #FFF;
-    font-size: 0.85rem !important;
+    font-size: 0.95rem !important;
 }
 
 @media (max-width: 767.98px) {
@@ -306,7 +307,10 @@
 }
 
 .grid-row-lg .data-item-sub {
-    padding-top: 14px !important;
+    padding-top: 20px !important;
+}
+.grid-row-lg .data-item-detail {
+    margin-top: 7px !important;
 }
 
 .grid-row-md .data-item-sub {
@@ -317,7 +321,8 @@
     padding-top: 5px !important;
 }
 
-.grid-can-edit .grid-row .data-item:first-of-type .data-item-sub {
+.grid-can-edit .grid-row .data-item:first-of-type .data-item-sub
+{
     width: Calc(100% - 22px) !important;
 }
 
@@ -481,8 +486,9 @@
 
 /*   GRID TRAN    */
 .grid-tran {
-    margin-bottom: 10px;
+    margin-bottom: 20px;
     margin-left: 0px;
+    padding: 15px;
 }
 
 @media (max-width: 767.98px) {
@@ -605,12 +611,54 @@
         font-weight: bold;
     }
 
+/*---------------------------------------*/
+/*  CUSTOM GRIDS                         */
+/*---------------------------------------*/
 
+.grid-chapter-nav {
+    min-height: 500px;
+}
+
+.grid-chapter-agenda {
+    width: 800px;
+    min-height: 400px;
+}
+
+.grid-chapter-docs {
+    width: 100%;
+    min-height: 400px;
+}
+
+.grid-chapter-fees {
+    width: 800px;
+    min-height: 400px;
+}
+
+.grid-chapter-status {
+    width: 800px;
+    min-height: 400px;
+}
+
+
+/*---------------------------------------*/
+/*   SEQUENCE CHANGE OPTIONS             */
+/*        ^                              */
+/*        7                              */
+/*        v                              */
+/*---------------------------------------*/
+
+.grid-row-lg .data-item-sub .seq-change{
+    margin-top: -14px;
+}
+
+.seq-change a {
+    color: #ccc !important;
+    text-decoration: none;
+}
 
 /*---------------------------------------*/
 /*   BLOCK CARDS                         */
 /*---------------------------------------*/
-
 * {
     box-sizing: border-box;
 }

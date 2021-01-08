@@ -105,14 +105,13 @@
 /*-----------------------------*/
 
 .page-navbar {
-    margin-bottom: 50px;
+    margin-bottom: 30px;
 }
 
 .page-navbar .navbar {
     height: 50px;
     border-radius: 2px !important;
     box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.5) !important;
-
 }
 
 .page-navbar .navbar li {
@@ -174,6 +173,62 @@
     color: #FFF !important;
 }
 
+/*-TRAN NAVBAR-*/
+
+
+.tran-navbar {
+    margin-bottom: 30px;
+}
+
+.tran-navbar .navbar {
+    height: 50px;
+}
+
+.tran-navbar .navbar li {
+    height: 50px;
+    min-width: 100px;
+}
+
+
+.tran-navbar .navbar li.active {
+    border-bottom: 3pt solid;
+}
+
+.tran-navbar .navbar li.active a{
+    color: #000 !important;
+}
+
+.tran-navbar .navbar li a {
+    color: #555 !important;
+    display: block;
+    width: 100%;
+    height: 100%;
+    text-align:center;
+}
+
+.tran-navbar .navbar a span {
+    padding-top: 11px;
+    display: block;
+    text-align:center;
+}
+
+.tran-navbar .navbar li a:hover {
+    text-decoration: none;
+    background-color: rgba(220, 220, 220, 1);
+    color: #000 !important;
+    border-bottom: 3pt solid #000;
+    border-bottom-color: #000;
+    transition-duration: 0.5s;
+    transition-property: background-color, color;
+}
+
+.tran-navbar .navbar li.active a:hover {
+    border-bottom: none !important;
+}
+
+.tran-navbar .navbar li.active a {
+    color: #000;
+}
 
 
 
