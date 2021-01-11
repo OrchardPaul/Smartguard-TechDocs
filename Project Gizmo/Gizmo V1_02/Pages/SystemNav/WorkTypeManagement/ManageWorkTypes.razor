@@ -64,7 +64,7 @@ else
                 {
 
                     <div class="mb-3 mt-2">
-                        <button data-toggle="modal" data-target="#DepartmentModal" @onclick='(() => PrepareDepartmentForInsert())' class="btn btn-main btn-shadow"><i class="fa fa-plus pr-1"></i> Add New Department</button>
+                        <button @onclick='(() => PrepareDepartmentForInsert())' class="btn btn-main btn-shadow"><i class="fa fa-plus pr-1"></i> Add New Department</button>
                     </div>
                     <div class="grid-can-edit">
                         @foreach (var vmDepartment in departments)
@@ -76,7 +76,7 @@ else
                                         <div class="ellipsis-menu">
                                             <ul>
                                                 <li>
-                                                    <a href="javascript: void(0);" @onclick='(() => PrepareDepartmentForEdit(vmDepartment.department))'  data-toggle="modal" data-target="#DepartmentModal" >
+                                                    <a href="javascript: void(0);" @onclick='(() => PrepareDepartmentForEdit(vmDepartment.department))' >
                                                         <span class="fa fa-pencil-alt mr-2"></span>Edit
                                                     </a>
                                                 </li>
@@ -148,7 +148,7 @@ else
                 {
 
                     <div class="mb-3">
-                        <button data-toggle="modal" data-target="#TypeModal" @onclick='(() => PrepareTypeForInsert())' class="btn btn-main btn-shadow"><i class="fa fa-plus pr-1"></i> Add New Work Type</button>
+                        <button @onclick='(() => PrepareTypeForInsert())' class="btn btn-main btn-shadow"><i class="fa fa-plus pr-1"></i> Add New Work Type</button>
                     </div>
                     <div class="grid-can-edit">
                         <div class="row grid-header ">
@@ -166,7 +166,7 @@ else
                                         <div class="ellipsis-menu">
                                             <ul>
                                                 <li>
-                                                    <a href="javascript: void(0);" @onclick='(() => PrepareTypeForEdit(wt.workType))' data-toggle="modal" data-target="#TypeModal">
+                                                    <a href="javascript: void(0);" @onclick='(() => PrepareTypeForEdit(wt.workType))'>
                                                         <span class="fa fa-pencil-alt mr-2"></span>Edit
                                                     </a>
                                                 </li>
@@ -266,10 +266,6 @@ else
 
 
 <WorkTypeGroupDetails TaskObject="@editGroup" Departments="@departments.Select(D => D.department).ToList()" DataChanged="@DataChanged"></WorkTypeGroupDetails>
-
-<WorkTypeDetails TaskObject="@editType" Departments="@departments.Select(D => D.department).ToList()" DataChanged="@DataChanged"></WorkTypeDetails>
-
-<WorkTypeDepartmentDetails TaskObject="@editDepartment" DataChanged="@DataChanged"></WorkTypeDepartmentDetails>
 
 <WorkTypeGroupingDetails TaskObject="@editGrouping" DataChanged="@DataChanged" Assignments="@editAssignments"></WorkTypeGroupingDetails>
 

@@ -1,4 +1,6 @@
-﻿using Gizmo.Context.Gizmo_Authentification;
+﻿using Blazored.Modal;
+using Blazored.Modal.Services;
+using Gizmo.Context.Gizmo_Authentification;
 using Gizmo.Context.Gizmo_Authentification.Custom;
 using Gizmo_V1_02.Data.Admin;
 using Microsoft.AspNetCore.Components;
@@ -11,6 +13,8 @@ namespace Gizmo_V1_02.Pages.SystemNav.WorkTypeManagement
 {
     public partial class ManageWorkTypes
     {
+        [Inject]
+        IModalService Modal { get; set; }
 
         [Inject]
         ICompanyDbAccess companyDbAccess { get; set; }
@@ -209,6 +213,7 @@ namespace Gizmo_V1_02.Pages.SystemNav.WorkTypeManagement
         protected void PrepareDepartmentForEdit(AppDepartments selectedDepartment)
         {
             editDepartment = selectedDepartment;
+            ShowEditDepartmentModal();
         }
 
         protected void PrepareDepartmentForDelete(AppDepartments selectedDepartment)
@@ -231,6 +236,7 @@ namespace Gizmo_V1_02.Pages.SystemNav.WorkTypeManagement
         protected void PrepareTypeForEdit(AppWorkTypes seletedType)
         {
             editType = seletedType;
+            ShowEditTypeModal();
         }
 
         protected void PrepareTypeForDelete(AppWorkTypes seletedType)
@@ -242,6 +248,7 @@ namespace Gizmo_V1_02.Pages.SystemNav.WorkTypeManagement
         protected void PrepareDepartmentForInsert()
         {
             editDepartment = new AppDepartments();
+            ShowEditDepartmentModal();
         }
 
         protected void PrepareGroupForInsert()
@@ -252,7 +259,32 @@ namespace Gizmo_V1_02.Pages.SystemNav.WorkTypeManagement
         protected void PrepareTypeForInsert()
         {
             editType = new AppWorkTypes();
+            ShowEditTypeModal();
         }
+
+        protected void ShowEditDepartmentModal()
+        {
+            Action Action = DataChanged;
+
+            var parameters = new ModalParameters();
+            parameters.Add("TaskObject", editDepartment);
+            parameters.Add("DataChanged", Action);
+
+            Modal.Show<WorkTypeDepartmentDetails>("Department", parameters);
+        }
+
+        protected void ShowEditTypeModal()
+        {
+            Action Action = DataChanged;
+
+            var parameters = new ModalParameters();
+            parameters.Add("TaskObject", editType);
+            parameters.Add("DataChanged", Action);
+            parameters.Add("Departments", departments.Select(D => D.department).ToList());
+
+            Modal.Show<WorkTypeDetails>("Work Type", parameters);
+        }
+
 
         protected void PrepareGroupingForEdit(WorkTypeGroupItem selectedGroup)
         {

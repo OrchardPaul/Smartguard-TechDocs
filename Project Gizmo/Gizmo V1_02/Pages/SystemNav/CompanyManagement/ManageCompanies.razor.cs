@@ -1,4 +1,6 @@
-﻿using Gizmo.Context.Gizmo_Authentification;
+﻿using Blazored.Modal;
+using Blazored.Modal.Services;
+using Gizmo.Context.Gizmo_Authentification;
 using Gizmo.Context.Gizmo_Authentification.Custom;
 using Gizmo_V1_02.Data.Admin;
 using Gizmo_V1_02.Services.SessionState;
@@ -12,6 +14,9 @@ namespace Gizmo_V1_02.Pages.SystemNav.CompanyManagement
 {
     public partial class ManageCompanies
     {
+        [Inject]
+        IModalService Modal { get; set; }
+
         [Inject]
         ICompanyDbAccess companyDbAccess { get; set; }
 
@@ -51,6 +56,8 @@ namespace Gizmo_V1_02.Pages.SystemNav.CompanyManagement
         protected void PrepareForEdit(AppCompanyDetails seletedRole)
         {
             editCompany = seletedRole;
+
+            ShowEditModal();
         }
 
         protected void PrepareForDelete(AppCompanyDetails seletedRole)
@@ -61,7 +68,21 @@ namespace Gizmo_V1_02.Pages.SystemNav.CompanyManagement
         protected void PrepareForInsert()
         {
             editCompany = new AppCompanyDetails();
+
+            ShowEditModal();
         }
+
+        protected void ShowEditModal()
+        {
+            Action Action = DataChanged;
+
+            var parameters = new ModalParameters();
+            parameters.Add("TaskObject", editCompany);
+            parameters.Add("DataChanged", Action);
+
+            Modal.Show<CompanyEdit>("Edit Company", parameters);
+        }
+
         private async void HandleValidDelete()
         {
             await companyDbAccess.DeleteCompany(editCompany);

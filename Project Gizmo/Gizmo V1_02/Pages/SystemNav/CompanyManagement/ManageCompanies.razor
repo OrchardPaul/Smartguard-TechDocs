@@ -30,7 +30,7 @@ else
                                     <div class="ellipsis-menu">
                                         <ul>
                                             <li>
-                                                <a href="javascript: void(0);" @onclick='() => PrepareForEdit(vmCompany.Company)' data-toggle="modal" data-target="#companyModal">
+                                                <a href="javascript: void(0);" @onclick='() => PrepareForEdit(vmCompany.Company)'>
                                                     <span class="fa fa-pencil-alt mr-2"></span>Edit
                                                 </a>
                                             </li>
@@ -54,6 +54,4 @@ else
     </div>
 
 }
-
-<CompanyEdit TaskObject="@editCompany" DataChanged="@DataChanged"></CompanyEdit>
 <ModalDelete DeleteAction="HandleValidDelete" ModalWidth="500px" ModalHeight="300px" InfoHeader="Delete?"></ModalDelete>
