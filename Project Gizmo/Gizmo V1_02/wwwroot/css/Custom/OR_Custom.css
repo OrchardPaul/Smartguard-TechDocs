@@ -647,6 +647,12 @@
 /*        v                              */
 /*---------------------------------------*/
 
+/*use grid data to surround the data rows (.grid-row). This is to allow first-child selector to apply within grid-can-edit where there is a preceeding grid-header*/
+.grid-data {
+    margin: 0;
+    padding: 0;
+}
+
 .grid-row-lg .data-item-sub .seq-change{
     margin-top: -14px;
 }
@@ -654,6 +660,15 @@
 .seq-change a {
     color: #ccc !important;
     text-decoration: none;
+}
+
+.grid-can-edit div.grid-row:first-child .seq-change div:first-child
+,.grid-can-edit .grid-data div.grid-row:first-child .seq-change div:first-child{
+    visibility: hidden;
+}
+
+.grid-can-edit div.grid-row:last-child .seq-change div:last-child {
+    visibility: hidden;
 }
 
 /*---------------------------------------*/

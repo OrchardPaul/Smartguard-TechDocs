@@ -12,7 +12,7 @@
             </div>
             <div class="modal-body">
                 <EditForm Model="@TaskObject" OnValidSubmit="@HandleValidSubmit">
-                    @if (selectedList == "Document / Step")
+                    @if (selectedList == "Docs")
                     {
                         <label for="DocName">Document / Step</label>
 
@@ -45,7 +45,7 @@
                     }
 
 
-                    @if (selectedList == "Document / Step")
+                    @if (selectedList == "Docs")
                     {
                         <div class="form-group">
                             <label for="DocType">Type</label>

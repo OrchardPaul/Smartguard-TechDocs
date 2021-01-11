@@ -15,11 +15,6 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
 {
     public partial class ChapterList
     {
-        private class StatusObject
-        {
-            public UsrOrDefChapterManagement management { get; set; }
-            public bool hoveredOver { get; set; }
-        }
 
         [Inject]
         private IChapterManagementService chapterManagementService { get; set; }
@@ -36,15 +31,13 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
         [Inject]
         public IUserSessionState sessionState { get; set; }
 
-        private List<UsrOrDefChapterManagement> lstAllObjects;
+        private List<UsrOrDefChapterManagement> lstChapters;
 
-        private List<UsrOrDefChapterManagement> lstAll;
-        private List<UsrOrDefChapterManagement> lstAgendas;
-        private List<UsrOrDefChapterManagement> lstFees;
-        private List<UsrOrDefChapterManagement> lstDocs;
-        private List<UsrOrDefChapterManagement> lstStatus;
-
-        private List<StatusObject> statusObjects;
+        private List<UsrOrDefChapterManagement> lstAll { get; set; } = new List<UsrOrDefChapterManagement>();
+        private List<UsrOrDefChapterManagement> lstAgendas { get; set; } = new List<UsrOrDefChapterManagement>();
+        private List<UsrOrDefChapterManagement> lstFees { get; set; } = new List<UsrOrDefChapterManagement>();
+        private List<UsrOrDefChapterManagement> lstDocs { get; set; } = new List<UsrOrDefChapterManagement>();
+        private List<UsrOrDefChapterManagement> lstStatus { get; set; } = new List<UsrOrDefChapterManagement>();
 
 
         public List<DmDocuments> dropDownDocumentList;
@@ -70,7 +63,6 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
 
         private string selectedChapterDetial { get; set; }
 
-        protected List<string> CaseTypeList;
 
         public string ModalInfoHeader { get; set; }
         public string ModalInfoText { get; set; }
@@ -79,6 +71,7 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
 
         public string navDisplay = "Agenda";
 
+        public List<string> lstDocTypes { get; set; } = new List<string> { "Document", "Letter", "Form", "Email", "Step" };
 
         protected override async Task OnInitializedAsync()
         {
@@ -102,14 +95,14 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
             //{
                 try
                 {
-                    lstAllObjects = await chapterManagementService.GetAllChapters();
-                    CaseTypeList = await chapterManagementService.GetCaseTypes();
+                    RefreshChapters();
                 }
                 catch(Exception)
                 {
                     NavigationManager.NavigateTo($"/", true);
                 }
             //}
+
         }
 
         public void DirectToLogin()
@@ -137,58 +130,68 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
             PrepDocumentList();
         }
 
-        async Task SelectDocList(String chapter, int chapterID)
+        private void SelectChapter(string chapter, int chapterID)
         {
-            lstAll = await chapterManagementService.GetItemListByChapter(chapterID);
-
-            lstAgendas = lstAll.Where(A => A.Type == "Agenda").ToList();
-            lstFees = lstAll.Where(A => A.Type == "Fee").ToList();
-            lstStatus = lstAll.Where(A => A.Type == "Status").ToList();
-
-            statusObjects = lstAll.Where(A => A.Type == "Status")
-                .Select(A => new StatusObject
-                {
-                    management = A,
-                    hoveredOver = false
-                })
-                .ToList();
-
-            lstDocs = lstAll
-                .Where(A => A.Type != "Agenda")
-                .Where(A => A.Type != "Fee")
-                .Where(A => A.Type != "Status")
-                .ToList();
+            lstAll = new List<UsrOrDefChapterManagement>();
 
             selectedChapterId = chapterID;
             selectedChapter = chapter;
+
+            RefreshChapterItems("All");
+
         }
 
-        private async void DataChanged()
+        private async void RefreshChapters()
         {
-            lstAll = await chapterManagementService.GetItemListByChapter(selectedChapterId);
-            lstAllObjects = await chapterManagementService.GetAllChapters();
-
-            lstAgendas = lstAll.Where(A => A.Type == "Agenda").ToList();
-            lstFees = lstAll.Where(A => A.Type == "Fee").ToList();
-            lstStatus = lstAll.Where(A => A.Type == "Status").ToList();
-
-            statusObjects = lstAll.Where(A => A.Type == "Status")
-            .Select(A => new StatusObject
-            {
-                management = A,
-                hoveredOver = false
-            })
-            .ToList();
-
-            lstDocs = lstAll
-                .Where(A => A.Type != "Agenda")
-                .Where(A => A.Type != "Fee")
-                .Where(A => A.Type != "Status")
-                .ToList();
-
-            editObject = new UsrOrDefChapterManagement();
+            lstChapters = await chapterManagementService.GetAllChapters();
 
             StateHasChanged();
+        }
+
+        private async void RefreshChapterItems(string listType)
+        {
+            lstAll = await chapterManagementService.GetItemListByChapter(selectedChapterId);
+
+            if (listType == "Agenda" | listType == "All")
+            {
+                lstAgendas = lstAll
+                                    .OrderBy(A => A.SeqNo)
+                                    .Where(A => A.Type == "Agenda")
+                                    .ToList();
+
+            }
+            if (listType == "Docs" | listType == "All")
+            {
+                lstDocs = lstAll
+                                    .OrderBy(A => A.SeqNo)
+                                    .Where(A => lstDocTypes.Contains(A.Type))
+                                    .ToList();
+
+            }
+            if (listType == "Fees" | listType == "All")
+            {
+                lstFees = lstAll
+                                    .OrderBy(A => A.SeqNo)
+                                    .Where(A => A.Type == "Fee")
+                                    .ToList();
+                
+            }
+            if (listType == "Status" | listType == "All")
+            {
+                lstStatus = lstAll
+                                    .OrderBy(A => A.SeqNo)
+                                    .Where(A => A.Type == "Status")
+                                    .ToList();
+
+            }
+
+            StateHasChanged();
+        }
+
+
+        public void RefreshSelectedList()
+        {
+            RefreshChapterItems(displaySection);
         }
 
         private void PrepareForEdit(UsrOrDefChapterManagement item, string header)
@@ -261,5 +264,68 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
         {
             navDisplay = displayChange;
         }
+
+       
+
+        /// <summary>
+        /// Moves a sequecnce item up or down a list of type [UsrOrDefChapterManagement]
+        /// </summary>
+        /// <remarks>
+        /// <para>Up: swaps the item with the preceding item in the lest by reducing sequence number by 1 </para>
+        /// <para>Up: swaps the item with the following item in the lest by increasing sequence number by 1 </para>
+        /// </remarks>
+        /// <param name="selectobject">: current list item</param>
+        /// <param name="listType">: Doc or Fee</param>
+        /// <param name="direction">: Up or Down</param>
+        /// <returns>No return</returns>
+        protected async void MoveSeq(UsrOrDefChapterManagement selectobject, string listType, string direction)
+        {
+            var lstItems = new List<UsrOrDefChapterManagement>();
+            int incrementBy;
+
+            incrementBy = (direction.ToLower() == "up" ? -1 : 1);
+
+            switch (listType)
+            {
+                case "Docs":
+                    lstItems = lstDocs;
+                    break;
+                case "Fees":
+                    lstItems = lstFees;
+                    break;
+            }
+
+            var swapItem = lstItems.Where(D => D.SeqNo == (selectobject.SeqNo + incrementBy)).SingleOrDefault();
+            if (!(swapItem is null))
+            {
+                selectobject.SeqNo += incrementBy;
+                swapItem.SeqNo = swapItem.SeqNo + (incrementBy * -1);
+
+                await chapterManagementService.Update(selectobject);
+                await chapterManagementService.Update(swapItem);
+            }
+            else
+            {
+                CondenseSeq(lstItems);
+            }
+
+            RefreshChapterItems(listType);
+        }
+
+        private async void CondenseSeq(List<UsrOrDefChapterManagement> lstItems)
+        {
+            int seqNo = 0;
+
+            foreach (UsrOrDefChapterManagement item in lstItems.OrderBy(A => A.SeqNo))
+            {
+                seqNo += 1;
+                item.SeqNo = seqNo;
+
+                await chapterManagementService.Update(item);
+            }
+
+        }
+
+
     }
 }
