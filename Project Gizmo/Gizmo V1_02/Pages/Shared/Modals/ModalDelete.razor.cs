@@ -1,4 +1,5 @@
-﻿using Gizmo.Context.OR_RESI;
+﻿using Blazored.Modal;
+using Gizmo.Context.OR_RESI;
 using Gizmo_V1_02.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
@@ -13,6 +14,9 @@ namespace Gizmo_V1_02.Pages.Shared.Modals
 {
     public partial class ModalDelete
     {
+        [CascadingParameter]
+        BlazoredModalInstance ModalInstance { get; set; }
+
         [Parameter]
         public string InfoHeader { get; set; }
 
@@ -37,12 +41,12 @@ namespace Gizmo_V1_02.Pages.Shared.Modals
         private async Task HandleValidSubmit()
         {
             DeleteAction?.Invoke();
-            await CloseModal();
+            Close();
         }
 
-        private async Task CloseModal()
+        private async void Close()
         {
-            await jsRuntime.InvokeAsync<object>("CloseModal", "modalDelete");
+            await ModalInstance.CloseAsync();
         }
 
     }
