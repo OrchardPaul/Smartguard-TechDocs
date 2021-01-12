@@ -10,25 +10,19 @@ using Microsoft.AspNetCore.Components.Authorization;
 using System.Net;
 using System.Web;
 using Gizmo_V1_02.Services.SessionState;
+using Blazored.Modal.Services;
+using Blazored.Modal;
+using Gizmo_V1_02.Pages.Shared.Modals;
 
 namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
 {
     public partial class ChapterList
     {
-        private class StatusObject
-        {
-            public UsrOrDefChapterManagement management { get; set; }
-            public bool hoveredOver { get; set; }
-        }
+        [Inject]
+        IModalService Modal { get; set; }
 
         [Inject]
         private IChapterManagementService chapterManagementService { get; set; }
-
-        [Inject]
-        private IPageAuthorisationState pageAuthorisationState { get; set; }
-
-        [CascadingParameter]
-        private Task<AuthenticationState> authenticationStateTask { get; set; }
 
         [Inject]
         public NavigationManager NavigationManager { get; set; }
@@ -36,20 +30,17 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
         [Inject]
         public IUserSessionState sessionState { get; set; }
 
-        private List<UsrOrDefChapterManagement> lstAllObjects;
+        private List<UsrOrDefChapterManagement> lstChapters;
 
-        private List<UsrOrDefChapterManagement> lstAll;
-        private List<UsrOrDefChapterManagement> lstAgendas;
-        private List<UsrOrDefChapterManagement> lstFees;
-        private List<UsrOrDefChapterManagement> lstDocs;
-        private List<UsrOrDefChapterManagement> lstStatus;
-
-        private List<StatusObject> statusObjects;
+        private List<UsrOrDefChapterManagement> lstAll { get; set; } = new List<UsrOrDefChapterManagement>();
+        private List<UsrOrDefChapterManagement> lstAgendas { get; set; } = new List<UsrOrDefChapterManagement>();
+        private List<UsrOrDefChapterManagement> lstFees { get; set; } = new List<UsrOrDefChapterManagement>();
+        private List<UsrOrDefChapterManagement> lstDocs { get; set; } = new List<UsrOrDefChapterManagement>();
+        private List<UsrOrDefChapterManagement> lstStatus { get; set; } = new List<UsrOrDefChapterManagement>();
 
 
         public List<DmDocuments> dropDownDocumentList;
 
-        int parentId;
 
         public string editCaseType { get; set; } = "";
         public string isCaseTypeOrGroup { get; set; } = "";
@@ -64,29 +55,32 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
         string selectedCaseType { get; set; } = "";
         string selectedCaseTypeGroup { get; set; } = "";
         string selectedChapter { get; set; } = "";
+
+        int rowChanged { get; set; } = 0;
+
         private int selectedChapterId { get; set; } = -1;
 
 
         private bool editChapterDetail { get; set; } = false;
-
-        private string selectedChapterDetial { get; set; }
-
-        protected List<string> CaseTypeList;
 
         public string ModalInfoHeader { get; set; }
         public string ModalInfoText { get; set; }
         public string ModalHeight { get; set; }
         public string ModalWidth { get; set; }
 
+        public string navDisplay = "Agenda";
+
+        public List<string> lstDocTypes { get; set; } = new List<string> { "Document", "Letter", "Form", "Email", "Step" };
+
         protected override async Task OnInitializedAsync()
         {
-            var authenticationState = await pageAuthorisationState.ChapterListAuthorisation();
+            //var authenticationState = await pageAuthorisationState.ChapterListAuthorisation();
 
-            if (!authenticationState)
-            {
-                string returnUrl = HttpUtility.UrlEncode($"/chapterlist");
-                NavigationManager.NavigateTo($"Identity/Account/Login?returnUrl={returnUrl}", true);
-            }
+            //if (!authenticationState)
+            //{
+            //    string returnUrl = HttpUtility.UrlEncode($"/chapterlist");
+            //    NavigationManager.NavigateTo($"Identity/Account/Login?returnUrl={returnUrl}", true);
+            //}
 
             bool gotLock = sessionState.Lock;
             while (gotLock)
@@ -96,18 +90,18 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
             }
 
 
-            if (authenticationState)
-            {
+            //if (authenticationState)
+            //{
                 try
                 {
-                    lstAllObjects = await chapterManagementService.GetAllChapters();
-                    CaseTypeList = await chapterManagementService.GetCaseTypes();
+                    RefreshChapters();
                 }
                 catch(Exception)
                 {
                     NavigationManager.NavigateTo($"/", true);
                 }
-            }
+            //}
+
         }
 
         public void DirectToLogin()
@@ -135,58 +129,69 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
             PrepDocumentList();
         }
 
-        async Task SelectDocList(String chapter, int chapterID)
+        private void SelectChapter(string chapter, int chapterID)
         {
-            lstAll = await chapterManagementService.GetItemListByChapter(chapterID);
-
-            lstAgendas = lstAll.Where(A => A.Type == "Agenda").ToList();
-            lstFees = lstAll.Where(A => A.Type == "Fee").ToList();
-            lstStatus = lstAll.Where(A => A.Type == "Status").ToList();
-
-            statusObjects = lstAll.Where(A => A.Type == "Status")
-                .Select(A => new StatusObject
-                {
-                    management = A,
-                    hoveredOver = false
-                })
-                .ToList();
-
-            lstDocs = lstAll
-                .Where(A => A.Type != "Agenda")
-                .Where(A => A.Type != "Fee")
-                .Where(A => A.Type != "Status")
-                .ToList();
+            lstAll = new List<UsrOrDefChapterManagement>();
 
             selectedChapterId = chapterID;
             selectedChapter = chapter;
+
+            RefreshChapterItems("All");
+
         }
 
-        private async void DataChanged()
+        private async void RefreshChapters()
         {
-            lstAll = await chapterManagementService.GetItemListByChapter(selectedChapterId);
-            lstAllObjects = await chapterManagementService.GetAllChapters();
-
-            lstAgendas = lstAll.Where(A => A.Type == "Agenda").ToList();
-            lstFees = lstAll.Where(A => A.Type == "Fee").ToList();
-            lstStatus = lstAll.Where(A => A.Type == "Status").ToList();
-
-            statusObjects = lstAll.Where(A => A.Type == "Status")
-            .Select(A => new StatusObject
-            {
-                management = A,
-                hoveredOver = false
-            })
-            .ToList();
-
-            lstDocs = lstAll
-                .Where(A => A.Type != "Agenda")
-                .Where(A => A.Type != "Fee")
-                .Where(A => A.Type != "Status")
-                .ToList();
-
-            editObject = new UsrOrDefChapterManagement();
+            lstChapters = await chapterManagementService.GetAllChapters();
 
             StateHasChanged();
+        }
+
+        private async void RefreshChapterItems(string listType)
+        {
+            lstAll = await chapterManagementService.GetItemListByChapter(selectedChapterId);
+
+            if (listType == "Agenda" | listType == "All")
+            {
+                lstAgendas = lstAll
+                                    .OrderBy(A => A.SeqNo)
+                                    .Where(A => A.Type == "Agenda")
+                                    .ToList();
+
+            }
+            if (listType == "Docs" | listType == "All")
+            {
+                lstDocs = lstAll
+                                    .OrderBy(A => A.SeqNo)
+                                    .Where(A => lstDocTypes.Contains(A.Type))
+                                    .ToList();
+
+            }
+            if (listType == "Fees" | listType == "All")
+            {
+                lstFees = lstAll
+                                    .OrderBy(A => A.SeqNo)
+                                    .Where(A => A.Type == "Fee")
+                                    .ToList();
+                
+            }
+            if (listType == "Status" | listType == "All")
+            {
+                lstStatus = lstAll
+                                    .OrderBy(A => A.SeqNo)
+                                    .Where(A => A.Type == "Status")
+                                    .ToList();
+
+            }
+
+
+            StateHasChanged();
+        }
+
+
+        public void RefreshSelectedList()
+        {
+            RefreshChapterItems(displaySection);
         }
 
         private void PrepareForEdit(UsrOrDefChapterManagement item, string header)
@@ -194,6 +199,16 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
             customHeader = header;
             selectedList = header;
             editObject = item;
+
+            ShowChapterDetailModal();
+        }
+
+        private void PrepareForInsert(string header)
+        {
+            selectedList = header;
+            editObject = new UsrOrDefChapterManagement();
+
+            ShowChapterDetailModal();
         }
 
         private void PrepareChapterForInsert()
@@ -223,12 +238,16 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
             editChapterObject.SeqNo = 0;
             editChapterObject.SuppressStep = "";
             editChapterObject.EntityType = "";
+
+            ShowChapterAddOrEditModel();
         }
 
         private void PrepareCaseTypeForEdit(string caseType, string option)
         {
             editCaseType = caseType;
             isCaseTypeOrGroup = option;
+
+            ShowCaseTypeEditModal();
         }
 
         private async void PrepDocumentList()
@@ -253,6 +272,142 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
             ModalInfoText = modalText;
             ModalHeight = modalHeight;
             ModalWidth = modalWidth;
+        }
+
+        protected void ShowNav(string displayChange)
+        {
+            rowChanged = 0;
+            navDisplay = displayChange;
+        }
+
+       
+
+        /// <summary>
+        /// Moves a sequecnce item up or down a list of type [UsrOrDefChapterManagement]
+        /// </summary>
+        /// <remarks>
+        /// <para>Up: swaps the item with the preceding item in the lest by reducing sequence number by 1 </para>
+        /// <para>Up: swaps the item with the following item in the lest by increasing sequence number by 1 </para>
+        /// </remarks>
+        /// <param name="selectobject">: current list item</param>
+        /// <param name="listType">: Docs or Fees</param>
+        /// <param name="direction">: Up or Down</param>
+        /// <returns>No return</returns>
+        protected async void MoveSeq(UsrOrDefChapterManagement selectobject, string listType, string direction)
+        {
+            var lstItems = new List<UsrOrDefChapterManagement>();
+            int incrementBy;
+
+            incrementBy = (direction.ToLower() == "up" ? -1 : 1);
+
+            rowChanged = (int)(selectobject.SeqNo + incrementBy);
+            
+            switch (listType)
+            {
+                case "Docs":
+                    lstItems = lstDocs;
+                    break;
+                case "Fees":
+                    lstItems = lstFees;
+                    break;
+            }
+
+            
+            var swapItem = lstItems.Where(D => D.SeqNo == (selectobject.SeqNo + incrementBy)).SingleOrDefault();
+            if (!(swapItem is null))
+            {
+                selectobject.SeqNo += incrementBy;
+                swapItem.SeqNo = swapItem.SeqNo + (incrementBy * -1);
+
+                await chapterManagementService.Update(selectobject);
+                await chapterManagementService.Update(swapItem);
+
+
+            }
+            else
+            {
+                CondenseSeq(lstItems);
+            }
+
+            RefreshChapterItems(listType);
+        }
+
+        private async void CondenseSeq(List<UsrOrDefChapterManagement> lstItems)
+        {
+            int seqNo = 0;
+
+            foreach (UsrOrDefChapterManagement item in lstItems.OrderBy(A => A.SeqNo))
+            {
+                seqNo += 1;
+                item.SeqNo = seqNo;
+
+                await chapterManagementService.Update(item);
+            }
+
+        }
+
+        protected void ShowChapterAddOrEditModel()
+        {
+            Action Action = RefreshChapters;
+
+            var parameters = new ModalParameters();
+            parameters.Add("TaskObject", editChapterObject);
+            parameters.Add("DataChanged", Action);
+            parameters.Add("AllObjects", lstChapters);
+
+            Modal.Show<ChapterAddOrEdit>("Chapter", parameters);
+        }
+
+        protected void ShowCaseTypeEditModal()
+        {
+            Action Action = RefreshChapters;
+
+            var parameters = new ModalParameters();
+            parameters.Add("TaskObject", editCaseType);
+            parameters.Add("DataChanged", Action);
+            parameters.Add("isCaseTypeOrGroup", isCaseTypeOrGroup);
+            parameters.Add("originalName", editCaseType);
+            parameters.Add("caseTypeGroupName", selectedCaseTypeGroup);
+
+            Modal.Show<ChapterCaseTypeEdit>("Chapter", parameters);
+        }
+
+
+        protected void ShowChapterDetailModal()
+        {
+            Action Action = RefreshSelectedList;
+
+            var parameters = new ModalParameters();
+            parameters.Add("TaskObject", editObject);
+            parameters.Add("DataChanged", Action);
+            parameters.Add("selectedCaseType", selectedCaseType);
+            parameters.Add("selectedList", selectedList);
+            parameters.Add("dropDownDocumentList", dropDownDocumentList);
+
+            Modal.Show<ChapterDetail>(selectedList, parameters);
+        }
+
+
+        protected void PrepareChapterDetailDelete(UsrOrDefChapterManagement selectedChapterItem)
+        {
+            editObject = selectedChapterItem;
+
+            Action SelectedDeleteAction = HandleChapterDetailDelete;
+            var parameters = new ModalParameters();
+            parameters.Add("InfoHeader", "Delete?");
+            parameters.Add("ModalHeight", "300px");
+            parameters.Add("ModalWidth", "500px");
+            parameters.Add("DeleteAction", SelectedDeleteAction);
+
+            Modal.Show<ModalDelete>("Delete?", parameters);
+        }
+
+        private async void HandleChapterDetailDelete()
+        {
+            await chapterManagementService.Delete(editObject.Id);
+
+            RefreshChapterItems(selectedList);
+
         }
     }
 }

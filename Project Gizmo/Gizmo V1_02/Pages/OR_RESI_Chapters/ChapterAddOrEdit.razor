@@ -1,106 +1,90 @@
-﻿@inject IJSRuntime jsRuntime
-@using Gizmo_V1_02.Data.CustomFormObjects
+﻿
+<EditForm Model="@TaskObject" OnValidSubmit="@HandleValidSubmit">
 
-<div class="modal" tabindex="-1" role="dialog" id="chapterAddOrEditModel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Chapter</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <EditForm Model="@TaskObject" OnValidSubmit="@HandleValidSubmit">
+    <label for="DocName">Document / Step</label>
 
-                    <label for="DocName">Document / Step</label>
-
-                    <div class="form-group">
-                        @if (!addNewCaseTypeGroupOption)
-                        {
-                            <label>Case Type Group</label>
-                            @if (AllObjects is null)
+    <div class="form-group">
+        @if (!addNewCaseTypeGroupOption)
+        {
+            <label>Case Type Group</label>
+            @if (AllObjects is null)
+            {
+                <div class="spinner"></div>
+            }
+            else
+            {
+                <InputSelect @bind-Value="TaskObject.CaseTypeGroup">
+                    @foreach (var c in AllObjects.Where(C => C.ParentId == 0)
+                                           .Where(C => !(C.CaseTypeGroup is null))
+                                           .Select(C => C.CaseTypeGroup)
+                                           .Distinct()
+                                           .ToList())
                             {
-                                <div class="spinner"></div>
+                        <option value="@c">
+                            @c
+                        </option>
                             }
-                            else
-                            {
-                                <InputSelect @bind-Value="TaskObject.CaseTypeGroup">
-                                    @foreach (var c in AllObjects.Where(C => C.ParentId == 0)
-                                                            .Where(C => !(C.CaseTypeGroup is null))
-                                                            .Select(C => C.CaseTypeGroup)
-                                                            .Distinct()
-                                                            .ToList())
-                                            {
-                                        <option value="@c">
-                                            @c
-                                        </option>
-                                            }
-                                </InputSelect>
-                            }
-                        }
-                        else
-                        {
-                            <label>Case type group name</label>
-                            <InputText @bind-Value="TaskObject.CaseTypeGroup"></InputText>
-                        }
+                </InputSelect>
+            }
+        }
+        else
+        {
+            <label>Case type group name</label>
+            <InputText @bind-Value="TaskObject.CaseTypeGroup"></InputText>
+        }
 
-                        <input type="checkbox" @bind-value="addNewCaseTypeGroupOption"/>
-                    </div>
-
-                    <div class="form-group">
-                        @if (!addNewCaseTypeOption)
-                        {
-
-
-                            <label>Case Type</label>
-                            @if (AllObjects is null)
-                            {
-                                <div class="spinner"></div>
-                            }
-                            else
-                            {
-                                <InputSelect @bind-Value="TaskObject.CaseType">
-                                    @foreach (var c in AllObjects.Where(C => C.ParentId == 0)
-                                                           .Where(C => !(C.CaseType is null))
-                                                           .Select(C => C.CaseType)
-                                                           .Distinct()
-                                                           .ToList())
-                                            {
-                                        <option value="@c">
-                                            @c
-                                        </option>
-                                            }
-                                </InputSelect>
-                            }
-
-                        }
-                        else
-                        {
-
-                            <label>Case type name</label>
-                            <InputText @bind-Value="TaskObject.CaseType"></InputText>
-
-                        }
-
-                        <input type="checkbox" @bind-value="addNewCaseTypeOption" />
-                    </div>
-
-                    <div class="form-group">
-                        <label>Chapter Name</label>
-                        <InputText @bind-Value="TaskObject.Name"></InputText>
-                    </div>
-
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-
-                    @if (TaskObject.Id != 0)
-                    {
-                        <button type="button" @onclick="HandleValidDelete" class="btn btn-secondary"></button>
-                    }
-
-                </EditForm>
-            </div>
-        </div>
+        <input type="checkbox" @bind-value="addNewCaseTypeGroupOption" />
     </div>
-</div>
+
+    <div class="form-group">
+        @if (!addNewCaseTypeOption)
+        {
+
+
+            <label>Case Type</label>
+            @if (AllObjects is null)
+            {
+                <div class="spinner"></div>
+            }
+            else
+            {
+                <InputSelect @bind-Value="TaskObject.CaseType">
+                    @foreach (var c in AllObjects.Where(C => C.ParentId == 0)
+                                          .Where(C => !(C.CaseType is null))
+                                          .Select(C => C.CaseType)
+                                          .Distinct()
+                                          .ToList())
+                            {
+                        <option value="@c">
+                            @c
+                        </option>
+                            }
+                </InputSelect>
+            }
+
+        }
+        else
+        {
+
+            <label>Case type name</label>
+            <InputText @bind-Value="TaskObject.CaseType"></InputText>
+
+        }
+
+        <input type="checkbox" @bind-value="addNewCaseTypeOption" />
+    </div>
+
+    <div class="form-group">
+        <label>Chapter Name</label>
+        <InputText @bind-Value="TaskObject.Name"></InputText>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+
+    @if (TaskObject.Id != 0)
+    {
+        <button type="button" @onclick="HandleValidDelete" class="btn btn-secondary"></button>
+    }
+
+</EditForm>

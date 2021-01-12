@@ -1,6 +1,9 @@
-﻿using Gizmo.Context.Gizmo_Authentification;
+﻿using Blazored.Modal;
+using Blazored.Modal.Services;
+using Gizmo.Context.Gizmo_Authentification;
 using Gizmo.Context.Gizmo_Authentification.Custom;
 using Gizmo_V1_02.Data.Admin;
+using Gizmo_V1_02.Pages.Shared.Modals;
 using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
@@ -11,6 +14,8 @@ namespace Gizmo_V1_02.Pages.SystemNav.WorkTypeManagement
 {
     public partial class ManageWorkTypes
     {
+        [Inject]
+        IModalService Modal { get; set; }
 
         [Inject]
         ICompanyDbAccess companyDbAccess { get; set; }
@@ -209,50 +214,116 @@ namespace Gizmo_V1_02.Pages.SystemNav.WorkTypeManagement
         protected void PrepareDepartmentForEdit(AppDepartments selectedDepartment)
         {
             editDepartment = selectedDepartment;
+            ShowEditDepartmentModal();
         }
 
         protected void PrepareDepartmentForDelete(AppDepartments selectedDepartment)
         {
             editDepartment = selectedDepartment;
             SelectedDeleteAction = HandleDepartmentDelete;
+
+            var parameters = new ModalParameters();
+            parameters.Add("InfoHeader", "Delete?");
+            parameters.Add("ModalHeight", "300px");
+            parameters.Add("ModalWidth", "500px");
+            parameters.Add("DeleteAction", SelectedDeleteAction);
+
+            ShowDeleteModal(parameters);
         }
 
         protected void PrepareGroupForEdit(WorkTypeGroupItem seletedGroup)
         {
             editGroup = seletedGroup;
+            ShowEditGroupModal();
         }
 
         protected void PrepareGroupForDelete(WorkTypeGroupItem seletedGroup)
         {
             editGroup = seletedGroup;
             SelectedDeleteAction = HandleGroupDelete;
+
+            var parameters = new ModalParameters();
+            parameters.Add("InfoHeader", "Delete?");
+            parameters.Add("ModalHeight", "300px");
+            parameters.Add("ModalWidth", "500px");
+            parameters.Add("DeleteAction", SelectedDeleteAction);
+
+            ShowDeleteModal(parameters);
         }
 
         protected void PrepareTypeForEdit(AppWorkTypes seletedType)
         {
             editType = seletedType;
+            ShowEditTypeModal();
         }
 
         protected void PrepareTypeForDelete(AppWorkTypes seletedType)
         {
             editType = seletedType;
             SelectedDeleteAction = HandleWorkTypeDelete;
+
+            var parameters = new ModalParameters();
+            parameters.Add("InfoHeader", "Delete?");
+            parameters.Add("ModalHeight", "300px");
+            parameters.Add("ModalWidth", "500px");
+            parameters.Add("DeleteAction", SelectedDeleteAction);
+
+            ShowDeleteModal(parameters);
         }
 
         protected void PrepareDepartmentForInsert()
         {
             editDepartment = new AppDepartments();
+            ShowEditDepartmentModal();
         }
 
         protected void PrepareGroupForInsert()
         {
             editGroup = new WorkTypeGroupItem();
+            ShowEditGroupModal();
         }
 
         protected void PrepareTypeForInsert()
         {
             editType = new AppWorkTypes();
+            ShowEditTypeModal();
         }
+
+        protected void ShowEditDepartmentModal()
+        {
+            Action Action = DataChanged;
+
+            var parameters = new ModalParameters();
+            parameters.Add("TaskObject", editDepartment);
+            parameters.Add("DataChanged", Action);
+
+            Modal.Show<WorkTypeDepartmentDetails>("Department", parameters);
+        }
+
+        protected void ShowEditTypeModal()
+        {
+            Action Action = DataChanged;
+
+            var parameters = new ModalParameters();
+            parameters.Add("TaskObject", editType);
+            parameters.Add("DataChanged", Action);
+            parameters.Add("Departments", departments.Select(D => D.department).ToList());
+
+            Modal.Show<WorkTypeDetails>("Work Type", parameters);
+        }
+
+        protected void ShowEditGroupModal()
+        {
+            Action Action = DataChanged;
+
+            var parameters = new ModalParameters();
+            parameters.Add("TaskObject", editGroup);
+            parameters.Add("DataChanged", Action);
+            parameters.Add("Departments", departments.Select(D => D.department).ToList());
+
+            Modal.Show<WorkTypeGroupDetails>("Work Type Group", parameters);
+        }
+
 
         protected void PrepareGroupingForEdit(WorkTypeGroupItem selectedGroup)
         {
@@ -271,6 +342,19 @@ namespace Gizmo_V1_02.Pages.SystemNav.WorkTypeManagement
            })
            .ToList();
 
+            ShowEditGroupingModal();
+        }
+
+        protected void ShowEditGroupingModal()
+        {
+            Action Action = DataChanged;
+
+            var parameters = new ModalParameters();
+            parameters.Add("TaskObject", editGrouping);
+            parameters.Add("DataChanged", Action);
+            parameters.Add("Assignments", editAssignments);
+
+            Modal.Show<WorkTypeGroupingDetails>("Grouping", parameters);
         }
 
 
@@ -306,6 +390,12 @@ namespace Gizmo_V1_02.Pages.SystemNav.WorkTypeManagement
 
             DataChanged();
         }
+
+        protected void ShowDeleteModal(ModalParameters modalParameters)
+        {
+            Modal.Show<ModalDelete>("Delete?", modalParameters);
+        }
+
 
     }
 }

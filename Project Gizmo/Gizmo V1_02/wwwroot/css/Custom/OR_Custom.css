@@ -176,9 +176,10 @@
 
 .tran-block {
     background-color: rgba(255, 255, 255, 0.8);
-    padding: 15px;
+    padding: 15px 15px 30px 15px;
     margin-bottom: 20px;
     margin-left: 20px;
+    margin-right: 20px;
     border-radius: 5px;
     width: auto;
 }
@@ -276,7 +277,7 @@
     border: 1pt solid;
     background-color: rgba(255, 255, 255, 0.5);
     border-color: #FFF #DDD #DDD #FFF;
-    font-size: 0.85rem !important;
+    font-size: 0.95rem !important;
 }
 
 @media (max-width: 767.98px) {
@@ -306,7 +307,10 @@
 }
 
 .grid-row-lg .data-item-sub {
-    padding-top: 14px !important;
+    padding-top: 20px !important;
+}
+.grid-row-lg .data-item-detail {
+    margin-top: 7px !important;
 }
 
 .grid-row-md .data-item-sub {
@@ -317,7 +321,8 @@
     padding-top: 5px !important;
 }
 
-.grid-can-edit .grid-row .data-item:first-of-type .data-item-sub {
+.grid-can-edit .grid-row .data-item:first-of-type .data-item-sub
+{
     width: Calc(100% - 22px) !important;
 }
 
@@ -481,8 +486,9 @@
 
 /*   GRID TRAN    */
 .grid-tran {
-    margin-bottom: 10px;
+    margin-bottom: 20px;
     margin-left: 0px;
+    padding: 15px;
 }
 
 @media (max-width: 767.98px) {
@@ -555,7 +561,7 @@
 
 
 .grid-can-edit .grid-row:hover .data-item {
-    background-color: rgba(200, 200, 200, 0.5);
+    background-color: rgba(200, 200, 200, 0.5) !important;
 }
 
 /*  FILTER BLOCK   */
@@ -605,12 +611,93 @@
         font-weight: bold;
     }
 
+/*---------------------------------------*/
+/*  CUSTOM GRIDS                         */
+/*---------------------------------------*/
+
+.grid-chapter-nav {
+    min-height: 500px;
+}
+
+.grid-chapter-agenda {
+    width: 800px;
+    min-height: 400px;
+}
+
+.grid-chapter-docs {
+    width: 100%;
+    min-height: 400px;
+}
+
+.grid-chapter-fees {
+    width: 800px;
+    min-height: 400px;
+}
+
+.grid-chapter-status {
+    width: 800px;
+    min-height: 400px;
+}
+
+
+/*---------------------------------------*/
+/*   SEQUENCE CHANGE OPTIONS             */
+/*        ^                              */
+/*        7                              */
+/*        v                              */
+/*---------------------------------------*/
+
+/*use grid data to surround the data rows (.grid-row). This is to allow first-child selector to apply within grid-can-edit where there is a preceeding grid-header*/
+.grid-data {
+    margin: 0;
+    padding: 0;
+}
+
+.grid-row-lg .data-item-sub .seq-change{
+    margin-top: -14px;
+}
+
+.seq-change a {
+    color: #ccc !important;
+    text-decoration: none;
+}
+
+.grid-can-edit div.grid-row:first-child .seq-change div:first-child
+,.grid-can-edit .grid-data div.grid-row:first-child .seq-change div:first-child{
+    visibility: hidden;
+}
+
+.grid-can-edit div.grid-row:last-child .seq-change div:last-child {
+    visibility: hidden;
+}
+
+
+
+.row-changed .data-item {
+    animation-name: rowChanged;
+    animation-duration: 3s;
+    animation-iteration-count: 1;
+    animation-direction: normal;
+    animation-fill-mode: forwards; /* or: backwards, both, none */
+}
+
+@keyframes rowChanged{
+    0% {
+        background-color: rgba(255, 255, 255, 0.5);
+    }
+    40% {
+        background-color: #777;
+    }
+    100% {
+        background-color: rgba(255, 255, 255, 0.5);
+    }
+}
+
 
 
 /*---------------------------------------*/
 /*   BLOCK CARDS                         */
 /*---------------------------------------*/
-
 * {
     box-sizing: border-box;
 }

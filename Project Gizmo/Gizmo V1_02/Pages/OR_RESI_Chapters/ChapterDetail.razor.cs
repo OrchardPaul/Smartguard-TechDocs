@@ -1,4 +1,5 @@
-﻿using Gizmo.Context.OR_RESI;
+﻿using Blazored.Modal;
+using Gizmo.Context.OR_RESI;
 using Gizmo_V1_02.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
@@ -11,6 +12,9 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
 {
     public partial class ChapterDetail : ComponentBase
     {
+        [CascadingParameter]
+        BlazoredModalInstance ModalInstance { get; set; }
+
         [Inject]
         IChapterManagementService chapterManagementService { get; set; }
 
@@ -36,9 +40,10 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
 
         public List<string> documentList;
 
-        private async Task ClosechapterModal()
+        private async void Close()
         {
-            await jsRuntime.InvokeAsync<object>("CloseModal", "taskModal");
+            TaskObject = new UsrOrDefChapterManagement();
+            await ModalInstance.CloseAsync();
         }
 
         private async void HandleValidSubmit()
@@ -54,24 +59,10 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
 
             TaskObject = new UsrOrDefChapterManagement();
 
-            await ClosechapterModal();
             DataChanged?.Invoke();
+            Close();
 
         }
 
-        private async void Cancel()
-        {
-            TaskObject = new UsrOrDefChapterManagement();
-
-            await ClosechapterModal();
-        }
-
-        private async void HandleValidDelete()
-        {
-            await chapterManagementService.Delete(TaskObject.Id);
-
-            await ClosechapterModal();
-            DataChanged?.Invoke();
-        }
     }
 }

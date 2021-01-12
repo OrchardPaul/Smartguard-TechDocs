@@ -1,4 +1,5 @@
-﻿using Gizmo.Context.Gizmo_Authentification;
+﻿using Blazored.Modal;
+using Gizmo.Context.Gizmo_Authentification;
 using Gizmo_V1_02.Data.Admin;
 using Gizmo_V1_02.Services.SessionState;
 using Microsoft.AspNetCore.Components;
@@ -13,6 +14,8 @@ namespace Gizmo_V1_02.Pages.SystemNav.WorkTypeManagement
 {
     public partial class WorkTypeDetails
     {
+        [CascadingParameter]
+        BlazoredModalInstance ModalInstance { get; set; }
 
         [Parameter]
         public AppWorkTypes TaskObject { get; set; }
@@ -29,10 +32,9 @@ namespace Gizmo_V1_02.Pages.SystemNav.WorkTypeManagement
         [Inject]
         private IUserSessionState sessionState { get; set; }
 
-        private bool ShowForm { get; set; } = true;
-        private async Task ClosechapterModal()
+        private async void Close()
         {
-            await jsRuntime.InvokeAsync<object>("CloseModal", "TypeModal");
+            await ModalInstance.CloseAsync();
         }
 
         private async void HandleValidSubmit()
@@ -40,29 +42,10 @@ namespace Gizmo_V1_02.Pages.SystemNav.WorkTypeManagement
             await service.SubmitWorkType(TaskObject);
             await sessionState.SetSessionState();
 
-            await ClosechapterModal();
             DataChanged?.Invoke();
+            Close();
 
         }
 
-        private async void HandleValidDelete()
-        {
-            await service.DeleteWorkType(TaskObject);
-
-            ShowForm = true;
-
-            await ClosechapterModal();
-            DataChanged?.Invoke();
-        }
-
-        private void SubmitForm()
-        {
-            ShowForm = false;
-        }
-
-        private void CancelForm()
-        {
-            ShowForm = true;
-        }
     }
 }

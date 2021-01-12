@@ -24,6 +24,7 @@ using Plk.Blazor.DragDrop;
 using Gizmo_V1_02.Services.Email;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Gizmo_V1_02.Services.SessionState;
+using Blazored.Modal;
 
 namespace Gizmo_V1_02
 {
@@ -71,6 +72,7 @@ namespace Gizmo_V1_02
             services.AddScoped<IMappingSessionState, MappingSessionState>();
             services.AddScoped<IPageAuthorisationState, PageAuthorisationState>();
             services.AddScoped<IUserManagementSelectedUserState, UserManagementSelectedUserState>();
+            services.AddBlazoredModal();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

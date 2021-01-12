@@ -23,6 +23,7 @@ namespace Gizmo_V1_02.Services.SessionState
         AppCompanyDetails Company { get; }
         List<AppCompanyDetails> allAssignedCompanies { get; }
         bool isSuperUser { get;  }
+        bool isAdminUser { get;  }
         string FullName { get; }
         SpinLock IdentityLock { get; set; }
         bool Lock { get; set; }
@@ -42,6 +43,7 @@ namespace Gizmo_V1_02.Services.SessionState
         void SetSelectedSystem(string selectedSystem);
         Task<AppCompanyDetails> switchSelectedCompany();
         Task<string> SetSessionState();
+
     }
 
     public class UserSessionState : IUserSessionState
@@ -76,13 +78,16 @@ namespace Gizmo_V1_02.Services.SessionState
 
         public SpinLock IdentityLock { get; set; }
 
-        public bool isSuperUser { get; protected set; }
+        public bool isSuperUser { get; protected set; } = false;
+
+        public bool isAdminUser { get; protected set; } = false;
 
         public bool Lock { get; set; }
 
         public event Action OnChange;
 
         private string sessionStateSet;
+
 
         public UserSessionState(AuthenticationStateProvider authenticationStateProvider
                                 , IIdentityUserAccess userAccess
@@ -200,6 +205,21 @@ namespace Gizmo_V1_02.Services.SessionState
 
                             isSuperUser = auth.User.IsInRole("Super User");
 
+                            List<string> adminRoles = new List<string>()
+                            {
+                                "Super User"
+                                ,"Site Admin"
+                            };
+
+                            foreach (var role in adminRoles)
+                            {
+                                if (auth.User.IsInRole(role))
+                                {
+                                    isAdminUser = true;
+                                    break;
+                                }
+                            }
+                            
                             var allClaims = await userAccess.GetSignedInUserClaims();
 
                             if (!(allClaims.Count() == 0))

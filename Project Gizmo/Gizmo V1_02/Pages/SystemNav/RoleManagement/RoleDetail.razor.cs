@@ -1,4 +1,5 @@
-﻿using Gizmo.Context.Gizmo_Authentification;
+﻿using Blazored.Modal;
+using Gizmo.Context.Gizmo_Authentification;
 using Gizmo_V1_02.Data.Admin;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Identity;
@@ -12,6 +13,9 @@ namespace Gizmo_V1_02.Pages.SystemNav.RoleManagement
 {
     public partial class RoleDetail
     {
+        [CascadingParameter]
+        BlazoredModalInstance ModalInstance { get; set; }
+
         [Parameter]
         public AspNetRoles TaskObject { get; set; }
 
@@ -20,39 +24,20 @@ namespace Gizmo_V1_02.Pages.SystemNav.RoleManagement
 
         [Inject]
         private IIdentityRoleAccess service { get; set; }
-        private bool ShowForm { get; set; } = true;
-        private async Task ClosechapterModal()
-        {
-            await jsRuntime.InvokeAsync<object>("CloseModal", "roleModal");
-        }
 
         private async void HandleValidSubmit()
         {
             await service.SubmitChanges(TaskObject);
 
-            await ClosechapterModal();
             DataChanged?.Invoke();
+            Close();
         }
 
-        private async void HandleValidDelete()
+        private async void Close()
         {
-            await service.Delete(TaskObject);
-
-            ShowForm = true;
-
-            await ClosechapterModal();
-            DataChanged?.Invoke();
+            await ModalInstance.CloseAsync();
         }
 
 
-        private void SubmitForm()
-        {
-            ShowForm = false;
-        }
-
-        private void CancelForm()
-        {
-            ShowForm = true;
-        }
     }
 }

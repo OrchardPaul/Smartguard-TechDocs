@@ -80,7 +80,7 @@ else
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="javascript: void(0);" @onclick='(() => PrepareModalForDelete(userDataItem.User))' data-toggle="modal" data-target="#modalDelete">
+                                        <a href="javascript: void(0);" @onclick='(() => PrepareModalForDelete(userDataItem.User))'>
                                             <span class="fa fa-trash-alt mr-2"></span>Delete
                                         </a>
                                     </li>
@@ -95,13 +95,6 @@ else
 
                     </div>
 
-
-
-                    @*
-            <div class="data-item-ellipses"><a href="javascript: void(0);" @onclick='(() => PrepareForEdit(userDataItem.User))'><span class="fa fa-ellipsis-v"></span></a></div>
-                <div class="col-1 data-item-edit"><button class="btn btn-edit" @onclick='(() => PrepareForEdit(userDataItem.User))' data-toggle="modal" data-target="#roleModal" value=""><i class="fa fa-pencil-alt"></i></button></div>
-        <div class="col-1 data-item-edit"><button class="btn btn-edit" @onclick='(() => PrepareForEdit(userDataItem.User))' data-toggle="modal" data-target="#roleModal" value=""><i class="fa fa-trash-alt"></i></button></div>*@
-
                 </div>
 
                     }
@@ -112,7 +105,3 @@ else
 
     </div>
 }
-
-
-
-<ModalDelete DeleteAction="HandleValidDelete" ModalWidth="500px" ModalHeight="300px" InfoHeader="Delete?"></ModalDelete>
