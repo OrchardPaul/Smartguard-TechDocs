@@ -184,9 +184,14 @@
     height: 50px;
 }
 
-.tran-navbar .navbar li {
+.tran-navbar .navbar ul{
+    display: flex;
+}
+
+.tran-navbar .navbar ul li {
     height: 50px;
     min-width: 100px;
+    display: block;
 }
 
 
