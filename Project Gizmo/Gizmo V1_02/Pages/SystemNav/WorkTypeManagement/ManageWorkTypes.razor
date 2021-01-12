@@ -76,12 +76,12 @@ else
                                         <div class="ellipsis-menu">
                                             <ul>
                                                 <li>
-                                                    <a href="javascript: void(0);" @onclick='(() => PrepareDepartmentForEdit(vmDepartment.department))' >
+                                                    <a href="javascript: void(0);" @onclick='(() => PrepareDepartmentForEdit(vmDepartment.department))'>
                                                         <span class="fa fa-pencil-alt mr-2"></span>Edit
                                                     </a>
                                                 </li>
                                                 <li>
-                                                    <a href="javascript: void(0);" @onclick='(() => PrepareDepartmentForDelete(vmDepartment.department))' data-toggle="modal" data-target="#modalDelete">
+                                                    <a href="javascript: void(0);" @onclick='(() => PrepareDepartmentForDelete(vmDepartment.department))'>
                                                         <span class="fa fa-trash-alt mr-2"></span>Delete
                                                     </a>
                                                 </li>
@@ -91,8 +91,6 @@ else
                                     </div>
                                     <div class="data-item-sub ">@vmDepartment.department.DepartmentName</div>
                                 </div>
-                                @*<div class="col-1 data-item-edit"><button class="btn btn-edit" @onclick='(() => PrepareDepartmentForEdit(vmDepartment.department))' data-toggle="modal" data-target="#DepartmentModal" value=""><i class="fa fa-pencil-alt"></i></button></div>
-                                <div class="col-1 data-item-edit"><button class="btn btn-edit" @onclick='(() => PrepareDepartmentForDelete(vmDepartment.department))' data-toggle="modal" data-target="#modalDelete" value=""><i class="fa fa-pencil-alt"></i></button></div>*@
                             </div>
                         }
                     </div>
@@ -103,7 +101,7 @@ else
                 {
 
                     <div class="mb-3 mt-2">
-                        <button data-toggle="modal" data-target="#GroupModal" @onclick='(() => PrepareGroupForInsert())' class="btn btn-main btn-shadow"><i class="fa fa-plus pr-1"></i> Add New Group</button>
+                        <button @onclick='(() => PrepareGroupForInsert())' class="btn btn-main btn-shadow"><i class="fa fa-plus pr-1"></i> Add New Group</button>
                     </div>
                     <div class="grid-can-edit">
                         <div class="row grid-header ">
@@ -120,12 +118,12 @@ else
                                     <div class="ellipsis-menu">
                                         <ul>
                                             <li>
-                                                <a href="javascript: void(0);" @onclick='(() => PrepareGroupForEdit(wtg))' data-toggle="modal" data-target="#GroupModal">
+                                                <a href="javascript: void(0);" @onclick='(() => PrepareGroupForEdit(wtg))'>
                                                     <span class="fa fa-pencil-alt mr-2"></span>Edit
                                                 </a>
                                             </li>
                                             <li>
-                                                <a href="javascript: void(0);" @onclick='(() => PrepareGroupForDelete(wtg))' data-toggle="modal" data-target="#modalDelete">
+                                                <a href="javascript: void(0);" @onclick='(() => PrepareGroupForDelete(wtg))'>
                                                     <span class="fa fa-trash-alt mr-2"></span>Delete
                                                 </a>
                                             </li>
@@ -171,7 +169,7 @@ else
                                                     </a>
                                                 </li>
                                                 <li>
-                                                    <a href="javascript: void(0);" @onclick='(() => PrepareTypeForDelete(wt.workType))' data-toggle="modal" data-target="#modalDelete">
+                                                    <a href="javascript: void(0);" @onclick='(() => PrepareTypeForDelete(wt.workType))'>
                                                         <span class="fa fa-trash-alt mr-2"></span>Delete
                                                     </a>
                                                 </li>
@@ -244,7 +242,7 @@ else
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-1 data-item-edit grid-row"><button class="btn btn-edit" @onclick='(() => PrepareGroupingForEdit(wtg))' data-toggle="modal" data-target="#GroupingModal" value=""><i class="fa fa-pencil-alt"></i></button></div>
+                                        <div class="col-1 data-item-edit grid-row"><button class="btn btn-edit" @onclick='(() => PrepareGroupingForEdit(wtg))' value=""><i class="fa fa-pencil-alt"></i></button></div>
 
                                     </div>
 
@@ -263,14 +261,3 @@ else
     </div>
 
 }
-
-
-<WorkTypeGroupDetails TaskObject="@editGroup" Departments="@departments.Select(D => D.department).ToList()" DataChanged="@DataChanged"></WorkTypeGroupDetails>
-
-<WorkTypeGroupingDetails TaskObject="@editGrouping" DataChanged="@DataChanged" Assignments="@editAssignments"></WorkTypeGroupingDetails>
-
-@if (!(SelectedDeleteAction is null))
-{
-    <ModalDelete DeleteAction="SelectedDeleteAction" ModalWidth="500px" ModalHeight="300px" InfoHeader="Delete?"></ModalDelete>
-}
-

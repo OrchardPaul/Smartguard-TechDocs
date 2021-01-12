@@ -123,12 +123,6 @@ namespace Gizmo_V1_02.Pages.Admin.UserManagement
 
         }
 
-        public void Dispose()
-        {
-            sessionState.OnChange -= StateHasChanged;
-        }
-
-
         private void TogglePasswordSet()
         {
             enablePasswordSet = !enablePasswordSet;
@@ -185,18 +179,6 @@ namespace Gizmo_V1_02.Pages.Admin.UserManagement
         private void NavigateBack()
         {
             ToggleDetail?.Invoke();
-        }
-
-        private async void HandleValidDelete()
-        {
-            await service.Delete(TaskObject);
-
-            NavigateBack();
-        }
-
-        private async Task ShowModal()
-        {
-            await jsRuntime.InvokeAsync<object>("ShowModal", "modalDelete");
         }
 
     }

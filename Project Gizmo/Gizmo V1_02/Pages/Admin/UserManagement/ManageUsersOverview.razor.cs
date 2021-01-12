@@ -1,6 +1,9 @@
-﻿using Gizmo.Context.Gizmo_Authentification;
+﻿using Blazored.Modal;
+using Blazored.Modal.Services;
+using Gizmo.Context.Gizmo_Authentification;
 using Gizmo.Context.Gizmo_Authentification.Custom;
 using Gizmo_V1_02.Data.Admin;
+using Gizmo_V1_02.Pages.Shared.Modals;
 using Gizmo_V1_02.Services.SessionState;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -15,6 +18,8 @@ namespace Gizmo_V1_02.Pages.Admin.UserManagement
 {
     public partial class ManageUsersOverview
     {
+        [Inject]
+        IModalService Modal { get; set; }
 
         [Parameter]
         public Action ToggleDetail { get; set; }
@@ -72,17 +77,6 @@ namespace Gizmo_V1_02.Pages.Admin.UserManagement
             selectedUserState.allRoles = lstRoles;
         }
 
-        protected void PrepareForDelete(AspNetUsers selectedUser)
-        {
-            editOption = "Delete";
-            editObject = selectedUser;
-
-            selectedUserState.TaskObject = editObject;
-            selectedUserState.selectedOption = editOption;
-
-            ToggleDetail?.Invoke();
-        }
-
 
         protected void PrepareForEdit(AspNetUsers selectedUser)
         {
@@ -131,6 +125,15 @@ namespace Gizmo_V1_02.Pages.Admin.UserManagement
         protected void PrepareModalForDelete(AspNetUsers selectedUser)
         {
             editObject = selectedUser;
+
+            Action SelectedDeleteAction = HandleValidDelete;
+            var parameters = new ModalParameters();
+            parameters.Add("InfoHeader", "Delete?");
+            parameters.Add("ModalHeight", "300px");
+            parameters.Add("ModalWidth", "500px");
+            parameters.Add("DeleteAction", SelectedDeleteAction);
+
+            Modal.Show<ModalDelete>("Delete?", parameters);
         }
 
         private async void HandleValidDelete()

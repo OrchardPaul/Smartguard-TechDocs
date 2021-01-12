@@ -1,4 +1,5 @@
-﻿using Gizmo.Context.Gizmo_Authentification.Custom;
+﻿using Blazored.Modal;
+using Gizmo.Context.Gizmo_Authentification.Custom;
 using Gizmo_V1_02.Data.Admin;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
@@ -11,6 +12,9 @@ namespace Gizmo_V1_02.Pages.SystemNav.WorkTypeManagement
 {
     public partial class WorkTypeGroupingDetails
     {
+        [CascadingParameter]
+        BlazoredModalInstance ModalInstance { get; set; }
+
         [Parameter]
         public WorkTypeGroupItem TaskObject { get; set; }
 
@@ -23,18 +27,17 @@ namespace Gizmo_V1_02.Pages.SystemNav.WorkTypeManagement
         [Inject]
         private ICompanyDbAccess service { get; set; }
 
-        private bool ShowForm { get; set; } = true;
-        private async Task ClosechapterModal()
+        private async void Close()
         {
-            await jsRuntime.InvokeAsync<object>("CloseModal", "GroupingModal");
+            await ModalInstance.CloseAsync();
         }
 
         private async void HandleValidSubmit()
         {
             await service.AssignWorkTypeToGroup(TaskObject, Assignments);
 
-            await ClosechapterModal();
             DataChanged?.Invoke();
+            Close();
         }
 
     }

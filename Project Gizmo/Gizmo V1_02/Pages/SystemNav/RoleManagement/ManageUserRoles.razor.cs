@@ -2,6 +2,7 @@
 using Blazored.Modal.Services;
 using Gizmo.Context.Gizmo_Authentification;
 using Gizmo_V1_02.Data.Admin;
+using Gizmo_V1_02.Pages.Shared.Modals;
 using Gizmo_V1_02.Services.SessionState;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Identity;
@@ -69,6 +70,15 @@ namespace Gizmo_V1_02.Pages.SystemNav.RoleManagement
         protected void PrepareForDelete(AspNetRoles seletedRole)
         {
             editRole = seletedRole;
+
+            Action SelectedDeleteAction = HandleValidDelete;
+            var parameters = new ModalParameters();
+            parameters.Add("InfoHeader", "Delete?");
+            parameters.Add("ModalHeight", "300px");
+            parameters.Add("ModalWidth", "500px");
+            parameters.Add("DeleteAction", SelectedDeleteAction);
+
+            Modal.Show<ModalDelete>("Delete?", parameters);
         }
 
         protected void PrepareForInsert()
