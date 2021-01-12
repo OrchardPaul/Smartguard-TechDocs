@@ -228,7 +228,7 @@ else
                             {
 
 
-                                <div class="row grid-row grid-row-lg">
+                                <div class="row grid-row grid-row-lg @(rowChanged == Doc.SeqNo ? "row-changed" : "" )">
                                     <div class="col-12 col-xl-4 data-item">
                                         @if (sessionState.isAdminUser)
                                         {
@@ -321,7 +321,7 @@ else
                         {
 
 
-                            <div class="row grid-row grid-row-lg">
+                            <div class="row grid-row grid-row-lg @(rowChanged == Fee.SeqNo ? "row-changed" : "" )">
                                 <div class="col-12 data-item">
                                     @if (sessionState.isAdminUser)
                                     {
