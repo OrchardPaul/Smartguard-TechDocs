@@ -1,4 +1,5 @@
-﻿using Gizmo.Context.OR_RESI;
+﻿using Blazored.Modal;
+using Gizmo.Context.OR_RESI;
 using Gizmo_V1_02.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
@@ -11,6 +12,9 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
 {
     public partial class ChapterAddOrEdit
     {
+        [CascadingParameter]
+        BlazoredModalInstance ModalInstance { get; set; }
+
         [Inject]
         IChapterManagementService chapterManagementService { get; set; }
 
@@ -29,9 +33,9 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
         [Parameter]
         public bool addNewCaseTypeOption { get; set; } = false;
 
-        private async Task ClosechapterModal()
+        private async void Close()
         {
-            await jsRuntime.InvokeAsync<object>("CloseModal", "chapterAddOrEditModel");
+            await ModalInstance.CloseAsync();
         }
 
         private void ToggleNewCaseTypeGroupOption()
@@ -55,16 +59,16 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
             {
                 await chapterManagementService.Update(TaskObject);
             }
-            await ClosechapterModal();
             DataChanged?.Invoke();
+            Close();
         }
 
         private async void HandleValidDelete()
         {
             await chapterManagementService.DeleteChapter(TaskObject.Id);
 
-            await ClosechapterModal();
             DataChanged?.Invoke();
+            Close();
         }
     }
 }

@@ -10,20 +10,19 @@ using Microsoft.AspNetCore.Components.Authorization;
 using System.Net;
 using System.Web;
 using Gizmo_V1_02.Services.SessionState;
+using Blazored.Modal.Services;
+using Blazored.Modal;
+using Gizmo_V1_02.Pages.Shared.Modals;
 
 namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
 {
     public partial class ChapterList
     {
+        [Inject]
+        IModalService Modal { get; set; }
 
         [Inject]
         private IChapterManagementService chapterManagementService { get; set; }
-
-        [Inject]
-        private IPageAuthorisationState pageAuthorisationState { get; set; }
-
-        [CascadingParameter]
-        private Task<AuthenticationState> authenticationStateTask { get; set; }
 
         [Inject]
         public NavigationManager NavigationManager { get; set; }
@@ -34,6 +33,8 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
         private List<UsrOrDefChapterManagement> lstChapters;
 
         private List<UsrOrDefChapterManagement> lstAll { get; set; } = new List<UsrOrDefChapterManagement>();
+        private List<UsrOrDefChapterManagement> lstAltSystemChapterItems { get; set; } = new List<UsrOrDefChapterManagement>();
+
         private List<UsrOrDefChapterManagement> lstAgendas { get; set; } = new List<UsrOrDefChapterManagement>();
         private List<UsrOrDefChapterManagement> lstFees { get; set; } = new List<UsrOrDefChapterManagement>();
         private List<UsrOrDefChapterManagement> lstDocs { get; set; } = new List<UsrOrDefChapterManagement>();
@@ -64,15 +65,14 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
 
         private bool editChapterDetail { get; set; } = false;
 
-        private string selectedChapterDetial { get; set; }
-
-
         public string ModalInfoHeader { get; set; }
         public string ModalInfoText { get; set; }
         public string ModalHeight { get; set; }
         public string ModalWidth { get; set; }
 
         public string navDisplay = "Agenda";
+
+        public bool compareSystems = false;
 
         public List<string> lstDocTypes { get; set; } = new List<string> { "Document", "Letter", "Form", "Email", "Step" };
 
@@ -192,6 +192,15 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
             StateHasChanged();
         }
 
+        private async void GetAltSytemChapterItems()
+        {
+
+            await sessionState.SwitchSelectedSystem();
+            lstAltSystemChapterItems = await chapterManagementService.GetItemListByChapter(selectedChapterId);
+            await sessionState.ResetSelectedSystem();
+            compareSystems = true;
+
+        }
 
         public void RefreshSelectedList()
         {
@@ -203,6 +212,16 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
             customHeader = header;
             selectedList = header;
             editObject = item;
+
+            ShowChapterDetailModal();
+        }
+
+        private void PrepareForInsert(string header)
+        {
+            selectedList = header;
+            editObject = new UsrOrDefChapterManagement();
+
+            ShowChapterDetailModal();
         }
 
         private void PrepareChapterForInsert()
@@ -232,12 +251,16 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
             editChapterObject.SeqNo = 0;
             editChapterObject.SuppressStep = "";
             editChapterObject.EntityType = "";
+
+            ShowChapterAddOrEditModel();
         }
 
         private void PrepareCaseTypeForEdit(string caseType, string option)
         {
             editCaseType = caseType;
             isCaseTypeOrGroup = option;
+
+            ShowCaseTypeEditModal();
         }
 
         private async void PrepDocumentList()
@@ -336,6 +359,68 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
 
         }
 
+        protected void ShowChapterAddOrEditModel()
+        {
+            Action Action = RefreshChapters;
 
+            var parameters = new ModalParameters();
+            parameters.Add("TaskObject", editChapterObject);
+            parameters.Add("DataChanged", Action);
+            parameters.Add("AllObjects", lstChapters);
+
+            Modal.Show<ChapterAddOrEdit>("Chapter", parameters);
+        }
+
+        protected void ShowCaseTypeEditModal()
+        {
+            Action Action = RefreshChapters;
+
+            var parameters = new ModalParameters();
+            parameters.Add("TaskObject", editCaseType);
+            parameters.Add("DataChanged", Action);
+            parameters.Add("isCaseTypeOrGroup", isCaseTypeOrGroup);
+            parameters.Add("originalName", editCaseType);
+            parameters.Add("caseTypeGroupName", selectedCaseTypeGroup);
+
+            Modal.Show<ChapterCaseTypeEdit>("Chapter", parameters);
+        }
+
+
+        protected void ShowChapterDetailModal()
+        {
+            Action Action = RefreshSelectedList;
+
+            var parameters = new ModalParameters();
+            parameters.Add("TaskObject", editObject);
+            parameters.Add("DataChanged", Action);
+            parameters.Add("selectedCaseType", selectedCaseType);
+            parameters.Add("selectedList", selectedList);
+            parameters.Add("dropDownDocumentList", dropDownDocumentList);
+
+            Modal.Show<ChapterDetail>(selectedList, parameters);
+        }
+
+
+        protected void PrepareChapterDetailDelete(UsrOrDefChapterManagement selectedChapterItem)
+        {
+            editObject = selectedChapterItem;
+
+            Action SelectedDeleteAction = HandleChapterDetailDelete;
+            var parameters = new ModalParameters();
+            parameters.Add("InfoHeader", "Delete?");
+            parameters.Add("ModalHeight", "300px");
+            parameters.Add("ModalWidth", "500px");
+            parameters.Add("DeleteAction", SelectedDeleteAction);
+
+            Modal.Show<ModalDelete>("Delete?", parameters);
+        }
+
+        private async void HandleChapterDetailDelete()
+        {
+            await chapterManagementService.Delete(editObject.Id);
+
+            RefreshChapterItems(selectedList);
+
+        }
     }
 }

@@ -41,6 +41,8 @@ namespace Gizmo_V1_02.Services.SessionState
         void SetAllAssignedCompanies(List<AppCompanyDetails> allAssignedCompanies);
         void SetFullName(string FullName);
         void SetSelectedSystem(string selectedSystem);
+        Task<string> SwitchSelectedSystem();
+        Task<string> ResetSelectedSystem();
         Task<AppCompanyDetails> switchSelectedCompany();
         Task<string> SetSessionState();
 
@@ -176,6 +178,24 @@ namespace Gizmo_V1_02.Services.SessionState
             await SetSessionState();
             return selectedCompany;
         }
+
+        public async Task<string> SwitchSelectedSystem()
+        {
+            //Get new 
+            var baseUri = await companyDbAccess.GetCompanyBaseUri(Company.Id
+                                                                            , (User.SelectedUri == "Live") ? "Dev" : "Live");
+            SetBaseUri(baseUri);
+            return baseUri;
+        }
+
+        public async Task<string> ResetSelectedSystem()
+        {
+            //Get new 
+            var baseUri = await companyDbAccess.GetCompanyBaseUri(Company.Id, User.SelectedUri);
+            SetBaseUri(baseUri);
+            return baseUri;
+        }
+
 
         public async Task<string> SetSessionState()
         {
