@@ -55,6 +55,9 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
         string selectedCaseType { get; set; } = "";
         string selectedCaseTypeGroup { get; set; } = "";
         string selectedChapter { get; set; } = "";
+
+        int rowChanged { get; set; } = 0;
+
         private int selectedChapterId { get; set; } = -1;
 
 
@@ -181,6 +184,7 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
 
             }
 
+
             StateHasChanged();
         }
 
@@ -272,6 +276,7 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
 
         protected void ShowNav(string displayChange)
         {
+            rowChanged = 0;
             navDisplay = displayChange;
         }
 
@@ -285,7 +290,7 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
         /// <para>Up: swaps the item with the following item in the lest by increasing sequence number by 1 </para>
         /// </remarks>
         /// <param name="selectobject">: current list item</param>
-        /// <param name="listType">: Doc or Fee</param>
+        /// <param name="listType">: Docs or Fees</param>
         /// <param name="direction">: Up or Down</param>
         /// <returns>No return</returns>
         protected async void MoveSeq(UsrOrDefChapterManagement selectobject, string listType, string direction)
@@ -295,6 +300,8 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
 
             incrementBy = (direction.ToLower() == "up" ? -1 : 1);
 
+            rowChanged = (int)(selectobject.SeqNo + incrementBy);
+            
             switch (listType)
             {
                 case "Docs":
@@ -305,6 +312,7 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
                     break;
             }
 
+            
             var swapItem = lstItems.Where(D => D.SeqNo == (selectobject.SeqNo + incrementBy)).SingleOrDefault();
             if (!(swapItem is null))
             {
@@ -313,6 +321,8 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
 
                 await chapterManagementService.Update(selectobject);
                 await chapterManagementService.Update(swapItem);
+
+
             }
             else
             {
