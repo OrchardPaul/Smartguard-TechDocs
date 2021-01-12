@@ -24,7 +24,7 @@ else
             <div class="grid-tran .grid-chapter-nav">
                 @if (sessionState.isAdminUser)
                 {
-                    <button data-toggle="modal" data-target="#chapterAddOrEditModel" @onclick='PrepareChapterForInsert' class="btn btn-main btn-shadow"><i class="fa fa-plus mr-1"></i> Add New Chapter</button>
+                    <button @onclick='PrepareChapterForInsert' class="btn btn-main btn-shadow"><i class="fa fa-plus mr-1"></i> Add New Chapter</button>
                 }
                 <div class="container-fluid">
 
@@ -45,7 +45,7 @@ else
                             </div>
                             @if (sessionState.isAdminUser)
                             {
-                                <div class="col-1 data-item-edit"><button class="btn btn-edit" @onclick='() => PrepareCaseTypeForEdit(caseTypeGroup, "CaseTypeGroup")' data-toggle="modal" data-target="#chapterCaseTypeEdit" value=""><i class="fa fa-pencil-alt"></i></button></div>
+                                <div class="col-1 data-item-edit"><button class="btn btn-edit" @onclick='() => PrepareCaseTypeForEdit(caseTypeGroup, "CaseTypeGroup")' value=""><i class="fa fa-pencil-alt"></i></button></div>
                             }
                         </div>
 
@@ -70,7 +70,7 @@ else
                                     </div>
                                     @if (sessionState.isAdminUser)
                                     {
-                                        <div class="col-1 data-item-edit"><button class="btn btn-edit" @onclick='() => PrepareCaseTypeForEdit(caseType, "CaseType")' data-toggle="modal" data-target="#chapterCaseTypeEdit" value=""><i class="fa fa-pencil-alt"></i></button></div>
+                                        <div class="col-1 data-item-edit"><button class="btn btn-edit" @onclick='() => PrepareCaseTypeForEdit(caseType, "CaseType")' value=""><i class="fa fa-pencil-alt"></i></button></div>
                                     }
                                 </div>
                                 @if (caseType == selectedCaseType)
@@ -149,7 +149,7 @@ else
                     @if (sessionState.isAdminUser)
                     {
                         <div class="mb-3">
-                            <button data-toggle="modal" data-target="#taskModal" class="btn btn-main btn-shadow"><i class="fa fa-plus pr-1"></i> Add New Agenda</button>
+                            <button @onclick='() => PrepareForInsert(navDisplay)' class="btn btn-main btn-shadow"><i class="fa fa-plus pr-1"></i> Add New Agenda</button>
                         </div>
                     }
                     <div class="@(sessionState.isAdminUser ? "grid-can-edit" : "") ">
@@ -167,12 +167,12 @@ else
                                             <div class="ellipsis-menu">
                                                 <ul>
                                                     <li>
-                                                        <a href="javascript: void(0);" @onclick='(() => PrepareForEdit(Agenda, "Agenda"))' data-toggle="modal" data-target="#taskModal">
+                                                        <a href="javascript: void(0);" @onclick='(() => PrepareForEdit(Agenda, "Agenda"))'>
                                                             <span class="fa fa-pencil-alt mr-2"></span>Edit
                                                         </a>
                                                     </li>
                                                     <li>
-                                                        <a href="javascript: void(0);" data-toggle="modal" data-target="#modalDelete">
+                                                        <a href="javascript: void(0);" @onclick="() => PrepareChapterDetailDelete(Agenda)">
                                                             <span class="fa fa-trash-alt mr-2"></span>Delete
                                                         </a>
                                                     </li>
@@ -202,7 +202,7 @@ else
                     @if (sessionState.isAdminUser)
                     {
                         <div class="mb-3">
-                            <button data-toggle="modal" data-target="#taskModal" class="btn btn-main btn-shadow"><i class="fa fa-plus pr-1"></i> Add New Document</button>
+                            <button @onclick='() => PrepareForInsert(navDisplay)' class="btn btn-main btn-shadow"><i class="fa fa-plus pr-1"></i> Add New Document</button>
                         </div>
                     }
                     <div class="@(sessionState.isAdminUser ? "grid-can-edit" : "") ">
@@ -237,12 +237,12 @@ else
                                                 <div class="ellipsis-menu">
                                                     <ul>
                                                         <li>
-                                                            <a href="javascript: void(0);" @onclick='(() => PrepareForEdit(Doc, "Docs"))' data-toggle="modal" data-target="#taskModal">
+                                                            <a href="javascript: void(0);" @onclick='(() => PrepareForEdit(Doc, "Docs"))'>
                                                                 <span class="fa fa-pencil-alt mr-2"></span>Edit
                                                             </a>
                                                         </li>
                                                         <li>
-                                                            <a href="javascript: void(0);" data-toggle="modal" data-target="#modalDelete">
+                                                            <a href="javascript: void(0);" @onclick="() => PrepareChapterDetailDelete(Doc)">
                                                                 <span class="fa fa-trash-alt mr-2"></span>Delete
                                                             </a>
                                                         </li>
@@ -312,7 +312,7 @@ else
                     @if (sessionState.isAdminUser)
                     {
                         <div class="mb-3">
-                            <button data-toggle="modal" data-target="#taskModal" class="btn btn-main btn-shadow"><i class="fa fa-plus pr-1"></i> Add New Fee</button>
+                            <button @onclick='() => PrepareForInsert(navDisplay)' class="btn btn-main btn-shadow"><i class="fa fa-plus pr-1"></i> Add New Fee</button>
                         </div>
                     }
                     <div class="@(sessionState.isAdminUser ? "grid-can-edit" : "") ">
@@ -330,12 +330,12 @@ else
                                             <div class="ellipsis-menu">
                                                 <ul>
                                                     <li>
-                                                        <a href="javascript: void(0);" @onclick='(() => PrepareForEdit(Fee, "Fees"))' data-toggle="modal" data-target="#taskModal">
+                                                        <a href="javascript: void(0);" @onclick='(() => PrepareForEdit(Fee, "Fees"))'>
                                                             <span class="fa fa-pencil-alt mr-2"></span>Edit
                                                         </a>
                                                     </li>
                                                     <li>
-                                                        <a href="javascript: void(0);" data-toggle="modal" data-target="#modalDelete">
+                                                        <a href="javascript: void(0);" @onclick="() => PrepareChapterDetailDelete(Fee)">
                                                             <span class="fa fa-trash-alt mr-2"></span>Delete
                                                         </a>
                                                     </li>
@@ -380,7 +380,7 @@ else
                     @if (sessionState.isAdminUser)
                     {
                         <div class="mb-3">
-                            <button data-toggle="modal" data-target="#taskModal" class="btn btn-main btn-shadow"><i class="fa fa-plus pr-1"></i> Add New Status</button>
+                            <button @onclick='() => PrepareForInsert(navDisplay)' class="btn btn-main btn-shadow"><i class="fa fa-plus pr-1"></i> Add New Status</button>
                         </div>
                     }
                     <div class="@(sessionState.isAdminUser ? "grid-can-edit" : "") ">
@@ -398,12 +398,12 @@ else
                                             <div class="ellipsis-menu">
                                                 <ul>
                                                     <li>
-                                                        <a href="javascript: void(0);" @onclick='(() => PrepareForEdit(status, "Status"))' data-toggle="modal" data-target="#taskModal">
+                                                        <a href="javascript: void(0);" @onclick='(() => PrepareForEdit(status, "Status"))'>
                                                             <span class="fa fa-pencil-alt mr-2"></span>Edit
                                                         </a>
                                                     </li>
                                                     <li>
-                                                        <a href="javascript: void(0);" data-toggle="modal" data-target="#modalDelete">
+                                                        <a href="javascript: void(0);" @onclick="() => PrepareChapterDetailDelete(status)">
                                                             <span class="fa fa-trash-alt mr-2"></span>Delete
                                                         </a>
                                                     </li>
@@ -618,13 +618,13 @@ else
                     {
                         <div class="OR_ChapterItemTable">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 p-2 ">
-                                <span class="shadow card subCard rounded chapterItem_Agenda" @onclick='(() => PrepareForEdit(Agenda,displaySection))' data-toggle="modal" data-target="#taskModal">@Agenda.Name</span>
+                                <span class="shadow card subCard rounded chapterItem_Agenda" @onclick='(() => PrepareForEdit(Agenda,displaySection))'>@Agenda.Name</span>
                             </div>
                         </div>
                     }
                 </div>
 
-                <input type="button" data-toggle="modal" data-target="#taskModal" class="btn btn-primary" value="Add Agenda" />
+                <input type="button" @onclick='() => PrepareForInsert(displaySection)' class="btn btn-primary" value="Add Agenda" />
             }
 
 
@@ -635,12 +635,12 @@ else
                     {
                         <div class="OR_ChapterItemTable">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 p-2 ">
-                                <span class="shadow card subCard rounded chapterItem_Fee" @onclick='(() => PrepareForEdit(Fee,displaySection))' data-toggle="modal" data-target="#taskModal" value="Edit">@Fee.Name</span>
+                                <span class="shadow card subCard rounded chapterItem_Fee" @onclick='(() => PrepareForEdit(Fee,displaySection))' value="Edit">@Fee.Name</span>
                             </div>
                         </div>
                     }
 
-                    <input type="button" data-toggle="modal" data-target="#taskModal" class="btn btn-primary" value="Add Fee" />
+                    <input type="button" @onclick='() => PrepareForInsert(displaySection)' class="btn btn-primary" value="Add Fee" />
                 </div>
             }
 
@@ -651,12 +651,12 @@ else
                     {
                         <div class="OR_ChapterItemTable">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 p-2 ">
-                                <span class="shadow card subCard rounded chapterItem_Doc" @onclick='(() => PrepareForEdit(Doc,displaySection))' data-toggle="modal" data-target="#taskModal" value="Edit">@Doc.Name</span>
+                                <span class="shadow card subCard rounded chapterItem_Doc" @onclick='(() => PrepareForEdit(Doc,displaySection))' value="Edit">@Doc.Name</span>
                             </div>
                         </div>
                     }
 
-                    <input type="button" data-toggle="modal" data-target="#taskModal" class="btn btn-primary" value="Add Document" />
+                    <input type="button" @onclick='() => PrepareForInsert(displaySection)' class="btn btn-primary" value="Add Document" />
                 </div>
             }
 
@@ -667,12 +667,12 @@ else
                     {
                         <div class="OR_ChapterItemTable">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 p-2 ">
-                                <span class="shadow card subCard rounded chapterItem_Status" @onclick='(() => PrepareForEdit(status,displaySection))' data-toggle="modal" data-target="#taskModal" value="Edit">@status.Name</span>
+                                <span class="shadow card subCard rounded chapterItem_Status" @onclick='(() => PrepareForEdit(status,displaySection))' value="Edit">@status.Name</span>
                             </div>
                         </div>
                     }
 
-                    <input type="button" data-toggle="modal" data-target="#taskModal" class="btn btn-primary" value="Add Status" />
+                    <input type="button" @onclick='() => PrepareForInsert(displaySection)' class="btn btn-primary" value="Add Status" />
                 </div>
             }
         </div>
@@ -680,13 +680,5 @@ else
 
 }
 
-
-<ChapterDetail TaskObject=editObject DataChanged="RefreshSelectedList" selectedCaseType="@selectedCaseType" selectedList="@selectedList" dropDownDocumentList="@dropDownDocumentList">
-    <CustomHeader>@customHeader</CustomHeader>
-</ChapterDetail>
-
-<ChapterAddOrEdit TaskObject="editChapterObject" DataChanged="RefreshChapters" AllObjects="lstChapters"></ChapterAddOrEdit>
-
-<ChapterCaseTypeEdit TaskObject="@editCaseType" isCaseTypeOrGroup="@isCaseTypeOrGroup" DataChanged="RefreshChapters" originalName="@editCaseType" caseTypeGroupName="@selectedCaseTypeGroup"></ChapterCaseTypeEdit>
 
 <ModalInfo InfoHeader="@ModalInfoHeader" InfoText="@ModalInfoText" ModalHeight="@ModalHeight" ModalWidth="@ModalWidth"></ModalInfo>
