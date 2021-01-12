@@ -9,15 +9,29 @@
             <span class="fa fa-user-cog"></span>
 
         </NavLink>
+        @if (!(userSession.User is null))
+        {
+            <div id="user-login-dets" class="nav-login-dets hidden-md-down">
+                <a href="javascript: void(0)" title="Name: @userSession.User.FullName"><span class="nav-dets-top">@userSession.User.FullName</span></a>
+                <a href="javascript: void(0)" title="Username: @userSession.User.Email"><span class="nav-dets-bottom">@userSession.User.Email</span></a>
+            </div>
+        }
+
 
         <NavLink @onclick='() => PrepareModalDelete("System Setting"
                                                 ,"500px"
-                                                ,"400px")' class="nav-link" data-toggle="modal" data-target="#modalSystemSelect">
+                                                ,"400px")' class="nav-link" data-toggle="modal" data-target="#modalSystemSelect" href="javascript: void(0)">
             <span class="fa fa-cog"></span>
         </NavLink>
-
+        @if (!(userSession.Company is null))
+        {
+            <div id="company-login-dets" class="nav-login-dets hidden-md-down">
+                <a href="javascript: void(0)" title="Company: @userSession.Company.CompanyName"><span class="nav-dets-top">@userSession.Company.CompanyName</span></a>
+                <a href="javascript: void(0)" title="System: @userSession.selectedSystem"><span class="nav-dets-bottom">@userSession.selectedSystem</span></a>
+            </div>
+        }
         <form method="post" action="Identity/Account/LogOut">
-            <button type="submit" class="nav-link btn btn-link">Log out</button>
+            <button id="btn-logout" type="submit" class="nav-link btn btn-link">Log out</button>
         </form>
     </Authorized>
     <NotAuthorized>
