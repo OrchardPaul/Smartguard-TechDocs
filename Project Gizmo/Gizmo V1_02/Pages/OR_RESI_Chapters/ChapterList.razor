@@ -111,7 +111,10 @@ else
         <p>Current: @selectedChapter </p>
     </div>
 
+    <input type="checkbox" class="btn-primary" @onchange="() => GetAltSytemChapterItems()"/>
 
+    <button @onclick="() => GetAltSytemChapterItems()"></button>
+    
     <div class="tran-block rounded">
 
         <div class="tran-navbar">
@@ -162,24 +165,28 @@ else
                                 <div class="col-12 data-item">
                                     @if (sessionState.isAdminUser)
                                     {
-                                        <div class="btn-ellipses float-left">
+                                    <div class="btn-ellipses float-left">
+                                        @if (!compareSystems)
+                                        {
                                             <span class="fa fa-ellipsis-v"></span>
-                                            <div class="ellipsis-menu">
-                                                <ul>
-                                                    <li>
-                                                        <a href="javascript: void(0);" @onclick='(() => PrepareForEdit(Agenda, "Agenda"))'>
-                                                            <span class="fa fa-pencil-alt mr-2"></span>Edit
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="javascript: void(0);" @onclick="() => PrepareChapterDetailDelete(Agenda)">
-                                                            <span class="fa fa-trash-alt mr-2"></span>Delete
-                                                        </a>
-                                                    </li>
+                                        }
 
-                                                </ul>
-                                            </div>
+                                        <div class="ellipsis-menu">
+                                            <ul>
+                                                <li>
+                                                    <a href="javascript: void(0);" @onclick='(() => PrepareForEdit(Agenda, "Agenda"))'>
+                                                        <span class="fa fa-pencil-alt mr-2"></span>Edit
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="javascript: void(0);" @onclick="() => PrepareChapterDetailDelete(Agenda)">
+                                                        <span class="fa fa-trash-alt mr-2"></span>Delete
+                                                    </a>
+                                                </li>
+
+                                            </ul>
                                         </div>
+                                    </div>
                                     }
                                     <div class="data-item-sub">
                                         <span class="fa fa-folder-open mr-2"></span>@Agenda.Name

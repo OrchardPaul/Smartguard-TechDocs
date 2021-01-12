@@ -33,6 +33,8 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
         private List<UsrOrDefChapterManagement> lstChapters;
 
         private List<UsrOrDefChapterManagement> lstAll { get; set; } = new List<UsrOrDefChapterManagement>();
+        private List<UsrOrDefChapterManagement> lstAltSystemChapterItems { get; set; } = new List<UsrOrDefChapterManagement>();
+
         private List<UsrOrDefChapterManagement> lstAgendas { get; set; } = new List<UsrOrDefChapterManagement>();
         private List<UsrOrDefChapterManagement> lstFees { get; set; } = new List<UsrOrDefChapterManagement>();
         private List<UsrOrDefChapterManagement> lstDocs { get; set; } = new List<UsrOrDefChapterManagement>();
@@ -69,6 +71,8 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
         public string ModalWidth { get; set; }
 
         public string navDisplay = "Agenda";
+
+        public bool compareSystems = false;
 
         public List<string> lstDocTypes { get; set; } = new List<string> { "Document", "Letter", "Form", "Email", "Step" };
 
@@ -188,6 +192,15 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
             StateHasChanged();
         }
 
+        private async void GetAltSytemChapterItems()
+        {
+
+            await sessionState.SwitchSelectedSystem();
+            lstAltSystemChapterItems = await chapterManagementService.GetItemListByChapter(selectedChapterId);
+            await sessionState.ResetSelectedSystem();
+            compareSystems = true;
+
+        }
 
         public void RefreshSelectedList()
         {
