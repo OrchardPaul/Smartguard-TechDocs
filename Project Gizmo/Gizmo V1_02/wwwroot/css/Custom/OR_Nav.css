@@ -22,22 +22,13 @@
 }
 
 
-
-
-
-
-
-
-
-
-
-
 /*-----------------------------*/
 /*  Top Navbar                 */
 /*-----------------------------*/
 
 .topbar a.nav-link {
     font-size: 1.3em;
+    margin-right: 0;
 }
 
 .topbar .btn-link {
@@ -45,6 +36,44 @@
     background-color: #000;
     height: 32px;
     padding: 2px 8px;
+}
+
+.topbar #user-login-dets {
+    width: 150px;
+}
+
+.topbar #company-login-dets {
+    width: 120px;
+}
+
+.topbar .nav-login-dets {
+    margin-right: 10px;
+}
+
+.topbar .nav-login-dets a {
+        text-decoration: none;
+        cursor: default;
+    }
+
+.topbar .nav-login-dets span {
+        display: block;
+        white-space: nowrap;
+        width: 100%;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        text-align: left;
+        color: #aaa;
+    }
+
+.topbar .nav-dets-top {
+}
+
+.topbar .nav-dets-bottom {
+    font-size: 0.7rem;
+}
+
+.topbar #btn-logout {
+    margin-right: 10px;
 }
 
 /*-----------------------------*/
