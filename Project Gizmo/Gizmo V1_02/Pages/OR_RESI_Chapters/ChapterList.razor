@@ -137,13 +137,8 @@ else
         <h3>Chapters</h3>
         <p>Current: @selectedChapter </p>
     </div>
-
-    <input type="checkbox" class="btn-primary" @onchange="() => GetAltSytemChapterItems()"/>
-
-    <button @onclick="() => GetAltSytemChapterItems()"></button>
-    
+    <input type="checkbox" @onchange="() => GetAltSytemChapterItems()"/>
     <div class="tran-block rounded">
-
         <div class="tran-navbar">
             <nav class="navbar navbar-expand ">
 
@@ -192,31 +187,34 @@ else
                                 <div class="col-12 data-item">
                                     @if (sessionState.isAdminUser)
                                     {
-                                    <div class="btn-ellipses float-left">
+
                                         @if (!compareSystems)
                                         {
-                                            <span class="fa fa-ellipsis-v"></span>
+                                            <div class="btn-ellipses float-left">
+                                                <span class="fa fa-ellipsis-v"></span>
+                                                <div class="ellipsis-menu">
+                                                    <ul>
+                                                        <li>
+                                                            <a href="javascript: void(0);" @onclick='(() => PrepareForEdit(Agenda.ChapterObject, "Agenda"))'>
+                                                                <span class="fa fa-pencil-alt mr-2"></span>Edit
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="javascript: void(0);" @onclick="() => PrepareChapterDetailDelete(Agenda.ChapterObject)">
+                                                                <span class="fa fa-trash-alt mr-2"></span>Delete
+                                                            </a>
+                                                        </li>
+
+                                                    </ul>
+                                                </div>
+                                            </div>
                                         }
 
-                                        <div class="ellipsis-menu">
-                                            <ul>
-                                                <li>
-                                                    <a href="javascript: void(0);" @onclick='(() => PrepareForEdit(Agenda, "Agenda"))'>
-                                                        <span class="fa fa-pencil-alt mr-2"></span>Edit
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="javascript: void(0);" @onclick="() => PrepareChapterDetailDelete(Agenda)">
-                                                        <span class="fa fa-trash-alt mr-2"></span>Delete
-                                                    </a>
-                                                </li>
 
-                                            </ul>
-                                        </div>
-                                    </div>
+
                                     }
                                     <div class="data-item-sub">
-                                        <span class="fa fa-folder-open mr-2"></span>@Agenda.Name
+                                        <span class="fa fa-folder-open mr-2"></span>@Agenda.ChapterObject.Name
                                     </div>
                                 </div>
 
@@ -262,7 +260,7 @@ else
                             {
 
 
-                                <div class="row grid-row grid-row-lg @(rowChanged == Doc.SeqNo ? "row-changed" : "" )">
+                                <div class="row grid-row grid-row-lg @(rowChanged == Doc.ChapterObject.SeqNo ? "row-changed" : "" )">
                                     <div class="col-12 col-xl-4 data-item">
                                         @if (sessionState.isAdminUser)
                                         {
@@ -271,12 +269,12 @@ else
                                                 <div class="ellipsis-menu">
                                                     <ul>
                                                         <li>
-                                                            <a href="javascript: void(0);" @onclick='(() => PrepareForEdit(Doc, "Docs"))'>
+                                                            <a href="javascript: void(0);" @onclick='(() => PrepareForEdit(Doc.ChapterObject, "Docs"))'>
                                                                 <span class="fa fa-pencil-alt mr-2"></span>Edit
                                                             </a>
                                                         </li>
                                                         <li>
-                                                            <a href="javascript: void(0);" @onclick="() => PrepareChapterDetailDelete(Doc)">
+                                                            <a href="javascript: void(0);" @onclick="() => PrepareChapterDetailDelete(Doc.ChapterObject)">
                                                                 <span class="fa fa-trash-alt mr-2"></span>Delete
                                                             </a>
                                                         </li>
@@ -286,39 +284,39 @@ else
                                             </div>
 
                                             <div class="data-item-sub">
-                                                <span class="fa fa-file mr-2"></span> @Doc.Name
+                                                <span class="fa fa-file mr-2"></span> @Doc.ChapterObject.Name
                                             </div>
                                             <div class="data-item-right mr-2 seq-change">
-                                                <div><a href="javascript: void(0);" @onclick='() =>  MoveSeq(Doc,"Docs","Up")'><span class="fa fa-angle-up"></span></a></div>
-                                                <div class="seq-no">@Doc.SeqNo</div>
-                                                <div><a href="javascript: void(0);" @onclick='() =>  MoveSeq(Doc,"Docs","Down")'><span class="fa fa-angle-down"></span></a></div>
+                                                <div><a href="javascript: void(0);" @onclick='() =>  MoveSeq(Doc.ChapterObject,"Docs","Up")'><span class="fa fa-angle-up"></span></a></div>
+                                                <div class="seq-no">@Doc.ChapterObject.SeqNo</div>
+                                                <div><a href="javascript: void(0);" @onclick='() =>  MoveSeq(Doc.ChapterObject,"Docs","Down")'><span class="fa fa-angle-down"></span></a></div>
                                             </div>
                                         }
                                         else
                                         {
                                             <div class="data-item-sub">
-                                                <span class="far fa-file mr-1"></span> @Doc.Name
+                                                <span class="far fa-file mr-1"></span> @Doc.ChapterObject.Name
                                                 <div class="data-item-right mr-2 ">
-                                                    <div class="seq-no">@Doc.SeqNo</div>
+                                                    <div class="seq-no">@Doc.ChapterObject.SeqNo</div>
                                                 </div>
 
                                             </div>
                                         }
                                     </div>
                                     <div class="col-4 hidden-lg-down data-item ">
-                                        <div class="data-item-detail pl-3">@(string.IsNullOrEmpty(Doc.AsName) ? "" : Doc.AsName)</div>
+                                        <div class="data-item-detail pl-3">@(string.IsNullOrEmpty(Doc.ChapterObject.AsName) ? "" : Doc.ChapterObject.AsName)</div>
                                         <div class="pl-3">
-                                            @if (Doc.RescheduleDays.HasValue)
+                                            @if (Doc.ChapterObject.RescheduleDays.HasValue)
                                             {
-                                                <span class="badge badge-sm square">@Doc.RescheduleDays.ToString() days</span>
+                                                <span class="badge badge-sm square">@Doc.ChapterObject.RescheduleDays.ToString() days</span>
                                             }
                                         </div>
                                     </div>
                                     <div class="col-4 hidden-lg-down data-item ">
                                         <div>
-                                            <div class="data-item-detail pl-3">@(string.IsNullOrEmpty(Doc.CompleteName) ? "" : "Save As: " + Doc.CompleteName)</div>
+                                            <div class="data-item-detail pl-3">@(string.IsNullOrEmpty(Doc.ChapterObject.CompleteName) ? "" : "Save As: " + Doc.ChapterObject.CompleteName)</div>
                                         </div>
-                                        @if (Doc.SuppressStep == "Y")
+                                        @if (Doc.ChapterObject.SuppressStep == "Y")
                                         {
                                             <div class="data-item-right pb-1">
                                                 <span class="badge badge-sm ">End Chapter</span>
@@ -354,7 +352,7 @@ else
                         {
 
 
-                            <div class="row grid-row grid-row-lg @(rowChanged == Fee.SeqNo ? "row-changed" : "" )">
+                            <div class="row grid-row grid-row-lg @(rowChanged == Fee.ChapterObject.SeqNo ? "row-changed" : "" )">
                                 <div class="col-12 data-item">
                                     @if (sessionState.isAdminUser)
                                     {
@@ -363,12 +361,12 @@ else
                                             <div class="ellipsis-menu">
                                                 <ul>
                                                     <li>
-                                                        <a href="javascript: void(0);" @onclick='(() => PrepareForEdit(Fee, "Fees"))'>
+                                                        <a href="javascript: void(0);" @onclick='(() => PrepareForEdit(Fee.ChapterObject, "Fees"))'>
                                                             <span class="fa fa-pencil-alt mr-2"></span>Edit
                                                         </a>
                                                     </li>
                                                     <li>
-                                                        <a href="javascript: void(0);" @onclick="() => PrepareChapterDetailDelete(Fee)">
+                                                        <a href="javascript: void(0);" @onclick="() => PrepareChapterDetailDelete(Fee.ChapterObject)">
                                                             <span class="fa fa-trash-alt mr-2"></span>Delete
                                                         </a>
                                                     </li>
@@ -377,20 +375,20 @@ else
                                             </div>
                                         </div>
                                         <div class="data-item-sub">
-                                            <span class="fa fa-file mr-2"></span> @Fee.Name
+                                            <span class="fa fa-file mr-2"></span> @Fee.ChapterObject.Name
                                         </div>
                                         <div class="data-item-right mr-2 seq-change">
-                                            <div><a href="javascript: void(0);" @onclick='() =>  MoveSeq(Fee,"Fees", "Up")'><span class="fa fa-angle-up"></span></a></div>
-                                            <div class="seq-no">@Fee.SeqNo</div>
-                                            <div><a href="javascript: void(0);" @onclick='() =>  MoveSeq(Fee,"Fees", "Down")'><span class="fa fa-angle-down"></span></a></div>
+                                            <div><a href="javascript: void(0);" @onclick='() =>  MoveSeq(Fee.ChapterObject,"Fees", "Up")'><span class="fa fa-angle-up"></span></a></div>
+                                            <div class="seq-no">@Fee.ChapterObject.SeqNo</div>
+                                            <div><a href="javascript: void(0);" @onclick='() =>  MoveSeq(Fee.ChapterObject,"Fees", "Down")'><span class="fa fa-angle-down"></span></a></div>
                                         </div>
                                     }
                                     else
                                     {
                                         <div class="data-item-sub">
-                                            <span class="fa fa-money-bill mr-2"></span> @Fee.Name
+                                            <span class="fa fa-money-bill mr-2"></span> @Fee.ChapterObject.Name
                                             <div class="data-item-right mr-2 ">
-                                                <div class="seq-no">@Fee.SeqNo</div>
+                                                <div class="seq-no">@Fee.ChapterObject.SeqNo</div>
                                             </div>
                                         </div>
                                     }
@@ -430,12 +428,12 @@ else
                                             <div class="ellipsis-menu">
                                                 <ul>
                                                     <li>
-                                                        <a href="javascript: void(0);" @onclick='(() => PrepareForEdit(status, "Status"))'>
+                                                        <a href="javascript: void(0);" @onclick='(() => PrepareForEdit(status.ChapterObject, "Status"))'>
                                                             <span class="fa fa-pencil-alt mr-2"></span>Edit
                                                         </a>
                                                     </li>
                                                     <li>
-                                                        <a href="javascript: void(0);" @onclick="() => PrepareChapterDetailDelete(status)">
+                                                        <a href="javascript: void(0);" @onclick="() => PrepareChapterDetailDelete(status.ChapterObject)">
                                                             <span class="fa fa-trash-alt mr-2"></span>Delete
                                                         </a>
                                                     </li>
@@ -445,7 +443,7 @@ else
                                         </div>
                                     }
                                     <div class="data-item-sub">
-                                        <span class="fa fa-battery-half mr-2"></span>@status.Name
+                                        <span class="fa fa-battery-half mr-2"></span>@status.ChapterObject.Name
                                     </div>
                                 </div>
 
@@ -462,255 +460,3 @@ else
 
     </div>
 }
-
-
-@if (selectedChapter == "x")
-{
-
-    <div class="tran-block page-header-block ">
-        <div class="float-left back-link">
-            <a href="javascript: void(0);" @onclick="SelectHome"><span class="col-alt fa fa-angle-double-left"></span></a>
-        </div>
-        <h3>Chapter: @selectedChapter</h3>
-    </div>
-
-    @if (!editChapterDetail)
-    {
-        <div class="tran-block detail-block">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-6 detail-box ml-0 mr-0">
-                        <div class="container-fluid">
-                            <div class="row">
-                                <div class="col-12" id="agendaWrapper">
-                                    <h5>
-                                        Agendas
-                                        <a Title="Information" href="javascript: void(0);" @onclick='() => PrepareModalInfoDisplay("Agenda"
-                                                                                                            ,"<p>Document storage agendas.</p><p>Correspondance stored in these agendas will be made avalible on the History tab.</p>"
-                                                                                                            ,"500px"
-                                                                                                            ,"400px")' data-toggle="modal" data-target="#modalInfo">
-                                            <span class="fa fa-info-circle"></span>
-                                        </a>
-
-                                        <a class="edit-link-right col-main" title="Edit" href="javascript: void(0);" @onclick='() => ToggleChapterDetailEdit("Agenda")'>
-                                            <span class="fa fa-pencil-alt "></span>
-                                        </a>
-                                    </h5>
-
-
-                                    <div class="col-12 detail-list-box">
-
-                                        @foreach (var Agenda in lstAgendas)
-                                        {
-                                            <div class="row grid-row">
-                                                <div class="col-12 data-item">
-                                                    <div class="data-item-sub">
-                                                        <span class="fas fa-stream mr-1"></span> @Agenda.Name
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        }
-
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-12 " id="statusWrapper">
-                                    <h5>
-                                        Status
-                                        <a Title="Information" href="javascript: void(0);" @onclick='() => PrepareModalInfoDisplay("Status"
-                                                                                                                ,"<p>Document storage agendas.</p><p>Correspondance stored in these agendas will be made avalible on the History tab.</p>"
-                                                                                                                ,"500px"
-                                                                                                                ,"400px")' data-toggle="modal" data-target="#modalInfo">
-                                            <span class="fa fa-info-circle"></span>
-                                        </a>
-                                        <a class="edit-link-right col-main" title="Edit" href="javascript: void(0);" @onclick='() => ToggleChapterDetailEdit("Status")'>
-                                            <span class="fa fa-pencil-alt"></span>
-                                        </a>
-
-                                    </h5>
-
-                                    <div class="col-12  detail-list-box">
-
-                                        @foreach (var status in lstStatus)
-                                        {
-                                            <div class="row grid-row">
-                                                <div class="col-12 data-item"><div class="data-item-sub"><span class="far fa-calendar-check mr-1"></span> @status.Name</div></div>
-                                            </div>
-                                        }
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-6 detail-box " id="feesWrapper">
-                        <h5>
-                            Fees
-                            <a Title="Information" href="javascript: void(0);" @onclick='() => PrepareModalInfoDisplay("Fees"
-                                                                                                          ,"<p>Document storage agendas.</p><p>Correspondance stored in these agendas will be made avalible on the History tab.</p>"
-                                                                                                          ,"500px"
-                                                                                                          ,"400px")' data-toggle="modal" data-target="#modalInfo">
-                                <span class="fa fa-info-circle"></span>
-                            </a>
-                            <a class="edit-link-right col-main" title="Edit" href="javascript: void(0);" @onclick='() => ToggleChapterDetailEdit("Fees")'>
-                                <span class="fa fa-pencil-alt"></span>
-                            </a>
-
-                        </h5>
-                        <div class="col-12  detail-list-box">
-                            @foreach (var Fee in lstFees)
-                            {
-                                <div class="row grid-row">
-                                    <div class="col-12 data-item"><div class="data-item-sub"><span class="fas fa-pound-sign mr-1"></span> @Fee.Name</div></div>
-                                </div>
-                            }
-
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-12 detail-box" id="docsWrapper">
-                        <h5>
-                            Docs
-                            <a Title="Information" href="javascript: void(0);" @onclick='() => PrepareModalInfoDisplay("Docs"
-                                                                                                         ,"<p>Document storage agendas.</p><p>Correspondance stored in these agendas will be made avalible on the History tab.</p>"
-                                                                                                         ,"500px"
-                                                                                                         ,"400px")' data-toggle="modal" data-target="#modalInfo">
-                                <span class="fa fa-info-circle"></span>
-                            </a>
-                            <a class="edit-link-right col-main" title="Edit" href="javascript: void(0);" @onclick='() => ToggleChapterDetailEdit("Docs")'>
-                                <span class="fa fa-pencil-alt"></span>
-                            </a>
-
-                        </h5>
-
-                        <div class="col-12  detail-list-box">
-                            @foreach (var doc in lstDocs)
-                            {
-                                <div class="row grid-row-lg">
-                                    <div class="col-11 col-xl-4 data-item">
-                                        <div class="pl-3 data-item-sub">
-                                            <span class="far fa-file-word mr-1"></span> @doc.Name
-                                            <div class="data-item-right mr-2">
-                                                <span class="badge badge-tran">@doc.SeqNo</span>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                    <div class="col-4 hidden-lg-down data-item ">
-                                        <div class="data-item-detail-sm"><span>Schedule:</span></div>
-                                        <div class="data-item-detail pl-3"><span>@(string.IsNullOrEmpty(doc.AsName) ? "" : doc.AsName)</span></div>
-                                        <div class="pl-3">
-                                            @if (doc.RescheduleDays.HasValue)
-                                            {
-                                                <span class="badge badge-sm square">@doc.RescheduleDays.ToString() days</span>
-                                            }
-                                        </div>
-                                    </div>
-                                    <div class="col-4 hidden-lg-down data-item ">
-                                        <div>
-                                            <div class="data-item-detail-sm"><span>On Complete:</span></div>
-                                            <div class="data-item-detail pl-3"><span>@(string.IsNullOrEmpty(doc.CompleteName) ? "Clear from agenda" : "Save As: " + doc.CompleteName)</span></div>
-                                        </div>
-                                        @if (doc.SuppressStep == "Y")
-                                        {
-                                            <div class="data-item-right pb-1">
-                                                <span class="badge badge-sm ">End Chapter</span>
-                                            </div>
-                                        }
-
-
-                                    </div>
-
-
-                                </div>
-                            }
-                        </div>
-
-
-
-                    </div>
-                </div>
-            </div>
-        </div>
-    }
-    else
-    {
-        <div class="tran-block detail-block">
-
-            <input type="button" @onclick='() => ToggleChapterDetailEdit("")' class="btn btn-primary" value="Back" />
-
-            @if (displaySection == "Agenda")
-            {
-
-                <div class="fade-in">
-                    @foreach (var Agenda in lstAgendas)
-                    {
-                        <div class="OR_ChapterItemTable">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 p-2 ">
-                                <span class="shadow card subCard rounded chapterItem_Agenda" @onclick='(() => PrepareForEdit(Agenda,displaySection))'>@Agenda.Name</span>
-                            </div>
-                        </div>
-                    }
-                </div>
-
-                <input type="button" @onclick='() => PrepareForInsert(displaySection)' class="btn btn-primary" value="Add Agenda" />
-            }
-
-
-            @if (displaySection == "Fees")
-            {
-                <div class="fade-in">
-                    @foreach (var Fee in lstFees)
-                    {
-                        <div class="OR_ChapterItemTable">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 p-2 ">
-                                <span class="shadow card subCard rounded chapterItem_Fee" @onclick='(() => PrepareForEdit(Fee,displaySection))' value="Edit">@Fee.Name</span>
-                            </div>
-                        </div>
-                    }
-
-                    <input type="button" @onclick='() => PrepareForInsert(displaySection)' class="btn btn-primary" value="Add Fee" />
-                </div>
-            }
-
-            @if (displaySection == "Docs")
-            {
-                <div class="fade-in">
-                    @foreach (var Doc in lstDocs)
-                    {
-                        <div class="OR_ChapterItemTable">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 p-2 ">
-                                <span class="shadow card subCard rounded chapterItem_Doc" @onclick='(() => PrepareForEdit(Doc,displaySection))' value="Edit">@Doc.Name</span>
-                            </div>
-                        </div>
-                    }
-
-                    <input type="button" @onclick='() => PrepareForInsert(displaySection)' class="btn btn-primary" value="Add Document" />
-                </div>
-            }
-
-            @if (displaySection == "Status")
-            {
-                <div class="fade-in">
-                    @foreach (var status in lstStatus)
-                    {
-                        <div class="OR_ChapterItemTable">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 p-2 ">
-                                <span class="shadow card subCard rounded chapterItem_Status" @onclick='(() => PrepareForEdit(status,displaySection))' value="Edit">@status.Name</span>
-                            </div>
-                        </div>
-                    }
-
-                    <input type="button" @onclick='() => PrepareForInsert(displaySection)' class="btn btn-primary" value="Add Status" />
-                </div>
-            }
-        </div>
-    }
-
-}
-
-
-<ModalInfo InfoHeader="@ModalInfoHeader" InfoText="@ModalInfoText" ModalHeight="@ModalHeight" ModalWidth="@ModalWidth"></ModalInfo>

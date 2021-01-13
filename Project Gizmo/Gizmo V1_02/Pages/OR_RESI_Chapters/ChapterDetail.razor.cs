@@ -34,7 +34,7 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
         public string selectedCaseType { get; set; }
 
         [Parameter]
-        public List<DmDocuments> dropDownDocumentList { get; set; }
+        public List<DmDocuments> dropDownChapterList { get; set; }
 
         List<string> DocTypeList = new List<string>() { "Chapter", "Doc", "Form", "Letter", "Step" };
 
