@@ -75,6 +75,7 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
 
         public bool compareSystems = false;
 
+
         public List<string> lstDocTypes { get; set; } = new List<string> { "Document", "Letter", "Form", "Email", "Step" };
 
         protected override async Task OnInitializedAsync()
@@ -202,6 +203,10 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
 
             if (compareSystems)
             {
+
+
+                lstDocs = lstDocs.Select(D => { D.ComparisonIcon = null; return D; }).ToList();
+
                 await sessionState.SwitchSelectedSystem();
                 var temp = await chapterManagementService.GetItemListByChapter(selectedChapterId);
                 lstAltSystemChapterItems = temp.Select(T => new VmUsrOrDefChapterManagement { ChapterObject = T }).ToList();
@@ -226,7 +231,10 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
                 {
                     CompareChapterItemsToAltSytem(item);
                 }
+
+                StateHasChanged();
             }
+
             return true;
         }
 
@@ -240,15 +248,46 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
 
             if(altObject is null)
             {
-                chapterItem.ComparisonResult = "No Match";
+                chapterItem.ComparisonResult = "No match";
+                chapterItem.ComparisonIcon = "times";
             }
             else
             {
-                chapterItem.ComparisonResult = "Match";
+                if (chapterItem.IsChapterItemsSame(altObject))
+                {
+                    chapterItem.ComparisonResult = "Exact match";
+                    chapterItem.ComparisonIcon = "check";
+
+                }
+                else
+                {
+                    chapterItem.ComparisonResult = "Partial match";
+                    chapterItem.ComparisonIcon = "exclamation";
+
+                }
+
             }
 
+            if (chapterItem.ChapterObject.SeqNo < 3)
+            {
+                chapterItem.ComparisonIcon = "times";
+            }
+            else
+            {
+                if (chapterItem.ChapterObject.SeqNo < 5)
+                {
+                    chapterItem.ComparisonIcon = "check";
+                }
+                else
+                {
+                    chapterItem.ComparisonIcon = "exclamation";
+
+                }
+            }
             return chapterItem;
         }
+
+        
 
         public void RefreshSelectedList()
         {

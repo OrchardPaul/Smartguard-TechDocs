@@ -163,6 +163,17 @@
     font-size: 25px;
 }
 
+/*  validation icons  */
+.fa-check {
+    color: #009933;
+}
+.fa-times {
+    color: #cc0000;
+}
+.fa-exclamation {
+    color: #cc9900;
+}
+
 .data-item-edit {
     padding: 0 !important;
     background-color: rgba(245, 245, 245, 0) !important;
