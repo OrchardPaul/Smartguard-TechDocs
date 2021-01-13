@@ -13,6 +13,7 @@ using Gizmo_V1_02.Services.SessionState;
 using Blazored.Modal.Services;
 using Blazored.Modal;
 using Gizmo_V1_02.Pages.Shared.Modals;
+using Gizmo.Context.OR_RESI.Custom;
 
 namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
 {
@@ -32,16 +33,16 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
 
         private List<UsrOrDefChapterManagement> lstChapters;
 
-        private List<UsrOrDefChapterManagement> lstAll { get; set; } = new List<UsrOrDefChapterManagement>();
-        private List<UsrOrDefChapterManagement> lstAltSystemChapterItems { get; set; } = new List<UsrOrDefChapterManagement>();
+        private List<VmUsrOrDefChapterManagement> lstAll { get; set; } = new List<VmUsrOrDefChapterManagement>();
+        private List<VmUsrOrDefChapterManagement> lstAltSystemChapterItems { get; set; } = new List<VmUsrOrDefChapterManagement>();
 
-        private List<UsrOrDefChapterManagement> lstAgendas { get; set; } = new List<UsrOrDefChapterManagement>();
-        private List<UsrOrDefChapterManagement> lstFees { get; set; } = new List<UsrOrDefChapterManagement>();
-        private List<UsrOrDefChapterManagement> lstDocs { get; set; } = new List<UsrOrDefChapterManagement>();
-        private List<UsrOrDefChapterManagement> lstStatus { get; set; } = new List<UsrOrDefChapterManagement>();
+        private List<VmUsrOrDefChapterManagement> lstAgendas { get; set; } = new List<VmUsrOrDefChapterManagement>();
+        private List<VmUsrOrDefChapterManagement> lstFees { get; set; } = new List<VmUsrOrDefChapterManagement>();
+        private List<VmUsrOrDefChapterManagement> lstDocs { get; set; } = new List<VmUsrOrDefChapterManagement>();
+        private List<VmUsrOrDefChapterManagement> lstStatus { get; set; } = new List<VmUsrOrDefChapterManagement>();
 
 
-        public List<DmDocuments> dropDownDocumentList;
+        public List<DmDocuments> dropDownChapterList;
 
 
         public string editCaseType { get; set; } = "";
@@ -130,15 +131,16 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
         {
             selectedCaseType = (selectedCaseType == caseType) ? "" : caseType;
             selectedChapter = "";
-            PrepDocumentList();
+            PrepChapterList();
         }
 
         private void SelectChapter(string chapter, int chapterID)
         {
-            lstAll = new List<UsrOrDefChapterManagement>();
+            lstAll = new List<VmUsrOrDefChapterManagement>();
 
             selectedChapterId = chapterID;
             selectedChapter = chapter;
+            compareSystems = false;
 
             RefreshChapterItems("All");
 
@@ -153,37 +155,39 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
 
         private async void RefreshChapterItems(string listType)
         {
-            lstAll = await chapterManagementService.GetItemListByChapter(selectedChapterId);
+            var lst = await chapterManagementService.GetItemListByChapter(selectedChapterId);
+
+            lstAll = lst.Select(A => new VmUsrOrDefChapterManagement { ChapterObject = A }).ToList();
 
             if (listType == "Agenda" | listType == "All")
             {
                 lstAgendas = lstAll
-                                    .OrderBy(A => A.SeqNo)
-                                    .Where(A => A.Type == "Agenda")
+                                    .OrderBy(A => A.ChapterObject.SeqNo)
+                                    .Where(A => A.ChapterObject.Type == "Agenda")
                                     .ToList();
 
             }
             if (listType == "Docs" | listType == "All")
             {
                 lstDocs = lstAll
-                                    .OrderBy(A => A.SeqNo)
-                                    .Where(A => lstDocTypes.Contains(A.Type))
+                                    .OrderBy(A => A.ChapterObject.SeqNo)
+                                    .Where(A => lstDocTypes.Contains(A.ChapterObject.Type))
                                     .ToList();
 
             }
             if (listType == "Fees" | listType == "All")
             {
                 lstFees = lstAll
-                                    .OrderBy(A => A.SeqNo)
-                                    .Where(A => A.Type == "Fee")
+                                    .OrderBy(A => A.ChapterObject.SeqNo)
+                                    .Where(A => A.ChapterObject.Type == "Fee")
                                     .ToList();
                 
             }
             if (listType == "Status" | listType == "All")
             {
                 lstStatus = lstAll
-                                    .OrderBy(A => A.SeqNo)
-                                    .Where(A => A.Type == "Status")
+                                    .OrderBy(A => A.ChapterObject.SeqNo)
+                                    .Where(A => A.ChapterObject.Type == "Status")
                                     .ToList();
 
             }
@@ -192,14 +196,58 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
             StateHasChanged();
         }
 
-        private async void GetAltSytemChapterItems()
+        private async Task<bool> GetAltSytemChapterItems()
         {
+            compareSystems = !compareSystems;
 
-            await sessionState.SwitchSelectedSystem();
-            lstAltSystemChapterItems = await chapterManagementService.GetItemListByChapter(selectedChapterId);
-            await sessionState.ResetSelectedSystem();
-            compareSystems = true;
+            if (compareSystems)
+            {
+                await sessionState.SwitchSelectedSystem();
+                var temp = await chapterManagementService.GetItemListByChapter(selectedChapterId);
+                lstAltSystemChapterItems = temp.Select(T => new VmUsrOrDefChapterManagement { ChapterObject = T }).ToList();
+                await sessionState.ResetSelectedSystem();
 
+                foreach (var item in lstDocs)
+                {
+                    CompareChapterItemsToAltSytem(item);
+                }
+
+                foreach (var item in lstAgendas)
+                {
+                    CompareChapterItemsToAltSytem(item);
+                }
+
+                foreach (var item in lstFees)
+                {
+                    CompareChapterItemsToAltSytem(item);
+                }
+
+                foreach (var item in lstStatus)
+                {
+                    CompareChapterItemsToAltSytem(item);
+                }
+            }
+            return true;
+        }
+
+        private VmUsrOrDefChapterManagement CompareChapterItemsToAltSytem(VmUsrOrDefChapterManagement chapterItem)
+        {
+            
+
+            var altObject = lstAltSystemChapterItems
+                                .Where(A => A.ChapterObject.Name == chapterItem.ChapterObject.Name)
+                                .SingleOrDefault();
+
+            if(altObject is null)
+            {
+                chapterItem.ComparisonResult = "No Match";
+            }
+            else
+            {
+                chapterItem.ComparisonResult = "Match";
+            }
+
+            return chapterItem;
         }
 
         public void RefreshSelectedList()
@@ -263,11 +311,13 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
             ShowCaseTypeEditModal();
         }
 
-        private async void PrepDocumentList()
+        private async void PrepChapterList()
         {
-            dropDownDocumentList = await chapterManagementService.GetDocumentList(selectedCaseType);
-
-            StateHasChanged();
+            if(!(selectedCaseType == ""))
+            {
+                dropDownChapterList = await chapterManagementService.GetDocumentList(selectedCaseType);
+                StateHasChanged();
+            }
         }
 
         private void ToggleChapterDetailEdit(string selectedDetail)
@@ -308,7 +358,7 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
         /// <returns>No return</returns>
         protected async void MoveSeq(UsrOrDefChapterManagement selectobject, string listType, string direction)
         {
-            var lstItems = new List<UsrOrDefChapterManagement>();
+            var lstItems = new List<VmUsrOrDefChapterManagement>();
             int incrementBy;
 
             incrementBy = (direction.ToLower() == "up" ? -1 : 1);
@@ -326,14 +376,14 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
             }
 
             
-            var swapItem = lstItems.Where(D => D.SeqNo == (selectobject.SeqNo + incrementBy)).SingleOrDefault();
+            var swapItem = lstItems.Where(D => D.ChapterObject.SeqNo == (selectobject.SeqNo + incrementBy)).SingleOrDefault();
             if (!(swapItem is null))
             {
                 selectobject.SeqNo += incrementBy;
-                swapItem.SeqNo = swapItem.SeqNo + (incrementBy * -1);
+                swapItem.ChapterObject.SeqNo = swapItem.ChapterObject.SeqNo + (incrementBy * -1);
 
                 await chapterManagementService.Update(selectobject);
-                await chapterManagementService.Update(swapItem);
+                await chapterManagementService.Update(swapItem.ChapterObject);
 
 
             }
@@ -345,16 +395,16 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
             RefreshChapterItems(listType);
         }
 
-        private async void CondenseSeq(List<UsrOrDefChapterManagement> lstItems)
+        private async void CondenseSeq(List<VmUsrOrDefChapterManagement> lstItems)
         {
             int seqNo = 0;
 
-            foreach (UsrOrDefChapterManagement item in lstItems.OrderBy(A => A.SeqNo))
+            foreach (VmUsrOrDefChapterManagement item in lstItems.OrderBy(A => A.ChapterObject.SeqNo))
             {
                 seqNo += 1;
-                item.SeqNo = seqNo;
+                item.ChapterObject.SeqNo = seqNo;
 
-                await chapterManagementService.Update(item);
+                await chapterManagementService.Update(item.ChapterObject);
             }
 
         }
@@ -395,7 +445,7 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
             parameters.Add("DataChanged", Action);
             parameters.Add("selectedCaseType", selectedCaseType);
             parameters.Add("selectedList", selectedList);
-            parameters.Add("dropDownDocumentList", dropDownDocumentList);
+            parameters.Add("dropDownChapterList", dropDownChapterList);
 
             Modal.Show<ChapterDetail>(selectedList, parameters);
         }

@@ -5,7 +5,7 @@
         {
             <label for="DocName">Document / Step</label>
 
-            @if (dropDownDocumentList is null)
+            @if (dropDownChapterList is null)
             {
                 <div class="spinner"></div>
             }
@@ -14,7 +14,7 @@
                 <InputSelect id="documentList" class="form-control" @bind-Value="TaskObject.Name">
                     <option value="">Select</option>
 
-                    @foreach (var doc in dropDownDocumentList)
+                    @foreach (var doc in dropDownChapterList)
                             {
                         <option value="@doc.Name">
                             @doc.Name

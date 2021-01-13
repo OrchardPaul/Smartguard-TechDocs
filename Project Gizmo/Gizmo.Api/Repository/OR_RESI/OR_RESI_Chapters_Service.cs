@@ -162,6 +162,15 @@ namespace Gizmo.Api.Repository.OR_RESI
                                 .ToListAsync();
         }
 
+        public async Task<List<UsrOrDefChapterManagement>> GetItemListByChapterName(string casetypegroup, string casetype, string chapterName)
+        {
+            return await _context.UsrOrDefChapterManagement
+                                .Where(C => C.CaseTypeGroup == casetypegroup)
+                                .Where(C => C.CaseType == casetype)
+                                .Where(C => C.Name == chapterName)
+                                .ToListAsync();
+        }
+
         public async Task<List<UsrOrDefChapterManagement>> GetDocListByChapterAndDocType(String caseType, String chapter, String docType)
         {
 
@@ -217,13 +226,13 @@ namespace Gizmo.Api.Repository.OR_RESI
             return caseTypeGroupRef;
         }
 
-        public int? GetCaseTypeCode(String caseType, int? caseTypeGroup)
+        public async Task<int?> GetCaseTypeCode(string caseType, int? caseTypeGroup)
         {
-            int? caseTypeCode = _context.CaseTypes
+            int? caseTypeCode = await _context.CaseTypes
                 .Where(C => C.CaseTypeGroupRef == caseTypeGroup)
                 .Where(C => EF.Functions.Like(C.Description, "%" + caseType + "%"))
                 .Select(C => C.Code)
-                .Single();
+                .SingleOrDefaultAsync();
 
             if (caseTypeCode is null)
                 caseTypeCode = -1;
@@ -231,20 +240,11 @@ namespace Gizmo.Api.Repository.OR_RESI
             return caseTypeCode;
         }
 
-        public async Task<List<DmDocuments>> GetDocumentList(String caseType)
+        public async Task<List<DmDocuments>> GetDocumentList(string caseType)
         {
             int? caseTypeGroupRef = GetCaseTypeGroupRef();
 
-            int? caseTypeCode = GetCaseTypeCode(caseType, caseTypeGroupRef);
-
-            /*
-            return (from d in _context.DmDocuments
-                    join dm in _context.DmDocumentsPermissions on d.Code equals dm.Doccode
-                    where dm.Casetype == caseTypeCode
-                    orderby d.Name
-                    select d.Name)
-                    .ToList();
-            */
+            int? caseTypeCode = await GetCaseTypeCode(caseType, caseTypeGroupRef);
 
             return await _context.DmDocuments
                             .Join(_context.DmDocumentsPermissions,
