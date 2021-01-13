@@ -93,7 +93,6 @@
 
 .sidebar .nav-item a.active {
     color: #000 !important;
-    border: 1pt solid #ddd;
     font-weight: bold;
 }
 
