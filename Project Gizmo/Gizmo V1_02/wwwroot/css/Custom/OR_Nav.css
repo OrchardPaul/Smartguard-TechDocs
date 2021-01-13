@@ -84,15 +84,17 @@
     position: -webkit-sticky; /* Safari */
     position: sticky;
     top: 0;
+    background: #222 !important;
+    border: none;
 }
 
 .sidebar .nav-item .nav-link{
     font-size: 0.9rem !important;
-    color: #555 !important;
+    color: #CCC !important;
 }
 
 .sidebar .nav-item a.active {
-    color: #000 !important;
+    color: #FFF !important;
     font-weight: bold;
 }
 
