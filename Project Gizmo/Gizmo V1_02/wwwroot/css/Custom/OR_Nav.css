@@ -265,6 +265,60 @@
 }
 
 
+/*--------------------*/
+/*   MOCK TREE NAV    */
+/*--------------------*/
+
+.nav-row-1 {
+    margin-top: 20px;
+}
+.nav-row-2 {
+    margin-top: 12px;
+    margin-left: 30px;
+}
+.nav-row-3 {
+    margin-top: 7px;
+    margin-left: 60px;
+    margin-right: 15px;
+}
+
+.data-item-nav {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    padding: 0;
+    font-size: 0.95rem !important;
+    background-color: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 8px 12px 0 rgba(0, 0, 0, 0.5);
+    border-radius: 0px;
+    border: none;
+    cursor: pointer;
+}
+
+.data-item-nav a {
+    display: block;
+    height: 100%;
+    width: 100%;
+    text-decoration: none !important;
+}
+
+
+.data-item-nav:hover, .data-item-nav a:hover, .nav-row-3 .data-item-nav:hover{
+    background-color: #000;
+    color: #FFF;
+    transition-duration: 1s;
+    transition-property: background-color, color;
+}
+
+
+
+.data-item a:hover .data-item-main, .data-item a:hover .data-item-alt {
+    background-color: #000;
+    color: #FFF;
+    transition-duration: 1s;
+    transition-property: background-color, color;
+}
+
 
 /*--------------------*/
 /*   DROP DOWN NAV    */
@@ -281,6 +335,11 @@
     z-index: 100;
 }
 
+.btn-ellipses .ellipsis-menu-right {
+    top: 8px;
+    left: calc(100% - 170px) !important;
+}
+
 .btn-ellipses ul {
     width: 100%;
     margin: 0;
@@ -295,10 +354,12 @@
 
 .btn-ellipses:hover .ellipsis-menu {
     display: block;
+    
 }
 
 .btn-ellipses ul li {
     list-style-type: none;
+    background: #fff;
 }
 
 .btn-ellipses ul li a {
@@ -308,6 +369,7 @@
     border-radius: 3px;
     color: #555;
     text-align: left;
+    background: #fff;
 }
 
 .btn-ellipses ul li a:hover {

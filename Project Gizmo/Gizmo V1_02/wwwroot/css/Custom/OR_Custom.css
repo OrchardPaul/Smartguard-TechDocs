@@ -144,6 +144,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    position: relative;
 }
 
 .tran-block .btn-edit {
@@ -309,7 +310,6 @@
 }
 
 .data-item-sub {
-    
     padding-left: 10px !important;
     padding-top: 0px !important;
     width: 100%;
@@ -319,26 +319,12 @@
     overflow: hidden;
     text-overflow: ellipsis !important;
     align-items: center;
-
+    
 }
 
-.grid-row .data-item-su {
-    padding-top: 11px !important;
-}
 
-.grid-row-lg .data-item-su {
-    padding-top: 20px !important;
-}
 .grid-row-lg .data-item-detail {
     margin-top: 7px !important;
-}
-
-.grid-row-md .data-item-su {
-    padding-top: 7px !important;
-}
-
-.grid-row-sm .data-item-su {
-    padding-top: 5px !important;
 }
 
 .grid-can-edit .grid-row .data-item:first-of-type{
@@ -390,52 +376,6 @@
     box-shadow: 0 8px 12px 0 rgba(0, 0, 0, 0.5);
 }
 
-.data-item-nav {
-    height: 100%;
-    display: flex;
-    align-items: center;
-    align-content: center;
-    padding: 0;
-    font-size: 0.95rem !important;
-    background-color: rgba(255, 255, 255, 0.8);
-    box-shadow: 0 8px 12px 0 rgba(0, 0, 0, 0.5);
-    border-radius: 5px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.data-item-nav a {
-    display: block;
-    align-items: center;
-    height: 100%;
-    width: 100%;
-    text-decoration: none !important;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    vertical-align: middle;
-}
-
-
-.data-item-nav:hover, .data-item-nav a:hover {
-    background-color: #000;
-    color: #FFF;
-    transition-duration: 1s;
-    transition-property: background-color, color;
-}
-
-.data-item-nav a .data-item-sub{
-    display: flex;
-    align-items: center;
-}
-
-.data-item a:hover .data-item-main, .data-item a:hover .data-item-alt {
-    background-color: #000;
-    color: #FFF;
-    transition-duration: 1s;
-    transition-property: background-color, color;
-}
 
 
 .data-item-detail {
@@ -478,9 +418,9 @@
 
 .edit-link-right, .nav-link-right, .data-item-nav .data-item-sub .nav-link-right {
     display: block;
-    width: 20px;
+    width: 15px;
     margin-left: auto;
-    margin-right: 10px;
+    margin-right: 5px;
     height: 1.2em;
     float: right;
 }
@@ -576,13 +516,7 @@
     border-radius: 5px;
 }
 
-.grid-tran .data-item-sub {
-    height: 100%;
-    width: 100%;
-    padding: 0 5px 0 5px;
-    margin: 0px;
 
-}
 
 
 
