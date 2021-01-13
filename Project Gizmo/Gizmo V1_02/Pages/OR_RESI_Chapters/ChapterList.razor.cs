@@ -71,7 +71,7 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
         public string ModalHeight { get; set; }
         public string ModalWidth { get; set; }
 
-        public string navDisplay = "Agenda";
+        public string navDisplay = "Docs";
 
         public bool compareSystems = false;
 
@@ -378,6 +378,7 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
 
         protected void ShowNav(string displayChange)
         {
+            compareSystems = false;
             rowChanged = 0;
             navDisplay = displayChange;
         }

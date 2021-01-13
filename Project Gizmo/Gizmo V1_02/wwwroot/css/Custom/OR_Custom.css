@@ -7,8 +7,6 @@
 
 
 
-
-
 .main > div {
     padding-left: 0 !important;
     padding-right: 0 !important;
@@ -102,6 +100,17 @@
     }
 }
 
+/*-----------------------------*/
+/*  FLEX Boxes           */
+/*-----------------------------*/
+.flex-box {
+    display: flex;
+}
+
+.flex-push {
+    margin-left: auto;
+}
+  
 /*-----------------------------*/
 /*  BUTTONS & LINKS            */
 /*-----------------------------*/
@@ -573,17 +582,29 @@
     width: 80px;
     height: 80px;
     animation: spin 700ms linear infinite;
+    animation-delay: 1s;
     top: 40%;
     left: 55%;
     position: absolute;
+    visibility: hidden;
+}
+
+
+.data-item .spinner {
+    width: 20px;
+    height: 20px;
+    top: 40%;
+    left: 55%;
 }
 
 @keyframes spin {
     0% {
+        visibility: hidden;
         transform: rotate(0deg)
     }
 
     100% {
+        visibility: visible;
         transform: rotate(360deg)
     }
 }
@@ -612,6 +633,9 @@
 .grid-chapter-docs {
     width: 100%;
     min-height: 400px;
+}
+.grid-chapter-docs .flex-box{
+    width: 800px;
 }
 
 .grid-chapter-fees {
@@ -851,4 +875,8 @@
 
 a[title="Information"] {
     color: #999;
+}
+
+.flex-box a[title="Information"] {
+    margin-left: 40px;
 }

@@ -19,6 +19,16 @@ h5{
     margin: 0;
 }
 
+
+.font-75 {
+    font-size: .75rem;
+}
+
+.font-grey {
+    color: #777;
+}
+
+
 ul.ul-simple {
     list-style-type: none;
     padding: 0;
