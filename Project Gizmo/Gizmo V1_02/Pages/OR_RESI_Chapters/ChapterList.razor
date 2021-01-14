@@ -225,12 +225,12 @@ else
                                                     <div class="ellipsis-menu">
                                                         <ul>
                                                             <li>
-                                                                <a href="javascript: void(0);" @onclick='(() => PrepareForEdit(doc.ChapterObject, "Docs"))'>
+                                                                <a href="javascript: void(0);" @onclick='(() => PrepareForEdit(doc, "Docs"))'>
                                                                     <span class="fa fa-pencil-alt mr-2"></span>Edit
                                                                 </a>
                                                             </li>
                                                             <li>
-                                                                <a href="javascript: void(0);" @onclick="() => PrepareChapterDetailDelete(doc.ChapterObject)">
+                                                                <a href="javascript: void(0);" @onclick="() => PrepareChapterDetailDelete(doc)">
                                                                     <span class="fa fa-trash-alt mr-2"></span>Delete
                                                                 </a>
                                                             </li>
@@ -245,7 +245,9 @@ else
                                                 <div class="btn-ellipses float-left">
                                                     @if (!(doc.ComparisonIcon is null))
                                                     {
-                                                        <span class="fa fa-@doc.ComparisonIcon"></span>
+                                                        <a href="javascript: void(0);" @onclick="() => PrepareForComparison(doc)">
+                                                            <span class="fa fa-@doc.ComparisonIcon"></span>
+                                                        </a>
                                                     }
                                                     else
                                                     {
@@ -352,12 +354,12 @@ else
                                                 <div class="ellipsis-menu">
                                                     <ul>
                                                         <li>
-                                                            <a href="javascript: void(0);" @onclick='(() => PrepareForEdit(agenda.ChapterObject, "Agenda"))'>
+                                                            <a href="javascript: void(0);" @onclick='(() => PrepareForEdit(agenda, "Agenda"))'>
                                                                 <span class="fa fa-pencil-alt mr-2"></span>Edit
                                                             </a>
                                                         </li>
                                                         <li>
-                                                            <a href="javascript: void(0);" @onclick="() => PrepareChapterDetailDelete(agenda.ChapterObject)">
+                                                            <a href="javascript: void(0);" @onclick="() => PrepareChapterDetailDelete(agenda)">
                                                                 <span class="fa fa-trash-alt mr-2"></span>Delete
                                                             </a>
                                                         </li>
@@ -441,12 +443,12 @@ else
                                                 <div class="ellipsis-menu">
                                                     <ul>
                                                         <li>
-                                                            <a href="javascript: void(0);" @onclick='(() => PrepareForEdit(fee.ChapterObject, "Fees"))'>
+                                                            <a href="javascript: void(0);" @onclick='(() => PrepareForEdit(fee, "Fees"))'>
                                                                 <span class="fa fa-pencil-alt mr-2"></span>Edit
                                                             </a>
                                                         </li>
                                                         <li>
-                                                            <a href="javascript: void(0);" @onclick="() => PrepareChapterDetailDelete(fee.ChapterObject)">
+                                                            <a href="javascript: void(0);" @onclick="() => PrepareChapterDetailDelete(fee)">
                                                                 <span class="fa fa-trash-alt mr-2"></span>Delete
                                                             </a>
                                                         </li>
@@ -542,12 +544,12 @@ else
                                                 <div class="ellipsis-menu">
                                                     <ul>
                                                         <li>
-                                                            <a href="javascript: void(0);" @onclick='(() => PrepareForEdit(status.ChapterObject, "Status"))'>
+                                                            <a href="javascript: void(0);" @onclick='(() => PrepareForEdit(status, "Status"))'>
                                                                 <span class="fa fa-pencil-alt mr-2"></span>Edit
                                                             </a>
                                                         </li>
                                                         <li>
-                                                            <a href="javascript: void(0);" @onclick="() => PrepareChapterDetailDelete(status.ChapterObject)">
+                                                            <a href="javascript: void(0);" @onclick="() => PrepareChapterDetailDelete(status)">
                                                                 <span class="fa fa-trash-alt mr-2"></span>Delete
                                                             </a>
                                                         </li>

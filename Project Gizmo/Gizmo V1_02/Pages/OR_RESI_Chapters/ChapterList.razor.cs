@@ -48,8 +48,8 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
         public string editCaseType { get; set; } = "";
         public string isCaseTypeOrGroup { get; set; } = "";
         
-        public UsrOrDefChapterManagement editObject = new UsrOrDefChapterManagement();
-        public UsrOrDefChapterManagement editChapterObject = new UsrOrDefChapterManagement();
+        public VmUsrOrDefChapterManagement editObject = new VmUsrOrDefChapterManagement();
+        public VmUsrOrDefChapterManagement editChapterObject = new VmUsrOrDefChapterManagement();
 
         string customHeader = string.Empty;
         string selectedList = string.Empty;
@@ -253,7 +253,7 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
             }
             else
             {
-                if (chapterItem.IsChapterItemsSame(altObject))
+                if (chapterItem.IsChapterItemMatch(altObject))
                 {
                     chapterItem.ComparisonResult = "Exact match";
                     chapterItem.ComparisonIcon = "check";
@@ -268,33 +268,21 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
 
             }
 
-            if (chapterItem.ChapterObject.SeqNo < 3)
-            {
-                chapterItem.ComparisonIcon = "times";
-            }
-            else
-            {
-                if (chapterItem.ChapterObject.SeqNo < 5)
-                {
-                    chapterItem.ComparisonIcon = "check";
-                }
-                else
-                {
-                    chapterItem.ComparisonIcon = "exclamation";
-
-                }
-            }
             return chapterItem;
         }
 
-        
+        public async void CompareChapterItemsToAltSytem()
+        {
+            await GetAltSytemChapterItems();
+        }
+
 
         public void RefreshSelectedList()
         {
             RefreshChapterItems(displaySection);
         }
 
-        private void PrepareForEdit(UsrOrDefChapterManagement item, string header)
+        private void PrepareForEdit(VmUsrOrDefChapterManagement item, string header)
         {
             customHeader = header;
             selectedList = header;
@@ -306,38 +294,38 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
         private void PrepareForInsert(string header)
         {
             selectedList = header;
-            editObject = new UsrOrDefChapterManagement();
+            editObject = new VmUsrOrDefChapterManagement();
 
             ShowChapterDetailModal();
         }
 
         private void PrepareChapterForInsert()
         {
-            editChapterObject = new UsrOrDefChapterManagement();
+            editChapterObject = new VmUsrOrDefChapterManagement();
 
             if(!(selectedCaseTypeGroup == ""))
             {
-                editChapterObject.CaseTypeGroup = selectedCaseTypeGroup;
+                editChapterObject.ChapterObject.CaseTypeGroup = selectedCaseTypeGroup;
             }
             else
             {
-                editChapterObject.CaseTypeGroup = "";
+                editChapterObject.ChapterObject.CaseTypeGroup = "";
             }
 
             if(!(selectedCaseType == ""))
             {
-                editChapterObject.CaseType = selectedCaseType;
+                editChapterObject.ChapterObject.CaseType = selectedCaseType;
             }
             else
             {
-                editChapterObject.CaseType = "";
+                editChapterObject.ChapterObject.CaseType = "";
             }
 
-            editChapterObject.Type = "Chapter";
-            editChapterObject.ParentId = 0;
-            editChapterObject.SeqNo = 0;
-            editChapterObject.SuppressStep = "";
-            editChapterObject.EntityType = "";
+            editChapterObject.ChapterObject.Type = "Chapter";
+            editChapterObject.ChapterObject.ParentId = 0;
+            editChapterObject.ChapterObject.SeqNo = 0;
+            editChapterObject.ChapterObject.SuppressStep = "";
+            editChapterObject.ChapterObject.EntityType = "";
 
             ShowChapterAddOrEditModel();
         }
@@ -357,12 +345,6 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
                 dropDownChapterList = await chapterManagementService.GetDocumentList(selectedCaseType);
                 StateHasChanged();
             }
-        }
-
-        private void ToggleChapterDetailEdit(string selectedDetail)
-        {
-            editChapterDetail = !editChapterDetail;
-            displaySection = selectedDetail;
         }
 
         private void PrepareModalInfoDisplay(string modalHeader
@@ -454,7 +436,7 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
             Action Action = RefreshChapters;
 
             var parameters = new ModalParameters();
-            parameters.Add("TaskObject", editChapterObject);
+            parameters.Add("TaskObject", editChapterObject.ChapterObject);
             parameters.Add("DataChanged", Action);
             parameters.Add("AllObjects", lstChapters);
 
@@ -481,7 +463,7 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
             Action Action = RefreshSelectedList;
 
             var parameters = new ModalParameters();
-            parameters.Add("TaskObject", editObject);
+            parameters.Add("TaskObject", editObject.ChapterObject);
             parameters.Add("DataChanged", Action);
             parameters.Add("selectedCaseType", selectedCaseType);
             parameters.Add("selectedList", selectedList);
@@ -491,7 +473,7 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
         }
 
 
-        protected void PrepareChapterDetailDelete(UsrOrDefChapterManagement selectedChapterItem)
+        protected void PrepareChapterDetailDelete(VmUsrOrDefChapterManagement selectedChapterItem)
         {
             editObject = selectedChapterItem;
 
@@ -505,9 +487,30 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
             Modal.Show<ModalDelete>("Delete?", parameters);
         }
 
+        private void PrepareForComparison(VmUsrOrDefChapterManagement selectedItem)
+        {
+            editObject = selectedItem;
+
+            ShowChapterComparisonModal();
+        }
+
+        protected void ShowChapterComparisonModal()
+        {
+            Action Action = RefreshSelectedList;
+            Action Compare = CompareChapterItemsToAltSytem;
+
+            var parameters = new ModalParameters();
+            parameters.Add("Object", editObject);
+            parameters.Add("DataChanged", Action);
+            parameters.Add("ComparisonRefresh", Compare);
+
+            Modal.Show<ChapterItemComparison>(selectedList, parameters);
+        }
+
+
         private async void HandleChapterDetailDelete()
         {
-            await chapterManagementService.Delete(editObject.Id);
+            await chapterManagementService.Delete(editObject.ChapterObject.Id);
 
             RefreshChapterItems(selectedList);
 

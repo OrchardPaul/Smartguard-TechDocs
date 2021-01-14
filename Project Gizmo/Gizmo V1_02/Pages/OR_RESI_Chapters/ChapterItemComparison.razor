@@ -1,0 +1,59 @@
+﻿<div class="container-fluid">
+    <div class="modal-body col-6">
+        <div class="form-group">
+            <label for="Name">Name</label>
+            <div>@Object.ChapterObject.Name</div>
+        </div>
+
+        <div class="form-group">
+            <label for="AsName">Schedule As Name</label>
+            <div>@Object.ChapterObject.AsName</div>
+        </div>
+
+        <div class="form-group">
+            <label for="CompleteName">Complete As Name</label>
+            <div>@Object.ChapterObject.CompleteName</div>
+        </div>
+
+        <div class="form-group">
+            <label for="RescheduleDays">Reschedule Days</label>
+            <div>@Object.ChapterObject.RescheduleDays</div>
+        </div>
+
+        <div class="form-group">
+            <label for="SeqNo">Seq number</label>
+            <div>@Object.ChapterObject.SeqNo</div>
+        </div>
+
+        <button type="submit" class="btn btn-primary" @onclick="() => HandleValidSubmit(false)">Take Current</button>
+    </div>
+
+    <div class="modal-body col-6">
+        <div class="form-group">
+            <label for="Name">Name</label>
+            <div>@Object.AltObject.Name</div>
+        </div>
+
+        <div class="form-group">
+            <label for="AsName">Schedule As Name</label>
+            <div>@Object.AltObject.AsName</div>
+        </div>
+
+        <div class="form-group">
+            <label for="CompleteName">Complete As Name</label>
+            <div>@Object.AltObject.CompleteName</div>
+        </div>
+
+        <div class="form-group">
+            <label for="RescheduleDays">Reschedule Days</label>
+            <div>@Object.AltObject.RescheduleDays</div>
+        </div>
+
+        <div class="form-group">
+            <label for="SeqNo">Seq number</label>
+            <div>@Object.AltObject.SeqNo</div>
+        </div>
+
+        <button type="submit" class="btn btn-primary" @onclick="() => HandleValidSubmit(true)">Take Alt</button>
+    </div>
+</div>

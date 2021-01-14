@@ -9,12 +9,16 @@ namespace Gizmo.Context.OR_RESI.Custom
     {
         public UsrOrDefChapterManagement ChapterObject { get; set; }
 
+        public UsrOrDefChapterManagement AltObject { get; set; }
+
         public string ComparisonResult { get; set; }
         public string ComparisonIcon { get; set; }
         public List<string> ComparisonList { get; set; } = new List<string>();
 
-        public bool IsChapterItemsSame(VmUsrOrDefChapterManagement vmCompItem)
+        public bool IsChapterItemMatch(VmUsrOrDefChapterManagement vmCompItem)
         {
+            AltObject = vmCompItem.ChapterObject;
+
             ComparisonList = new List<string>();
             bool isSame = true;
             UsrOrDefChapterManagement compItem = vmCompItem.ChapterObject;
