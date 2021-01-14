@@ -57,7 +57,9 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
                 Object.AltObject.AsName = Object.ChapterObject.AsName;
                 Object.AltObject.RescheduleDays = Object.ChapterObject.RescheduleDays;
 
+                await sessionState.SwitchSelectedSystem();
                 await chapterManagementService.Update(Object.AltObject);
+                await sessionState.ResetSelectedSystem();
             }
 
             DataChanged?.Invoke();
