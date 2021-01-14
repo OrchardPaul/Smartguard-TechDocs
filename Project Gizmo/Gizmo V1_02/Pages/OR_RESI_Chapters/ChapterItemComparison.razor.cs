@@ -2,6 +2,7 @@
 using Gizmo.Context.OR_RESI;
 using Gizmo.Context.OR_RESI.Custom;
 using Gizmo_V1_02.Services;
+using Gizmo_V1_02.Services.SessionState;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using System;
@@ -18,6 +19,9 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
 
         [Inject]
         IChapterManagementService chapterManagementService { get; set; }
+
+        [Parameter]
+        public IUserSessionState sessionState { get; set; }
 
         [Parameter]
         public VmUsrOrDefChapterManagement Object { get; set; }

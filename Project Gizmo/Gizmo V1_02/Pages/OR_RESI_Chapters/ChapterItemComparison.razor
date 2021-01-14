@@ -1,20 +1,27 @@
 ﻿
-    <div class="modal-body" tabindex="0">
-        <table class="table-basic table-top-header table-left-header table-borderless">
+<div class="modal-body" tabindex="0">
+    <table class="table-basic table-top-header table-left-header table-borderless">
+        <thead>
+
             <tr>
                 <td style="width: 150px">
                 </td>
                 <td style="width: 250px">
-                    Dev
+                    <div class=" d-flex justify-content-center">
+                        @(sessionState.selectedSystem == "Dev" ? "Dev" : "Live")
+                    </div>
                 </td>
                 <td style="width: 250px">
-                    Live
+                    <div class=" d-flex justify-content-center">
+                        @(sessionState.selectedSystem == "Dev" ? "Live" : "Dev")
+                    </div>
                 </td>
                 <td style="width: 30px">
-                    
                 </td>
 
             </tr>
+        </thead>
+        <tbody>
             <tr>
                 <td>
                     Seq Number
@@ -38,7 +45,7 @@
                 </td>
                 <td>
                     <input type="text" class="read-only" value="@Object.AltObject.Name" />
-</td>
+                </td>
                 <td>
                     <span class="fa fa-@(Object.ChapterObject.Name == @Object.AltObject.Name ? "check" : "exclamation")"></span>
                 </td>
@@ -48,11 +55,11 @@
                     Schedule As Name:
                 </td>
                 <td>
-                    <input type="text" class="read-only" value="@Object.ChapterObject.AsName"  />
-</td>
+                    <input type="text" class="read-only" value="@Object.ChapterObject.AsName" />
+                </td>
                 <td>
-                    <input type="text" class="read-only" value="@Object.AltObject.AsName"  />
-</td>
+                    <input type="text" class="read-only" value="@Object.AltObject.AsName" />
+                </td>
                 <td>
                     <span class="fa fa-@(Object.ChapterObject.AsName == @Object.AltObject.AsName ? "check" : "exclamation")"></span>
                 </td>
@@ -62,11 +69,11 @@
                     Complete As Name
                 </td>
                 <td>
-                    <input type="text" class="read-only" value="@Object.ChapterObject.CompleteName"  />
-</td>
+                    <input type="text" class="read-only" value="@Object.ChapterObject.CompleteName" />
+                </td>
                 <td>
                     <input type="text" class="read-only" value="@Object.AltObject.CompleteName" />
-</td>
+                </td>
                 <td>
                     <span class="fa fa-@(Object.ChapterObject.CompleteName == @Object.AltObject.CompleteName ? "check" : "exclamation")"></span>
                 </td>
@@ -85,15 +92,35 @@
                     <span class="fa fa-@(Object.ChapterObject.RescheduleDays == @Object.AltObject.RescheduleDays ? "check" : "exclamation")"></span>
                 </td>
             </tr>
-            
-                    
+            </tbody>
+        <tfoot>
+            <tr>
+                <td>
+                </td>
+                <td>
+                    <div class=" d-flex justify-content-center">
+                        <button type="submit" autofocus class="btn btn-main" @onclick="() => HandleValidSubmit(false)">@(sessionState.selectedSystem == "Dev" ? ">> Live" : ">> Dev")</button>
+                    </div>
+                </td>
+                <td>
+                    <div class=" d-flex justify-content-center">
+                        <button type="submit" autofocus class="btn btn-main" @onclick="() => HandleValidSubmit(true)">@(sessionState.selectedSystem == "Dev" ? "Dev <<" : "Live <<")</button>
+                    </div>
+                </td>
+                <td>
+                </td>
+            </tr>
+        </tfoot>
 
-            
-        </table>
 
-        <div class="mt-5 d-flex justify-content-center">
-            <button type="submit" autofocus class="btn btn-main" @onclick="() => HandleValidSubmit(true)">Copy Dev >> Live</button>
-        </div>
-        
-    </div>
+
+
+    </table>
+
+    
+
+    
+
+
+</div>
 

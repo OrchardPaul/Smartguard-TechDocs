@@ -197,10 +197,14 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
             StateHasChanged();
         }
 
-        private async Task<bool> GetAltSytemChapterItems()
+        private async void ToggleComparison()
         {
             compareSystems = !compareSystems;
+            await GetAltSytemChapterItems();
+        }
 
+        private async Task<bool> GetAltSytemChapterItems()
+        {
             if (compareSystems)
             {
 
@@ -503,8 +507,9 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
             parameters.Add("Object", editObject);
             parameters.Add("DataChanged", Action);
             parameters.Add("ComparisonRefresh", Compare);
+            parameters.Add("sessionState", sessionState);
 
-            Modal.Show<ChapterItemComparison>(selectedList, parameters);
+            Modal.Show<ChapterItemComparison>("Synchronise Chapter Item", parameters);
         }
 
 

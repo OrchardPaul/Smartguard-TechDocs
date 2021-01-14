@@ -106,7 +106,13 @@
     font-weight: bold;
 }
 
-.modal-body table.table-top-header tr:first-of-type {
+.modal-body table thead tr {
     background: #FFF;
     border-bottom: 1pt solid #555;
+}
+
+.modal-body table tfoot tr {
+    background: #FFF;
+    border-top: 1pt solid #555;
+    border-bottom: none;
 }
