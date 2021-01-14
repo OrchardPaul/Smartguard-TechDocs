@@ -58,3 +58,55 @@
     color: #888;
     font-size: 0.9rem;
 }
+
+/*****************/
+/*   Tables      */
+/*****************/
+
+.modal-body:focus{
+    outline: none;
+}
+
+.modal-body table {
+    margin: 20px 10px 20px 10px;
+    background: #eee;
+}
+
+.modal-body table tr{
+    padding: 10px 0 10px 0;
+}
+
+.modal-body table tr td{
+    padding: 5px;
+    color: #777;
+    font-size: 0.75rem !important;
+    /*each td will need a max-width: for ellipses to work*/
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.modal-body table tr td input[type="text"].read-only {
+    width: 100%;
+    border: 1pt dashed #fff;
+    background-color: transparent;
+    text-overflow: ellipsis;
+}
+
+.modal-body table tr td input[type="text"].read-only:focus {
+    outline: none !important;
+}
+
+.modal-body table.table-left-heading tr td:first-of-type{
+    font-weight: bold;
+    padding-right: 15px;
+}
+
+.modal-body table.table-top-header tr:first-of-type td{
+    font-weight: bold;
+}
+
+.modal-body table.table-top-header tr:first-of-type {
+    background: #FFF;
+    border-bottom: 1pt solid #555;
+}

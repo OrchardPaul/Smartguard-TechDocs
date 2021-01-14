@@ -575,7 +575,66 @@
 
 }
 
+
+/*---------------------------------------*/
+/*  SPINNERS                             */
+/*---------------------------------------*/
+
 .spinner {
+    width: 120px;
+    height: 120px;
+    top: 40%;
+    left: 55%;
+    position: absolute;
+    margin: 100px auto;
+    background-color: #000;
+    border-radius: 100%;
+    -webkit-animation: sk-scaleout 1.0s infinite ease-in-out;
+    animation: sk-scaleout 2.0s infinite ease-in-out;
+    animation-delay: 1s;
+    visibility: hidden;
+}
+
+@-webkit-keyframes sk-scaleout {
+    0% {
+        -webkit-transform: scale(0);
+        visibility: visible;
+    }
+
+    100% {
+        -webkit-transform: scale(1.0);
+        opacity: 0;
+        visibility: visible;
+    }
+}
+
+@keyframes sk-scaleout {
+    0% {
+        -webkit-transform: scale(0);
+        transform: scale(0);
+        visibility: visible;
+    }
+
+    100% {
+        -webkit-transform: scale(1.0);
+        transform: scale(1.0);
+        opacity: 0;
+        visibility: visible;
+    }
+}
+
+.data-item .spinner {
+    width: 25px;
+    height: 25px;
+    top: 20%;
+    left: 0%;
+    margin: 0;
+    background-color: #666;
+}
+
+
+
+/*.spinner {
     border: 16px solid silver;
     border-top: 16px solid #337AB7;
     border-radius: 50%;
@@ -608,7 +667,7 @@
         transform: rotate(360deg)
     }
 }
-
+*/
 .cookie-link {
     font-size: 1.1em;
 }
