@@ -48,8 +48,8 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
         public string editCaseType { get; set; } = "";
         public string isCaseTypeOrGroup { get; set; } = "";
         
-        public VmUsrOrDefChapterManagement editObject = new VmUsrOrDefChapterManagement();
-        public VmUsrOrDefChapterManagement editChapterObject = new VmUsrOrDefChapterManagement();
+        public VmUsrOrDefChapterManagement editObject = new VmUsrOrDefChapterManagement { ChapterObject = new UsrOrDefChapterManagement() };
+        public VmUsrOrDefChapterManagement editChapterObject = new VmUsrOrDefChapterManagement { ChapterObject = new UsrOrDefChapterManagement() };
 
         string customHeader = string.Empty;
         string selectedList = string.Empty;
@@ -63,8 +63,7 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
 
         private int selectedChapterId { get; set; } = -1;
 
-
-        private bool editChapterDetail { get; set; } = false;
+        private int? altSysSelectedChapterId { get; set; }
 
         public string ModalInfoHeader { get; set; }
         public string ModalInfoText { get; set; }
@@ -76,7 +75,7 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
         public bool compareSystems = false;
 
 
-        public List<string> lstDocTypes { get; set; } = new List<string> { "Document", "Letter", "Form", "Email", "Step" };
+        public List<string> lstDocTypes { get; set; } = new List<string> { "Doc", "Letter", "Form", "Email", "Step" };
 
         protected override async Task OnInitializedAsync()
         {
@@ -209,36 +208,43 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
         {
             if (compareSystems)
             {
-
-
                 lstDocs = lstDocs.Select(D => { D.ComparisonIcon = null; return D; }).ToList();
 
                 await sessionState.SwitchSelectedSystem();
                 var temp = await chapterManagementService.GetItemListByChapter(selectedChapterId);
-                lstAltSystemChapterItems = temp.Select(T => new VmUsrOrDefChapterManagement { ChapterObject = T }).ToList();
-                await sessionState.ResetSelectedSystem();
-
-                foreach (var item in lstDocs)
+                if(temp.Count > 0)
                 {
-                    CompareChapterItemsToAltSytem(item);
+                    lstAltSystemChapterItems = temp.Select(T => new VmUsrOrDefChapterManagement { ChapterObject = T }).ToList();
+                    altSysSelectedChapterId = lstAltSystemChapterItems
+                                                .Select(A => A.ChapterObject.ParentId)
+                                                .FirstOrDefault();
+
+                    await sessionState.ResetSelectedSystem();
+
+                    foreach (var item in lstDocs)
+                    {
+                        CompareChapterItemsToAltSytem(item);
+                    }
+
+                    foreach (var item in lstAgendas)
+                    {
+                        CompareChapterItemsToAltSytem(item);
+                    }
+
+                    foreach (var item in lstFees)
+                    {
+                        CompareChapterItemsToAltSytem(item);
+                    }
+
+                    foreach (var item in lstStatus)
+                    {
+                        CompareChapterItemsToAltSytem(item);
+                    }
+
+                    StateHasChanged();
                 }
 
-                foreach (var item in lstAgendas)
-                {
-                    CompareChapterItemsToAltSytem(item);
-                }
-
-                foreach (var item in lstFees)
-                {
-                    CompareChapterItemsToAltSytem(item);
-                }
-
-                foreach (var item in lstStatus)
-                {
-                    CompareChapterItemsToAltSytem(item);
-                }
-
-                StateHasChanged();
+                
             }
 
             return true;
@@ -246,8 +252,6 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
 
         private VmUsrOrDefChapterManagement CompareChapterItemsToAltSytem(VmUsrOrDefChapterManagement chapterItem)
         {
-            
-
             var altObject = lstAltSystemChapterItems
                                 .Where(A => A.ChapterObject.Name == chapterItem.ChapterObject.Name)
                                 .SingleOrDefault();
@@ -285,7 +289,7 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
 
         public void RefreshSelectedList()
         {
-            RefreshChapterItems(displaySection);
+            RefreshChapterItems(navDisplay);
         }
 
         private void PrepareForEdit(VmUsrOrDefChapterManagement item, string header)
@@ -300,14 +304,22 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
         private void PrepareForInsert(string header)
         {
             selectedList = header;
-            editObject = new VmUsrOrDefChapterManagement();
+
+            editObject = new VmUsrOrDefChapterManagement { ChapterObject = new UsrOrDefChapterManagement() };
+            editObject.ChapterObject.CaseType = "";
+            editObject.ChapterObject.CaseTypeGroup = "";
+            editObject.ChapterObject.SeqNo = lstAll
+                                                .OrderByDescending(A => A.ChapterObject.SeqNo)
+                                                .Select(A => A.ChapterObject.SeqNo)
+                                                .FirstOrDefault() + 1;
+            editObject.ChapterObject.ParentId = selectedChapterId;
 
             ShowChapterDetailModal();
         }
 
         private void PrepareChapterForInsert()
         {
-            editChapterObject = new VmUsrOrDefChapterManagement();
+            editChapterObject = new VmUsrOrDefChapterManagement { ChapterObject = new UsrOrDefChapterManagement() };
 
             if(!(selectedCaseTypeGroup == ""))
             {
@@ -510,6 +522,8 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
             parameters.Add("DataChanged", Action);
             parameters.Add("ComparisonRefresh", Compare);
             parameters.Add("sessionState", sessionState);
+            parameters.Add("CurrentSysParentId", selectedChapterId);
+            parameters.Add("AlternateSysParentId", altSysSelectedChapterId);
 
             Modal.Show<ChapterItemComparison>("Synchronise Chapter Item", parameters);
         }
@@ -519,7 +533,7 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
         {
             await chapterManagementService.Delete(editObject.ChapterObject.Id);
 
-            RefreshChapterItems(selectedList);
+            RefreshChapterItems(navDisplay);
 
         }
     }
