@@ -110,6 +110,8 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
 
         }
 
+
+
         public void DirectToLogin()
         {
             string returnUrl = HttpUtility.UrlEncode($"/");

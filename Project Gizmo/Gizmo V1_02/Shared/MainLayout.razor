@@ -82,25 +82,25 @@
 <div class="main">
     <div class="top-row px-4 auth topbar">
         @*@if (!(userState.allAssignedCompanies is null))
-        {
-            @if (userState.allAssignedCompanies.Count() > 0)
             {
-                <EditForm Model="currentUser">
-                    <InputSelectInteger ValueExpression="@(() => currentUser.SelectedCompanyId)"
-                                        Value="@currentUser.SelectedCompanyId"
-                                        ValueChanged="@((int value) => ToggleCompany(value))">
+                @if (userState.allAssignedCompanies.Count() > 0)
+                {
+                    <EditForm Model="currentUser">
+                        <InputSelectInteger ValueExpression="@(() => currentUser.SelectedCompanyId)"
+                                            Value="@currentUser.SelectedCompanyId"
+                                            ValueChanged="@((int value) => ToggleCompany(value))">
 
-                        @foreach (var company in userState.allAssignedCompanies)
-                        {
-                            <option value="@company.Id">
-                                @company.CompanyName
-                            </option>
-                        }
-                    </InputSelectInteger>
-                </EditForm>
+                            @foreach (var company in userState.allAssignedCompanies)
+                            {
+                                <option value="@company.Id">
+                                    @company.CompanyName
+                                </option>
+                            }
+                        </InputSelectInteger>
+                    </EditForm>
 
-            }
-        }*@
+                }
+            }*@
         <LoginDisplay userFullName="@userState.FullName" />
     </div>
 
@@ -111,13 +111,12 @@
 
 
     <!--<footer class="page-footer font-small fixed-bottom">-->
-
-        <!-- Copyright -->
-        <!--<div class="footer-copyright text-center ">
-            © @DateTime.Now.Year Copyright:
-            <a href="https://orchardrock.co.uk"> Orchard Rock Development Ltd</a>
-        </div>-->
-        <!-- Copyright -->
+    <!-- Copyright -->
+    <!--<div class="footer-copyright text-center ">
+        © @DateTime.Now.Year Copyright:
+        <a href="https://orchardrock.co.uk"> Orchard Rock Development Ltd</a>
+    </div>-->
+    <!-- Copyright -->
     <!--</footer>-->
 
 </div>

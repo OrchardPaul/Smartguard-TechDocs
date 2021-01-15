@@ -10,7 +10,7 @@
 }
 else
 {
-
+    
 
     @if (selectedChapter == "")
     {
@@ -27,10 +27,10 @@ else
 
                 <!-- SHOW ALL GROUPS -->
                 @foreach (var caseTypeGroup in lstChapters.Where(C => C.ParentId == 0)
-           .Where(C => !(C.CaseTypeGroup is null))
-           .Select(C => C.CaseTypeGroup)
-           .Distinct()
-           .ToList())
+          .Where(C => !(C.CaseTypeGroup is null))
+          .Select(C => C.CaseTypeGroup)
+          .Distinct()
+          .ToList())
                 {
 
                     <div class="grid-row mt-3 nav-row-1">
@@ -62,11 +62,11 @@ else
                     {
 
                         @foreach (var caseType in lstChapters.Where(C => C.ParentId == 0)
-                  .Where(C => !(C.CaseType is null))
-                  .Where(C => C.CaseTypeGroup == selectedCaseTypeGroup)
-                  .Select(C => C.CaseType)
-                  .Distinct()
-                  .ToList())
+                 .Where(C => !(C.CaseType is null))
+                 .Where(C => C.CaseTypeGroup == selectedCaseTypeGroup)
+                 .Select(C => C.CaseType)
+                 .Distinct()
+                 .ToList())
                         {
 
                             <div class="grid-row-md nav-row-2">
@@ -80,7 +80,7 @@ else
                                                 <ul>
                                                     <li>
                                                         <a href="javascript: void(0);" @onclick='() => PrepareCaseTypeForEdit(caseType, "CaseType")'>
-                                                            <span class="fa fa-pencil-alt mr-2"></span>@caseType
+                                                            <span class="fa fa-pencil-alt mr-2"></span>Edit
                                                         </a>
                                                     </li>
 
@@ -175,15 +175,15 @@ else
                                 <button @onclick='() => PrepareForInsert(navDisplay)' class="btn btn-main btn-shadow" title="Add new document/step"><i class="fa fa-plus"></i></button>
                             </div>
                         }
-                        <div class="pt-1">
-
-                            <a Title="Information" href="javascript: void(0);" @onclick='() => PrepareModalInfoDisplay("Docs"
-                                                                                                            ,"<p>Documents and steps to be made available in the chapter for inserting into the case agenda</p>"
-                                                                                                            ,"500px"
-                                                                                                            ,"400px")' data-toggle="modal" data-target="#modalInfo">
+                    <div class="pt-1">
+                        <ModalTooltip Direction="top" Text="Documents and steps to be made available in the chapter for inserting into the case agenda!">
+                            <a class="info-icon" href="javascript: void(0);">
                                 <span class=" fa fa-info-circle fa-2x "></span>
                             </a>
-                        </div>
+                        </ModalTooltip>
+
+
+                    </div>
                         @if (sessionState.isAdminUser)
                         {
                             <div class="hidden-lg-down flex-push pt-2">
@@ -214,92 +214,104 @@ else
                             @foreach (var doc in lstDocs)
                             {
 
-                                <div class="row grid-row grid-row-lg @(rowChanged == doc.ChapterObject.SeqNo ? "row-changed" : "" )">
-                                    <div class="col-12 col-xl-4 data-item">
-                                        @if (sessionState.isAdminUser)
+                            <div class="row grid-row grid-row-lg @(rowChanged == doc.ChapterObject.SeqNo ? "row-changed" : "" )">
+                                <div class="col-12 col-xl-4 data-item">
+                                    @if (sessionState.isAdminUser)
+                                    {
+                                        @if (!compareSystems)
                                         {
-                                            @if (!compareSystems)
-                                            {
-                                                <div class="btn-ellipses float-left">
-                                                    <span class="fa fa-ellipsis-v"></span>
-                                                    <div class="ellipsis-menu">
-                                                        <ul>
-                                                            <li>
-                                                                <a href="javascript: void(0);" @onclick='(() => PrepareForEdit(doc, "Docs"))'>
-                                                                    <span class="fa fa-pencil-alt mr-2"></span>Edit
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="javascript: void(0);" @onclick="() => PrepareChapterDetailDelete(doc)">
-                                                                    <span class="fa fa-trash-alt mr-2"></span>Delete
-                                                                </a>
-                                                            </li>
+                                            <div class="btn-ellipses float-left">
+                                                <span class="fa fa-ellipsis-v"></span>
+                                                <div class="ellipsis-menu">
+                                                    <ul>
+                                                        <li>
+                                                            <a href="javascript: void(0);" @onclick='(() => PrepareForEdit(doc, "Docs"))'>
+                                                                <span class="fa fa-pencil-alt mr-2"></span>Edit
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="javascript: void(0);" @onclick="() => PrepareChapterDetailDelete(doc)">
+                                                                <span class="fa fa-trash-alt mr-2"></span>Delete
+                                                            </a>
+                                                        </li>
 
-                                                        </ul>
-                                                    </div>
+                                                    </ul>
                                                 </div>
-                                            }
-                                            else
-                                            {
-
-                                                <div class="btn-ellipses float-left">
-                                                    @if (!(doc.ComparisonIcon is null))
-                                                    {
-                                                        <a href="javascript: void(0);" @onclick="() => PrepareForComparison(doc)">
-                                                            <span class="fa fa-@doc.ComparisonIcon"></span>
-                                                        </a>
-                                                    }
-                                                    else
-                                                    {
-                                                        <div class="spinner"></div>
-                                                    }
-
-                                                </div>
-                                            }
-
-                                            <div class="data-item-sub">
-                                                <span class="fa fa-file mr-2"></span> @doc.ChapterObject.Name
-                                            </div>
-                                            <div class="data-item-right mr-2 seq-change">
-                                                <div><a href="javascript: void(0);" @onclick='() => MoveSeq(doc.ChapterObject,"Docs","Up")'><span class="fa fa-angle-up"></span></a></div>
-                                                <div class="seq-no">@doc.ChapterObject.SeqNo</div>
-                                                <div><a href="javascript: void(0);" @onclick='() => MoveSeq(doc.ChapterObject,"Docs","Down")'><span class="fa fa-angle-down"></span></a></div>
                                             </div>
                                         }
                                         else
                                         {
-                                            <div class="data-item-sub">
-                                                <span class="far fa-file mr-1"></span> @doc.ChapterObject.Name
-                                                <div class="data-item-right mr-2 ">
-                                                    <div class="seq-no">@doc.ChapterObject.SeqNo</div>
-                                                </div>
+
+                                            <div class="btn-ellipses float-left">
+                                                @if (!(doc.ComparisonIcon is null))
+                                                {
+                                                    <a href="javascript: void(0);" @onclick="() => PrepareForComparison(doc)">
+                                                        <span class="fa fa-@doc.ComparisonIcon"></span>
+                                                    </a>
+                                                }
+                                                else
+                                                {
+                                                    <div class="spinner"></div>
+                                                }
 
                                             </div>
                                         }
-                                    </div>
-                                    <div class="col-4 hidden-lg-down data-item ">
-                                        <div class="data-item-detail pl-3">@(string.IsNullOrEmpty(doc.ChapterObject.AsName) ? "" : doc.ChapterObject.AsName)</div>
-                                        <div class="pl-3">
-                                            @if (doc.ChapterObject.RescheduleDays.HasValue)
-                                            {
-                                                <span class="badge badge-sm square">@doc.ChapterObject.RescheduleDays.ToString() days</span>
-                                            }
-                                        </div>
-                                    </div>
-                                    <div class="col-4 hidden-lg-down data-item ">
-                                        <div>
-                                            <div class="data-item-detail pl-3">@(string.IsNullOrEmpty(doc.ChapterObject.CompleteName) ? "" : "Save As: " + doc.ChapterObject.CompleteName)</div>
-                                        </div>
-                                        @if (doc.ChapterObject.SuppressStep == "Y")
-                                        {
-                                            <div class="data-item-right pb-1">
-                                                <span class="badge badge-sm ">End Chapter</span>
-                                            </div>
-                                        }
 
-                                    </div>
+                                        <div class="data-item-sub">
+                                            <span class="fa fa-file mr-2"></span> @doc.ChapterObject.Name
+                                        </div>
+                                        <div class="data-item-right mr-2 seq-change">
+                                            <div><a href="javascript: void(0);" @onclick='() => MoveSeq(doc.ChapterObject,"Docs","Up")'><span class="fa fa-angle-up"></span></a></div>
+                                            <div class="seq-no">@doc.ChapterObject.SeqNo</div>
+                                            <div><a href="javascript: void(0);" @onclick='() => MoveSeq(doc.ChapterObject,"Docs","Down")'><span class="fa fa-angle-down"></span></a></div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="data-item-sub">
+                                            <span class="far fa-file mr-1"></span> @doc.ChapterObject.Name
+                                            <div class="data-item-right mr-2 ">
+                                                <div class="seq-no">@doc.ChapterObject.SeqNo</div>
+                                            </div>
+
+                                        </div>
+                                    }
+                                </div>
+                                <div class="col-4 hidden-lg-down data-item ">
+                                    <div class="data-item-detail pl-3">@(string.IsNullOrEmpty(doc.ChapterObject.AsName) ? "" : doc.ChapterObject.AsName)</div>
+
+                                    @if (doc.ChapterObject.RescheduleDays.HasValue)
+                                    {
+                                        <div class="data-item-right schedule-days">
+                                            <ModalTooltip Direction="left" Text="@(string.IsNullOrEmpty(doc.ChapterObject.AsName) ? "" : "The step named " + doc.ChapterObject.AsName + " will be scheduled for " +  doc.ChapterObject.RescheduleDays.ToString() + " days")">
+                                                <span class="badge rounded-square">@doc.ChapterObject.RescheduleDays.ToString() days</span>
+                                            </ModalTooltip>
+                                        </div>
+                                    }
 
                                 </div>
+                                <div class="col-4 hidden-lg-down data-item ">
+                                    @if (!(string.IsNullOrEmpty(doc.ChapterObject.CompleteName)))
+                                    {
+                                        <div class="data-item-detail pl-3" title="This step will be saved in the agenda as @doc.ChapterObject.CompleteName.">
+                                            @doc.ChapterObject.CompleteName
+                                        </div>
+
+                                    }
+
+
+                                    @if (doc.ChapterObject.SuppressStep == "Y")
+                                    {
+                                        <div class="data-item-right suppress-step">
+                                            <ModalTooltip Direction="left" Text="This document will end the chapter when taken.">
+                                                <span class="fa fa-flag-checkered"></span>
+                                            </ModalTooltip>
+                                        </div>
+                                    }
+
+                                </div>
+
+                            </div>
 
                             }
                         </div>
@@ -320,15 +332,14 @@ else
                                 <button @onclick='() => PrepareForInsert(navDisplay)' class="btn btn-main btn-shadow" title="Add new agenda"><i class="fa fa-plus"></i></button>
                             </div>
                         }
-                        <div class="pt-1">
-
-                            <a Title="Information" href="javascript: void(0);" @onclick='() => PrepareModalInfoDisplay("Agenda"
-                                                                                                            ,"<p>Document storage agendas.</p><p>Correspondance stored in these agendas will be made avalible on the History tab.</p>"
-                                                                                                            ,"500px"
-                                                                                                            ,"400px")' data-toggle="modal" data-target="#modalInfo">
+                    <div class="pt-1">
+                        <ModalTooltip Direction="top" Text="<p>Document storage agendas.</p><p>Correspondance stored in these agendas will be made avalible on the History tab.</p>">
+                            <a Title="Information" href="javascript: void(0);" >
                                 <span class=" fa fa-info-circle fa-2x "></span>
                             </a>
-                        </div>
+                        </ModalTooltip>
+                            
+                    </div>
                         @if (sessionState.isAdminUser)
                         {
                             <div class="hidden-lg-down flex-push pt-2">
@@ -411,15 +422,13 @@ else
                                 <button @onclick='() => PrepareForInsert(navDisplay)' class="btn btn-main btn-shadow" title="Add new fee"><i class="fa fa-plus"></i></button>
                             </div>
                         }
-                        <div class="pt-1">
-
-                            <a Title="Information" href="javascript: void(0);" @onclick='() => PrepareModalInfoDisplay("Fees"
-                                                                                                            ,"<p>Fees to be made available in the chapter for inserting into the case agenda</p><p>Default values will be taken/calculated automatically from the practice/SOI settings</p>"
-                                                                                                            ,"500px"
-                                                                                                            ,"400px")' data-toggle="modal" data-target="#modalInfo">
+                    <div class="pt-1">
+                        <ModalTooltip Direction="top" Text="<p>Fees to be made available in the chapter for inserting into the case agenda</p><p>Default values will be taken/calculated automatically from the practice/SOI settings</p>">
+                            <a class="info-icon" href="javascript: void(0);">
                                 <span class=" fa fa-info-circle fa-2x "></span>
                             </a>
-                        </div>
+                        </ModalTooltip>
+                                            </div>
                         @if (sessionState.isAdminUser)
                         {
                             <div class="hidden-lg-down flex-push pt-2">
@@ -512,15 +521,13 @@ else
                                 <button @onclick='() => PrepareForInsert(navDisplay)' class="btn btn-main btn-shadow" title="Add new status"><i class="fa fa-plus"></i></button>
                             </div>
                         }
-                        <div class="pt-1">
-
-                            <a Title="Information" href="javascript: void(0);" @onclick='() => PrepareModalInfoDisplay("Status"
-                                                                                                            ,"<p>Status options to assist with the flow of the chapter and to indicate when the chapter is complete</p>"
-                                                                                                            ,"500px"
-                                                                                                            ,"400px")' data-toggle="modal" data-target="#modalInfo">
+                    <div class="pt-1">
+                        <ModalTooltip Direction="top" Text="<p>Status options to assist with the flow of the chapter and to indicate when the chapter is complete</p>">
+                            <a class="info-icon" href="javascript: void(0);">
                                 <span class=" fa fa-info-circle fa-2x "></span>
                             </a>
-                        </div>
+                        </ModalTooltip>
+                    </div>
                         @if (sessionState.isAdminUser)
                         {
                             <div class="hidden-lg-down flex-push pt-2">

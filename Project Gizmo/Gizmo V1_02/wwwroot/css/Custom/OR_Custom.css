@@ -449,7 +449,11 @@
     display: block;
     margin-left: auto;
     margin-right: 5px;
+    margin-top:0;
+    margin-bottom:0;
+    padding: 0;
     float: right;
+
 }
 
 .data-item-wrap {
@@ -715,11 +719,15 @@
 }
 
 /*---------------------------------------*/
+/*    CHAPTER LISTINGS                   */
+/*                                       */
+/*                                       */
 /*   SEQUENCE CHANGE OPTIONS             */
 /*        ^                              */
 /*        7                              */
 /*        v                              */
 /*---------------------------------------*/
+
 
 /*use grid data to surround the data rows (.grid-row). This is to allow first-child selector to apply within grid-can-edit where there is a preceeding grid-header*/
 .grid-data {
@@ -727,10 +735,26 @@
     padding: 0;
 }
 
-.grid-row-lg .seq-change{
+.schedule-days {
+    padding-top: 5px;
+}
+
+.schedule-days .badge{
+    padding: 5px !important;
+}
+
+.suppress-step{
+    padding-left: 5px;
+}
+
+/*   SEQUENCE CHANGE OPTIONS             */
+.grid-row-lg .seq-change {
     padding-top: 6px;
     padding-left: 8px;
+    width: 30px;
+    text-align: center;
 }
+
 
 .seq-change a {
     color: #ccc !important;
@@ -932,10 +956,3 @@
     height: 205px;
 }
 
-a[title="Information"] {
-    color: #999;
-}
-
-.flex-box a[title="Information"] {
-    margin-left: 40px;
-}
