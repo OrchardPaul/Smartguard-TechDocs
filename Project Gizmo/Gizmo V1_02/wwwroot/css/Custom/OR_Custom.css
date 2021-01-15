@@ -144,7 +144,7 @@
 
 .btn-ellipses {
     width: 20px !important;
-    margin: 0 !important;
+    margin: 0 5px 0 5px !important;
     height: 100%;
     font-size: 1.1rem;
     color: #ccc;
@@ -154,6 +154,19 @@
     align-items: center;
     justify-content: center;
     position: relative;
+}
+
+.btn-ellipses .btn-dashed {
+    cursor: pointer;
+    border: 1pt dashed #999;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    width: 100%;
+}
+
+.btn-ellipses:hover .btn-dashed {
+    cursor: pointer;
+    border: 1pt dashed #fff;
 }
 
 .tran-block .btn-edit {
@@ -172,16 +185,6 @@
     font-size: 25px;
 }
 
-/*  validation icons  */
-.fa-check {
-    color: #009933;
-}
-.fa-times {
-    color: #cc0000;
-}
-.fa-exclamation {
-    color: #cc9900;
-}
 
 .data-item-edit {
     padding: 0 !important;
@@ -711,8 +714,11 @@
     min-height: 400px;
 }
 
-@media (max-width: 992px) {
+.grid-chapter-docs .info-icon, .grid-chapter-agenda .info-icon, .grid-chapter-fees .info-icon, .grid-chapter-status .info-icon {
+    margin-left: 40px
+}
 
+@media (max-width: 992px) {
     .grid-chapter-agenda, .grid-chapter-docs, .grid-chapter-fees, .grid-chapter-status {
         width: 100%;
     }

@@ -43,10 +43,8 @@ else
                                     <span class="fa fa-ellipsis-v"></span>
                                     <div class="ellipsis-menu ellipsis-menu-right">
                                         <ul>
-                                            <li>
-                                                <a href="javascript: void(0);" @onclick='() => PrepareCaseTypeForEdit(caseTypeGroup, "CaseTypeGroup")'>
+                                            <li @onclick='() => PrepareCaseTypeForEdit(caseTypeGroup, "CaseTypeGroup")'>
                                                     <span class="fa fa-pencil-alt mr-2"></span>Edit
-                                                </a>
                                             </li>
 
                                         </ul>
@@ -78,10 +76,10 @@ else
                                             <span class="fa fa-ellipsis-v"></span>
                                             <div class="ellipsis-menu ellipsis-menu-right">
                                                 <ul>
-                                                    <li>
-                                                        <a href="javascript: void(0);" @onclick='() => PrepareCaseTypeForEdit(caseType, "CaseType")'>
+                                                    <li @onclick='() => PrepareCaseTypeForEdit(caseType, "CaseType")'>
+                                                        
                                                             <span class="fa fa-pencil-alt mr-2"></span>Edit
-                                                        </a>
+                                                        
                                                     </li>
 
                                                 </ul>
@@ -175,15 +173,14 @@ else
                                 <button @onclick='() => PrepareForInsert(navDisplay)' class="btn btn-main btn-shadow" title="Add new document/step"><i class="fa fa-plus"></i></button>
                             </div>
                         }
-                    <div class="pt-1">
+                        <div class="pt-1">
                         <ModalTooltip Direction="top" Text="Documents and steps to be made available in the chapter for inserting into the case agenda!">
-                            <a class="info-icon" href="javascript: void(0);">
+                            <span class="info-icon" >
                                 <span class=" fa fa-info-circle fa-2x "></span>
-                            </a>
+                            </span>
                         </ModalTooltip>
+                        </div>
 
-
-                    </div>
                         @if (sessionState.isAdminUser)
                         {
                             <div class="hidden-lg-down flex-push pt-2">
@@ -224,15 +221,13 @@ else
                                                 <span class="fa fa-ellipsis-v"></span>
                                                 <div class="ellipsis-menu">
                                                     <ul>
-                                                        <li>
-                                                            <a href="javascript: void(0);" @onclick='(() => PrepareForEdit(doc, "Docs"))'>
-                                                                <span class="fa fa-pencil-alt mr-2"></span>Edit
-                                                            </a>
+                                                        <li class="col-main" @onclick='(() => PrepareForEdit(doc, "Docs"))'>
+                                                            <span class="fa fa-pencil-alt mr-2" ></span>
+                                                            <span class="col-black">Edit</span>
                                                         </li>
-                                                        <li>
-                                                            <a href="javascript: void(0);" @onclick="() => PrepareChapterDetailDelete(doc)">
-                                                                <span class="fa fa-trash-alt mr-2"></span>Delete
-                                                            </a>
+                                                        <li class="col-red" @onclick="() => PrepareChapterDetailDelete(doc)">
+                                                            <span class="fa fa-trash-alt mr-2" ></span>
+                                                            <span class="col-black">Delete</span>
                                                         </li>
 
                                                     </ul>
@@ -242,19 +237,24 @@ else
                                         else
                                         {
 
-                                            <div class="btn-ellipses float-left">
-                                                @if (!(doc.ComparisonIcon is null))
-                                                {
-                                                    <a href="javascript: void(0);" @onclick="() => PrepareForComparison(doc)">
-                                                        <span class="fa fa-@doc.ComparisonIcon"></span>
-                                                    </a>
-                                                }
-                                                else
-                                                {
-                                                    <div class="spinner"></div>
-                                                }
+                                <div class="btn-ellipses float-left" >
+                                    @if (!(doc.ComparisonIcon is null))
+                                    {
+                                        @if (!(doc.ComparisonResult == "Exact match"))
+                                        {
+                                            <div class="btn-dashed" @onclick="() => PrepareForComparison(doc)"><span class="fa fa-@doc.ComparisonIcon"></span></div>
+                                        }
+                                        else
+                                        {
+                                            <span class="fa fa-@doc.ComparisonIcon"></span>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <div class="spinner"></div>
+                                    }
 
-                                            </div>
+                                </div>
                                         }
 
                                         <div class="data-item-sub">
@@ -333,10 +333,10 @@ else
                             </div>
                         }
                     <div class="pt-1">
-                        <ModalTooltip Direction="top" Text="<p>Document storage agendas.</p><p>Correspondance stored in these agendas will be made avalible on the History tab.</p>">
-                            <a Title="Information" href="javascript: void(0);" >
+                        <ModalTooltip Direction="top" Text="Correspondance stored in these agendas will be made avalible on the History tab.">
+                            <span class="info-icon">
                                 <span class=" fa fa-info-circle fa-2x "></span>
-                            </a>
+                            </span>
                         </ModalTooltip>
                             
                     </div>
@@ -364,35 +364,41 @@ else
                                                 <span class="fa fa-ellipsis-v"></span>
                                                 <div class="ellipsis-menu">
                                                     <ul>
-                                                        <li>
-                                                            <a href="javascript: void(0);" @onclick='(() => PrepareForEdit(agenda, "Agenda"))'>
-                                                                <span class="fa fa-pencil-alt mr-2"></span>Edit
-                                                            </a>
+                                                        <li class="col-main" @onclick='(() => PrepareForEdit(agenda, "Agenda"))'>
+                                                            <span class="fa fa-pencil-alt mr-2"></span>
+                                                            <span class="col-black">Edit</span>
                                                         </li>
-                                                        <li>
-                                                            <a href="javascript: void(0);" @onclick="() => PrepareChapterDetailDelete(agenda)">
-                                                                <span class="fa fa-trash-alt mr-2"></span>Delete
-                                                            </a>
+                                                        <li class="col-red" @onclick="() => PrepareChapterDetailDelete(agenda)">
+                                                            <span class="fa fa-trash-alt mr-2"></span>
+                                                            <span class="col-black">Delete</span>
                                                         </li>
 
                                                     </ul>
+                                                    
                                                 </div>
                                             </div>
                                         }
                                         else
                                         {
 
-                                            <div class="btn-ellipses float-left">
-                                                @if (!(agenda.ComparisonIcon is null))
-                                                {
-                                                    <span class="fa fa-@agenda.ComparisonIcon"></span>
-                                                }
-                                                else
-                                                {
-                                                    <div class="spinner"></div>
-                                                }
+                                <div class="btn-ellipses float-left">
+                                    @if (!(agenda.ComparisonIcon is null))
+                                    {
+                                        @if (!(agenda.ComparisonResult == "Exact match"))
+                                        {
+                                            <div class="btn-dashed" @onclick="() => PrepareForComparison(agenda)"><span class="fa fa-@agenda.ComparisonIcon"></span></div>
+                                        }
+                                        else
+                                        {
+                                            <span class="fa fa-@agenda.ComparisonIcon"></span>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <div class="spinner"></div>
+                                    }
 
-                                            </div>
+                                </div>
                                         }
 
 
@@ -423,10 +429,10 @@ else
                             </div>
                         }
                     <div class="pt-1">
-                        <ModalTooltip Direction="top" Text="<p>Fees to be made available in the chapter for inserting into the case agenda</p><p>Default values will be taken/calculated automatically from the practice/SOI settings</p>">
-                            <a class="info-icon" href="javascript: void(0);">
+                        <ModalTooltip Direction="top" Text="Fees to be made available in the chapter. Default values will be automatically calculated where possible.">
+                            <span class="info-icon">
                                 <span class=" fa fa-info-circle fa-2x "></span>
-                            </a>
+                            </span>
                         </ModalTooltip>
                                             </div>
                         @if (sessionState.isAdminUser)
@@ -451,35 +457,41 @@ else
                                                 <span class="fa fa-ellipsis-v"></span>
                                                 <div class="ellipsis-menu">
                                                     <ul>
-                                                        <li>
-                                                            <a href="javascript: void(0);" @onclick='(() => PrepareForEdit(fee, "Fees"))'>
-                                                                <span class="fa fa-pencil-alt mr-2"></span>Edit
-                                                            </a>
+                                                        <li class="col-main" @onclick='(() => PrepareForEdit(fee, "Fees"))'>
+                                                            <span class="fa fa-pencil-alt mr-2"></span>
+                                                            <span class="col-black">Edit</span>
                                                         </li>
-                                                        <li>
-                                                            <a href="javascript: void(0);" @onclick="() => PrepareChapterDetailDelete(fee)">
-                                                                <span class="fa fa-trash-alt mr-2"></span>Delete
-                                                            </a>
+                                                        <li class="col-red" @onclick="() => PrepareChapterDetailDelete(fee)">
+                                                            <span class="fa fa-trash-alt mr-2"></span>
+                                                            <span class="col-black">Delete</span>
                                                         </li>
 
                                                     </ul>
+                                                    
                                                 </div>
                                             </div>
                                         }
                                         else
                                         {
 
-                                            <div class="btn-ellipses float-left">
-                                                @if (!(fee.ComparisonIcon is null))
-                                                {
-                                                    <span class="fa fa-@fee.ComparisonIcon"></span>
-                                                }
-                                                else
-                                                {
-                                                    <div class="spinner"></div>
-                                                }
+                                <div class="btn-ellipses float-left">
+                                    @if (!(fee.ComparisonIcon is null))
+                                    {
+                                        @if (!(fee.ComparisonResult == "Exact match"))
+                                        {
+                                            <div class="btn-dashed" @onclick="() => PrepareForComparison(fee)"><span class="fa fa-@fee.ComparisonIcon"></span></div>
+                                        }
+                                        else
+                                        {
+                                            <span class="fa fa-@fee.ComparisonIcon"></span>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <div class="spinner"></div>
+                                    }
 
-                                            </div>
+                                </div>
                                         }
 
                                         <div class="data-item-sub">
@@ -522,10 +534,10 @@ else
                             </div>
                         }
                     <div class="pt-1">
-                        <ModalTooltip Direction="top" Text="<p>Status options to assist with the flow of the chapter and to indicate when the chapter is complete</p>">
-                            <a class="info-icon" href="javascript: void(0);">
+                        <ModalTooltip Direction="top" Text="Status options to assist with the flow of the chapter and to indicate when the chapter is complete">
+                            <span class="info-icon">
                                 <span class=" fa fa-info-circle fa-2x "></span>
-                            </a>
+                            </span>
                         </ModalTooltip>
                     </div>
                         @if (sessionState.isAdminUser)
@@ -550,35 +562,41 @@ else
                                                 <span class="fa fa-ellipsis-v"></span>
                                                 <div class="ellipsis-menu">
                                                     <ul>
-                                                        <li>
-                                                            <a href="javascript: void(0);" @onclick='(() => PrepareForEdit(status, "Status"))'>
-                                                                <span class="fa fa-pencil-alt mr-2"></span>Edit
-                                                            </a>
+                                                        <li class="col-main" @onclick='(() => PrepareForEdit(status, "Status"))'>
+                                                            <span class="fa fa-pencil-alt mr-2"></span>
+                                                            <span class="col-black">Edit</span>
                                                         </li>
-                                                        <li>
-                                                            <a href="javascript: void(0);" @onclick="() => PrepareChapterDetailDelete(status)">
-                                                                <span class="fa fa-trash-alt mr-2"></span>Delete
-                                                            </a>
+                                                        <li class="col-red" @onclick="() => PrepareChapterDetailDelete(status)">
+                                                            <span class="fa fa-trash-alt mr-2"></span>
+                                                            <span class="col-black">Delete</span>
                                                         </li>
 
                                                     </ul>
+                                                    
                                                 </div>
                                             </div>
                                         }
                                         else
                                         {
 
-                                            <div class="btn-ellipses float-left">
-                                                @if (!(status.ComparisonIcon is null))
-                                                {
-                                                    <span class="fa fa-@status.ComparisonIcon"></span>
-                                                }
-                                                else
-                                                {
-                                                    <div class="spinner"></div>
-                                                }
+                                <div class="btn-ellipses float-left">
+                                    @if (!(status.ComparisonIcon is null))
+                                    {
+                                        @if (!(status.ComparisonResult == "Exact match"))
+                                        {
+                                            <div class="btn-dashed" @onclick="() => PrepareForComparison(status)"><span class="fa fa-@status.ComparisonIcon"></span></div>
+                                        }
+                                        else
+                                        {
+                                            <span class="fa fa-@status.ComparisonIcon"></span>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <div class="spinner"></div>
+                                    }
 
-                                            </div>
+                                </div>
                                         }
 
                                     }
