@@ -111,6 +111,19 @@ namespace Gizmo.Api.Controllers
             }
         }
 
+        [HttpGet("{casetypegroup}/{casetype}/{chapterName}")]
+        public async Task<ActionResult> GetItemListByChapterName(string casetypegroup, string casetype, string chapterName)
+        {
+            try
+            {
+                return Ok(await chapterRepository.GetItemListByChapterName(casetypegroup, casetype, chapterName));
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
 
         [HttpGet("{caseType}/{chapter}/{docType}")]
         public async Task<ActionResult> GetDocListByChapterAndDocType(string caseType, string chapter, string docType)

@@ -7,6 +7,30 @@ using Gizmo.Context.OR_RESI;
 
 namespace Gizmo.Api.Repository.OR_RESI
 {
+    public interface IOR_RESI_Chapters_Service
+    {
+        Task<UsrOrDefChapterManagement> Add(UsrOrDefChapterManagement item);
+        Task<UsrOrDefChapterManagement> Delete(int id);
+        Task<UsrOrDefChapterManagement> DeleteChapter(int id);
+        Task<List<UsrOrDefChapterManagement>> GetAllChapters();
+        Task<int?> GetCaseTypeCode(string caseType, int? caseTypeGroup);
+        Task<List<string>> GetCaseTypeGroup();
+        Task<int?> GetCaseTypeGroupRef();
+        Task<List<string>> GetCaseTypes();
+        Task<UsrOrDefChapterManagement> GetChapterItemById(int id);
+        Task<List<UsrOrDefChapterManagement>> GetChapterListByCaseType(string caseType);
+        Task<List<UsrOrDefChapterManagement>> GetDocListByChapter(string caseType, string chapter);
+        Task<List<UsrOrDefChapterManagement>> GetDocListByChapterAndDocType(string caseType, string chapter, string docType);
+        Task<List<DmDocuments>> GetDocumentList(string caseType);
+        Task<List<UsrOrDefChapterManagement>> GetItemListByChapter(int chapterId);
+        Task<List<UsrOrDefChapterManagement>> GetItemListByChapterName(string casetypegroup, string casetype, string chapterName);
+        int? GetMaxSeqNum(int parentId);
+        Task<int> GetParentId(string caseType, string chapter);
+        Task<UsrOrDefChapterManagement> Update(UsrOrDefChapterManagement item);
+        Task<List<UsrOrDefChapterManagement>> UpdateCaseType(string newCaseType, string originalCaseType, string caseTypeGroup);
+        Task<List<UsrOrDefChapterManagement>> UpdateCaseTypeGroups(string newCaseTypeGroup, string originalCaseTypeGroup);
+    }
+
     public class OR_RESI_Chapters_Service : IOR_RESI_Chapters_Service
     {
         private readonly P4W_OR_RESI_V6_DEVContext _context;
@@ -18,12 +42,12 @@ namespace Gizmo.Api.Repository.OR_RESI
 
         public async Task<List<UsrOrDefChapterManagement>> GetAllChapters()
         {
-            return await _context.UsrOrDefChapterManagement.ToListAsync();
+            return await _context.UsrOrDefChapterManagement.Where(C => C.ParentId == 0).ToListAsync();
         }
 
         public async Task<UsrOrDefChapterManagement> GetChapterItemById(int id)
         {
-            return await _context.UsrOrDefChapterManagement.SingleAsync(C => C.Id == id);
+            return await _context.UsrOrDefChapterManagement.SingleOrDefaultAsync(C => C.Id == id);
         }
 
         public async Task<UsrOrDefChapterManagement> Add(UsrOrDefChapterManagement item)
@@ -35,7 +59,7 @@ namespace Gizmo.Api.Repository.OR_RESI
 
         public async Task<UsrOrDefChapterManagement> Update(UsrOrDefChapterManagement item)
         {
-            var updatedItem = await _context.UsrOrDefChapterManagement.SingleAsync(U => U.Id == item.Id);
+            var updatedItem = await _context.UsrOrDefChapterManagement.SingleOrDefaultAsync(U => U.Id == item.Id);
 
             updatedItem.Name = item.Name;
             updatedItem.RescheduleDays = item.RescheduleDays;
@@ -89,9 +113,9 @@ namespace Gizmo.Api.Repository.OR_RESI
         {
             var toDo = await _context.UsrOrDefChapterManagement.FindAsync(id);
 
-            var chapterItems = await _context.UsrOrDefChapterManagement.Where(C => C.ParentId == toDo.Id).ToListAsync(); 
+            var chapterItems = await _context.UsrOrDefChapterManagement.Where(C => C.ParentId == toDo.Id).ToListAsync();
 
-            if(chapterItems.Count() > 0)
+            if (chapterItems.Count() > 0)
             {
                 _context.RemoveRange(chapterItems);
             }
@@ -113,7 +137,7 @@ namespace Gizmo.Api.Repository.OR_RESI
         {
             return await _context.UsrOrDefChapterManagement
                 .Where(C => C.ParentId == 0)
-                .Select(s => s.CaseTypeGroup )
+                .Select(s => s.CaseTypeGroup)
                 .Distinct()
                 .ToListAsync();
         }
@@ -146,7 +170,7 @@ namespace Gizmo.Api.Repository.OR_RESI
                 .Where(C => C.Name == chapter)
                 .Where(C => C.CaseType == caseType)
                 .Where(C => C.Type == "Chapter")
-                .Single();
+                .SingleOrDefaultAsync();
 
             return await _context.UsrOrDefChapterManagement
                                 .Where(C => C.ParentId == idRecord.Id)
@@ -186,15 +210,15 @@ namespace Gizmo.Api.Repository.OR_RESI
                                 .ToListAsync();
         }
 
-        public int GetParentId(String caseType, String chapter)
+        public async Task<int> GetParentId(String caseType, String chapter)
         {
 
-            int idRecord = _context.UsrOrDefChapterManagement
+            int idRecord = await _context.UsrOrDefChapterManagement
                 .Where(C => C.Name == chapter)
                 .Where(C => C.CaseType == caseType)
                 .Where(C => C.Type == "Chapter")
                 .Select(C => C.Id)
-                .Single();
+                .SingleOrDefaultAsync();
 
             return idRecord;
         }
@@ -213,12 +237,12 @@ namespace Gizmo.Api.Repository.OR_RESI
             return seqRecord;
         }
 
-        public int? GetCaseTypeGroupRef()
+        public async Task<int?> GetCaseTypeGroupRef()
         {
-            int? caseTypeGroupRef = _context.DmDocuments
+            int? caseTypeGroupRef = await _context.DmDocuments
                 .Where(D => D.Name == "FS-PRX-Pre-Exchange (P)")
                 .Select(D => D.CaseTypeGroupRef)
-                .Single();
+                .SingleOrDefaultAsync();
 
             if (caseTypeGroupRef is null)
                 caseTypeGroupRef = -1;
@@ -242,7 +266,7 @@ namespace Gizmo.Api.Repository.OR_RESI
 
         public async Task<List<DmDocuments>> GetDocumentList(string caseType)
         {
-            int? caseTypeGroupRef = GetCaseTypeGroupRef();
+            int? caseTypeGroupRef = await GetCaseTypeGroupRef();
 
             int? caseTypeCode = await GetCaseTypeCode(caseType, caseTypeGroupRef);
 
@@ -252,7 +276,7 @@ namespace Gizmo.Api.Repository.OR_RESI
                                 Dm => Dm.Doccode,
                                 (D, Dm) => new { Name = D, DmDocumentsPermissions = Dm })
                             .Select(x => x.Name)
-                            .ToListAsync(); 
+                            .ToListAsync();
 
         }
 
