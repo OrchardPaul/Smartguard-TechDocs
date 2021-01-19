@@ -1,9 +1,9 @@
-﻿using Gizmo.Context.OR_RESI;
+﻿using GadjIT.ClientContext.OR_RESI;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Gizmo.Api.Repository.OR_RESI
+namespace GadjIT.ClientAPI.Repository.OR_RESI
 {
     public interface IPartner_Access_Service
     {

@@ -1,4 +1,4 @@
-﻿using Gizmo.Context.OR_RESI;
+﻿using GadjIT.ClientContext.OR_RESI;
 using Gizmo_V1_02.Services.SessionState;
 using Microsoft.AspNetCore.Components;
 using System;

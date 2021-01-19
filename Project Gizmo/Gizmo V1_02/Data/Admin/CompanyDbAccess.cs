@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using Gizmo.Context.Gizmo_Authentification;
-using Gizmo.Context.Gizmo_Authentification.Custom;
-using Gizmo.Context.OR_RESI;
+using GadjIT.GadjitContext.GadjIT_App;
+using GadjIT.GadjitContext.GadjIT_App.Custom;
+using GadjIT.ClientContext.OR_RESI;
 using Gizmo_V1_02.Services;
 using Gizmo_V1_02.Services.SessionState;
 using Microsoft.AspNetCore.Components;
@@ -220,7 +220,7 @@ namespace Gizmo_V1_02.Data.Admin
         public async Task<List<AppWorkTypeGroups>> GetWorkTypeGroupsByCompany(int companyId)
         {
             var assignedWorkTypeGroups = await context.AppCompanyWorkTypeGroups
-                                                    .Where(A => A.CompanyID == companyId)
+                                                    .Where(A => A.CompanyId == companyId)
                                                     .Select(A => A.WorkTypeGroupId)
                                                     .ToListAsync();
 
@@ -336,7 +336,7 @@ namespace Gizmo_V1_02.Data.Admin
                                                             A => A.WorkTypeGroupId,
                                                             AWG => AWG.Id,
                                                             (A, AWG) => new { A, AWG })
-                                                .Where(C => C.AWG.parentId == selectedWorkTypeWithNoTracking.DepartmentId)
+                                                .Where(C => C.AWG.ParentId == selectedWorkTypeWithNoTracking.DepartmentId)
                                                 .Select(C => C.A)
                                                 .ToListAsync();
 
@@ -363,14 +363,14 @@ namespace Gizmo_V1_02.Data.Admin
             if (!(selectedDepartment is null))
             {
                 var groups = await context.AppWorkTypeGroups
-                                        .Where(A => A.parentId == department.Id)
+                                        .Where(A => A.ParentId == department.Id)
                                         .ToListAsync();
 
                 if (!(groups.Count == 0))
                 {
                     groups = groups
                                 .Select(g => {
-                                    g.parentId = 0;
+                                    g.ParentId = 0;
                                     return g;
                                 })
                                 .ToList();
@@ -469,7 +469,6 @@ namespace Gizmo_V1_02.Data.Admin
                 var signedInUsersCompany = await identityUserAccess.GetCompanyClaims(signedInUser);
                 var signedInUsersCompanyIds = signedInUsersCompany.Select(C => C.Value).ToList();
 
-
                 return await context.AppCompanyDetails
                                     .Where(A => signedInUsersCompanyIds.Contains(A.Id.ToString()))
                                     .ToListAsync();
@@ -496,6 +495,10 @@ namespace Gizmo_V1_02.Data.Admin
             if (!(selectedCompany is null))
             {
                 selectedUri = (selectedServer == "Live") ? selectedCompany.LiveUri : selectedCompany.DevUri;
+                if (!selectedUri.EndsWith("/"))
+                {
+                    selectedUri = selectedUri + "/";
+                }
             }
 
             return (selectedCompany is null) ? null : selectedUri;
@@ -534,13 +537,13 @@ namespace Gizmo_V1_02.Data.Admin
             {
                 var newAssignment = new AppCompanyWorkTypeGroups
                 {
-                    CompanyID = selectedCompany.Id
+                    CompanyId = selectedCompany.Id
                                                                     ,
                     WorkTypeGroupId = workTypeGroup.Id
                 };
 
                 var existingAssignment = await context.AppCompanyWorkTypeGroups
-                                                    .Where(A => A.CompanyID == newAssignment.CompanyID)
+                                                    .Where(A => A.CompanyId == newAssignment.CompanyId)
                                                     .Where(A => A.WorkTypeGroupId == newAssignment.WorkTypeGroupId)
                                                     .SingleOrDefaultAsync();
 
@@ -566,7 +569,7 @@ namespace Gizmo_V1_02.Data.Admin
             {
 
                 var existingAssignment = await context.AppCompanyWorkTypeGroups
-                                                    .Where(A => A.CompanyID == selectedCompany.Id)
+                                                    .Where(A => A.CompanyId == selectedCompany.Id)
                                                     .Where(A => A.WorkTypeGroupId == workTypeGroup.Id)
                                                     .SingleOrDefaultAsync();
 

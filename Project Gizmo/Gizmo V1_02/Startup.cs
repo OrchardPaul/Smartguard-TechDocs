@@ -15,7 +15,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Gizmo_V1_02.Areas.Identity;
 using Gizmo_V1_02.Data;
-using Gizmo.Context.OR_RESI;
+using GadjIT.ClientContext.OR_RESI;
 using Gizmo_V1_02.Services;
 using Gizmo_V1_02.Data.Admin;
 using Gizmo_V1_02.Data.MapperProfiles;

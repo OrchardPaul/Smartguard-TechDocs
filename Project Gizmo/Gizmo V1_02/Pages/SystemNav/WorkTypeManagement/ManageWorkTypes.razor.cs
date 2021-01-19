@@ -1,7 +1,7 @@
 ﻿using Blazored.Modal;
 using Blazored.Modal.Services;
-using Gizmo.Context.Gizmo_Authentification;
-using Gizmo.Context.Gizmo_Authentification.Custom;
+using GadjIT.GadjitContext.GadjIT_App;
+using GadjIT.GadjitContext.GadjIT_App.Custom;
 using Gizmo_V1_02.Data.Admin;
 using Gizmo_V1_02.Pages.Shared.Modals;
 using Microsoft.AspNetCore.Components;
@@ -63,13 +63,13 @@ namespace Gizmo_V1_02.Pages.SystemNav.WorkTypeManagement
                                             group = G.group,
                                             department =
                                                         (departments
-                                                                .Where(D => D.department.Id == G.group.parentId)
+                                                                .Where(D => D.department.Id == G.group.ParentId)
                                                                 .SingleOrDefault() is null)
                                                                 ?
                                                                 new AppDepartments { DepartmentName = "" }
                                                                 :
                                                                 departments
-                                                                .Where(D => D.department.Id == G.group.parentId)
+                                                                .Where(D => D.department.Id == G.group.ParentId)
                                                                 .Select(D => D.department)
                                                                 .SingleOrDefault(),
                                             workTypes = G.workTypes,
@@ -143,13 +143,13 @@ namespace Gizmo_V1_02.Pages.SystemNav.WorkTypeManagement
                                 group = RWT.group,
                                 department =
                                         (departments
-                                                .Where(D => D.department.Id == RWT.group.parentId)
+                                                .Where(D => D.department.Id == RWT.group.ParentId)
                                                 .SingleOrDefault() is null)
                                                 ?
                                                 new AppDepartments { DepartmentName = "" }
                                                 :
                                                 departments
-                                                .Where(D => D.department.Id == RWT.group.parentId)
+                                                .Where(D => D.department.Id == RWT.group.ParentId)
                                                 .Select(D => D.department)
                                                 .SingleOrDefault(),
 

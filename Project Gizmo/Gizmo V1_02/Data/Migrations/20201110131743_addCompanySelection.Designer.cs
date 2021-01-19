@@ -21,7 +21,7 @@ namespace Gizmo_V1_02.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("Gizmo.Context.Gizmo_Authentification.AppCompanyDetails", b =>
+            modelBuilder.Entity("GadjIT.GadjitContext.GadjIT_App.AppCompanyDetails", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -46,7 +46,7 @@ namespace Gizmo_V1_02.Data.Migrations
                     b.ToTable("AppCompanyDetails");
                 });
 
-            modelBuilder.Entity("Gizmo.Context.Gizmo_Authentification.AppCompanySelection", b =>
+            modelBuilder.Entity("GadjIT.GadjitContext.GadjIT_App.AppCompanySelection", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -65,7 +65,7 @@ namespace Gizmo_V1_02.Data.Migrations
                     b.ToTable("AppCompanySelection");
                 });
 
-            modelBuilder.Entity("Gizmo.Context.Gizmo_Authentification.AppCompanyUserRoles", b =>
+            modelBuilder.Entity("GadjIT.GadjitContext.GadjIT_App.AppCompanyUserRoles", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -88,7 +88,7 @@ namespace Gizmo_V1_02.Data.Migrations
                     b.ToTable("AppCompanyUserRoles");
                 });
 
-            modelBuilder.Entity("Gizmo.Context.Gizmo_Authentification.AppCompanyWorkTypeGroups", b =>
+            modelBuilder.Entity("GadjIT.GadjitContext.GadjIT_App.AppCompanyWorkTypeGroups", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -106,7 +106,7 @@ namespace Gizmo_V1_02.Data.Migrations
                     b.ToTable("AppCompanyWorkTypeGroups");
                 });
 
-            modelBuilder.Entity("Gizmo.Context.Gizmo_Authentification.AppCompanyWorkTypeMapping", b =>
+            modelBuilder.Entity("GadjIT.GadjitContext.GadjIT_App.AppCompanyWorkTypeMapping", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -132,7 +132,7 @@ namespace Gizmo_V1_02.Data.Migrations
                     b.ToTable("AppCompanyWorkTypeMapping");
                 });
 
-            modelBuilder.Entity("Gizmo.Context.Gizmo_Authentification.AppWorkTypeGroups", b =>
+            modelBuilder.Entity("GadjIT.GadjitContext.GadjIT_App.AppWorkTypeGroups", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -151,7 +151,7 @@ namespace Gizmo_V1_02.Data.Migrations
                     b.ToTable("AppWorkTypeGroups");
                 });
 
-            modelBuilder.Entity("Gizmo.Context.Gizmo_Authentification.AppWorkTypeGroupsTypeAssignments", b =>
+            modelBuilder.Entity("GadjIT.GadjitContext.GadjIT_App.AppWorkTypeGroupsTypeAssignments", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -169,7 +169,7 @@ namespace Gizmo_V1_02.Data.Migrations
                     b.ToTable("AppWorkTypeGroupsTypeAssignments");
                 });
 
-            modelBuilder.Entity("Gizmo.Context.Gizmo_Authentification.AppWorkTypes", b =>
+            modelBuilder.Entity("GadjIT.GadjitContext.GadjIT_App.AppWorkTypes", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()

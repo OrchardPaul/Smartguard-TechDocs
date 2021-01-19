@@ -1,11 +1,11 @@
-﻿using Gizmo.Context.Gizmo_Authentification;
+﻿using GadjIT.GadjitContext.GadjIT_App;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
-using Gizmo.Context.Gizmo_Authentification.Custom;
+using GadjIT.GadjitContext.GadjIT_App.Custom;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -54,37 +54,44 @@ namespace Gizmo_V1_02.Data.Admin
 
         public async Task<AspNetUsers> SwitchSelectedCompany(AspNetUsers user)
         {
+            var signedInUserState = await authenticationStateProvider.GetAuthenticationStateAsync();
+
             selectedUser = await userManager.FindByNameAsync(user.UserName);
             selectedUser.SelectedCompanyId = user.SelectedCompanyId;
             selectedUser.SelectedUri = user.SelectedUri;
 
             await userManager.UpdateAsync(selectedUser);
 
-            var selectedCompanyUserRoles = await context.AppCompanyUserRoles
+            if(!signedInUserState.User.IsInRole("Super User"))
+            {
+                var selectedCompanyUserRoles = await context.AppCompanyUserRoles
                                                     .Where(A => A.UserId == selectedUser.Id
                                                                 & A.CompanyId == selectedUser.SelectedCompanyId)
                                                     .Select(A => A.RoleId)
                                                     .ToListAsync();
 
-            var newRoles = await roleManager.Roles
-                                        .Where(R => selectedCompanyUserRoles.Contains(R.Id))
-                                        .Select(R => R.Name)
-                                        .ToListAsync();
+                var newRoles = await roleManager.Roles
+                                            .Where(R => selectedCompanyUserRoles.Contains(R.Id))
+                                            .Select(R => R.Name)
+                                            .ToListAsync();
 
-            
 
-            var currentRoles = await userManager.GetRolesAsync(selectedUser);
 
-            if(currentRoles.Count > 0)
-            {
-                await userManager.RemoveFromRolesAsync(selectedUser, currentRoles);
+                var currentRoles = await userManager.GetRolesAsync(selectedUser);
+
+                if (currentRoles.Count > 0)
+                {
+                    await userManager.RemoveFromRolesAsync(selectedUser, currentRoles);
+                }
+
+                if (newRoles.Count > 0)
+                {
+                    await userManager.AddToRolesAsync(selectedUser, newRoles);
+                }
+
             }
-            
-            if(newRoles.Count > 0)
-            {
-                await userManager.AddToRolesAsync(selectedUser, newRoles);
-            }
-            
+
+
 
             return mapper.Map(selectedUser, new AspNetUsers());
         }

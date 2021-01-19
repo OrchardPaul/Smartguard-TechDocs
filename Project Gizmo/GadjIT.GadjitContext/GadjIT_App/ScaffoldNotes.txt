@@ -1,0 +1,2 @@
+﻿18/01/2021
+Scaffold-DbContext “Data Source=dev\SQLEXPRESS;Initial Catalog=Gizmo_Authentication;Integrated Security=True;Pooling=False” Microsoft.EntityFrameworkCore.SqlServer -OutputDir GadjIT_App -DataAnnotations

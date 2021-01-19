@@ -76,6 +76,20 @@ using Gizmo_V1_02.Shared;
 #line default
 #line hidden
 #nullable disable
+#nullable restore
+#line 10 "F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\_Imports.razor"
+using Blazored.Modal;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 11 "F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\_Imports.razor"
+using Blazored.Modal.Services;
+
+#line default
+#line hidden
+#nullable disable
     [Microsoft.AspNetCore.Components.RouteAttribute("/admin/manageusers")]
     public partial class ManageUsersMainPage : Microsoft.AspNetCore.Components.ComponentBase
     {

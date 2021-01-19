@@ -47,8 +47,6 @@ F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo.Api\bin\Debug\netcoreapp3.1\runtimes
 F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo.Api\bin\Debug\netcoreapp3.1\runtimes\unix\lib\netcoreapp2.0\System.Runtime.Caching.dll
 F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo.Api\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp2.0\System.Runtime.Caching.dll
 F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo.Api\bin\Debug\netcoreapp3.1\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll
-F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo.Api\bin\Debug\netcoreapp3.1\GadjIT.Context.dll
-F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo.Api\bin\Debug\netcoreapp3.1\GadjIT.Context.pdb
 F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo.Api\obj\Debug\netcoreapp3.1\GadjIT.Api.csprojAssemblyReference.cache
 F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo.Api\obj\Debug\netcoreapp3.1\GadjIT.Api.AssemblyInfoInputs.cache
 F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo.Api\obj\Debug\netcoreapp3.1\GadjIT.Api.AssemblyInfo.cs
@@ -61,3 +59,5 @@ F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo.Api\obj\Debug\netcoreapp3.1\staticwe
 F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo.Api\obj\Debug\netcoreapp3.1\GadjIT.Api.dll
 F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo.Api\obj\Debug\netcoreapp3.1\GadjIT.Api.pdb
 F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo.Api\obj\Debug\netcoreapp3.1\GadjIT.Api.genruntimeconfig.cache
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo.Api\bin\Debug\netcoreapp3.1\Gadjit.ClientContext.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo.Api\bin\Debug\netcoreapp3.1\Gadjit.ClientContext.pdb

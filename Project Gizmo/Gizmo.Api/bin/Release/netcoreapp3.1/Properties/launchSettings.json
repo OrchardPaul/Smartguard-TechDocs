@@ -17,7 +17,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "Gizmo.Api": {
+    "GadjIT.ClientAPI": {
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "weatherforecast",

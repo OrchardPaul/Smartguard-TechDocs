@@ -73,6 +73,20 @@ using Gizmo_V1_02.Shared;
 #line hidden
 #nullable disable
 #nullable restore
+#line 10 "F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\_Imports.razor"
+using Blazored.Modal;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 11 "F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\_Imports.razor"
+using Blazored.Modal.Services;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
 #line 2 "F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\Pages\Admin\CompanyDetails\CompanyDetails.razor"
 using Gizmo_V1_02.Pages.Admin.CompanyWorkTypeManagement;
 

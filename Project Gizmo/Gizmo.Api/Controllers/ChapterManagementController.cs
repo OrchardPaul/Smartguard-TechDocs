@@ -3,12 +3,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Gizmo.Api.Repository.OR_RESI;
+using GadjIT.ClientAPI.Repository.OR_RESI;
 using Microsoft.AspNetCore.Http;
 using System.Net.Http;
-using Gizmo.Context.OR_RESI;
+using GadjIT.ClientContext.OR_RESI;
 
-namespace Gizmo.Api.Controllers
+namespace GadjIT.ClientAPI.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
@@ -56,7 +56,7 @@ namespace Gizmo.Api.Controllers
             }
             catch (Exception)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return StatusCode(StatusCodes.Status406NotAcceptable);
             }
         }
 

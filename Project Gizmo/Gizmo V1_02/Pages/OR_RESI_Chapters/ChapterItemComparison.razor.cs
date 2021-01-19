@@ -1,6 +1,6 @@
 ﻿using Blazored.Modal;
-using Gizmo.Context.OR_RESI;
-using Gizmo.Context.OR_RESI.Custom;
+using GadjIT.ClientContext.OR_RESI;
+using GadjIT.ClientContext.OR_RESI.Custom;
 using Gizmo_V1_02.Services;
 using Gizmo_V1_02.Services.SessionState;
 using Microsoft.AspNetCore.Components;

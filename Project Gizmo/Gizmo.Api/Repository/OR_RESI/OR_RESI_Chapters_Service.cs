@@ -3,9 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Gizmo.Context.OR_RESI;
+using GadjIT.ClientContext.OR_RESI;
 
-namespace Gizmo.Api.Repository.OR_RESI
+namespace GadjIT.ClientAPI.Repository.OR_RESI
 {
     public interface IOR_RESI_Chapters_Service
     {

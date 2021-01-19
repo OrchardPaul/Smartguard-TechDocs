@@ -1,4 +1,4 @@
-﻿using Gizmo.Api.Repository.OR_RESI;
+﻿using GadjIT.ClientAPI.Repository.OR_RESI;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Gizmo.Api.Controllers
+namespace GadjIT.ClientAPI.Controllers
 {
     /*
      * Controller to access P4W default tables

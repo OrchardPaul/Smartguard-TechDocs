@@ -1,5 +1,5 @@
-﻿using Gizmo.Context.Gizmo_Authentification;
-using Gizmo.Context.Gizmo_Authentification.Custom;
+﻿using GadjIT.GadjitContext.GadjIT_App;
+using GadjIT.GadjitContext.GadjIT_App.Custom;
 using System;
 using System.Collections.Generic;
 using System.Linq;

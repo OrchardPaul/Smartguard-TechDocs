@@ -1,4 +1,4 @@
-﻿using Gizmo.Context.OR_RESI;
+﻿using GadjIT.ClientContext.OR_RESI;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using System;
@@ -13,7 +13,7 @@ using Gizmo_V1_02.Services.SessionState;
 using Blazored.Modal.Services;
 using Blazored.Modal;
 using Gizmo_V1_02.Pages.Shared.Modals;
-using Gizmo.Context.OR_RESI.Custom;
+using GadjIT.ClientContext.OR_RESI.Custom;
 
 namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
 {

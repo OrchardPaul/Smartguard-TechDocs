@@ -33,13 +33,13 @@
     <PackageReference Include="Blazored.Modal" Version="6.0.0" />
     <PackageReference Include="entityframework" Version="6.4.4" />
     <PackageReference Include="Microsoft.AspNetCore.Blazor.HttpClient" Version="3.2.0-preview3.20168.3" />
-    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.1.8" />
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.1.11" />
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.8" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.11" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.8" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.8" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.8" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.8">
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.11" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.11" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.11">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
@@ -48,7 +48,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Gizmo.Context\GadjIT.Context.csproj" />
+    <ProjectReference Include="..\Gadjit.ClientContext\GadjIT.ClientContext.csproj" />
+    <ProjectReference Include="..\GadjIT.GadjitContext\GadjIT.GadjitContext.csproj" />
   </ItemGroup>
 
   <ItemGroup>

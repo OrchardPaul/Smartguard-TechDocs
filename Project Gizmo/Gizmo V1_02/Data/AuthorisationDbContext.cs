@@ -1,4 +1,4 @@
-﻿using Gizmo.Context.Gizmo_Authentification;
+﻿using GadjIT.GadjitContext.GadjIT_App;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;

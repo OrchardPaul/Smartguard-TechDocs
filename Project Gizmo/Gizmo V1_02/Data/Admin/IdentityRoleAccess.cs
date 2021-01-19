@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Gizmo.Context.Gizmo_Authentification;
+using GadjIT.GadjitContext.GadjIT_App;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;

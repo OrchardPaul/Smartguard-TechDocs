@@ -1,6 +1,6 @@
 ﻿using Blazored.Modal;
-using Gizmo.Context.Gizmo_Authentification;
-using Gizmo.Context.Gizmo_Authentification.Custom;
+using GadjIT.GadjitContext.GadjIT_App;
+using GadjIT.GadjitContext.GadjIT_App.Custom;
 using Gizmo_V1_02.Data.Admin;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;

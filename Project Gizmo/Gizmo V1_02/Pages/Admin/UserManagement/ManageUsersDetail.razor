@@ -13,7 +13,7 @@
 
 
 
-<EditForm Model="@TaskObject" OnValidSubmit="@HandleValidSubmit">
+<EditForm Model="@TaskObject">
     <DataAnnotationsValidator />
     <ValidationSummary />
     <div class="tran-block detail-block">
@@ -68,9 +68,9 @@
                                     <InputSelectInteger class="form-control" style="width: 300px;" ValueExpression="@(() => TaskObject.SelectedCompanyId)"
                                                         Value="@TaskObject.SelectedCompanyId"
                                                         ValueChanged="@((int value) => ToggleCompany(value))">
-                                        @if (companyItems.Where(C => C.IsSubscribed).Count() > 0)
+                                        @if (companyItems.Count() > 0)
                                         {
-                                            @foreach (var company in companyItems.Where(C => C.IsSubscribed))
+                                            @foreach (var company in companyItems)
                                             {
                                                 <option value="@company.Company.Id">
                                                     @company.Company.CompanyName
@@ -153,7 +153,7 @@
             </div>
 
             <div class="detail-group-box ">
-                <button type="submit" class="float-left btn btn-alt">Save Changes</button>
+                <button type="submit" class="float-left btn btn-alt" @onclick="HandleValidSubmit">Save Changes</button>
                 <button type="button" class="float-left ml-2 btn btn-secondary" @onclick="NavigateBack">Cancel</button>
             </div>
         </div>

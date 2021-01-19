@@ -22,22 +22,13 @@
 }
 
 
-
-
-
-
-
-
-
-
-
-
 /*-----------------------------*/
 /*  Top Navbar                 */
 /*-----------------------------*/
 
 .topbar a.nav-link {
     font-size: 1.3em;
+    margin-right: 0;
 }
 
 .topbar .btn-link {
@@ -45,6 +36,44 @@
     background-color: #000;
     height: 32px;
     padding: 2px 8px;
+}
+
+.topbar #user-login-dets {
+    width: 150px;
+}
+
+.topbar #company-login-dets {
+    width: 120px;
+}
+
+.topbar .nav-login-dets {
+    margin-right: 10px;
+}
+
+.topbar .nav-login-dets a {
+        text-decoration: none;
+        cursor: default;
+    }
+
+.topbar .nav-login-dets span {
+        display: block;
+        white-space: nowrap;
+        width: 100%;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        text-align: left;
+        color: #aaa;
+    }
+
+.topbar .nav-dets-top {
+}
+
+.topbar .nav-dets-bottom {
+    font-size: 0.7rem;
+}
+
+.topbar #btn-logout {
+    margin-right: 10px;
 }
 
 /*-----------------------------*/
@@ -55,16 +84,17 @@
     position: -webkit-sticky; /* Safari */
     position: sticky;
     top: 0;
+    background: #222 !important;
+    border: none;
 }
 
 .sidebar .nav-item .nav-link{
     font-size: 0.9rem !important;
-    color: #555 !important;
+    color: #CCC !important;
 }
 
 .sidebar .nav-item a.active {
-    color: #000 !important;
-    border: 1pt solid #ddd;
+    color: #FFF !important;
     font-weight: bold;
 }
 
@@ -105,14 +135,13 @@
 /*-----------------------------*/
 
 .page-navbar {
-    margin-bottom: 50px;
+    margin-bottom: 30px;
 }
 
 .page-navbar .navbar {
     height: 50px;
     border-radius: 2px !important;
     box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.5) !important;
-
 }
 
 .page-navbar .navbar li {
@@ -173,3 +202,182 @@
 .tran-tabs .active a, .tran-tabs .active a:hover {
     color: #FFF !important;
 }
+
+/*-TRAN NAVBAR-*/
+
+
+.tran-navbar {
+    margin-bottom: 30px;
+}
+
+.tran-navbar .navbar {
+    height: 50px;
+}
+
+.tran-navbar .navbar ul{
+    display: flex;
+}
+
+.tran-navbar .navbar ul li {
+    height: 50px;
+    min-width: 100px;
+    display: block;
+}
+
+
+.tran-navbar .navbar li.active {
+    border-bottom: 3pt solid;
+}
+
+.tran-navbar .navbar li.active a{
+    color: #000 !important;
+}
+
+.tran-navbar .navbar li a {
+    color: #555 !important;
+    display: block;
+    width: 100%;
+    height: 100%;
+    text-align:center;
+}
+
+.tran-navbar .navbar a span {
+    padding-top: 11px;
+    display: block;
+    text-align:center;
+}
+
+.tran-navbar .navbar li a:hover {
+    text-decoration: none;
+    background-color: rgba(220, 220, 220, 1);
+    color: #000 !important;
+    border-bottom: 3pt solid #000;
+    border-bottom-color: #000;
+    transition-duration: 0.5s;
+    transition-property: background-color, color;
+}
+
+.tran-navbar .navbar li.active a:hover {
+    border-bottom: none !important;
+}
+
+.tran-navbar .navbar li.active a {
+    color: #000;
+}
+
+
+/*--------------------*/
+/*   MOCK TREE NAV    */
+/*--------------------*/
+
+.nav-row-1 {
+    margin-top: 20px;
+}
+.nav-row-2 {
+    margin-top: 12px;
+    margin-left: 30px;
+}
+.nav-row-3 {
+    margin-top: 7px;
+    margin-left: 60px;
+    margin-right: 15px;
+}
+
+.data-item-nav {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    padding: 0;
+    font-size: 0.95rem !important;
+    background-color: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 8px 12px 0 rgba(0, 0, 0, 0.5);
+    border-radius: 0px;
+    border: none;
+    cursor: pointer;
+}
+
+.data-item-nav a {
+    display: block;
+    height: 100%;
+    width: 100%;
+    text-decoration: none !important;
+}
+
+
+.data-item-nav:hover, .data-item-nav a:hover, .nav-row-3 .data-item-nav:hover{
+    background-color: #000;
+    color: #FFF;
+    transition-duration: 1s;
+    transition-property: background-color, color;
+}
+
+
+
+.data-item a:hover .data-item-main, .data-item a:hover .data-item-alt {
+    background-color: #000;
+    color: #FFF;
+    transition-duration: 1s;
+    transition-property: background-color, color;
+}
+
+
+/*--------------------*/
+/*   DROP DOWN NAV    */
+/*--------------------*/
+.btn-ellipses .ellipsis-menu {
+    position: absolute;
+    display: block;
+    width: 180px;
+    top: 20px;
+    left: 8px;
+    margin: 0;
+    padding: 10px 3px 3px 3px;
+    background-color: none;
+    z-index: 100;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 1s linear;
+    transition: visibility 0.3s linear, opacity 0.3s linear;
+}
+
+.btn-ellipses .ellipsis-menu-right {
+    top: 8px;
+    left: calc(100% - 170px) !important;
+}
+
+.btn-ellipses ul {
+    width: 100%;
+    margin: 0;
+    padding: 5px;
+    background-color: #fff;
+    font-size: 0.9rem;
+    color: #555;
+    box-shadow: 0 5px 8px rgba(0,0,0,0.4);
+    border-radius: 3px;
+    display: block;
+}
+
+.btn-ellipses:hover .ellipsis-menu {
+    visibility: visible;
+    opacity: 1;
+    transition: visibility 0.3s linear, opacity 0.3s linear;
+}
+
+.btn-ellipses ul li {
+    list-style-type: none;
+    background: #fff;
+    padding: 5px 5px 5px 7px;
+    display: block;
+    border-radius: 3px;
+    color: #555;
+    text-align: left;
+    background: #fff;
+    cursor: pointer;
+    
+}
+
+.btn-ellipses ul li:hover {
+    background-color: #ddd;
+    color: #000;
+}
+

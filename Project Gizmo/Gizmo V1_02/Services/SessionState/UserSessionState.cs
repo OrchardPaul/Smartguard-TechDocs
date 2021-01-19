@@ -1,4 +1,4 @@
-﻿using Gizmo.Context.Gizmo_Authentification;
+﻿using GadjIT.GadjitContext.GadjIT_App;
 using Gizmo_V1_02.Data.Admin;
 using Microsoft.AspNetCore.Components.Authorization;
 using System;
@@ -181,18 +181,23 @@ namespace Gizmo_V1_02.Services.SessionState
 
         public async Task<string> SwitchSelectedSystem()
         {
+            Lock = true;
             //Get new 
-            var baseUri = await companyDbAccess.GetCompanyBaseUri(Company.Id
-                                                                            , (User.SelectedUri == "Live") ? "Dev" : "Live");
+            var baseUri = await companyDbAccess.GetCompanyBaseUri(Company.Id, (User.SelectedUri == "Live") ? "Dev" : "Live");
             SetBaseUri(baseUri);
+
+            Lock = false;
             return baseUri;
         }
 
         public async Task<string> ResetSelectedSystem()
         {
+            Lock = true;
             //Get new 
             var baseUri = await companyDbAccess.GetCompanyBaseUri(Company.Id, User.SelectedUri);
             SetBaseUri(baseUri);
+
+            Lock = false;
             return baseUri;
         }
 
@@ -266,6 +271,7 @@ namespace Gizmo_V1_02.Services.SessionState
                                 
                                 if (!(baseUri is null))
                                 {
+                                    
                                     SetBaseUri(baseUri);
                                     
                                     sessionStateSet = "Success";

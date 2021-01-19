@@ -1,6 +1,6 @@
-﻿using Gizmo.Context.Gizmo_Authentification;
-using Gizmo.Context.Gizmo_Authentification.Custom;
-using Gizmo.Context.OR_RESI;
+﻿using GadjIT.GadjitContext.GadjIT_App;
+using GadjIT.GadjitContext.GadjIT_App.Custom;
+using GadjIT.ClientContext.OR_RESI;
 using Gizmo_V1_02.Data.Admin;
 using Gizmo_V1_02.Services;
 using Gizmo_V1_02.Services.SessionState;

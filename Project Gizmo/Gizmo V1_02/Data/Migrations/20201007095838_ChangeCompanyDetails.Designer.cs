@@ -21,7 +21,7 @@ namespace Gizmo_V1_02.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("Gizmo.Context.Gizmo_Authentification.AppCompanyDetails", b =>
+            modelBuilder.Entity("GadjIT.GadjitContext.GadjIT_App.AppCompanyDetails", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()

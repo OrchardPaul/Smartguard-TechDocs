@@ -1,7 +1,7 @@
 ﻿using Blazored.Modal;
 using Blazored.Modal.Services;
-using Gizmo.Context.Gizmo_Authentification;
-using Gizmo.Context.Gizmo_Authentification.Custom;
+using GadjIT.GadjitContext.GadjIT_App;
+using GadjIT.GadjitContext.GadjIT_App.Custom;
 using Gizmo_V1_02.Data.Admin;
 using Gizmo_V1_02.Pages.Shared.Modals;
 using Gizmo_V1_02.Services.SessionState;

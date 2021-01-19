@@ -1,4 +1,4 @@
-﻿using Gizmo.Context.Gizmo_Authentification;
+﻿using GadjIT.GadjitContext.GadjIT_App;
 using Gizmo_V1_02.Services.SessionState;
 using Microsoft.AspNetCore.Components;
 using System;

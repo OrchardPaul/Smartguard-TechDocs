@@ -7,6 +7,14 @@ C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo.Context\obj\Debug\nets
 C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo.Context\obj\Debug\netstandard2.0\GadjIT.Context.csproj.CoreCompileInputs.cache
 C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo.Context\obj\Debug\netstandard2.0\GadjIT.Context.dll
 C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo.Context\obj\Debug\netstandard2.0\GadjIT.Context.pdb
+F:\WorkSpaces\MS\GadjIT\Project Gizmo\Gizmo.Context\bin\Debug\netstandard2.0\GadjIT.Context.deps.json
+F:\WorkSpaces\MS\GadjIT\Project Gizmo\Gizmo.Context\bin\Debug\netstandard2.0\GadjIT.Context.dll
+F:\WorkSpaces\MS\GadjIT\Project Gizmo\Gizmo.Context\bin\Debug\netstandard2.0\GadjIT.Context.pdb
+F:\WorkSpaces\MS\GadjIT\Project Gizmo\Gizmo.Context\obj\Debug\netstandard2.0\GadjIT.Context.AssemblyInfoInputs.cache
+F:\WorkSpaces\MS\GadjIT\Project Gizmo\Gizmo.Context\obj\Debug\netstandard2.0\GadjIT.Context.AssemblyInfo.cs
+F:\WorkSpaces\MS\GadjIT\Project Gizmo\Gizmo.Context\obj\Debug\netstandard2.0\GadjIT.Context.csproj.CoreCompileInputs.cache
+F:\WorkSpaces\MS\GadjIT\Project Gizmo\Gizmo.Context\obj\Debug\netstandard2.0\GadjIT.Context.dll
+F:\WorkSpaces\MS\GadjIT\Project Gizmo\Gizmo.Context\obj\Debug\netstandard2.0\GadjIT.Context.pdb
 F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo.Context\bin\Debug\netstandard2.0\GadjIT.Context.deps.json
 F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo.Context\bin\Debug\netstandard2.0\GadjIT.Context.dll
 F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo.Context\bin\Debug\netstandard2.0\GadjIT.Context.pdb
@@ -16,11 +24,3 @@ F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo.Context\obj\Debug\netstandard2.0\Gad
 F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo.Context\obj\Debug\netstandard2.0\GadjIT.Context.csproj.CoreCompileInputs.cache
 F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo.Context\obj\Debug\netstandard2.0\GadjIT.Context.dll
 F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo.Context\obj\Debug\netstandard2.0\GadjIT.Context.pdb
-F:\WorkSpaces\MS\GadjIT\Project Gizmo\Gizmo.Context\bin\Debug\netstandard2.0\GadjIT.Context.deps.json
-F:\WorkSpaces\MS\GadjIT\Project Gizmo\Gizmo.Context\bin\Debug\netstandard2.0\GadjIT.Context.dll
-F:\WorkSpaces\MS\GadjIT\Project Gizmo\Gizmo.Context\bin\Debug\netstandard2.0\GadjIT.Context.pdb
-F:\WorkSpaces\MS\GadjIT\Project Gizmo\Gizmo.Context\obj\Debug\netstandard2.0\GadjIT.Context.AssemblyInfoInputs.cache
-F:\WorkSpaces\MS\GadjIT\Project Gizmo\Gizmo.Context\obj\Debug\netstandard2.0\GadjIT.Context.AssemblyInfo.cs
-F:\WorkSpaces\MS\GadjIT\Project Gizmo\Gizmo.Context\obj\Debug\netstandard2.0\GadjIT.Context.csproj.CoreCompileInputs.cache
-F:\WorkSpaces\MS\GadjIT\Project Gizmo\Gizmo.Context\obj\Debug\netstandard2.0\GadjIT.Context.dll
-F:\WorkSpaces\MS\GadjIT\Project Gizmo\Gizmo.Context\obj\Debug\netstandard2.0\GadjIT.Context.pdb

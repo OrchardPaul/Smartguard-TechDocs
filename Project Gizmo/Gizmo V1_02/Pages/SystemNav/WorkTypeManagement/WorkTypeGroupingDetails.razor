@@ -6,7 +6,7 @@
         <ValidationSummary />
 
         <div class="form-group">
-            @foreach (var a in Assignments.Where(A => A.WorkType.DepartmentId == TaskObject.group.parentId))
+            @foreach (var a in Assignments.Where(A => A.WorkType.DepartmentId == TaskObject.group.ParentId))
             {
                 <div>
                     <InputCheckbox @bind-Value="a.IsAssigned"></InputCheckbox><span class="pl-2">@a.WorkType.TypeName</span>

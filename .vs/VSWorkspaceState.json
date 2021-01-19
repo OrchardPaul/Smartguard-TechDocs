@@ -2,8 +2,8 @@
   "ExpandedNodes": [
     "",
     "\\Project Gizmo",
-    "\\Project Gizmo\\Gizmo V1_02",
-    "\\Project Gizmo\\Gizmo V1_02\\Pages"
+    "\\Project Gizmo\\Gizmo.API"
   ],
+  "SelectedNode": "\\Project Gizmo\\Gizmo.API\\Program.cs",
   "PreviewInSolutionExplorer": false
 }
