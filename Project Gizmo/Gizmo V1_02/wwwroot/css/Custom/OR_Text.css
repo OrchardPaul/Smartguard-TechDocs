@@ -37,6 +37,11 @@ h5{
 }
 
 
+
+.cookie-link a:hover {
+    color: #000;
+}
+
 /*  validation icons  */
 .fa-check {
     color: #009933;

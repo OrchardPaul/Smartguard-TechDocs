@@ -28,15 +28,13 @@ else
                                     <span class="fa fa-ellipsis-v"></span>
                                     <div class="ellipsis-menu">
                                         <ul>
-                                            <li>
-                                                <a href="javascript: void(0);" @onclick='() => PrepareForEdit(vmCompany.Company)'>
-                                                    <span class="fa fa-pencil-alt mr-2"></span>Edit
-                                                </a>
+                                            <li class="col-main" @onclick='() => PrepareForEdit(vmCompany.Company)'>
+                                                <span class="fa fa-pencil-alt mr-2"></span>
+                                                <span class="col-black">Edit</span>
                                             </li>
-                                            <li>
-                                                <a href="javascript: void(0);" @onclick='() => PrepareForDelete(vmCompany.Company)'>
-                                                    <span class="fa fa-trash-alt mr-2"></span>Delete
-                                                </a>
+                                            <li class="col-red" @onclick="() => PrepareForDelete(vmCompany.Company)">
+                                                <span class="fa fa-trash-alt mr-2"></span>
+                                                <span class="col-black">Delete</span>
                                             </li>
 
                                         </ul>

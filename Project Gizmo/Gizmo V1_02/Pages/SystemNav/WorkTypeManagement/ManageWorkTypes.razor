@@ -75,15 +75,13 @@ else
                                         <span class="fa fa-ellipsis-v"></span>
                                         <div class="ellipsis-menu">
                                             <ul>
-                                                <li>
-                                                    <a href="javascript: void(0);" @onclick='(() => PrepareDepartmentForEdit(vmDepartment.department))'>
-                                                        <span class="fa fa-pencil-alt mr-2"></span>Edit
-                                                    </a>
+                                                <li class="col-main" @onclick='(() => PrepareDepartmentForEdit(vmDepartment.department))'>
+                                                    <span class="fa fa-pencil-alt mr-2"></span>
+                                                    <span class="col-black">Edit</span>
                                                 </li>
-                                                <li>
-                                                    <a href="javascript: void(0);" @onclick='(() => PrepareDepartmentForDelete(vmDepartment.department))'>
-                                                        <span class="fa fa-trash-alt mr-2"></span>Delete
-                                                    </a>
+                                                <li class="col-red" @onclick="(() => PrepareDepartmentForDelete(vmDepartment.department))">
+                                                    <span class="fa fa-trash-alt mr-2"></span>
+                                                    <span class="col-black">Delete</span>
                                                 </li>
 
                                             </ul>
@@ -117,16 +115,16 @@ else
                                     <span class="fa fa-ellipsis-v"></span>
                                     <div class="ellipsis-menu">
                                         <ul>
-                                            <li>
-                                                <a href="javascript: void(0);" @onclick='(() => PrepareGroupForEdit(wtg))'>
-                                                    <span class="fa fa-pencil-alt mr-2"></span>Edit
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="javascript: void(0);" @onclick='(() => PrepareGroupForDelete(wtg))'>
-                                                    <span class="fa fa-trash-alt mr-2"></span>Delete
-                                                </a>
-                                            </li>
+                                            <li class="col-main" @onclick='(() => PrepareGroupForEdit(wtg))'>
+                                                    <span class="fa fa-pencil-alt mr-2"></span>
+                                                    <span class="col-black">Edit</span>
+                                                </li>
+                                                <li class="col-red" @onclick="(() => PrepareGroupForDelete(wtg))">
+                                                    <span class="fa fa-trash-alt mr-2"></span>
+                                                    <span class="col-black">Delete</span>
+                                                </li>
+
+                                            
 
                                         </ul>
                                     </div>
@@ -163,16 +161,16 @@ else
                                         <span class="fa fa-ellipsis-v"></span>
                                         <div class="ellipsis-menu">
                                             <ul>
-                                                <li>
-                                                    <a href="javascript: void(0);" @onclick='(() => PrepareTypeForEdit(wt.workType))'>
-                                                        <span class="fa fa-pencil-alt mr-2"></span>Edit
-                                                    </a>
+                                                <li class="col-main" @onclick='(() => PrepareTypeForEdit(wt.workType))'>
+                                                    <span class="fa fa-pencil-alt mr-2"></span>
+                                                    <span class="col-black">Edit</span>
                                                 </li>
-                                                <li>
-                                                    <a href="javascript: void(0);" @onclick='(() => PrepareTypeForDelete(wt.workType))'>
-                                                        <span class="fa fa-trash-alt mr-2"></span>Delete
-                                                    </a>
+                                                <li class="col-red" @onclick="(() => PrepareTypeForDelete(wt.workType))">
+                                                    <span class="fa fa-trash-alt mr-2"></span>
+                                                    <span class="col-black">Delete</span>
                                                 </li>
+
+             
 
                                             </ul>
                                         </div>
@@ -209,12 +207,10 @@ else
 
 
                             <div class="row grid-row mt-3">
-                                <div class="col-12 col-xl-6 data-item-nav">
-                                    <a href="javascript:void(0);" @onclick='(() => ShowGroupingDept("Show",vmDepartment.department.DepartmentName))'>
+                                <div class="col-12 col-xl-6 data-item-nav" @onclick='(() => ShowGroupingDept("Show",vmDepartment.department.DepartmentName))'>
                                         <div class="data-item-sub">
                                             @vmDepartment.department.DepartmentName<span class="nav-link-right fa fa-chevron-circle-right"></span>
                                         </div>
-                                    </a>
                                 </div>
                             </div>
                         }
