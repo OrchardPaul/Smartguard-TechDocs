@@ -115,6 +115,7 @@
 /*  BUTTONS & LINKS            */
 /*-----------------------------*/
 
+
 .btn {
     border: 2pt solid !important;
     border-radius: 5px !important;
@@ -124,7 +125,7 @@
 
 .btn:hover {
     box-shadow: 0 8px 12px 0 rgba(0, 0, 0, 0);
-    transition-duration: 1s;
+    transition-duration: 0.5s;
     transition-property: box-shadow, background-color, border;
 }
 
@@ -177,6 +178,14 @@
     box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.7);
 }
 
+
+.btn-main:hover {
+    background-color: #000;
+    border-color: #000 !important;
+    color: #FFF;
+}
+
+
 .back-link {
     margin: 12px 10px 0 0;
 }
@@ -214,6 +223,7 @@
     width: auto;
     font-size: 0.8rem;
     border-radius: 0px;
+    background-color: rgba(230, 230, 230, 0.8);
 }
 
 @media (max-width: 992px) {
@@ -292,7 +302,7 @@
 }
 
 .grid-row-lg {
-    height: 65px;
+    height: 52px;
 }
 
 .grid-row-md {
@@ -510,7 +520,7 @@
 
 .grid-tran .btn:hover {
     box-shadow: none;
-    transition-duration: 1s;
+    transition-duration: 0.5s;
     transition-property: box-shadow, background-color, border;
 }
 
@@ -742,7 +752,7 @@
 }
 
 .schedule-days {
-    padding-top: 5px;
+    padding-top: 3px;
 }
 
 .schedule-days .badge{
@@ -755,7 +765,7 @@
 
 /*   SEQUENCE CHANGE OPTIONS             */
 .grid-row-lg .seq-change {
-    padding-top: 6px;
+    padding-top: 1px;
     padding-left: 8px;
     width: 30px;
     text-align: center;
@@ -931,6 +941,27 @@
 
 .visible{
     visibility: visible;
+}
+
+
+/*---------------------------------------*/
+/*   SHAPES                              */
+/*---------------------------------------*/
+
+.triangle-up {
+    width: 0;
+    height: 0;
+    border-left: 0.5em solid transparent;
+    border-right: 0.5em solid transparent;
+    border-bottom: 1em solid ;
+}
+
+.triangle-down {
+    width: 0;
+    height: 0;
+    border-left: 0.5em solid transparent;
+    border-right: 0.5em solid transparent;
+    border-top: 1em solid ;
 }
 
 /******************/
