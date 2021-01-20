@@ -170,7 +170,7 @@ else
                         @if (sessionState.isAdminUser)
                         {
                             <div>
-                                <button @onclick='() => PrepareForInsert(navDisplay)' class="btn btn-main btn-shadow" title="Add new document/step"><i class="fa fa-plus"></i></button>
+                                <button @onclick='() => PrepareForInsert(navDisplay,"Doc")' class="btn btn-main btn-shadow" title="Add new document/step"><i class="fa fa-plus"></i></button>
                             </div>
                         }
                         <div class="pt-1">
@@ -329,7 +329,7 @@ else
                         @if (sessionState.isAdminUser)
                         {
                             <div>
-                                <button @onclick='() => PrepareForInsert(navDisplay)' class="btn btn-main btn-shadow" title="Add new agenda"><i class="fa fa-plus"></i></button>
+                                <button @onclick='() => PrepareForInsert(navDisplay,"Agenda")' class="btn btn-main btn-shadow" title="Add new agenda"><i class="fa fa-plus"></i></button>
                             </div>
                         }
                     <div class="pt-1">
@@ -425,7 +425,7 @@ else
                         @if (sessionState.isAdminUser)
                         {
                             <div>
-                                <button @onclick='() => PrepareForInsert(navDisplay)' class="btn btn-main btn-shadow" title="Add new fee"><i class="fa fa-plus"></i></button>
+                                <button @onclick='() => PrepareForInsert(navDisplay,"Fee")' class="btn btn-main btn-shadow" title="Add new fee"><i class="fa fa-plus"></i></button>
                             </div>
                         }
                     <div class="pt-1">
@@ -530,7 +530,7 @@ else
                         @if (sessionState.isAdminUser)
                         {
                             <div>
-                                <button @onclick='() => PrepareForInsert(navDisplay)' class="btn btn-main btn-shadow" title="Add new status"><i class="fa fa-plus"></i></button>
+                                <button @onclick='() => PrepareForInsert(navDisplay,"Status")' class="btn btn-main btn-shadow" title="Add new status"><i class="fa fa-plus"></i></button>
                             </div>
                         }
                     <div class="pt-1">

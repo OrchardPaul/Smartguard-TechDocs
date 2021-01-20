@@ -35,5 +35,18 @@ namespace GadjIT.ClientAPI.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
+
+        [HttpGet]
+        public async Task<ActionResult> GetAllCaseTypeGroups()
+        {
+            try
+            {
+                return Ok(await partner_Access_Service.GetAllCaseTypeGroups());
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
     }
 }

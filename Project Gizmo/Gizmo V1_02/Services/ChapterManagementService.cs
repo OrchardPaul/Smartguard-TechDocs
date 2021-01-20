@@ -92,6 +92,11 @@ namespace Gizmo_V1_02.Services
             return httpClient.GetJsonAsync<List<DmDocuments>>($"{userSession.baseUri}api/ChapterManagement/GetDocumentList/{caseType}");
         }
 
+        public Task<List<DmDocuments>> GetDocumentListByCaseTypeGroup(int caseTypeGroupRef)
+        {
+            return httpClient.GetJsonAsync<List<DmDocuments>>($"{userSession.baseUri}api/ChapterManagement/GetDocumentListByCaseTypeGroupRef/{caseTypeGroupRef}");
+        }
+
         public Task<List<string>> GetCaseTypeGroup()
         {
             return httpClient.GetJsonAsync<List<string>>($"{userSession.baseUri}api/ChapterManagement/GetCaseTypeGroup");

@@ -19,6 +19,7 @@ namespace GadjIT.ClientContext.OR_RESI
         {
         }
 
+        public virtual DbSet<CaseTypeGroups> CaseTypeGroups { get; set; }
         public virtual DbSet<CaseTypes> CaseTypes { get; set; }
         public virtual DbSet<DmDocuments> DmDocuments { get; set; }
         public virtual DbSet<DmDocumentsPermissions> DmDocumentsPermissions { get; set; }
@@ -37,6 +38,22 @@ namespace GadjIT.ClientContext.OR_RESI
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<CaseTypeGroups>(entity =>
+            {
+                entity.HasKey(e => e.Id)
+                    .IsClustered(false);
+
+                entity.HasIndex(e => e.Name)
+                    .HasName("UC_CaseTypeGroups_Name")
+                    .IsUnique();
+
+                entity.Property(e => e.Cmtemplates).IsUnicode(false);
+
+                entity.Property(e => e.Department).IsUnicode(false);
+
+                entity.Property(e => e.Name).IsUnicode(false);
+            });
+
             modelBuilder.Entity<CaseTypes>(entity =>
             {
                 entity.HasKey(e => e.Code)

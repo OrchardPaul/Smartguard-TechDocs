@@ -29,6 +29,7 @@ namespace GadjIT.ClientAPI.Repository.OR_RESI
         Task<UsrOrDefChapterManagement> Update(UsrOrDefChapterManagement item);
         Task<List<UsrOrDefChapterManagement>> UpdateCaseType(string newCaseType, string originalCaseType, string caseTypeGroup);
         Task<List<UsrOrDefChapterManagement>> UpdateCaseTypeGroups(string newCaseTypeGroup, string originalCaseTypeGroup);
+        Task<List<DmDocuments>> GetDocumentListByCaseTypeGroupRef(int caseTypeGroupRef);
     }
 
     public class OR_RESI_Chapters_Service : IOR_RESI_Chapters_Service
@@ -275,6 +276,19 @@ namespace GadjIT.ClientAPI.Repository.OR_RESI
                                 D => D.Code,
                                 Dm => Dm.Doccode,
                                 (D, Dm) => new { Name = D, DmDocumentsPermissions = Dm })
+                            .Select(x => x.Name)
+                            .ToListAsync();
+
+        }
+
+        public async Task<List<DmDocuments>> GetDocumentListByCaseTypeGroupRef(int caseTypeGroupRef)
+        {
+            return await _context.DmDocuments
+                            .Join(_context.DmDocumentsPermissions,
+                                D => D.Code,
+                                Dm => Dm.Doccode,
+                                (D, Dm) => new { Name = D, DmDocumentsPermissions = Dm })
+                            .Where(x => x.Name.CaseTypeGroupRef == caseTypeGroupRef)
                             .Select(x => x.Name)
                             .ToListAsync();
 

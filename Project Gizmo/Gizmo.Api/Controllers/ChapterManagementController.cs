@@ -111,6 +111,19 @@ namespace GadjIT.ClientAPI.Controllers
             }
         }
 
+        [HttpGet("{caseTypeGroupRef:int}")]
+        public async Task<ActionResult> GetDocumentListByCaseTypeGroupRef(int caseTypeGroupRef)
+        {
+            try
+            {
+                return Ok(await chapterRepository.GetDocumentListByCaseTypeGroupRef(caseTypeGroupRef));
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
         [HttpGet("{casetypegroup}/{casetype}/{chapterName}")]
         public async Task<ActionResult> GetItemListByChapterName(string casetypegroup, string casetype, string chapterName)
         {
