@@ -129,7 +129,7 @@ else
             <a href="javascript: void(0);" @onclick="SelectHome"><span class="col-alt fa fa-angle-double-left"></span></a>
         </div>
         <h3>Chapter: @selectedChapter</h3>
-        <p>System: <kbd class="mr-3">@sessionState.selectedSystem</kbd> Case Type Group: <kbd class="mr-3">@selectedCaseTypeGroup</kbd> Case Type: <kbd class="mr-3">@selectedCaseType</kbd> Chapter: <kbd class="mr-3"> @selectedChapter</kbd></p>
+        <p>Group: <span class="badge badge-grey mr-3">@selectedCaseTypeGroup</span> Case Type: <span class="badge badge-grey mr-3">@selectedCaseType</span> Chapter: <span class="badge badge-grey mr-3"> @selectedChapter</span></p>
     </div>
 
     <div class="tran-block rounded">
@@ -174,9 +174,10 @@ else
                     <div class="mb-3 flex-box">
                         @if (sessionState.isAdminUser)
                         {
-                            <div>
-                                <button @onclick='() => PrepareForInsert(navDisplay,"Doc")' class="btn btn-main btn-shadow" title="Add new document/step"><i class="fa fa-plus"></i></button>
-                            </div>
+                        <div class="grid-actions">
+                            <button @onclick='() => PrepareForInsert(navDisplay)' class="btn btn-main btn-shadow" title="Add new document/step"><i class="fa fa-plus"></i></button>
+                            <button @onclick='() => CondenseSeq(lstDocs)' class="btn btn-main btn-shadow" title="Re-order Sequence Numbers"><i class="fa fa-sort-numeric-down"></i></button>
+                        </div>
                         }
                         <div class="pt-1">
                         <ModalTooltip Direction="top" Text="Documents and steps to be made available in the chapter for inserting into the case agenda!">
@@ -226,7 +227,7 @@ else
                                                 <span class="fa fa-ellipsis-v"></span>
                                                 <div class="ellipsis-menu">
                                                     <ul>
-                                                        <li class="col-main" @onclick='(() => PrepareForEdit(doc, "Docs"))'>
+                                                        <li class="col-main" @onclick='(() => PrepareForEdit(doc, "Steps and Documents"))'>
                                                             <span class="fa fa-pencil-alt mr-2" ></span>
                                                             <span class="col-black">Edit</span>
                                                         </li>
@@ -429,9 +430,11 @@ else
                     <div class="mb-3 flex-box">
                         @if (sessionState.isAdminUser)
                         {
-                            <div>
-                                <button @onclick='() => PrepareFeesForEdit()' class="btn btn-main btn-shadow" title="Add new fee"><i class="fa fa-plus"></i></button>
-                            </div>
+                        <div class="grid-actions">
+                            <button @onclick='() => PrepareFeesForEdit()' class="btn btn-main btn-shadow" title="Change selected fees"><i class="fa fa-pencil-alt"></i></button>
+                            <button @onclick='() => CondenseSeq(lstFees)' class="btn btn-main btn-shadow" title="Re-order Sequence Numbers"><i class="fa fa-sort-numeric-down"></i></button>
+
+                        </div>
                         }
                     <div class="pt-1">
                         <ModalTooltip Direction="top" Text="Fees to be made available in the chapter. Default values will be automatically calculated where possible.">

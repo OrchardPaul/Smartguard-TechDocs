@@ -93,14 +93,13 @@
     color: #CCC !important;
 }
 
-.sidebar .nav-item a {
-    border-radius: 0px;
-    height: 2.5rem;
+.sidebar .nav-item .nav-link span, .sidebar .nav-item .nav-link svg {
+    margin-right: 10px;
 }
 
 .sidebar .nav-item a.active {
     color: #000 !important;
-    background-color: #fff;
+    background-color: #666;
     font-weight: bold;
 }
 
