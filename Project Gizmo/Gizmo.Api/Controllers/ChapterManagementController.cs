@@ -7,6 +7,7 @@ using GadjIT.ClientAPI.Repository.OR_RESI;
 using Microsoft.AspNetCore.Http;
 using System.Net.Http;
 using GadjIT.ClientContext.OR_RESI;
+using GadjIT.ClientContext.OR_RESI.Custom;
 
 namespace GadjIT.ClientAPI.Controllers
 {
@@ -56,7 +57,20 @@ namespace GadjIT.ClientAPI.Controllers
             }
             catch (Exception)
             {
-                return StatusCode(StatusCodes.Status406NotAcceptable);
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpGet("{caseTypeGroup}/{caseType}")]
+        public async Task<ActionResult> GetFeeDefs(string caseTypeGroup, string caseType)
+        {
+            try
+            {
+                return Ok(await chapterRepository.GetFeeDefs(caseTypeGroup,caseType));
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
 
@@ -189,6 +203,19 @@ namespace GadjIT.ClientAPI.Controllers
                 }
 
                 return await chapterRepository.Update(item);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error Updating Data");
+            }
+        }
+
+        [HttpPut("{ChapterId:int}")]
+        public async Task<ActionResult<List<VmChapterFee>>> UpdateChapterFees(int ChapterId, List<VmChapterFee> vmChapterFees)
+        {
+            try
+            {
+                return await chapterRepository.UpdateChapterFees(ChapterId,vmChapterFees);
             }
             catch (Exception)
             {

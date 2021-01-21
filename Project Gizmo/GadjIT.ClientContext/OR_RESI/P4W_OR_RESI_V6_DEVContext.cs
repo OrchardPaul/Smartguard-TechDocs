@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using GadjIT.ClientContext.OR_RESI.Functions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
@@ -27,6 +29,12 @@ namespace GadjIT.ClientContext.OR_RESI
         public virtual DbSet<UsrOrResiMtChapterControl> UsrOrResiMtChapterControl { get; set; }
         public virtual DbSet<UsrOrResiMtFees> UsrOrResiMtFees { get; set; }
 
+        //public DbSet<fnORCHAGetFeeDefinitions> fnORCHAGetFeeDefinitions { get; set; }
+
+       
+        public IQueryable<fnORCHAGetFeeDefinitions> fnORCHAGetFeeDefinitions(string Group, string CaseType) =>
+                Set<fnORCHAGetFeeDefinitions>().FromSqlInterpolated($"select * from fn_OR_CHA_GetFeeDefinitions({Group},{CaseType})");
+       
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
@@ -38,6 +46,8 @@ namespace GadjIT.ClientContext.OR_RESI
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<fnORCHAGetFeeDefinitions>().HasNoKey().ToView(null);
+
             modelBuilder.Entity<CaseTypeGroups>(entity =>
             {
                 entity.HasKey(e => e.Id)

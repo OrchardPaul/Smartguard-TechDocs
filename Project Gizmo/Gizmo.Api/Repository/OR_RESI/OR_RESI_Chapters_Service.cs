@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using GadjIT.ClientContext.OR_RESI;
+using GadjIT.ClientContext.OR_RESI.Functions;
+using GadjIT.ClientContext.OR_RESI.Custom;
 
 namespace GadjIT.ClientAPI.Repository.OR_RESI
 {
@@ -30,6 +32,8 @@ namespace GadjIT.ClientAPI.Repository.OR_RESI
         Task<List<UsrOrDefChapterManagement>> UpdateCaseType(string newCaseType, string originalCaseType, string caseTypeGroup);
         Task<List<UsrOrDefChapterManagement>> UpdateCaseTypeGroups(string newCaseTypeGroup, string originalCaseTypeGroup);
         Task<List<DmDocuments>> GetDocumentListByCaseTypeGroupRef(int caseTypeGroupRef);
+        Task<List<fnORCHAGetFeeDefinitions>> GetFeeDefs(string caseTypeGroup, string caseType);
+        Task<List<VmChapterFee>> UpdateChapterFees(int ChapterId, List<VmChapterFee> vmChapterFees);
     }
 
     public class OR_RESI_Chapters_Service : IOR_RESI_Chapters_Service
@@ -39,6 +43,11 @@ namespace GadjIT.ClientAPI.Repository.OR_RESI
         public OR_RESI_Chapters_Service(P4W_OR_RESI_V6_DEVContext context)
         {
             _context = context;
+        }
+
+        public async Task<List<fnORCHAGetFeeDefinitions>> GetFeeDefs(string caseTypeGroup, string caseType)
+        {
+            return await _context.fnORCHAGetFeeDefinitions(caseTypeGroup, caseType).ToListAsync();
         }
 
         public async Task<List<UsrOrDefChapterManagement>> GetAllChapters()
@@ -108,6 +117,53 @@ namespace GadjIT.ClientAPI.Repository.OR_RESI
             }
 
             return updatedItems;
+        }
+
+        public async Task<List<VmChapterFee>> UpdateChapterFees(int ChapterId, List<VmChapterFee> vmChapterFees)
+        {
+            bool change = false;
+
+            var existingItems = await _context.UsrOrDefChapterManagement
+                                                .Where(C => C.ParentId == ChapterId)
+                                                .Where(C => C.Type == "Fee")
+                                                .ToListAsync();
+
+            var itemsToAdd = vmChapterFees
+                                .Where(C => C.selected)
+                                .Where(C => !existingItems
+                                                .Select(E => E.Name)
+                                                .ToList()
+                                                .Contains(C.FeeItem.Name))
+                                .Select(C => C.FeeItem)
+                                .ToList();
+
+            var itemsToRemove = existingItems
+                                    .Where(C => vmChapterFees
+                                                    .Where(V => !V.selected)
+                                                    .Select(V => V.FeeItem.Name)
+                                                    .ToList()
+                                                    .Contains(C.Name))
+                                    .ToList();
+
+
+            if (itemsToAdd.Count() > 0)
+            {
+                _context.UsrOrDefChapterManagement.AddRange(itemsToAdd);
+                change = true;
+            }
+
+            if (itemsToRemove.Count() > 0)
+            {
+                _context.UsrOrDefChapterManagement.RemoveRange(itemsToRemove);
+                change = true;
+            }
+
+            if (change)
+            {
+                await _context.SaveChangesAsync();
+            }
+
+            return vmChapterFees;
         }
 
         public async Task<UsrOrDefChapterManagement> DeleteChapter(int id)

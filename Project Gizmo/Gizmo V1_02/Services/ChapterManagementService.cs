@@ -1,4 +1,6 @@
 ﻿using GadjIT.ClientContext.OR_RESI;
+using GadjIT.ClientContext.OR_RESI.Custom;
+using GadjIT.ClientContext.OR_RESI.Functions;
 using Gizmo_V1_02.Services.SessionState;
 using Microsoft.AspNetCore.Components;
 using System;
@@ -25,6 +27,8 @@ namespace Gizmo_V1_02.Services
         Task<UsrOrDefChapterManagement> Update(UsrOrDefChapterManagement item);
         Task<List<UsrOrDefChapterManagement>> UpdateCaseType(string newCaseTypeName, string originalCaseTypeName, string caseTypeGroup);
         Task<List<UsrOrDefChapterManagement>> UpdateCaseTypeGroups(string newCaseTypeGroupName, string originalCaseTypeGroupName);
+        Task<List<fnORCHAGetFeeDefinitions>> GetFeeDefs(string caseTypeGroup, string caseType);
+        Task<List<VmChapterFee>> UpdateChapterFees(int ChapterId, List<VmChapterFee> vmChapterFees);
     }
 
     public class ChapterManagementService : IChapterManagementService
@@ -48,6 +52,12 @@ namespace Gizmo_V1_02.Services
         {
             return httpClient.PutJsonAsync<UsrOrDefChapterManagement>($"{userSession.baseUri}api/ChapterManagement/Update/{item.Id}", item);
         }
+
+        public Task<List<VmChapterFee>> UpdateChapterFees(int ChapterId, List<VmChapterFee> vmChapterFees)
+        {
+            return httpClient.PutJsonAsync<List<VmChapterFee>>($"{userSession.baseUri}api/ChapterManagement/UpdateChapterFees/{ChapterId}",vmChapterFees);
+        }
+
 
         public Task<List<UsrOrDefChapterManagement>> UpdateCaseType(string newCaseTypeName, string originalCaseTypeName, string caseTypeGroup)
         {
@@ -75,6 +85,11 @@ namespace Gizmo_V1_02.Services
         public Task<List<UsrOrDefChapterManagement>> GetAllChapters()
         {
             return httpClient.GetJsonAsync<List<UsrOrDefChapterManagement>>($"{userSession.baseUri}api/ChapterManagement/GetAllChapters");
+        }
+
+        public Task<List<fnORCHAGetFeeDefinitions>> GetFeeDefs(string caseTypeGroup, string caseType)
+        {
+            return httpClient.GetJsonAsync<List<fnORCHAGetFeeDefinitions>>($"{userSession.baseUri}api/ChapterManagement/GetFeeDefs/{caseTypeGroup}/{caseType}");
         }
 
         public Task<List<UsrOrDefChapterManagement>> GetItemListByChapter(int chapterId)
