@@ -427,15 +427,11 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
 
 
             }
-            else
-            {
-                CondenseSeq(lstItems);
-            }
-
+            
             RefreshChapterItems(listType);
         }
 
-        private async void CondenseSeq(List<VmUsrOrDefChapterManagement> lstItems)
+        protected async void CondenseSeq(List<VmUsrOrDefChapterManagement> lstItems)
         {
             int seqNo = 0;
 
@@ -446,6 +442,8 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
 
                 await chapterManagementService.Update(item.ChapterObject);
             }
+
+            StateHasChanged();
 
         }
 
