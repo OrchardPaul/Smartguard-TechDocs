@@ -12,6 +12,23 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
 {
     public partial class ChapterDetail : ComponentBase
     {
+        public bool suppressStep
+        {
+            get { return (TaskObject.SuppressStep == "Y" ? true : false); }
+            set
+            {
+                if (value)
+                {
+                    TaskObject.SuppressStep = "Y";
+                }
+                else
+                {
+                    TaskObject.SuppressStep = "N";
+                }
+            }
+        }
+
+
         [CascadingParameter]
         BlazoredModalInstance ModalInstance { get; set; }
 
@@ -35,6 +52,11 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
 
         [Parameter]
         public List<DmDocuments> dropDownChapterList { get; set; }
+
+        [Parameter]
+        public List<CaseTypeGroups> CaseTypeGroups { get; set; }
+
+        private int selectedCaseTypeGroup { get; set; } = -1;
 
         List<string> DocTypeList = new List<string>() { "Chapter", "Doc", "Form", "Letter", "Step" };
 
@@ -62,6 +84,18 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
             DataChanged?.Invoke();
             Close();
 
+        }
+
+        private void SuppressChange(object value)
+        {
+            if ((bool)value)
+            {
+                TaskObject.SuppressStep = "Y";
+            }
+            else
+            {
+                TaskObject.SuppressStep = "N";
+            }
         }
 
     }

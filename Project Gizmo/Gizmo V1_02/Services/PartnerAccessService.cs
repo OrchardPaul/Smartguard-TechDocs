@@ -10,6 +10,7 @@ namespace Gizmo_V1_02.Services
     public interface IPartnerAccessService
     {
         Task<List<CaseTypes>> GetPartnerCaseTypes();
+        Task<List<CaseTypeGroups>> GetPartnerCaseTypeGroups();
     }
 
     public class PartnerAccessService : IPartnerAccessService
@@ -26,6 +27,20 @@ namespace Gizmo_V1_02.Services
         public Task<List<CaseTypes>> GetPartnerCaseTypes()
         {
             var result = httpClient.GetJsonAsync<List<CaseTypes>>($"{userSession.baseUri}api/PartnerAccess/GetAllCaseTypes");
+
+            if (result.Exception is null)
+            {
+                return result;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public Task<List<CaseTypeGroups>> GetPartnerCaseTypeGroups()
+        {
+            var result = httpClient.GetJsonAsync<List<CaseTypeGroups>>($"{userSession.baseUri}api/PartnerAccess/GetAllCaseTypeGroups");
 
             if (result.Exception is null)
             {

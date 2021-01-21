@@ -25,6 +25,10 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
         [Inject]
         private IChapterManagementService chapterManagementService { get; set; }
 
+
+        [Inject]
+        private IPartnerAccessService partnerAccessService { get; set; }
+
         [Inject]
         public NavigationManager NavigationManager { get; set; }
 
@@ -43,7 +47,7 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
 
 
         public List<DmDocuments> dropDownChapterList;
-
+        public List<CaseTypeGroups> partnerCaseTypeGroups;
 
         public string editCaseType { get; set; } = "";
         public string isCaseTypeOrGroup { get; set; } = "";
@@ -94,18 +98,16 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
                 gotLock = sessionState.Lock;
             }
 
+            try
+            {
+                RefreshChapters();
+                partnerCaseTypeGroups = await partnerAccessService.GetPartnerCaseTypeGroups();
+            }
+            catch (Exception)
+            {
+                NavigationManager.NavigateTo($"/", true);
+            }
 
-            //if (authenticationState)
-            //{
-                try
-                {
-                    RefreshChapters();
-                }
-                catch(Exception)
-                {
-                    NavigationManager.NavigateTo($"/", true);
-                }
-            //}
 
         }
 
@@ -301,12 +303,13 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
             ShowChapterDetailModal();
         }
 
-        private void PrepareForInsert(string header)
+        private void PrepareForInsert(string header, string type)
         {
             selectedList = header;
 
             editObject = new VmUsrOrDefChapterManagement { ChapterObject = new UsrOrDefChapterManagement() };
             editObject.ChapterObject.CaseType = "";
+            editObject.ChapterObject.Type = type;
             editObject.ChapterObject.CaseTypeGroup = "";
             editObject.ChapterObject.SeqNo = lstAll
                                                 .OrderByDescending(A => A.ChapterObject.SeqNo)
@@ -365,16 +368,6 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
             }
         }
 
-        private void PrepareModalInfoDisplay(string modalHeader
-                                                , string modalText
-                                                , string modalHeight
-                                                , string modalWidth)
-        {
-            ModalInfoHeader = modalHeader;
-            ModalInfoText = modalText;
-            ModalHeight = modalHeight;
-            ModalWidth = modalWidth;
-        }
 
         protected void ShowNav(string displayChange)
         {
@@ -484,6 +477,7 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
             parameters.Add("selectedCaseType", selectedCaseType);
             parameters.Add("selectedList", selectedList);
             parameters.Add("dropDownChapterList", dropDownChapterList);
+            parameters.Add("CaseTypeGroups", partnerCaseTypeGroups);
 
             Modal.Show<ChapterDetail>(selectedList, parameters);
         }

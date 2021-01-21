@@ -8,6 +8,7 @@ namespace GadjIT.ClientAPI.Repository.OR_RESI
     public interface IPartner_Access_Service
     {
         Task<List<CaseTypes>> GetAllCaseTypes();
+        Task<List<CaseTypeGroups>> GetAllCaseTypeGroups();
     }
 
     public class Partner_Access_Service : IPartner_Access_Service
@@ -22,6 +23,11 @@ namespace GadjIT.ClientAPI.Repository.OR_RESI
         public async Task<List<CaseTypes>> GetAllCaseTypes()
         {
             return await context.CaseTypes.ToListAsync();
+        }
+
+        public async Task<List<CaseTypeGroups>> GetAllCaseTypeGroups()
+        {
+            return await context.CaseTypeGroups.ToListAsync();
         }
 
     }
