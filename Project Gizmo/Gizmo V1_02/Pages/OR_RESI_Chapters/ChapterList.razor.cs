@@ -14,6 +14,7 @@ using Blazored.Modal.Services;
 using Blazored.Modal;
 using Gizmo_V1_02.Pages.Shared.Modals;
 using GadjIT.ClientContext.OR_RESI.Custom;
+using GadjIT.ClientContext.OR_RESI.Functions;
 
 namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
 {
@@ -42,12 +43,14 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
 
         private List<VmUsrOrDefChapterManagement> lstAgendas { get; set; } = new List<VmUsrOrDefChapterManagement>();
         private List<VmUsrOrDefChapterManagement> lstFees { get; set; } = new List<VmUsrOrDefChapterManagement>();
+        private List<VmChapterFee> lstVmFeeModalItems { get; set; } = new List<VmChapterFee>();
         private List<VmUsrOrDefChapterManagement> lstDocs { get; set; } = new List<VmUsrOrDefChapterManagement>();
         private List<VmUsrOrDefChapterManagement> lstStatus { get; set; } = new List<VmUsrOrDefChapterManagement>();
 
 
         public List<DmDocuments> dropDownChapterList;
         public List<CaseTypeGroups> partnerCaseTypeGroups;
+        public List<fnORCHAGetFeeDefinitions> feeDefinitions;
 
         public string editCaseType { get; set; } = "";
         public string isCaseTypeOrGroup { get; set; } = "";
@@ -162,6 +165,8 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
             var lst = await chapterManagementService.GetItemListByChapter(selectedChapterId);
 
             lstAll = lst.Select(A => new VmUsrOrDefChapterManagement { ChapterObject = A }).ToList();
+            feeDefinitions = await chapterManagementService.GetFeeDefs(selectedCaseTypeGroup, selectedCaseType);
+
 
             if (listType == "Agenda" | listType == "All")
             {
@@ -182,10 +187,38 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
             if (listType == "Fees" | listType == "All")
             {
                 lstFees = lstAll
-                                    .OrderBy(A => A.ChapterObject.SeqNo)
-                                    .Where(A => A.ChapterObject.Type == "Fee")
-                                    .ToList();
-                
+                                .OrderBy(A => A.ChapterObject.SeqNo)
+                                .Where(A => A.ChapterObject.Type == "Fee")
+                                .ToList();
+
+                lstVmFeeModalItems = feeDefinitions
+                                        .Select(FD => new VmChapterFee
+                                        {
+                                            FeeItem = lstFees
+                                                            .Where(F => FD.FeeDesc == F.ChapterObject.Name)
+                                                            .SingleOrDefault() is null
+                                                            ? new UsrOrDefChapterManagement 
+                                                                { 
+                                                                    ParentId = selectedChapterId,
+                                                                    Name = FD.FeeDesc,
+                                                                    Type = "Fee",
+                                                                    CaseType = "",
+                                                                    CaseTypeGroup = "",
+                                                                    CompleteName = ""
+                                                                } 
+                                                            : lstFees
+                                                                .Where(F => FD.FeeDesc == F.ChapterObject.Name)
+                                                                .Select(F => F.ChapterObject)
+                                                                .SingleOrDefault(),
+                                            feeDefinition = FD,
+                                            selected = lstFees
+                                                            .Where(F => FD.FeeDesc == F.ChapterObject.Name)
+                                                            .SingleOrDefault() is null
+                                                            ? false : true
+                                        })
+                                        .ToList();
+
+
             }
             if (listType == "Status" | listType == "All")
             {
@@ -301,6 +334,11 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
             editObject = item;
 
             ShowChapterDetailModal();
+        }
+
+        private void PrepareFeesForEdit()
+        {
+            ShowChapterFeesModal();
         }
 
         private void PrepareForInsert(string header, string type)
@@ -482,6 +520,24 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
             parameters.Add("CaseTypeGroups", partnerCaseTypeGroups);
 
             Modal.Show<ChapterDetail>(selectedList, parameters);
+        }
+
+        protected void ShowChapterFeesModal()
+        {
+            Action Action = RefreshSelectedList;
+
+            var parameters = new ModalParameters();
+            parameters.Add("DataChanged", Action);
+            parameters.Add("feeItems", lstVmFeeModalItems);
+            parameters.Add("SeletedChapterId", selectedChapterId);
+
+            var options = new ModalOptions()
+            {
+                Class = "blazored-custom-modal"
+            };
+
+
+            Modal.Show<ChapterFees>("Fees", parameters, options);
         }
 
 
