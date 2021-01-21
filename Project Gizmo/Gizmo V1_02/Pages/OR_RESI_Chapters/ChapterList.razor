@@ -39,10 +39,11 @@ else
                             {
                                 <div class="btn-ellipses float-left">
                                     <span class="fa fa-ellipsis-v"></span>
-                                    <div class="ellipsis-menu ellipsis-menu-left">
+                                    <div class="ellipsis-menu">
                                         <ul>
-                                            <li @onclick='() => PrepareCaseTypeForEdit(caseTypeGroup, "CaseTypeGroup")'>
-                                                <span class="fa fa-pencil-alt mr-2"></span>Edit
+                                            <li class="col-main" @onclick='() => PrepareCaseTypeForEdit(caseTypeGroup, "CaseTypeGroup")'>
+                                                <span class="fa fa-font mr-2"></span>
+                                                <span >Rename</span>
                                             </li>
 
                                         </ul>
@@ -76,18 +77,18 @@ else
                                     {
                                         <div class="btn-ellipses float-left">
                                             <span class="fa fa-ellipsis-v"></span>
-                                            <div class="ellipsis-menu ellipsis-menu-left">
+                                            <div class="ellipsis-menu">
                                                 <ul>
-                                                    <li @onclick='() => PrepareCaseTypeForEdit(caseType, "CaseType")'>
+                                                    <li class="col-main" @onclick='() => PrepareCaseTypeForEdit(caseType, "CaseType")'>
 
-                                                        <span class="fa fa-pencil-alt mr-2"></span>Edit
+                                                        <span class="fa fa-font mr-2"></span>
+                                                        <span >Rename</span>
 
                                                     </li>
 
                                                 </ul>
                                             </div>
                                         </div>
-                                        @*<div class="col-1 data-item-edit"><button class="btn btn-edit" @onclick='() => PrepareCaseTypeForEdit(caseType, "CaseType")' value=""><i class="fa fa-pencil-alt"></i></button></div>*@
                                     }
                                     <div class="data-item-sub"><span class="fa fa-folder-open mr-2"></span>@caseType</div>
                                     <div class="data-item-right col-alt "><div class="link-direction @(caseType == selectedCaseType ? "triangle-up col-grey" : "triangle-down")"></div></div>
@@ -99,12 +100,43 @@ else
                             {
                                 @foreach (var Chapter in lstChapters.Where(C => C.CaseType == selectedCaseType).Where(C => C.Type == "Chapter").ToList())
                                 {
-                                    <div class="grid-row-sm nav-row-3">
+                                    <div class="grid-row-md nav-row-3">
                                         <div class="data-item-nav " @onclick="() => SelectChapter(Chapter.Name,Chapter.Id)" title="Chapter: click to configure @Chapter.Name">
+                                            @if (sessionState.isAdminUser)
+                                            {
+                                                <div class="btn-ellipses float-left">
+                                                    <span class="fa fa-ellipsis-v"></span>
+                                                    <div class="ellipsis-menu">
+                                                        <ul>
+                                                            <li class="col-main" @onclick='() => PrepareCaseTypeForEdit(caseType, "CaseType")' title="">
+                                                                <span class="fa fa-arrow-up mr-2"></span>
+                                                                <span>Move Up</span>
+                                                            </li>
+                                                            <li class="col-main" @onclick='() => PrepareCaseTypeForEdit(caseType, "CaseType")' title="">
+                                                                <span class="fa fa-arrow-down mr-2"></span>
+                                                                <span>Move Down</span>
+                                                            </li>
+                                                            <li class="col-main" @onclick='() => PrepareCaseTypeForEdit(caseType, "CaseType")' title="">
+                                                                <span class="fa fa-font mr-2"></span>
+                                                                <span>Rename</span>
+                                                            </li>
+                                                            <li class="col-main" @onclick="() => SelectChapter(Chapter.Name,Chapter.Id)" title="">
+                                                                <span class="fa fa-pencil-alt mr-2"></span>
+                                                                <span>Edit</span>
+                                                            </li>
+                                                            <li class="col-red" @onclick='() => PrepareCaseTypeForEdit(caseType, "CaseType")' title="">
+                                                                <span class="fa fa-trash-alt mr-2"></span>
+                                                                <span>Delete</span>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            }
                                             <div class="data-item-sub">
                                                 <span class=" fa fa-share-alt-square mr-2"></span>
                                                 @Chapter.Name
                                             </div>
+
                                             <div class="data-item-right col-alt "><div class="link-direction fa fa-chevron-circle-right"></div></div>
                                         </div>
                                     </div>
@@ -175,7 +207,7 @@ else
                         @if (sessionState.isAdminUser)
                         {
                         <div class="grid-actions">
-                            <button @onclick='() => PrepareForInsert(navDisplay)' class="btn btn-main btn-shadow" title="Add new document/step"><i class="fa fa-plus"></i></button>
+                            <button @onclick='() => PrepareForInsert(navDisplay,"Doc")' class="btn btn-main btn-shadow" title="Add new document/step"><i class="fa fa-plus"></i></button>
                             <button @onclick='() => CondenseSeq(lstDocs)' class="btn btn-main btn-shadow" title="Re-order Sequence Numbers"><i class="fa fa-sort-numeric-down"></i></button>
                         </div>
                         }
@@ -229,11 +261,11 @@ else
                                                     <ul>
                                                         <li class="col-main" @onclick='(() => PrepareForEdit(doc, "Steps and Documents"))'>
                                                             <span class="fa fa-pencil-alt mr-2" ></span>
-                                                            <span class="col-black">Edit</span>
+                                                            <span >Edit</span>
                                                         </li>
                                                         <li class="col-red" @onclick="() => PrepareChapterDetailDelete(doc)">
                                                             <span class="fa fa-trash-alt mr-2" ></span>
-                                                            <span class="col-black">Delete</span>
+                                                            <span >Delete</span>
                                                         </li>
 
                                                     </ul>
@@ -267,9 +299,9 @@ else
                                             <span class="fa fa-file mr-2"></span> @doc.ChapterObject.Name
                                         </div>
                                         <div class="data-item-right mr-2 seq-change">
-                                            <div><a href="javascript: void(0);" @onclick='() => MoveSeq(doc.ChapterObject,"Docs","Up")'><span class="fa fa-angle-up"></span></a></div>
+                                            <div @onclick='() => MoveSeq(doc.ChapterObject,"Docs","Up")'><span class="fa fa-angle-up"></span></div>
                                             <div class="seq-no">@doc.ChapterObject.SeqNo</div>
-                                            <div><a href="javascript: void(0);" @onclick='() => MoveSeq(doc.ChapterObject,"Docs","Down")'><span class="fa fa-angle-down"></span></a></div>
+                                            <div @onclick='() => MoveSeq(doc.ChapterObject,"Docs","Down")'><span class="fa fa-angle-down"></span></div>
                                         </div>
                                     }
                                     else
@@ -372,11 +404,11 @@ else
                                                     <ul>
                                                         <li class="col-main" @onclick='(() => PrepareForEdit(agenda, "Agenda"))'>
                                                             <span class="fa fa-pencil-alt mr-2"></span>
-                                                            <span class="col-black">Edit</span>
+                                                            <span >Edit</span>
                                                         </li>
                                                         <li class="col-red" @onclick="() => PrepareChapterDetailDelete(agenda)">
                                                             <span class="fa fa-trash-alt mr-2"></span>
-                                                            <span class="col-black">Delete</span>
+                                                            <span >Delete</span>
                                                         </li>
 
                                                     </ul>
@@ -431,7 +463,7 @@ else
                         @if (sessionState.isAdminUser)
                         {
                         <div class="grid-actions">
-                            <button @onclick='() => PrepareForInsert(navDisplay)' class="btn btn-main btn-shadow" title="Change selected fees"><i class="fa fa-pencil-alt"></i></button>
+                            <button @onclick='() => PrepareForInsert(navDisplay, "Fee")' class="btn btn-main btn-shadow" title="Change selected fees"><i class="fa fa-pencil-alt"></i></button>
                             <button @onclick='() => CondenseSeq(lstFees)' class="btn btn-main btn-shadow" title="Re-order Sequence Numbers"><i class="fa fa-sort-numeric-down"></i></button>
 
                         </div>
@@ -467,11 +499,11 @@ else
                                                     <ul>
                                                         <li class="col-main" @onclick='(() => PrepareForEdit(fee, "Fees"))'>
                                                             <span class="fa fa-pencil-alt mr-2"></span>
-                                                            <span class="col-black">Edit</span>
+                                                            <span >Edit</span>
                                                         </li>
                                                         <li class="col-red" @onclick="() => PrepareChapterDetailDelete(fee)">
                                                             <span class="fa fa-trash-alt mr-2"></span>
-                                                            <span class="col-black">Delete</span>
+                                                            <span >Delete</span>
                                                         </li>
 
                                                     </ul>
@@ -506,9 +538,9 @@ else
                                             <span class="fa fa-file mr-2"></span> @fee.ChapterObject.Name
                                         </div>
                                         <div class="data-item-right mr-2 seq-change">
-                                            <div><a href="javascript: void(0);" @onclick='() => MoveSeq(fee.ChapterObject,"Fees", "Up")'><span class="fa fa-angle-up"></span></a></div>
+                                            <div @onclick='() => MoveSeq(fee.ChapterObject,"Fees", "Up")'><span class="fa fa-angle-up"></span></div>
                                             <div class="seq-no">@fee.ChapterObject.SeqNo</div>
-                                            <div><a href="javascript: void(0);" @onclick='() => MoveSeq(fee.ChapterObject,"Fees", "Down")'><span class="fa fa-angle-down"></span></a></div>
+                                            <div @onclick='() => MoveSeq(fee.ChapterObject,"Fees", "Down")'><span class="fa fa-angle-down"></span></div>
                                         </div>
                                     }
                                     else
@@ -572,11 +604,11 @@ else
                                                     <ul>
                                                         <li class="col-main" @onclick='(() => PrepareForEdit(status, "Status"))'>
                                                             <span class="fa fa-pencil-alt mr-2"></span>
-                                                            <span class="col-black">Edit</span>
+                                                            <span >Edit</span>
                                                         </li>
                                                         <li class="col-red" @onclick="() => PrepareChapterDetailDelete(status)">
                                                             <span class="fa fa-trash-alt mr-2"></span>
-                                                            <span class="col-black">Delete</span>
+                                                            <span >Delete</span>
                                                         </li>
 
                                                     </ul>
