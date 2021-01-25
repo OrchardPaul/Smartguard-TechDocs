@@ -88,7 +88,7 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
 
         public bool compareSystems = false;
 
-        private string RowChangedClass { get; set; } = "row-changed";
+        private string RowChangedClass { get; set; } = "row-changed-nav3";
        
 
         public bool displaySpinner = true;
@@ -664,19 +664,19 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
         {
             switch (RowChangedClass)
             {
-                case "row-changed":
-                    RowChangedClass = "row-changedx";
+                case "row-changed-nav3":
+                    RowChangedClass = "row-changed-nav3x";
                     break;
-                case "row-changedx":
-                    RowChangedClass = "row-changedxx";
+                case "row-changed-nav3x":
+                    RowChangedClass = "row-changed-nav3xx";
                     break;
-                case "row-changedxx":
-                    RowChangedClass = "row-changed";
+                default:
+                    RowChangedClass = "row-changed-nav3";
                     break;
             }
 
-            
             return RowChangedClass;
+
         }
     }
 }

@@ -260,7 +260,7 @@ else
                             @foreach (var doc in lstDocs)
                             {
 
-                                <div class="row grid-row grid-row-lg @(rowChanged == doc.ChapterObject.SeqNo ? ToggleRowChangedClass() : "" )">
+                                <div class="row grid-row grid-row-lg @(rowChanged == doc.ChapterObject.SeqNo ? "row-changed" : "" )">
                                     <div class="col-12 col-xl-4 data-item">
 
                                         @if (sessionState.isAdminUser)
