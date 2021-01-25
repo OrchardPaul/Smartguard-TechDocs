@@ -59,8 +59,9 @@
     .btn-edit:hover { background-color: @colMain !important; color: @colMainContr; }
     .btn-edit:active:focus {box-shadow: 0 0 0 0.2rem rgba(@rgbColAlt, 0.5);}
     .grid-can-edit .grid-row:hover .btn-ellipses { color: @colMain !important}
-    .grid-can-edit .grid-row:hover .seq-change div:first-of-type 
-            ,.grid-can-edit .grid-row:hover .seq-change div:last-of-type{ color: @colMain !important}
+    div[class*="grid-row"]:hover .seq-change div:first-of-type
+            ,div[class*="grid-row"]:hover .seq-change div:last-of-type{ color: @colMain !important}
+    div[class*="grid-row"]:hover .link-direction {color: @colAlt;}
     .grid-tran .btn-edit { background-color: #FFF; color: @colMain }
     .grid-tran .btn-edit:hover { background-color: @colMain; color: @colMainContr; }
     .grid-tran .data-item-main { background-color: rgba(@rgbColMain, 0.7); border-color: rgba(@rgbColMain, 0.7);}

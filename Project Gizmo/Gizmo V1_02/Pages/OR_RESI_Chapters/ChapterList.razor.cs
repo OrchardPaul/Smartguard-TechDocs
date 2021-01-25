@@ -35,7 +35,8 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
         [Inject]
         public IUserSessionState sessionState { get; set; }
 
-        private List<UsrOrDefChapterManagement> lstChapters;
+        //private List<UsrOrDefChapterManagement> lstChapters;
+        private List<VmUsrOrDefChapterManagement> lstChapters { get; set; } = new List<VmUsrOrDefChapterManagement>();
 
         private List<VmUsrOrDefChapterManagement> lstAll { get; set; } = new List<VmUsrOrDefChapterManagement>();
         private List<VmUsrOrDefChapterManagement> lstAltSystemChapterItems { get; set; } = new List<VmUsrOrDefChapterManagement>();
@@ -78,8 +79,11 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
 
         public bool compareSystems = false;
 
+        private string RowChangedClass { get; set; } = "row-changed";
+       
 
         public List<string> lstDocTypes { get; set; } = new List<string> { "Doc", "Letter", "Form", "Email", "Step" };
+
 
         protected override async Task OnInitializedAsync()
         {
@@ -122,6 +126,7 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
         void SelectHome()
         {
             selectedChapter = "";
+            rowChanged = 0;
         }
 
         void SelectCaseTypeGroup(string caseTypeGroup)
@@ -145,6 +150,7 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
             selectedChapterId = chapterID;
             selectedChapter = chapter;
             compareSystems = false;
+            rowChanged = 0;
 
             RefreshChapterItems("All");
 
@@ -152,52 +158,66 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
 
         private async void RefreshChapters()
         {
-            lstChapters = await chapterManagementService.GetAllChapters();
+            var lstC = await chapterManagementService.GetAllChapters();
+            lstChapters = lstC.Select(A => new VmUsrOrDefChapterManagement { ChapterObject = A } ).ToList();
 
             StateHasChanged();
         }
 
         private async void RefreshChapterItems(string listType)
         {
-            var lst = await chapterManagementService.GetItemListByChapter(selectedChapterId);
+           
 
-            lstAll = lst.Select(A => new VmUsrOrDefChapterManagement { ChapterObject = A }).ToList();
-
-            if (listType == "Agenda" | listType == "All")
+            if (listType == "Chapters")
             {
-                lstAgendas = lstAll
-                                    .OrderBy(A => A.ChapterObject.SeqNo)
-                                    .Where(A => A.ChapterObject.Type == "Agenda")
-                                    .ToList();
+
+                var lstC = await chapterManagementService.GetAllChapters();
+                lstChapters = lstC.Select(A => new VmUsrOrDefChapterManagement { ChapterObject = A }).ToList();
 
             }
-            if (listType == "Docs" | listType == "All")
+            else
             {
-                lstDocs = lstAll
-                                    .OrderBy(A => A.ChapterObject.SeqNo)
-                                    .Where(A => lstDocTypes.Contains(A.ChapterObject.Type))
-                                    .ToList();
+                var lst = await chapterManagementService.GetItemListByChapter(selectedChapterId);
 
-            }
-            if (listType == "Fees" | listType == "All")
-            {
-                lstFees = lstAll
-                                    .OrderBy(A => A.ChapterObject.SeqNo)
-                                    .Where(A => A.ChapterObject.Type == "Fee")
-                                    .ToList();
-                
-            }
-            if (listType == "Status" | listType == "All")
-            {
-                lstStatus = lstAll
-                                    .OrderBy(A => A.ChapterObject.SeqNo)
-                                    .Where(A => A.ChapterObject.Type == "Status")
-                                    .ToList();
+                lstAll = lst.Select(A => new VmUsrOrDefChapterManagement { ChapterObject = A }).ToList();
 
-            }
+                if (listType == "Agenda" | listType == "All")
+                {
+                    lstAgendas = lstAll
+                                        .OrderBy(A => A.ChapterObject.SeqNo)
+                                        .Where(A => A.ChapterObject.Type == "Agenda")
+                                        .ToList();
 
+                }
+                if (listType == "Docs" | listType == "All")
+                {
+                    lstDocs = lstAll
+                                        .OrderBy(A => A.ChapterObject.SeqNo)
+                                        .Where(A => lstDocTypes.Contains(A.ChapterObject.Type))
+                                        .ToList();
+
+                }
+                if (listType == "Fees" | listType == "All")
+                {
+                    lstFees = lstAll
+                                        .OrderBy(A => A.ChapterObject.SeqNo)
+                                        .Where(A => A.ChapterObject.Type == "Fee")
+                                        .ToList();
+
+                }
+                if (listType == "Status" | listType == "All")
+                {
+                    lstStatus = lstAll
+                                        .OrderBy(A => A.ChapterObject.SeqNo)
+                                        .Where(A => A.ChapterObject.Type == "Status")
+                                        .ToList();
+
+                }
+            }
 
             StateHasChanged();
+
+            rowChanged = 0;
         }
 
         private async void ToggleComparison()
@@ -406,6 +426,13 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
                 case "Fees":
                     lstItems = lstFees;
                     break;
+                case "Chapters":
+                    lstItems = lstChapters
+                                        .Where(A => A.ChapterObject.CaseTypeGroup == selectedCaseTypeGroup)
+                                        .Where(A => A.ChapterObject.CaseType == selectedCaseType)
+                                        .OrderByDescending(A => A.ChapterObject.SeqNo)
+                                        .ToList();
+                    break;
             }
 
             
@@ -424,8 +451,28 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
             RefreshChapterItems(listType);
         }
 
-        protected async void CondenseSeq(List<VmUsrOrDefChapterManagement> lstItems)
+        protected async void CondenseSeq(string listType )
         {
+
+            var lstItems = new List<VmUsrOrDefChapterManagement>() ;
+
+            switch (listType)
+            {
+                case "Docs":
+                    lstItems = lstDocs;
+                    break;
+                case "Fees":
+                    lstItems = lstFees;
+                    break;
+                case "Chapters":
+                    lstItems = lstChapters
+                                        .Where(A => A.ChapterObject.CaseTypeGroup == selectedCaseTypeGroup)
+                                        .Where(A => A.ChapterObject.CaseType == selectedCaseType)
+                                        .OrderByDescending(A => A.ChapterObject.SeqNo)
+                                        .ToList();
+                    break;
+            }
+
             int seqNo = 0;
 
             foreach (VmUsrOrDefChapterManagement item in lstItems.OrderBy(A => A.ChapterObject.SeqNo))
@@ -527,6 +574,32 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
 
             RefreshChapterItems(navDisplay);
 
+        }
+
+        /// <summary>
+        /// swaps the CSS class for indicating that a row has changed.  
+        /// This ensures that CSS recognises a new change even if the change occurs on the same row 
+        /// </summary>
+        /// <remarks>
+        /// </remarks>
+        /// <returns>string: row-changed or row-changedx</returns>
+        private string ToggleRowChangedClass()
+        {
+            switch (RowChangedClass)
+            {
+                case "row-changed":
+                    RowChangedClass = "row-changedx";
+                    break;
+                case "row-changedx":
+                    RowChangedClass = "row-changedxx";
+                    break;
+                case "row-changedxx":
+                    RowChangedClass = "row-changed";
+                    break;
+            }
+
+            
+            return RowChangedClass;
         }
     }
 }

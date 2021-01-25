@@ -291,6 +291,10 @@
     font-size: 0.9rem !important;
 }
 
+.nav-row-3 .data-item{
+    background-color: rgba(255, 255, 255, 0.8) ;
+
+}
 
 .data-item-nav {
     height: 100%;
@@ -317,6 +321,9 @@
     text-decoration: none !important;
 }
 
+.link-direction{
+    cursor: pointer;
+}
 
 .data-item-nav:hover, .data-item-nav a:hover, .nav-row-3 .data-item-nav:hover{
     transition-duration: 0.2s;
@@ -362,7 +369,7 @@
     color: #333;
 }
 
-.nav-row-3 .data-item-nav .btn-ellipses {
+.nav-row-3 .data-item .btn-ellipses {
     color: #999;
 }
 
@@ -406,7 +413,7 @@
 .btn-ellipses:hover .ellipsis-menu {
     visibility: visible;
     opacity: 1;
-    transition: visibility 0.2s linear, opacity 0.2s linear;
+    
 }
 
 .btn-ellipses ul li {
