@@ -1,5 +1,6 @@
 ﻿using Blazored.Modal;
 using GadjIT.ClientContext.OR_RESI;
+using GadjIT.ClientContext.OR_RESI.Custom;
 using Gizmo_V1_02.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
@@ -19,13 +20,13 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
         IChapterManagementService chapterManagementService { get; set; }
 
         [Parameter]
-        public UsrOrDefChapterManagement TaskObject { get; set; }
+        public VmUsrOrDefChapterManagement TaskObject { get; set; }
 
         [Parameter]
         public Action DataChanged { get; set; }
 
         [Parameter]
-        public List<UsrOrDefChapterManagement> AllObjects { get; set; }
+        public List<VmUsrOrDefChapterManagement> AllObjects { get; set; }
 
         [Parameter]
         public bool addNewCaseTypeGroupOption { get; set; } = false;
@@ -51,13 +52,13 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
 
         private async void HandleValidSubmit()
         {
-            if (TaskObject.Id == 0)
+            if (TaskObject.ChapterObject.Id == 0)
             {
-                await chapterManagementService.Add(TaskObject);
+                await chapterManagementService.Add(TaskObject.ChapterObject);
             }
             else
             {
-                await chapterManagementService.Update(TaskObject);
+                await chapterManagementService.Update(TaskObject.ChapterObject);
             }
             DataChanged?.Invoke();
             Close();
@@ -65,7 +66,7 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
 
         private async void HandleValidDelete()
         {
-            await chapterManagementService.DeleteChapter(TaskObject.Id);
+            await chapterManagementService.DeleteChapter(TaskObject.ChapterObject.Id);
 
             DataChanged?.Invoke();
             Close();

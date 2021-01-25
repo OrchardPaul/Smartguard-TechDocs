@@ -549,7 +549,7 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
             Action Action = RefreshChapters;
 
             var parameters = new ModalParameters();
-            parameters.Add("TaskObject", editChapterObject.ChapterObject);
+            parameters.Add("TaskObject", editChapterObject);
             parameters.Add("DataChanged", Action);
             parameters.Add("AllObjects", lstChapters);
 
