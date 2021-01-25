@@ -1,4 +1,7 @@
 ﻿@page "/chapterlist"
+@page "/chapterlist/{selectedCaseTypeGroup}"
+@page "/chapterlist/{selectedCaseTypeGroup}/{selectedCaseType}"
+@page "/chapterlist/{selectedCaseTypeGroup}/{selectedCaseType}/{selectedChapter}"
 
 @inject IJSRuntime jsRuntime
 @using Gizmo_V1_02.Pages.Shared.Modals
@@ -10,9 +13,9 @@
 }
 else
 {
-    
 
-    @if (selectedChapter == "")
+
+    @if (selectedChapter == "" | selectedChapter is null)
     {
         <div class="tran-block page-header-block ">
             <h3>Chapters</h3>
@@ -27,10 +30,10 @@ else
 
                 <!-- SHOW ALL GROUPS -->
                 @foreach (var caseTypeGroup in lstChapters.Where(C => C.ParentId == 0)
-          .Where(C => !(C.CaseTypeGroup is null))
-          .Select(C => C.CaseTypeGroup)
-          .Distinct()
-          .ToList())
+       .Where(C => !(C.CaseTypeGroup is null))
+       .Select(C => C.CaseTypeGroup)
+       .Distinct()
+       .ToList())
                 {
 
                     <div class="grid-row-lg mt-3 nav-row-1">
@@ -51,7 +54,7 @@ else
                             }
                             <div class="data-item-sub"><span class="fa fa-boxes mr-2"></span>@caseTypeGroup</div>
                             <div class="data-item-right col-alt "><div class="link-direction @(caseTypeGroup == selectedCaseTypeGroup ? "triangle-up col-grey" : "triangle-down")"></div></div>
-                           
+
 
 
                         </div>
@@ -63,11 +66,11 @@ else
                     {
 
                         @foreach (var caseType in lstChapters.Where(C => C.ParentId == 0)
-                 .Where(C => !(C.CaseType is null))
-                 .Where(C => C.CaseTypeGroup == selectedCaseTypeGroup)
-                 .Select(C => C.CaseType)
-                 .Distinct()
-                 .ToList())
+              .Where(C => !(C.CaseType is null))
+              .Where(C => C.CaseTypeGroup == selectedCaseTypeGroup)
+              .Select(C => C.CaseType)
+              .Distinct()
+              .ToList())
                         {
 
                             <div class="grid-row-md nav-row-2">
@@ -91,7 +94,7 @@ else
                                     }
                                     <div class="data-item-sub"><span class="fa fa-folder-open mr-2"></span>@caseType</div>
                                     <div class="data-item-right col-alt "><div class="link-direction @(caseType == selectedCaseType ? "triangle-up col-grey" : "triangle-down")"></div></div>
-                                    
+
                                 </div>
 
                             </div>
@@ -121,7 +124,7 @@ else
     }
 }
 
-@if (selectedChapter != "")
+@if (selectedChapter != "" & !(selectedChapter is null))
 {
 
     <div class="tran-block page-header-block ">
@@ -155,18 +158,12 @@ else
             </nav>
         </div>
 
-        @if (lstAll.Count == 0)
+        @if (displaySpinner)
         {
             <div class="spinner"></div>
         }
         else
         {
-            @if (sessionState.isAdminUser)
-            {
-
-            }
-
-
             @if (navDisplay == "Docs")
             {
 
@@ -174,17 +171,17 @@ else
                     <div class="mb-3 flex-box">
                         @if (sessionState.isAdminUser)
                         {
-                        <div class="grid-actions">
-                            <button @onclick='() => PrepareForInsert(navDisplay, "Doc")' class="btn btn-main btn-shadow" title="Add new document/step"><i class="fa fa-plus"></i></button>
-                            <button @onclick='() => CondenseSeq(lstDocs)' class="btn btn-main btn-shadow" title="Re-order Sequence Numbers"><i class="fa fa-sort-numeric-down"></i></button>
-                        </div>
+                            <div class="grid-actions">
+                                <button @onclick='() => PrepareForInsert(navDisplay, "Doc")' class="btn btn-main btn-shadow" title="Add new document/step"><i class="fa fa-plus"></i></button>
+                                <button @onclick='() => CondenseSeq(lstDocs)' class="btn btn-main btn-shadow" title="Re-order Sequence Numbers"><i class="fa fa-sort-numeric-down"></i></button>
+                            </div>
                         }
                         <div class="pt-1">
-                        <ModalTooltip Direction="top" Text="Documents and steps to be made available in the chapter for inserting into the case agenda!">
-                            <span class="info-icon" >
-                                <span class=" fa fa-info-circle fa-2x "></span>
-                            </span>
-                        </ModalTooltip>
+                            <ModalTooltip Direction="top" Text="Documents and steps to be made available in the chapter for inserting into the case agenda!">
+                                <span class="info-icon">
+                                    <span class=" fa fa-info-circle fa-2x "></span>
+                                </span>
+                            </ModalTooltip>
                         </div>
 
                         @if (sessionState.isAdminUser)
@@ -217,107 +214,107 @@ else
                             @foreach (var doc in lstDocs)
                             {
 
-                            <div class="row grid-row grid-row-lg @(rowChanged == doc.ChapterObject.SeqNo ? "row-changed" : "" )">
-                                <div class="col-12 col-xl-4 data-item">
-                                    @if (sessionState.isAdminUser)
-                                    {
-                                        @if (!compareSystems)
+                                <div class="row grid-row grid-row-lg @(rowChanged == doc.ChapterObject.SeqNo ? "row-changed" : "" )">
+                                    <div class="col-12 col-xl-4 data-item">
+                                        @if (sessionState.isAdminUser)
                                         {
-                                            <div class="btn-ellipses float-left">
-                                                <span class="fa fa-ellipsis-v"></span>
-                                                <div class="ellipsis-menu">
-                                                    <ul>
-                                                        <li class="col-main" @onclick='(() => PrepareForEdit(doc, "Steps and Documents"))'>
-                                                            <span class="fa fa-pencil-alt mr-2" ></span>
-                                                            <span class="col-black">Edit</span>
-                                                        </li>
-                                                        <li class="col-red" @onclick="() => PrepareChapterDetailDelete(doc)">
-                                                            <span class="fa fa-trash-alt mr-2" ></span>
-                                                            <span class="col-black">Delete</span>
-                                                        </li>
+                                            @if (!compareSystems)
+                                            {
+                                                <div class="btn-ellipses float-left">
+                                                    <span class="fa fa-ellipsis-v"></span>
+                                                    <div class="ellipsis-menu">
+                                                        <ul>
+                                                            <li class="col-main" @onclick='(() => PrepareForEdit(doc, "Steps and Documents"))'>
+                                                                <span class="fa fa-pencil-alt mr-2"></span>
+                                                                <span class="col-black">Edit</span>
+                                                            </li>
+                                                            <li class="col-red" @onclick="() => PrepareChapterDetailDelete(doc)">
+                                                                <span class="fa fa-trash-alt mr-2"></span>
+                                                                <span class="col-black">Delete</span>
+                                                            </li>
 
-                                                    </ul>
+                                                        </ul>
+                                                    </div>
                                                 </div>
+                                            }
+                                            else
+                                            {
+
+                                                <div class="btn-ellipses float-left">
+                                                    @if (!(doc.ComparisonIcon is null))
+                                                    {
+                                                        @if (!(doc.ComparisonResult == "Exact match"))
+                                                        {
+                                                            <div class="btn-dashed" @onclick="() => PrepareForComparison(doc)"><span class="fa fa-@doc.ComparisonIcon"></span></div>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span class="fa fa-@doc.ComparisonIcon"></span>
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="spinner"></div>
+                                                    }
+
+                                                </div>
+                                            }
+
+                                            <div class="data-item-sub">
+                                                <span class="fa fa-file mr-2"></span> @doc.ChapterObject.Name
                                             </div>
-                                        }
-                                        else
-                                        {
-
-                                <div class="btn-ellipses float-left" >
-                                    @if (!(doc.ComparisonIcon is null))
-                                    {
-                                        @if (!(doc.ComparisonResult == "Exact match"))
-                                        {
-                                            <div class="btn-dashed" @onclick="() => PrepareForComparison(doc)"><span class="fa fa-@doc.ComparisonIcon"></span></div>
-                                        }
-                                        else
-                                        {
-                                            <span class="fa fa-@doc.ComparisonIcon"></span>
-                                        }
-                                    }
-                                    else
-                                    {
-                                        <div class="spinner"></div>
-                                    }
-
-                                </div>
-                                        }
-
-                                        <div class="data-item-sub">
-                                            <span class="fa fa-file mr-2"></span> @doc.ChapterObject.Name
-                                        </div>
-                                        <div class="data-item-right mr-2 seq-change">
-                                            <div><a href="javascript: void(0);" @onclick='() => MoveSeq(doc.ChapterObject,"Docs","Up")'><span class="fa fa-angle-up"></span></a></div>
-                                            <div class="seq-no">@doc.ChapterObject.SeqNo</div>
-                                            <div><a href="javascript: void(0);" @onclick='() => MoveSeq(doc.ChapterObject,"Docs","Down")'><span class="fa fa-angle-down"></span></a></div>
-                                        </div>
-                                    }
-                                    else
-                                    {
-                                        <div class="data-item-sub">
-                                            <span class="far fa-file mr-1"></span> @doc.ChapterObject.Name
-                                            <div class="data-item-right mr-2 ">
+                                            <div class="data-item-right mr-2 seq-change">
+                                                <div><a href="javascript: void(0);" @onclick='() => MoveSeq(doc.ChapterObject,"Docs","Up")'><span class="fa fa-angle-up"></span></a></div>
                                                 <div class="seq-no">@doc.ChapterObject.SeqNo</div>
+                                                <div><a href="javascript: void(0);" @onclick='() => MoveSeq(doc.ChapterObject,"Docs","Down")'><span class="fa fa-angle-down"></span></a></div>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="data-item-sub">
+                                                <span class="far fa-file mr-1"></span> @doc.ChapterObject.Name
+                                                <div class="data-item-right mr-2 ">
+                                                    <div class="seq-no">@doc.ChapterObject.SeqNo</div>
+                                                </div>
+
+                                            </div>
+                                        }
+                                    </div>
+                                    <div class="col-4 hidden-lg-down data-item ">
+                                        <div class="data-item-detail pl-3">@(string.IsNullOrEmpty(doc.ChapterObject.AsName) ? "" : doc.ChapterObject.AsName)</div>
+
+                                        @if (doc.ChapterObject.RescheduleDays.HasValue)
+                                        {
+                                            <div class="data-item-right schedule-days">
+                                                <ModalTooltip Direction="left" Text="@(string.IsNullOrEmpty(doc.ChapterObject.AsName) ? "" : "The step named " + doc.ChapterObject.AsName + " will be scheduled for " +  doc.ChapterObject.RescheduleDays.ToString() + " days")">
+                                                    <span class="badge rounded-square">@doc.ChapterObject.RescheduleDays.ToString() days</span>
+                                                </ModalTooltip>
+                                            </div>
+                                        }
+
+                                    </div>
+                                    <div class="col-4 hidden-lg-down data-item ">
+                                        @if (!(string.IsNullOrEmpty(doc.ChapterObject.CompleteName)))
+                                        {
+                                            <div class="data-item-detail pl-3" title="This step will be saved in the agenda as @doc.ChapterObject.CompleteName.">
+                                                @doc.ChapterObject.CompleteName
                                             </div>
 
-                                        </div>
-                                    }
-                                </div>
-                                <div class="col-4 hidden-lg-down data-item ">
-                                    <div class="data-item-detail pl-3">@(string.IsNullOrEmpty(doc.ChapterObject.AsName) ? "" : doc.ChapterObject.AsName)</div>
-
-                                    @if (doc.ChapterObject.RescheduleDays.HasValue)
-                                    {
-                                        <div class="data-item-right schedule-days">
-                                            <ModalTooltip Direction="left" Text="@(string.IsNullOrEmpty(doc.ChapterObject.AsName) ? "" : "The step named " + doc.ChapterObject.AsName + " will be scheduled for " +  doc.ChapterObject.RescheduleDays.ToString() + " days")">
-                                                <span class="badge rounded-square">@doc.ChapterObject.RescheduleDays.ToString() days</span>
-                                            </ModalTooltip>
-                                        </div>
-                                    }
-
-                                </div>
-                                <div class="col-4 hidden-lg-down data-item ">
-                                    @if (!(string.IsNullOrEmpty(doc.ChapterObject.CompleteName)))
-                                    {
-                                        <div class="data-item-detail pl-3" title="This step will be saved in the agenda as @doc.ChapterObject.CompleteName.">
-                                            @doc.ChapterObject.CompleteName
-                                        </div>
-
-                                    }
+                                        }
 
 
-                                    @if (doc.ChapterObject.SuppressStep == "Y")
-                                    {
-                                        <div class="data-item-right suppress-step">
-                                            <ModalTooltip Direction="left" Text="This document will end the chapter when taken.">
-                                                <span class="fa fa-flag-checkered"></span>
-                                            </ModalTooltip>
-                                        </div>
-                                    }
+                                        @if (doc.ChapterObject.SuppressStep == "Y")
+                                        {
+                                            <div class="data-item-right suppress-step">
+                                                <ModalTooltip Direction="left" Text="This document will end the chapter when taken.">
+                                                    <span class="fa fa-flag-checkered"></span>
+                                                </ModalTooltip>
+                                            </div>
+                                        }
+
+                                    </div>
 
                                 </div>
-
-                            </div>
 
                             }
                         </div>
@@ -338,14 +335,14 @@ else
                                 <button @onclick='() => PrepareForInsert(navDisplay,"Agenda")' class="btn btn-main btn-shadow" title="Add new agenda"><i class="fa fa-plus"></i></button>
                             </div>
                         }
-                    <div class="pt-1">
-                        <ModalTooltip Direction="top" Text="Correspondance stored in these agendas will be made avalible on the History tab.">
-                            <span class="info-icon">
-                                <span class=" fa fa-info-circle fa-2x "></span>
-                            </span>
-                        </ModalTooltip>
-                            
-                    </div>
+                        <div class="pt-1">
+                            <ModalTooltip Direction="top" Text="Correspondance stored in these agendas will be made avalible on the History tab.">
+                                <span class="info-icon">
+                                    <span class=" fa fa-info-circle fa-2x "></span>
+                                </span>
+                            </ModalTooltip>
+
+                        </div>
                         @if (sessionState.isAdminUser)
                         {
                             <div class="hidden-lg-down flex-push pt-2">
@@ -380,31 +377,31 @@ else
                                                         </li>
 
                                                     </ul>
-                                                    
+
                                                 </div>
                                             </div>
                                         }
                                         else
                                         {
 
-                                <div class="btn-ellipses float-left">
-                                    @if (!(agenda.ComparisonIcon is null))
-                                    {
-                                        @if (!(agenda.ComparisonResult == "Exact match"))
-                                        {
-                                            <div class="btn-dashed" @onclick="() => PrepareForComparison(agenda)"><span class="fa fa-@agenda.ComparisonIcon"></span></div>
-                                        }
-                                        else
-                                        {
-                                            <span class="fa fa-@agenda.ComparisonIcon"></span>
-                                        }
-                                    }
-                                    else
-                                    {
-                                        <div class="spinner"></div>
-                                    }
+                                            <div class="btn-ellipses float-left">
+                                                @if (!(agenda.ComparisonIcon is null))
+                                                {
+                                                    @if (!(agenda.ComparisonResult == "Exact match"))
+                                                    {
+                                                        <div class="btn-dashed" @onclick="() => PrepareForComparison(agenda)"><span class="fa fa-@agenda.ComparisonIcon"></span></div>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="fa fa-@agenda.ComparisonIcon"></span>
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <div class="spinner"></div>
+                                                }
 
-                                </div>
+                                            </div>
                                         }
 
 
@@ -430,19 +427,19 @@ else
                     <div class="mb-3 flex-box">
                         @if (sessionState.isAdminUser)
                         {
-                        <div class="grid-actions">
-                            <button @onclick='() => PrepareFeesForEdit()' class="btn btn-main btn-shadow" title="Change selected fees"><i class="fa fa-pencil-alt"></i></button>
-                            <button @onclick='() => CondenseSeq(lstFees)' class="btn btn-main btn-shadow" title="Re-order Sequence Numbers"><i class="fa fa-sort-numeric-down"></i></button>
+                            <div class="grid-actions">
+                                <button @onclick='() => PrepareFeesForEdit()' class="btn btn-main btn-shadow" title="Change selected fees"><i class="fa fa-pencil-alt"></i></button>
+                                <button @onclick='() => CondenseSeq(lstFees)' class="btn btn-main btn-shadow" title="Re-order Sequence Numbers"><i class="fa fa-sort-numeric-down"></i></button>
 
-                        </div>
+                            </div>
                         }
-                    <div class="pt-1">
-                        <ModalTooltip Direction="top" Text="Fees to be made available in the chapter. Default values will be automatically calculated where possible.">
-                            <span class="info-icon">
-                                <span class=" fa fa-info-circle fa-2x "></span>
-                            </span>
-                        </ModalTooltip>
-                                            </div>
+                        <div class="pt-1">
+                            <ModalTooltip Direction="top" Text="Fees to be made available in the chapter. Default values will be automatically calculated where possible.">
+                                <span class="info-icon">
+                                    <span class=" fa fa-info-circle fa-2x "></span>
+                                </span>
+                            </ModalTooltip>
+                        </div>
                         @if (sessionState.isAdminUser)
                         {
                             <div class="hidden-lg-down flex-push pt-2">
@@ -475,31 +472,31 @@ else
                                                         </li>
 
                                                     </ul>
-                                                    
+
                                                 </div>
                                             </div>
                                         }
                                         else
                                         {
 
-                                <div class="btn-ellipses float-left">
-                                    @if (!(fee.ComparisonIcon is null))
-                                    {
-                                        @if (!(fee.ComparisonResult == "Exact match"))
-                                        {
-                                            <div class="btn-dashed" @onclick="() => PrepareForComparison(fee)"><span class="fa fa-@fee.ComparisonIcon"></span></div>
-                                        }
-                                        else
-                                        {
-                                            <span class="fa fa-@fee.ComparisonIcon"></span>
-                                        }
-                                    }
-                                    else
-                                    {
-                                        <div class="spinner"></div>
-                                    }
+                                            <div class="btn-ellipses float-left">
+                                                @if (!(fee.ComparisonIcon is null))
+                                                {
+                                                    @if (!(fee.ComparisonResult == "Exact match"))
+                                                    {
+                                                        <div class="btn-dashed" @onclick="() => PrepareForComparison(fee)"><span class="fa fa-@fee.ComparisonIcon"></span></div>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="fa fa-@fee.ComparisonIcon"></span>
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <div class="spinner"></div>
+                                                }
 
-                                </div>
+                                            </div>
                                         }
 
                                         <div class="data-item-sub">
@@ -541,13 +538,13 @@ else
                                 <button @onclick='() => PrepareForInsert(navDisplay,"Status")' class="btn btn-main btn-shadow" title="Add new status"><i class="fa fa-plus"></i></button>
                             </div>
                         }
-                    <div class="pt-1">
-                        <ModalTooltip Direction="top" Text="Status options to assist with the flow of the chapter and to indicate when the chapter is complete">
-                            <span class="info-icon">
-                                <span class=" fa fa-info-circle fa-2x "></span>
-                            </span>
-                        </ModalTooltip>
-                    </div>
+                        <div class="pt-1">
+                            <ModalTooltip Direction="top" Text="Status options to assist with the flow of the chapter and to indicate when the chapter is complete">
+                                <span class="info-icon">
+                                    <span class=" fa fa-info-circle fa-2x "></span>
+                                </span>
+                            </ModalTooltip>
+                        </div>
                         @if (sessionState.isAdminUser)
                         {
                             <div class="hidden-lg-down flex-push pt-2">
@@ -580,31 +577,31 @@ else
                                                         </li>
 
                                                     </ul>
-                                                    
+
                                                 </div>
                                             </div>
                                         }
                                         else
                                         {
 
-                                <div class="btn-ellipses float-left">
-                                    @if (!(status.ComparisonIcon is null))
-                                    {
-                                        @if (!(status.ComparisonResult == "Exact match"))
-                                        {
-                                            <div class="btn-dashed" @onclick="() => PrepareForComparison(status)"><span class="fa fa-@status.ComparisonIcon"></span></div>
-                                        }
-                                        else
-                                        {
-                                            <span class="fa fa-@status.ComparisonIcon"></span>
-                                        }
-                                    }
-                                    else
-                                    {
-                                        <div class="spinner"></div>
-                                    }
+                                            <div class="btn-ellipses float-left">
+                                                @if (!(status.ComparisonIcon is null))
+                                                {
+                                                    @if (!(status.ComparisonResult == "Exact match"))
+                                                    {
+                                                        <div class="btn-dashed" @onclick="() => PrepareForComparison(status)"><span class="fa fa-@status.ComparisonIcon"></span></div>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="fa fa-@status.ComparisonIcon"></span>
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <div class="spinner"></div>
+                                                }
 
-                                </div>
+                                            </div>
                                         }
 
                                     }

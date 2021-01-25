@@ -23,6 +23,9 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
         public Action DataChanged { get; set; }
 
         [Parameter]
+        public Action RefreshFeeOrder { get; set; }
+
+        [Parameter]
         public List<VmChapterFee> feeItems { get; set; }
 
         [Parameter]
@@ -42,7 +45,9 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
         private async void HandleValidSubmit()
         {
             await chapterManagementService.UpdateChapterFees(SeletedChapterId, feeItems);
-            DataChanged?.Invoke();
+
+
+            RefreshFeeOrder?.Invoke();
             Close();
         }
 

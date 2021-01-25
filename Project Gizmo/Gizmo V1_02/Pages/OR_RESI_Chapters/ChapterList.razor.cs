@@ -62,9 +62,15 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
         string selectedList = string.Empty;
 
         string displaySection { get; set; } = "";
-        string selectedCaseType { get; set; } = "";
-        string selectedCaseTypeGroup { get; set; } = "";
-        string selectedChapter { get; set; } = "";
+
+        [Parameter]
+        public string selectedCaseType { get; set; } = "";
+        
+        [Parameter]
+        public string selectedCaseTypeGroup { get; set; } = "";
+        
+        [Parameter]
+        public string selectedChapter { get; set; } = "";
 
         int rowChanged { get; set; } = 0;
 
@@ -81,6 +87,7 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
 
         public bool compareSystems = false;
 
+        public bool displaySpinner = true;
 
         public List<string> lstDocTypes { get; set; } = new List<string> { "Doc", "Letter", "Form", "Email", "Step" };
 
@@ -143,6 +150,8 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
 
         private void SelectChapter(string chapter, int chapterID)
         {
+            displaySpinner = true;
+
             lstAll = new List<VmUsrOrDefChapterManagement>();
 
             selectedChapterId = chapterID;
@@ -156,6 +165,15 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
         private async void RefreshChapters()
         {
             lstChapters = await chapterManagementService.GetAllChapters();
+
+            if(!(selectedChapter is null) & selectedChapter != "")
+            {
+                SelectChapter(selectedChapter,lstChapters
+                                                    .Where(C => C.CaseTypeGroup == selectedCaseTypeGroup)
+                                                    .Where(C => C.CaseType == selectedCaseType)
+                                                    .Where(C => C.Name == selectedChapter)
+                                                    .Select(C => C.Id).SingleOrDefault());
+            }
 
             StateHasChanged();
         }
@@ -201,6 +219,7 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
                                                                 { 
                                                                     ParentId = selectedChapterId,
                                                                     Name = FD.FeeDesc,
+                                                                    SeqNo = 1000,
                                                                     Type = "Fee",
                                                                     CaseType = "",
                                                                     CaseTypeGroup = "",
@@ -218,7 +237,7 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
                                         })
                                         .ToList();
 
-
+                CondenseSeq(lstFees);
             }
             if (listType == "Status" | listType == "All")
             {
@@ -229,7 +248,7 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
 
             }
 
-
+            displaySpinner = false;
             StateHasChanged();
         }
 
@@ -415,7 +434,6 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
         }
 
        
-
         /// <summary>
         /// Moves a sequecnce item up or down a list of type [UsrOrDefChapterManagement]
         /// </summary>
@@ -446,7 +464,6 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
                     break;
             }
 
-            
             var swapItem = lstItems.Where(D => D.ChapterObject.SeqNo == (selectobject.SeqNo + incrementBy)).SingleOrDefault();
             if (!(swapItem is null))
             {
@@ -455,10 +472,7 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
 
                 await chapterManagementService.Update(selectobject);
                 await chapterManagementService.Update(swapItem.ChapterObject);
-
-
             }
-            
             RefreshChapterItems(listType);
         }
 
@@ -473,9 +487,13 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
 
                 await chapterManagementService.Update(item.ChapterObject);
             }
-
             StateHasChanged();
+        }
 
+        protected void CondenseFeeSeq()
+        {
+            RefreshSelectedList();
+            
         }
 
         protected void ShowChapterAddOrEditModel()
@@ -523,9 +541,11 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
         protected void ShowChapterFeesModal()
         {
             Action Action = RefreshSelectedList;
+            Action RefreshFeeOrder = CondenseFeeSeq;
 
             var parameters = new ModalParameters();
             parameters.Add("DataChanged", Action);
+            parameters.Add("RefreshFeeOrder", RefreshFeeOrder);
             parameters.Add("feeItems", lstVmFeeModalItems);
             parameters.Add("SeletedChapterId", selectedChapterId);
 
