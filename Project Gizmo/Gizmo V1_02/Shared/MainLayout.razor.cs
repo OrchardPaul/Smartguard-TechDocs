@@ -46,7 +46,7 @@ namespace Gizmo_V1_02.Shared
             StateHasChanged();
         }
 
-        private async void ToggleCompany(int companyId)
+        private void ToggleCompany(int companyId)
         {
             currentUser.SelectedCompanyId = companyId;
             //await sessionState.switchSelectedCompany(companyId);

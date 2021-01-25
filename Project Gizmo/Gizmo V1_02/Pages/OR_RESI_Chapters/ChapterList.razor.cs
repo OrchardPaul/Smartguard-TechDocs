@@ -177,10 +177,10 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
             if(!(selectedChapter is null) & selectedChapter != "")
             {
                 SelectChapter(selectedChapter,lstChapters
-                                                    .Where(C => C.CaseTypeGroup == selectedCaseTypeGroup)
-                                                    .Where(C => C.CaseType == selectedCaseType)
-                                                    .Where(C => C.Name == selectedChapter)
-                                                    .Select(C => C.Id).SingleOrDefault());
+                                                    .Where(C => C.ChapterObject.CaseTypeGroup == selectedCaseTypeGroup)
+                                                    .Where(C => C.ChapterObject.CaseType == selectedCaseType)
+                                                    .Where(C => C.ChapterObject.Name == selectedChapter)
+                                                    .Select(C => C.ChapterObject.Id).SingleOrDefault());
             }
 
             StateHasChanged();
@@ -255,7 +255,7 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
                                         })
                                         .ToList();
 
-                CondenseSeq(lstFees);
+                CondenseSeq("Fees");
             }
             if (listType == "Status" | listType == "All")
             {
