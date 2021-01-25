@@ -1,0 +1,19 @@
+﻿
+<div class="grid-can-edit">
+    @foreach (var fee in feeItems){
+        <div class="row grid-row grid-row-lg">
+            <div class="col-12 data-item">
+                <div class="data-item-sub" @onclick="() => ToggleSelectedFee(fee)">
+                    <span class="fa fa-file mr-2"></span> @fee.FeeItem.Name
+
+                    <div class="data-item-right mr-2 ">
+                        <div class="seq-no">@(fee.selected ? "Y" : "N")</div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<button type="submit" class="float-left btn btn-alt" @onclick="() => HandleValidSubmit()">Save Changes</button>

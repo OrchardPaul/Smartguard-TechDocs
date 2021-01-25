@@ -38,7 +38,8 @@ namespace Gizmo_V1_02.Shared
 
             if(currentUser is null)
             {
-                string returnUrl = HttpUtility.UrlEncode($"/admin");
+
+                string returnUrl = HttpUtility.UrlEncode("/" + HttpUtility.UrlDecode(NavigationManager.Uri.Replace(NavigationManager.BaseUri, "")));
                 NavigationManager.NavigateTo($"Identity/Account/Login?returnUrl={returnUrl}", true);
             } 
 
