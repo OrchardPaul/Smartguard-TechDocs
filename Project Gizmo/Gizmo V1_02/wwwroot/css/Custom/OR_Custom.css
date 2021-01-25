@@ -143,32 +143,6 @@
     background-color: rgba(245, 245, 245, 0.5) !important;
 }
 
-.btn-ellipses {
-    width: 20px !important;
-    margin: 0 5px 0 5px !important;
-    height: 100%;
-    font-size: 1.1rem;
-    color: #ccc;
-    border: none !important;
-    text-align: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-}
-
-.btn-ellipses .btn-dashed {
-    cursor: pointer;
-    border: 1pt dashed #999;
-    padding-top: 3px;
-    padding-bottom: 3px;
-    width: 100%;
-}
-
-.btn-ellipses:hover .btn-dashed {
-    cursor: pointer;
-    border: 1pt dashed #fff;
-}
 
 .tran-block .btn-edit {
     background-color: rgba(245, 245, 245, 0) !important;
@@ -779,9 +753,15 @@
 }
 
 
-.seq-change a {
+.seq-change div:first-of-type, .seq-change div:last-of-type {
     color: #ccc !important;
     text-decoration: none;
+    cursor: pointer;
+    height: 10px;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-top: 0;
+    padding-bottom: 0;
 }
 
 .grid-can-edit div.grid-row:first-child .seq-change div:first-child
