@@ -7,7 +7,7 @@
 @using Gizmo_V1_02.Pages.Shared.Modals
 
 
-@if (lstChapters is null)
+@if (ListChapterLoaded == false)
 {
     <div class="spinner"></div>
 }
@@ -26,9 +26,12 @@ else
             {
                 <div class="grid-actions">
                     <button @onclick='PrepareChapterForInsert' class="btn btn-main btn-shadow" title="Add new chapter"><i class="fa fa-plus pr-1"></i>New Chapter</button>
-                    @if (selectedCaseType != "")
+                    @if (!(string.IsNullOrEmpty(selectedCaseType)))
                     {
-                        <button @onclick='() => CondenseSeq("Chapters")' class="btn btn-main btn-shadow" title="Re-order Sequence Numbers"><i class="fa fa-sort-numeric-down"></i></button>
+                        @if (!(SequenceIsValid("Chapters")))
+                        {
+                            <button @onclick='() => CondenseSeq("Chapters")' class="btn btn-main btn-shadow" title="Re-order Sequence Numbers"><i class="fa fa-sort-numeric-down"></i></button>
+                        }
                     }
 
                 </div>
@@ -219,7 +222,8 @@ else
                         {
                             <div class="grid-actions">
                                 <button @onclick='() => PrepareForInsert(navDisplay,"Doc")' class="btn btn-main btn-shadow" title="Add new document/step"><i class="fa fa-plus"></i></button>
-                                <button @onclick='() => CondenseSeq("Docs")' class="btn btn-main btn-shadow" title="Re-order Sequence Numbers"><i class="fa fa-sort-numeric-down"></i></button>
+                                
+                                <button @onclick='() => CondenseSeq("Docs")' class="btn btn-main btn-shadow @(SequenceIsValid("Docs") ? "invisible" : "")" title="Re-order Sequence Numbers"><i class="fa fa-sort-numeric-down"></i></button>
                             </div>
                         }
                         <div class="pt-1">
@@ -283,6 +287,14 @@ else
                                                         </ul>
                                                     </div>
                                                 </div>
+                                                <div class="data-item-sub">
+                                                    <span class="fa fa-file mr-2"></span> @doc.ChapterObject.Name
+                                                </div>
+                                                <div class="data-item-right mr-2 seq-change">
+                                                    <div @onclick='() => MoveSeq(doc.ChapterObject,"Docs","Up")'><span class="fa fa-angle-up"></span></div>
+                                                    <div class="seq-no">@doc.ChapterObject.SeqNo</div>
+                                                    <div @onclick='() => MoveSeq(doc.ChapterObject,"Docs","Down")'><span class="fa fa-angle-down"></span></div>
+                                                </div>
                                             }
                                             else
                                             {
@@ -305,16 +317,16 @@ else
                                                     }
 
                                                 </div>
-                                            }
+                                            
 
-                                            <div class="data-item-sub">
-                                                <span class="fa fa-file mr-2"></span> @doc.ChapterObject.Name
-                                            </div>
-                                            <div class="data-item-right mr-2 seq-change">
-                                                <div @onclick='() => MoveSeq(doc.ChapterObject,"Docs","Up")'><span class="fa fa-angle-up"></span></div>
-                                                <div class="seq-no">@doc.ChapterObject.SeqNo</div>
-                                                <div @onclick='() => MoveSeq(doc.ChapterObject,"Docs","Down")'><span class="fa fa-angle-down"></span></div>
-                                            </div>
+                                                <div class="data-item-sub">
+                                                    <span class="fa fa-file mr-2"></span> @doc.ChapterObject.Name
+                                                </div>
+                                                <div class="data-item-right mr-2 ">
+                                                    <div class="seq-no">@doc.ChapterObject.SeqNo</div>
+                                                </div>
+                                        
+                                            }
                                         }
                                         else
                                         {
@@ -476,7 +488,7 @@ else
                         {
                             <div class="grid-actions">
                                 <button @onclick='() => PrepareFeesForEdit()' class="btn btn-main btn-shadow" title="Change selected fees"><i class="fa fa-pencil-alt"></i></button>
-                                <button @onclick='() => CondenseSeq("Fees")' class="btn btn-main btn-shadow" title="Re-order Sequence Numbers"><i class="fa fa-sort-numeric-down"></i></button>
+                                <button @onclick='() => CondenseSeq("Fees")' class="btn btn-main btn-shadow @(SequenceIsValid("Fees") ? "invisible" : "")" title="Re-order Sequence Numbers"><i class="fa fa-sort-numeric-down"></i></button>
 
                             </div>
                         }
@@ -522,6 +534,14 @@ else
 
                                                 </div>
                                             </div>
+                                            <div class="data-item-sub">
+                                                <span class="fa fa-file mr-2"></span> @fee.ChapterObject.Name
+                                            </div>
+                                            <div class="data-item-right mr-2 seq-change">
+                                                <div @onclick='() => MoveSeq(fee.ChapterObject,"Fees", "Up")'><span class="fa fa-angle-up"></span></div>
+                                                <div class="seq-no">@fee.ChapterObject.SeqNo</div>
+                                                <div @onclick='() => MoveSeq(fee.ChapterObject,"Fees", "Down")'><span class="fa fa-angle-down"></span></div>
+                                            </div>
                                         }
                                         else
                                         {
@@ -544,22 +564,21 @@ else
                                                 }
 
                                             </div>
-                                        }
 
-                                        <div class="data-item-sub">
-                                            <span class="fa fa-file mr-2"></span> @fee.ChapterObject.Name
-                                        </div>
-                                        <div class="data-item-right mr-2 seq-change">
-                                            <div @onclick='() => MoveSeq(fee.ChapterObject,"Fees", "Up")'><span class="fa fa-angle-up"></span></div>
-                                            <div class="seq-no">@fee.ChapterObject.SeqNo</div>
-                                            <div @onclick='() => MoveSeq(fee.ChapterObject,"Fees", "Down")'><span class="fa fa-angle-down"></span></div>
-                                        </div>
+
+                                            <div class="data-item-sub">
+                                                <span class="fa fa-file mr-2"></span> @fee.ChapterObject.Name
+                                            </div>
+                                            <div class="data-item-right mr-2">
+                                                <div class="seq-no">@fee.ChapterObject.SeqNo</div>
+                                            </div>
+                                        }
                                     }
                                     else
                                     {
                                         <div class="data-item-sub">
                                             <span class="fa fa-money-bill mr-2"></span> @fee.ChapterObject.Name
-                                            <div class="data-item-right mr-2 ">
+                                            <div class="data-item-right mr-2">
                                                 <div class="seq-no">@fee.ChapterObject.SeqNo</div>
                                             </div>
                                         </div>

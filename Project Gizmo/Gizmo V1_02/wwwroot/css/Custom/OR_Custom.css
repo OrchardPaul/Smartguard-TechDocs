@@ -747,7 +747,7 @@
 
 /*   SEQUENCE CHANGE OPTIONS             */
 .grid-row-lg .seq-change {
-    padding-top: 1px;
+    padding-bottom: 3px;
     padding-left: 8px;
     width: 30px;
     text-align: center;
@@ -758,6 +758,16 @@
     padding-left: 8px;
     width: 20px;
     text-align: center;
+}
+
+
+.grid-row-md .seq-change .seq-no {
+   height: 13px;
+   font-size: 0.85em;
+}
+
+.grid-row-lg .seq-change div:first-of-type {
+    margin-bottom: 2px;
 }
 
 .seq-change div:first-of-type, .seq-change div:last-of-type {
@@ -948,6 +958,10 @@
     .card-header {
         border-radius: 20px !important;
     }
+}
+
+.invisible {
+    visibility: hidden;
 }
 
 .visible{

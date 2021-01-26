@@ -93,6 +93,9 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
 
         public bool displaySpinner = true;
 
+        public bool ListChapterLoaded = false;
+
+        
         public List<string> lstDocTypes { get; set; } = new List<string> { "Doc", "Letter", "Form", "Email", "Step" };
 
 
@@ -171,6 +174,8 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
 
         private async void RefreshChapters()
         {
+            ListChapterLoaded = false;
+
             var lstC = await chapterManagementService.GetAllChapters();
             lstChapters = lstC.Select(A => new VmUsrOrDefChapterManagement { ChapterObject = A } ).ToList();
 
@@ -182,6 +187,8 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
                                                     .Where(C => C.ChapterObject.Name == selectedChapter)
                                                     .Select(C => C.ChapterObject.Id).SingleOrDefault());
             }
+
+            ListChapterLoaded = true;
 
             StateHasChanged();
         }
@@ -204,20 +211,20 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
             lstAll = lst.Select(A => new VmUsrOrDefChapterManagement { ChapterObject = A }).ToList();
             feeDefinitions = await chapterManagementService.GetFeeDefs(selectedCaseTypeGroup, selectedCaseType);
 
-                if (listType == "Agenda" | listType == "All")
-                {
-                    lstAgendas = lstAll
-                                        .OrderBy(A => A.ChapterObject.SeqNo)
-                                        .Where(A => A.ChapterObject.Type == "Agenda")
-                                        .ToList();
+            if (listType == "Agenda" | listType == "All")
+            {
+                lstAgendas = lstAll
+                                    .OrderBy(A => A.ChapterObject.SeqNo)
+                                    .Where(A => A.ChapterObject.Type == "Agenda")
+                                    .ToList();
 
-                }
-                if (listType == "Docs" | listType == "All")
-                {
-                    lstDocs = lstAll
-                                        .OrderBy(A => A.ChapterObject.SeqNo)
-                                        .Where(A => lstDocTypes.Contains(A.ChapterObject.Type))
-                                        .ToList();
+            }
+            if (listType == "Docs" | listType == "All")
+            {
+                lstDocs = lstAll
+                                    .OrderBy(A => A.ChapterObject.SeqNo)
+                                    .Where(A => lstDocTypes.Contains(A.ChapterObject.Type))
+                                    .ToList();
 
             }
             if (listType == "Fees" | listType == "All")
@@ -487,7 +494,7 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
                     lstItems = lstChapters
                                         .Where(A => A.ChapterObject.CaseTypeGroup == selectedCaseTypeGroup)
                                         .Where(A => A.ChapterObject.CaseType == selectedCaseType)
-                                        .OrderByDescending(A => A.ChapterObject.SeqNo)
+                                        .OrderBy(A => A.ChapterObject.SeqNo)
                                         .ToList();
                     break;
             }
@@ -504,31 +511,38 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
             RefreshChapterItems(listType);
         }
 
-        protected async void CondenseSeq(string listType )
+        private List<VmUsrOrDefChapterManagement> GetRelevantChapterList(string listType)
         {
-
-            var lstItems = new List<VmUsrOrDefChapterManagement>() ;
+            var listItems = new List<VmUsrOrDefChapterManagement>();
 
             switch (listType)
             {
                 case "Docs":
-                    lstItems = lstDocs;
+                    listItems = lstDocs;
                     break;
                 case "Fees":
-                    lstItems = lstFees;
+                    listItems = lstFees;
                     break;
                 case "Chapters":
-                    lstItems = lstChapters
+                    listItems = lstChapters
                                         .Where(A => A.ChapterObject.CaseTypeGroup == selectedCaseTypeGroup)
                                         .Where(A => A.ChapterObject.CaseType == selectedCaseType)
-                                        .OrderByDescending(A => A.ChapterObject.SeqNo)
+                                        .OrderBy(A => A.ChapterObject.SeqNo)
                                         .ToList();
                     break;
             }
 
+            return listItems;
+        }
+
+        protected async void CondenseSeq(string ListType )
+        {
+
+            var ListItems = GetRelevantChapterList(ListType);
+
             int seqNo = 0;
 
-            foreach (VmUsrOrDefChapterManagement item in lstItems.OrderBy(A => A.ChapterObject.SeqNo))
+            foreach (VmUsrOrDefChapterManagement item in ListItems.OrderBy(A => A.ChapterObject.SeqNo))
             {
                 seqNo += 1;
                 item.ChapterObject.SeqNo = seqNo;
@@ -676,6 +690,25 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
             }
 
             return RowChangedClass;
+
+        }
+
+        private bool SequenceIsValid(string listType)
+        {
+            List<VmUsrOrDefChapterManagement> listItems = GetRelevantChapterList(listType);
+
+            bool isValid = true;
+
+            for (int i = 0; i < listItems.Count; i++)
+            {
+                if (listItems[i].ChapterObject.SeqNo != i+1)
+                {
+                    isValid = false;
+                }
+                
+            }
+
+            return isValid;
 
         }
     }
