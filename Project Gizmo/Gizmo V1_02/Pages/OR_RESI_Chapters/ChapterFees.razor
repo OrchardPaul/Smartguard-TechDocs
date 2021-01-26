@@ -1,19 +1,29 @@
-﻿
-<div class="grid-can-edit">
-    @foreach (var fee in feeItems){
-        <div class="row grid-row grid-row-lg">
-            <div class="col-12 data-item">
-                <div class="data-item-sub" @onclick="() => ToggleSelectedFee(fee)">
-                    <span class="fa fa-file mr-2"></span> @fee.FeeItem.Name
+﻿<div class="modal-body" id="modal-chapter-fees">
+    <div class="grid-can-edit" id="modal-edit-fees">
+        @foreach (var fee in feeItems)
+        {
+            <div class="row grid-row grid-row-md">
+                <div class="col-12 data-item @(fee.selected ? "data-item-selected" : "" )">
+                    <div class="data-item-sub" @onclick="() => ToggleSelectedFee(fee)">
+                        <span class="fa fa-pound-sign mr-2"></span> @fee.FeeItem.Name
 
                     <div class="data-item-right mr-2 ">
-                        <div class="seq-no">@(fee.selected ? "Y" : "N")</div>
+                        @if (fee.selected)
+                        {
+                            <div class="data-item-right">
+                                <span class="fa fa-check"></span>
+                            </div>
+                        }
+
                     </div>
-                    
+
+                    </div>
                 </div>
             </div>
-        </div>
-    }
-</div>
+        }
+    </div>
 
-<button type="submit" class="float-left btn btn-alt" @onclick="() => HandleValidSubmit()">Save Changes</button>
+    <div class="button-container">
+        <button type="submit" class="float-left btn btn-alt" @onclick="() => HandleValidSubmit()">Save Changes</button>
+    </div>
+ </div>
