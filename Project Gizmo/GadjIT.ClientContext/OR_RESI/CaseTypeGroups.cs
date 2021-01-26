@@ -16,10 +16,6 @@ namespace GadjIT.ClientContext.OR_RESI
         public int Id { get; set; }
         [StringLength(50)]
         public string Name { get; set; }
-        [Column("CMTemplates")]
-        [StringLength(255)]
-        public string Cmtemplates { get; set; }
-        [StringLength(3)]
-        public string Department { get; set; }
+
     }
 }

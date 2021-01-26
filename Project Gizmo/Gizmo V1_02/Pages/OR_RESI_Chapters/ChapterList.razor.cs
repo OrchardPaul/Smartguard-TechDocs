@@ -157,7 +157,7 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
             PrepChapterList();
         }
 
-        private void SelectChapter(string chapter, int chapterID)
+        private async void SelectChapter(string chapter, int chapterID)
         {
             displaySpinner = true;
 
@@ -168,7 +168,7 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
             compareSystems = false;
             rowChanged = 0;
 
-            RefreshChapterItems("All");
+            await RefreshChapterItems("All");
 
         }
 
@@ -193,7 +193,7 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
             StateHasChanged();
         }
 
-        private async void RefreshChapterItems(string listType)
+        private async Task<bool> RefreshChapterItems(string listType)
         {
 
             if (listType == "Chapters")
@@ -210,37 +210,37 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
                 lstAll = lst.Select(A => new VmUsrOrDefChapterManagement { ChapterObject = A }).ToList();
                 feeDefinitions = await chapterManagementService.GetFeeDefs(selectedCaseTypeGroup, selectedCaseType);
 
-            if (listType == "Agenda" | listType == "All")
-            {
-                lstAgendas = lstAll
+                if (listType == "Agenda" | listType == "All")
+                {
+                    lstAgendas = lstAll
+                                        .OrderBy(A => A.ChapterObject.SeqNo)
+                                        .Where(A => A.ChapterObject.Type == "Agenda")
+                                        .ToList();
+
+                }
+                if (listType == "Docs" | listType == "All")
+                {
+                    lstDocs = lstAll
+                                        .OrderBy(A => A.ChapterObject.SeqNo)
+                                        .Where(A => lstDocTypes.Contains(A.ChapterObject.Type))
+                                        .ToList();
+
+                }
+                if (listType == "Fees" | listType == "All")
+                {
+                    lstFees = lstAll
                                     .OrderBy(A => A.ChapterObject.SeqNo)
-                                    .Where(A => A.ChapterObject.Type == "Agenda")
+                                    .Where(A => A.ChapterObject.Type == "Fee")
                                     .ToList();
 
-            }
-            if (listType == "Docs" | listType == "All")
-            {
-                lstDocs = lstAll
-                                    .OrderBy(A => A.ChapterObject.SeqNo)
-                                    .Where(A => lstDocTypes.Contains(A.ChapterObject.Type))
-                                    .ToList();
-
-            }
-            if (listType == "Fees" | listType == "All")
-            {
-                lstFees = lstAll
-                                .OrderBy(A => A.ChapterObject.SeqNo)
-                                .Where(A => A.ChapterObject.Type == "Fee")
-                                .ToList();
-
-                lstVmFeeModalItems = feeDefinitions
-                                        .Select(FD => new VmChapterFee
-                                        {
-                                            FeeItem = lstFees
-                                                            .Where(F => FD.FeeDesc == F.ChapterObject.Name)
-                                                            .SingleOrDefault() is null
-                                                            ? new UsrOrDefChapterManagement 
-                                                                { 
+                    lstVmFeeModalItems = feeDefinitions
+                                            .Select(FD => new VmChapterFee
+                                            {
+                                                FeeItem = lstFees
+                                                                .Where(F => FD.FeeDesc == F.ChapterObject.Name)
+                                                                .SingleOrDefault() is null
+                                                                ? new UsrOrDefChapterManagement
+                                                                {
                                                                     ParentId = selectedChapterId,
                                                                     Name = FD.FeeDesc,
                                                                     SeqNo = 1000,
@@ -248,48 +248,51 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
                                                                     CaseType = "",
                                                                     CaseTypeGroup = "",
                                                                     CompleteName = ""
-                                                                } 
-                                                            : lstFees
+                                                                }
+                                                                : lstFees
+                                                                    .Where(F => FD.FeeDesc == F.ChapterObject.Name)
+                                                                    .Select(F => F.ChapterObject)
+                                                                    .SingleOrDefault(),
+                                                feeDefinition = FD,
+                                                selected = lstFees
                                                                 .Where(F => FD.FeeDesc == F.ChapterObject.Name)
-                                                                .Select(F => F.ChapterObject)
-                                                                .SingleOrDefault(),
-                                            feeDefinition = FD,
-                                            selected = lstFees
-                                                            .Where(F => FD.FeeDesc == F.ChapterObject.Name)
-                                                            .SingleOrDefault() is null
-                                                            ? false : true
-                                        })
-                                        .ToList();
+                                                                .SingleOrDefault() is null
+                                                                ? false : true
+                                            })
+                                            .ToList();
 
-                CondenseSeq("Fees");
-            }
-            if (listType == "Status" | listType == "All")
-            {
-                lstStatus = lstAll
-                                    .OrderBy(A => A.ChapterObject.SeqNo)
-                                    .Where(A => A.ChapterObject.Type == "Status")
-                                    .ToList();
+                    CondenseSeq("Fees");
+                }
+                if (listType == "Status" | listType == "All")
+                {
+                    lstStatus = lstAll
+                                        .OrderBy(A => A.ChapterObject.SeqNo)
+                                        .Where(A => A.ChapterObject.Type == "Status")
+                                        .ToList();
 
                 }
             }
 
             displaySpinner = false;
-            StateHasChanged();
 
             rowChanged = 0;
+            return true;
         }
 
         private async void ToggleComparison()
         {
             compareSystems = !compareSystems;
-            await GetAltSytemChapterItems();
+            if (compareSystems)
+            {
+                await GetAltSytemChapterItems();
+            }
         }
 
         private async Task<bool> GetAltSytemChapterItems()
         {
             if (compareSystems)
             {
-                lstDocs = lstDocs.Select(D => { D.ComparisonIcon = null; return D; }).ToList();
+                var test = await RefreshChapterItems(navDisplay);
 
                 await sessionState.SwitchSelectedSystem();
                 var temp = await chapterManagementService.GetItemListByChapter(selectedChapterId);
@@ -362,14 +365,15 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
             return chapterItem;
         }
 
-        public async void CompareChapterItemsToAltSytem()
+        public async void CompareChapterItemsToAltSytemAction()
         {
+            
             await GetAltSytemChapterItems();
         }
 
-        public void RefreshSelectedList()
+        public async void RefreshSelectedList()
         {
-            RefreshChapterItems(navDisplay);
+            await RefreshChapterItems(navDisplay);
         }
 
         private void PrepareForEdit(VmUsrOrDefChapterManagement item, string header)
@@ -506,7 +510,7 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
                 await chapterManagementService.Update(selectobject);
                 await chapterManagementService.Update(swapItem.ChapterObject);
             }
-            RefreshChapterItems(listType);
+            await RefreshChapterItems(listType);
         }
 
         private List<VmUsrOrDefChapterManagement> GetRelevantChapterList(string listType)
@@ -642,12 +646,10 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
 
         protected void ShowChapterComparisonModal()
         {
-            Action Action = RefreshSelectedList;
-            Action Compare = CompareChapterItemsToAltSytem;
+            Action Compare = CompareChapterItemsToAltSytemAction;
 
             var parameters = new ModalParameters();
             parameters.Add("Object", editObject);
-            parameters.Add("DataChanged", Action);
             parameters.Add("ComparisonRefresh", Compare);
             parameters.Add("sessionState", sessionState);
             parameters.Add("CurrentSysParentId", selectedChapterId);
@@ -661,7 +663,7 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
         {
             await chapterManagementService.Delete(editObject.ChapterObject.Id);
 
-            RefreshChapterItems(navDisplay);
+            await RefreshChapterItems(navDisplay);
 
         }
 

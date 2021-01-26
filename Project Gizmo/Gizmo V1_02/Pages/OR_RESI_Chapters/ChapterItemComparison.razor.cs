@@ -26,8 +26,7 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
         [Parameter]
         public VmUsrOrDefChapterManagement Object { get; set; }
 
-        [Parameter]
-        public Action DataChanged { get; set; }
+
 
         [Parameter]
         public int CurrentSysParentId { get; set; }
@@ -70,7 +69,6 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
                 await sessionState.ResetSelectedSystem();
             }
 
-            DataChanged?.Invoke();
             ComparisonRefresh?.Invoke();
             Close();
 
@@ -120,7 +118,6 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
                 await sessionState.ResetSelectedSystem();
             }
 
-            DataChanged?.Invoke();
             ComparisonRefresh?.Invoke();
             Close();
         }

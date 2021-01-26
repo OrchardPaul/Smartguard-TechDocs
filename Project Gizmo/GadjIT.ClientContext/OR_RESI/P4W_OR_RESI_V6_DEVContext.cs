@@ -57,10 +57,6 @@ namespace GadjIT.ClientContext.OR_RESI
                     .HasName("UC_CaseTypeGroups_Name")
                     .IsUnique();
 
-                entity.Property(e => e.Cmtemplates).IsUnicode(false);
-
-                entity.Property(e => e.Department).IsUnicode(false);
-
                 entity.Property(e => e.Name).IsUnicode(false);
             });
 
