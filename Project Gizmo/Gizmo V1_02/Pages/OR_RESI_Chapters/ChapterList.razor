@@ -104,7 +104,20 @@ else
                                             </div>
                                         </div>
                                     }
-                                    <div class="data-item-sub"><span class="fa fa-folder-open mr-2"></span>@caseType</div>
+                                    
+                                    @if (caseType == selectedCaseType) 
+                                    {
+                                        <div class="data-item-sub">
+                                            <span class="fa fa-folder-open mr-2"></span>@caseType
+                                        </div>
+                                            }else
+                                            {
+                                        <div class="data-item-sub">
+                                            <span class="fa fa-folder mr-2"></span>@caseType
+                                        </div>
+                                    }
+                                    
+                                    
                                     <div class="data-item-right col-alt "><div class="link-direction @(caseType == selectedCaseType ? "triangle-up col-grey" : "triangle-down")"></div></div>
 
                                 </div>
@@ -221,7 +234,7 @@ else
                         @if (sessionState.isAdminUser)
                         {
                             <div class="grid-actions">
-                                <button @onclick='() => PrepareForInsert(navDisplay,"Doc")' class="btn btn-main btn-shadow" title="Add new document/step"><i class="fa fa-plus"></i></button>
+                                <button @onclick='() => PrepareForInsert(navDisplay,"Steps and Documents")' class="btn btn-main btn-shadow" title="Add new document/step"><i class="fa fa-plus"></i></button>
                                 
                                 <button @onclick='() => CondenseSeq("Docs")' class="btn btn-main btn-shadow @(SequenceIsValid("Docs") ? "invisible" : "")" title="Re-order Sequence Numbers"><i class="fa fa-sort-numeric-down"></i></button>
                             </div>
@@ -517,25 +530,9 @@ else
                                     {
                                         @if (!compareSystems)
                                         {
-                                            <div class="btn-ellipses float-left">
-                                                <span class="fa fa-ellipsis-v"></span>
-                                                <div class="ellipsis-menu">
-                                                    <ul>
-                                                        <li class="col-main" @onclick='(() => PrepareForEdit(fee, "Fees"))'>
-                                                            <span class="fa fa-pencil-alt mr-2"></span>
-                                                            <span>Edit</span>
-                                                        </li>
-                                                        <li class="col-red" @onclick="() => PrepareChapterDetailDelete(fee)">
-                                                            <span class="fa fa-trash-alt mr-2"></span>
-                                                            <span>Delete</span>
-                                                        </li>
-
-                                                    </ul>
-
-                                                </div>
-                                            </div>
+                                            
                                             <div class="data-item-sub">
-                                                <span class="fa fa-file mr-2"></span> @fee.ChapterObject.Name
+                                                <span class="fa fa-pound-sign mr-2"></span> @fee.ChapterObject.Name
                                             </div>
                                             <div class="data-item-right mr-2 seq-change">
                                                 <div @onclick='() => MoveSeq(fee.ChapterObject,"Fees", "Up")'><span class="fa fa-angle-up"></span></div>
@@ -567,7 +564,7 @@ else
 
 
                                             <div class="data-item-sub">
-                                                <span class="fa fa-file mr-2"></span> @fee.ChapterObject.Name
+                                                <span class="fa fa-pound-sign mr-2"></span> @fee.ChapterObject.Name
                                             </div>
                                             <div class="data-item-right mr-2">
                                                 <div class="seq-no">@fee.ChapterObject.SeqNo</div>

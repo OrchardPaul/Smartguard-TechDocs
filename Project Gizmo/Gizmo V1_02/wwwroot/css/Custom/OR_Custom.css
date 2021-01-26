@@ -429,7 +429,9 @@
     color: #555;
 }
 
-
+.data-item-selected{
+    background-color: #eee !important;
+}
 
 .edit-link-right, .nav-link-right, .data-item-nav .data-item-sub .nav-link-right {
     display: block;
@@ -988,6 +990,7 @@
     border-right: 0.5em solid transparent;
     border-top: 0.8em solid ;
 }
+
 
 /******************/
 /*   TESTING ONLY */

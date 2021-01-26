@@ -5,15 +5,14 @@
 .blazored-custom-modal {
     display: flex;
     flex-direction: column;
-    width: 60vw;
-    height: 60vh;
     background-color: #fafafa;
     border-radius: 12px;
     border: 1px solid #fff;
-    padding: 0.5rem;
+    padding: 1rem;
     z-index: 102;
     box-shadow: 0 2px 2px rgba(0,0,0,.75);
     overflow-y: auto;
+    overflow-x: hidden;
 }
 
 
@@ -53,13 +52,33 @@
     border-top: 1pt solid #DDD;
 }
 
-.modal .form-control {
+.modal-body .form-control {
     color: #888;
+    text-align: left;
+    border-color: #aaa;
+    font-size: 0.9em;
 }
 
-.modal .info-text{
-    color: #888;
-    font-size: 0.9rem;
+.modal-body .form-group label {
+   padding-bottom: 0px;
+   margin-bottom: 0px;
+   font-size: 0.9em;
+}
+
+.modal-body .form-group input[type=checkbox] {
+    width: 1.1em;
+    height: 1.1em;
+}
+
+.modal-body .button-container {
+    border-top: 1pt solid #ccc;
+    margin-top: 15px;
+    padding-top: 15px;
+    text-align: center;
+}
+
+.modal-body button {
+    margin: 0 10px 0 10px;
 }
 
 /*****************/
@@ -118,4 +137,22 @@
     background: #FFF;
     border-top: 1pt solid #555;
     border-bottom: none;
+}
+
+/************************/
+/*   Unique Modals      */
+/************************/
+
+#modal-chapter-doc {
+    width: 550px;
+}
+
+#modal-chapter-fees {
+    width: 500px;
+    overflow: hidden;
+}
+#modal-edit-fees {
+    width: 450px;
+    height: 400px;
+    overflow-y: scroll;
 }
