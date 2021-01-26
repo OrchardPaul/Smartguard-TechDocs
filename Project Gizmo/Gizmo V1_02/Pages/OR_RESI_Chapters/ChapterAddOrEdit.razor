@@ -13,10 +13,10 @@
             }
             else
             {
-                <InputSelect @bind-Value="TaskObject.CaseTypeGroup">
-                    @foreach (var c in AllObjects.Where(C => C.ParentId == 0)
-                                           .Where(C => !(C.CaseTypeGroup is null))
-                                           .Select(C => C.CaseTypeGroup)
+                <InputSelect @bind-Value="TaskObject.ChapterObject.CaseTypeGroup">
+                    @foreach (var c in AllObjects.Where(C => C.ChapterObject.ParentId == 0)
+                                           .Where(C => !(C.ChapterObject.CaseTypeGroup is null))
+                                           .Select(C => C.ChapterObject.CaseTypeGroup)
                                            .Distinct()
                                            .ToList())
                             {
@@ -30,7 +30,7 @@
         else
         {
             <label>Case type group name</label>
-            <InputText @bind-Value="TaskObject.CaseTypeGroup"></InputText>
+            <InputText @bind-Value="TaskObject.ChapterObject.CaseTypeGroup"></InputText>
         }
 
         <input type="checkbox" @bind-value="addNewCaseTypeGroupOption" />
@@ -48,10 +48,10 @@
             }
             else
             {
-                <InputSelect @bind-Value="TaskObject.CaseType">
-                    @foreach (var c in AllObjects.Where(C => C.ParentId == 0)
-                                          .Where(C => !(C.CaseType is null))
-                                          .Select(C => C.CaseType)
+                <InputSelect @bind-Value="TaskObject.ChapterObject.CaseType">
+                    @foreach (var c in AllObjects.Where(C => C.ChapterObject.ParentId == 0)
+                                          .Where(C => !(C.ChapterObject.CaseType is null))
+                                          .Select(C => C.ChapterObject.CaseType)
                                           .Distinct()
                                           .ToList())
                             {
@@ -67,7 +67,7 @@
         {
 
             <label>Case type name</label>
-            <InputText @bind-Value="TaskObject.CaseType"></InputText>
+            <InputText @bind-Value="TaskObject.ChapterObject.CaseType"></InputText>
 
         }
 
@@ -76,13 +76,13 @@
 
     <div class="form-group">
         <label>Chapter Name</label>
-        <InputText @bind-Value="TaskObject.Name"></InputText>
+        <InputText @bind-Value="TaskObject.ChapterObject.Name"></InputText>
     </div>
 
     <button type="submit" class="btn btn-primary">Submit</button>
     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
 
-    @if (TaskObject.Id != 0)
+    @if (TaskObject.ChapterObject.Id != 0)
     {
         <button type="button" @onclick="HandleValidDelete" class="btn btn-secondary"></button>
     }
