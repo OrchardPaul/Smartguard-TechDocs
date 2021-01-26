@@ -1,0 +1,82 @@
+﻿html {
+    height: 100%;
+
+}
+
+body {
+    height: 100%;
+}
+
+a {
+    color: #AF00E3 !important;
+}
+
+h1, h2, h3, h4 {
+    color: #999;
+}
+
+label{
+    color: #333;
+}
+
+.login-page {
+    /* Full height */
+    height: 100%;
+    /* The image used */
+    background-image: url(../images/parallax_8.jpg);
+    /* Create the parallax scrolling effect */
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    margin: 0;
+    padding: 0;
+}
+
+.auth-block{
+    padding: 20px;
+    background: #fff;
+    border-radius: 5px;
+    box-shadow: 0 8px 12px 0 rgba(0,0,0,0.5);
+}
+
+#login-block {
+    width: 400px;
+    height: auto;
+    position: absolute;
+    top: calc(50% - 250px);
+    left: calc(50% - 200px);
+}
+
+.btn-main {
+    background-color: #3E00E3;
+    border-color: #3E00E3 !important;
+    color: #fff;
+    width: 200px;
+    box-shadow: 0 5px 8px 0 rgba(0,0,0,0.5);
+}
+
+    .btn-main:hover {
+        color: #fff;
+        background-color: #AF00E3;
+        border-color: #AF00E3 !important;
+        box-shadow: 0 5px 8px 0 rgba(0,0,0,0);
+    }
+
+.login-top-row {
+    background-color: #000000;
+    background-image: url(../images/GadJIT_logo_vsmall.jpg);
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 50px;
+    border-color: #aaa #ccc #ccc #aaa;
+    border-width: 2pt;
+    border-style: solid;
+}
+
+.button-container {
+    border-top: 1pt solid #ccc;
+    padding-top: 15px;
+    text-align: center;
+    padding-bottom: 15px;
+}
