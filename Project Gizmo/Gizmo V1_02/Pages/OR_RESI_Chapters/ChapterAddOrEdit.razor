@@ -15,10 +15,10 @@
             {
                 <InputSelect @bind-Value="TaskObject.ChapterObject.CaseTypeGroup">
                     @foreach (var c in AllObjects.Where(C => C.ChapterObject.ParentId == 0)
-                                           .Where(C => !(C.ChapterObject.CaseTypeGroup is null))
-                                           .Select(C => C.ChapterObject.CaseTypeGroup)
-                                           .Distinct()
-                                           .ToList())
+                                          .Where(C => !(C.ChapterObject.CaseTypeGroup is null))
+                                          .Select(C => C.ChapterObject.CaseTypeGroup)
+                                          .Distinct()
+                                          .ToList())
                             {
                         <option value="@c">
                             @c
@@ -50,10 +50,10 @@
             {
                 <InputSelect @bind-Value="TaskObject.ChapterObject.CaseType">
                     @foreach (var c in AllObjects.Where(C => C.ChapterObject.ParentId == 0)
-                                          .Where(C => !(C.ChapterObject.CaseType is null))
-                                          .Select(C => C.ChapterObject.CaseType)
-                                          .Distinct()
-                                          .ToList())
+                                         .Where(C => !(C.ChapterObject.CaseType is null))
+                                         .Select(C => C.ChapterObject.CaseType)
+                                         .Distinct()
+                                         .ToList())
                             {
                         <option value="@c">
                             @c
@@ -79,12 +79,14 @@
         <InputText @bind-Value="TaskObject.ChapterObject.Name"></InputText>
     </div>
 
-    <button type="submit" class="btn btn-primary">Submit</button>
-    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+    <div class="button-container">
+        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
 
-    @if (TaskObject.ChapterObject.Id != 0)
-    {
-        <button type="button" @onclick="HandleValidDelete" class="btn btn-secondary"></button>
-    }
+        @if (TaskObject.ChapterObject.Id != 0)
+        {
+            <button type="button" @onclick="HandleValidDelete" class="btn btn-secondary"></button>
+        }
+    </div>
 
 </EditForm>
