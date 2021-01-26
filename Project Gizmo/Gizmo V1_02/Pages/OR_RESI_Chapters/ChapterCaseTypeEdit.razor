@@ -1,18 +1,22 @@
 ﻿<EditForm Model="@TaskObject" OnValidSubmit="@HandleValidSubmit">
+    <div class="modal-body">
+            <div class="form-group">
+                @if (isCaseTypeOrGroup == "CaseType")
+                {
+                    <label>Case Type</label>
+                }
+                else
+                {
+                    <label>Case Type Group</label>
+                }
 
-    <div class="form-group">
-        @if (isCaseTypeOrGroup == "CaseType")
-        {
-            <label>Case Type</label>
-        }
-        else
-        {
-            <label>Case Type Group</label>
-        }
+                <InputText class="form-control" @bind-Value="TaskObject"></InputText>
+            </div>
 
-        <InputText @bind-Value="TaskObject"></InputText>
-    </div>
-    <button type="submit" class="float-left btn btn-alt">Save Changes</button>
-    <button type="button" class="float-left ml-2 btn btn-secondary" data-dismiss="modal">Cancel</button>
+            <div class="button-container">
+                <button type="submit" class="float-left btn btn-main">Save Changes</button>
+                <button type="button" class="float-left ml-2 btn btn-secondary" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
 
 </EditForm>

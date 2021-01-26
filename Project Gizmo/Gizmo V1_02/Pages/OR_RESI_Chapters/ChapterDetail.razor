@@ -1,6 +1,6 @@
 ﻿@using Gizmo_V1_02.Data.CustomFormObjects;
 
-<div class="modal-body" id="modal-chapter-doc">
+<div class="modal-body" >
     <EditForm Model="@TaskObject" OnValidSubmit="@HandleValidSubmit">
         @if (selectedList == "Steps and Documents")
         {
@@ -14,7 +14,7 @@
             {
                 <div class="form-group">
                     <label for="DocType">Type</label>
-                    <InputSelectInteger id="Summary" class="form-control"
+                    <InputSelectInteger id="Summary" class="form-control" style="width: 250px"
                                         @bind-Value="selectedCaseTypeGroup">
                         <option value="-1">Select</option>
                         @foreach (var group in CaseTypeGroups)
@@ -93,12 +93,12 @@
 
                             <div class="form-group">
                                 <label for="AsName">Schedule As Name</label>
-                                <InputText id="name" class="form-control" @bind-Value="@TaskObject.AsName" />
+                                <InputText id="name" class="form-control" @bind-Value="@TaskObject.AsName" style="width: 250px"/>
                             </div>
 
                             <div class="form-group">
                                 <label for="CompleteName">Complete As Name</label>
-                                <InputText id="name" class="form-control" @bind-Value="@TaskObject.CompleteName" />
+                                <InputText id="name" class="form-control" @bind-Value="@TaskObject.CompleteName" style="width: 250px"/>
                             </div>
 
                             <div class="form-group">

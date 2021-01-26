@@ -585,7 +585,12 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
             parameters.Add("originalName", editCaseType);
             parameters.Add("caseTypeGroupName", selectedCaseTypeGroup);
 
-            Modal.Show<ChapterCaseTypeEdit>("Chapter", parameters);
+            var options = new ModalOptions()
+            {
+                Class = "blazored-custom-modal modal-chapter-casetype"
+            };
+
+            Modal.Show<ChapterCaseTypeEdit>("Chapter", parameters, options);
         }
 
 
@@ -601,7 +606,18 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
             parameters.Add("dropDownChapterList", dropDownChapterList);
             parameters.Add("CaseTypeGroups", partnerCaseTypeGroups);
 
-            Modal.Show<ChapterDetail>(selectedList, parameters);
+            string className = "modal-chapter-item";
+
+            if(selectedList == "Steps and Documents")
+            {
+                className = "modal-chapter-doc";
+            }
+            var options = new ModalOptions()
+            {
+                Class = "blazored-custom-modal " + className
+            };
+
+            Modal.Show<ChapterDetail>(selectedList, parameters, options);
         }
 
         protected void ShowChapterFeesModal()
@@ -617,7 +633,7 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
 
             var options = new ModalOptions()
             {
-                Class = "blazored-custom-modal"
+                Class = "blazored-custom-modal modal-chapter-fees"
             };
 
 
@@ -657,7 +673,12 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
             parameters.Add("CurrentSysParentId", selectedChapterId);
             parameters.Add("AlternateSysParentId", altSysSelectedChapterId);
 
-            Modal.Show<ChapterItemComparison>("Synchronise Chapter Item", parameters);
+            var options = new ModalOptions()
+            {
+                Class = "blazored-custom-modal modal-chapter-comparison"
+            };
+
+            Modal.Show<ChapterItemComparison>("Synchronise Chapter Item", parameters, options);
         }
 
 
