@@ -188,7 +188,6 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
 
         private async void RefreshChapterItems(string listType)
         {
-           
 
             if (listType == "Chapters")
             {
@@ -201,8 +200,8 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
             {
                 var lst = await chapterManagementService.GetItemListByChapter(selectedChapterId);
 
-            lstAll = lst.Select(A => new VmUsrOrDefChapterManagement { ChapterObject = A }).ToList();
-            feeDefinitions = await chapterManagementService.GetFeeDefs(selectedCaseTypeGroup, selectedCaseType);
+                lstAll = lst.Select(A => new VmUsrOrDefChapterManagement { ChapterObject = A }).ToList();
+                feeDefinitions = await chapterManagementService.GetFeeDefs(selectedCaseTypeGroup, selectedCaseType);
 
                 if (listType == "Agenda" | listType == "All")
                 {
@@ -361,7 +360,6 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
             await GetAltSytemChapterItems();
         }
 
-
         public void RefreshSelectedList()
         {
             RefreshChapterItems(navDisplay);
@@ -383,7 +381,7 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
 
         private void PrepareForInsert(string header, string type)
         {
-            selectedList = header;
+            selectedList = type;
 
             editObject = new VmUsrOrDefChapterManagement { ChapterObject = new UsrOrDefChapterManagement() };
             editObject.ChapterObject.CaseType = "";
