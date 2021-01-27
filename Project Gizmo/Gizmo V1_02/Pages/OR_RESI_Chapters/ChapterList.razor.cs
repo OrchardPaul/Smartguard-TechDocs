@@ -54,6 +54,8 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
         public List<fnORCHAGetFeeDefinitions> feeDefinitions;
 
         public string editCaseType { get; set; } = "";
+
+        public UsrOrDefChapterManagement editChapter { get; set; }
         public string isCaseTypeOrGroup { get; set; } = "";
         
         public VmUsrOrDefChapterManagement editObject = new VmUsrOrDefChapterManagement { ChapterObject = new UsrOrDefChapterManagement() };
@@ -398,7 +400,7 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
 
             editObject = new VmUsrOrDefChapterManagement { ChapterObject = new UsrOrDefChapterManagement() };
             editObject.ChapterObject.CaseType = "";
-            editObject.ChapterObject.Type = type;
+            editObject.ChapterObject.Type = (type == "Steps and Documents") ? "Doc" : type;
             editObject.ChapterObject.CaseTypeGroup = "";
             editObject.ChapterObject.SeqNo = lstAll
                                                 .OrderByDescending(A => A.ChapterObject.SeqNo)
@@ -443,6 +445,14 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
         private void PrepareCaseTypeForEdit(string caseType, string option)
         {
             editCaseType = caseType;
+            isCaseTypeOrGroup = option;
+
+            ShowCaseTypeEditModal();
+        }
+
+        private void PrepareChapterForEdit(UsrOrDefChapterManagement chapter, string option)
+        {
+            editChapter = chapter;
             isCaseTypeOrGroup = option;
 
             ShowCaseTypeEditModal();
@@ -579,10 +589,14 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
             Action Action = RefreshChapters;
 
             var parameters = new ModalParameters();
-            parameters.Add("TaskObject", editCaseType);
+            parameters.Add("TaskObject", (isCaseTypeOrGroup == "Chapter") ? editChapter.Name : editCaseType);
+            parameters.Add("originalName", (isCaseTypeOrGroup == "Chapter") ? editChapter.Name : editCaseType);
+            if(isCaseTypeOrGroup == "Chapter")
+            {
+                parameters.Add("Chapter", editChapter);
+            }
             parameters.Add("DataChanged", Action);
             parameters.Add("isCaseTypeOrGroup", isCaseTypeOrGroup);
-            parameters.Add("originalName", editCaseType);
             parameters.Add("caseTypeGroupName", selectedCaseTypeGroup);
 
             var options = new ModalOptions()

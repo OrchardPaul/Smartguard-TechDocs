@@ -58,7 +58,7 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
 
         private int selectedCaseTypeGroup { get; set; } = -1;
 
-        List<string> DocTypeList = new List<string>() { "Chapter", "Doc", "Form", "Letter", "Step" };
+        List<string> DocTypeList = new List<string>() { "Doc", "Form", "Letter", "Step" };
 
         public List<string> documentList;
 

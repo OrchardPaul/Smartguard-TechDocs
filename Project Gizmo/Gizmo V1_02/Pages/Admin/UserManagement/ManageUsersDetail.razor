@@ -13,7 +13,7 @@
 
 
 
-<EditForm Model="@TaskObject">
+<EditForm Model="@TaskObject" OnValidSubmit="HandleValidSubmit">
     <DataAnnotationsValidator />
     <ValidationSummary />
     <div class="tran-block detail-block">
@@ -48,7 +48,7 @@
                             else
                             {
                                 <input type="password" disabled="disabled" class="form-control" style="display: inline; width: 250px;" value="PasswordNotChanged115592!" />
-                                <button class="btn btn-edit" style="display: inline; height:auto;" @onclick="() => TogglePasswordSet()" value=""><i class="fa fa-pencil-alt"></i></button>
+                                <button type="button" class="btn btn-edit" style="display: inline; height:auto;" @onclick="() => TogglePasswordSet()" value=""><i class="fa fa-pencil-alt"></i></button>
                             }
 
 
@@ -153,7 +153,7 @@
             </div>
 
             <div class="detail-group-box ">
-                <button type="submit" class="float-left btn btn-alt" @onclick="HandleValidSubmit">Save Changes</button>
+                <button type="submit" class="float-left btn btn-alt" >Save Changes</button>
                 <button type="button" class="float-left ml-2 btn btn-secondary" @onclick="NavigateBack">Cancel</button>
             </div>
         </div>

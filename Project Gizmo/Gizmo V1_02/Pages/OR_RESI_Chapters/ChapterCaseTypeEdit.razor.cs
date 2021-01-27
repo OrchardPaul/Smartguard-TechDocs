@@ -22,6 +22,9 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
         public string TaskObject { get; set; }
 
         [Parameter]
+        public UsrOrDefChapterManagement Chapter { get; set; }
+
+        [Parameter]
         public string originalName { get; set; }
 
         [Parameter]
@@ -44,9 +47,13 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
             {
                 await chapterManagementService.UpdateCaseType(TaskObject,originalName, caseTypeGroupName);
             }
-            else
+            else if(isCaseTypeOrGroup == "CaseTypeGroup")
             {
                 await chapterManagementService.UpdateCaseTypeGroups(TaskObject, originalName);
+            }
+            else
+            {
+                await chapterManagementService.Update(Chapter);
             }
 
             DataChanged?.Invoke();
