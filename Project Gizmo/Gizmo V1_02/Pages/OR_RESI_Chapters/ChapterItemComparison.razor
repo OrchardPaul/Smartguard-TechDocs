@@ -115,18 +115,30 @@
         </table>
     </div>
 }
-else if (Object.AltObject is null)
-{
-    <div class=" d-flex justify-content-center">
-        <div>Chapter item does not exist on @(sessionState.selectedSystem == "Dev" ? "Live" : "Dev"), Do you wish create this object on @(sessionState.selectedSystem == "Dev" ? "Live" : "Dev")?</div>
-        <button type="submit" autofocus class="btn btn-main" @onclick="() => AddObject(false)">@(sessionState.selectedSystem == "Dev" ? ">> Live" : ">> Dev")</button>
-    </div>
-}
 else
 {
-    <div class=" d-flex justify-content-center">
-        <div>Chapter item does not exist on @(sessionState.selectedSystem == "Dev" ? "Dev" : "Live"), Do you wish create this object on @(sessionState.selectedSystem == "Dev" ? "Dev" : "Live")?</div>
-        <button type="submit" autofocus class="btn btn-main" @onclick="() => AddObject(true)">@(sessionState.selectedSystem == "Dev" ? "Dev <<" : "Live <<")</button>
+    @code {
+        string curSystem;
+    }
+
+        @if (Object.AltObject is null)
+        {
+            curSystem = (sessionState.selectedSystem == "Dev" ? "Live" : "Dev");
+        }
+        else
+        {
+            curSystem = (sessionState.selectedSystem == "Dev" ? "Dev" : "Live");
+
+        }
+
+    <div class="modal-body">
+        <p>Chapter item does not exist on @curSystem</p>
+        <p>Do you wish create this object on @curSystem?</P>
+        <div class="button-container">
+            <button type="submit" autofocus class="btn btn-main" @onclick="() => AddObject(false)">Create on @curSystem</button>
+            <button type="button" class="btn btn-secondary">Cancel</button>
+        </div>
     </div>
 }
+
 

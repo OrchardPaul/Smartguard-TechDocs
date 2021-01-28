@@ -279,6 +279,8 @@
     margin-top: 20px;
     font-size: 1.2rem !important;
 }
+
+
 .nav-row-2 {
     margin-top: 12px;
     margin-left: 30px;
@@ -291,6 +293,17 @@
     font-size: 0.9rem !important;
 }
 
+.nav-row-1 .data-item, .nav-row-2 .data-item {
+    background-color: rgba(0, 0, 0, 0.8);
+    color: #FFF;
+    margin: 0 !important;
+    box-shadow: 0 8px 12px 0 rgba(0, 0, 0, 0.5);
+    border: none;
+    padding: 0;
+}
+
+
+
 .nav-row-3 .data-item{
     background-color: rgba(255, 255, 255, 0.8) ;
 
@@ -298,15 +311,15 @@
 
 .data-item-nav {
     height: 100%;
+    width: 100%;
     display: flex;
     align-items: center;
     padding: 0;
-    background-color: rgba(0, 0, 0, 0.8);
-    box-shadow: 0 8px 12px 0 rgba(0, 0, 0, 0.5);
     border-radius: 0px;
     border: none;
     cursor: pointer;
     color: #fff;
+    margin: 0;
 }
 
 .nav-row-3 .data-item-nav {
@@ -365,18 +378,10 @@
 }
 
 
-
-
-
-.data-item-nav a {
-    display: block;
-    height: 100%;
-    width: 100%;
-    text-decoration: none !important;
-}
-
 .link-direction{
     cursor: pointer;
+    margin-left: 10px;
+    margin-right: 10px;
 }
 
 .data-item-nav:hover, .data-item-nav a:hover, .nav-row-3 .data-item-nav:hover{
