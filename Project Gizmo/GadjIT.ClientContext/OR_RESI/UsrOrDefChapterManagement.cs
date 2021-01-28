@@ -39,5 +39,8 @@ namespace GadjIT.ClientContext.OR_RESI
         [StringLength(250)]
         public string CompleteName { get; set; }
         public int? RescheduleDays { get; set; }
+        [Column("Alt_Display_Name")]
+        [StringLength(300)]
+        public string AltDisplayName { get; set; }
     }
 }

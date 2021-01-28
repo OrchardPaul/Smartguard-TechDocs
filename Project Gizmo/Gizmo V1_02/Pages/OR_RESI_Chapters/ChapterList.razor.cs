@@ -280,7 +280,6 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
 
             displaySpinner = false;
 
-            rowChanged = 0;
             return true;
         }
 
@@ -404,10 +403,23 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
             editObject.ChapterObject.CaseType = "";
             editObject.ChapterObject.Type = (type == "Steps and Documents") ? "Doc" : type;
             editObject.ChapterObject.CaseTypeGroup = "";
-            editObject.ChapterObject.SeqNo = lstAll
-                                                .OrderByDescending(A => A.ChapterObject.SeqNo)
-                                                .Select(A => A.ChapterObject.SeqNo)
-                                                .FirstOrDefault() + 1;
+
+            if(type == "Steps and Documents")
+            {
+                editObject.ChapterObject.SeqNo = lstDocs
+                                                    .OrderByDescending(A => A.ChapterObject.SeqNo)
+                                                    .Select(A => A.ChapterObject.SeqNo)
+                                                    .FirstOrDefault() + 1;
+            }
+            else
+            {
+                editObject.ChapterObject.SeqNo = lstFees
+                                    .OrderByDescending(A => A.ChapterObject.SeqNo)
+                                    .Select(A => A.ChapterObject.SeqNo)
+                                    .FirstOrDefault() + 1;
+            }
+
+            
             editObject.ChapterObject.ParentId = selectedChapterId;
 
             ShowChapterDetailModal();
