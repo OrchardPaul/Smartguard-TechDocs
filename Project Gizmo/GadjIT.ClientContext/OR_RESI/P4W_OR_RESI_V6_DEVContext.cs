@@ -224,10 +224,13 @@ namespace GadjIT.ClientContext.OR_RESI
                     .HasName("PK__DM_DocumentsPerm__1F7A4DDE");
             });
 
+
             modelBuilder.Entity<UsrOrDefChapterManagement>(entity =>
             {
                 entity.HasKey(e => e.Id)
                     .IsClustered(false);
+
+                entity.Property(e => e.AltDisplayName).IsUnicode(false);
 
                 entity.Property(e => e.AsName).IsUnicode(false);
 

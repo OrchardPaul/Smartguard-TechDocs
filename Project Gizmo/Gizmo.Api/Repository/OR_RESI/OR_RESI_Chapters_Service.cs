@@ -81,6 +81,7 @@ namespace GadjIT.ClientAPI.Repository.OR_RESI
             updatedItem.CompleteName = item.CompleteName;
             updatedItem.EntityType = item.EntityType;
             updatedItem.SuppressStep = item.SuppressStep;
+            updatedItem.AltDisplayName = item.AltDisplayName;
 
             await _context.SaveChangesAsync();
 
