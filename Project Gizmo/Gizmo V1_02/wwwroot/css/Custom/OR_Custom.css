@@ -1021,14 +1021,3 @@
     height: 205px;
 }
 
-.invalid.modified {
-    border: 1.5pt solid red !important;
-    border-radius: 5px !important;
-    outline-width: 0px !important;
-}
-
-.valid.modified {
-    border: 1.5pt solid green !important;
-    border-radius: 5px !important;
-    outline-width: 0px !important;
-}

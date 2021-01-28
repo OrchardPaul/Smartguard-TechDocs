@@ -104,6 +104,19 @@
     margin: 0 10px 0 10px;
 }
 
+/*Form Control Validation - remove outline to be able to add curved borders */
+.invalid.modified {
+    border: 1.5pt solid red !important;
+    border-radius: 5px !important;
+    outline-width: 0px !important;
+}
+
+.valid.modified {
+    border: 1.5pt solid green !important;
+    border-radius: 5px !important;
+    outline-width: 0px !important;
+}
+
 /*****************/
 /*   Tables      */
 /*****************/
