@@ -297,7 +297,12 @@ namespace Gizmo_V1_02.Pages.SystemNav.WorkTypeManagement
             parameters.Add("TaskObject", editDepartment);
             parameters.Add("DataChanged", Action);
 
-            Modal.Show<WorkTypeDepartmentDetails>("Department", parameters);
+            var options = new ModalOptions()
+            {
+                Class = "blazored-custom-modal"
+            };
+
+            Modal.Show<WorkTypeDepartmentDetails>("Department", parameters, options);
         }
 
         protected void ShowEditTypeModal()
@@ -309,7 +314,12 @@ namespace Gizmo_V1_02.Pages.SystemNav.WorkTypeManagement
             parameters.Add("DataChanged", Action);
             parameters.Add("Departments", departments.Select(D => D.department).ToList());
 
-            Modal.Show<WorkTypeDetails>("Work Type", parameters);
+            var options = new ModalOptions()
+            {
+                Class = "blazored-custom-modal"
+            };
+
+            Modal.Show<WorkTypeDetails>("Work Type", parameters,options);
         }
 
         protected void ShowEditGroupModal()
@@ -321,7 +331,12 @@ namespace Gizmo_V1_02.Pages.SystemNav.WorkTypeManagement
             parameters.Add("DataChanged", Action);
             parameters.Add("Departments", departments.Select(D => D.department).ToList());
 
-            Modal.Show<WorkTypeGroupDetails>("Work Type Group", parameters);
+            var options = new ModalOptions()
+            {
+                Class = "blazored-custom-modal"
+            };
+
+            Modal.Show<WorkTypeGroupDetails>("Work Type Group", parameters, options);
         }
 
 
