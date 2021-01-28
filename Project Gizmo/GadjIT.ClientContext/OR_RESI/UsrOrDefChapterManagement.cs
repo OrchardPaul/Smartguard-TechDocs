@@ -22,8 +22,10 @@ namespace GadjIT.ClientContext.OR_RESI
         [StringLength(100)]
         public string CaseType { get; set; }
         [StringLength(100)]
+        [Required(ErrorMessage = "<b> Item type must be set </b>")]
         public string Type { get; set; }
         [StringLength(250)]
+        [Required]
         public string Name { get; set; }
         public int? SeqNo { get; set; }
         [Column("Suppress_Step")]

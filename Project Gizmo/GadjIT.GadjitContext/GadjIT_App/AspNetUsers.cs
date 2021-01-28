@@ -18,14 +18,18 @@ namespace GadjIT.GadjitContext.GadjIT_App
         [Key]
         public string Id { get; set; }
         [StringLength(256)]
+        [EmailAddress]
+        [Required]
         public string UserName { get; set; }
         [StringLength(256)]
         public string NormalizedUserName { get; set; }
         [StringLength(256)]
+        [EmailAddress]
         public string Email { get; set; }
         [StringLength(256)]
         public string NormalizedEmail { get; set; }
         public bool EmailConfirmed { get; set; }
+        [Required]
         public string PasswordHash { get; set; }
         public string SecurityStamp { get; set; }
         public string ConcurrencyStamp { get; set; }

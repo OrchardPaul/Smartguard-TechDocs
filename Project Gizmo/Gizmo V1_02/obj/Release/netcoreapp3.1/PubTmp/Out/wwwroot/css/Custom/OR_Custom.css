@@ -115,6 +115,7 @@
 /*  BUTTONS & LINKS            */
 /*-----------------------------*/
 
+
 .btn {
     border: 2pt solid !important;
     border-radius: 5px !important;
@@ -124,7 +125,7 @@
 
 .btn:hover {
     box-shadow: 0 8px 12px 0 rgba(0, 0, 0, 0);
-    transition-duration: 1s;
+    transition-duration: 0.5s;
     transition-property: box-shadow, background-color, border;
 }
 
@@ -142,32 +143,6 @@
     background-color: rgba(245, 245, 245, 0.5) !important;
 }
 
-.btn-ellipses {
-    width: 20px !important;
-    margin: 0 5px 0 5px !important;
-    height: 100%;
-    font-size: 1.1rem;
-    color: #ccc;
-    border: none !important;
-    text-align: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-}
-
-.btn-ellipses .btn-dashed {
-    cursor: pointer;
-    border: 1pt dashed #999;
-    padding-top: 3px;
-    padding-bottom: 3px;
-    width: 100%;
-}
-
-.btn-ellipses:hover .btn-dashed {
-    cursor: pointer;
-    border: 1pt dashed #fff;
-}
 
 .tran-block .btn-edit {
     background-color: rgba(245, 245, 245, 0) !important;
@@ -175,6 +150,21 @@
 
 .btn-shadow {
     box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.7);
+}
+
+
+.btn-main:hover {
+    background-color: #000;
+    border-color: #000 !important;
+    color: #FFF;
+}
+
+.grid-actions .btn{
+    margin-left: 30px;
+}
+
+.grid-actions .btn:first-of-type {
+    margin-left: 0px;
 }
 
 .back-link {
@@ -214,6 +204,7 @@
     width: auto;
     font-size: 0.8rem;
     border-radius: 0px;
+    background-color: rgba(255, 255, 255, 0.9);
 }
 
 @media (max-width: 992px) {
@@ -292,7 +283,7 @@
 }
 
 .grid-row-lg {
-    height: 65px;
+    height: 52px;
 }
 
 .grid-row-md {
@@ -510,7 +501,7 @@
 
 .grid-tran .btn:hover {
     box-shadow: none;
-    transition-duration: 1s;
+    transition-duration: 0.5s;
     transition-property: box-shadow, background-color, border;
 }
 
@@ -742,7 +733,7 @@
 }
 
 .schedule-days {
-    padding-top: 5px;
+    padding-top: 3px;
 }
 
 .schedule-days .badge{
@@ -755,16 +746,22 @@
 
 /*   SEQUENCE CHANGE OPTIONS             */
 .grid-row-lg .seq-change {
-    padding-top: 6px;
+    padding-top: 1px;
     padding-left: 8px;
     width: 30px;
     text-align: center;
 }
 
 
-.seq-change a {
+.seq-change div:first-of-type, .seq-change div:last-of-type {
     color: #ccc !important;
     text-decoration: none;
+    cursor: pointer;
+    height: 10px;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-top: 0;
+    padding-bottom: 0;
 }
 
 .grid-can-edit div.grid-row:first-child .seq-change div:first-child
@@ -931,6 +928,27 @@
 
 .visible{
     visibility: visible;
+}
+
+
+/*---------------------------------------*/
+/*   SHAPES                              */
+/*---------------------------------------*/
+
+.triangle-up {
+    width: 0;
+    height: 0;
+    border-left: 0.5em solid transparent;
+    border-right: 0.5em solid transparent;
+    border-bottom: 0.8em solid ;
+}
+
+.triangle-down {
+    width: 0;
+    height: 0;
+    border-left: 0.5em solid transparent;
+    border-right: 0.5em solid transparent;
+    border-top: 0.8em solid ;
 }
 
 /******************/

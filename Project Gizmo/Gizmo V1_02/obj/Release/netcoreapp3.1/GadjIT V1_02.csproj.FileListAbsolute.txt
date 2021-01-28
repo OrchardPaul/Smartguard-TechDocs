@@ -304,3 +304,5 @@ F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\Gadj
 F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\GadjIT.GadjitContext.pdb
 F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\RazorDeclaration\Pages\Shared\Modals\ModalTooltip.razor.g.cs
 F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Pages\Shared\Modals\ModalTooltip.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\RazorDeclaration\Pages\OR_RESI_Chapters\ChapterFees.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Pages\OR_RESI_Chapters\ChapterFees.razor.g.cs

@@ -84,7 +84,7 @@
     position: -webkit-sticky; /* Safari */
     position: sticky;
     top: 0;
-    background: #222 !important;
+    background: #333 !important;
     border: none;
 }
 
@@ -93,8 +93,13 @@
     color: #CCC !important;
 }
 
+.sidebar .nav-item .nav-link span, .sidebar .nav-item .nav-link svg {
+    margin-right: 10px;
+}
+
 .sidebar .nav-item a.active {
-    color: #FFF !important;
+    color: #000 !important;
+    background-color: #666;
     font-weight: bold;
 }
 
@@ -272,28 +277,37 @@
 
 .nav-row-1 {
     margin-top: 20px;
+    font-size: 1.2rem !important;
 }
 .nav-row-2 {
     margin-top: 12px;
     margin-left: 30px;
+    font-size: 1rem !important;
 }
 .nav-row-3 {
     margin-top: 7px;
     margin-left: 60px;
     margin-right: 15px;
+    font-size: 0.9rem !important;
 }
+
 
 .data-item-nav {
     height: 100%;
     display: flex;
     align-items: center;
     padding: 0;
-    font-size: 0.95rem !important;
-    background-color: rgba(255, 255, 255, 0.8);
+    background-color: rgba(0, 0, 0, 0.8);
     box-shadow: 0 8px 12px 0 rgba(0, 0, 0, 0.5);
     border-radius: 0px;
     border: none;
     cursor: pointer;
+    color: #fff;
+}
+
+.nav-row-3 .data-item-nav {
+    background-color: rgba(255, 255, 255, 0.7);
+    color: #000;
 }
 
 .data-item-nav a {
@@ -305,13 +319,13 @@
 
 
 .data-item-nav:hover, .data-item-nav a:hover, .nav-row-3 .data-item-nav:hover{
-    background-color: #000;
-    color: #FFF;
-    transition-duration: 1s;
+    transition-duration: 0.2s;
     transition-property: background-color, color;
 }
 
-
+.data-item-nav:hover div[class*='triangle'], .data-item-nav:hover .link-direction {
+    color: #fff !important;
+}    
 
 .data-item a:hover .data-item-main, .data-item a:hover .data-item-alt {
     background-color: #000;
@@ -324,6 +338,38 @@
 /*--------------------*/
 /*   DROP DOWN NAV    */
 /*--------------------*/
+
+
+
+.btn-ellipses {
+    width: 20px !important;
+    margin: 0 5px 0 5px !important;
+    height: 100%;
+    font-size: 1.1rem;
+    border: none !important;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.grid-can-edit .btn-ellipses {
+    color: #CCC;
+}
+
+.data-item-nav .btn-ellipses {
+    color: #333;
+}
+
+.nav-row-3 .data-item-nav .btn-ellipses {
+    color: #999;
+}
+
+.data-item-nav:hover .btn-ellipses {
+    color: #FFF;
+}
+
 .btn-ellipses .ellipsis-menu {
     position: absolute;
     display: block;
@@ -336,11 +382,11 @@
     z-index: 100;
     opacity: 0;
     visibility: hidden;
-    transition: opacity 1s linear;
-    transition: visibility 0.3s linear, opacity 0.3s linear;
+    transition: opacity 0.1s linear;
+    transition: visibility 0.1s linear, opacity 0.1s linear;
 }
 
-.btn-ellipses .ellipsis-menu-right {
+.btn-ellipses .ellipsis-menu-left {
     top: 8px;
     left: calc(100% - 170px) !important;
 }
@@ -360,7 +406,7 @@
 .btn-ellipses:hover .ellipsis-menu {
     visibility: visible;
     opacity: 1;
-    transition: visibility 0.3s linear, opacity 0.3s linear;
+    transition: visibility 0.2s linear, opacity 0.2s linear;
 }
 
 .btn-ellipses ul li {
@@ -376,8 +422,26 @@
     
 }
 
+
 .btn-ellipses ul li:hover {
     background-color: #ddd;
     color: #000;
 }
 
+.btn-ellipses ul li.col-main:not(:hover), .btn-ellipses ul li.col-red:not(:hover)  {
+    color: #000 !important;
+}
+
+
+.btn-ellipses .btn-dashed {
+    cursor: pointer;
+    border: 1pt dashed #999;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    width: 100%;
+}
+
+.btn-ellipses:hover .btn-dashed {
+    cursor: pointer;
+    border: 1pt dashed #fff;
+}

@@ -525,6 +525,7 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
                 await chapterManagementService.Update(swapItem.ChapterObject);
             }
             await RefreshChapterItems(listType);
+            StateHasChanged();
         }
 
         private List<VmUsrOrDefChapterManagement> GetRelevantChapterList(string listType)
@@ -703,7 +704,7 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
             await chapterManagementService.Delete(editObject.ChapterObject.Id);
 
             await RefreshChapterItems(navDisplay);
-
+            StateHasChanged();
         }
 
         /// <summary>
