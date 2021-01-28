@@ -48,7 +48,7 @@ else
                 {
 
                     <div class="grid-row-lg mt-3 nav-row-1">
-                        <div class="data-item-nav" @onclick='() => SelectCaseTypeGroup(caseTypeGroup)' title="Group: click to see case types assigned to @caseTypeGroup">
+                        <div class="data-item-nav"  title="Group: click to see case types assigned to @caseTypeGroup">
                             @if (sessionState.isAdminUser)
                             {
                                 <div class="btn-ellipses float-left">
@@ -64,8 +64,8 @@ else
                                     </div>
                                 </div>
                             }
-                            <div class="data-item-sub"><span class="fa fa-boxes mr-2"></span>@caseTypeGroup</div>
-                            <div class="data-item-right col-alt "><div class="link-direction @(caseTypeGroup == selectedCaseTypeGroup ? "triangle-up col-grey" : "triangle-down")"></div></div>
+                            <div class="data-item-sub" @onclick='() => SelectCaseTypeGroup(caseTypeGroup)'><span class="fa fa-boxes mr-2"></span>@caseTypeGroup</div>
+                            <div class="data-item-right col-alt " @onclick='() => SelectCaseTypeGroup(caseTypeGroup)'><div class="link-direction @(caseTypeGroup == selectedCaseTypeGroup ? "triangle-up col-grey" : "triangle-down")"></div></div>
 
 
 
@@ -86,7 +86,7 @@ else
                         {
 
                             <div class="grid-row-md nav-row-2">
-                                <div class="data-item-nav" @onclick='() => SelectCaseType(caseType)' title="Case Type: click to see the chapters within @caseType">
+                                <div class="data-item-nav" title="Case Type: click to see the chapters within @caseType">
                                     @if (sessionState.isAdminUser)
                                     {
                                         <div class="btn-ellipses float-left">
@@ -107,18 +107,18 @@ else
                                     
                                     @if (caseType == selectedCaseType) 
                                     {
-                                        <div class="data-item-sub">
+                                        <div class="data-item-sub" @onclick='() => SelectCaseType(caseType)'>
                                             <span class="fa fa-folder-open mr-2"></span>@caseType
                                         </div>
                                             }else
                                             {
-                                        <div class="data-item-sub">
+                                        <div class="data-item-sub" @onclick='() => SelectCaseType(caseType)'>
                                             <span class="fa fa-folder mr-2"></span>@caseType
                                         </div>
                                     }
                                     
                                     
-                                    <div class="data-item-right col-alt "><div class="link-direction @(caseType == selectedCaseType ? "triangle-up col-grey" : "triangle-down")"></div></div>
+                                    <div class="data-item-right col-alt " @onclick='() => SelectCaseType(caseType)'><div class="link-direction @(caseType == selectedCaseType ? "triangle-up col-grey" : "triangle-down")"></div></div>
 
                                 </div>
 

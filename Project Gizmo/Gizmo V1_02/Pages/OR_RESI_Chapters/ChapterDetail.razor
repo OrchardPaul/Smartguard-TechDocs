@@ -3,7 +3,6 @@
 <div class="modal-body">
     <EditForm Model="@TaskObject" OnValidSubmit="HandleValidSubmit">
         <DataAnnotationsValidator />
-        <ValidationSummary />
         @if (selectedList == "Steps and Documents")
         {
             @if (dropDownChapterList is null)
@@ -34,28 +33,29 @@
                 }
                 else
                 {
-                    <div class="form-group">
+    <div class="form-group">
 
-                        <label for="DocName">Document / Step</label>
-                        <InputSelect id="documentList" class="form-control" @bind-Value="TaskObject.Name">
-                            @if (TaskObject.Name is null)
-                                        {
-                                <option value="">Select</option>
-                                        }
-                                        else
-                                        {
-                                <option value="@TaskObject.Name">@TaskObject.Name</option>
-                                        }
+        <label for="DocName">Document / Step</label>
+        <InputSelect id="documentList" class="form-control" @bind-Value="TaskObject.Name">
+            @if (TaskObject.Name is null)
+                        {
+                <option value="">Select</option>
+                        }
+                        else
+                        {
+                <option value="@TaskObject.Name">@TaskObject.Name</option>
+                        }
 
 
-                            @foreach (var doc in dropDownChapterList.Where(D => D.CaseTypeGroupRef == selectedCaseTypeGroup).OrderByDescending(D => D.Name).ToList())
-                                        {
-                                <option value="@doc.Name">
-                                    @doc.Name
-                                </option>
-                                        }
-                        </InputSelect>
-                    </div>
+            @foreach (var doc in dropDownChapterList.Where(D => D.CaseTypeGroupRef == selectedCaseTypeGroup).OrderByDescending(D => D.Name).ToList())
+                        {
+                <option value="@doc.Name">
+                    @doc.Name
+                </option>
+                        }
+        </InputSelect>
+        <ValidationMessage For="@(() => TaskObject.Name)" />
+    </div>
                 }
 
 
@@ -74,19 +74,20 @@
 
         @if (selectedList == "Steps and Documents")
         {
-            <div class="form-group">
-                <label for="DocType">Type</label>
-                <InputSelect id="Summary" class="form-control" style="width: 150px"
-                             @bind-Value="TaskObject.Type">
-                    <option value="">Select</option>
-                    @foreach (var type in DocTypeList)
-                        {
-                        <option value="@type">
-                            @type
-                        </option>
-                        }
-                </InputSelect>
-            </div>
+    <div class="form-group">
+        <label for="DocType">Type</label>
+        <InputSelect id="Summary" class="form-control" style="width: 150px"
+                     @bind-Value="TaskObject.Type">
+            <option value="">Select</option>
+            @foreach (var type in DocTypeList)
+                {
+                <option value="@type">
+                    @type
+                </option>
+                }
+        </InputSelect>
+        <ValidationMessage For="@(() => TaskObject.Type)" />
+    </div>
 
 
 
@@ -103,7 +104,7 @@
 
             <div class="form-group">
                 <label for="RescheduleDays">Reschedule Days</label>
-                <InputNumber id="name" class="form-control" @bind-Value="@TaskObject.RescheduleDays" style="width: 75px" />
+                <InputNumber id="name" class="form-control" @bind-Value="RescheduleDays" style="width: 75px" />
             </div>
 
 

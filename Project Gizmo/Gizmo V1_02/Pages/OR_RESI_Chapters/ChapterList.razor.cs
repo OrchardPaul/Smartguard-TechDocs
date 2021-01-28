@@ -169,6 +169,7 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
             selectedChapter = chapter;
             compareSystems = false;
             rowChanged = 0;
+            navDisplay = "Docs";
 
             await RefreshChapterItems("All");
 
@@ -378,6 +379,7 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
         public async void RefreshSelectedList()
         {
             await RefreshChapterItems(navDisplay);
+            StateHasChanged();
         }
 
         private void PrepareForEdit(VmUsrOrDefChapterManagement item, string header)
