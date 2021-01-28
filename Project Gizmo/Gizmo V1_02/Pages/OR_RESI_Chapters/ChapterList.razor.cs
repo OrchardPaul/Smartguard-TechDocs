@@ -88,6 +88,8 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
 
         public string navDisplay = "Docs";
 
+        private bool seqMoving = false;
+
         public bool compareSystems = false;
 
         private string RowChangedClass { get; set; } = "row-changed-nav3";
@@ -503,6 +505,8 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
         /// <returns>No return</returns>
         protected async void MoveSeq(UsrOrDefChapterManagement selectobject, string listType, string direction)
         {
+            seqMoving = true; //prevents changes to the form whilst process of changing seq is carried out
+
             var lstItems = new List<VmUsrOrDefChapterManagement>();
             int incrementBy;
 
@@ -538,6 +542,9 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
             }
             await RefreshChapterItems(listType);
             StateHasChanged();
+
+            seqMoving = false;
+
         }
 
         private List<VmUsrOrDefChapterManagement> GetRelevantChapterList(string listType)
@@ -742,25 +749,32 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
             }
 
             return RowChangedClass;
-
+            
         }
 
         private bool SequenceIsValid(string listType)
         {
-            List<VmUsrOrDefChapterManagement> listItems = GetRelevantChapterList(listType);
-
-            bool isValid = true;
-
-            for (int i = 0; i < listItems.Count; i++)
+            if (seqMoving == false)
             {
-                if (listItems[i].ChapterObject.SeqNo != i+1)
+                List<VmUsrOrDefChapterManagement> listItems = GetRelevantChapterList(listType);
+
+                bool isValid = true;
+
+                for (int i = 0; i < listItems.Count; i++)
                 {
-                    isValid = false;
+                    if (listItems[i].ChapterObject.SeqNo != i+1)
+                    {
+                        isValid = false;
+                    }
+                
                 }
                 
+                return isValid;
             }
-
-            return isValid;
+            else
+            {
+                return true;
+            }
 
         }
     }
