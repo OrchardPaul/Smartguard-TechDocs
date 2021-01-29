@@ -787,7 +787,7 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
 
         private bool SequenceIsValid(string listType)
         {
-            if (seqMoving == false)
+            if (seqMoving == false | compareSystems == true)
             {
                 List<VmUsrOrDefChapterManagement> listItems = GetRelevantChapterList(listType);
 

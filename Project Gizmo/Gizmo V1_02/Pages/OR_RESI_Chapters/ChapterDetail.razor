@@ -12,30 +12,29 @@
             else
             {
                 <div class="form-group">
-                    <label for="DocType">Type</label>
+                    <label for="DocType">Case Type Group</label>
                     <InputSelectInteger class="form-control" style="width: 250px"
                                         @bind-Value="selectedCaseTypeGroup">
                         <option value="-1">Select</option>
                         @foreach (var group in CaseTypeGroups)
-                                {
+                            {
                             <option value="@group.Id">
                                 @group.Name
                             </option>
-                                }
+                            }
                     </InputSelectInteger>
                 </div>
 
-                @if (selectedCaseTypeGroup == -1 & TaskObject.Name is null)
-                {
-                    <div class="form-group">
-                        <label>Please select case type group</label>
-                    </div>
-                }
-                else
-                {
-                    <div class="form-group">
+                <div class="form-group">
+                    <label for="DocName">Document / Step</label>
+                    @if (selectedCaseTypeGroup == -1 & TaskObject.Name is null)
+                    {
+                            <select class="form-control" disabled />
+                    }
+                    else
+                    {
 
-                        <label for="DocName">Document / Step</label>
+
                         <InputSelect class="form-control" @bind-Value="TaskObject.Name">
                             @if (TaskObject.Name is null)
                                         {
@@ -55,77 +54,80 @@
                                         }
                         </InputSelect>
                         <ValidationMessage For="@(() => TaskObject.Name)" />
+
+                    }
+
+                </div>
+                    }
+
+                    }
+                    else
+                    {
+                    <div class="form-group">
+                        <label for="Name">@CustomHeader Name</label>
+                        <input type="hidden" @bind-value="@TaskObject.Id" />
+                        <InputText class="form-control" @bind-Value="@TaskObject.Name" />
                     </div>
-                }
+                    }
 
 
-            }
 
-        }
-        else
-        {
-            <div class="form-group">
-                <label for="Name">@CustomHeader Name</label>
-                <input type="hidden" @bind-value="@TaskObject.Id" />
-                <InputText class="form-control" @bind-Value="@TaskObject.Name" />
-            </div>
-        }
+                    @if (selectedList == "Steps and Documents")
+                    {
+                        <div class="form-group">
+                            <label for="AltDisplayName">Display Name</label>
+                            <InputText class="form-control" @bind-Value="@TaskObject.AltDisplayName" style="width: 350px" />
+                        </div>
 
+                        <div class="form-group">
+                            <label for="DocType">Type</label>
+                            <InputSelect class="form-control" style="width: 150px"
+                                         @bind-Value="TaskObject.Type">
+                                <option value="">Select</option>
+                                @foreach (var type in DocTypeList)
+                                        {
+                                    <option value="@type">
+                                        @type
+                                    </option>
+                                        }
+                            </InputSelect>
+                            <ValidationMessage For="@(() => TaskObject.Type)" />
+                        </div>
 
-        @if (selectedList == "Steps and Documents")
-        {
-            <div class="form-group">
-                <label for="DocType">Type</label>
-                <InputSelect class="form-control" style="width: 150px"
-                             @bind-Value="TaskObject.Type">
-                    <option value="">Select</option>
-                    @foreach (var type in DocTypeList)
-                        {
-                        <option value="@type">
-                            @type
-                        </option>
-                        }
-                </InputSelect>
-                <ValidationMessage For="@(() => TaskObject.Type)" />
-            </div>
-
-            <div class="form-group">
-                <label for="AsName">Schedule As Name</label>
-                <InputText class="form-control" @bind-Value="@TaskObject.AsName" style="width: 250px" />
-            </div>
-
-            <div class="form-group">
-                <label for="AltDisplayName">Display Name</label>
-                <InputText class="form-control" @bind-Value="@TaskObject.AltDisplayName" style="width: 250px" />
-            </div>
+                        <div class="form-group">
+                            <label for="AsName">Schedule As Name</label>
+                            <InputText class="form-control" @bind-Value="@TaskObject.AsName" style="width: 350px" />
+                        </div>
 
 
-            <div class="form-group">
-                <label for="CompleteName">Complete As Name</label>
-                <InputText class="form-control" @bind-Value="@TaskObject.CompleteName" style="width: 250px" />
-            </div>
-
-            <div class="form-group">
-                <label for="RescheduleDays">Reschedule Days</label>
-                <InputNumber class="form-control" @bind-Value="RescheduleDays" style="width: 75px" />
-            </div>
 
 
-            <div class="form-group">
-                <label for="Suppress">Suppress Step</label>
-                <InputCheckbox class="form-control" @bind-Value="suppressStep" />
-            </div>
-        }
+                        <div class="form-group">
+                            <label for="CompleteName">Complete As Name</label>
+                            <InputText class="form-control" @bind-Value="@TaskObject.CompleteName" style="width: 350px" />
+                        </div>
 
-        <input type="hidden" @bind-value="@TaskObject.CaseType" />
-        <input type="hidden" @bind-value="@TaskObject.CaseTypeGroup" />
-        <input type="hidden" @bind-value="@TaskObject.ParentId" />
+                        <div class="form-group">
+                            <label for="RescheduleDays">Reschedule Days</label>
+                            <InputNumber class="form-control" @bind-Value="RescheduleDays" style="width: 75px" />
+                        </div>
 
 
-        <div class="button-container">
-            <button type="submit" class="btn btn-main">Save</button>
-            <button type="button" class="btn btn-secondary" @onclick="Close">Cancel</button>
-        </div>
-    </EditForm>
+                        <div class="form-group">
+                            <label for="Suppress">Suppress Step</label>
+                            <InputCheckbox class="form-control" @bind-Value="suppressStep" />
+                        </div>
+                    }
+
+                    <input type="hidden" @bind-value="@TaskObject.CaseType" />
+                    <input type="hidden" @bind-value="@TaskObject.CaseTypeGroup" />
+                    <input type="hidden" @bind-value="@TaskObject.ParentId" />
+
+
+                    <div class="button-container">
+                        <button type="submit" class="btn btn-main">Save</button>
+                        <button type="button" class="btn btn-secondary" @onclick="Close">Cancel</button>
+                    </div>
+                </EditForm>
 </div>
 
