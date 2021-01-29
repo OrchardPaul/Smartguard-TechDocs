@@ -585,7 +585,8 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
 
                 await chapterManagementService.Update(item.ChapterObject);
             }
-            StateHasChanged();
+
+            RefreshSelectedList();
         }
 
         protected void CondenseFeeSeq()
