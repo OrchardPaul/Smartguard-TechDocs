@@ -532,6 +532,10 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
                 case "Fees":
                     lstItems = lstFees;
                     break;
+                case "Status":
+                    lstItems = lstStatus;
+                    break;
+
                 case "Chapters":
                     lstItems = lstChapters
                                         .Where(A => A.ChapterObject.CaseTypeGroup == selectedCaseTypeGroup)
@@ -568,6 +572,9 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
                     break;
                 case "Fees":
                     listItems = lstFees;
+                    break;
+                case "Status":
+                    listItems = lstStatus;
                     break;
                 case "Chapters":
                     listItems = lstChapters
