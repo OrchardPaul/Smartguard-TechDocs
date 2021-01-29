@@ -301,13 +301,23 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
                 var test = await RefreshChapterItems(navDisplay);
 
                 await sessionState.SwitchSelectedSystem();
-                var temp = await chapterManagementService.GetItemListByChapter(selectedChapterId);
+
+                var chapter = await chapterManagementService.GetItemListByChapterName(selectedCaseTypeGroup, selectedCaseType, selectedChapter);
+                altSysSelectedChapterId = chapter
+                                                .Select(A => A.Id)
+                                                .FirstOrDefault();
+
+                if(altSysSelectedChapterId == 0)
+                {
+                    return false;
+                }
+
+                var temp = await chapterManagementService.GetItemListByChapter(altSysSelectedChapterId.Value);
+                
                 if(temp.Count > 0)
                 {
                     lstAltSystemChapterItems = temp.Select(T => new VmUsrOrDefChapterManagement { ChapterObject = T }).ToList();
-                    altSysSelectedChapterId = lstAltSystemChapterItems
-                                                .Select(A => A.ChapterObject.ParentId)
-                                                .FirstOrDefault();
+                    
 
                     await sessionState.ResetSelectedSystem();
 
@@ -522,6 +532,10 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
                 case "Fees":
                     lstItems = lstFees;
                     break;
+                case "Status":
+                    lstItems = lstStatus;
+                    break;
+
                 case "Chapters":
                     lstItems = lstChapters
                                         .Where(A => A.ChapterObject.CaseTypeGroup == selectedCaseTypeGroup)
@@ -558,6 +572,9 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
                     break;
                 case "Fees":
                     listItems = lstFees;
+                    break;
+                case "Status":
+                    listItems = lstStatus;
                     break;
                 case "Chapters":
                     listItems = lstChapters
