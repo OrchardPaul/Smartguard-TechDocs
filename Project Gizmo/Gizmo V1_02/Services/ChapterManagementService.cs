@@ -24,6 +24,7 @@ namespace Gizmo_V1_02.Services
         Task<List<UsrOrDefChapterManagement>> GetDocListByChapterAndDocType(string caseType, string chapter, string docType);
         Task<List<DmDocuments>> GetDocumentList(string caseType);
         Task<List<UsrOrDefChapterManagement>> GetItemListByChapter(int chapterId);
+        Task<List<UsrOrDefChapterManagement>> GetItemListByChapterName(string casetypegroup, string casetype, string chapterName);
         Task<UsrOrDefChapterManagement> Update(UsrOrDefChapterManagement item);
         Task<List<UsrOrDefChapterManagement>> UpdateCaseType(string newCaseTypeName, string originalCaseTypeName, string caseTypeGroup);
         Task<List<UsrOrDefChapterManagement>> UpdateCaseTypeGroups(string newCaseTypeGroupName, string originalCaseTypeGroupName);
@@ -95,6 +96,11 @@ namespace Gizmo_V1_02.Services
         public Task<List<UsrOrDefChapterManagement>> GetItemListByChapter(int chapterId)
         {
             return httpClient.GetJsonAsync<List<UsrOrDefChapterManagement>>($"{userSession.baseUri}api/ChapterManagement/GetItemListByChapter/{chapterId}");
+        }
+
+        public Task<List<UsrOrDefChapterManagement>> GetItemListByChapterName(string casetypegroup, string casetype, string chapterName)
+        {
+            return httpClient.GetJsonAsync<List<UsrOrDefChapterManagement>>($"{userSession.baseUri}api/ChapterManagement/GetItemListByChapterName/{casetypegroup}/{casetype}/{chapterName}");
         }
 
         public Task<List<UsrOrDefChapterManagement>> GetDocListByChapter(string caseType, string chapter)
