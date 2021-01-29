@@ -11,10 +11,17 @@ namespace Gizmo_V1_02.Pages.Shared.Modals
         [Parameter] public RenderFragment ChildContent { get; set; }
         [Parameter] public string Text { get; set; }
         [Parameter] public string Direction { get; set; } = "top";
+        [Parameter] public string Class { get; set; } = "";
+
 
         protected override void OnInitialized()
         {
             Direction = "tooltip-" + Direction.ToLower();
+            
+            if(Class != "")
+            {
+                Class = "tooltip-" + Class.ToLower();
+            }
         }
     }
 

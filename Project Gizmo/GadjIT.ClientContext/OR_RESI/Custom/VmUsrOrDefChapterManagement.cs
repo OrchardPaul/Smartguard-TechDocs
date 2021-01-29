@@ -14,6 +14,38 @@ namespace GadjIT.ClientContext.OR_RESI.Custom
         public string ComparisonIcon { get; set; }
         public List<string> ComparisonList { get; set; } = new List<string>();
 
+        public string DocDisplayName
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(ChapterObject.AltDisplayName))
+                {
+                    return ChapterObject.Name;
+                }
+                else
+                {
+                    return ChapterObject.AltDisplayName;
+                }
+            }
+        }
+        
+        public string DocOrigName
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(ChapterObject.AltDisplayName))
+                {
+                    return "";
+                }
+                else
+                {
+                    return ChapterObject.Name;
+                }
+            }
+        }
+
+
+
         public bool IsChapterItemMatch(VmUsrOrDefChapterManagement vmCompItem)
         {
             AltObject = vmCompItem.ChapterObject;
