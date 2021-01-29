@@ -262,17 +262,17 @@ else
 
                     <div class="@(sessionState.isAdminUser ? "grid-can-edit" : "") ">
                         <div class="row grid-header hidden-lg-down">
-                            <div class="col-12 col-xl-4 data-item">
+                            <div class="data-item">
                                 <div class="data-item-sub">
                                     Name
                                 </div>
                             </div>
-                            <div class="col-4 hidden-lg-down data-item">
+                            <div class="hidden-lg-down data-item">
                                 <div class="data-item-sub">
                                     Schedule
                                 </div>
                             </div>
-                            <div class="col-4 hidden-lg-down data-item">
+                            <div class="hidden-lg-down data-item">
                                 <div class="data-item-sub">
                                     On Completion
                                 </div>
@@ -283,7 +283,7 @@ else
                             {
 
                                 <div class="row grid-row grid-row-lg @(rowChanged == doc.ChapterObject.SeqNo ? "row-changed" : "" )">
-                                    <div class="col-12 col-xl-4 data-item">
+                                    <div class="data-item">
 
                                         @if (sessionState.isAdminUser)
                                         {
@@ -338,7 +338,7 @@ else
 
                                                         <div class="data-item-right mr-2">
                                                             <ModalTooltip Direction="top" Text=@("Template: " + doc.DocOrigName) Class="w-3">
-                                                            <span class="fa fa-file-invoice"></span>
+                                                            <span class="fa fa-clone"></span>
                                                             </ModalTooltip>
                                                         </div>
 
@@ -392,8 +392,8 @@ else
                                                         </div>
                                                         }
                                                 </div>
-                                                    <div class="col-4 hidden-lg-down data-item ">
-                                                        <div class="data-item-detail pl-3">@(string.IsNullOrEmpty(doc.ChapterObject.AsName) ? "" : doc.ChapterObject.AsName)</div>
+                                                    <div class="hidden-lg-down data-item ">
+                                                        <div class="data-item-sm pl-3">@(string.IsNullOrEmpty(doc.ChapterObject.AsName) ? "" : doc.ChapterObject.AsName)</div>
 
                                                         @if (doc.ChapterObject.RescheduleDays.HasValue)
                                                         {
@@ -405,10 +405,10 @@ else
                                                         }
 
                                                     </div>
-                                                    <div class="col-4 hidden-lg-down data-item ">
+                                                    <div class="hidden-lg-down data-item ">
                                                         @if (!(string.IsNullOrEmpty(doc.ChapterObject.CompleteName)))
                                                         {
-                                                            <div class="data-item-detail pl-3" title="This step will be saved in the agenda as @doc.ChapterObject.CompleteName.">
+                                                            <div class="data-item-sm pl-3" title="This step will be saved in the agenda as @doc.ChapterObject.CompleteName.">
                                                                 @doc.ChapterObject.CompleteName
                                                             </div>
 
