@@ -171,7 +171,7 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
             selectedChapter = chapter;
             compareSystems = false;
             rowChanged = 0;
-            navDisplay = "Docs";
+            navDisplay = "Agenda";
 
             await RefreshChapterItems("All");
 
@@ -684,6 +684,7 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
             parameters.Add("selectedList", selectedList);
             parameters.Add("dropDownChapterList", dropDownChapterList);
             parameters.Add("CaseTypeGroups", partnerCaseTypeGroups);
+            parameters.Add("ListOfStatus", lstStatus);
 
             string className = "modal-chapter-item";
 

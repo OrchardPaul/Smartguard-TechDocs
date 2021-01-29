@@ -416,23 +416,26 @@ else
 
                                                         }
 
-                                                        @if (doc.NextStatus == "Y")
+                                                        @if (!(string.IsNullOrEmpty(doc.ChapterObject.NextStatus)))
                                                         {
-                                                            <div class="data-item-right suppress-step font-100">
-                                                                <ModalTooltip Direction="left" Text=@("Status Change: " + doc.NextStatus)>
-                                                                    <span class="fa fa-battery-half"></span>
-                                                                </ModalTooltip>
-                                                            </div>
-                                                        }
-
-                                                        @*@if (doc.ChapterObject.SuppressStep == "Y")
+                                                            @if (lstStatus.Where(S => S.ChapterObject.Name == doc.ChapterObject.NextStatus).Select(S => S.ChapterObject.SuppressStep).SingleOrDefault() == "Y")
                                                             {
                                                                 <div class="data-item-right suppress-step">
                                                                     <ModalTooltip Direction="left" Text="This document will end the chapter when taken.">
                                                                         <span class="fa fa-flag-checkered"></span>
                                                                     </ModalTooltip>
                                                                 </div>
-                                                            }*@
+                                                            }
+
+
+                                                            <div class="data-item-right suppress-step font-100">
+                                                                <ModalTooltip Direction="left" Text=@("Status Change: " + doc.ChapterObject.NextStatus)>
+                                                                    <span class="fa fa-battery-half"></span>
+                                                                </ModalTooltip>
+                                                            </div>
+                                                        }
+
+
 
                                                     </div>
 

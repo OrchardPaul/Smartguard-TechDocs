@@ -1,5 +1,6 @@
 ﻿using Blazored.Modal;
 using GadjIT.ClientContext.OR_RESI;
+using GadjIT.ClientContext.OR_RESI.Custom;
 using Gizmo_V1_02.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
@@ -71,6 +72,9 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
 
         [Parameter]
         public List<CaseTypeGroups> CaseTypeGroups { get; set; }
+
+        [Parameter]
+        public List<VmUsrOrDefChapterManagement> ListOfStatus { get; set; }
 
         private int selectedCaseTypeGroup { get; set; } = -1;
 
