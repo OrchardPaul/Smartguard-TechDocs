@@ -585,7 +585,8 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
 
                 await chapterManagementService.Update(item.ChapterObject);
             }
-            StateHasChanged();
+
+            RefreshSelectedList();
         }
 
         protected void CondenseFeeSeq()
@@ -691,6 +692,20 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
             Modal.Show<ModalDelete>("Delete?", parameters);
         }
 
+        protected void PrepareChapterDelete(VmUsrOrDefChapterManagement selectedChapterItem)
+        {
+            editObject = selectedChapterItem;
+
+            Action SelectedDeleteAction = HandleChapterDelete;
+            var parameters = new ModalParameters();
+            parameters.Add("InfoHeader", "Delete?");
+            parameters.Add("ModalHeight", "300px");
+            parameters.Add("ModalWidth", "500px");
+            parameters.Add("DeleteAction", SelectedDeleteAction);
+
+            Modal.Show<ModalDelete>("Delete?", parameters);
+        }
+
         private void PrepareForComparison(VmUsrOrDefChapterManagement selectedItem)
         {
             editObject = selectedItem;
@@ -723,6 +738,14 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
             await chapterManagementService.Delete(editObject.ChapterObject.Id);
 
             await RefreshChapterItems(navDisplay);
+            StateHasChanged();
+        }
+
+        private async void HandleChapterDelete()
+        {
+            await chapterManagementService.Delete(editObject.ChapterObject.Id);
+
+            RefreshChapters();
             StateHasChanged();
         }
 
