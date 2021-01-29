@@ -395,7 +395,7 @@ else
                                                         }
                                                 </div>
                                                     <div class="hidden-lg-down data-item ">
-                                                        <div class="data-item-sm pl-3">@(string.IsNullOrEmpty(doc.ChapterObject.AsName) ? "" : doc.ChapterObject.AsName)</div>
+                                                        <div class="data-item-sub font-85 pl-3">@(string.IsNullOrEmpty(doc.ChapterObject.AsName) ? "" : doc.ChapterObject.AsName)</div>
 
                                                         @if (doc.ChapterObject.RescheduleDays.HasValue)
                                                         {
@@ -410,10 +410,15 @@ else
                                                     <div class="hidden-lg-down data-item ">
                                                         @if (!(string.IsNullOrEmpty(doc.ChapterObject.CompleteName)))
                                                         {
-                                                            <div class="data-item-sm pl-3" title="This step will be saved in the agenda as @doc.ChapterObject.CompleteName.">
+                                                            <div class="data-item-sub font-85 pl-3" title="This step will be saved in the agenda as @doc.ChapterObject.CompleteName.">
                                                                 @doc.ChapterObject.CompleteName
                                                             </div>
 
+                                                        }
+                                                        else
+                                                        {
+                                                            <div class="data-item-sub">
+                                                            </div>
                                                         }
 
                                                         @if (!(string.IsNullOrEmpty(doc.ChapterObject.NextStatus)))
@@ -533,7 +538,7 @@ else
 
                                     }
                                     <div class="data-item-sub">
-                                        <span class="fa fa-folder-open mr-2"></span>@agenda.ChapterObject.Name
+                                        <span class="font-100"><span class="fa fa-folder-open mr-2"></span></span>@agenda.ChapterObject.Name
                                     </div>
                                 </div>
 
