@@ -93,8 +93,8 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
         public bool compareSystems = false;
 
         private string RowChangedClass { get; set; } = "row-changed-nav3";
-       
 
+                
         public bool displaySpinner = true;
 
         public bool ListChapterLoaded = false;

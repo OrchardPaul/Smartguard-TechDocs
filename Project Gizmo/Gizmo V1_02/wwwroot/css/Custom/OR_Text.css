@@ -143,7 +143,7 @@ ul.ul-simple {
     position: absolute;
     bottom: calc(100% + 10px);
     left: 50%;
-    width: 140px;
+    min-width: 140px;
     margin-left: -70px;
     background-color: #000;
     color: #fff;
@@ -189,3 +189,15 @@ ul.ul-simple {
 }
 
 
+.tooltip-wrapper span:first-child.tooltip-w-1 {
+    min-width: 140px;
+    margin-left: -70px;
+}
+.tooltip-wrapper span:first-child.tooltip-w-2 {
+    min-width: 220px;
+    margin-left: -110px;
+}
+.tooltip-wrapper span:first-child.tooltip-w-3 {
+    min-width: 300px;
+    margin-left: -150px;
+}
