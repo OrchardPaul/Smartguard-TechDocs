@@ -24,6 +24,10 @@ h5{
     font-size: .75rem;
 }
 
+.font-100 {
+    font-size: 1rem;
+}
+
 .col-grey, .font-grey {
     color: #777 !important;
 }

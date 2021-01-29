@@ -86,7 +86,7 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
         public string ModalHeight { get; set; }
         public string ModalWidth { get; set; }
 
-        public string navDisplay = "Docs";
+        public string navDisplay = "Agenda";
 
         private bool seqMoving = false;
 

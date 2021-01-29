@@ -207,18 +207,20 @@ else
             <nav class="navbar navbar-expand ">
 
                 <ul class="navbar-nav">
-                    <li class="@(navDisplay == "Docs" ? "active" : "")">
-                        <a href="javascript:void(0);" @onclick='() => ShowNav("Docs")'><span>Documents</span></a>
-                    </li>
+
                     <li class="@(navDisplay == "Agenda" ? "active" : "")">
                         <a href="javascript:void(0);" @onclick='() => ShowNav("Agenda")'><span>Agenda</span></a>
-                    </li>
-                    <li class="@(navDisplay == "Fees" ? "active" : "")">
-                        <a href="javascript:void(0);" @onclick='() => ShowNav("Fees")'><span>Fees</span></a>
                     </li>
                     <li class="last @(navDisplay == "Status" ? "active" : "")">
                         <a href="javascript:void(0);" @onclick='() => ShowNav("Status")'><span>Status</span></a>
                     </li>
+                    <li class="@(navDisplay == "Docs" ? "active" : "")">
+                        <a href="javascript:void(0);" @onclick='() => ShowNav("Docs")'><span>Documents</span></a>
+                    </li>
+                    <li class="@(navDisplay == "Fees" ? "active" : "")">
+                        <a href="javascript:void(0);" @onclick='() => ShowNav("Fees")'><span>Fees</span></a>
+                    </li>
+
 
                 </ul>
 
@@ -306,27 +308,27 @@ else
                                                     </div>
                                                 </div>
 
-                                                <div class="data-item-sub">
+                                                <div class="data-item-sub ">
                                                     <!--"Doc", "Letter", "Form", "Email", "Step"-->
                                                     @switch (doc.ChapterObject.Type)
                                                     {
                                                         case "Doc":
-                                                    <span><span class="fa fa-file mr-2"></span></span>
+                                                    <span class="font-100"><span class="fa fa-file mr-2"></span></span>
                                                             break;
                                                         case "Letter":
-                                                <span><span class="fa fa-file-alt mr-2"></span></span>
+                                                <span class="font-100"><span class="fa fa-file-alt mr-2"></span></span>
                                                             break;
                                                         case "Form":
-                                                <span><span class="fa fa-file-pdf mr-2"></span></span>
+                                                <span class="font-100"><span class="fa fa-file-pdf mr-2"></span></span>
                                                             break;
                                                         case "Email":
-                                                <span><span class="fa fa-envelope mr-2"></span></span>
+                                                <span class="font-100"><span class="fa fa-envelope mr-2"></span></span>
                                                             break;
                                                         case "Step":
-                                                <span><span class="fa fa-list-ol mr-2"></span></span>
+                                                <span class="font-100"><span class="fa fa-list-ol mr-2"></span></span>
                                                             break;
                                                         default:
-                                                <span><span class="fa fa-file mr-2"></span></span>
+                                                <span class="font-100"><span class="fa fa-file mr-2"></span></span>
                                                             break;
                                                     }
 
@@ -336,7 +338,7 @@ else
                                                 @if (doc.DocOrigName != "")
                                                 {
 
-                                                        <div class="data-item-right mr-2">
+                                                        <div class="data-item-right mr-2 font-100">
                                                             <ModalTooltip Direction="top" Text=@("Template: " + doc.DocOrigName) Class="w-3">
                                                             <span class="fa fa-clone"></span>
                                                             </ModalTooltip>
@@ -414,15 +416,23 @@ else
 
                                                         }
 
-
-                                                        @if (doc.ChapterObject.SuppressStep == "Y")
+                                                        @if (doc.NextStatus == "Y")
                                                         {
-                                                            <div class="data-item-right suppress-step">
-                                                                <ModalTooltip Direction="left" Text="This document will end the chapter when taken.">
-                                                                    <span class="fa fa-flag-checkered"></span>
+                                                            <div class="data-item-right suppress-step font-100">
+                                                                <ModalTooltip Direction="left" Text=@("Status Change: " + doc.NextStatus)>
+                                                                    <span class="fa fa-battery-half"></span>
                                                                 </ModalTooltip>
                                                             </div>
                                                         }
+
+                                                        @*@if (doc.ChapterObject.SuppressStep == "Y")
+                                                            {
+                                                                <div class="data-item-right suppress-step">
+                                                                    <ModalTooltip Direction="left" Text="This document will end the chapter when taken.">
+                                                                        <span class="fa fa-flag-checkered"></span>
+                                                                    </ModalTooltip>
+                                                                </div>
+                                                            }*@
 
                                                     </div>
 
@@ -712,19 +722,19 @@ else
 
                                     }
                                     <div class="data-item-sub">
-                                        <span class="fa fa-battery-half mr-2"></span>@status.ChapterObject.Name
+                                        <span class="font-100"><span class="fa fa-battery-half mr-2"></span></span>@status.ChapterObject.Name
                                     </div>
 
                                     @if (status.ChapterObject.SuppressStep == "Y")
                                     {
-                                        <div class="data-item-right suppress-step">
+                                        <div class="data-item-right suppress-step mr-5 font-100">
                                             <ModalTooltip Direction="left" Text="This status will end the chapter.">
                                                 <span class="fa fa-flag-checkered"></span>
                                             </ModalTooltip>
                                         </div>
                                     }
 
-                                    <div class="data-item-right mr-2 seq-change">
+                                    <div class="data-item-right seq-change">
                                         <div @onclick='() => MoveSeq(status.ChapterObject,"Status","Up")'><span class="fa fa-angle-up"></span></div>
                                         <div class="seq-no">@status.ChapterObject.SeqNo</div>
                                         <div @onclick='() => MoveSeq(status.ChapterObject,"Status","Down")'><span class="fa fa-angle-down"></span></div>
