@@ -82,6 +82,7 @@ namespace GadjIT.ClientAPI.Repository.OR_RESI
             updatedItem.EntityType = item.EntityType;
             updatedItem.SuppressStep = item.SuppressStep;
             updatedItem.AltDisplayName = item.AltDisplayName;
+            updatedItem.NextStatus = item.NextStatus;
 
             await _context.SaveChangesAsync();
 
@@ -329,11 +330,6 @@ namespace GadjIT.ClientAPI.Repository.OR_RESI
             int? caseTypeCode = await GetCaseTypeCode(caseType, caseTypeGroupRef);
 
             return await _context.DmDocuments
-                            .Join(_context.DmDocumentsPermissions,
-                                D => D.Code,
-                                Dm => Dm.Doccode,
-                                (D, Dm) => new { Name = D, DmDocumentsPermissions = Dm })
-                            .Select(x => x.Name)
                             .ToListAsync();
 
         }
@@ -341,12 +337,7 @@ namespace GadjIT.ClientAPI.Repository.OR_RESI
         public async Task<List<DmDocuments>> GetDocumentListByCaseTypeGroupRef(int caseTypeGroupRef)
         {
             return await _context.DmDocuments
-                            .Join(_context.DmDocumentsPermissions,
-                                D => D.Code,
-                                Dm => Dm.Doccode,
-                                (D, Dm) => new { Name = D, DmDocumentsPermissions = Dm })
-                            .Where(x => x.Name.CaseTypeGroupRef == caseTypeGroupRef)
-                            .Select(x => x.Name)
+                            .Where(x => x.CaseTypeGroupRef == caseTypeGroupRef)
                             .ToListAsync();
 
         }

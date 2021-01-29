@@ -42,5 +42,9 @@ namespace GadjIT.ClientContext.OR_RESI
         [Column("Alt_Display_Name")]
         [StringLength(300)]
         public string AltDisplayName { get; set; }
+
+        [Column("Next_Status")]
+        [StringLength(100)]
+        public string NextStatus { get; set; }
     }
 }

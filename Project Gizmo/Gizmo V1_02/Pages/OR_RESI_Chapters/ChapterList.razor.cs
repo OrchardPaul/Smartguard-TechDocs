@@ -423,6 +423,13 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
                                                     .Select(A => A.ChapterObject.SeqNo)
                                                     .FirstOrDefault() + 1;
             }
+            else if(type == "Status")
+            {
+                editObject.ChapterObject.SeqNo = lstStatus
+                                                    .OrderByDescending(A => A.ChapterObject.SeqNo)
+                                                    .Select(A => A.ChapterObject.SeqNo)
+                                                    .FirstOrDefault() + 1;
+            }
             else
             {
                 editObject.ChapterObject.SeqNo = lstFees
@@ -431,6 +438,9 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
                                     .FirstOrDefault() + 1;
             }
 
+            editChapterObject.ChapterObject.SeqNo = editChapterObject.ChapterObject.SeqNo is null
+                                                        ? 0
+                                                        : editChapterObject.ChapterObject.SeqNo;
             
             editObject.ChapterObject.ParentId = selectedChapterId;
 
@@ -459,9 +469,24 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
                 editChapterObject.ChapterObject.CaseType = "";
             }
 
+            if(!string.IsNullOrWhiteSpace(selectedCaseTypeGroup) & !string.IsNullOrWhiteSpace(selectedCaseType))
+            {
+                editChapterObject.ChapterObject.SeqNo = lstChapters
+                                                            .Where(C => C.ChapterObject.ParentId == 0)
+                                                            .Where(C => C.ChapterObject.CaseType == selectedCaseType)
+                                                            .Where(C => C.ChapterObject.CaseTypeGroup == selectedCaseTypeGroup)
+                                                            .OrderByDescending(C => C.ChapterObject.SeqNo)
+                                                            .Select(C => C.ChapterObject.SeqNo)
+                                                            .FirstOrDefault() + 1;
+            }
+            else
+            {
+                editChapterObject.ChapterObject.SeqNo = 1;
+            }
+
             editChapterObject.ChapterObject.Type = "Chapter";
             editChapterObject.ChapterObject.ParentId = 0;
-            editChapterObject.ChapterObject.SeqNo = 0;
+
             editChapterObject.ChapterObject.SuppressStep = "";
             editChapterObject.ChapterObject.EntityType = "";
 
