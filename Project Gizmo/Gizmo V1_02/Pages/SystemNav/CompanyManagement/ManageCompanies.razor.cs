@@ -90,7 +90,12 @@ namespace Gizmo_V1_02.Pages.SystemNav.CompanyManagement
             parameters.Add("TaskObject", editCompany);
             parameters.Add("DataChanged", Action);
 
-            Modal.Show<CompanyEdit>("Edit Company", parameters);
+            var options = new ModalOptions()
+            {
+                Class = "blazored-custom-modal modal-system-company"
+            };
+
+            Modal.Show<CompanyEdit>("Edit Company", parameters,options);
         }
 
         private async void HandleValidDelete()

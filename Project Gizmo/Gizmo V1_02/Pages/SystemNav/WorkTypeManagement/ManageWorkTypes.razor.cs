@@ -333,7 +333,7 @@ namespace Gizmo_V1_02.Pages.SystemNav.WorkTypeManagement
 
             var options = new ModalOptions()
             {
-                Class = "blazored-custom-modal"
+                Class = "blazored-custom-modal modal-system-worktypes"
             };
 
             Modal.Show<WorkTypeGroupDetails>("Work Type Group", parameters, options);
@@ -369,7 +369,12 @@ namespace Gizmo_V1_02.Pages.SystemNav.WorkTypeManagement
             parameters.Add("DataChanged", Action);
             parameters.Add("Assignments", editAssignments);
 
-            Modal.Show<WorkTypeGroupingDetails>("Grouping", parameters);
+            var options = new ModalOptions()
+            {
+                Class = "blazored-custom-modal modal-system-worktypegrouping"
+            };
+
+            Modal.Show<WorkTypeGroupingDetails>("Grouping", parameters,options);
         }
 
 
