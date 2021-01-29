@@ -244,6 +244,8 @@ namespace GadjIT.ClientContext.OR_RESI
 
                 entity.Property(e => e.Name).IsUnicode(false);
 
+                entity.Property(e => e.NextStatus).IsUnicode(false);
+
                 entity.Property(e => e.SuppressStep).IsUnicode(false);
 
                 entity.Property(e => e.Type).IsUnicode(false);
