@@ -268,7 +268,6 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
                                             })
                                             .ToList();
 
-                    CondenseSeq("Fees");
                 }
                 if (listType == "Status" | listType == "All")
                 {
@@ -615,6 +614,7 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
 
         protected async void CondenseSeq(string ListType )
         {
+            await RefreshChapterItems(ListType);
 
             var ListItems = GetRelevantChapterList(ListType);
 
@@ -633,7 +633,7 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
 
         protected void CondenseFeeSeq()
         {
-            RefreshSelectedList();
+            CondenseSeq("Fees");
             
         }
 
