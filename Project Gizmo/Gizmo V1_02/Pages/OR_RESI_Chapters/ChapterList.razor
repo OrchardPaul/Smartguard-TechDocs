@@ -19,7 +19,7 @@ else
     {
         <div class="tran-block page-header-block ">
             <h3>Chapters</h3>
-            <p>Create and maintain chapters for all case types. <em>Note: please make sure you are pointing to the appropriate system.</em></p>
+            <p class="hidden-md-down">Create and maintain chapters for all case types. <em>Note: please make sure you are pointing to the appropriate system.</em></p>
         </div>
         <div class="mb-4 col-xl-6 col-lg-12 col-md-12 col-sm-12 grid-tran grid-chapter-nav">
             @if (sessionState.isAdminUser)
@@ -41,10 +41,10 @@ else
 
                 <!-- SHOW ALL GROUPS -->
                 @foreach (var caseTypeGroup in lstChapters.Where(C => C.ChapterObject.ParentId == 0)
-   .Where(C => !(C.ChapterObject.CaseTypeGroup is null))
-   .Select(C => C.ChapterObject.CaseTypeGroup)
-   .Distinct()
-   .ToList())
+  .Where(C => !(C.ChapterObject.CaseTypeGroup is null))
+  .Select(C => C.ChapterObject.CaseTypeGroup)
+  .Distinct()
+  .ToList())
                 {
 
                     <div class="grid-row-lg mt-3 nav-row-1">
@@ -66,26 +66,26 @@ else
                             }
 
                             <div class="data-item-nav" @onclick='() => SelectCaseTypeGroup(caseTypeGroup)'>
-                                <div class="data-item-sub" ><span class="fa fa-boxes mr-2"></span>@caseTypeGroup</div>
-                                <div class="data-item-right col-alt" ><div class="link-direction @(caseTypeGroup == selectedCaseTypeGroup ? "triangle-up col-grey" : "triangle-down")"></div></div>
+                                <div class="data-item-sub"><span class="fa fa-boxes mr-2"></span>@caseTypeGroup</div>
+                                <div class="data-item-right col-alt"><div class="link-direction @(caseTypeGroup == selectedCaseTypeGroup ? "triangle-up col-grey" : "triangle-down")"></div></div>
                             </div>
                         </div>
 
 
                     </div>
 
-                  
+
 
                     <!-- GROUP SELECTED SHOW CASE TYPES-->
                     @if (caseTypeGroup == selectedCaseTypeGroup)
                     {
 
                         @foreach (var caseType in lstChapters.Where(C => C.ChapterObject.ParentId == 0)
-          .Where(C => !(C.ChapterObject.CaseType is null))
-          .Where(C => C.ChapterObject.CaseTypeGroup == selectedCaseTypeGroup)
-          .Select(C => C.ChapterObject.CaseType)
-          .Distinct()
-          .ToList())
+         .Where(C => !(C.ChapterObject.CaseType is null))
+         .Where(C => C.ChapterObject.CaseTypeGroup == selectedCaseTypeGroup)
+         .Select(C => C.ChapterObject.CaseType)
+         .Distinct()
+         .ToList())
                         {
 
                             <div class="grid-row-md nav-row-2">
@@ -107,35 +107,35 @@ else
                                             </div>
                                         </div>
                                     }
-                                <div class="data-item-nav" @onclick='() => SelectCaseType(caseType)'>
-                                    @if (caseType == selectedCaseType)
-                                    {
-                                        <div class="data-item-sub">
-                                            <span class="fa fa-folder-open mr-2"></span>@caseType
-                                        </div>
-                                    }
-                                    else
-                                    {
-                                        <div class="data-item-sub">
-                                            <span class="fa fa-folder mr-2"></span>@caseType
-                                        </div>
-                                    }
+                                    <div class="data-item-nav" @onclick='() => SelectCaseType(caseType)'>
+                                        @if (caseType == selectedCaseType)
+                                        {
+                                            <div class="data-item-sub">
+                                                <span class="fa fa-folder-open mr-2"></span>@caseType
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="data-item-sub">
+                                                <span class="fa fa-folder mr-2"></span>@caseType
+                                            </div>
+                                        }
 
 
-                                    <div class="data-item-right col-alt " @onclick='() => SelectCaseType(caseType)'><div class="link-direction @(caseType == selectedCaseType ? "triangle-up col-grey" : "triangle-down")"></div></div>
-                                </div>
+                                        <div class="data-item-right col-alt " @onclick='() => SelectCaseType(caseType)'><div class="link-direction @(caseType == selectedCaseType ? "triangle-up col-grey" : "triangle-down")"></div></div>
                                     </div>
-
                                 </div>
+
+                            </div>
                             @if (caseType == selectedCaseType)
                             {
                                 <div class="grid-nav">
                                     @foreach (var Chapter in lstChapters
-                                                             .Where(C => C.ChapterObject.CaseType == selectedCaseType)
-                                                             .Where(C => C.ChapterObject.CaseTypeGroup == selectedCaseTypeGroup)
-                                                             .Where(C => C.ChapterObject.Type == "Chapter")
-                                                             .OrderBy(C => C.ChapterObject.SeqNo)
-                                                             .ToList())
+                                                            .Where(C => C.ChapterObject.CaseType == selectedCaseType)
+                                                            .Where(C => C.ChapterObject.CaseTypeGroup == selectedCaseTypeGroup)
+                                                            .Where(C => C.ChapterObject.Type == "Chapter")
+                                                            .OrderBy(C => C.ChapterObject.SeqNo)
+                                                            .ToList())
                                     {
                                         <div class="grid-row-md nav-row-3 no-border @(rowChanged == Chapter.ChapterObject.SeqNo ? ToggleRowChangedClass() : "" )">
                                             <div class="data-item ">
@@ -168,13 +168,15 @@ else
                                                 </div>
                                                 @if (sessionState.isAdminUser)
                                                 {
-                                                    <div class="data-item-right mr-4 seq-change">
+                                                    <div class="data-item-right seq-change">
                                                         <div @onclick='() => MoveSeq(Chapter.ChapterObject, "Chapters", "Up")'><span class="fa fa-angle-up"></span></div>
                                                         <div class="seq-no">@Chapter.ChapterObject.SeqNo</div>
                                                         <div @onclick='() => MoveSeq(Chapter.ChapterObject, "Chapters", "Down")'><span class="fa fa-angle-down"></span></div>
                                                     </div>
                                                 }
-                                                <div title="Chapter: click to configure @Chapter.ChapterObject.Name" class="data-item-right pl-4 link-direction" @onclick="() => SelectChapter(Chapter.ChapterObject.Name,Chapter.ChapterObject.Id)"><div class="fa fa-chevron-circle-right"></div></div>
+                                                <div title="Chapter: click to configure @Chapter.ChapterObject.Name" class="data-item-right link-direction" @onclick="() => SelectChapter(Chapter.ChapterObject.Name,Chapter.ChapterObject.Id)">
+                                                    <div class="fa fa-chevron-circle-right"></div>
+                                                </div>
                                             </div>
                                         </div>
 
@@ -199,11 +201,11 @@ else
             <a href="javascript: void(0);" @onclick="SelectHome"><span class="col-alt fa fa-angle-double-left"></span></a>
         </div>
         <h3>Chapter: @selectedChapter</h3>
-        <p>Group: <span class="badge badge-grey mr-3">@selectedCaseTypeGroup</span> Case Type: <span class="badge badge-grey mr-3">@selectedCaseType</span> Chapter: <span class="badge badge-grey mr-3"> @selectedChapter</span></p>
+        <p class="hidden-md-down">Group: <span class="badge badge-grey mr-3">@selectedCaseTypeGroup</span> Case Type: <span class="badge badge-grey mr-3">@selectedCaseType</span> Chapter: <span class="badge badge-grey mr-3"> @selectedChapter</span></p>
     </div>
 
     <div class="tran-block rounded">
-        <div class="tran-navbar">
+        <div class="tran-navbar hidden-lg-down">
             <nav class="navbar navbar-expand ">
 
                 <ul class="navbar-nav">
@@ -211,7 +213,7 @@ else
                     <li class="@(navDisplay == "Agenda" ? "active" : "")">
                         <a href="javascript:void(0);" @onclick='() => ShowNav("Agenda")'><span>Agenda</span></a>
                     </li>
-                    <li class="last @(navDisplay == "Status" ? "active" : "")">
+                    <li class="@(navDisplay == "Status" ? "active" : "")">
                         <a href="javascript:void(0);" @onclick='() => ShowNav("Status")'><span>Status</span></a>
                     </li>
                     <li class="@(navDisplay == "Docs" ? "active" : "")">
@@ -225,6 +227,25 @@ else
                 </ul>
 
             </nav>
+        </div>
+
+        <div class="page-navbar hidden-xl-up">
+            <ul class="nav nav-pills tran-tabs">
+                <li class="nav-item @(navDisplay == "Agenda" ? "active" : "")">
+                    <a class="nav-link" href="javascript:void(0);" @onclick='() => ShowNav("Agenda")'><span>Agenda</span></a>
+                </li>
+                <li class="nav-item  @(navDisplay == "Status" ? "active" : "")">
+                    <a class="nav-link" href="javascript:void(0);" @onclick='() => ShowNav("Status")'><span>Status</span></a>
+                </li>
+                <li class="nav-item @(navDisplay == "Docs" ? "active" : "")">
+                    <a class="nav-link" href="javascript:void(0);" @onclick='() => ShowNav("Docs")'><span>Documents</span></a>
+                </li>
+                <li class="nav-item @(navDisplay == "Fees" ? "active" : "")">
+                    <a class="nav-link" href="javascript:void(0);" @onclick='() => ShowNav("Fees")'><span>Fees</span></a>
+                </li>
+
+
+            </ul>
         </div>
 
         @if (displaySpinner)
@@ -263,18 +284,18 @@ else
                     </div>
 
                     <div class="@(sessionState.isAdminUser ? "grid-can-edit" : "") ">
-                        <div class="row grid-header hidden-lg-down">
-                            <div class="data-item">
+                        <div class="row grid-header hidden-md-down">
+                            <div class="data-item col-4 ">
                                 <div class="data-item-sub">
                                     Name
                                 </div>
                             </div>
-                            <div class="hidden-lg-down data-item">
+                            <div class="data-item col-4 ">
                                 <div class="data-item-sub">
                                     Schedule
                                 </div>
                             </div>
-                            <div class="hidden-lg-down data-item">
+                            <div class="data-item col-4 ">
                                 <div class="data-item-sub">
                                     On Completion
                                 </div>
@@ -285,7 +306,7 @@ else
                             {
 
                                 <div class="row grid-row grid-row-lg @(rowChanged == doc.ChapterObject.SeqNo ? "row-changed" : "" )">
-                                    <div class="data-item">
+                                    <div class="data-item col-12 col-lg-4 col-xl-4">
 
                                         @if (sessionState.isAdminUser)
                                         {
@@ -313,22 +334,22 @@ else
                                                     @switch (doc.ChapterObject.Type)
                                                     {
                                                         case "Doc":
-                                                    <span class="font-100"><span class="fa fa-file mr-2"></span></span>
+                                                            <span class="font-100"><span class="fa fa-file mr-2"></span></span>
                                                             break;
                                                         case "Letter":
-                                                <span class="font-100"><span class="fa fa-file-alt mr-2"></span></span>
+                                                            <span class="font-100"><span class="fa fa-file-alt mr-2"></span></span>
                                                             break;
                                                         case "Form":
-                                                <span class="font-100"><span class="fa fa-file-pdf mr-2"></span></span>
+                                                            <span class="font-100"><span class="fa fa-file-pdf mr-2"></span></span>
                                                             break;
                                                         case "Email":
-                                                <span class="font-100"><span class="fa fa-envelope mr-2"></span></span>
+                                                            <span class="font-100"><span class="fa fa-envelope mr-2"></span></span>
                                                             break;
                                                         case "Step":
-                                                <span class="font-100"><span class="fa fa-list-ol mr-2"></span></span>
+                                                            <span class="font-100"><span class="fa fa-list-ol mr-2"></span></span>
                                                             break;
                                                         default:
-                                                <span class="font-100"><span class="fa fa-file mr-2"></span></span>
+                                                            <span class="font-100"><span class="fa fa-file mr-2"></span></span>
                                                             break;
                                                     }
 
@@ -338,113 +359,113 @@ else
                                                 @if (doc.DocOrigName != "")
                                                 {
 
-                                                        <div class="data-item-right mr-2 font-100">
-                                                            <ModalTooltip Direction="top" Text=@("Template: " + doc.DocOrigName) Class="w-3">
+                                                    <div class="data-item-right mr-2 font-100">
+                                                        <ModalTooltip Direction="top" Text=@("Template: " + doc.DocOrigName) Class="w-3">
                                                             <span class="fa fa-clone"></span>
-                                                            </ModalTooltip>
-                                                        </div>
-
-                                                        }
-                                                        <div class="data-item-right mr-2 seq-change">
-                                                            <div @onclick='() => MoveSeq(doc.ChapterObject,"Docs","Up")'><span class="fa fa-angle-up"></span></div>
-                                                            <div class="seq-no">@doc.ChapterObject.SeqNo</div>
-                                                            <div @onclick='() => MoveSeq(doc.ChapterObject,"Docs","Down")'><span class="fa fa-angle-down"></span></div>
-                                                        </div>
-                                                        }
-                                                        else
-                                                        {
-
-                                                        <div class="btn-ellipses float-left">
-                                                            @if (!(doc.ComparisonIcon is null))
-                                                            {
-                                                                @if (!(doc.ComparisonResult == "Exact match"))
-                                                                {
-                                                                    <div class="btn-dashed" @onclick="() => PrepareForComparison(doc)"><span class="fa fa-@doc.ComparisonIcon"></span></div>
-                                                                }
-                                                                else
-                                                                {
-                                                                    <span class="fa fa-@doc.ComparisonIcon"></span>
-                                                                }
-                                                            }
-                                                            else
-                                                            {
-                                                                <div class="spinner"></div>
-                                                            }
-
-                                                        </div>
-
-
-                                                        <div class="data-item-sub">
-                                                            <span class="fa fa-file mr-2"></span> @doc.ChapterObject.Name
-                                                        </div>
-                                                        <div class="data-item-right mr-2 ">
-                                                            <div class="seq-no">@doc.ChapterObject.SeqNo</div>
-                                                        </div>
-
-                                                        }
-                                                        }
-                                                        else
-                                                        {
-                                                        <div class="data-item-sub">
-                                                            <span class="far fa-file mr-1"></span> @doc.ChapterObject.Name
-                                                            <div class="data-item-right mr-2 ">
-                                                                <div class="seq-no">@doc.ChapterObject.SeqNo</div>
-                                                            </div>
-
-                                                        </div>
-                                                        }
-                                                </div>
-                                                    <div class="hidden-lg-down data-item ">
-                                                        <div class="data-item-sub font-85 pl-3">@(string.IsNullOrEmpty(doc.ChapterObject.AsName) ? "" : doc.ChapterObject.AsName)</div>
-
-                                                        @if (doc.ChapterObject.RescheduleDays.HasValue)
-                                                        {
-                                                            <div class="data-item-right schedule-days">
-                                                                <ModalTooltip Direction="left" Text="@(string.IsNullOrEmpty(doc.ChapterObject.AsName) ? "" : "The step named " + doc.ChapterObject.AsName + " will be scheduled for " +  doc.ChapterObject.RescheduleDays.ToString() + " days")">
-                                                                    <span class="badge rounded-square">@doc.ChapterObject.RescheduleDays.ToString() days</span>
-                                                                </ModalTooltip>
-                                                            </div>
-                                                        }
-
-                                                    </div>
-                                                    <div class="hidden-lg-down data-item ">
-                                                        @if (!(string.IsNullOrEmpty(doc.ChapterObject.CompleteName)))
-                                                        {
-                                                            <div class="data-item-sub font-85 pl-3" title="This step will be saved in the agenda as @doc.ChapterObject.CompleteName.">
-                                                                @doc.ChapterObject.CompleteName
-                                                            </div>
-
-                                                        }
-                                                        else
-                                                        {
-                                                            <div class="data-item-sub">
-                                                            </div>
-                                                        }
-
-                                                        @if (!(string.IsNullOrEmpty(doc.ChapterObject.NextStatus)))
-                                                        {
-                                                            @if (lstStatus.Where(S => S.ChapterObject.Name == doc.ChapterObject.NextStatus).Select(S => S.ChapterObject.SuppressStep).SingleOrDefault() == "Y")
-                                                            {
-                                                                <div class="data-item-right suppress-step">
-                                                                    <ModalTooltip Direction="left" Text="This document will end the chapter when taken.">
-                                                                        <span class="fa fa-flag-checkered"></span>
-                                                                    </ModalTooltip>
-                                                                </div>
-                                                            }
-
-
-                                                            <div class="data-item-right suppress-step font-100">
-                                                                <ModalTooltip Direction="left" Text=@("Status Change: " + doc.ChapterObject.NextStatus)>
-                                                                    <span class="fa fa-battery-half"></span>
-                                                                </ModalTooltip>
-                                                            </div>
-                                                        }
-
-
-
+                                                        </ModalTooltip>
                                                     </div>
 
+                                                }
+                                                <div class="data-item-right mr-2 seq-change">
+                                                    <div @onclick='() => MoveSeq(doc.ChapterObject,"Docs","Up")'><span class="fa fa-angle-up"></span></div>
+                                                    <div class="seq-no">@doc.ChapterObject.SeqNo</div>
+                                                    <div @onclick='() => MoveSeq(doc.ChapterObject,"Docs","Down")'><span class="fa fa-angle-down"></span></div>
                                                 </div>
+                                            }
+                                            else
+                                            {
+
+                                                <div class="btn-ellipses float-left">
+                                                    @if (!(doc.ComparisonIcon is null))
+                                                    {
+                                                        @if (!(doc.ComparisonResult == "Exact match"))
+                                                        {
+                                                            <div class="btn-dashed" @onclick="() => PrepareForComparison(doc)"><span class="fa fa-@doc.ComparisonIcon"></span></div>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span class="fa fa-@doc.ComparisonIcon"></span>
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="spinner"></div>
+                                                    }
+
+                                                </div>
+
+
+                                                <div class="data-item-sub">
+                                                    <span class="fa fa-file mr-2"></span> @doc.ChapterObject.Name
+                                                </div>
+                                                <div class="data-item-right mr-2 ">
+                                                    <div class="seq-no">@doc.ChapterObject.SeqNo</div>
+                                                </div>
+
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <div class="data-item-sub">
+                                                <span class="far fa-file mr-1"></span> @doc.ChapterObject.Name
+                                                <div class="data-item-right mr-2 ">
+                                                    <div class="seq-no">@doc.ChapterObject.SeqNo</div>
+                                                </div>
+
+                                            </div>
+                                        }
+                                    </div>
+                                    <div class="hidden-md-down col-4 data-item ">
+                                        <div class="data-item-sub font-85 pl-3">@(string.IsNullOrEmpty(doc.ChapterObject.AsName) ? "" : doc.ChapterObject.AsName)</div>
+
+                                        @if (doc.ChapterObject.RescheduleDays.HasValue)
+                                        {
+                                            <div class="data-item-right schedule-days">
+                                                <ModalTooltip Direction="left" Text="@(string.IsNullOrEmpty(doc.ChapterObject.AsName) ? "" : "The step named " + doc.ChapterObject.AsName + " will be scheduled for " +  doc.ChapterObject.RescheduleDays.ToString() + " days")">
+                                                    <span class="badge rounded-square">@doc.ChapterObject.RescheduleDays.ToString() days</span>
+                                                </ModalTooltip>
+                                            </div>
+                                        }
+
+                                    </div>
+                                    <div class="hidden-md-down col-4 data-item ">
+                                        @if (!(string.IsNullOrEmpty(doc.ChapterObject.CompleteName)))
+                                        {
+                                            <div class="data-item-sub font-85 pl-3" title="This step will be saved in the agenda as @doc.ChapterObject.CompleteName.">
+                                                @doc.ChapterObject.CompleteName
+                                            </div>
+
+                                        }
+                                        else
+                                        {
+                                            <div class="data-item-sub">
+                                            </div>
+                                        }
+
+                                        @if (!(string.IsNullOrEmpty(doc.ChapterObject.NextStatus)))
+                                        {
+                                            @if (lstStatus.Where(S => S.ChapterObject.Name == doc.ChapterObject.NextStatus).Select(S => S.ChapterObject.SuppressStep).SingleOrDefault() == "Y")
+                                            {
+                                                <div class="data-item-right suppress-step">
+                                                    <ModalTooltip Direction="left" Text="This document will end the chapter when taken.">
+                                                        <span class="fa fa-flag-checkered"></span>
+                                                    </ModalTooltip>
+                                                </div>
+                                            }
+
+
+                                            <div class="data-item-right suppress-step font-100">
+                                                <ModalTooltip Direction="left" Text=@("Status Change: " + doc.ChapterObject.NextStatus)>
+                                                    <span class="fa fa-battery-half"></span>
+                                                </ModalTooltip>
+                                            </div>
+                                        }
+
+
+
+                                    </div>
+
+                                </div>
 
                             }
                         </div>
@@ -655,7 +676,7 @@ else
                     <div class="mb-3 flex-box">
                         @if (sessionState.isAdminUser)
                         {
-                            <div>
+                            <div class="grid-actions">
                                 <button @onclick='() => PrepareForInsert(navDisplay,"Status")' class="btn btn-main btn-shadow" title="Add new status"><i class="fa fa-plus"></i></button>
                                 <button @onclick='() => CondenseSeq("Status")' class="btn btn-main btn-shadow @(SequenceIsValid("Status") ? "invisible" : "")" title="Re-order Sequence Numbers"><i class="fa fa-sort-numeric-down"></i></button>
                             </div>
@@ -761,5 +782,5 @@ else
 
     </div>
 
-    
+
 }

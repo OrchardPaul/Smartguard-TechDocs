@@ -79,6 +79,27 @@
     font-size: 0.9em;
 }
 
+.form-control-xxl {
+    width: 450px;
+}
+.form-control-xl {
+    width: 350px;
+}
+.form-control-lg {
+    width: 250px;
+}
+.form-control-sm {
+    width: 150px;
+}
+.form-control-sm {
+    width: 150px;
+}
+.form-control-xs {
+    width: 75px;
+}
+
+.form-control-sm{ width: 150px; }
+
 .modal-body .form-group label {
     padding-bottom: 0px;
     margin-bottom: 3px;
@@ -201,8 +222,31 @@
     overflow-y: scroll;
 }
 
+@media (max-width: 1200px) {
+    .modal-chapter-item {
+        width: 350px;
+    }
+
+    .modal-chapter-doc {
+        width: 450px;
+    }
+    .modal-chapter-doc .modal-body{
+        height: 450px;
+        overflow-y: scroll;
+    }
+
+    .modal-chapter-fees {
+        width: 450px;
+        overflow: hidden;
+    }
+
+    #modal-edit-fees-list {
+        width: 420px;
+    }
+}
+
 .modal-system-company {
-    width: 500px;
+    width: 450px;
 }
 
 .modal-system-worktypes {

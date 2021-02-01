@@ -57,7 +57,7 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
 
         public UsrOrDefChapterManagement editChapter { get; set; }
         public string isCaseTypeOrGroup { get; set; } = "";
-        
+
         public VmUsrOrDefChapterManagement editObject = new VmUsrOrDefChapterManagement { ChapterObject = new UsrOrDefChapterManagement() };
         public VmUsrOrDefChapterManagement editChapterObject = new VmUsrOrDefChapterManagement { ChapterObject = new UsrOrDefChapterManagement() };
 
@@ -68,10 +68,10 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
 
         [Parameter]
         public string selectedCaseType { get; set; } = "";
-        
+
         [Parameter]
         public string selectedCaseTypeGroup { get; set; } = "";
-        
+
         [Parameter]
         public string selectedChapter { get; set; } = "";
 
@@ -94,12 +94,12 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
 
         private string RowChangedClass { get; set; } = "row-changed-nav3";
 
-                
+
         public bool displaySpinner = true;
 
         public bool ListChapterLoaded = false;
 
-        
+
         public List<string> lstDocTypes { get; set; } = new List<string> { "Doc", "Letter", "Form", "Email", "Step" };
 
 
@@ -184,11 +184,11 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
             ListChapterLoaded = false;
 
             var lstC = await chapterManagementService.GetAllChapters();
-            lstChapters = lstC.Select(A => new VmUsrOrDefChapterManagement { ChapterObject = A } ).ToList();
+            lstChapters = lstC.Select(A => new VmUsrOrDefChapterManagement { ChapterObject = A }).ToList();
 
-            if(!(selectedChapter is null) & selectedChapter != "")
+            if (!(selectedChapter is null) & selectedChapter != "")
             {
-                SelectChapter(selectedChapter,lstChapters
+                SelectChapter(selectedChapter, lstChapters
                                                     .Where(C => C.ChapterObject.CaseTypeGroup == selectedCaseTypeGroup)
                                                     .Where(C => C.ChapterObject.CaseType == selectedCaseType)
                                                     .Where(C => C.ChapterObject.Name == selectedChapter)
@@ -307,17 +307,17 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
                                                 .Select(A => A.Id)
                                                 .FirstOrDefault();
 
-                if(altSysSelectedChapterId == 0)
+                if (altSysSelectedChapterId == 0)
                 {
                     return false;
                 }
 
                 var temp = await chapterManagementService.GetItemListByChapter(altSysSelectedChapterId.Value);
-                
-                if(temp.Count > 0)
+
+                if (temp.Count > 0)
                 {
                     lstAltSystemChapterItems = temp.Select(T => new VmUsrOrDefChapterManagement { ChapterObject = T }).ToList();
-                    
+
 
                     await sessionState.ResetSelectedSystem();
 
@@ -344,7 +344,7 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
                     StateHasChanged();
                 }
 
-                
+
             }
 
             return true;
@@ -356,7 +356,7 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
                                 .Where(A => A.ChapterObject.Name == chapterItem.ChapterObject.Name)
                                 .SingleOrDefault();
 
-            if(altObject is null)
+            if (altObject is null)
             {
                 chapterItem.ComparisonResult = "No match";
                 chapterItem.ComparisonIcon = "times";
@@ -383,7 +383,7 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
 
         public async void CompareChapterItemsToAltSytemAction()
         {
-            
+
             await GetAltSytemChapterItems();
         }
 
@@ -416,14 +416,14 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
             editObject.ChapterObject.Type = (type == "Steps and Documents") ? "Doc" : type;
             editObject.ChapterObject.CaseTypeGroup = "";
 
-            if(type == "Steps and Documents")
+            if (type == "Steps and Documents")
             {
                 editObject.ChapterObject.SeqNo = lstDocs
                                                     .OrderByDescending(A => A.ChapterObject.SeqNo)
                                                     .Select(A => A.ChapterObject.SeqNo)
                                                     .FirstOrDefault() + 1;
             }
-            else if(type == "Status")
+            else if (type == "Status")
             {
                 editObject.ChapterObject.SeqNo = lstStatus
                                                     .OrderByDescending(A => A.ChapterObject.SeqNo)
@@ -441,7 +441,7 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
             editChapterObject.ChapterObject.SeqNo = editChapterObject.ChapterObject.SeqNo is null
                                                         ? 0
                                                         : editChapterObject.ChapterObject.SeqNo;
-            
+
             editObject.ChapterObject.ParentId = selectedChapterId;
 
             ShowChapterDetailModal();
@@ -451,7 +451,7 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
         {
             editChapterObject = new VmUsrOrDefChapterManagement { ChapterObject = new UsrOrDefChapterManagement() };
 
-            if(!(selectedCaseTypeGroup == ""))
+            if (!(selectedCaseTypeGroup == ""))
             {
                 editChapterObject.ChapterObject.CaseTypeGroup = selectedCaseTypeGroup;
             }
@@ -460,7 +460,7 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
                 editChapterObject.ChapterObject.CaseTypeGroup = "";
             }
 
-            if(!(selectedCaseType == ""))
+            if (!(selectedCaseType == ""))
             {
                 editChapterObject.ChapterObject.CaseType = selectedCaseType;
             }
@@ -469,7 +469,7 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
                 editChapterObject.ChapterObject.CaseType = "";
             }
 
-            if(!string.IsNullOrWhiteSpace(selectedCaseTypeGroup) & !string.IsNullOrWhiteSpace(selectedCaseType))
+            if (!string.IsNullOrWhiteSpace(selectedCaseTypeGroup) & !string.IsNullOrWhiteSpace(selectedCaseType))
             {
                 editChapterObject.ChapterObject.SeqNo = lstChapters
                                                             .Where(C => C.ChapterObject.ParentId == 0)
@@ -511,7 +511,7 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
 
         private async void PrepChapterList()
         {
-            if(!(selectedCaseType == ""))
+            if (!(selectedCaseType == ""))
             {
                 dropDownChapterList = await chapterManagementService.GetDocumentList(selectedCaseType);
                 StateHasChanged();
@@ -526,7 +526,7 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
             navDisplay = displayChange;
         }
 
-       
+
         /// <summary>
         /// Moves a sequecnce item up or down a list of type [UsrOrDefChapterManagement]
         /// </summary>
@@ -548,7 +548,7 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
             incrementBy = (direction.ToLower() == "up" ? -1 : 1);
 
             rowChanged = (int)(selectobject.SeqNo + incrementBy);
-            
+
             switch (listType)
             {
                 case "Docs":
@@ -613,7 +613,7 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
             return listItems;
         }
 
-        protected async void CondenseSeq(string ListType )
+        protected async void CondenseSeq(string ListType)
         {
 
             var ListItems = GetRelevantChapterList(ListType);
@@ -634,7 +634,7 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
         protected void CondenseFeeSeq()
         {
             RefreshSelectedList();
-            
+
         }
 
         protected void ShowChapterAddOrEditModel()
@@ -656,7 +656,7 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
             var parameters = new ModalParameters();
             parameters.Add("TaskObject", (isCaseTypeOrGroup == "Chapter") ? editChapter.Name : editCaseType);
             parameters.Add("originalName", (isCaseTypeOrGroup == "Chapter") ? editChapter.Name : editCaseType);
-            if(isCaseTypeOrGroup == "Chapter")
+            if (isCaseTypeOrGroup == "Chapter")
             {
                 parameters.Add("Chapter", editChapter);
             }
@@ -688,7 +688,7 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
 
             string className = "modal-chapter-item";
 
-            if(selectedList == "Steps and Documents")
+            if (selectedList == "Steps and Documents")
             {
                 className = "modal-chapter-doc";
             }
@@ -815,7 +815,7 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
             }
 
             return RowChangedClass;
-            
+
         }
 
         private bool SequenceIsValid(string listType)
@@ -828,13 +828,13 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
 
                 for (int i = 0; i < listItems.Count; i++)
                 {
-                    if (listItems[i].ChapterObject.SeqNo != i+1)
+                    if (listItems[i].ChapterObject.SeqNo != i + 1)
                     {
                         isValid = false;
                     }
-                
+
                 }
-                
+
                 return isValid;
             }
             else
