@@ -1,5 +1,5 @@
 ﻿using Blazored.Modal;
-using GadjIT.ClientContext.OR_RESI;
+using GadjIT.ClientContext.P4W;
 using Gizmo_V1_02.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;

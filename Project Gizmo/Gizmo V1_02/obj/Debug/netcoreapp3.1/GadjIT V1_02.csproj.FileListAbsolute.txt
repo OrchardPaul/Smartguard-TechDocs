@@ -772,11 +772,6 @@ F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\RazorD
 F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\RazorDeclaration\Pages\Admin\UserManagement\ManageUsersOverview.razor.g.cs
 F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\RazorDeclaration\Pages\ConfirmDialog.razor.g.cs
 F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\RazorDeclaration\Pages\Index.razor.g.cs
-F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\RazorDeclaration\Pages\OR_RESI_Chapters\ChapterAddOrEdit.razor.g.cs
-F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\RazorDeclaration\Pages\OR_RESI_Chapters\ChapterCaseTypeEdit.razor.g.cs
-F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\RazorDeclaration\Pages\OR_RESI_Chapters\ChapterDetail.razor.g.cs
-F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\RazorDeclaration\Pages\OR_RESI_Chapters\ChapterItemComparison.razor.g.cs
-F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\RazorDeclaration\Pages\OR_RESI_Chapters\ChapterList.razor.g.cs
 F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\RazorDeclaration\Pages\Shared\Modals\ModalDelete.razor.g.cs
 F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\RazorDeclaration\Pages\Shared\Modals\ModalInfo.razor.g.cs
 F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\RazorDeclaration\Pages\Shared\Modals\ModalSystemSelect.razor.g.cs
@@ -813,11 +808,6 @@ F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\
 F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\Admin\UserManagement\ManageUsersOverview.razor.g.cs
 F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\ConfirmDialog.razor.g.cs
 F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\Index.razor.g.cs
-F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\OR_RESI_Chapters\ChapterAddOrEdit.razor.g.cs
-F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\OR_RESI_Chapters\ChapterCaseTypeEdit.razor.g.cs
-F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\OR_RESI_Chapters\ChapterDetail.razor.g.cs
-F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\OR_RESI_Chapters\ChapterItemComparison.razor.g.cs
-F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\OR_RESI_Chapters\ChapterList.razor.g.cs
 F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\Shared\Modals\ModalDelete.razor.g.cs
 F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\Shared\Modals\ModalInfo.razor.g.cs
 F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\Shared\Modals\ModalSystemSelect.razor.g.cs
@@ -896,5 +886,15 @@ F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\static
 F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\GadjIT V1_02.dll
 F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\GadjIT V1_02.pdb
 F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\GadjIT V1_02.genruntimeconfig.cache
-F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\RazorDeclaration\Pages\OR_RESI_Chapters\ChapterFees.razor.g.cs
-F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\OR_RESI_Chapters\ChapterFees.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\RazorDeclaration\Pages\Chapters\ChapterAddOrEdit.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\RazorDeclaration\Pages\Chapters\ChapterCaseTypeEdit.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\RazorDeclaration\Pages\Chapters\ChapterDetail.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\RazorDeclaration\Pages\Chapters\ChapterFees.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\RazorDeclaration\Pages\Chapters\ChapterItemComparison.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\RazorDeclaration\Pages\Chapters\ChapterList.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\Chapters\ChapterAddOrEdit.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\Chapters\ChapterCaseTypeEdit.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\Chapters\ChapterDetail.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\Chapters\ChapterFees.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\Chapters\ChapterItemComparison.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\Chapters\ChapterList.razor.g.cs

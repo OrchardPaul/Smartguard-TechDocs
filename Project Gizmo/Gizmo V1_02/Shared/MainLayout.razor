@@ -29,9 +29,10 @@
     .cookie-link a:hover {color: @colMain;}
     .cookie-link a.active {color: @colAlt;}
 
-    .topbar a.nav-link {color: @colMain;}
-    .topbar a.nav-link:hover {color: @colAlt;}
-    .topbar .btn-link {color: @colMainContr; margin-top: 15px}
+    .topbar .nav-link {color: @colMain;}
+    .topbar .btn-uprofile {color: @colMain;}
+    .topbar .nav-link:hover {color: @colAlt;}
+    .topbar .btn-link {color: @colMainContr;}
     @*.sidebar .nav-item a.active {color: @colAlt;}*@
     @*.sidebar .nav-item a {color: @colMain;}*@
     @*.sidebar .nav-item a.active {background-color: @colAltContr !important; border-color: @colAlt;}*@
@@ -83,32 +84,12 @@
 </div>
 
 <div class="main">
+
     <div class="top-row px-4 auth topbar">
-        @*@if (!(userState.allAssignedCompanies is null))
-            {
-                @if (userState.allAssignedCompanies.Count() > 0)
-                {
-                    <EditForm Model="currentUser">
-                        <InputSelectInteger ValueExpression="@(() => currentUser.SelectedCompanyId)"
-                                            Value="@currentUser.SelectedCompanyId"
-                                            ValueChanged="@((int value) => ToggleCompany(value))">
-
-                            @foreach (var company in userState.allAssignedCompanies)
-                            {
-                                <option value="@company.Id">
-                                    @company.CompanyName
-                                </option>
-                            }
-                        </InputSelectInteger>
-                    </EditForm>
-
-                }
-            }*@
         <LoginDisplay userFullName="@userState.FullName" />
     </div>
 
-
-    <div class="content pt-4 pb-4 parallax">
+    <div class="content pt-4 pb-4 parallax" >
         @Body
     </div>
 
@@ -121,6 +102,13 @@
     </div>-->
     <!-- Copyright -->
     <!--</footer>-->
+
+
+
+
+
+
+
 
 </div>
 

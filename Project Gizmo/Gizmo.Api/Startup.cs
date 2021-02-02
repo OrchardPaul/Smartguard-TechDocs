@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using GadjIT.ClientContext.OR_RESI;
+using GadjIT.ClientAPI.Repository.Chapters;
+using GadjIT.ClientAPI.Repository.Partner;
+using GadjIT.ClientContext.P4W;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -12,7 +14,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using GadjIT.ClientAPI.Repository.OR_RESI;
+
 
 
 namespace GadjIT.ClientAPI
@@ -30,11 +32,11 @@ namespace GadjIT.ClientAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddDbContext<P4W_OR_RESI_V6_DEVContext>(options =>
+            services.AddDbContext<P4W_Context>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("OR_RESI_LIVE")));
 
-            services.AddScoped<IOR_RESI_Chapters_Service, OR_RESI_Chapters_Service>();
+            services.AddScoped<IChapters_Service, Chapters_Service>();
             services.AddScoped<IPartner_Access_Service, Partner_Access_Service>();
         }
 

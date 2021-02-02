@@ -1,4 +1,4 @@
-﻿using GadjIT.ClientAPI.Repository.OR_RESI;
+﻿using GadjIT.ClientAPI.Repository.Partner;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;

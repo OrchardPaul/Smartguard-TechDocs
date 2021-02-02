@@ -3,11 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using GadjIT.ClientAPI.Repository.OR_RESI;
 using Microsoft.AspNetCore.Http;
 using System.Net.Http;
-using GadjIT.ClientContext.OR_RESI;
-using GadjIT.ClientContext.OR_RESI.Custom;
+using GadjIT.ClientContext.P4W;
+using GadjIT.ClientContext.P4W.Custom;
+using GadjIT.ClientAPI.Repository.Chapters;
 
 namespace GadjIT.ClientAPI.Controllers
 {
@@ -15,9 +15,9 @@ namespace GadjIT.ClientAPI.Controllers
     [ApiController]
     public class ChapterManagementController : ControllerBase
     {
-        private readonly IOR_RESI_Chapters_Service chapterRepository;
+        private readonly IChapters_Service chapterRepository;
 
-        public ChapterManagementController(IOR_RESI_Chapters_Service ChapterRepository)
+        public ChapterManagementController(IChapters_Service ChapterRepository)
         {
             this.chapterRepository = ChapterRepository;
         }

@@ -28,9 +28,11 @@ namespace Gizmo_V1_02.Shared
         public string ModalHeight { get; set; }
         public string ModalWidth { get; set; }
 
-        public void setReturnURI()
+        public void NavigateToUserProfile()
         {
+            //set Return URI
             userSession.SetUserProfileReturnURI(navigationManager.Uri);
+            navigationManager.NavigateTo("/userprofile");
         }
 
 

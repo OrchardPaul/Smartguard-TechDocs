@@ -1,6 +1,6 @@
-﻿using GadjIT.ClientContext.OR_RESI;
-using GadjIT.ClientContext.OR_RESI.Custom;
-using GadjIT.ClientContext.OR_RESI.Functions;
+﻿using GadjIT.ClientContext.P4W;
+using GadjIT.ClientContext.P4W.Custom;
+using GadjIT.ClientContext.P4W.Functions;
 using Gizmo_V1_02.Services.SessionState;
 using Microsoft.AspNetCore.Components;
 using System;

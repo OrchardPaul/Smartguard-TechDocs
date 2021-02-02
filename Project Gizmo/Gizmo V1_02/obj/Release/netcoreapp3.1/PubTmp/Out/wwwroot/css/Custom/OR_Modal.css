@@ -5,15 +5,14 @@
 .blazored-custom-modal {
     display: flex;
     flex-direction: column;
-    width: 60vw;
-    height: 60vh;
     background-color: #fafafa;
     border-radius: 12px;
-    border: 1px solid #fff;
-    padding: 0.5rem;
+    padding: 1rem;
     z-index: 102;
-    box-shadow: 0 2px 2px rgba(0,0,0,.75);
+    box-shadow: 0 2px 2px rgba(0,0,0,0.75);
     overflow-y: auto;
+    overflow-x: hidden;
+    min-width: 300px;
 }
 
 
@@ -28,6 +27,16 @@
     padding: 0.5rem;
     z-index: 102;
     box-shadow: 0 2px 2px rgba(0,0,0,.75);
+}
+
+.blazored-modal-header {
+    margin: 0px;
+    padding: 0px;
+}
+
+.blazored-modal-content {
+    margin: 0px;
+    padding: 0px;
 }
 
 .modal {
@@ -49,17 +58,66 @@
     font-weight: bold !important
 }
 
+.modal-body {
+    padding: 0;
+    margin-top: 10px;
+}
+
 .modal-footer {
     border-top: 1pt solid #DDD;
 }
 
-.modal .form-control {
+.modal-body h4{
     color: #888;
+    margin-bottom: 8px;
 }
 
-.modal .info-text{
+.modal-body .form-control {
     color: #888;
-    font-size: 0.9rem;
+    text-align: left;
+    border-color: #aaa;
+    font-size: 0.9em;
+}
+
+.modal-body .form-group label {
+    padding-bottom: 0px;
+    margin-bottom: 3px;
+    margin-top: 10px;
+    font-size: 0.9em;
+}
+
+.modal-body .form-group input[type=checkbox] {
+    width: 1.1em;
+    height: 1.1em;
+}
+
+.button-container {
+    border-top: 1pt solid #ccc;
+    margin-top: 0px;
+    padding-top: 10px;
+    margin-bottom: 0px;
+    padding-bottom: 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    clear: both;
+}
+
+.button-container button {
+    margin: 0 10px 0 10px;
+}
+
+/*Form Control Validation - remove outline to be able to add curved borders */
+.invalid.modified {
+    border: 1.5pt solid red !important;
+    border-radius: 5px !important;
+    outline-width: 0px !important;
+}
+
+.valid.modified {
+    border: 1.5pt solid green !important;
+    border-radius: 5px !important;
+    outline-width: 0px !important;
 }
 
 /*****************/
@@ -118,4 +176,39 @@
     background: #FFF;
     border-top: 1pt solid #555;
     border-bottom: none;
+}
+
+/************************/
+/*   Unique Modals      */
+/************************/
+
+.modal-chapter-item {
+    width: 350px;
+}
+
+.modal-chapter-doc {
+    width: 550px;
+}
+
+.modal-chapter-fees {
+    width: 500px;
+    overflow: hidden;
+}
+
+#modal-edit-fees-list {
+    width: 470px;
+    height: 400px;
+    overflow-y: scroll;
+}
+
+.modal-system-company {
+    width: 500px;
+}
+
+.modal-system-worktypes {
+    width: 350px;
+}
+
+.modal-system-worktypegrouping {
+    width: 350px;
 }
