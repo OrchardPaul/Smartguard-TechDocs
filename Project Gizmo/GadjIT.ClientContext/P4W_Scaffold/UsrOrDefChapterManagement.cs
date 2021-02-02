@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 // If you have enabled NRTs for your project, then un-comment the following line:
 // #nullable disable
 
-namespace GadjIT.ClientContext.P4W
+namespace GadjIT.ClientContext.P4W_Scaffold
 {
     [Table("Usr_OR_DEF_Chapter_Management")]
     public partial class UsrOrDefChapterManagement
@@ -22,10 +22,8 @@ namespace GadjIT.ClientContext.P4W
         [StringLength(100)]
         public string CaseType { get; set; }
         [StringLength(100)]
-        [Required(ErrorMessage = "<b> Item type must be set </b>")]
         public string Type { get; set; }
         [StringLength(250)]
-        [Required]
         public string Name { get; set; }
         public int? SeqNo { get; set; }
         [Column("Suppress_Step")]
@@ -42,7 +40,6 @@ namespace GadjIT.ClientContext.P4W
         [Column("Alt_Display_Name")]
         [StringLength(300)]
         public string AltDisplayName { get; set; }
-
         [Column("Next_Status")]
         [StringLength(100)]
         public string NextStatus { get; set; }

@@ -4,6 +4,7 @@ using GadjIT.ClientContext.P4W.Custom;
 using Gizmo_V1_02.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,6 +38,8 @@ namespace Gizmo_V1_02.Pages.Chapters
         private async void Close()
         {
             await ModalInstance.CloseAsync();
+
+
         }
 
         private void ToggleNewCaseTypeGroupOption()

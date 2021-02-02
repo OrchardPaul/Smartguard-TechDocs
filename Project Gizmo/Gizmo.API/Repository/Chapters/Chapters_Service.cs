@@ -83,6 +83,7 @@ namespace GadjIT.ClientAPI.Repository.Chapters
             updatedItem.SuppressStep = item.SuppressStep;
             updatedItem.AltDisplayName = item.AltDisplayName;
             updatedItem.NextStatus = item.NextStatus;
+            updatedItem.ChapterData = item.ChapterData;
 
             await _context.SaveChangesAsync();
 
