@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Linq;
-using GadjIT.ClientContext.P4W.Functions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
@@ -8,15 +6,15 @@ using Microsoft.EntityFrameworkCore.Metadata;
 // If you have enabled NRTs for your project, then un-comment the following line:
 // #nullable disable
 
-namespace GadjIT.ClientContext.P4W
+namespace GadjIT.ClientContext.P4W_Scaffold
 {
-    public partial class P4W_Context : DbContext
+    public partial class P4W_OR_RESI_V5_DEVContext : DbContext
     {
-        public P4W_Context()
+        public P4W_OR_RESI_V5_DEVContext()
         {
         }
 
-        public P4W_Context(DbContextOptions<P4W_Context> options)
+        public P4W_OR_RESI_V5_DEVContext(DbContextOptions<P4W_OR_RESI_V5_DEVContext> options)
             : base(options)
         {
         }
@@ -26,36 +24,27 @@ namespace GadjIT.ClientContext.P4W
         public virtual DbSet<DmDocuments> DmDocuments { get; set; }
         public virtual DbSet<DmDocumentsPermissions> DmDocumentsPermissions { get; set; }
         public virtual DbSet<UsrOrDefChapterManagement> UsrOrDefChapterManagement { get; set; }
-        public virtual DbSet<UsrOrResiMtChapterControl> UsrOrResiMtChapterControl { get; set; }
         public virtual DbSet<UsrOrResiMtFees> UsrOrResiMtFees { get; set; }
 
-        //public DbSet<fnORCHAGetFeeDefinitions> fnORCHAGetFeeDefinitions { get; set; }
-
-       
-        public IQueryable<fnORCHAGetFeeDefinitions> fnORCHAGetFeeDefinitions(string Group, string CaseType) =>
-                Set<fnORCHAGetFeeDefinitions>().FromSqlInterpolated($"select * from fn_OR_CHA_GetFeeDefinitions({Group},{CaseType})");
-       
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("Data Source=dev\\SQLEXPRESS;Initial Catalog=P4W_OR_RESI_V6_DEV;Integrated Security=True");
+                optionsBuilder.UseSqlServer("Data Source=dev\\SQLEXPRESS;Initial Catalog=P4W_OR_RESI_V5_DEV;Integrated Security=True");
             }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<fnORCHAGetFeeDefinitions>().HasNoKey().ToView(null);
-
             modelBuilder.Entity<CaseTypeGroups>(entity =>
             {
                 entity.HasKey(e => e.Id)
                     .IsClustered(false);
 
-                entity.HasIndex(e => e.Name)
-                    .HasName("UC_CaseTypeGroups_Name")
-                    .IsUnique();
+                entity.Property(e => e.Cmtemplates).IsUnicode(false);
+
+                entity.Property(e => e.Department).IsUnicode(false);
 
                 entity.Property(e => e.Name).IsUnicode(false);
             });
@@ -64,10 +53,6 @@ namespace GadjIT.ClientContext.P4W
             {
                 entity.HasKey(e => e.Code)
                     .IsClustered(false);
-
-                entity.HasIndex(e => e.CodeName)
-                    .HasName("UC_CaseTypes_CodeName")
-                    .IsUnique();
 
                 entity.Property(e => e.ArchiveLocation)
                     .IsUnicode(false)
@@ -224,7 +209,6 @@ namespace GadjIT.ClientContext.P4W
                     .HasName("PK__DM_DocumentsPerm__1F7A4DDE");
             });
 
-
             modelBuilder.Entity<UsrOrDefChapterManagement>(entity =>
             {
                 entity.HasKey(e => e.Id)
@@ -251,33 +235,6 @@ namespace GadjIT.ClientContext.P4W
                 entity.Property(e => e.SuppressStep).IsUnicode(false);
 
                 entity.Property(e => e.Type).IsUnicode(false);
-            });
-
-            modelBuilder.Entity<UsrOrResiMtChapterControl>(entity =>
-            {
-                entity.HasKey(e => e.Id)
-                    .IsClustered(false);
-
-                entity.HasIndex(e => new { e.EntityRef, e.MatterNo })
-                    .HasName("Usr_OR_RESI_MT_Chapter_Control_MPIndex");
-
-                entity.Property(e => e.CompleteAsName).IsUnicode(false);
-
-                entity.Property(e => e.CurrentChapter).IsUnicode(false);
-
-                entity.Property(e => e.DefaultStep).IsUnicode(false);
-
-                entity.Property(e => e.DefaultStepAsName).IsUnicode(false);
-
-                entity.Property(e => e.DoNotReschedule).IsUnicode(false);
-
-                entity.Property(e => e.EntityRef).IsUnicode(false);
-
-                entity.Property(e => e.ScheduleAsName).IsUnicode(false);
-
-                entity.Property(e => e.StepsToRun).IsUnicode(false);
-
-                entity.Property(e => e.SubViewName).IsUnicode(false);
             });
 
             modelBuilder.Entity<UsrOrResiMtFees>(entity =>

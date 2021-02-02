@@ -1,2 +1,2 @@
 ﻿18/01/2021
-Scaffold-DbContext “Data Source=dev\SQLEXPRESS;Initial Catalog=P4W_OR_RESI_V6_DEV;Integrated Security=True” Microsoft.EntityFrameworkCore.SqlServer -OutputDir OR_RESI_Scaffold -Tables usr_OR_RESI_MT_Fees, Usr_OR_DEF_Chapter_Management, Usr_OR_RESI_MT_Chapter_Control, Dm_Documents, DM_DocumentsPermissions, CaseTypes, CaseTypeGroups -DataAnnotations -Force
+Scaffold-DbContext “Data Source=dev\SQLEXPRESS;Initial Catalog=P4W_OR_RESI_V5_DEV;Integrated Security=True” Microsoft.EntityFrameworkCore.SqlServer -OutputDir P4W_Scaffold -Tables usr_OR_RESI_MT_Fees, Usr_OR_DEF_Chapter_Management, Usr_OR_RESI_MT_Chapter_Control, Dm_Documents, DM_DocumentsPermissions, CaseTypes, CaseTypeGroups -DataAnnotations -Force

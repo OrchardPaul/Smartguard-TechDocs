@@ -15,6 +15,7 @@ using Blazored.Modal;
 using Gizmo_V1_02.Pages.Shared.Modals;
 using GadjIT.ClientContext.P4W.Custom;
 using GadjIT.ClientContext.P4W.Functions;
+using Newtonsoft.Json.Linq;
 
 namespace Gizmo_V1_02.Pages.Chapters
 {
@@ -176,8 +177,8 @@ namespace Gizmo_V1_02.Pages.Chapters
             await RefreshChapterItems("All");
 
             StateHasChanged();
-
         }
+
 
         private async void RefreshChapters()
         {
@@ -196,7 +197,6 @@ namespace Gizmo_V1_02.Pages.Chapters
             }
 
             ListChapterLoaded = true;
-
             StateHasChanged();
         }
 

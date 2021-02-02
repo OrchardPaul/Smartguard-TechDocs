@@ -79,11 +79,49 @@
     font-size: 0.9em;
 }
 
+.form-control-xxl {
+    width: 450px;
+}
+.form-control-xl {
+    width: 350px;
+}
+.form-control-lg {
+    width: 250px;
+}
+.form-control-sm {
+    width: 150px;
+}
+.form-control-sm {
+    width: 150px;
+}
+.form-control-xs {
+    width: 75px;
+}
+
 .modal-body .form-group label {
     padding-bottom: 0px;
     margin-bottom: 3px;
     margin-top: 10px;
     font-size: 0.9em;
+}
+
+.modal-body .form-group .form-label-check {
+    float: right;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    align-content: center;
+}
+
+.modal-body .form-group .form-label-check label {
+    font-size: 0.75rem;
+    color: #555;
+    padding-right: 3px;
+}
+
+.modal-body .form-group .form-label-check input[type="checkbox"] {
+    
+    margin-top: 7px;
 }
 
 .modal-body .form-group input[type=checkbox] {
@@ -182,6 +220,10 @@
 /*   Unique Modals      */
 /************************/
 
+.modal-chapter-chapter {
+    width: 350px;
+}
+
 .modal-chapter-item {
     width: 350px;
 }
@@ -201,8 +243,31 @@
     overflow-y: scroll;
 }
 
+@media (max-width: 1200px) {
+    .modal-chapter-item {
+        width: 350px;
+    }
+
+    .modal-chapter-doc {
+        width: 450px;
+    }
+    .modal-chapter-doc .modal-body{
+        height: 450px;
+        overflow-y: scroll;
+    }
+
+    .modal-chapter-fees {
+        width: 450px;
+        overflow: hidden;
+    }
+
+    #modal-edit-fees-list {
+        width: 420px;
+    }
+}
+
 .modal-system-company {
-    width: 500px;
+    width: 450px;
 }
 
 .modal-system-worktypes {

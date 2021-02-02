@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "d13O8LYFMHDVmovK1fh53cJxmLu67pNb/v+BvPzxPJGco4QrssjAcyLaK1bRfoqhVmwNuIdYqXqDOKy448yYYQ==",
+  "dgSpecHash": "I0ga5FejbsYkRmWm4xFDfjZtHYYGcySo1op6mIUfL3sZVn2QLBMiC7ES/JJNfB2AQNDx/KZPgY3I53XpRWWqaQ==",
   "success": true,
   "projectFilePath": "F:\\WorkSpaces\\JD\\GadjIT\\Project Gizmo\\Gizmo V1_02\\GadjIT V1_02.csproj",
   "expectedPackageFiles": [
@@ -97,7 +97,8 @@
     "C:\\Users\\j_duggan\\.nuget\\packages\\microsoft.win32.registry\\4.7.0\\microsoft.win32.registry.4.7.0.nupkg.sha512",
     "C:\\Users\\j_duggan\\.nuget\\packages\\microsoft.win32.systemevents\\4.7.0\\microsoft.win32.systemevents.4.7.0.nupkg.sha512",
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\netstandard.library\\1.6.1\\netstandard.library.1.6.1.nupkg.sha512",
-    "C:\\Users\\j_duggan\\.nuget\\packages\\newtonsoft.json\\12.0.2\\newtonsoft.json.12.0.2.nupkg.sha512",
+    "C:\\Users\\j_duggan\\.nuget\\packages\\newtonsoft.json\\12.0.3\\newtonsoft.json.12.0.3.nupkg.sha512",
+    "C:\\Users\\j_duggan\\.nuget\\packages\\newtonsoft.json.schema\\3.0.13\\newtonsoft.json.schema.3.0.13.nupkg.sha512",
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\nuget.frameworks\\4.7.0\\nuget.frameworks.4.7.0.nupkg.sha512",
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\runtime.debian.8-x64.runtime.native.system.security.cryptography.openssl\\4.3.0\\runtime.debian.8-x64.runtime.native.system.security.cryptography.openssl.4.3.0.nupkg.sha512",
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\runtime.fedora.23-x64.runtime.native.system.security.cryptography.openssl\\4.3.0\\runtime.fedora.23-x64.runtime.native.system.security.cryptography.openssl.4.3.0.nupkg.sha512",

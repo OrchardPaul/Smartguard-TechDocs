@@ -46,7 +46,6 @@ namespace Gizmo_V1_02.Services
         public Task<UsrOrDefChapterManagement> Add(UsrOrDefChapterManagement item)
         {
             return httpClient.PostJsonAsync<UsrOrDefChapterManagement>($"{userSession.baseUri}api/ChapterManagement/Add", item);
-
         }
 
         public Task<UsrOrDefChapterManagement> Update(UsrOrDefChapterManagement item)
