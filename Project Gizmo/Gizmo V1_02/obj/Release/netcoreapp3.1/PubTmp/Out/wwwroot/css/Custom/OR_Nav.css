@@ -279,6 +279,8 @@
     margin-top: 20px;
     font-size: 1.2rem !important;
 }
+
+
 .nav-row-2 {
     margin-top: 12px;
     margin-left: 30px;
@@ -291,18 +293,33 @@
     font-size: 0.9rem !important;
 }
 
+.nav-row-1 .data-item, .nav-row-2 .data-item {
+    background-color: rgba(0, 0, 0, 0.8);
+    color: #FFF;
+    margin: 0 !important;
+    box-shadow: 0 8px 12px 0 rgba(0, 0, 0, 0.5);
+    border: none;
+    padding: 0;
+}
+
+
+
+.nav-row-3 .data-item{
+    background-color: rgba(255, 255, 255, 0.8) ;
+
+}
 
 .data-item-nav {
     height: 100%;
+    width: 100%;
     display: flex;
     align-items: center;
     padding: 0;
-    background-color: rgba(0, 0, 0, 0.8);
-    box-shadow: 0 8px 12px 0 rgba(0, 0, 0, 0.5);
     border-radius: 0px;
     border: none;
     cursor: pointer;
     color: #fff;
+    margin: 0;
 }
 
 .nav-row-3 .data-item-nav {
@@ -310,13 +327,62 @@
     color: #000;
 }
 
-.data-item-nav a {
-    display: block;
-    height: 100%;
-    width: 100%;
-    text-decoration: none !important;
+.grid-nav .row-changed-nav3 .data-item, .grid-nav .row-changed-nav3xx .data-item {
+    animation-name: rowChangednav3;
+    animation-duration: 2s;
+    animation-iteration-count: 1;
+    animation-direction: normal;
+    animation-fill-mode: forwards; /* or: backwards, both, none */
 }
 
+.grid-nav .row-changed-nav3x .data-item {
+    animation-name: rowChangednav3x;
+    animation-duration: 2s;
+    animation-iteration-count: 1;
+    animation-direction: normal;
+    animation-fill-mode: forwards; /* or: backwards, both, none */
+}
+
+@keyframes rowChangednav3 {
+    0% {
+        background-color: rgba(255, 255, 255, 0.8);
+        color: #000;
+    }
+
+    40% {
+        background-color: rgba(0, 0, 0, 0.5);
+        color: #fff;
+    }
+
+    100% {
+        background-color: rgba(255, 255, 255, 0.8);
+        color: #000;
+    }
+}
+
+@keyframes rowChangednav3x {
+    0% {
+        background-color: rgba(255, 255, 255, 0.8);
+        color: #000;
+    }
+
+    40% {
+        background-color: rgba(0, 0, 0, 0.5);
+        color: #fff;
+    }
+
+    100% {
+        background-color: rgba(255, 255, 255, 0.8);
+        color: #000;
+    }
+}
+
+
+.link-direction{
+    cursor: pointer;
+    margin-left: 10px;
+    margin-right: 10px;
+}
 
 .data-item-nav:hover, .data-item-nav a:hover, .nav-row-3 .data-item-nav:hover{
     transition-duration: 0.2s;
@@ -362,7 +428,7 @@
     color: #333;
 }
 
-.nav-row-3 .data-item-nav .btn-ellipses {
+.nav-row-3 .data-item .btn-ellipses {
     color: #999;
 }
 
@@ -406,7 +472,7 @@
 .btn-ellipses:hover .ellipsis-menu {
     visibility: visible;
     opacity: 1;
-    transition: visibility 0.2s linear, opacity 0.2s linear;
+    
 }
 
 .btn-ellipses ul li {
