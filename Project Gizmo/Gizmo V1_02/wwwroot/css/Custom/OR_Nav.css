@@ -576,7 +576,7 @@
 
 .btn-uprofile .uprofile-menu {
     top: 33px;
-    left: calc(100% - 70px) !important;
+    left: calc(100% - 120px) !important;
 }
 
 .btn-uprofile ul {
@@ -623,7 +623,7 @@
     font-size: 0.9rem;
     font-weight: normal;
     background-color: #333;
-
+    color: #fff;
 }
 
 .btn-uprofile #btn-logout:hover {
