@@ -1,24 +1,28 @@
 ﻿
 <EditForm Model="@TaskObject" OnValidSubmit="@HandleValidSubmit">
     <div class="modal-body">
-        <label for="DocName">Document / Step</label>
+        
 
         <div class="form-group">
+            <label>Case Type Group</label>
+            <div class="form-label-check">
+                <label>New</label><input type="checkbox" @bind-value="addNewCaseTypeGroupOption" />
+            </div>
             @if (!addNewCaseTypeGroupOption)
             {
-                <label>Case Type Group</label>
+
                 @if (AllObjects is null)
                 {
                     <div class="spinner"></div>
                 }
                 else
                 {
-                    <InputSelect @bind-Value="TaskObject.ChapterObject.CaseTypeGroup">
+                    <InputSelect class="form-control" @bind-Value="TaskObject.ChapterObject.CaseTypeGroup">
                         @foreach (var c in AllObjects.Where(C => C.ChapterObject.ParentId == 0)
-                                            .Where(C => !(C.ChapterObject.CaseTypeGroup is null))
-                                            .Select(C => C.ChapterObject.CaseTypeGroup)
-                                            .Distinct()
-                                            .ToList())
+                                          .Where(C => !(C.ChapterObject.CaseTypeGroup is null))
+                                          .Select(C => C.ChapterObject.CaseTypeGroup)
+                                          .Distinct()
+                                          .ToList())
                                 {
                             <option value="@c">
                                 @c
@@ -29,31 +33,36 @@
             }
             else
             {
-                <label>Case type group name</label>
-                <InputText @bind-Value="TaskObject.ChapterObject.CaseTypeGroup"></InputText>
+                
+                <InputText class="form-control" @bind-Value="TaskObject.ChapterObject.CaseTypeGroup"></InputText>
             }
 
-            <input type="checkbox" @bind-value="addNewCaseTypeGroupOption" />
+
         </div>
 
         <div class="form-group">
+            <label>Case Type</label>
+            <div class="form-label-check">
+                <label>New</label>
+                <input type="checkbox" @bind-value="addNewCaseTypeOption" />
+            </div>
             @if (!addNewCaseTypeOption)
             {
 
 
-                <label>Case Type</label>
+
                 @if (AllObjects is null)
                 {
                     <div class="spinner"></div>
                 }
                 else
                 {
-                    <InputSelect @bind-Value="TaskObject.ChapterObject.CaseType">
+                    <InputSelect class="form-control" @bind-Value="TaskObject.ChapterObject.CaseType">
                         @foreach (var c in AllObjects.Where(C => C.ChapterObject.ParentId == 0)
-                                           .Where(C => !(C.ChapterObject.CaseType is null))
-                                           .Select(C => C.ChapterObject.CaseType)
-                                           .Distinct()
-                                           .ToList())
+                                         .Where(C => !(C.ChapterObject.CaseType is null))
+                                         .Select(C => C.ChapterObject.CaseType)
+                                         .Distinct()
+                                         .ToList())
                                 {
                             <option value="@c">
                                 @c
@@ -65,27 +74,25 @@
             }
             else
             {
-
-                <label>Case type name</label>
-                <InputText @bind-Value="TaskObject.ChapterObject.CaseType"></InputText>
+                <InputText class="form-control" @bind-Value="TaskObject.ChapterObject.CaseType"></InputText>
 
             }
 
-            <input type="checkbox" @bind-value="addNewCaseTypeOption" />
+
         </div>
 
         <div class="form-group">
             <label>Chapter Name</label>
-            <InputText @bind-Value="TaskObject.ChapterObject.Name"></InputText>
+            <InputText class="form-control" @bind-Value="TaskObject.ChapterObject.Name"></InputText>
         </div>
     </div>
     <div class="button-container">
-        <button type="submit" class="btn btn-primary">Submit</button>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <button type="submit" class="btn btn-main">Save</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" @onclick="Close">Cancel</button>
 
         @if (TaskObject.ChapterObject.Id != 0)
         {
-            <button type="button" @onclick="HandleValidDelete" class="btn btn-secondary"></button>
+            <button type="button" @onclick="HandleValidDelete" class="btn btn-danger">Delete</button>
         }
     </div>
 

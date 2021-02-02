@@ -646,7 +646,12 @@ namespace Gizmo_V1_02.Pages.OR_RESI_Chapters
             parameters.Add("DataChanged", Action);
             parameters.Add("AllObjects", lstChapters);
 
-            Modal.Show<ChapterAddOrEdit>("Chapter", parameters);
+            var options = new ModalOptions()
+            {
+                Class = "blazored-custom-modal modal-chapter-chapter"
+            };
+
+            Modal.Show<ChapterAddOrEdit>("Chapter", parameters, options);
         }
 
         protected void ShowCaseTypeEditModal()

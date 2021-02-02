@@ -98,13 +98,30 @@
     width: 75px;
 }
 
-.form-control-sm{ width: 150px; }
-
 .modal-body .form-group label {
     padding-bottom: 0px;
     margin-bottom: 3px;
     margin-top: 10px;
     font-size: 0.9em;
+}
+
+.modal-body .form-group .form-label-check {
+    float: right;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    align-content: center;
+}
+
+.modal-body .form-group .form-label-check label {
+    font-size: 0.75rem;
+    color: #555;
+    padding-right: 3px;
+}
+
+.modal-body .form-group .form-label-check input[type="checkbox"] {
+    
+    margin-top: 7px;
 }
 
 .modal-body .form-group input[type=checkbox] {
@@ -202,6 +219,10 @@
 /************************/
 /*   Unique Modals      */
 /************************/
+
+.modal-chapter-chapter {
+    width: 350px;
+}
 
 .modal-chapter-item {
     width: 350px;

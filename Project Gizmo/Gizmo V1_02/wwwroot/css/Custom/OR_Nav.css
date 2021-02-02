@@ -569,6 +569,9 @@
 .btn-uprofile:hover .uprofile-menu {
     visibility: visible;
     opacity: 1;
+    transition-property: visibility, opacity;
+    transition-delay: 0.3s;
+    transition-duration: 0.3s;
 }
 
 .btn-uprofile .uprofile-menu {
@@ -588,10 +591,6 @@
     display: block;
 }
 
-.btn-uprofile:hover .ellipsis-menu {
-    visibility: visible;
-    opacity: 1;
-}
 
 .btn-uprofile ul li {
     list-style-type: none;
@@ -620,9 +619,10 @@
     margin: 15px 0 0 15px;
     width: 120px;
     border: none !important;
-    box-shadow: 0 5px 8px rgba(0,0,0,0.4);
+    box-shadow: 0 3px 5px rgba(0,0,0,0.4);
     font-size: 0.9rem;
     font-weight: normal;
+    background-color: #333;
 
 }
 
