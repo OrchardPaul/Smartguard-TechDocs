@@ -16,6 +16,7 @@ using Gizmo_V1_02.Pages.Shared.Modals;
 using GadjIT.ClientContext.P4W.Custom;
 using GadjIT.ClientContext.P4W.Functions;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 
 namespace Gizmo_V1_02.Pages.Chapters
 {
@@ -200,6 +201,32 @@ namespace Gizmo_V1_02.Pages.Chapters
             StateHasChanged();
         }
 
+        private class Chapter
+        {
+            public string CaseTypeGroup { get; set; }
+            public string CaseType { get; set; }
+            public string Name { get; set; }
+            public int SeqNo { get; set; }
+            public List<UsrOrDefChapterManagement> ChapterItems { get; set; }
+
+        }
+        
+
+        private void GetItemListByChapter(int chapterID)
+        {
+
+            string chapterData = lstChapters
+                                .Where(A => A.ChapterObject.Id == chapterID)
+                                .Select(A => A.ChapterObject.ChapterData)
+                                .SingleOrDefault();
+
+            chapterData = "{ 'CaseTypeGroup': 'OR Debt','CaseType': 'Debt - Commercial','Name':'Winding Up Proceedings','SeqNo': 1,'ChapterItems': [{ 'Type':'Agenda','Name':'WUP','SeqNo':0,'AltDisplayName':'','SuppressStep':'','EntityType':'','AsName':'','CompleteName':'','RescheduleDays':0,'NextStatus':''},{ 'Type':'Agenda','Name':'Insolvency','SeqNo':0,'AltDisplayName':'','SuppressStep':'','EntityType':'','AsName':'','CompleteName':'','RescheduleDays':0,'NextStatus':''},{ 'Type':'Status','Name':'In Progress','SeqNo':1,'AltDisplayName':'','SuppressStep':'','EntityType':'','AsName':'','CompleteName':'','RescheduleDays':0,'NextStatus':''},{ 'Type':'Status','Name':'Withdrawn','SeqNo':2,'AltDisplayName':'','SuppressStep':'Y','EntityType':'','AsName':'','CompleteName':'','RescheduleDays':0,'NextStatus':''},{ 'Type':'Status','Name':'Concluded','SeqNo':3,'AltDisplayName':'','SuppressStep':'Y','EntityType':'','AsName':'','CompleteName':'','RescheduleDays':0,'NextStatus':''},{ 'Type':'Letter','Name':'Blank LTR to Agent','SeqNo':1,'AltDisplayName':'Blank Letter to the Agent','SuppressStep':'','EntityType':'Agent','AsName':'','CompleteName':'','RescheduleDays':0,'NextStatus':''},{ 'Type':'Letter','Name':'Blank LTR to Debtor','SeqNo':2,'AltDisplayName':'Blank Letter to the Debtor','SuppressStep':'','EntityType':'Debtor','AsName':'','CompleteName':'','RescheduleDays':0,'NextStatus':''},{ 'Type':'Letter','Name':'Blank LTR to Offical Receiver','SeqNo':3,'AltDisplayName':'Blank Letter to the Official Receiver','SuppressStep':'','EntityType':'Offical Receiver','AsName':'','CompleteName':'','RescheduleDays':0,'NextStatus':''},{ 'Type':'Letter','Name':'Blank LTR to Client','SeqNo':4,'AltDisplayName':'Blank Letter to the Client','SuppressStep':'','EntityType':'Client','AsName':'','CompleteName':'','RescheduleDays':0,'NextStatus':''},{ 'Type':'Letter','Name':'Blank LTR to Court','SeqNo':5,'AltDisplayName':'Blank Letter to the Court','SuppressStep':'','EntityType':'Court','AsName':'','CompleteName':'','RescheduleDays':0,'NextStatus':''},{ 'Type':'Letter','Name':'LTR to Debtor - WUP Short Form Demand','SeqNo':6,'AltDisplayName':'Letter to Debtor - Winding Up Proceedings Short Form Demand','SuppressStep':'','EntityType':'Debtor','AsName':'FS Awaiting Response from Debtor to Short Form Demand','CompleteName':'FS SHORT FORM DEMAND SENT TO DEBTOR','RescheduleDays':14,'NextStatus':'In Progress'},{ 'Type':'Form','Name':'FRM Statutory Demand','SeqNo':7,'AltDisplayName':'','SuppressStep':'','EntityType':'','AsName':'','CompleteName':'','RescheduleDays':0,'NextStatus':''},{ 'Type':'Letter','Name':'LTR to Agent - Enc Statutory Demand for service','SeqNo':8,'AltDisplayName':'','SuppressStep':'','EntityType':'Agent','AsName':'FS Awaiting Certificate of Service of Stat Demand','CompleteName':'FS STATUTORY DEMAND SENT FOR SERVICE','RescheduleDays':14,'NextStatus':''},{ 'Type':'Letter','Name':'LTR to Process Server - Chasing Certificate of Service\r\n','SeqNo':9,'AltDisplayName':'','SuppressStep':'','EntityType':'Process Server','AsName':'FS Awaiting Certificate of Service of Stat Demand','CompleteName':'FS CHASED PROCESS SERVER FOR CERTIFICTAE OF SERVICE','RescheduleDays':7,'NextStatus':''},{ 'Type':'Doc','Name':'DOC WUP Petition','SeqNo':10,'AltDisplayName':'','SuppressStep':'','EntityType':'','AsName':'','CompleteName':'','RescheduleDays':0,'NextStatus':''},{ 'Type':'Doc','Name':'DOC WUP Witness Statement','SeqNo':11,'AltDisplayName':'','SuppressStep':'','EntityType':'','AsName':'','CompleteName':'','RescheduleDays':0,'NextStatus':''},{ 'Type':'Letter','Name':'LTR to Court - Enclosing Winding Up Petition','SeqNo':12,'AltDisplayName':'','SuppressStep':'','EntityType':'Court','AsName':'FS Awaiting Sealed WuP from Court','CompleteName':'FS WINDING UP PETITION SENT TO COURT','RescheduleDays':14,'NextStatus':''},{ 'Type':'Letter','Name':'LTR to Court - Chasing Sealed WUP Petiton','SeqNo':13,'AltDisplayName':'','SuppressStep':'','EntityType':'Court','AsName':'FS Awaiting Sealed WuP from Court','CompleteName':'FS CHASED COURT FOR SEALED WINDING UP PRETITION','RescheduleDays':7,'NextStatus':''},{ 'Type':'Letter','Name':'LTR to Client - Informing of WUP Hearing Date','SeqNo':14,'AltDisplayName':'','SuppressStep':'','EntityType':'Client','AsName':'','CompleteName':'','RescheduleDays':0,'NextStatus':''},{ 'Type':'Letter','Name':'LTR to Agent - Enclosing WUP for Service','SeqNo':15,'AltDisplayName':'','SuppressStep':'','EntityType':'Agent','AsName':'FS Awaiting Affidavit of Service of WuP','CompleteName':'FS WINDING UP PRETITON SENT FOR SERVICE','RescheduleDays':14,'NextStatus':''},{ 'Type':'Letter','Name':'LTR to Process Server - Chasing Affidavit of Service','SeqNo':16,'AltDisplayName':'','SuppressStep':'','EntityType':'Process Server','AsName':'FS Awaiting Affidavit of Service of WuP','CompleteName':'FS CHASED PROCESS SERVER FOR AFFIDAVIT OF SERVICE','RescheduleDays':7,'NextStatus':''},{ 'Type':'Letter','Name':'LTR to London Gazette - Enc Advertisment WUP','SeqNo':17,'AltDisplayName':'','SuppressStep':'','EntityType':'London Gazette','AsName':'','CompleteName':'FS GAZETTE ADVERTISEMENT LODGED','RescheduleDays':0,'NextStatus':''},{ 'Type':'Doc','Name':'DOC London Gazette Advertisment WUP','SeqNo':18,'AltDisplayName':'','SuppressStep':'','EntityType':'','AsName':'','CompleteName':'','RescheduleDays':0,'NextStatus':''},{ 'Type':'Letter','Name':'LTR to Court - Enc Certificate of Service','SeqNo':19,'AltDisplayName':'','SuppressStep':'','EntityType':'Court','AsName':'','CompleteName':'FS CERTIFICATE OF SERVICE SENT TO COURT','RescheduleDays':0,'NextStatus':''},{ 'Type':'Letter','Name':'LTR to Agent - To Attend WUP Hearing','SeqNo':20,'AltDisplayName':'','SuppressStep':'','EntityType':'Agent','AsName':'FS Awaiting Hearing Attendance Confirmation from Agenr','CompleteName':'FS AGENT INSTRUCTED TO ATTEND WUP HEARING','RescheduleDays':7,'NextStatus':''},{ 'Type':'Doc','Name':'DOC List of Creditors Intending to Appear (WUP)','SeqNo':21,'AltDisplayName':'','SuppressStep':'','EntityType':'','AsName':'','CompleteName':'','RescheduleDays':0,'NextStatus':''},{ 'Type':'Letter','Name':'LTR to Court - Enc Certificate of Compliance','SeqNo':22,'AltDisplayName':'','SuppressStep':'','EntityType':'Court','AsName':'','CompleteName':'FS CERTIFICATE OF COMPLIANCE SENT TO COURT','RescheduleDays':0,'NextStatus':''},{ 'Type':'Doc','Name':'DOC Certificate of Compliance (WUP)','SeqNo':23,'AltDisplayName':'','SuppressStep':'','EntityType':'','AsName':'','CompleteName':'','RescheduleDays':0,'NextStatus':''},{ 'Type':'Letter','Name':'LTR to Agent - Chasing WUP Hearing Result','SeqNo':24,'AltDisplayName':'','SuppressStep':'','EntityType':'Agent','AsName':'FS Awaiting WUP Hearing Result from Agent','CompleteName':'FS CHASED AGENT FOR WUP HEARING RESULT','RescheduleDays':7,'NextStatus':''},{ 'Type':'Letter','Name':'LTR to Client - WUP Order Granted','SeqNo':25,'AltDisplayName':'','SuppressStep':'Y','EntityType':'Client','AsName':'','CompleteName':'FS CLIENT INFORMED WUP ORDER GRANTED','RescheduleDays':0,'NextStatus':'Concluded'},{ 'Type':'Fee','Name':'Cost for Statutory Demand','SeqNo':1,'AltDisplayName':'','SuppressStep':'','EntityType':'','AsName':'','CompleteName':'','RescheduleDays':0,'NextStatus':''},{ 'Type':'Fee','Name':'Cost for Short Form Demand','SeqNo':2,'AltDisplayName':'','SuppressStep':'','EntityType':'','AsName':'','CompleteName':'','RescheduleDays':0,'NextStatus':''},{ 'Type':'Fee','Name':'Agents Fees Process Server','SeqNo':3,'AltDisplayName':'','SuppressStep':'','EntityType':'','AsName':'','CompleteName':'','RescheduleDays':0,'NextStatus':''},{ 'Type':'Fee','Name':'Court Issue Fee for Winding up Petition','SeqNo':4,'AltDisplayName':'','SuppressStep':'','EntityType':'','AsName':'','CompleteName':'','RescheduleDays':0,'NextStatus':''},{ 'Type':'Fee','Name':'Winding Up Petition Deposit','SeqNo':5,'AltDisplayName':'','SuppressStep':'','EntityType':'','AsName':'','CompleteName':'','RescheduleDays':0,'NextStatus':''},{ 'Type':'Fee','Name':'Cost for Winding Up Petition','SeqNo':6,'AltDisplayName':'','SuppressStep':'','EntityType':'','AsName':'','CompleteName':'','RescheduleDays':0,'NextStatus':''},{ 'Type':'Fee','Name':'London Gazette Advertisement Fee','SeqNo':7,'AltDisplayName':'','SuppressStep':'','EntityType':'','AsName':'','CompleteName':'','RescheduleDays':0,'NextStatus':''},{ 'Type':'Fee','Name':'Agents Fees to Attend Hearing','SeqNo':8,'AltDisplayName':'','SuppressStep':'','EntityType':'','AsName':'','CompleteName':'','RescheduleDays':0,'NextStatus':''}]}";
+
+            Chapter chapter = JsonConvert.DeserializeObject<Chapter>(chapterData);
+
+            string ctg = chapter.CaseTypeGroup;
+
+        }
         private async Task<bool> RefreshChapterItems(string listType)
         {
 
@@ -212,8 +239,10 @@ namespace Gizmo_V1_02.Pages.Chapters
             }
             else
             {
-                var lst = await chapterManagementService.GetItemListByChapter(selectedChapterId);
+                GetItemListByChapter(selectedChapterId);
 
+                var lst = await chapterManagementService.GetItemListByChapter(selectedChapterId);
+                
                 lstAll = lst.Select(A => new VmUsrOrDefChapterManagement { ChapterObject = A }).ToList();
                 feeDefinitions = await chapterManagementService.GetFeeDefs(selectedCaseTypeGroup, selectedCaseType);
 
