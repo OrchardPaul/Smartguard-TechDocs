@@ -232,6 +232,11 @@
     width: 550px;
 }
 
+.modal-chapter-doc .modal-body {
+    height: 400px;
+    overflow-y: scroll;
+}
+
 .modal-chapter-fees {
     width: 500px;
     overflow: hidden;
