@@ -32,9 +32,7 @@
             }
 
 
-            <NavLink @onclick='() => PrepareModalDelete("System Setting"
-                                                ,"500px"
-                                                ,"400px")' class="nav-link" data-toggle="modal" data-target="#modalSystemSelect" href="javascript: void(0)">
+            <NavLink  class="nav-link" @onclick="ShowSystemSelectModel">
                 <span class="fa fa-cog"></span>
             </NavLink>
             @if (!(userSession.Company is null))
@@ -53,5 +51,3 @@
 </AuthorizeView>
 
 
-
-<ModalSystemSelect currentUser="@userSession.User" InfoHeader="@ModalInfoHeader" ModalHeight="@ModalHeight" ModalWidth="@ModalWidth"></ModalSystemSelect>

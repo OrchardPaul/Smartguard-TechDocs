@@ -1,5 +1,8 @@
-﻿using Gizmo_V1_02.Data;
+﻿using Blazored.Modal;
+using Blazored.Modal.Services;
+using Gizmo_V1_02.Data;
 using Gizmo_V1_02.Data.Admin;
+using Gizmo_V1_02.Pages.Shared.Modals;
 using Gizmo_V1_02.Services.SessionState;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -15,6 +18,9 @@ namespace Gizmo_V1_02.Shared
 {
     public partial class LoginDisplay
     {
+        [Inject]
+        IModalService Modal { get; set; }
+
         [Parameter]
         public string userFullName { get; set; }
 
@@ -34,6 +40,21 @@ namespace Gizmo_V1_02.Shared
             userSession.SetUserProfileReturnURI(navigationManager.Uri);
             navigationManager.NavigateTo("/userprofile");
         }
+
+        protected void ShowSystemSelectModel()
+        {
+            var parameters = new ModalParameters();
+            parameters.Add("currentUser", userSession.User);
+
+            var options = new ModalOptions()
+            {
+                Class = "blazored-custom-modal"
+            };
+
+
+            Modal.Show<ModalSystemSelect>("System Select", parameters, options);
+        }
+
 
 
         private void PrepareModalDelete(string modalHeader

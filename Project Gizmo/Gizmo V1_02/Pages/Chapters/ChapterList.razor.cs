@@ -22,6 +22,7 @@ namespace Gizmo_V1_02.Pages.Chapters
 {
     public partial class ChapterList
     {
+
         [Inject]
         IModalService Modal { get; set; }
 
@@ -40,6 +41,8 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         //private List<UsrOrDefChapterManagement> lstChapters;
         private List<VmUsrOrDefChapterManagement> lstChapters { get; set; } = new List<VmUsrOrDefChapterManagement>();
+
+        private List<VmUsrOrDefChapterManagement> lstAltSystemChapters { get; set; } = new List<VmUsrOrDefChapterManagement>();
 
         private List<VmUsrOrDefChapterManagement> lstAll { get; set; } = new List<VmUsrOrDefChapterManagement>();
         private List<VmUsrOrDefChapterManagement> lstAltSystemChapterItems { get; set; } = new List<VmUsrOrDefChapterManagement>();
@@ -63,25 +66,34 @@ namespace Gizmo_V1_02.Pages.Chapters
         public VmUsrOrDefChapterManagement editObject = new VmUsrOrDefChapterManagement { ChapterObject = new UsrOrDefChapterManagement() };
         public VmUsrOrDefChapterManagement editChapterObject = new VmUsrOrDefChapterManagement { ChapterObject = new UsrOrDefChapterManagement() };
 
-        string customHeader = string.Empty;
         string selectedList = string.Empty;
 
         string displaySection { get; set; } = "";
 
         [Parameter]
-        public string selectedCaseType { get; set; } = "";
+        public string UrlCaseTypeGroup { set { selectedChapter.CaseTypeGroup = value; } }
 
         [Parameter]
-        public string selectedCaseTypeGroup { get; set; } = "";
+        public string UrlCaseType { set { selectedChapter.CaseType = value; } }
 
         [Parameter]
-        public string selectedChapter { get; set; } = "";
+        public string UrlChapter { set { selectedChapter.Name = value; } }
+
+        [Parameter]
+        public VmChapter selectedChapter { get; set; } = new VmChapter();
+
+        public VmChapter altChapter { get; set; } = new VmChapter();
+
+        public UsrOrDefChapterManagement SelectedChapterObject { get; set; } = new UsrOrDefChapterManagement();
+
+        public UsrOrDefChapterManagement AltChapterObject { get; set; } = new UsrOrDefChapterManagement();
 
         int rowChanged { get; set; } = 0;
 
         private int selectedChapterId { get; set; } = -1;
 
         private int? altSysSelectedChapterId { get; set; }
+
 
         public string ModalInfoHeader { get; set; }
         public string ModalInfoText { get; set; }
@@ -100,7 +112,6 @@ namespace Gizmo_V1_02.Pages.Chapters
         public bool displaySpinner = true;
 
         public bool ListChapterLoaded = false;
-
 
         public List<string> lstDocTypes { get; set; } = new List<string> { "Doc", "Letter", "Form", "Email", "Step" };
 
@@ -145,35 +156,40 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         void SelectHome()
         {
-            selectedChapter = "";
+            selectedChapter.Name = "";
             rowChanged = 0;
         }
 
         void SelectCaseTypeGroup(string caseTypeGroup)
         {
-            selectedCaseTypeGroup = (selectedCaseTypeGroup == caseTypeGroup) ? "" : caseTypeGroup;
-            selectedCaseType = "";
-            selectedChapter = "";
+            selectedChapter.CaseTypeGroup = (selectedChapter.CaseTypeGroup == caseTypeGroup) ? "" : caseTypeGroup;
+            selectedChapter.CaseType = "";
+            selectedChapter.Name = "";
         }
 
         void SelectCaseType(string caseType)
         {
-            selectedCaseType = (selectedCaseType == caseType) ? "" : caseType;
-            selectedChapter = "";
+            selectedChapter.CaseType = (selectedChapter.CaseType == caseType) ? "" : caseType;
+            selectedChapter.Name = "";
             PrepChapterList();
         }
 
-        private async void SelectChapter(string chapter, int chapterID)
+        private async void SelectChapter(UsrOrDefChapterManagement chapter)
         {
             displaySpinner = true;
 
             lstAll = new List<VmUsrOrDefChapterManagement>();
 
-            selectedChapterId = chapterID;
-            selectedChapter = chapter;
+
+            SelectedChapterObject = chapter;
+
+            selectedChapterId = chapter.Id;
+            GetItemListByChapter(chapter.Id);
             compareSystems = false;
             rowChanged = 0;
             navDisplay = "Agenda";
+
+            feeDefinitions = await chapterManagementService.GetFeeDefs(selectedChapter.CaseTypeGroup, selectedChapter.CaseType);
 
             await RefreshChapterItems("All");
 
@@ -188,28 +204,21 @@ namespace Gizmo_V1_02.Pages.Chapters
             var lstC = await chapterManagementService.GetAllChapters();
             lstChapters = lstC.Select(A => new VmUsrOrDefChapterManagement { ChapterObject = A }).ToList();
 
-            if (!(selectedChapter is null) & selectedChapter != "")
+            if (!(selectedChapter.Name is null) & selectedChapter.Name != "")
             {
-                SelectChapter(selectedChapter, lstChapters
-                                                    .Where(C => C.ChapterObject.CaseTypeGroup == selectedCaseTypeGroup)
-                                                    .Where(C => C.ChapterObject.CaseType == selectedCaseType)
-                                                    .Where(C => C.ChapterObject.Name == selectedChapter)
-                                                    .Select(C => C.ChapterObject.Id).SingleOrDefault());
+                SelectChapter(lstChapters
+                                    .Where(C => C.ChapterObject.CaseTypeGroup == selectedChapter.CaseTypeGroup)
+                                    .Where(C => C.ChapterObject.CaseType == selectedChapter.CaseType)
+                                    .Where(C => C.ChapterObject.Name == selectedChapter.Name)
+                                    .Select(C => C.ChapterObject)
+                                    .SingleOrDefault());
             }
 
             ListChapterLoaded = true;
             StateHasChanged();
         }
 
-        private class Chapter
-        {
-            public string CaseTypeGroup { get; set; }
-            public string CaseType { get; set; }
-            public string Name { get; set; }
-            public int SeqNo { get; set; }
-            public List<UsrOrDefChapterManagement> ChapterItems { get; set; }
 
-        }
         
 
         private void GetItemListByChapter(int chapterID)
@@ -220,13 +229,13 @@ namespace Gizmo_V1_02.Pages.Chapters
                                 .Select(A => A.ChapterObject.ChapterData)
                                 .SingleOrDefault();
 
-            chapterData = "{ 'CaseTypeGroup': 'OR Debt','CaseType': 'Debt - Commercial','Name':'Winding Up Proceedings','SeqNo': 1,'ChapterItems': [{ 'Type':'Agenda','Name':'WUP','SeqNo':0,'AltDisplayName':'','SuppressStep':'','EntityType':'','AsName':'','CompleteName':'','RescheduleDays':0,'NextStatus':''},{ 'Type':'Agenda','Name':'Insolvency','SeqNo':0,'AltDisplayName':'','SuppressStep':'','EntityType':'','AsName':'','CompleteName':'','RescheduleDays':0,'NextStatus':''},{ 'Type':'Status','Name':'In Progress','SeqNo':1,'AltDisplayName':'','SuppressStep':'','EntityType':'','AsName':'','CompleteName':'','RescheduleDays':0,'NextStatus':''},{ 'Type':'Status','Name':'Withdrawn','SeqNo':2,'AltDisplayName':'','SuppressStep':'Y','EntityType':'','AsName':'','CompleteName':'','RescheduleDays':0,'NextStatus':''},{ 'Type':'Status','Name':'Concluded','SeqNo':3,'AltDisplayName':'','SuppressStep':'Y','EntityType':'','AsName':'','CompleteName':'','RescheduleDays':0,'NextStatus':''},{ 'Type':'Letter','Name':'Blank LTR to Agent','SeqNo':1,'AltDisplayName':'Blank Letter to the Agent','SuppressStep':'','EntityType':'Agent','AsName':'','CompleteName':'','RescheduleDays':0,'NextStatus':''},{ 'Type':'Letter','Name':'Blank LTR to Debtor','SeqNo':2,'AltDisplayName':'Blank Letter to the Debtor','SuppressStep':'','EntityType':'Debtor','AsName':'','CompleteName':'','RescheduleDays':0,'NextStatus':''},{ 'Type':'Letter','Name':'Blank LTR to Offical Receiver','SeqNo':3,'AltDisplayName':'Blank Letter to the Official Receiver','SuppressStep':'','EntityType':'Offical Receiver','AsName':'','CompleteName':'','RescheduleDays':0,'NextStatus':''},{ 'Type':'Letter','Name':'Blank LTR to Client','SeqNo':4,'AltDisplayName':'Blank Letter to the Client','SuppressStep':'','EntityType':'Client','AsName':'','CompleteName':'','RescheduleDays':0,'NextStatus':''},{ 'Type':'Letter','Name':'Blank LTR to Court','SeqNo':5,'AltDisplayName':'Blank Letter to the Court','SuppressStep':'','EntityType':'Court','AsName':'','CompleteName':'','RescheduleDays':0,'NextStatus':''},{ 'Type':'Letter','Name':'LTR to Debtor - WUP Short Form Demand','SeqNo':6,'AltDisplayName':'Letter to Debtor - Winding Up Proceedings Short Form Demand','SuppressStep':'','EntityType':'Debtor','AsName':'FS Awaiting Response from Debtor to Short Form Demand','CompleteName':'FS SHORT FORM DEMAND SENT TO DEBTOR','RescheduleDays':14,'NextStatus':'In Progress'},{ 'Type':'Form','Name':'FRM Statutory Demand','SeqNo':7,'AltDisplayName':'','SuppressStep':'','EntityType':'','AsName':'','CompleteName':'','RescheduleDays':0,'NextStatus':''},{ 'Type':'Letter','Name':'LTR to Agent - Enc Statutory Demand for service','SeqNo':8,'AltDisplayName':'','SuppressStep':'','EntityType':'Agent','AsName':'FS Awaiting Certificate of Service of Stat Demand','CompleteName':'FS STATUTORY DEMAND SENT FOR SERVICE','RescheduleDays':14,'NextStatus':''},{ 'Type':'Letter','Name':'LTR to Process Server - Chasing Certificate of Service\r\n','SeqNo':9,'AltDisplayName':'','SuppressStep':'','EntityType':'Process Server','AsName':'FS Awaiting Certificate of Service of Stat Demand','CompleteName':'FS CHASED PROCESS SERVER FOR CERTIFICTAE OF SERVICE','RescheduleDays':7,'NextStatus':''},{ 'Type':'Doc','Name':'DOC WUP Petition','SeqNo':10,'AltDisplayName':'','SuppressStep':'','EntityType':'','AsName':'','CompleteName':'','RescheduleDays':0,'NextStatus':''},{ 'Type':'Doc','Name':'DOC WUP Witness Statement','SeqNo':11,'AltDisplayName':'','SuppressStep':'','EntityType':'','AsName':'','CompleteName':'','RescheduleDays':0,'NextStatus':''},{ 'Type':'Letter','Name':'LTR to Court - Enclosing Winding Up Petition','SeqNo':12,'AltDisplayName':'','SuppressStep':'','EntityType':'Court','AsName':'FS Awaiting Sealed WuP from Court','CompleteName':'FS WINDING UP PETITION SENT TO COURT','RescheduleDays':14,'NextStatus':''},{ 'Type':'Letter','Name':'LTR to Court - Chasing Sealed WUP Petiton','SeqNo':13,'AltDisplayName':'','SuppressStep':'','EntityType':'Court','AsName':'FS Awaiting Sealed WuP from Court','CompleteName':'FS CHASED COURT FOR SEALED WINDING UP PRETITION','RescheduleDays':7,'NextStatus':''},{ 'Type':'Letter','Name':'LTR to Client - Informing of WUP Hearing Date','SeqNo':14,'AltDisplayName':'','SuppressStep':'','EntityType':'Client','AsName':'','CompleteName':'','RescheduleDays':0,'NextStatus':''},{ 'Type':'Letter','Name':'LTR to Agent - Enclosing WUP for Service','SeqNo':15,'AltDisplayName':'','SuppressStep':'','EntityType':'Agent','AsName':'FS Awaiting Affidavit of Service of WuP','CompleteName':'FS WINDING UP PRETITON SENT FOR SERVICE','RescheduleDays':14,'NextStatus':''},{ 'Type':'Letter','Name':'LTR to Process Server - Chasing Affidavit of Service','SeqNo':16,'AltDisplayName':'','SuppressStep':'','EntityType':'Process Server','AsName':'FS Awaiting Affidavit of Service of WuP','CompleteName':'FS CHASED PROCESS SERVER FOR AFFIDAVIT OF SERVICE','RescheduleDays':7,'NextStatus':''},{ 'Type':'Letter','Name':'LTR to London Gazette - Enc Advertisment WUP','SeqNo':17,'AltDisplayName':'','SuppressStep':'','EntityType':'London Gazette','AsName':'','CompleteName':'FS GAZETTE ADVERTISEMENT LODGED','RescheduleDays':0,'NextStatus':''},{ 'Type':'Doc','Name':'DOC London Gazette Advertisment WUP','SeqNo':18,'AltDisplayName':'','SuppressStep':'','EntityType':'','AsName':'','CompleteName':'','RescheduleDays':0,'NextStatus':''},{ 'Type':'Letter','Name':'LTR to Court - Enc Certificate of Service','SeqNo':19,'AltDisplayName':'','SuppressStep':'','EntityType':'Court','AsName':'','CompleteName':'FS CERTIFICATE OF SERVICE SENT TO COURT','RescheduleDays':0,'NextStatus':''},{ 'Type':'Letter','Name':'LTR to Agent - To Attend WUP Hearing','SeqNo':20,'AltDisplayName':'','SuppressStep':'','EntityType':'Agent','AsName':'FS Awaiting Hearing Attendance Confirmation from Agenr','CompleteName':'FS AGENT INSTRUCTED TO ATTEND WUP HEARING','RescheduleDays':7,'NextStatus':''},{ 'Type':'Doc','Name':'DOC List of Creditors Intending to Appear (WUP)','SeqNo':21,'AltDisplayName':'','SuppressStep':'','EntityType':'','AsName':'','CompleteName':'','RescheduleDays':0,'NextStatus':''},{ 'Type':'Letter','Name':'LTR to Court - Enc Certificate of Compliance','SeqNo':22,'AltDisplayName':'','SuppressStep':'','EntityType':'Court','AsName':'','CompleteName':'FS CERTIFICATE OF COMPLIANCE SENT TO COURT','RescheduleDays':0,'NextStatus':''},{ 'Type':'Doc','Name':'DOC Certificate of Compliance (WUP)','SeqNo':23,'AltDisplayName':'','SuppressStep':'','EntityType':'','AsName':'','CompleteName':'','RescheduleDays':0,'NextStatus':''},{ 'Type':'Letter','Name':'LTR to Agent - Chasing WUP Hearing Result','SeqNo':24,'AltDisplayName':'','SuppressStep':'','EntityType':'Agent','AsName':'FS Awaiting WUP Hearing Result from Agent','CompleteName':'FS CHASED AGENT FOR WUP HEARING RESULT','RescheduleDays':7,'NextStatus':''},{ 'Type':'Letter','Name':'LTR to Client - WUP Order Granted','SeqNo':25,'AltDisplayName':'','SuppressStep':'Y','EntityType':'Client','AsName':'','CompleteName':'FS CLIENT INFORMED WUP ORDER GRANTED','RescheduleDays':0,'NextStatus':'Concluded'},{ 'Type':'Fee','Name':'Cost for Statutory Demand','SeqNo':1,'AltDisplayName':'','SuppressStep':'','EntityType':'','AsName':'','CompleteName':'','RescheduleDays':0,'NextStatus':''},{ 'Type':'Fee','Name':'Cost for Short Form Demand','SeqNo':2,'AltDisplayName':'','SuppressStep':'','EntityType':'','AsName':'','CompleteName':'','RescheduleDays':0,'NextStatus':''},{ 'Type':'Fee','Name':'Agents Fees Process Server','SeqNo':3,'AltDisplayName':'','SuppressStep':'','EntityType':'','AsName':'','CompleteName':'','RescheduleDays':0,'NextStatus':''},{ 'Type':'Fee','Name':'Court Issue Fee for Winding up Petition','SeqNo':4,'AltDisplayName':'','SuppressStep':'','EntityType':'','AsName':'','CompleteName':'','RescheduleDays':0,'NextStatus':''},{ 'Type':'Fee','Name':'Winding Up Petition Deposit','SeqNo':5,'AltDisplayName':'','SuppressStep':'','EntityType':'','AsName':'','CompleteName':'','RescheduleDays':0,'NextStatus':''},{ 'Type':'Fee','Name':'Cost for Winding Up Petition','SeqNo':6,'AltDisplayName':'','SuppressStep':'','EntityType':'','AsName':'','CompleteName':'','RescheduleDays':0,'NextStatus':''},{ 'Type':'Fee','Name':'London Gazette Advertisement Fee','SeqNo':7,'AltDisplayName':'','SuppressStep':'','EntityType':'','AsName':'','CompleteName':'','RescheduleDays':0,'NextStatus':''},{ 'Type':'Fee','Name':'Agents Fees to Attend Hearing','SeqNo':8,'AltDisplayName':'','SuppressStep':'','EntityType':'','AsName':'','CompleteName':'','RescheduleDays':0,'NextStatus':''}]}";
-
-            Chapter chapter = JsonConvert.DeserializeObject<Chapter>(chapterData);
-
-            string ctg = chapter.CaseTypeGroup;
-
+            selectedChapter = JsonConvert.DeserializeObject<VmChapter>(chapterData);
         }
+
+
+
+
+
         private async Task<bool> RefreshChapterItems(string listType)
         {
 
@@ -239,12 +248,9 @@ namespace Gizmo_V1_02.Pages.Chapters
             }
             else
             {
-                GetItemListByChapter(selectedChapterId);
+                var lst = selectedChapter.ChapterItems;
 
-                var lst = await chapterManagementService.GetItemListByChapter(selectedChapterId);
-                
                 lstAll = lst.Select(A => new VmUsrOrDefChapterManagement { ChapterObject = A }).ToList();
-                feeDefinitions = await chapterManagementService.GetFeeDefs(selectedCaseTypeGroup, selectedCaseType);
 
                 if (listType == "Agenda" | listType == "All")
                 {
@@ -330,48 +336,49 @@ namespace Gizmo_V1_02.Pages.Chapters
 
                 await sessionState.SwitchSelectedSystem();
 
-                var chapter = await chapterManagementService.GetItemListByChapterName(selectedCaseTypeGroup, selectedCaseType, selectedChapter);
-                altSysSelectedChapterId = chapter
-                                                .Select(A => A.Id)
-                                                .FirstOrDefault();
 
-                if (altSysSelectedChapterId == 0)
+                var lstC = await chapterManagementService.GetAllChapters();
+                lstAltSystemChapters = lstC.Select(A => new VmUsrOrDefChapterManagement { ChapterObject = A }).ToList();
+
+                AltChapterObject = lstAltSystemChapters
+                                        .Where(A => A.ChapterObject.Name == SelectedChapterObject.Name)
+                                        .Select(C => C.ChapterObject)
+                                        .SingleOrDefault();
+
+                altChapter = JsonConvert.DeserializeObject<VmChapter>(AltChapterObject.ChapterData);
+
+                var temp = altChapter.ChapterItems;
+
+
+                lstAltSystemChapterItems = temp.Select(T => new VmUsrOrDefChapterManagement { ChapterObject = T }).ToList();
+
+                foreach (var item in lstDocs)
                 {
-                    return false;
+                    CompareChapterItemsToAltSytem(item);
                 }
 
-                var temp = await chapterManagementService.GetItemListByChapter(altSysSelectedChapterId.Value);
-
-                if (!(altSysSelectedChapterId is null))
+                foreach (var item in lstAgendas)
                 {
-                    lstAltSystemChapterItems = temp.Select(T => new VmUsrOrDefChapterManagement { ChapterObject = T }).ToList();
+                    CompareChapterItemsToAltSytem(item);
+                }
 
+                foreach (var item in lstFees)
+                {
+                    CompareChapterItemsToAltSytem(item);
+                }
 
-                    await sessionState.ResetSelectedSystem();
+                foreach (var item in lstStatus)
+                {
+                    CompareChapterItemsToAltSytem(item);
+                }
 
-                    foreach (var item in lstDocs)
-                    {
-                        CompareChapterItemsToAltSytem(item);
-                    }
-
-                    foreach (var item in lstAgendas)
-                    {
-                        CompareChapterItemsToAltSytem(item);
-                    }
-
-                    foreach (var item in lstFees)
-                    {
-                        CompareChapterItemsToAltSytem(item);
-                    }
-
-                    foreach (var item in lstStatus)
-                    {
-                        CompareChapterItemsToAltSytem(item);
-                    }
-
+                await InvokeAsync(() =>
+                {
                     StateHasChanged();
-                }
+                });
 
+
+                await sessionState.ResetSelectedSystem();
 
             }
 
@@ -418,11 +425,10 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         private void PrepareForEdit(VmUsrOrDefChapterManagement item, string header)
         {
-            customHeader = header;
             selectedList = header;
             editObject = item;
 
-            ShowChapterDetailModal();
+            ShowChapterDetailModal("Edit");
         }
 
         private void PrepareFeesForEdit()
@@ -467,37 +473,37 @@ namespace Gizmo_V1_02.Pages.Chapters
 
             editObject.ChapterObject.ParentId = selectedChapterId;
 
-            ShowChapterDetailModal();
+            ShowChapterDetailModal("Insert");
         }
 
         private void PrepareChapterForInsert()
         {
             editChapterObject = new VmUsrOrDefChapterManagement { ChapterObject = new UsrOrDefChapterManagement() };
 
-            if (!(selectedCaseTypeGroup == ""))
+            if (!(selectedChapter.CaseTypeGroup == ""))
             {
-                editChapterObject.ChapterObject.CaseTypeGroup = selectedCaseTypeGroup;
+                editChapterObject.ChapterObject.CaseTypeGroup = selectedChapter.CaseTypeGroup;
             }
             else
             {
                 editChapterObject.ChapterObject.CaseTypeGroup = "";
             }
 
-            if (!(selectedCaseType == ""))
+            if (!(selectedChapter.CaseType == ""))
             {
-                editChapterObject.ChapterObject.CaseType = selectedCaseType;
+                editChapterObject.ChapterObject.CaseType = selectedChapter.CaseType;
             }
             else
             {
                 editChapterObject.ChapterObject.CaseType = "";
             }
 
-            if (!string.IsNullOrWhiteSpace(selectedCaseTypeGroup) & !string.IsNullOrWhiteSpace(selectedCaseType))
+            if (!string.IsNullOrWhiteSpace(selectedChapter.CaseTypeGroup) & !string.IsNullOrWhiteSpace(selectedChapter.CaseType))
             {
                 editChapterObject.ChapterObject.SeqNo = lstChapters
                                                             .Where(C => C.ChapterObject.ParentId == 0)
-                                                            .Where(C => C.ChapterObject.CaseType == selectedCaseType)
-                                                            .Where(C => C.ChapterObject.CaseTypeGroup == selectedCaseTypeGroup)
+                                                            .Where(C => C.ChapterObject.CaseType == selectedChapter.CaseType)
+                                                            .Where(C => C.ChapterObject.CaseTypeGroup == selectedChapter.CaseTypeGroup)
                                                             .OrderByDescending(C => C.ChapterObject.SeqNo)
                                                             .Select(C => C.ChapterObject.SeqNo)
                                                             .FirstOrDefault() + 1;
@@ -534,9 +540,9 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         private async void PrepChapterList()
         {
-            if (!(selectedCaseType == ""))
+            if (!(selectedChapter.CaseType == ""))
             {
-                dropDownChapterList = await chapterManagementService.GetDocumentList(selectedCaseType);
+                dropDownChapterList = await chapterManagementService.GetDocumentList(selectedChapter.CaseType);
                 StateHasChanged();
             }
         }
@@ -586,8 +592,8 @@ namespace Gizmo_V1_02.Pages.Chapters
 
                 case "Chapters":
                     lstItems = lstChapters
-                                        .Where(A => A.ChapterObject.CaseTypeGroup == selectedCaseTypeGroup)
-                                        .Where(A => A.ChapterObject.CaseType == selectedCaseType)
+                                        .Where(A => A.ChapterObject.CaseTypeGroup == selectedChapter.CaseTypeGroup)
+                                        .Where(A => A.ChapterObject.CaseType == selectedChapter.CaseType)
                                         .OrderBy(A => A.ChapterObject.SeqNo)
                                         .ToList();
                     break;
@@ -599,11 +605,16 @@ namespace Gizmo_V1_02.Pages.Chapters
                 selectobject.SeqNo += incrementBy;
                 swapItem.ChapterObject.SeqNo = swapItem.ChapterObject.SeqNo + (incrementBy * -1);
 
-                await chapterManagementService.Update(selectobject);
-                await chapterManagementService.Update(swapItem.ChapterObject);
+                SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(selectedChapter);
+                await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
             }
+
             await RefreshChapterItems(listType);
-            StateHasChanged();
+            await InvokeAsync(() =>
+            {
+                StateHasChanged();
+            }); 
+            
 
             seqMoving = false;
 
@@ -626,8 +637,8 @@ namespace Gizmo_V1_02.Pages.Chapters
                     break;
                 case "Chapters":
                     listItems = lstChapters
-                                        .Where(A => A.ChapterObject.CaseTypeGroup == selectedCaseTypeGroup)
-                                        .Where(A => A.ChapterObject.CaseType == selectedCaseType)
+                                        .Where(A => A.ChapterObject.CaseTypeGroup == selectedChapter.CaseTypeGroup)
+                                        .Where(A => A.ChapterObject.CaseType == selectedChapter.CaseType)
                                         .OrderBy(A => A.ChapterObject.SeqNo)
                                         .ToList();
                     break;
@@ -637,9 +648,15 @@ namespace Gizmo_V1_02.Pages.Chapters
         }
 
 
-        public void RefreshSelectedList()
+        public async void RefreshSelectedList()
         {
-            CondenseSeq(navDisplay);
+            await RefreshChapterItems("All");
+            //CondenseSeq(navDisplay);
+
+            await InvokeAsync(() =>
+            {
+                StateHasChanged();
+            });
         }
 
         protected async void CondenseSeq(string ListType)
@@ -655,11 +672,18 @@ namespace Gizmo_V1_02.Pages.Chapters
                 seqNo += 1;
                 item.ChapterObject.SeqNo = seqNo;
 
-                await chapterManagementService.Update(item.ChapterObject);
+
             }
 
+            SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(selectedChapter);
+            await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
+
             await RefreshChapterItems(ListType);
-            StateHasChanged();
+
+            await InvokeAsync(() =>
+            {
+                StateHasChanged();
+            });
         }
 
         protected void CondenseFeeSeq()
@@ -698,7 +722,7 @@ namespace Gizmo_V1_02.Pages.Chapters
             }
             parameters.Add("DataChanged", Action);
             parameters.Add("isCaseTypeOrGroup", isCaseTypeOrGroup);
-            parameters.Add("caseTypeGroupName", selectedCaseTypeGroup);
+            parameters.Add("caseTypeGroupName", selectedChapter.CaseTypeGroup);
 
             var options = new ModalOptions()
             {
@@ -709,18 +733,20 @@ namespace Gizmo_V1_02.Pages.Chapters
         }
 
 
-        protected void ShowChapterDetailModal()
+        protected void ShowChapterDetailModal(string option)
         {
             Action action = RefreshSelectedList;
 
             var parameters = new ModalParameters();
             parameters.Add("TaskObject", editObject.ChapterObject);
             parameters.Add("DataChanged", action);
-            parameters.Add("selectedCaseType", selectedCaseType);
             parameters.Add("selectedList", selectedList);
             parameters.Add("dropDownChapterList", dropDownChapterList);
             parameters.Add("CaseTypeGroups", partnerCaseTypeGroups);
             parameters.Add("ListOfStatus", lstStatus);
+            parameters.Add("SelectedChapter", selectedChapter);
+            parameters.Add("SelectedChapterObject", SelectedChapterObject);
+            parameters.Add("Option", option);
 
             string className = "modal-chapter-item";
 
@@ -738,12 +764,14 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         protected void ShowChapterFeesModal()
         {
-            Action RefreshFeeOrder = RefreshSelectedList;
+            Action RefreshFeeOrder = CondenseFeeSeq;
 
             var parameters = new ModalParameters();
             parameters.Add("RefreshFeeOrder", RefreshFeeOrder);
             parameters.Add("feeItems", lstVmFeeModalItems);
             parameters.Add("SeletedChapterId", selectedChapterId);
+            parameters.Add("SelectedChapter", selectedChapter);
+            parameters.Add("SelectedChapterObject", SelectedChapterObject);
 
             var options = new ModalOptions()
             {
@@ -800,6 +828,10 @@ namespace Gizmo_V1_02.Pages.Chapters
             parameters.Add("sessionState", sessionState);
             parameters.Add("CurrentSysParentId", selectedChapterId);
             parameters.Add("AlternateSysParentId", altSysSelectedChapterId);
+            parameters.Add("CurrentChapter", selectedChapter);
+            parameters.Add("AltChapter", altChapter);
+            parameters.Add("CurrentChapterRow", SelectedChapterObject);
+            parameters.Add("AltChapterRow", AltChapterObject);
 
             var options = new ModalOptions()
             {
@@ -812,7 +844,10 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         private async void HandleChapterDetailDelete()
         {
-            await chapterManagementService.Delete(editObject.ChapterObject.Id);
+
+            selectedChapter.ChapterItems.Remove(editObject.ChapterObject);
+            SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(selectedChapter);
+            await chapterManagementService.Update(SelectedChapterObject);
 
             await RefreshChapterItems(navDisplay);
             StateHasChanged();

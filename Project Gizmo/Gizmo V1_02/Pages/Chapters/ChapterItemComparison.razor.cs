@@ -5,6 +5,7 @@ using Gizmo_V1_02.Services;
 using Gizmo_V1_02.Services.SessionState;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,7 +27,17 @@ namespace Gizmo_V1_02.Pages.Chapters
         [Parameter]
         public VmUsrOrDefChapterManagement Object { get; set; }
 
+        [Parameter]
+        public UsrOrDefChapterManagement CurrentChapterRow { get; set; }
 
+        [Parameter]
+        public UsrOrDefChapterManagement AltChapterRow { get; set; }
+
+        [Parameter]
+        public VmChapter CurrentChapter { get; set; }
+
+        [Parameter]
+        public VmChapter AltChapter { get; set; }
 
         [Parameter]
         public int CurrentSysParentId { get; set; }
@@ -46,28 +57,39 @@ namespace Gizmo_V1_02.Pages.Chapters
         {
             if (TakeAlternate)
             {
-                Object.ChapterObject.SeqNo = Object.AltObject.SeqNo;
-                Object.ChapterObject.SuppressStep = Object.AltObject.SuppressStep;
-                Object.ChapterObject.EntityType = Object.AltObject.EntityType;
-                Object.ChapterObject.CompleteName = Object.AltObject.CompleteName;
-                Object.ChapterObject.AsName = Object.AltObject.AsName;
-                Object.ChapterObject.RescheduleDays = Object.AltObject.RescheduleDays;
+                var taskObject = CurrentChapter.ChapterItems.Where(C => C.Name == Object.ChapterObject.Name).SingleOrDefault();
 
-                await chapterManagementService.Update(Object.ChapterObject);
+                taskObject.SeqNo = Object.AltObject.SeqNo;
+                taskObject.SuppressStep = Object.AltObject.SuppressStep;
+                taskObject.EntityType = Object.AltObject.EntityType;
+                taskObject.CompleteName = Object.AltObject.CompleteName;
+                taskObject.AsName = Object.AltObject.AsName;
+                taskObject.RescheduleDays = Object.AltObject.RescheduleDays;
+                taskObject.AltDisplayName = Object.AltObject.AltDisplayName;
+
+                CurrentChapterRow.ChapterData = JsonConvert.SerializeObject(CurrentChapter);
+                await chapterManagementService.Update(CurrentChapterRow).ConfigureAwait(false);
             }
             else
             {
-                Object.AltObject.SeqNo = Object.ChapterObject.SeqNo;
-                Object.AltObject.SuppressStep = Object.ChapterObject.SuppressStep;
-                Object.AltObject.EntityType = Object.ChapterObject.EntityType;
-                Object.AltObject.CompleteName = Object.ChapterObject.CompleteName;
-                Object.AltObject.AsName = Object.ChapterObject.AsName;
-                Object.AltObject.RescheduleDays = Object.ChapterObject.RescheduleDays;
+                var taskObject = AltChapter.ChapterItems.Where(C => C.Name == Object.AltObject.Name).SingleOrDefault();
+
+                taskObject.SeqNo = Object.ChapterObject.SeqNo;
+                taskObject.SuppressStep = Object.ChapterObject.SuppressStep;
+                taskObject.EntityType = Object.ChapterObject.EntityType;
+                taskObject.CompleteName = Object.ChapterObject.CompleteName;
+                taskObject.AsName = Object.ChapterObject.AsName;
+                taskObject.RescheduleDays = Object.ChapterObject.RescheduleDays;
+                taskObject.AltDisplayName = Object.ChapterObject.AltDisplayName;
 
                 await sessionState.SwitchSelectedSystem();
-                await chapterManagementService.Update(Object.AltObject);
+                AltChapterRow.ChapterData = JsonConvert.SerializeObject(AltChapter);
+                await chapterManagementService.Update(AltChapterRow);
                 await sessionState.ResetSelectedSystem();
             }
+
+
+            
 
             ComparisonRefresh?.Invoke();
             Close();
@@ -91,10 +113,14 @@ namespace Gizmo_V1_02.Pages.Chapters
                     SuppressStep = Object.AltObject.SuppressStep,
                     CompleteName = Object.AltObject.CompleteName,
                     AsName = Object.AltObject.AsName,
-                    RescheduleDays = Object.AltObject.RescheduleDays
+                    RescheduleDays = Object.AltObject.RescheduleDays,
+                    AltDisplayName = Object.AltObject.AltDisplayName
                 };
 
-                await chapterManagementService.Add(AltObject);
+                CurrentChapter.ChapterItems.Add(AltObject);
+
+                CurrentChapterRow.ChapterData = JsonConvert.SerializeObject(CurrentChapter);
+                await chapterManagementService.Update(CurrentChapterRow).ConfigureAwait(false);
             }
             else
             {
@@ -110,11 +136,15 @@ namespace Gizmo_V1_02.Pages.Chapters
                     SuppressStep = Object.ChapterObject.SuppressStep,
                     CompleteName = Object.ChapterObject.CompleteName,
                     AsName = Object.ChapterObject.AsName,
-                    RescheduleDays = Object.ChapterObject.RescheduleDays
+                    RescheduleDays = Object.ChapterObject.RescheduleDays,
+                    AltDisplayName = Object.ChapterObject.AltDisplayName
                 };
 
+                AltChapter.ChapterItems.Add(PushObject);
+
                 await sessionState.SwitchSelectedSystem();
-                await chapterManagementService.Add(PushObject);
+                AltChapterRow.ChapterData = JsonConvert.SerializeObject(AltChapter);
+                await chapterManagementService.Update(AltChapterRow);
                 await sessionState.ResetSelectedSystem();
             }
 

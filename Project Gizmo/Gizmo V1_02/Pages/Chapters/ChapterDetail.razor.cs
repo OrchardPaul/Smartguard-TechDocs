@@ -4,6 +4,7 @@ using GadjIT.ClientContext.P4W.Custom;
 using Gizmo_V1_02.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -54,19 +55,27 @@ namespace Gizmo_V1_02.Pages.Chapters
         IChapterManagementService chapterManagementService { get; set; }
 
         [Parameter]
-        public UsrOrDefChapterManagement TaskObject { get; set; }
-
-        [Parameter]
         public RenderFragment CustomHeader { get; set; }
 
         [Parameter]
         public string selectedList { get; set; }
 
         [Parameter]
-        public Action DataChanged { get; set; }
+        public string Option { get; set; }
 
         [Parameter]
-        public string selectedCaseType { get; set; }
+        public UsrOrDefChapterManagement SelectedChapterObject { get; set; }
+
+        [Parameter]
+        public VmChapter SelectedChapter { get; set; }
+
+        [Parameter]
+        public UsrOrDefChapterManagement TaskObject { get; set; }
+
+
+
+        [Parameter]
+        public Action DataChanged { get; set; }
 
         [Parameter]
         public List<DmDocuments> dropDownChapterList { get; set; }
@@ -93,14 +102,13 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         private async void HandleValidSubmit()
         {
-            if (TaskObject.Id == 0)
+            if(Option == "Insert")
             {
-                await chapterManagementService.Add(TaskObject);
+                SelectedChapter.ChapterItems.Add(TaskObject);
             }
-            else
-            {
-                await chapterManagementService.Update(TaskObject);
-            }
+            
+            SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(SelectedChapter);
+            await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
 
             TaskObject = new UsrOrDefChapterManagement();
 
