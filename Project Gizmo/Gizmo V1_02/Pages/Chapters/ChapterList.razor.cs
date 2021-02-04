@@ -746,6 +746,10 @@ namespace Gizmo_V1_02.Pages.Chapters
         {
             Action action = RefreshSelectedList;
 
+            var copyObject = new UsrOrDefChapterManagement
+                                { 
+                                    
+                                };
          
             var parameters = new ModalParameters();
             parameters.Add("TaskObject", editObject.ChapterObject);
