@@ -386,6 +386,9 @@
     }
 }
 
+.link-item {
+    cursor: pointer;
+}
 
 .link-direction {
     cursor: pointer;

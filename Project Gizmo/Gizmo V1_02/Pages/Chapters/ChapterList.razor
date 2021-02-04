@@ -284,17 +284,17 @@ else
 
                     <div class="@(sessionState.isAdminUser ? "grid-can-edit" : "") ">
                         <div class="row grid-header hidden-md-down">
-                            <div class="data-item col-4 ">
+                            <div class="data-item ">
                                 <div class="data-item-sub">
                                     Name
                                 </div>
                             </div>
-                            <div class="data-item col-4 ">
+                            <div class="data-item ">
                                 <div class="data-item-sub">
                                     Schedule
                                 </div>
                             </div>
-                            <div class="data-item col-4 ">
+                            <div class="data-item ">
                                 <div class="data-item-sub">
                                     On Completion
                                 </div>
@@ -305,7 +305,7 @@ else
                             {
 
                                 <div class="row grid-row grid-row-lg @(rowChanged == doc.ChapterObject.SeqNo ? "row-changed" : "" )">
-                                    <div class="data-item col-12 col-lg-4 col-xl-4">
+                                    <div class="data-item ">
 
                                         @if (sessionState.isAdminUser)
                                         {
@@ -365,6 +365,26 @@ else
                                                     </div>
 
                                                 }
+                                                @if (!string.IsNullOrEmpty(doc.ChapterObject.UserMessage))
+                                                {
+
+                                                    <div class="data-item-right mr-2 font-100">
+                                                        <ModalTooltip Direction="top" Text=@("POPUP: " + doc.ChapterObject.UserMessage) Class="w-3">
+                                                            <span class="fa fa-exclamation-triangle"></span>
+                                                        </ModalTooltip>
+                                                    </div>
+
+                                                }
+                                                @if (!string.IsNullOrEmpty(doc.ChapterObject.UserNotes))
+                                                {
+
+                                                    <div class="data-item-right mr-2 font-100">
+                                                        <ModalTooltip Direction="top" Text=@("NOTES: " + doc.ChapterObject.UserNotes) Class="w-3">
+                                                            <span class="fa fa-comment"></span>
+                                                        </ModalTooltip>
+                                                    </div>
+
+                                                }
                                                 <div class="data-item-right mr-2 seq-change">
                                                     <div @onclick='() => MoveSeq(doc.ChapterObject,"Docs","Up")'><span class="fa fa-angle-up"></span></div>
                                                     <div class="seq-no">@doc.ChapterObject.SeqNo</div>
@@ -414,7 +434,7 @@ else
                                             </div>
                                         }
                                     </div>
-                                    <div class="hidden-md-down col-4 data-item ">
+                                    <div class="hidden-md-down data-item ">
                                         <div class="data-item-sub font-85 pl-3">@(string.IsNullOrEmpty(doc.ChapterObject.AsName) ? "" : doc.ChapterObject.AsName)</div>
 
                                         @if (doc.ChapterObject.RescheduleDays.HasValue & !(doc.ChapterObject.RescheduleDays == 0))
@@ -427,7 +447,7 @@ else
                                         }
 
                                     </div>
-                                    <div class="hidden-md-down col-4 data-item ">
+                                    <div class="hidden-md-down data-item ">
                                         @if (!(string.IsNullOrEmpty(doc.ChapterObject.CompleteName)))
                                         {
                                             <div class="data-item-sub font-85 pl-3" title="This step will be saved in the agenda as @doc.ChapterObject.CompleteName.">
@@ -612,53 +632,61 @@ else
                                             <div class="data-item-sub">
                                                 <span class="fa fa-pound-sign mr-2"></span> @fee.ChapterObject.Name
                                             </div>
-                                            <div class="data-item-right mr-2 seq-change">
-                                                <div @onclick='() => MoveSeq(fee.ChapterObject,"Fees", "Up")'><span class="fa fa-angle-up"></span></div>
-                                                <div class="seq-no">@fee.ChapterObject.SeqNo</div>
-                                                <div @onclick='() => MoveSeq(fee.ChapterObject,"Fees", "Down")'><span class="fa fa-angle-down"></span></div>
-                                            </div>
-                                        }
-                                        else
-                                        {
+                                            @if (!(string.IsNullOrEmpty(lstVmFeeModalItems.Where(FMI => FMI.feeDefinition.FeeDesc == fee.ChapterObject.Name).Select(FMI => FMI.feeDefinition.WorkProvider).SingleOrDefault())))
+                                            {
+                                                <div class="data-item-right mr-2 font-100">
+                                                    <ModalTooltip Direction="top" Text=@("USED BY: " + lstVmFeeModalItems.Where(FMI => FMI.feeDefinition.FeeDesc == fee.ChapterObject.Name).Select(FMI => FMI.feeDefinition.WorkProvider).SingleOrDefault()) Class="w-3">
+                                                        <span class="fa fa-comment"></span>
+                                                    </ModalTooltip>
+                                                </div>
+                                            }
+                                                <div class="data-item-right mr-2 seq-change">
+                                                    <div @onclick='() => MoveSeq(fee.ChapterObject,"Fees", "Up")'><span class="fa fa-angle-up"></span></div>
+                                                    <div class="seq-no">@fee.ChapterObject.SeqNo</div>
+                                                    <div @onclick='() => MoveSeq(fee.ChapterObject,"Fees", "Down")'><span class="fa fa-angle-down"></span></div>
+                                                </div>
+                                            }
+                                            else
+                                            {
 
-                                            <div class="btn-ellipses float-left">
-                                                @if (!(fee.ComparisonIcon is null))
-                                                {
-                                                    @if (!(fee.ComparisonResult == "Exact match"))
+                                                <div class="btn-ellipses float-left">
+                                                    @if (!(fee.ComparisonIcon is null))
                                                     {
-                                                        <div class="btn-dashed" @onclick="() => PrepareForComparison(fee)"><span class="fa fa-@fee.ComparisonIcon"></span></div>
+                                                        @if (!(fee.ComparisonResult == "Exact match"))
+                                                        {
+                                                            <div class="btn-dashed" @onclick="() => PrepareForComparison(fee)"><span class="fa fa-@fee.ComparisonIcon"></span></div>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span class="fa fa-@fee.ComparisonIcon"></span>
+                                                        }
                                                     }
                                                     else
                                                     {
-                                                        <span class="fa fa-@fee.ComparisonIcon"></span>
+                                                        <div class="spinner"></div>
                                                     }
-                                                }
-                                                else
-                                                {
-                                                    <div class="spinner"></div>
-                                                }
 
-                                            </div>
+                                                </div>
 
 
+                                                <div class="data-item-sub">
+                                                    <span class="fa fa-pound-sign mr-2"></span> @fee.ChapterObject.Name
+                                                </div>
+                                                <div class="data-item-right mr-2">
+                                                    <div class="seq-no">@fee.ChapterObject.SeqNo</div>
+                                                </div>
+                                            }
+                                        }
+                                        else
+                                        {
                                             <div class="data-item-sub">
-                                                <span class="fa fa-pound-sign mr-2"></span> @fee.ChapterObject.Name
-                                            </div>
-                                            <div class="data-item-right mr-2">
-                                                <div class="seq-no">@fee.ChapterObject.SeqNo</div>
+                                                <span class="fa fa-money-bill mr-2"></span> @fee.ChapterObject.Name
+                                                <div class="data-item-right mr-2">
+                                                    <div class="seq-no">@fee.ChapterObject.SeqNo</div>
+                                                </div>
                                             </div>
                                         }
-                                    }
-                                    else
-                                    {
-                                        <div class="data-item-sub">
-                                            <span class="fa fa-money-bill mr-2"></span> @fee.ChapterObject.Name
-                                            <div class="data-item-right mr-2">
-                                                <div class="seq-no">@fee.ChapterObject.SeqNo</div>
-                                            </div>
-                                        </div>
-                                    }
-                                </div>
+                                    </div>
 
                             </div>
 
