@@ -1,4 +1,7 @@
-﻿using Gizmo_V1_02.Services.SessionState;
+﻿using Blazored.Modal;
+using Blazored.Modal.Services;
+using Gizmo_V1_02.Pages.Shared.Modals;
+using Gizmo_V1_02.Services.SessionState;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using System;
@@ -10,6 +13,9 @@ namespace Gizmo_V1_02.Shared
 {
     public partial class NavMenu
     {
+        [Inject]
+        IModalService Modal { get; set; }
+
         [Inject]
         public IUserSessionState userSession { get; set; }
 
@@ -24,17 +30,11 @@ namespace Gizmo_V1_02.Shared
         public string ModalHeight { get; set; }
         public string ModalWidth { get; set; }
 
-        private async Task ToggleNavMenu()
+        private void ToggleNavMenu()
         {
             collapseNavMenu = !collapseNavMenu;
-
-            await CloseAllModels();
         }
 
-        private async Task CloseAllModels()
-        {
-            await jsRuntime.InvokeAsync<object>("HideAll");
-        }
 
         private void PrepareModalDelete(string modalHeader
                                         , string modalHeight
@@ -43,6 +43,21 @@ namespace Gizmo_V1_02.Shared
             ModalInfoHeader = modalHeader;
             ModalHeight = modalHeight;
             ModalWidth = modalWidth;
+        }
+
+
+        protected void ShowSystemSelectModel()
+        {
+            var parameters = new ModalParameters();
+            parameters.Add("currentUser", userSession.User);
+
+            var options = new ModalOptions()
+            {
+                Class = "blazored-custom-modal"
+            };
+
+
+            Modal.Show<ModalSystemSelect>("System Select", parameters, options);
         }
 
 

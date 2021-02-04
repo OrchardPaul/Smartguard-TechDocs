@@ -27,9 +27,7 @@
         </div>
     </div>
     <div class="pl-3 hidden-md-up">
-        <NavLink @onclick='() => PrepareModalDelete("System Setting"
-                                                ,"500px"
-                                                ,"400px")' class="nav-link col-white" data-toggle="modal" data-target="#modalSystemSelect" href="javascript: void(0)">
+        <NavLink @onclick='ShowSystemSelectModel'>
             <span class="fa fa-cog"></span>
         </NavLink>
     </div>
@@ -73,4 +71,3 @@
 </div>
 
 
-<ModalSystemSelect currentUser="@userSession.User" InfoHeader="@ModalInfoHeader" ModalHeight="@ModalHeight" ModalWidth="@ModalWidth"></ModalSystemSelect>

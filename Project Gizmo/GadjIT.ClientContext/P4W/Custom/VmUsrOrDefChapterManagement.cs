@@ -90,6 +90,12 @@ namespace GadjIT.ClientContext.P4W.Custom
                 ComparisonList.Add("EntityType");
             }
 
+            if (ChapterObject.AltDisplayName != compItem.AltDisplayName)
+            {
+                isSame = false;
+                ComparisonList.Add("AltDisplayName");
+            }
+
             return isSame;
         }
     }

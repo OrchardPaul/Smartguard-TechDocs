@@ -9,11 +9,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Blazored.Modal;
 
 namespace Gizmo_V1_02.Pages.Shared.Modals
 {
     public partial class ModalSystemSelect
     {
+        [CascadingParameter]
+        BlazoredModalInstance ModalInstance { get; set; }
+
         [Parameter]
         public string InfoHeader { get; set; }
 
@@ -46,6 +50,13 @@ namespace Gizmo_V1_02.Pages.Shared.Modals
 
             NavigationManager.NavigateTo("/Identity/Account/LogOutOnGet", true);
         }
+
+
+        private async void Close()
+        {
+            await ModalInstance.CloseAsync();
+        }
+
 
     }
 }

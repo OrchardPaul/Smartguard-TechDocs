@@ -1,7 +1,6 @@
 ﻿@page "/chapterlist"
-@page "/chapterlist/{selectedCaseTypeGroup}"
-@page "/chapterlist/{selectedCaseTypeGroup}/{selectedCaseType}"
-@page "/chapterlist/{selectedCaseTypeGroup}/{selectedCaseType}/{selectedChapter}"
+
+@page "/chapterlist/{UrlCaseTypeGroup}/{UrlCaseType}/{UrlChapter}"
 
 @inject IJSRuntime jsRuntime
 @using Gizmo_V1_02.Pages.Shared.Modals
@@ -15,7 +14,7 @@ else
 {
 
 
-    @if (selectedChapter == "" | selectedChapter is null)
+    @if (selectedChapter.Name == "" | selectedChapter.Name is null)
     {
         <div class="tran-block page-header-block ">
             <h3>Chapters</h3>
@@ -26,7 +25,7 @@ else
             {
                 <div class="grid-actions">
                     <button @onclick='PrepareChapterForInsert' class="btn btn-main btn-shadow" title="Add new chapter"><i class="fa fa-plus pr-1"></i>New Chapter</button>
-                    @if (!(string.IsNullOrEmpty(selectedCaseType)))
+                    @if (!(string.IsNullOrEmpty(selectedChapter.CaseType)))
                     {
                         @if (!(SequenceIsValid("Chapters")))
                         {
@@ -67,7 +66,7 @@ else
 
                             <div class="data-item-nav" @onclick='() => SelectCaseTypeGroup(caseTypeGroup)'>
                                 <div class="data-item-sub"><span class="fa fa-boxes mr-2"></span>@caseTypeGroup</div>
-                                <div class="data-item-right col-alt"><div class="link-direction @(caseTypeGroup == selectedCaseTypeGroup ? "triangle-up col-grey" : "triangle-down")"></div></div>
+                                <div class="data-item-right col-alt"><div class="link-direction @(caseTypeGroup == selectedChapter.CaseTypeGroup ? "triangle-up col-grey" : "triangle-down")"></div></div>
                             </div>
                         </div>
 
@@ -77,12 +76,12 @@ else
 
 
                     <!-- GROUP SELECTED SHOW CASE TYPES-->
-                    @if (caseTypeGroup == selectedCaseTypeGroup)
+                    @if (caseTypeGroup == selectedChapter.CaseTypeGroup)
                     {
 
                         @foreach (var caseType in lstChapters.Where(C => C.ChapterObject.ParentId == 0)
         .Where(C => !(C.ChapterObject.CaseType is null))
-        .Where(C => C.ChapterObject.CaseTypeGroup == selectedCaseTypeGroup)
+        .Where(C => C.ChapterObject.CaseTypeGroup == selectedChapter.CaseTypeGroup)
         .Select(C => C.ChapterObject.CaseType)
         .Distinct()
         .ToList())
@@ -108,7 +107,7 @@ else
                                         </div>
                                     }
                                     <div class="data-item-nav" @onclick='() => SelectCaseType(caseType)'>
-                                        @if (caseType == selectedCaseType)
+                                        @if (caseType == selectedChapter.CaseType)
                                         {
                                             <div class="data-item-sub">
                                                 <span class="fa fa-folder-open mr-2"></span>@caseType
@@ -122,17 +121,17 @@ else
                                         }
 
 
-                                        <div class="data-item-right col-alt " @onclick='() => SelectCaseType(caseType)'><div class="link-direction @(caseType == selectedCaseType ? "triangle-up col-grey" : "triangle-down")"></div></div>
+                                        <div class="data-item-right col-alt " @onclick='() => SelectCaseType(caseType)'><div class="link-direction @(caseType == selectedChapter.CaseType ? "triangle-up col-grey" : "triangle-down")"></div></div>
                                     </div>
                                 </div>
 
                             </div>
-                            @if (caseType == selectedCaseType)
+                            @if (caseType == selectedChapter.CaseType)
                             {
                                 <div class="grid-nav">
                                     @foreach (var Chapter in lstChapters
-                                                           .Where(C => C.ChapterObject.CaseType == selectedCaseType)
-                                                           .Where(C => C.ChapterObject.CaseTypeGroup == selectedCaseTypeGroup)
+                                                           .Where(C => C.ChapterObject.CaseType == selectedChapter.CaseType)
+                                                           .Where(C => C.ChapterObject.CaseTypeGroup == selectedChapter.CaseTypeGroup)
                                                            .Where(C => C.ChapterObject.Type == "Chapter")
                                                            .OrderBy(C => C.ChapterObject.SeqNo)
                                                            .ToList())
@@ -150,7 +149,7 @@ else
                                                                     <span class="fa fa-font mr-2"></span>
                                                                     <span>Rename</span>
                                                                 </li>
-                                                                <li class="col-main" @onclick="() => SelectChapter(Chapter.ChapterObject.Name,Chapter.ChapterObject.Id)" title="">
+                                                                <li class="col-main" @onclick="() => SelectChapter(Chapter.ChapterObject)" title="">
                                                                     <span class="fa fa-pencil-alt mr-2"></span>
                                                                     <span>Edit</span>
                                                                 </li>
@@ -174,7 +173,7 @@ else
                                                         <div @onclick='() => MoveSeq(Chapter.ChapterObject, "Chapters", "Down")'><span class="fa fa-angle-down"></span></div>
                                                     </div>
                                                 }
-                                                <div title="Chapter: click to configure @Chapter.ChapterObject.Name" class="data-item-right link-direction" @onclick="() => SelectChapter(Chapter.ChapterObject.Name,Chapter.ChapterObject.Id)">
+                                                <div title="Chapter: click to configure @Chapter.ChapterObject.Name" class="data-item-right link-direction" @onclick="() => SelectChapter(Chapter.ChapterObject)">
                                                     <div class="fa fa-chevron-circle-right"></div>
                                                 </div>
                                             </div>
@@ -193,15 +192,15 @@ else
     }
 }
 
-@if (selectedChapter != "" & !(selectedChapter is null))
+@if (selectedChapter.Name != "" & !(selectedChapter.Name is null))
 {
 
     <div class="tran-block page-header-block ">
         <div class="float-left back-link">
             <a href="javascript: void(0);" @onclick="SelectHome"><span class="col-alt fa fa-angle-double-left"></span></a>
         </div>
-        <h3>Chapter: @selectedChapter</h3>
-        <p class="hidden-md-down">Group: <span class="badge badge-grey mr-3">@selectedCaseTypeGroup</span> Case Type: <span class="badge badge-grey mr-3">@selectedCaseType</span> Chapter: <span class="badge badge-grey mr-3"> @selectedChapter</span></p>
+        <h3>Chapter: @selectedChapter.Name</h3>
+        <p class="hidden-md-down">Group: <span class="badge badge-grey mr-3">@selectedChapter.CaseTypeGroup</span> Case Type: <span class="badge badge-grey mr-3">@selectedChapter.CaseType</span> Chapter: <span class="badge badge-grey mr-3"> @selectedChapter.Name</span></p>
     </div>
 
     <div class="tran-block rounded">
@@ -418,7 +417,7 @@ else
                                     <div class="hidden-md-down col-4 data-item ">
                                         <div class="data-item-sub font-85 pl-3">@(string.IsNullOrEmpty(doc.ChapterObject.AsName) ? "" : doc.ChapterObject.AsName)</div>
 
-                                        @if (doc.ChapterObject.RescheduleDays.HasValue)
+                                        @if (doc.ChapterObject.RescheduleDays.HasValue & !(doc.ChapterObject.RescheduleDays == 0))
                                         {
                                             <div class="data-item-right schedule-days">
                                                 <ModalTooltip Direction="left" Text="@(string.IsNullOrEmpty(doc.ChapterObject.AsName) ? "" : "The step named " + doc.ChapterObject.AsName + " will be scheduled for " +  doc.ChapterObject.RescheduleDays.ToString() + " days")">
