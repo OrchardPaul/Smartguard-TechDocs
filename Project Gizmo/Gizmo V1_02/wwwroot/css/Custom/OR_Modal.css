@@ -244,25 +244,19 @@
 }
 
 @media (max-width: 1200px) {
-    .modal-chapter-item {
-        width: 350px;
+    .modal-chapter-item,.modal-chapter-doc, .modal-chapter-fees {
+        width: calc(100% - 20px);
     }
 
-    .modal-chapter-doc {
-        width: 450px;
-    }
     .modal-chapter-doc .modal-body{
-        height: 450px;
+        height: 300px;
         overflow-y: scroll;
     }
 
-    .modal-chapter-fees {
-        width: 450px;
-        overflow: hidden;
-    }
-
     #modal-edit-fees-list {
-        width: 420px;
+        width: calc(100% - 10px);
+        height: 300px;
+        overflow-y: scroll;
     }
 }
 
