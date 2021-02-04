@@ -80,7 +80,7 @@ namespace Gizmo_V1_02.Pages.Chapters
         public string UrlChapter { set { selectedChapter.Name = value; } }
 
         [Parameter]
-        public VmChapter selectedChapter { get; set; } = new VmChapter();
+        public VmChapter selectedChapter { get; set; } = new VmChapter { ChapterItems = new List<UsrOrDefChapterManagement>() };
 
         public VmChapter altChapter { get; set; } = new VmChapter();
 
@@ -180,8 +180,12 @@ namespace Gizmo_V1_02.Pages.Chapters
 
             lstAll = new List<VmUsrOrDefChapterManagement>();
 
+            selectedChapter = new VmChapter { ChapterItems = new List<UsrOrDefChapterManagement>() };
 
             SelectedChapterObject = chapter;
+            selectedChapter.CaseTypeGroup = chapter.CaseTypeGroup;
+            selectedChapter.CaseType = chapter.CaseType;
+            selectedChapter.Name = chapter.Name;
 
             selectedChapterId = chapter.Id;
             GetItemListByChapter(chapter.Id);
@@ -229,7 +233,12 @@ namespace Gizmo_V1_02.Pages.Chapters
                                 .Select(A => A.ChapterObject.ChapterData)
                                 .SingleOrDefault();
 
-            selectedChapter = JsonConvert.DeserializeObject<VmChapter>(chapterData);
+            if (!(chapterData is null))
+            {
+                selectedChapter = JsonConvert.DeserializeObject<VmChapter>(chapterData);
+            }
+
+            
         }
 
 
@@ -737,6 +746,7 @@ namespace Gizmo_V1_02.Pages.Chapters
         {
             Action action = RefreshSelectedList;
 
+         
             var parameters = new ModalParameters();
             parameters.Add("TaskObject", editObject.ChapterObject);
             parameters.Add("DataChanged", action);

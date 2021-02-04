@@ -47,5 +47,9 @@ namespace GadjIT.ClientContext.P4W
         [StringLength(100)]
         public string NextStatus { get; set; }
         public string ChapterData { get; set; }
+
+        public string UserMessage { get; set; }
+
+        public string UserNotes { get; set; }
     }
 }
