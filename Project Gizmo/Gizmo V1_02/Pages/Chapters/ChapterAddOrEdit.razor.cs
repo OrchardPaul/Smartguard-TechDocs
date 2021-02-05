@@ -4,6 +4,7 @@ using GadjIT.ClientContext.P4W.Custom;
 using Gizmo_V1_02.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -57,6 +58,16 @@ namespace Gizmo_V1_02.Pages.Chapters
         {
             if (TaskObject.ChapterObject.Id == 0)
             {
+                TaskObject.ChapterObject.ChapterData = JsonConvert.SerializeObject(new VmChapter
+                                                                                        {
+                                                                                            CaseTypeGroup = TaskObject.ChapterObject.CaseTypeGroup,
+                                                                                            CaseType = TaskObject.ChapterObject.CaseType,
+                                                                                            Name = TaskObject.ChapterObject.Name,
+                                                                                            SeqNo = TaskObject.ChapterObject.SeqNo.GetValueOrDefault(),
+                                                                                            ChapterItems = new List<UsrOrDefChapterManagement>()
+                                                                                        }); 
+
+
                 await chapterManagementService.Add(TaskObject.ChapterObject);
             }
             else

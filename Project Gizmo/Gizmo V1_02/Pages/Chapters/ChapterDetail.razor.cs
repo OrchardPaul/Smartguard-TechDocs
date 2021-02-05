@@ -115,6 +115,7 @@ namespace Gizmo_V1_02.Pages.Chapters
             TaskObject.AltDisplayName = CopyObject.AltDisplayName;
             TaskObject.UserMessage = CopyObject.UserMessage;
             TaskObject.UserNotes = CopyObject.UserNotes;
+            TaskObject.NextStatus = CopyObject.NextStatus;
 
             if (Option == "Insert")
             {

@@ -256,7 +256,10 @@ namespace Gizmo_V1_02.Pages.Chapters
             }
 
             ListChapterLoaded = true;
-            StateHasChanged();
+            await InvokeAsync(() =>
+            {
+                StateHasChanged();
+            });
         }
 
 
@@ -375,7 +378,6 @@ namespace Gizmo_V1_02.Pages.Chapters
                 var test = await RefreshChapterItems(navDisplay);
 
                 await sessionState.SwitchSelectedSystem();
-
 
                 var lstC = await chapterManagementService.GetAllChapters();
                 lstAltSystemChapters = lstC.Select(A => new VmUsrOrDefChapterManagement { ChapterObject = A }).ToList();
@@ -498,6 +500,7 @@ namespace Gizmo_V1_02.Pages.Chapters
                                                     .OrderByDescending(A => A.ChapterObject.SeqNo)
                                                     .Select(A => A.ChapterObject.SeqNo)
                                                     .FirstOrDefault() + 1;
+
             }
             else
             {
@@ -507,8 +510,8 @@ namespace Gizmo_V1_02.Pages.Chapters
                                     .FirstOrDefault() + 1;
             }
 
-            editChapterObject.ChapterObject.SeqNo = editChapterObject.ChapterObject.SeqNo is null
-                                                        ? 0
+            editObject.ChapterObject.SeqNo = editChapterObject.ChapterObject.SeqNo is null
+                                                        ? 1
                                                         : editChapterObject.ChapterObject.SeqNo;
 
             editObject.ChapterObject.ParentId = selectedChapterId;
@@ -749,6 +752,8 @@ namespace Gizmo_V1_02.Pages.Chapters
             Modal.Show<ChapterAddOrEdit>("Chapter", parameters, options);
         }
 
+
+
         protected void ShowCaseTypeEditModal()
         {
             Action Action = RefreshChapters;
@@ -763,6 +768,7 @@ namespace Gizmo_V1_02.Pages.Chapters
             parameters.Add("DataChanged", Action);
             parameters.Add("isCaseTypeOrGroup", isCaseTypeOrGroup);
             parameters.Add("caseTypeGroupName", selectedChapter.CaseTypeGroup);
+            parameters.Add("ListChapters", lstChapters);
 
             var options = new ModalOptions()
             {
@@ -981,7 +987,8 @@ namespace Gizmo_V1_02.Pages.Chapters
         {
             string colHTML = "";
 
-            if (Regex.IsMatch(colAndroid, "^#(?:[0-9a-fA-F]{8})$"))
+
+            if (!string.IsNullOrEmpty(colAndroid) && Regex.IsMatch(colAndroid, "^#(?:[0-9a-fA-F]{8})$"))
             {
                 colHTML = "#" + colAndroid.Substring(3, 6) + colAndroid.Substring(1, 2);
             }

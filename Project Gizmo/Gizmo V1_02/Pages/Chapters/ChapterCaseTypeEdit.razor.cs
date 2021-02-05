@@ -1,8 +1,10 @@
 ﻿using Blazored.Modal;
 using GadjIT.ClientContext.P4W;
+using GadjIT.ClientContext.P4W.Custom;
 using Gizmo_V1_02.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +19,9 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         [Inject]
         IChapterManagementService chapterManagementService { get; set; }
+
+        [Parameter]
+        public List<VmUsrOrDefChapterManagement> ListChapters { get; set; }
 
         [Parameter]
         public string TaskObject { get; set; }
@@ -45,20 +50,43 @@ namespace Gizmo_V1_02.Pages.Chapters
         {
             if (isCaseTypeOrGroup == "CaseType")
             {
-                await chapterManagementService.UpdateCaseType(TaskObject, originalName, caseTypeGroupName);
+                var chapters = ListChapters.Where(C => C.ChapterObject.CaseType == originalName).ToList();
+
+                foreach (var chapter in chapters)
+                {
+                    var updateJson = JsonConvert.DeserializeObject<VmChapter>(chapter.ChapterObject.ChapterData);
+                    updateJson.CaseType = TaskObject;
+                    chapter.ChapterObject.CaseType = TaskObject;
+                    chapter.ChapterObject.ChapterData = JsonConvert.SerializeObject(updateJson);
+                    await chapterManagementService.Update(chapter.ChapterObject).ConfigureAwait(false);
+                }
             }
             else if (isCaseTypeOrGroup == "CaseTypeGroup")
             {
-                await chapterManagementService.UpdateCaseTypeGroups(TaskObject, originalName);
+                var chapters = ListChapters.Where(C => C.ChapterObject.CaseTypeGroup == originalName).ToList();
+
+                foreach (var chapter in chapters)
+                {
+                    var updateJson = JsonConvert.DeserializeObject<VmChapter>(chapter.ChapterObject.ChapterData);
+                    updateJson.CaseTypeGroup = TaskObject;
+                    chapter.ChapterObject.CaseTypeGroup = TaskObject;
+                    chapter.ChapterObject.ChapterData = JsonConvert.SerializeObject(updateJson);
+                    await chapterManagementService.Update(chapter.ChapterObject).ConfigureAwait(false);
+                }
             }
             else
             {
-                await chapterManagementService.Update(Chapter);
+                var updateJson = JsonConvert.DeserializeObject<VmChapter>(Chapter.ChapterData);
+                updateJson.Name = Chapter.Name;
+                Chapter.ChapterData = JsonConvert.SerializeObject(updateJson);
+                await chapterManagementService.Update(Chapter).ConfigureAwait(false);
             }
 
             DataChanged?.Invoke();
             Close();
         }
+
+  
 
     }
 }
