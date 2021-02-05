@@ -72,6 +72,8 @@ namespace Gizmo_V1_02.Pages.Chapters
         [Parameter]
         public UsrOrDefChapterManagement TaskObject { get; set; }
 
+        [Parameter]
+        public UsrOrDefChapterManagement CopyObject { get; set; }
 
 
         [Parameter]
@@ -102,7 +104,19 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         private async void HandleValidSubmit()
         {
-            if(Option == "Insert")
+            TaskObject.Type = CopyObject.Type;
+            TaskObject.Name = CopyObject.Name;
+            TaskObject.EntityType = CopyObject.EntityType;
+            TaskObject.SeqNo = CopyObject.SeqNo;
+            TaskObject.SuppressStep = CopyObject.SuppressStep;
+            TaskObject.CompleteName = CopyObject.CompleteName;
+            TaskObject.AsName = CopyObject.AsName;
+            TaskObject.RescheduleDays = CopyObject.RescheduleDays;
+            TaskObject.AltDisplayName = CopyObject.AltDisplayName;
+            TaskObject.UserMessage = CopyObject.UserMessage;
+            TaskObject.UserNotes = CopyObject.UserNotes;
+
+            if (Option == "Insert")
             {
                 SelectedChapter.ChapterItems.Add(TaskObject);
             }
@@ -117,17 +131,6 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         }
 
-        private void SuppressChange(object value)
-        {
-            if ((bool)value)
-            {
-                TaskObject.SuppressStep = "Y";
-            }
-            else
-            {
-                TaskObject.SuppressStep = "N";
-            }
-        }
 
     }
 }

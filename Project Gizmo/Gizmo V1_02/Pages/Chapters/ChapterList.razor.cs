@@ -236,14 +236,8 @@ namespace Gizmo_V1_02.Pages.Chapters
             if (!(chapterData is null))
             {
                 selectedChapter = JsonConvert.DeserializeObject<VmChapter>(chapterData);
-            }
-
-            
+            }   
         }
-
-
-
-
 
         private async Task<bool> RefreshChapterItems(string listType)
         {
@@ -747,12 +741,23 @@ namespace Gizmo_V1_02.Pages.Chapters
             Action action = RefreshSelectedList;
 
             var copyObject = new UsrOrDefChapterManagement
-                                { 
-                                    
+                                {
+                                    Type = editObject.ChapterObject.Type,
+                                    Name = editObject.ChapterObject.Name,
+                                    EntityType = editObject.ChapterObject.EntityType,
+                                    SeqNo = editObject.ChapterObject.SeqNo,
+                                    SuppressStep = editObject.ChapterObject.SuppressStep,
+                                    CompleteName = editObject.ChapterObject.CompleteName,
+                                    AsName = editObject.ChapterObject.AsName,
+                                    RescheduleDays = editObject.ChapterObject.RescheduleDays,
+                                    AltDisplayName = editObject.ChapterObject.AltDisplayName,
+                                    UserMessage = editObject.ChapterObject.UserMessage,
+                                    UserNotes = editObject.ChapterObject.UserNotes
                                 };
          
             var parameters = new ModalParameters();
             parameters.Add("TaskObject", editObject.ChapterObject);
+            parameters.Add("CopyObject", copyObject);
             parameters.Add("DataChanged", action);
             parameters.Add("selectedList", selectedList);
             parameters.Add("dropDownChapterList", dropDownChapterList);

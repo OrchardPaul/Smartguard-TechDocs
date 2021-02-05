@@ -3,18 +3,27 @@
         <div class="form-group">
             @if (isCaseTypeOrGroup == "CaseType")
             {
-                <label>Case Type</label>
-                <InputText class="form-control" @bind-Value="TaskObject"></InputText>
+                <div class="form-group">
+                    <label>Case Type</label>
+                    <InputText class="form-control" @bind-Value="TaskObject"></InputText>
+                </div>
+
+
             }
             else if (isCaseTypeOrGroup == "CaseTypeGroup")
             {
-                <label>Case Type Group</label>
-                <InputText class="form-control" @bind-Value="TaskObject"></InputText>
+                <div class="form-group">
+                    <label>Case Type Group</label>
+                    <InputText class="form-control" @bind-Value="TaskObject"></InputText>
+                </div>
+
             }
             else
             {
-                <label>Chapter</label>
-                <InputText class="form-control" @bind-Value="Chapter.Name"></InputText>
+                <div class="form-group">
+                    <label>Chapter</label>
+                    <InputText class="form-control" @bind-Value="Chapter.Name"></InputText>
+                </div>
             }
 
 

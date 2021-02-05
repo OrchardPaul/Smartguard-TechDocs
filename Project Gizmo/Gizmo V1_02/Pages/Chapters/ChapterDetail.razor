@@ -1,6 +1,6 @@
 ﻿@using Gizmo_V1_02.Data.CustomFormObjects;
 
-<EditForm Model="@TaskObject" OnValidSubmit="HandleValidSubmit">
+<EditForm Model="@CopyObject" OnValidSubmit="HandleValidSubmit">
     <div class="modal-body">
 
         <DataAnnotationsValidator />
@@ -28,7 +28,7 @@
 
                 <div class="form-group">
                     <label for="DocName">Document / Step</label>
-                    @if (selectedCaseTypeGroup == -1 & TaskObject.Name is null)
+                    @if (selectedCaseTypeGroup == -1 & CopyObject.Name is null)
                     {
                         <select class="form-control" disabled />
                     }
@@ -36,14 +36,14 @@
                     {
 
 
-                        <InputSelect class="form-control form-control-xl" @bind-Value="TaskObject.Name">
-                            @if (TaskObject.Name is null)
+                        <InputSelect class="form-control form-control-xl" @bind-Value="CopyObject.Name">
+                            @if (CopyObject.Name is null)
                                         {
                                 <option value="">Select</option>
                                         }
                                         else
                                         {
-                                <option value="@TaskObject.Name">@TaskObject.Name</option>
+                                <option value="@CopyObject.Name">@CopyObject.Name</option>
                                         }
 
 
@@ -54,7 +54,7 @@
                                 </option>
                                         }
                         </InputSelect>
-                        <ValidationMessage For="@(() => TaskObject.Name)" />
+                        <ValidationMessage For="@(() => CopyObject.Name)" />
 
                     }
 
@@ -66,8 +66,8 @@
         {
             <div class="form-group">
                 <label for="Name">@CustomHeader Name</label>
-                <input type="hidden" @bind-value="@TaskObject.Id" />
-                <InputText class="form-control" @bind-Value="@TaskObject.Name" />
+                <input type="hidden" @bind-value="@CopyObject.Id" />
+                <InputText class="form-control" @bind-Value="@CopyObject.Name" />
             </div>
         }
 
@@ -77,13 +77,13 @@
         {
             <div class="form-group">
                 <label for="AltDisplayName">Display Name</label>
-                <InputText class="form-control form-control-xl" @bind-Value="@TaskObject.AltDisplayName" />
+                <InputText class="form-control form-control-xl" @bind-Value="@CopyObject.AltDisplayName" />
             </div>
 
             <div class="form-group">
                 <label for="DocType">Type</label>
                 <InputSelect class="form-control form-control-sm"
-                             @bind-Value="TaskObject.Type">
+                             @bind-Value="CopyObject.Type">
                     <option value="">Select</option>
                     @foreach (var type in DocTypeList)
                         {
@@ -92,17 +92,17 @@
                         </option>
                         }
                 </InputSelect>
-                <ValidationMessage For="@(() => TaskObject.Type)" />
+                <ValidationMessage For="@(() => CopyObject.Type)" />
             </div>
 
             <div class="form-group">
                 <label for="AsName">Schedule As Name</label>
-                <InputText class="form-control form-control-xl" @bind-Value="@TaskObject.AsName" />
+                <InputText class="form-control form-control-xl" @bind-Value="@CopyObject.AsName" />
             </div>
 
             <div class="form-group">
                 <label for="CompleteName">Complete As Name</label>
-                <InputText class="form-control form-control-xl" @bind-Value="@TaskObject.CompleteName" />
+                <InputText class="form-control form-control-xl" @bind-Value="@CopyObject.CompleteName" />
             </div>
 
             <div class="form-group">
@@ -112,18 +112,18 @@
 
             <div class="form-group">
                 <label for="UserMessage">User Message</label>
-                <InputText class="form-control form-control-xl" @bind-Value="@TaskObject.UserMessage" />
+                <InputText class="form-control form-control-xl" @bind-Value="@CopyObject.UserMessage" />
             </div>
 
             <div class="form-group">
                 <label for="UserNotes">User Notes</label>
-                <InputText class="form-control form-control-xl" @bind-Value="@TaskObject.UserNotes" />
+                <InputText class="form-control form-control-xl" @bind-Value="@CopyObject.UserNotes" />
             </div>
 
             <div class="form-group">
                 <label for="NextStatus">Next Status</label>
                 <InputSelect class="form-control form-control-sm"
-                             @bind-Value="TaskObject.NextStatus">
+                             @bind-Value="CopyObject.NextStatus">
                     <option value=""></option>
                     @foreach (var s in ListOfStatus)
                         {
@@ -132,7 +132,7 @@
                         </option>
                         }
                 </InputSelect>
-                <ValidationMessage For="@(() => TaskObject.Type)" />
+                <ValidationMessage For="@(() => CopyObject.Type)" />
             </div>
 
         }
@@ -144,9 +144,9 @@
             </div>
         }
 
-        <input type="hidden" @bind-value="@TaskObject.CaseType" />
-        <input type="hidden" @bind-value="@TaskObject.CaseTypeGroup" />
-        <input type="hidden" @bind-value="@TaskObject.ParentId" />
+        <input type="hidden" @bind-value="@CopyObject.CaseType" />
+        <input type="hidden" @bind-value="@CopyObject.CaseTypeGroup" />
+        <input type="hidden" @bind-value="@CopyObject.ParentId" />
 
 
 
