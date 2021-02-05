@@ -17,32 +17,32 @@ namespace Gizmo_V1_02.Pages.Chapters
     {
         public bool suppressStep
         {
-            get { return (TaskObject.SuppressStep == "Y" ? true : false); }
+            get { return (CopyObject.SuppressStep == "Y" ? true : false); }
             set
             {
                 if (value)
                 {
-                    TaskObject.SuppressStep = "Y";
+                    CopyObject.SuppressStep = "Y";
                 }
                 else
                 {
-                    TaskObject.SuppressStep = "N";
+                    CopyObject.SuppressStep = "N";
                 }
             }
         }
 
         public int? RescheduleDays
         {
-            get { return TaskObject.RescheduleDays; }
+            get { return CopyObject.RescheduleDays; }
             set
             {
                 if (value < 0)
                 {
-                    TaskObject.RescheduleDays = 0;
+                    CopyObject.RescheduleDays = 0;
                 }
                 else
                 {
-                    TaskObject.RescheduleDays = value;
+                    CopyObject.RescheduleDays = value;
                 }
             }
         }

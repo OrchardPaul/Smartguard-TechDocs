@@ -263,23 +263,30 @@ else
 
                 <div class="grid-chapter-docs">
                     <div class="mb-3 flex-box">
-                        <h5>Personal Details</h5>
                         <div class="detail-group-box">
-                            <div class="form-group">
-                                <label>Chapter Name</label>
-                                <input type="text" class="form-control" style="width: 350px;" />
-                            </div>
-                            <div class="form-group">
-                                <label for="BgColour">Background Colour</label>
-                                <select class="form-control">
-                                    <option></option>
-                                </select>
-                            </div>
+                            <EditForm Model="selectedChapter" OnValidSubmit="SaveChapterDetails">
+                                <div class="form-group">
+                                    <label>Chapter Name</label>
+                                    <InputText @bind-Value="selectedChapter.Name" class="form-control" style="width: 350px;" />
+                                </div>
+                                <div class="form-group">
+                                    <label for="BgColour">Background Colour</label>
+                                    <select @bind="selectedChapter.BackgroundColour" style="background-color: @getHTMLColourFromAndroid(selectedChapter.BackgroundColour)" class="form-control">
+                                        @foreach (var colour in ListChapterColours)
+                                        {
+                                            <option style="background-color: @getHTMLColourFromAndroid(colour.ColourCode)" value="@colour.ColourCode">
+                                                @colour.ColourName
+                                            </option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="button-container">
+                                    <button type="submit" class="btn btn-main">Save Changes</button>
+                                </div>
+                            </EditForm>
                         </div>
-                        <div class="button-container">
-                            <button type="submit" class="btn btn-main">Save Changes</button>
-                            
-                        </div>
+                        
+                        
                     </div>
                 </div>
             }

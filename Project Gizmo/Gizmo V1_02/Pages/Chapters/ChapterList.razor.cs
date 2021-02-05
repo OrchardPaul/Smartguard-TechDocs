@@ -17,11 +17,18 @@ using GadjIT.ClientContext.P4W.Custom;
 using GadjIT.ClientContext.P4W.Functions;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
+using System.Text.RegularExpressions;
 
 namespace Gizmo_V1_02.Pages.Chapters
 {
     public partial class ChapterList
     {
+        private class ChapterColour
+        {
+            public string ColourName { get; set; }
+            public string ColourCode { get; set; }
+        }
+
 
         [Inject]
         IModalService Modal { get; set; }
@@ -115,7 +122,23 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         public List<string> lstDocTypes { get; set; } = new List<string> { "Doc", "Letter", "Form", "Email", "Step" };
 
-        
+
+
+        private List<ChapterColour> ListChapterColours { get; set; } = new List<ChapterColour>
+                                                            { 
+                                                                new ChapterColour { ColourName = "Grey", ColourCode = "#3F000000"},
+                                                                new ChapterColour { ColourName = "Blue", ColourCode = "#3F0074FF"},
+                                                                new ChapterColour { ColourName = "Pink", ColourCode = "#3FFD64EF"},
+                                                                new ChapterColour { ColourName = "Peach", ColourCode = "#3FEA9C66"},
+                                                                new ChapterColour { ColourName = "Yellow", ColourCode = "#3FFFFF00"},
+                                                                new ChapterColour { ColourName = "Beige", ColourCode = "#3F957625"},
+                                                                new ChapterColour { ColourName = "Lilac", ColourCode = "#3F6E6FDB"},
+                                                                new ChapterColour { ColourName = "Green", ColourCode = "#3F32EC29"},
+                                                                new ChapterColour { ColourName = "Aqua", ColourCode = "#3F5BDCD0"}
+                                                            };
+
+            
+
         protected override async Task OnInitializedAsync()
         {
             //var authenticationState = await pageAuthorisationState.ChapterListAuthorisation();
@@ -198,6 +221,20 @@ namespace Gizmo_V1_02.Pages.Chapters
             await RefreshChapterItems("All");
 
             StateHasChanged();
+        }
+
+        private async void SaveChapterDetails()
+        {
+            SelectedChapterObject.Name = selectedChapter.Name;
+
+            SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(selectedChapter);
+            await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
+
+            await RefreshChapterItems("All");
+            await InvokeAsync(() =>
+            {
+                StateHasChanged();
+            });
         }
 
 
@@ -930,6 +967,30 @@ namespace Gizmo_V1_02.Pages.Chapters
                 return true;
             }
 
+        }
+
+        /// <summary>
+        /// moves the AA (transparancy) element of an android hex color to the end of the string
+        /// XAML Forms use Hex color but in format #aarrggbb
+        /// HTML hex is in format #rrggbbaa
+        /// </summary>
+        /// <remarks>
+        /// </remarks>
+        /// <returns>string: row-changed or row-changedx</returns>
+        public string getHTMLColourFromAndroid(string colAndroid)
+        {
+            string colHTML = "";
+
+            if (Regex.IsMatch(colAndroid, "^#(?:[0-9a-fA-F]{8})$"))
+            {
+                colHTML = "#" + colAndroid.Substring(3, 6) + colAndroid.Substring(1, 2);
+            }
+            else
+            {
+                colHTML = "#FFFFFFFF";
+            }
+
+            return colHTML;
         }
     }
 }
