@@ -7,7 +7,9 @@
     {
         <div class="row grid-row grid-row-md">
             <div class="col-12 data-item @(fee.selected ? "data-item-selected" : "" )">
-                
+                <div class="data-item-sub">
+                    @fee.FeeItem.Name
+                </div>  
                 @if (!string.IsNullOrEmpty(@fee.feeDefinition.WorkProvider))
                     {
             <div class="data-item-right font-100">
