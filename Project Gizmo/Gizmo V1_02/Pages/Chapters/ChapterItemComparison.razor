@@ -96,6 +96,34 @@
                 </tr>
                 <tr>
                     <td>
+                        User Message
+                    </td>
+                    <td>
+                        <input type="text" class="read-only" value="@Object.ChapterObject.UserMessage" />
+                    </td>
+                    <td>
+                        <input type="text" class="read-only" value="@Object.AltObject.UserMessage" />
+                    </td>
+                    <td>
+                        <span class="fa fa-@(Object.ChapterObject.UserMessage == @Object.AltObject.UserMessage ? "check" : "exclamation")"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Next Status
+                    </td>
+                    <td>
+                        <input type="text" class="read-only" value="@Object.ChapterObject.NextStatus" />
+                    </td>
+                    <td>
+                        <input type="text" class="read-only" value="@Object.AltObject.NextStatus" />
+                    </td>
+                    <td>
+                        <span class="fa fa-@(Object.ChapterObject.NextStatus == @Object.AltObject.NextStatus ? "check" : "exclamation")"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
                         Reschedule Days
                     </td>
                     <td>

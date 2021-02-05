@@ -96,6 +96,24 @@ namespace GadjIT.ClientContext.P4W.Custom
                 ComparisonList.Add("AltDisplayName");
             }
 
+            if (ChapterObject.UserMessage != compItem.UserMessage)
+            {
+                isSame = false;
+                ComparisonList.Add("UserMessage");
+            }
+
+            if (ChapterObject.UserNotes != compItem.UserNotes)
+            {
+                isSame = false;
+                ComparisonList.Add("UserNotes");
+            }
+
+            if (ChapterObject.NextStatus != compItem.NextStatus)
+            {
+                isSame = false;
+                ComparisonList.Add("NextStatus");
+            }
+
             return isSame;
         }
     }
