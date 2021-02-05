@@ -635,8 +635,8 @@ else
                                             @if (!(string.IsNullOrEmpty(lstVmFeeModalItems.Where(FMI => FMI.feeDefinition.FeeDesc == fee.ChapterObject.Name).Select(FMI => FMI.feeDefinition.WorkProvider).SingleOrDefault())))
                                             {
                                                 <div class="data-item-right mr-2 font-100">
-                                                    <ModalTooltip Direction="top" Text=@("USED BY: " + lstVmFeeModalItems.Where(FMI => FMI.feeDefinition.FeeDesc == fee.ChapterObject.Name).Select(FMI => FMI.feeDefinition.WorkProvider).SingleOrDefault()) Class="w-3">
-                                                        <span class="fa fa-comment"></span>
+                                                    <ModalTooltip Direction="left" Text=@("USED BY: " + lstVmFeeModalItems.Where(FMI => FMI.feeDefinition.FeeDesc == fee.ChapterObject.Name).Select(FMI => FMI.feeDefinition.WorkProvider).SingleOrDefault()) Class="w-3">
+                                                        <span class="fa fa-user-tie"></span>
                                                     </ModalTooltip>
                                                 </div>
                                             }

@@ -59,7 +59,7 @@ h5{
     color: #009933;
 }
 
-.fa-times {
+.fa-times,  {
     color: #cc0000;
 }
 
@@ -203,13 +203,13 @@ ul.ul-simple {
 
 .tooltip-wrapper span:first-child.tooltip-w-1 {
     min-width: 140px;
-    margin-left: -70px;
+    margin-left: -210px !important;
 }
 .tooltip-wrapper span:first-child.tooltip-w-2 {
     min-width: 220px;
-    margin-left: -110px;
+    margin-left: -230px !important;
 }
 .tooltip-wrapper span:first-child.tooltip-w-3 {
     min-width: 300px;
-    margin-left: -150px;
+    margin-left: -310px !important;
 }
