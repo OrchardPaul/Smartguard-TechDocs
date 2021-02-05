@@ -479,7 +479,7 @@ else
                                                     {
                                                         <div class="data-item-right schedule-days">
                                                             <ModalTooltip Direction="left" Text="@(string.IsNullOrEmpty(doc.ChapterObject.AsName) ? "" : "The step named " + doc.ChapterObject.AsName + " will be scheduled for " +  doc.ChapterObject.RescheduleDays.ToString() + " days")">
-                                                                <span class="badge rounded-square">@doc.ChapterObject.RescheduleDays.ToString() days</span>
+                                                                <span class="badge rounded-square">@doc.ChapterObject.RescheduleDays.ToString()d</span>
                                                             </ModalTooltip>
                                                         </div>
                                                     }
