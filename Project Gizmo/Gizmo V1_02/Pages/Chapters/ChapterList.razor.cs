@@ -795,7 +795,8 @@ namespace Gizmo_V1_02.Pages.Chapters
                                     RescheduleDays = editObject.ChapterObject.RescheduleDays,
                                     AltDisplayName = editObject.ChapterObject.AltDisplayName,
                                     UserMessage = editObject.ChapterObject.UserMessage,
-                                    UserNotes = editObject.ChapterObject.UserNotes
+                                    UserNotes = editObject.ChapterObject.UserNotes,
+                                    NextStatus = editObject.ChapterObject.NextStatus
                                 };
          
             var parameters = new ModalParameters();
