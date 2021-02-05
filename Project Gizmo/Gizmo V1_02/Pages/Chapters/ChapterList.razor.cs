@@ -987,8 +987,7 @@ namespace Gizmo_V1_02.Pages.Chapters
         {
             string colHTML = "";
 
-
-            if (!string.IsNullOrEmpty(colAndroid) && Regex.IsMatch(colAndroid, "^#(?:[0-9a-fA-F]{8})$"))
+            if (!string.IsNullOrEmpty(colAndroid) && (Regex.IsMatch(colAndroid, "^#(?:[0-9a-fA-F]{8})$")))
             {
                 colHTML = "#" + colAndroid.Substring(3, 6) + colAndroid.Substring(1, 2);
             }

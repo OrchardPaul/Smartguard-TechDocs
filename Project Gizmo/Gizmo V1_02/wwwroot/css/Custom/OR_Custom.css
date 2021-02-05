@@ -710,11 +710,11 @@
 }
 
 .grid-chapter-docs .row .data-item:nth-of-type(1) {
-    width: 50%;
+    width: 54%;
 }
 
-.grid-chapter-docs .row .data-item:nth-of-type(2), .grid-chapter-docs .grid-row .data-item:nth-of-type(3) {
-    width: 25%;
+.grid-chapter-docs .row .data-item:nth-of-type(2), .grid-chapter-docs .row .data-item:nth-of-type(3) {
+    width: 23%;
 }
 
 @media (max-width: 992px) {
