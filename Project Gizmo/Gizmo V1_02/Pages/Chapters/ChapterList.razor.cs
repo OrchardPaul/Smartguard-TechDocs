@@ -100,7 +100,7 @@ namespace Gizmo_V1_02.Pages.Chapters
         public string ModalHeight { get; set; }
         public string ModalWidth { get; set; }
 
-        public string navDisplay = "Agenda";
+        public string navDisplay = "Chapter";
 
         private bool seqMoving = false;
 
@@ -115,7 +115,7 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         public List<string> lstDocTypes { get; set; } = new List<string> { "Doc", "Letter", "Form", "Email", "Step" };
 
-
+        
         protected override async Task OnInitializedAsync()
         {
             //var authenticationState = await pageAuthorisationState.ChapterListAuthorisation();
@@ -191,7 +191,7 @@ namespace Gizmo_V1_02.Pages.Chapters
             GetItemListByChapter(chapter.Id);
             compareSystems = false;
             rowChanged = 0;
-            navDisplay = "Agenda";
+            navDisplay = "Chapter";
 
             feeDefinitions = await chapterManagementService.GetFeeDefs(selectedChapter.CaseTypeGroup, selectedChapter.CaseType);
 
