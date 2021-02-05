@@ -66,6 +66,9 @@ namespace Gizmo_V1_02.Pages.Chapters
                 taskObject.AsName = Object.AltObject.AsName;
                 taskObject.RescheduleDays = Object.AltObject.RescheduleDays;
                 taskObject.AltDisplayName = Object.AltObject.AltDisplayName;
+                taskObject.UserMessage = Object.AltObject.UserMessage;
+                taskObject.UserNotes = Object.AltObject.UserNotes;
+                taskObject.NextStatus = Object.AltObject.NextStatus;
 
                 CurrentChapterRow.ChapterData = JsonConvert.SerializeObject(CurrentChapter);
                 await chapterManagementService.Update(CurrentChapterRow).ConfigureAwait(false);
@@ -81,6 +84,10 @@ namespace Gizmo_V1_02.Pages.Chapters
                 taskObject.AsName = Object.ChapterObject.AsName;
                 taskObject.RescheduleDays = Object.ChapterObject.RescheduleDays;
                 taskObject.AltDisplayName = Object.ChapterObject.AltDisplayName;
+                taskObject.UserMessage = Object.ChapterObject.UserMessage;
+                taskObject.UserNotes = Object.ChapterObject.UserNotes;
+                taskObject.NextStatus = Object.ChapterObject.NextStatus;
+
 
                 await sessionState.SwitchSelectedSystem();
                 AltChapterRow.ChapterData = JsonConvert.SerializeObject(AltChapter);
@@ -114,7 +121,10 @@ namespace Gizmo_V1_02.Pages.Chapters
                     CompleteName = Object.AltObject.CompleteName,
                     AsName = Object.AltObject.AsName,
                     RescheduleDays = Object.AltObject.RescheduleDays,
-                    AltDisplayName = Object.AltObject.AltDisplayName
+                    AltDisplayName = Object.AltObject.AltDisplayName,
+                    UserMessage = Object.AltObject.UserMessage,
+                    UserNotes = Object.AltObject.UserNotes,
+                    NextStatus = Object.AltObject.NextStatus
                 };
 
                 CurrentChapter.ChapterItems.Add(AltObject);
@@ -137,7 +147,10 @@ namespace Gizmo_V1_02.Pages.Chapters
                     CompleteName = Object.ChapterObject.CompleteName,
                     AsName = Object.ChapterObject.AsName,
                     RescheduleDays = Object.ChapterObject.RescheduleDays,
-                    AltDisplayName = Object.ChapterObject.AltDisplayName
+                    AltDisplayName = Object.ChapterObject.AltDisplayName,
+                    UserMessage = Object.ChapterObject.UserMessage,
+                    UserNotes = Object.ChapterObject.UserNotes,
+                    NextStatus = Object.ChapterObject.NextStatus
                 };
 
                 AltChapter.ChapterItems.Add(PushObject);
