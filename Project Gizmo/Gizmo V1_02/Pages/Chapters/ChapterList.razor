@@ -141,7 +141,7 @@ else
 
                                                 @if (sessionState.isAdminUser)
                                                 {
-                                                    <div class="btn-ellipses float-left">
+                                                    <div class="btn-ellipses float-left ">
                                                         <span class="fa fa-ellipsis-v"></span>
                                                         <div class="ellipsis-menu">
                                                             <ul>
@@ -162,7 +162,7 @@ else
                                                     </div>
                                                 }
                                                 <div class="data-item-sub">
-                                                    <span class=" fa fa-share-alt-square mr-2"></span>
+                                                    <span class="hidden-sm-down"><span class=" fa fa-share-alt-square mr-2"></span></span>
                                                     @Chapter.ChapterObject.Name
                                                 </div>
                                                 @if (sessionState.isAdminUser)
@@ -196,10 +196,12 @@ else
 {
 
     <div class="tran-block page-header-block ">
-        <div class="float-left back-link">
-            <a href="javascript: void(0);" @onclick="SelectHome"><span class="col-alt fa fa-angle-double-left"></span></a>
+        <div class="page-header-title">
+            <div class="float-left back-link" @onclick="SelectHome">
+                <span class="col-alt fa fa-angle-double-left"></span>
+            </div>
+            <h3>Chapter: @selectedChapter.Name</h3>
         </div>
-        <h3>Chapter: @selectedChapter.Name</h3>
         <p class="hidden-md-down">Group: <span class="badge badge-grey mr-3">@selectedChapter.CaseTypeGroup</span> Case Type: <span class="badge badge-grey mr-3">@selectedChapter.CaseType</span> Chapter: <span class="badge badge-grey mr-3"> @selectedChapter.Name</span></p>
     </div>
 
@@ -208,20 +210,20 @@ else
             <nav class="navbar navbar-expand ">
 
                 <ul class="navbar-nav">
-                    <li class="@(navDisplay == "Chapter" ? "active" : "")">
-                        <a href="javascript:void(0);" @onclick='() => ShowNav("Chapter")'><span>Chapter</span></a>
+                    <li class="nav-item @(navDisplay == "Chapter" ? "active" : "")" @onclick='() => ShowNav("Chapter")'>
+                        <span>Chapter</span>
                     </li>
-                    <li class="@(navDisplay == "Agenda" ? "active" : "")">
-                        <a href="javascript:void(0);" @onclick='() => ShowNav("Agenda")'><span>Agenda</span></a>
+                    <li class="nav-item @(navDisplay == "Agenda" ? "active" : "")" @onclick='() => ShowNav("Agenda")'>
+                        <span>Agenda</span>
                     </li>
-                    <li class="@(navDisplay == "Status" ? "active" : "")">
-                        <a href="javascript:void(0);" @onclick='() => ShowNav("Status")'><span>Status</span></a>
+                    <li class="nav-item @(navDisplay == "Status" ? "active" : "")" @onclick='() => ShowNav("Status")'>
+                        <span>Status</span>
                     </li>
-                    <li class="@(navDisplay == "Docs" ? "active" : "")">
-                        <a href="javascript:void(0);" @onclick='() => ShowNav("Docs")'><span>Documents</span></a>
+                    <li class="nav-item @(navDisplay == "Docs" ? "active" : "")" @onclick='() => ShowNav("Docs")'>
+                        <span>Documents</span>
                     </li>
-                    <li class="@(navDisplay == "Fees" ? "active" : "")">
-                        <a href="javascript:void(0);" @onclick='() => ShowNav("Fees")'><span>Fees</span></a>
+                    <li class="nav-item @(navDisplay == "Fees" ? "active" : "")" @onclick='() => ShowNav("Fees")'>
+                        <span>Fees</span>
                     </li>
 
 
@@ -232,20 +234,20 @@ else
 
         <div class="page-navbar hidden-xl-up">
             <ul class="nav nav-pills tran-tabs">
-                <li class="nav-item @(navDisplay == "Chapter" ? "active" : "")">
-                    <a class="nav-link" href="javascript:void(0);" @onclick='() => ShowNav("Chapter")'><span>Chapter</span></a>
+                <li class="nav-item @(navDisplay == "Chapter" ? "active" : "")" @onclick='() => ShowNav("Chapter")'>
+                    <span>Chapter</span>
                 </li>
-                <li class="nav-item @(navDisplay == "Agenda" ? "active" : "")">
-                    <a class="nav-link" href="javascript:void(0);" @onclick='() => ShowNav("Agenda")'><span>Agenda</span></a>
+                <li class="nav-item @(navDisplay == "Agenda" ? "active" : "")" @onclick='() => ShowNav("Agenda")'>
+                    <span>Agenda</span>
                 </li>
-                <li class="nav-item  @(navDisplay == "Status" ? "active" : "")">
-                    <a class="nav-link" href="javascript:void(0);" @onclick='() => ShowNav("Status")'><span>Status</span></a>
+                <li class="nav-item  @(navDisplay == "Status" ? "active" : "")" @onclick='() => ShowNav("Status")'>
+                    <span>Status</span>
                 </li>
-                <li class="nav-item @(navDisplay == "Docs" ? "active" : "")">
-                    <a class="nav-link" href="javascript:void(0);" @onclick='() => ShowNav("Docs")'><span>Documents</span></a>
+                <li class="nav-item @(navDisplay == "Docs" ? "active" : "")" @onclick='() => ShowNav("Docs")'>
+                    <span>Docs</span>
                 </li>
-                <li class="nav-item @(navDisplay == "Fees" ? "active" : "")">
-                    <a class="nav-link" href="javascript:void(0);" @onclick='() => ShowNav("Fees")'><span>Fees</span></a>
+                <li class="nav-item @(navDisplay == "Fees" ? "active" : "")" @onclick='() => ShowNav("Fees")'>
+                    <span>Fees</span>
                 </li>
 
 
@@ -263,30 +265,49 @@ else
 
                 <div class="grid-chapter-docs">
                     <div class="mb-3 flex-box">
-                        <div class="detail-group-box">
+                        @if ((sessionState.isAdminUser))
+                        {
                             <EditForm Model="selectedChapter" OnValidSubmit="SaveChapterDetails">
-                                <div class="form-group">
-                                    <label>Chapter Name</label>
-                                    <InputText @bind-Value="selectedChapter.Name" class="form-control" style="width: 350px;" />
-                                </div>
-                                <div class="form-group">
-                                    <label for="BgColour">Background Colour</label>
-                                    <select @bind="selectedChapter.BackgroundColour" style="background-color: @getHTMLColourFromAndroid(selectedChapter.BackgroundColour)" class="form-control">
-                                        @foreach (var colour in ListChapterColours)
-                                        {
-                                            <option style="background-color: @getHTMLColourFromAndroid(colour.ColourCode)" value="@colour.ColourCode">
-                                                @colour.ColourName
-                                            </option>
-                                        }
-                                    </select>
+                                <div class="detail-group-box">
+                                    <div class="form-group">
+                                        <label>Chapter Name</label>
+                                        <InputText @bind-Value="selectedChapter.Name" class="form-control form-control-lg" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="BgColour">Background Colour</label>
+                                        <select @bind="selectedChapter.BackgroundColour" style="background-color: @getHTMLColourFromAndroid(selectedChapter.BackgroundColour)" class="form-control form-control-lg">
+                                            @foreach (var colour in ListChapterColours)
+                                            {
+                                                <option style="background-color: @getHTMLColourFromAndroid(colour.ColourCode)" value="@colour.ColourCode">
+                                                    @colour.ColourName
+                                                </option>
+                                            }
+                                        </select>
+                                    </div>
+
                                 </div>
                                 <div class="button-container">
                                     <button type="submit" class="btn btn-main">Save Changes</button>
                                 </div>
                             </EditForm>
-                        </div>
-                        
-                        
+                        }
+                        else
+                        {
+                            <div class="detail-group-box">
+                                <div class="form-group">
+                                    <label>Chapter Name: </label>
+                                    <label class="form-control-value">@selectedChapter.Name</label>
+                                </div>
+                                <div class="form-group">
+                                    <label>Background Colour:</label>
+                                    <label class="form-control-value" style="background-color: @getHTMLColourFromAndroid(selectedChapter.BackgroundColour)">
+                                    @ListChapterColours.Where(C => C.ColourCode == @selectedChapter.BackgroundColour).Select(C => C.ColourName).SingleOrDefault()
+                                    </label>
+                                </div>
+
+                            </div>
+                        }
+
                     </div>
                 </div>
             }

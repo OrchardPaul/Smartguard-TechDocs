@@ -20,20 +20,20 @@ else
 
 
         <div class="page-navbar hidden-md-down">
-            <nav class="navbar navbar-expand-lg navbar-dark bg-dark ">
+            <nav class="navbar navbar-expand-lg navbar-dark  ">
 
                 <ul class="navbar-nav">
-                    <li class="@(navDisplay == "Department" ? "active" : "")">
-                        <a href="javascript:void(0);" @onclick='(() => ShowNav("Department"))'><span>Departments</span></a>
+                    <li class="nav-item @(navDisplay == "Department" ? "active" : "")" @onclick='(() => ShowNav("Department"))'>
+                        <span>Departments</span>
                     </li>
-                    <li class="@(navDisplay == "Group" ? "active" : "")">
-                        <a href="javascript:void(0);" @onclick='(() => ShowNav("Group"))'><span>Groups</span></a>
+                    <li class="nav-item @(navDisplay == "Group" ? "active" : "")" @onclick='(() => ShowNav("Group"))'>
+                        <span>Groups</span>
                     </li>
-                    <li class="@(navDisplay == "Work Type" ? "active" : "")">
-                        <a href="javascript:void(0);" @onclick='(() => ShowNav("Work Type"))'><span>Work Types</span></a>
+                    <li class="nav-item @(navDisplay == "Work Type" ? "active" : "")" @onclick='(() => ShowNav("Work Type"))'>
+                        <span>Work Types</span>
                     </li>
-                    <li class="last @(navDisplay == "Grouping" ? "active" : "")">
-                        <a href="javascript:void(0);" @onclick='(() => ShowNav("Grouping"))'><span>Grouping</span></a>
+                    <li class="nav-item last @(navDisplay == "Grouping" ? "active" : "")" >
+                        <span>Grouping</span>
                     </li>
 
                 </ul>
@@ -42,17 +42,17 @@ else
         </div>
         <div class="page-navbar hidden-lg-up">
             <ul class="nav nav-pills tran-tabs">
-                <li class="nav-item @(navDisplay == "Department" ? "active" : "")">
-                    <a class="nav-link" href="javascript:void(0);" @onclick='(() => ShowNav("Department"))'>Departments</a>
+                <li class="nav-item @(navDisplay == "Department" ? "active" : "")" @onclick='(() => ShowNav("Department"))'>
+                    Departments
                 </li>
-                <li class="nav-item @(navDisplay == "Group" ? "active" : "")">
-                    <a class="nav-link" href="javascript:void(0);" @onclick='(() => ShowNav("Group"))'>Groups</a>
+                <li class="nav-item @(navDisplay == "Group" ? "active" : "")" @onclick='(() => ShowNav("Group"))'>
+                    Groups
                 </li>
-                <li class="nav-item @(navDisplay == "Work Type" ? "active" : "")">
-                    <a class="nav-link" href="javascript:void(0);" @onclick='(() => ShowNav("Work Type"))'>Work Types</a>
+                <li class="nav-item @(navDisplay == "Work Type" ? "active" : "")" @onclick='(() => ShowNav("Work Type"))'>
+                    Work Types
                 </li>
-                <li class="nav-item @(navDisplay == "Grouping" ? "active" : "")">
-                    <a class="nav-link " href="javascript:void(0);" @onclick='(() => ShowNav("Grouping"))'>Grouping</a>
+                <li class="nav-item @(navDisplay == "Grouping" ? "active" : "")" @onclick='(() => ShowNav("Grouping"))'>
+                    Grouping
                 </li>
 
             </ul>
