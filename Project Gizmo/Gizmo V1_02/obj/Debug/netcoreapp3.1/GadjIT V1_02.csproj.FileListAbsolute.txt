@@ -155,8 +155,6 @@ C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\bin\Debug\netcor
 C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\bin\Debug\netcoreapp3.1\runtimes\unix\lib\netcoreapp2.0\System.Runtime.Caching.dll
 C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp2.0\System.Runtime.Caching.dll
 C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\bin\Debug\netcoreapp3.1\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll
-C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\bin\Debug\netcoreapp3.1\GadjIT.Context.dll
-C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\bin\Debug\netcoreapp3.1\GadjIT.Context.pdb
 C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\GadjIT V1_02.csprojAssemblyReference.cache
 C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\GadjIT V1_02.AssemblyInfoInputs.cache
 C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\GadjIT V1_02.AssemblyInfo.cs
@@ -175,10 +173,6 @@ C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcor
 C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\RazorDeclaration\Pages\Admin\UserManagement\ManageUsersOverview.razor.g.cs
 C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\RazorDeclaration\Pages\ConfirmDialog.razor.g.cs
 C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\RazorDeclaration\Pages\Index.razor.g.cs
-C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\RazorDeclaration\Pages\OR_RESI_Chapters\ChapterAddOrEdit.razor.g.cs
-C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\RazorDeclaration\Pages\OR_RESI_Chapters\ChapterCaseTypeEdit.razor.g.cs
-C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\RazorDeclaration\Pages\OR_RESI_Chapters\ChapterDetail.razor.g.cs
-C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\RazorDeclaration\Pages\OR_RESI_Chapters\ChapterList.razor.g.cs
 C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\RazorDeclaration\Pages\Shared\Modals\ModalDelete.razor.g.cs
 C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\RazorDeclaration\Pages\Shared\Modals\ModalInfo.razor.g.cs
 C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\RazorDeclaration\Pages\SystemNav\CompanyManagement\CompanyEdit.razor.g.cs
@@ -212,10 +206,6 @@ C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcor
 C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\Admin\UserManagement\ManageUsersOverview.razor.g.cs
 C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\ConfirmDialog.razor.g.cs
 C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\Index.razor.g.cs
-C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\OR_RESI_Chapters\ChapterAddOrEdit.razor.g.cs
-C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\OR_RESI_Chapters\ChapterCaseTypeEdit.razor.g.cs
-C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\OR_RESI_Chapters\ChapterDetail.razor.g.cs
-C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\OR_RESI_Chapters\ChapterList.razor.g.cs
 C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\Shared\Modals\ModalDelete.razor.g.cs
 C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\Shared\Modals\ModalInfo.razor.g.cs
 C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\SystemNav\CompanyManagement\CompanyEdit.razor.g.cs
@@ -899,3 +889,28 @@ F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\static
 F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\GadjIT V1_02.dll
 F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\GadjIT V1_02.pdb
 F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\GadjIT V1_02.genruntimeconfig.cache
+C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\bin\Debug\netcoreapp3.1\Blazored.Modal.dll
+C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\bin\Debug\netcoreapp3.1\Microsoft.JSInterop.WebAssembly.dll
+C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\bin\Debug\netcoreapp3.1\Newtonsoft.Json.Schema.dll
+C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\bin\Debug\netcoreapp3.1\GadjIT.ClientContext.dll
+C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\bin\Debug\netcoreapp3.1\GadjIT.GadjitContext.dll
+C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\bin\Debug\netcoreapp3.1\GadjIT.ClientContext.pdb
+C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\bin\Debug\netcoreapp3.1\GadjIT.GadjitContext.pdb
+C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\RazorDeclaration\Pages\Admin\UserManagement\ManageUsersDropDownMenu.razor.g.cs
+C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\RazorDeclaration\Pages\Chapters\ChapterAddOrEdit.razor.g.cs
+C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\RazorDeclaration\Pages\Chapters\ChapterCaseTypeEdit.razor.g.cs
+C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\RazorDeclaration\Pages\Chapters\ChapterDetail.razor.g.cs
+C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\RazorDeclaration\Pages\Chapters\ChapterFees.razor.g.cs
+C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\RazorDeclaration\Pages\Chapters\ChapterItemComparison.razor.g.cs
+C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\RazorDeclaration\Pages\Chapters\ChapterList.razor.g.cs
+C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\RazorDeclaration\Pages\Shared\Modals\ModalSystemSelect.razor.g.cs
+C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\RazorDeclaration\Pages\Shared\Modals\ModalTooltip.razor.g.cs
+C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\Admin\UserManagement\ManageUsersDropDownMenu.razor.g.cs
+C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\Chapters\ChapterAddOrEdit.razor.g.cs
+C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\Chapters\ChapterCaseTypeEdit.razor.g.cs
+C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\Chapters\ChapterDetail.razor.g.cs
+C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\Chapters\ChapterFees.razor.g.cs
+C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\Chapters\ChapterItemComparison.razor.g.cs
+C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\Chapters\ChapterList.razor.g.cs
+C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\Shared\Modals\ModalSystemSelect.razor.g.cs
+C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\Shared\Modals\ModalTooltip.razor.g.cs
