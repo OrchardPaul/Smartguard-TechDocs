@@ -285,11 +285,31 @@ else
                                         </select>
                                     </div>
 
+                                    <div class="form-group">
+                                        <label>General Notes</label>
+                                        <InputTextArea @bind-Value="selectedChapter.GeneralNotes" class="form-control form-control-lg" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Devloper Notes</label>
+                                        <InputTextArea @bind-Value="selectedChapter.DelvolperNotes" class="form-control form-control-lg" />
+                                    </div>
+
                                 </div>
                                 <div class="button-container">
                                     <button type="submit" class="btn btn-main">Save Changes</button>
                                 </div>
                             </EditForm>
+
+                            <AuthorizeView Roles="Super User">
+
+                                <div class="form-group">
+                                    <label>Chapter JSON</label>
+                                    <input type="text" @bind="SelectedChapterObject.ChapterData" class="form-control form-control-lg" />
+                                </div>
+                                <div class="button-container">
+                                    <button type="submit" @onclick="SaveJsonFromDirectInput" class="btn btn-main">Save Changes</button>
+                                </div>
+                            </AuthorizeView>
                         }
                         else
                         {
@@ -301,7 +321,7 @@ else
                                 <div class="form-group">
                                     <label>Background Colour:</label>
                                     <label class="form-control-value" style="background-color: @getHTMLColourFromAndroid(selectedChapter.BackgroundColour)">
-                                    @ListChapterColours.Where(C => C.ColourCode == @selectedChapter.BackgroundColour).Select(C => C.ColourName).SingleOrDefault()
+                                        @ListChapterColours.Where(C => C.ColourCode == @selectedChapter.BackgroundColour).Select(C => C.ColourName).SingleOrDefault()
                                     </label>
                                 </div>
 

@@ -11,6 +11,8 @@ namespace GadjIT.ClientContext.P4W.Custom
         public string Name { get; set; }
         public int SeqNo { get; set; }
         public string BackgroundColour { get; set; }
+        public string GeneralNotes { get; set; }
+        public string DelvolperNotes { get; set; }
         public List<UsrOrDefChapterManagement> ChapterItems { get; set; }
     }
 }

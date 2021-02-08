@@ -237,6 +237,17 @@ namespace Gizmo_V1_02.Pages.Chapters
             });
         }
 
+        private async void SaveJsonFromDirectInput()
+        {
+            await chapterManagementService.Update(SelectedChapterObject);
+
+            SelectChapter(SelectedChapterObject);
+            await InvokeAsync(() =>
+            {
+                StateHasChanged();
+            });
+        }
+
 
         private async void RefreshChapters()
         {
