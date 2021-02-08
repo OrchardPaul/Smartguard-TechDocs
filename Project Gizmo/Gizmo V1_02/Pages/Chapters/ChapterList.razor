@@ -52,7 +52,7 @@ else
                             {
                                 <div class="btn-ellipses float-left">
                                     <span class="fa fa-ellipsis-v"></span>
-                                    <div class="ellipsis-menu">
+                                    <div class="ellipsis-menu" style="margin-top: 20px">
                                         <ul>
                                             <li class="col-main" @onclick='() => PrepareCaseTypeForEdit(caseTypeGroup, "CaseTypeGroup")'>
                                                 <span class="fa fa-font mr-2"></span>
@@ -392,6 +392,7 @@ else
                                                         {
                                                             <div class="btn-ellipses float-left">
                                                                 <span class="fa fa-ellipsis-v"></span>
+                                                                
                                                                 <div class="ellipsis-menu">
                                                                     <ul>
                                                                         <li class="col-main" @onclick='(() => PrepareForEdit(doc, "Steps and Documents"))'>
@@ -437,7 +438,7 @@ else
                                                             @if (doc.DocOrigName != "")
                                                             {
 
-                                                                <div class="data-item-right mr-2 font-100">
+                                                                <div class="data-item-right mr-2 font-100 hidden-md-down">
                                                                     <ModalTooltip Direction="top" Text=@("Template: " + doc.DocOrigName) Class="w-3">
                                                                         <span class="fa fa-clone"></span>
                                                                     </ModalTooltip>
@@ -447,7 +448,7 @@ else
                                                             @if (!string.IsNullOrEmpty(doc.ChapterObject.UserMessage))
                                                             {
 
-                                                                <div class="data-item-right mr-2 font-100">
+                                                                <div class="data-item-right mr-2 font-100 hidden-md-down">
                                                                     <ModalTooltip Direction="top" Text=@("POPUP: " + doc.ChapterObject.UserMessage) Class="w-3">
                                                                         <span class="fa fa-exclamation-triangle"></span>
                                                                     </ModalTooltip>
@@ -457,7 +458,7 @@ else
                                                             @if (!string.IsNullOrEmpty(doc.ChapterObject.UserNotes))
                                                             {
 
-                                                                <div class="data-item-right mr-2 font-100">
+                                                                <div class="data-item-right mr-2 font-100 hidden-md-down">
                                                                     <ModalTooltip Direction="top" Text=@("NOTES: " + doc.ChapterObject.UserNotes) Class="w-3">
                                                                         <span class="fa fa-comment"></span>
                                                                     </ModalTooltip>
