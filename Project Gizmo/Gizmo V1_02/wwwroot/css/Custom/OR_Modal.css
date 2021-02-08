@@ -2,6 +2,11 @@
 /*   POPUP DIALOG MODAL FORMS            */
 /*---------------------------------------*/
 
+.blazored-modal-container{
+
+    z-index: 99999;
+}
+
 .blazored-custom-modal {
     display: flex;
     flex-direction: column;
