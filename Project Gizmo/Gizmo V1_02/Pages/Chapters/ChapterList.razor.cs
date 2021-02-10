@@ -29,6 +29,8 @@ namespace Gizmo_V1_02.Pages.Chapters
             public string ColourCode { get; set; }
         }
 
+        [Inject]
+        IChapterState ChapterState { get; set; }
 
         [Inject]
         IModalService Modal { get; set; }
@@ -220,6 +222,9 @@ namespace Gizmo_V1_02.Pages.Chapters
 
             await RefreshChapterItems("All");
 
+            //prepare data for export (dealt with by separate page so we need to inject the results to the new page)
+            ChapterState.lstAll = lstAll;
+
             StateHasChanged();
         }
 
@@ -231,6 +236,17 @@ namespace Gizmo_V1_02.Pages.Chapters
             await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
 
             await RefreshChapterItems("All");
+            await InvokeAsync(() =>
+            {
+                StateHasChanged();
+            });
+        }
+
+        private async void SaveJsonFromDirectInput()
+        {
+            await chapterManagementService.Update(SelectedChapterObject);
+
+            SelectChapter(SelectedChapterObject);
             await InvokeAsync(() =>
             {
                 StateHasChanged();

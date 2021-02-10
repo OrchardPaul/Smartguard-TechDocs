@@ -72,6 +72,7 @@ namespace Gizmo_V1_02
             services.AddScoped<IMappingSessionState, MappingSessionState>();
             services.AddScoped<IPageAuthorisationState, PageAuthorisationState>();
             services.AddScoped<IUserManagementSelectedUserState, UserManagementSelectedUserState>();
+            services.AddScoped<IChapterState, ChapterState>();
             services.AddBlazoredModal();
         }
 
