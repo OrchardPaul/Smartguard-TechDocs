@@ -223,7 +223,7 @@ namespace Gizmo_V1_02.Pages.Chapters
             await RefreshChapterItems("All");
 
             //prepare data for export (dealt with by separate page so we need to inject the results to the new page)
-            ChapterState.lstAll = lstAll;
+            ChapterState.lstChapterItems = lstAll;
 
             StateHasChanged();
         }
@@ -311,12 +311,18 @@ namespace Gizmo_V1_02.Pages.Chapters
 
                 lstAll = lst.Select(A => new VmUsrOrDefChapterManagement { ChapterObject = A }).ToList();
 
+                //prepare data for export (dealt with by separate page so we need to inject the results to the new page)
+                ChapterState.lstChapterItems = lstAll;
+
                 if (listType == "Agenda" | listType == "All")
                 {
                     lstAgendas = lstAll
                                         .OrderBy(A => A.ChapterObject.SeqNo)
                                         .Where(A => A.ChapterObject.Type == "Agenda")
                                         .ToList();
+
+                    //prepare data for export (dealt with by separate page so we need to inject the results to the new page)
+                    ChapterState.lstChapterItems = lstAgendas;
 
                 }
                 if (listType == "Docs" | listType == "All")
@@ -326,6 +332,8 @@ namespace Gizmo_V1_02.Pages.Chapters
                                         .Where(A => lstDocTypes.Contains(A.ChapterObject.Type))
                                         .ToList();
 
+                    //prepare data for export (dealt with by separate page so we need to inject the results to the new page)
+                    ChapterState.lstChapterItems = lstDocs;
                 }
                 if (listType == "Fees" | listType == "All")
                 {
@@ -333,6 +341,9 @@ namespace Gizmo_V1_02.Pages.Chapters
                                     .OrderBy(A => A.ChapterObject.SeqNo)
                                     .Where(A => A.ChapterObject.Type == "Fee")
                                     .ToList();
+
+                    //prepare data for export (dealt with by separate page so we need to inject the results to the new page)
+                    ChapterState.lstChapterItems = lstFees;
 
                     lstVmFeeModalItems = feeDefinitions
                                             .Select(FD => new VmChapterFee
@@ -370,6 +381,8 @@ namespace Gizmo_V1_02.Pages.Chapters
                                         .Where(A => A.ChapterObject.Type == "Status")
                                         .ToList();
 
+                    //prepare data for export (dealt with by separate page so we need to inject the results to the new page)
+                    ChapterState.lstChapterItems = lstStatus;
                 }
             }
 
@@ -480,6 +493,18 @@ namespace Gizmo_V1_02.Pages.Chapters
             await GetAltSytemChapterItems();
         }
 
+        private void PrepareForExport(List<VmUsrOrDefChapterManagement> items, string header)
+        {
+            var parameters = new ModalParameters();
+            parameters.Add("lstChapterItems", items);
+
+            var options = new ModalOptions()
+            {
+                Class = "blazored-custom-modal modal-chapter-export"
+            };
+
+            Modal.Show<ChapterExport>("Chapter Export", parameters, options);
+        }
 
         private void PrepareForEdit(VmUsrOrDefChapterManagement item, string header)
         {

@@ -1,0 +1,76 @@
+﻿@page "/chapterdata"
+@page "/chapterdata/{ListToDisplay}"
+@page "/chapterdata/{ListToDisplay}/{PageTitle}"
+@page "/chapterdata/{ListToDisplay}/{PageTitle}/{PageSubTitle}"
+
+<h3>@PageTitle</h3>
+<h5>@PageSubTitle</h5>
+
+
+<button onclick="fncPrepDataTables()">Click me</button>
+
+<div class="hidden-data-tables " >
+    <table id="tbl_Export" class="display" style="width:100%">
+        <thead>
+            <tr>
+                <th>CaseTypeGroup</th>
+                <th>CaseType</th>
+                <th>Type</th>
+                <th>Name</th>
+                <th>SeqNo</th>
+                <th>AsName</th>
+                <th>RescheduleDays</th>
+                <th>CompleteName</th>
+                <th>SuppressStep</th>
+                <th>EntityType</th>
+                <th>AltDisplayName</th>
+                <th>UserMessage</th>
+                <th>UserNotes</th>
+                <th>NextStatus</th>
+            </tr>
+        </thead>
+        <tbody>
+    @foreach (var item in lstChapterItems)
+    {
+
+            <tr>
+                <td>@item.ChapterObject.CaseTypeGroup</td>
+                <td>@item.ChapterObject.CaseType</td>
+                <td>@item.ChapterObject.Name</td>
+                <td>@item.ChapterObject.Type</td>
+                <td>@item.ChapterObject.SeqNo</td>
+                <td>@item.ChapterObject.AsName</td>
+                <td>@item.ChapterObject.RescheduleDays</td>
+                <td>@item.ChapterObject.CompleteName</td>
+                <td>@item.ChapterObject.SuppressStep</td>
+                <td>@item.ChapterObject.EntityType</td>
+                <td>@item.ChapterObject.AltDisplayName</td>
+                <td>@item.ChapterObject.UserMessage</td>
+                <td>@item.ChapterObject.UserNotes</td>
+                <td>@item.ChapterObject.NextStatus</td>
+            </tr>
+    }
+
+
+    </tbody>
+            <tfoot>
+                <tr>
+                    <td>CaseTypeGroup</td>
+                    <td>CaseType</td>
+                    <td>Type</td>
+                    <td>Name</td>
+                    <td>SeqNo</td>
+                    <td>AsName</td>
+                    <td>RescheduleDays</td>
+                    <td>CompleteName</td>
+                    <td>SuppressStep</td>
+                    <td>EntityType</td>
+                    <td>AltDisplayName</td>
+                    <td>UserMessage</td>
+                    <td>UserNotes</td>
+                    <td>NextStatus</td>
+                </tr>
+            </tfoot>
+        </table>
+
+</div>

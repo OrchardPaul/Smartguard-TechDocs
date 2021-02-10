@@ -11,7 +11,7 @@
 }
 else
 {
-    
+
     @if (selectedChapter.Name == "" | selectedChapter.Name is null)
     {
         <div class="tran-block page-header-block ">
@@ -21,17 +21,18 @@ else
         <div class="mb-4 col-xl-6 col-lg-12 col-md-12 col-sm-12 grid-tran grid-chapter-nav">
             @if (sessionState.isAdminUser)
             {
-                <div class="grid-actions">
-                    <button @onclick='PrepareChapterForInsert' class="btn btn-main btn-shadow" title="Add new chapter"><i class="fa fa-plus pr-1"></i>New Chapter</button>
-                    @if (!(string.IsNullOrEmpty(selectedChapter.CaseType)))
+            <div class="grid-actions">
+                <button @onclick='PrepareChapterForInsert' class="btn btn-main btn-shadow" title="Add new chapter"><i class="fa fa-plus pr-1"></i>New Chapter</button>
+                @if (!(string.IsNullOrEmpty(selectedChapter.CaseType)))
+                {
+                    @if (!(SequenceIsValid("Chapters")))
                     {
-                        @if (!(SequenceIsValid("Chapters")))
-                        {
-                            <button @onclick='() => CondenseSeq("Chapters")' class="btn btn-main btn-shadow" title="Re-order Sequence Numbers"><i class="fa fa-sort-numeric-down"></i></button>
-                        }
-                    }
+                        <button @onclick='() => CondenseSeq("Chapters")' class="btn btn-main btn-shadow" title="Re-order Sequence Numbers"><i class="fa fa-sort-numeric-down"></i></button>
 
-                </div>
+                    }
+                }
+                <button @onclick='(() => PrepareForExport(lstChapters, "Chapter Export"))' class="btn btn-main btn-shadow" title="Export data to Excel or CSV"><i class="fa fa-file-export"></i><span class="pl-2">Export</span></button>
+            </div>
 
             }
             <div class="container-fluid">
@@ -78,11 +79,11 @@ else
                     {
 
                         @foreach (var caseType in lstChapters.Where(C => C.ChapterObject.ParentId == 0)
-      .Where(C => !(C.ChapterObject.CaseType is null))
-      .Where(C => C.ChapterObject.CaseTypeGroup == selectedChapter.CaseTypeGroup)
-      .Select(C => C.ChapterObject.CaseType)
-      .Distinct()
-      .ToList())
+     .Where(C => !(C.ChapterObject.CaseType is null))
+     .Where(C => C.ChapterObject.CaseTypeGroup == selectedChapter.CaseTypeGroup)
+     .Select(C => C.ChapterObject.CaseType)
+     .Distinct()
+     .ToList())
                         {
 
                             <div class="grid-row-md nav-row-2">
@@ -128,11 +129,11 @@ else
                             {
                                 <div class="grid-nav">
                                     @foreach (var Chapter in lstChapters
-                                                         .Where(C => C.ChapterObject.CaseType == selectedChapter.CaseType)
-                                                         .Where(C => C.ChapterObject.CaseTypeGroup == selectedChapter.CaseTypeGroup)
-                                                         .Where(C => C.ChapterObject.Type == "Chapter")
-                                                         .OrderBy(C => C.ChapterObject.SeqNo)
-                                                         .ToList())
+                                                        .Where(C => C.ChapterObject.CaseType == selectedChapter.CaseType)
+                                                        .Where(C => C.ChapterObject.CaseTypeGroup == selectedChapter.CaseTypeGroup)
+                                                        .Where(C => C.ChapterObject.Type == "Chapter")
+                                                        .OrderBy(C => C.ChapterObject.SeqNo)
+                                                        .ToList())
                                     {
                                         <div class="grid-row-md nav-row-3 no-border @(rowChanged == Chapter.ChapterObject.SeqNo ? ToggleRowChangedClass() : "" )">
                                             <div class="data-item ">
@@ -262,9 +263,38 @@ else
             {
 
                 <div class="grid-chapter-docs">
+                    <div class="grid-actions">
+
+                        <AuthorizeView Roles="Super User">
+                            <button @onclick='() => PrepareForInsert(navDisplay,"Steps and Documents")' class="btn btn-main btn-shadow" title="Copy/Paste Chapter JSON">
+                                <i class="fa fa-paste"></i><span class="pl-2">JSON</span>
+                            </button>
+
+                            @*<div class="form-group">
+                                    <label>Chapter JSON</label>
+                                    <input type="text" @bind="SelectedChapterObject.ChapterData" class="form-control form-control-lg" />
+                                </div>
+                                <div class="button-container">
+                                    <button type="submit" @onclick="SaveJsonFromDirectInput" class="btn btn-main">Save Changes</button>
+                                </div>*@
+                        </AuthorizeView>
+
+                        <button @onclick='(() => PrepareForExport(lstAll, "Chapter Export"))' class="btn btn-main btn-shadow" title="Export data to Excel or CSV">
+                            <i class="fa fa-file-export"></i><span class="pl-2">Export</span>
+                        </button>
+                        
+                    </div>
+
+
+
+
+
                     <div class="mb-3 flex-box">
+
+
                         @if ((sessionState.isAdminUser))
                         {
+
                             <EditForm Model="selectedChapter" OnValidSubmit="SaveChapterDetails">
                                 <div class="detail-group-box">
                                     <div class="form-group">
@@ -294,20 +324,11 @@ else
 
                                 </div>
                                 <div class="button-container">
-                                    <button type="submit" class="btn btn-main">Save Changes</button>
+                                    <button type="submit" class="btn btn-main btn-shadow">Save Changes</button>
                                 </div>
                             </EditForm>
 
-                            <AuthorizeView Roles="Super User">
 
-                                <div class="form-group">
-                                    <label>Chapter JSON</label>
-                                    <input type="text" @bind="SelectedChapterObject.ChapterData" class="form-control form-control-lg" />
-                                </div>
-                                <div class="button-container">
-                                    <button type="submit" @onclick="SaveJsonFromDirectInput" class="btn btn-main">Save Changes</button>
-                                </div>
-                            </AuthorizeView>
                         }
                         else
                         {
@@ -334,14 +355,14 @@ else
             {
 
                 <div class="grid-chapter-docs">
-                    <div class="mb-3 flex-box">
+                    <div class="mb-3 flex-box" style="max-width: 800px;">
                         @if (sessionState.isAdminUser)
                         {
-                            <div class="grid-actions">
-                                <button @onclick='() => PrepareForInsert(navDisplay,"Steps and Documents")' class="btn btn-main btn-shadow" title="Add new document/step"><i class="fa fa-plus"></i></button>
-
-                                <button @onclick='() => CondenseSeq("Docs")' class="btn btn-main btn-shadow @(SequenceIsValid("Docs") ? "invisible" : "")" title="Re-order Sequence Numbers"><i class="fa fa-sort-numeric-down"></i></button>
-                            </div>
+                        <div class="grid-actions" >
+                            <button @onclick='() => PrepareForInsert(navDisplay,"Steps and Documents")' class="btn btn-main btn-shadow" title="Add new document/step"><i class="fa fa-plus"></i></button>
+                            <button @onclick='(() => PrepareForExport(lstDocs, "Chapter Export"))' class="btn btn-main btn-shadow" title="Export data to Excel or CSV"><i class="fa fa-file-export"></i></button>
+                            <button @onclick='() => CondenseSeq("Docs")' class="btn btn-main btn-shadow @(SequenceIsValid("Docs") ? "invisible" : "")" title="Re-order Sequence Numbers"><i class="fa fa-sort-numeric-down"></i></button>
+                        </div>
                         }
                         <div class="pt-1">
                             <ModalTooltip Direction="top" Text="Documents and steps to be made available in the chapter for inserting into the case agenda!">
@@ -579,9 +600,10 @@ else
                     <div class="mb-3 flex-box">
                         @if (sessionState.isAdminUser)
                         {
-                            <div>
-                                <button @onclick='() => PrepareForInsert(navDisplay,"Agenda")' class="btn btn-main btn-shadow" title="Add new agenda"><i class="fa fa-plus"></i></button>
-                            </div>
+                        <div class="grid-actions">
+                            <button @onclick='() => PrepareForInsert(navDisplay,"Agenda")' class="btn btn-main btn-shadow" title="Add new agenda"><i class="fa fa-plus"></i></button>
+                            <button @onclick='(() => PrepareForExport(lstAgendas, "Chapter Export"))' class="btn btn-main btn-shadow" title="Export data to Excel or CSV"><i class="fa fa-file-export"></i></button>
+                        </div>
                         }
                         <div class="pt-1">
                             <ModalTooltip Direction="top" Text="Correspondence stored in these agendas will be made avalible on the History tab.">
@@ -675,11 +697,11 @@ else
                     <div class="mb-3 flex-box">
                         @if (sessionState.isAdminUser)
                         {
-                            <div class="grid-actions">
-                                <button @onclick='() => PrepareFeesForEdit()' class="btn btn-main btn-shadow" title="Change selected fees"><i class="fa fa-pencil-alt"></i></button>
-                                <button @onclick='() => CondenseSeq("Fees")' class="btn btn-main btn-shadow @(SequenceIsValid("Fees") ? "invisible" : "")" title="Re-order Sequence Numbers"><i class="fa fa-sort-numeric-down"></i></button>
-
-                            </div>
+                        <div class="grid-actions">
+                            <button @onclick='() => PrepareFeesForEdit()' class="btn btn-main btn-shadow" title="Change selected fees"><i class="fa fa-pencil-alt"></i></button>
+                            <button @onclick='(() => PrepareForExport(lstFees, "Chapter Export"))' class="btn btn-main btn-shadow" title="Export data to Excel or CSV"><i class="fa fa-file-export"></i></button>
+                            <button @onclick='() => CondenseSeq("Fees")' class="btn btn-main btn-shadow @(SequenceIsValid("Fees") ? "invisible" : "")" title="Re-order Sequence Numbers"><i class="fa fa-sort-numeric-down"></i></button>
+                        </div>
                         }
                         <div class="pt-1">
                             <ModalTooltip Direction="top" Text="Fees to be made available in the chapter. Default values will be automatically calculated where possible.">
@@ -781,10 +803,11 @@ else
                     <div class="mb-3 flex-box">
                         @if (sessionState.isAdminUser)
                         {
-                            <div class="grid-actions">
-                                <button @onclick='() => PrepareForInsert(navDisplay,"Status")' class="btn btn-main btn-shadow" title="Add new status"><i class="fa fa-plus"></i></button>
-                                <button @onclick='() => CondenseSeq("Status")' class="btn btn-main btn-shadow @(SequenceIsValid("Status") ? "invisible" : "")" title="Re-order Sequence Numbers"><i class="fa fa-sort-numeric-down"></i></button>
-                            </div>
+                        <div class="grid-actions">
+                            <button @onclick='() => PrepareForInsert(navDisplay,"Status")' class="btn btn-main btn-shadow" title="Add new status"><i class="fa fa-plus"></i></button>
+                            <button @onclick='(() => PrepareForExport(lstStatus, "Chapter Export"))' class="btn btn-main btn-shadow" title="Export data to Excel or CSV"><i class="fa fa-file-export"></i></button>
+                            <button @onclick='() => CondenseSeq("Status")' class="btn btn-main btn-shadow @(SequenceIsValid("Status") ? "invisible" : "")" title="Re-order Sequence Numbers"><i class="fa fa-sort-numeric-down"></i></button>
+                        </div>
                         }
                         <div class="pt-1">
                             <ModalTooltip Direction="top" Text="Status options to assist with the flow of the chapter and to indicate when the chapter is complete">
