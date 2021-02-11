@@ -102,18 +102,26 @@
     <script type="text/javascript">
 
         function fncPrepDataTables() {
-            $('#tbl_Export').DataTable({
-                // "sDom": '<"#divTableButtons"l><"top"<"clear">>t<"bottom"ip<"clear">f>',
-                "sDom": "<'row'<'col-sm-5'B><'col-sm-5'l><'col-sm-2'f>>" + "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-6'i><'col-sm-6'p>>",
-                "buttons": [
-                    'csv', 'excel'
-                ],
-                "pagingType": "full_numbers",
-                "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
-                "scrollX": true
+            //var table = $('#tbl_Export').DataTable({
+            //    // "sDom": '<"#divTableButtons"l><"top"<"clear">>t<"bottom"ip<"clear">f>',
+            //    "sDom": "<'row'<'col-sm-5'B><'col-sm-5'l><'col-sm-2'f>>" + "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-6'i><'col-sm-6'p>>",
+            //    "buttons": [
+            //        'csv', 'excel'
+            //    ],
+            //    //"pagingType": "full_numbers",
+            //    //"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+            //    //"scrollX": true
 
-            })
+            //})
+            var table = $('#tbl_Export').DataTable();
 
+            new $.fn.dataTable.Buttons(table, {
+                buttons: [
+                    'copy', 'excel', 'csv'
+                ]
+            });
+
+            table.buttons().container().appendTo('.datatable-buttons');
 
         }
 
