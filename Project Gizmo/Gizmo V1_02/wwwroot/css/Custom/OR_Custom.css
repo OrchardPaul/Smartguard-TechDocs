@@ -103,6 +103,70 @@
     }
 }
 
+/*--------------------------------------------------*/
+/*  Same as hidden but taking up no space           */
+/*--------------------------------------------------*/
+
+/* Breakpoint XS */
+@media (max-width: 575px) {
+    .invisible-xs-down, .invisible-sm-down, .invisible-md-down, .invisible-lg-down, .invisible-xl-down,
+    .invisible-xs-up,
+    .invisible-unless-sm, .invisible-unless-md, .invisible-unless-lg, .invisible-unless-xl {
+        display: none !important;
+        position: absolute;
+        left: -99999px;
+        width: 0px;
+    }
+}
+
+/* Breakpoint SM */
+@media (min-width: 576px) and (max-width: 767px) {
+    .invisible-sm-down, .invisible-md-down, .invisible-lg-down, .invisible-xl-down,
+    .invisible-xs-up, .invisible-sm-up,
+    .invisible-unless-xs, .invisible-unless-md, .invisible-unless-lg, .invisible-unless-xl {
+        display: none !important;
+        position: absolute;
+        left: -99999px;
+        width: 0px;
+    }
+}
+
+/* Breakpoint MD */
+@media (min-width: 768px) and (max-width: 991px) {
+    .invisible-md-down, .invisible-lg-down, .invisible-xl-down,
+    .invisible-xs-up, .invisible-sm-up, .invisible-md-up,
+    .invisible-unless-xs, .invisible-unless-sm, .invisible-unless-lg, .invisible-unless-xl {
+        display: none !important;
+        position: absolute;
+        left: -99999px;
+        width: 0px;
+    }
+}
+
+/* Breakpoint LG */
+@media (min-width: 992px) and (max-width: 1199px) {
+    .invisible-lg-down, .invisible-xl-down,
+    .invisible-xs-up, .invisible-sm-up, .invisible-md-up, .invisible-lg-up,
+    .invisible-unless-xs, .invisible-unless-sm, .invisible-unless-md, .invisible-unless-xl {
+        display: none !important;
+        position: absolute;
+        left: -99999px;
+        width: 0px;
+    }
+}
+
+/* Breakpoint XL */
+@media (min-width: 1200px) {
+    .invisible-xl-down,
+    .invisible-xs-up, .invisible-sm-up, .invisible-md-up, .invisible-lg-up, .invisible-xl-up,
+    .invisible-unless-xs, .invisible-unless-sm, .invisible-unless-md, .invisible-unless-lg {
+        display: none !important;
+        position: absolute;
+        left: -99999px;
+        width: 0px;
+    }
+}
+
 /*-----------------------------*/
 /*  FLEX Boxes           */
 /*-----------------------------*/
@@ -162,20 +226,36 @@
     color: #FFF;
 }
 
+.grid-chapter-docs .grid-actions {
+    max-width: 800px;
+}
 .grid-actions {
     margin-bottom: 10px !important;
+    display: flex;
+}
+
+.grid-actions .btn-group{
+    margin: 0 !important;
+    padding: 0 !important;
 }
 
 .grid-actions .btn {
-    margin-left: 30px !important;
+    margin-left: 20px !important;
+    font-size: 1.2rem;
 }
 
 .grid-actions .btn:first-of-type {
     margin-left: 0px;
 }
 
+.grid-actions .btn span {
+    margin-left: 3px !important;
+    font-size: 0.85rem;
+}
 
-    
+.grid-actions .spacer{
+    flex-grow:1;
+}
 
 .data-item-edit {
     padding: 0 !important;
@@ -734,7 +814,7 @@
 
 
         .grid-chapter-docs .info-icon, .grid-chapter-agenda .info-icon, .grid-chapter-fees .info-icon, .grid-chapter-status .info-icon {
-            margin-left: 40px;
+            margin-left: 10px;
         }
 
     .grid-chapter-docs .row .data-item:nth-of-type(1) {
@@ -1004,8 +1084,14 @@
 
     .invisible {
         visibility: hidden;
+        position: absolute !important;
+        left: -9999px !important;
+        width: 0px;
     }
 
+.hidden {
+    visibility: hidden;
+}
     .visible {
         visibility: visible;
     }
