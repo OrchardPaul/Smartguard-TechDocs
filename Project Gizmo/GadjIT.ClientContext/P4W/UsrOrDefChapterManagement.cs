@@ -22,7 +22,7 @@ namespace GadjIT.ClientContext.P4W
         [StringLength(100)]
         public string CaseType { get; set; }
         [StringLength(100)]
-        [Required(ErrorMessage = "<b> Item type must be set </b>")]
+        [Required(ErrorMessage = "Item type must be set")]
         public string Type { get; set; }
         [StringLength(250)]
         [Required]
@@ -51,5 +51,6 @@ namespace GadjIT.ClientContext.P4W
         public string UserMessage { get; set; }
 
         public string UserNotes { get; set; }
+
     }
 }

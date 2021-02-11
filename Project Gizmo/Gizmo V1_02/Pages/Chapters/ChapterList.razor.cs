@@ -18,6 +18,8 @@ using GadjIT.ClientContext.P4W.Functions;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using System.Text.RegularExpressions;
+using Newtonsoft.Json.Schema.Generation;
+using Newtonsoft.Json.Schema;
 
 namespace Gizmo_V1_02.Pages.Chapters
 {
@@ -119,6 +121,8 @@ namespace Gizmo_V1_02.Pages.Chapters
         public bool displaySpinner = true;
 
         public bool ListChapterLoaded = false;
+
+        public bool IsJsonValid = true;
 
         public List<string> lstDocTypes { get; set; } = new List<string> { "Doc", "Letter", "Form", "Email", "Step" };
 
@@ -239,13 +243,28 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         private async void SaveJsonFromDirectInput()
         {
-            await chapterManagementService.Update(SelectedChapterObject);
+            JSchemaGenerator generator = new JSchemaGenerator();
 
-            SelectChapter(SelectedChapterObject);
-            await InvokeAsync(() =>
+            JSchema schema = generator.Generate(typeof(VmChapter));
+            JObject jObject = JObject.Parse(SelectedChapterObject.ChapterData);
+
+            IsJsonValid = jObject.IsValid(schema);
+
+            if (IsJsonValid)
             {
-                StateHasChanged();
-            });
+                var chapterData = JsonConvert.DeserializeObject<VmChapter>(SelectedChapterObject.ChapterData);
+                selectedChapter.ChapterItems = chapterData.ChapterItems;
+                SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(selectedChapter);
+
+                await chapterManagementService.Update(SelectedChapterObject);
+
+                SelectChapter(SelectedChapterObject);
+                await InvokeAsync(() =>
+                {
+                    StateHasChanged();
+                });
+            }
+
         }
 
 
@@ -395,6 +414,8 @@ namespace Gizmo_V1_02.Pages.Chapters
 
                 AltChapterObject = lstAltSystemChapters
                                         .Where(A => A.ChapterObject.Name == SelectedChapterObject.Name)
+                                        .Where(A => A.ChapterObject.CaseType == SelectedChapterObject.CaseType)
+                                        .Where(A => A.ChapterObject.CaseTypeGroup == SelectedChapterObject.CaseTypeGroup)
                                         .Select(C => C.ChapterObject)
                                         .SingleOrDefault();
 
@@ -530,7 +551,7 @@ namespace Gizmo_V1_02.Pages.Chapters
             ShowChapterDetailModal("Insert");
         }
 
-        private void PrepareChapterForInsert()
+        private void PrepNewChapter()
         {
             editChapterObject = new VmUsrOrDefChapterManagement { ChapterObject = new UsrOrDefChapterManagement() };
 
@@ -572,8 +593,20 @@ namespace Gizmo_V1_02.Pages.Chapters
 
             editChapterObject.ChapterObject.SuppressStep = "";
             editChapterObject.ChapterObject.EntityType = "";
+        }
 
+        private void PrepareChapterForInsert()
+        {
+            PrepNewChapter();
             ShowChapterAddOrEditModel();
+        }
+
+        private void PrepareChapterForCopy()
+        {
+            var test = Uri.EscapeDataString(SelectedChapterObject.ChapterData);
+
+            PrepNewChapter();
+            ShowChapterCopyModel();
         }
 
         private void PrepareCaseTypeForEdit(string caseType, string option)
@@ -743,6 +776,24 @@ namespace Gizmo_V1_02.Pages.Chapters
         protected void CondenseFeeSeq()
         {
             CondenseSeq("Fees");
+        }
+
+        protected void ShowChapterCopyModel()
+        {
+            Action Action = RefreshChapters;
+
+            var parameters = new ModalParameters();
+            parameters.Add("TaskObject", editChapterObject);
+            parameters.Add("AllChapters", lstChapters);
+            parameters.Add("currentChapter", selectedChapter);
+            parameters.Add("DataChanged", Action);
+
+            var options = new ModalOptions()
+            {
+                Class = "blazored-custom-modal modal-chapter-chapter"
+            };
+
+            Modal.Show<ChapterCopy>("Copy Chapter", parameters, options);
         }
 
 
@@ -1009,6 +1060,97 @@ namespace Gizmo_V1_02.Pages.Chapters
             }
 
             return colHTML;
+        }
+
+        private async void SyncAll()
+        {
+            compareSystems = true;
+            await GetAltSytemChapterItems();
+            compareSystems = false;
+            SyncToLive("All");
+        }
+
+
+        private async void SyncToLive(string option)
+        {
+            var selectedCopyItems = new VmChapter { ChapterItems = new List<UsrOrDefChapterManagement>() };           
+
+            if (!(AltChapterObject.ChapterData is null))
+            {
+                selectedCopyItems = JsonConvert.DeserializeObject<VmChapter>(AltChapterObject.ChapterData);
+            }
+
+
+            if (option == "Agenda" | option == "All")
+            {
+                foreach (var item in selectedCopyItems.ChapterItems.Where(C => C.Type == "Agenda").ToList())
+                {
+                    selectedCopyItems.ChapterItems.Remove(item);
+                }
+
+                selectedCopyItems.ChapterItems.AddRange(selectedChapter.ChapterItems.Where(C => C.Type == "Agenda").ToList());
+            }
+
+            
+
+            if (option == "Status" | option == "All")
+            {
+                foreach (var item in selectedCopyItems.ChapterItems.Where(C => C.Type == "Status").ToList())
+                {
+                    selectedCopyItems.ChapterItems.Remove(item);
+                }
+
+                selectedCopyItems.ChapterItems.AddRange(selectedChapter.ChapterItems.Where(C => C.Type == "Status").ToList());
+            }
+
+            
+
+            if (option == "Docs" | option == "All")
+            {
+                foreach (var item in selectedCopyItems.ChapterItems.Where(C => lstDocTypes.Contains(C.Type)).ToList())
+                {
+                    selectedCopyItems.ChapterItems.Remove(item);
+                }
+
+                selectedCopyItems.ChapterItems.AddRange(selectedChapter.ChapterItems.Where(C => lstDocTypes.Contains(C.Type)).ToList());
+            }
+
+            
+
+            if (option == "Fees" | option == "All")
+            {
+                foreach (var item in selectedCopyItems.ChapterItems.Where(C => C.Type == "Fee").ToList())
+                {
+                    selectedCopyItems.ChapterItems.Remove(item);
+                }
+
+                selectedCopyItems.ChapterItems.AddRange(selectedChapter.ChapterItems.Where(C => C.Type == "Fee").ToList());
+            }
+
+            AltChapterObject.ChapterData = JsonConvert.SerializeObject(new VmChapter
+            {
+                CaseTypeGroup = AltChapterObject.CaseTypeGroup,
+                CaseType = AltChapterObject.CaseType,
+                Name = AltChapterObject.Name,
+                SeqNo = AltChapterObject.SeqNo.GetValueOrDefault(),
+                ChapterItems = selectedCopyItems.ChapterItems
+            });
+
+            await sessionState.SwitchSelectedSystem();
+            
+            if (AltChapterObject.Id == 0)
+            {
+                await chapterManagementService.Add(AltChapterObject);
+            }
+            else
+            {
+                await chapterManagementService.Update(AltChapterObject);
+            }
+
+            await sessionState.ResetSelectedSystem();
+
+            await GetAltSytemChapterItems();
+            StateHasChanged();
         }
     }
 }

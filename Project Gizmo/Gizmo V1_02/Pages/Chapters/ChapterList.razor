@@ -203,6 +203,7 @@ else
             <h3>Chapter: @selectedChapter.Name</h3>
         </div>
         <p class="hidden-md-down">Group: <span class="badge badge-grey mr-3">@selectedChapter.CaseTypeGroup</span> Case Type: <span class="badge badge-grey mr-3">@selectedChapter.CaseType</span> Chapter: <span class="badge badge-grey mr-3"> @selectedChapter.Name</span></p>
+        <button @onclick='PrepareChapterForCopy' class="btn btn-main btn-shadow" title="Copy Chapter"><i class="fa fa-plus pr-1"></i>Copy Chapter</button>
     </div>
 
     <div class="tran-block rounded">
@@ -267,44 +268,48 @@ else
                     <div class="mb-3 flex-box">
                         @if ((sessionState.isAdminUser))
                         {
-                            <EditForm Model="selectedChapter" OnValidSubmit="SaveChapterDetails">
-                                <div class="detail-group-box">
-                                    <div class="form-group">
-                                        <label>Chapter Name</label>
-                                        <InputText @bind-Value="selectedChapter.Name" class="form-control form-control-lg" />
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="BgColour">Background Colour</label>
-                                        <select @bind="selectedChapter.BackgroundColour" style="background-color: @getHTMLColourFromAndroid(selectedChapter.BackgroundColour)" class="form-control form-control-lg">
-                                            @foreach (var colour in ListChapterColours)
-                                            {
-                                                <option style="background-color: @getHTMLColourFromAndroid(colour.ColourCode)" value="@colour.ColourCode">
-                                                    @colour.ColourName
-                                                </option>
-                                            }
-                                        </select>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label>General Notes</label>
-                                        <InputTextArea @bind-Value="selectedChapter.GeneralNotes" class="form-control form-control-lg" />
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Devloper Notes</label>
-                                        <InputTextArea @bind-Value="selectedChapter.DelvolperNotes" class="form-control form-control-lg" />
-                                    </div>
-
+                        <EditForm Model="selectedChapter" OnValidSubmit="SaveChapterDetails">
+                            <div class="detail-group-box">
+                                <div class="form-group">
+                                    <label>Chapter Name</label>
+                                    <InputText @bind-Value="selectedChapter.Name" class="form-control form-control-lg" />
                                 </div>
-                                <div class="button-container">
-                                    <button type="submit" class="btn btn-main">Save Changes</button>
+                                <div class="form-group">
+                                    <label for="BgColour">Background Colour</label>
+                                    <select @bind="selectedChapter.BackgroundColour" style="background-color: @getHTMLColourFromAndroid(selectedChapter.BackgroundColour)" class="form-control form-control-lg">
+                                        @foreach (var colour in ListChapterColours)
+                                        {
+                                            <option style="background-color: @getHTMLColourFromAndroid(colour.ColourCode)" value="@colour.ColourCode">
+                                                @colour.ColourName
+                                            </option>
+                                        }
+                                    </select>
                                 </div>
-                            </EditForm>
+
+                                <div class="form-group">
+                                    <label>General Notes</label>
+                                    <InputTextArea @bind-Value="selectedChapter.GeneralNotes" class="form-control form-control-lg" />
+                                </div>
+                                <div class="form-group">
+                                    <label>Devloper Notes</label>
+                                    <InputTextArea @bind-Value="selectedChapter.DelvolperNotes" class="form-control form-control-lg" />
+                                </div>
+
+                            </div>
+                            <div class="button-container">
+                                <button type="submit" class="btn btn-main">Save Changes</button>
+                                <button type="button" @onclick='() => SyncAll()' class="btn btn-main">Sync To @(sessionState.selectedSystem == "Dev" ? "Live" : "Dev")</button>
+                            </div>
+                        </EditForm>
 
                             <AuthorizeView Roles="Super User">
-
                                 <div class="form-group">
                                     <label>Chapter JSON</label>
                                     <input type="text" @bind="SelectedChapterObject.ChapterData" class="form-control form-control-lg" />
+                                    @if (!IsJsonValid)
+                                    {
+                                        <label>Not Valid</label>
+                                    }
                                 </div>
                                 <div class="button-container">
                                     <button type="submit" @onclick="SaveJsonFromDirectInput" class="btn btn-main">Save Changes</button>
@@ -357,6 +362,7 @@ else
                                     {
                                         <div class="hidden-lg-down flex-push pt-2">
                                             <input type="checkbox" @onchange="() => ToggleComparison()" /><span class="ml-2 font-75">Compare to @(sessionState.selectedSystem == "Dev" ? "Live" : "Dev") </span>
+                                            <button type="button" @onclick='() => SyncToLive(navDisplay)' class="btn btn-main">Sync To @(sessionState.selectedSystem == "Dev" ? "Live" : "Dev")</button>
                                         </div>
                                     }
                                 </div>
@@ -597,6 +603,7 @@ else
                                     {
                                         <div class="hidden-lg-down flex-push pt-2">
                                             <input type="checkbox" @onchange="() => ToggleComparison()" /><span class="ml-2 font-75">Compare to @(sessionState.selectedSystem == "Dev" ? "Live" : "Dev") </span>
+                                            <button type="button" @onclick='() => SyncToLive(navDisplay)' class="btn btn-main">Sync To @(sessionState.selectedSystem == "Dev" ? "Live" : "Dev")</button>
                                         </div>
                                     }
                                 </div>
@@ -694,6 +701,7 @@ else
                                     {
                                         <div class="hidden-lg-down flex-push pt-2">
                                             <input type="checkbox" @onchange="() => ToggleComparison()" /><span class="ml-2 font-75">Compare to @(sessionState.selectedSystem == "Dev" ? "Live" : "Dev") </span>
+                                            <button type="button" @onclick='() => SyncToLive(navDisplay)' class="btn btn-main">Sync To @(sessionState.selectedSystem == "Dev" ? "Live" : "Dev")</button>
                                         </div>
                                     }
                                 </div>
@@ -799,6 +807,7 @@ else
                                     {
                                         <div class="hidden-lg-down flex-push pt-2">
                                             <input type="checkbox" @onchange="() => ToggleComparison()" /><span class="ml-2 font-75">Compare to @(sessionState.selectedSystem == "Dev" ? "Live" : "Dev") </span>
+                                            <button type="button" @onclick='() => SyncToLive(navDisplay)' class="btn btn-main">Sync To @(sessionState.selectedSystem == "Dev" ? "Live" : "Dev")</button>
                                         </div>
                                     }
                                 </div>

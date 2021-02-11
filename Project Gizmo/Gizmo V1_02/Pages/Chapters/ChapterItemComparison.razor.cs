@@ -95,9 +95,6 @@ namespace Gizmo_V1_02.Pages.Chapters
                 await sessionState.ResetSelectedSystem();
             }
 
-
-            
-
             ComparisonRefresh?.Invoke();
             Close();
 

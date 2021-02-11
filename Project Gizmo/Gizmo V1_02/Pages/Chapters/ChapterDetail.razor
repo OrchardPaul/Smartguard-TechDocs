@@ -34,6 +34,10 @@
                     }
                     else
                     {
+                        <div class="form-group">
+                            <label for="AltDisplayName">Filter</label>
+                            <InputText class="form-control form-control-xl" @bind-Value="@filterText" />
+                        </div>
 
 
                         <InputSelect class="form-control form-control-xl" @bind-Value="CopyObject.Name">
@@ -47,17 +51,17 @@
                                         }
 
 
-                            @foreach (var doc in dropDownChapterList.Where(D => D.CaseTypeGroupRef == selectedCaseTypeGroup).OrderBy(D => D.Name).ToList())
+                            @foreach (var doc in dropDownChapterList.Where(D => D.CaseTypeGroupRef == selectedCaseTypeGroup).Where(C => C.Name.ToUpper().Contains(filterText.ToUpper())).OrderBy(D => D.Name).ToList())
                                         {
                                 <option value="@doc.Name">
                                     @doc.Name
                                 </option>
                                         }
                         </InputSelect>
-                        <ValidationMessage For="@(() => CopyObject.Name)" />
+
 
                     }
-
+                    <ValidationMessage For="@(() => CopyObject.Name)" />
                 </div>
             }
 

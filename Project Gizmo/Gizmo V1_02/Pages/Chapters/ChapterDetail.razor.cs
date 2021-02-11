@@ -60,6 +60,8 @@ namespace Gizmo_V1_02.Pages.Chapters
         [Parameter]
         public string selectedList { get; set; }
 
+        public string filterText { get; set; } = "";
+
         [Parameter]
         public string Option { get; set; }
 
@@ -126,6 +128,7 @@ namespace Gizmo_V1_02.Pages.Chapters
             await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
 
             TaskObject = new UsrOrDefChapterManagement();
+            filterText = "";
 
             DataChanged?.Invoke();
             Close();
