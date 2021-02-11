@@ -118,19 +118,19 @@
 /*  BUTTONS & LINKS            */
 /*-----------------------------*/
 
-
-.btn {
+/*dt-buttons are from DataTabes - used for exporting to Excel*/
+.btn, .dt-button{
     border: 2pt solid !important;
     border-radius: 5px !important;
     min-height: 35px;
     text-align: center;
 }
 
-    .btn:hover {
-        box-shadow: 0 8px 12px 0 rgba(0, 0, 0, 0);
-        transition-duration: 0.5s;
-        transition-property: box-shadow, background-color, border;
-    }
+.btn:hover, .dt-button:hover{
+    box-shadow: 0 8px 12px 0 rgba(0, 0, 0, 0);
+    transition-duration: 0.5s;
+    transition-property: box-shadow, background-color, border;
+}
 
 .btn-secondary {
     border-color: #aaa !important;
@@ -151,24 +151,28 @@
     background-color: rgba(245, 245, 245, 0) !important;
 }
 
-.btn-shadow {
+.btn-shadow, .dt-button {
     box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.7);
 }
 
 
-.btn-main:hover {
+.btn-main:hover, .dt-button:hover {
     background-color: #000;
     border-color: #000 !important;
     color: #FFF;
 }
 
-.grid-actions .btn {
-    margin-left: 30px;
+.grid-actions {
+    margin-bottom: 10px !important;
 }
 
-    .grid-actions .btn:first-of-type {
-        margin-left: 0px;
-    }
+.grid-actions .btn {
+    margin-left: 30px !important;
+}
+
+.grid-actions .btn:first-of-type {
+    margin-left: 0px;
+}
 
 
     

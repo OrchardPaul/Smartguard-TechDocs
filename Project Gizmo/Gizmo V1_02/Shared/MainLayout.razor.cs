@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Server.HttpSys;
+using Microsoft.AspNetCore.WebUtilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,6 +29,8 @@ namespace Gizmo_V1_02.Shared
 
         public int selectedCompanyId { get; set; }
 
+        public bool hideTopbar { get; set; } = false;
+        public bool hideSidebar { get; set; } = false;
 
 
         protected override async Task OnInitializedAsync()
@@ -41,7 +44,26 @@ namespace Gizmo_V1_02.Shared
 
                 string returnUrl = HttpUtility.UrlEncode("/" + HttpUtility.UrlDecode(NavigationManager.Uri.Replace(NavigationManager.BaseUri, "")));
                 NavigationManager.NavigateTo($"Identity/Account/Login?returnUrl={returnUrl}", true);
-            } 
+            }
+
+            //Check if sidebar and topbar is not required, i.e. when exporting data via DataTables
+
+            var dExport = "";
+
+            var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
+
+            if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("dxport", out var param))
+            {
+                dExport = param.FirstOrDefault();
+
+                if(dExport != null)
+                {
+                    hideTopbar = true;
+                    hideSidebar = true;
+                }
+            }
+
+
 
             StateHasChanged();
         }

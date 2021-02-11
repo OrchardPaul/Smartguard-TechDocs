@@ -15,7 +15,7 @@
     padding: 1rem;
     z-index: 102;
     box-shadow: 0 2px 2px rgba(0,0,0,0.75);
-    overflow-y: auto;
+    overflow-y: hidden;
     overflow-x: hidden;
     min-width: 300px;
 }
@@ -310,4 +310,38 @@
 
 .modal-system-worktypegrouping {
     width: 350px;
+}
+
+
+/*---------------------------------------*/
+/*   EXPORT AND DATATABLES               */
+/*---------------------------------------*/
+
+.modal-chapter-export {
+    width: 320px;
+    height: 200px;
+    overflow-y: hidden;
+}
+
+.hidden-data-tables {
+    position: relative;
+    left: -99999px;
+    top: -99999px;
+    height: 200px;
+    width: 220px;
+}
+
+
+
+.modal-chapter-export .datatable-buttons {
+    height: 50px;
+    width: 300px;
+    margin-top: 15px;
+}
+
+
+.modal-chapter-export .dt-buttons .dt-button {
+    margin-left: 15px;
+    margin-right: 15px;
+    min-width: 60px;
 }
