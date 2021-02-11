@@ -32,9 +32,6 @@ namespace Gizmo_V1_02.Pages.Chapters
         }
 
         [Inject]
-        IChapterState ChapterState { get; set; }
-
-        [Inject]
         IModalService Modal { get; set; }
 
         [Inject]
@@ -209,15 +206,22 @@ namespace Gizmo_V1_02.Pages.Chapters
 
             lstAll = new List<VmUsrOrDefChapterManagement>();
 
-            selectedChapter = new VmChapter { ChapterItems = new List<UsrOrDefChapterManagement>() };
-
             SelectedChapterObject = chapter;
-            selectedChapter.CaseTypeGroup = chapter.CaseTypeGroup;
-            selectedChapter.CaseType = chapter.CaseType;
-            selectedChapter.Name = chapter.Name;
+
+            if (!(chapter.ChapterData is null))
+            {
+                selectedChapter = JsonConvert.DeserializeObject<VmChapter>(chapter.ChapterData);
+            }
+            else
+            {
+                //Initialise the VmChapter in case of null Json
+                selectedChapter = new VmChapter { ChapterItems = new List<UsrOrDefChapterManagement>() };
+                selectedChapter.CaseTypeGroup = chapter.CaseTypeGroup;
+                selectedChapter.CaseType = chapter.CaseType;
+                selectedChapter.Name = chapter.Name;
+            }
 
             selectedChapterId = chapter.Id;
-            GetItemListByChapter(chapter.Id);
             compareSystems = false;
             rowChanged = 0;
             navDisplay = "Chapter";
@@ -225,9 +229,6 @@ namespace Gizmo_V1_02.Pages.Chapters
             feeDefinitions = await chapterManagementService.GetFeeDefs(selectedChapter.CaseTypeGroup, selectedChapter.CaseType);
 
             await RefreshChapterItems("All");
-
-            //prepare data for export (dealt with by separate page so we need to inject the results to the new page)
-            ChapterState.lstChapterItems = lstAll;
 
             StateHasChanged();
         }
@@ -297,29 +298,11 @@ namespace Gizmo_V1_02.Pages.Chapters
             });
         }
 
-
-        
-
-        private void GetItemListByChapter(int chapterID)
-        {
-
-            string chapterData = lstChapters
-                                .Where(A => A.ChapterObject.Id == chapterID)
-                                .Select(A => A.ChapterObject.ChapterData)
-                                .SingleOrDefault();
-
-            if (!(chapterData is null))
-            {
-                selectedChapter = JsonConvert.DeserializeObject<VmChapter>(chapterData);
-            }   
-        }
-
         private async Task<bool> RefreshChapterItems(string listType)
         {
 
             if (listType == "Chapters")
             {
-
                 var lstC = await chapterManagementService.GetAllChapters();
                 lstChapters = lstC.Select(A => new VmUsrOrDefChapterManagement { ChapterObject = A }).ToList();
 
@@ -328,20 +311,24 @@ namespace Gizmo_V1_02.Pages.Chapters
             {
                 var lst = selectedChapter.ChapterItems;
 
-                lstAll = lst.Select(A => new VmUsrOrDefChapterManagement { ChapterObject = A }).ToList();
+                lstAll = lst.Select(L => new VmUsrOrDefChapterManagement { ChapterObject = L })
+                                .Select(L => { L.ChapterObject.CaseTypeGroup = selectedChapter.CaseTypeGroup;
+                                                L.ChapterObject.CaseType = selectedChapter.CaseType;
+                                                L.ChapterObject.ChapterName = selectedChapter.Name;
+                                                return L; })
+                                .ToList();
 
-                //prepare data for export (dealt with by separate page so we need to inject the results to the new page)
-                ChapterState.lstChapterItems = lstAll;
-
+                /*
+                 * listType = All when chapter is selected, 
+                 * listType = nav selected e.g. Agenda when and object in a specific list has been altered
+                 * 
+                 */
                 if (listType == "Agenda" | listType == "All")
                 {
                     lstAgendas = lstAll
                                         .OrderBy(A => A.ChapterObject.SeqNo)
                                         .Where(A => A.ChapterObject.Type == "Agenda")
                                         .ToList();
-
-                    //prepare data for export (dealt with by separate page so we need to inject the results to the new page)
-                    ChapterState.lstChapterItems = lstAgendas;
 
                 }
                 if (listType == "Docs" | listType == "All")
@@ -351,8 +338,6 @@ namespace Gizmo_V1_02.Pages.Chapters
                                         .Where(A => lstDocTypes.Contains(A.ChapterObject.Type))
                                         .ToList();
 
-                    //prepare data for export (dealt with by separate page so we need to inject the results to the new page)
-                    ChapterState.lstChapterItems = lstDocs;
                 }
                 if (listType == "Fees" | listType == "All")
                 {
@@ -360,9 +345,6 @@ namespace Gizmo_V1_02.Pages.Chapters
                                     .OrderBy(A => A.ChapterObject.SeqNo)
                                     .Where(A => A.ChapterObject.Type == "Fee")
                                     .ToList();
-
-                    //prepare data for export (dealt with by separate page so we need to inject the results to the new page)
-                    ChapterState.lstChapterItems = lstFees;
 
                     lstVmFeeModalItems = feeDefinitions
                                             .Select(FD => new VmChapterFee
@@ -399,9 +381,6 @@ namespace Gizmo_V1_02.Pages.Chapters
                                         .OrderBy(A => A.ChapterObject.SeqNo)
                                         .Where(A => A.ChapterObject.Type == "Status")
                                         .ToList();
-
-                    //prepare data for export (dealt with by separate page so we need to inject the results to the new page)
-                    ChapterState.lstChapterItems = lstStatus;
                 }
             }
 

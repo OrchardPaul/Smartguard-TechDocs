@@ -119,6 +119,8 @@ namespace Gizmo_V1_02.Pages.Chapters
             TaskObject.UserNotes = CopyObject.UserNotes;
             TaskObject.NextStatus = CopyObject.NextStatus;
 
+            TaskObject.FollowUpDocs = new List<FollowUpDoc> { new FollowUpDoc { ScheduleDays = 8, Action = "Insert", DocName= "LTR to Court - Enc Certificate of Compliance" } };
+
             if (Option == "Insert")
             {
                 SelectedChapter.ChapterItems.Add(TaskObject);

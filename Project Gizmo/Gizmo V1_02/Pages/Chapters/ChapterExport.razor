@@ -10,30 +10,49 @@
             <tr>
                 <th>CaseTypeGroup</th>
                 <th>CaseType</th>
-                <th>Type</th>
+
+                @if (!(lstChapterItems.FirstOrDefault().ChapterObject.Type == "Chapter"))
+                {
+                    <th>ChapterName</th>
+                    <th>Type</th>
+                }
+
                 <th>Name</th>
                 <th>SeqNo</th>
-                <th>AsName</th>
-                <th>RescheduleDays</th>
-                <th>CompleteName</th>
-                <th>SuppressStep</th>
-                <th>EntityType</th>
-                <th>AltDisplayName</th>
-                <th>UserMessage</th>
-                <th>UserNotes</th>
-                <th>NextStatus</th>
+
+                @if (!(lstChapterItems.FirstOrDefault().ChapterObject.Type == "Chapter"))
+                {
+                    <th>AsName</th>
+                    <th>RescheduleDays</th>
+                    <th>CompleteName</th>
+                    <th>SuppressStep</th>
+                    <th>EntityType</th>
+                    <th>AltDisplayName</th>
+                    <th>UserMessage</th>
+                    <th>UserNotes</th>
+                    <th>NextStatus</th>
+                }
             </tr>
         </thead>
         <tbody>
             @foreach (var item in lstChapterItems)
             {
 
-                <tr>
-                    <td>@item.ChapterObject.CaseTypeGroup</td>
-                    <td>@item.ChapterObject.CaseType</td>
+            <tr>
+                <td>@item.ChapterObject.CaseTypeGroup</td>
+                <td>@item.ChapterObject.CaseType</td>
+                
+                @if (!(item.ChapterObject.Type == "Chapter"))
+                {
+                    <td>@item.ChapterObject.ChapterName</td>
                     <td>@item.ChapterObject.Type</td>
-                    <td>@item.ChapterObject.Name</td>
-                    <td>@item.ChapterObject.SeqNo</td>
+                }
+
+                <td>@item.ChapterObject.Name</td>
+                <td>@item.ChapterObject.SeqNo</td>
+
+                @if (!(item.ChapterObject.Type == "Chapter"))
+                {
                     <td>@item.ChapterObject.AsName</td>
                     <td>@item.ChapterObject.RescheduleDays</td>
                     <td>@item.ChapterObject.CompleteName</td>
@@ -43,7 +62,10 @@
                     <td>@item.ChapterObject.UserMessage</td>
                     <td>@item.ChapterObject.UserNotes</td>
                     <td>@item.ChapterObject.NextStatus</td>
-                </tr>
+                }
+
+
+            </tr>
             }
 
 

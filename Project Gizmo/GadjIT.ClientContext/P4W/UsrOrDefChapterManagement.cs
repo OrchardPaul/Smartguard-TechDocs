@@ -27,6 +27,7 @@ namespace GadjIT.ClientContext.P4W
         [StringLength(250)]
         [Required]
         public string Name { get; set; }
+        public string ChapterName { get; set; }
         public int? SeqNo { get; set; }
         [Column("Suppress_Step")]
         [StringLength(1)]
@@ -47,10 +48,18 @@ namespace GadjIT.ClientContext.P4W
         [StringLength(100)]
         public string NextStatus { get; set; }
         public string ChapterData { get; set; }
-
         public string UserMessage { get; set; }
-
         public string UserNotes { get; set; }
+
+        public List<FollowUpDoc> FollowUpDocs { get; set; }
+        
+    }
+
+    public class FollowUpDoc
+    {
+        public string DocName { get; set; }
+        public string Action { get; set; }
+        public int? ScheduleDays { get; set; }
 
     }
 }
