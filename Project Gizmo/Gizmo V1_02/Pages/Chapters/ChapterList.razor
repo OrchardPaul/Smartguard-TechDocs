@@ -272,7 +272,7 @@ else
                             <div class="invisible-md-down btn-group">
                                 <button @onclick='() => PrepareForInsert(navDisplay,"Steps and Documents")' class="btn btn-main btn-shadow" title="View/Update JSON"><i class="fa fa-code"></i><span>JSON</span></button>
                                 <button @onclick='PrepareChapterForCopy' class="btn btn-main btn-shadow" title="Copy Chapter"><i class="fa fa-paste"></i><span>Copy</span></button>
-                                <button @onclick='() => SyncAll()' class="btn btn-main btn-shadow" title="Sync To @(sessionState.selectedSystem == "Dev" ? "Live" : "Dev")"><i class="fa fa-sync"></i><span>Sync</span></button>
+                                <button @onclick="() => PrepareChapterSync()" class="btn btn-main btn-shadow" title="Sync To @(sessionState.selectedSystem == "Dev" ? "Live" : "Dev")"><i class="fa fa-sync"></i><span>Sync</span></button>
                             </div>
                             @*<div class="form-group">
                                     <label>Chapter JSON</label>
@@ -360,23 +360,26 @@ else
                                 <span class=" fa fa-info-circle fa-2x "></span>
                             </span>
                         </ModalTooltip>
-                        @if (sessionState.isAdminUser)
+                        @if (!compareSystems)
                         {
-                            <div class="btn-group">
-                                <button @onclick='() => PrepareForInsert(navDisplay,"Steps and Documents")' class="btn btn-main btn-shadow" title="Add new document/step"><i class="fa fa-plus"></i><span>New</span></button>
+                            @if (sessionState.isAdminUser)
+                            {
+                                <div class="btn-group">
+                                    <button @onclick='() => PrepareForInsert(navDisplay,"Steps and Documents")' class="btn btn-main btn-shadow" title="Add new document/step"><i class="fa fa-plus"></i><span>New</span></button>
 
-                                <button @onclick='() => CondenseSeq("Docs")' class="btn btn-main btn-shadow @(SequenceIsValid("Docs") ? "invisible" : "")" title="Re-order Sequence Numbers"><i class="fa fa-sort-numeric-down"></i></button>
+                                    <button @onclick='() => CondenseSeq("Docs")' class="btn btn-main btn-shadow @(SequenceIsValid("Docs") ? "invisible" : "")" title="Re-order Sequence Numbers"><i class="fa fa-sort-numeric-down"></i></button>
+                                </div>
+                            }
+                            <div class="btn-group invisible-md-down">
+                                <button @onclick='(() => PrepareForExport(lstDocs, "Chapter Export"))' class="btn btn-main btn-shadow" title="Export data to Excel or CSV"><i class="fa fa-file-export"></i><span>Export</span></button>
                             </div>
                         }
-                        <div class="btn-group invisible-md-down">
-                            <button @onclick='(() => PrepareForExport(lstDocs, "Chapter Export"))' class="btn btn-main btn-shadow" title="Export data to Excel or CSV"><i class="fa fa-file-export"></i><span>Export</span></button>
-                        </div>
                         <div class="spacer">
                         </div>
                         @if (sessionState.isAdminUser)
                         {
                             <div class="btn-group invisible-md-down">
-                                <button type="button" @onclick='() => SyncToLive(navDisplay)' class="btn btn-main @(!compareSystems ? "hidden" : "")" title="Sync To @(sessionState.selectedSystem == "Dev" ? "Live" : "Dev")"><i class="fa fa-sync"></i><span>Sync</span></button>
+                                <button type="button" @onclick="() => PrepareChapterSync()" class="btn btn-main @(!compareSystems ? "hidden" : "")" title="Sync To @(sessionState.selectedSystem == "Dev" ? "Live" : "Dev")"><i class="fa fa-sync"></i><span>Sync</span></button>
                                 <input type="checkbox" class="ml-1 mt-1" @onchange="() => ToggleComparison()" /><span class="ml-2 font-75 ">Compare to @(sessionState.selectedSystem == "Dev" ? "Live" : "Dev") </span>
                             </div>
                         }
@@ -609,23 +612,26 @@ else
                                 <span class=" fa fa-info-circle fa-2x "></span>
                             </span>
                         </ModalTooltip>
-                        <div class="btn-group">
-                            @if (sessionState.isAdminUser)
-                            {
-                                <button @onclick='() => PrepareForInsert(navDisplay,"Agenda")' class="btn btn-main btn-shadow" title="Add new agenda"><i class="fa fa-plus"></i><span>New</span></button>
-                            }
-                            <button @onclick='(() => PrepareForExport(lstAgendas, "Chapter Export"))' class="btn btn-main btn-shadow invisible-md-down" title="Export data to Excel or CSV"><i class="fa fa-file-export"></i><span>Export</span></button>
-                        </div>
-                        <div class="spacer">
-                        </div>
-                        @if (sessionState.isAdminUser)
+                        @if (!compareSystems)
                         {
-                            <div class="btn-group invisible-md-down">
-                                <button type="button" @onclick='() => SyncToLive(navDisplay)' class="btn btn-main @(!compareSystems ? "hidden" : "")" title="Sync To @(sessionState.selectedSystem == "Dev" ? "Live" : "Dev")"><i class="fa fa-sync"></i><span>Sync</span></button>
-                                <input type="checkbox" class="ml-1 mt-1" @onchange="() => ToggleComparison()" /><span class="ml-2 font-75 ">Compare to @(sessionState.selectedSystem == "Dev" ? "Live" : "Dev") </span>
+                            <div class="btn-group">
+                                @if (sessionState.isAdminUser)
+                                {
+                                    <button @onclick='() => PrepareForInsert(navDisplay, "Agenda")' class="btn btn-main btn-shadow" title="Add new agenda"><i class="fa fa-plus"></i><span>New</span></button>
+                                }
+                                <button @onclick='(() => PrepareForExport(lstAgendas, "Chapter Export"))' class="btn btn-main btn-shadow invisible-md-down" title="Export data to Excel or CSV"><i class="fa fa-file-export"></i><span>Export</span></button>
                             </div>
                         }
-                    </div>
+                            <div class="spacer">
+                            </div>
+                            @if (sessionState.isAdminUser)
+                            {
+                                <div class="btn-group invisible-md-down">
+                                    <button type="button" @onclick="() => PrepareChapterSync()" class="btn btn-main @(!compareSystems ? "hidden" : "")" title="Sync To @(sessionState.selectedSystem == "Dev" ? "Live" : "Dev")"><i class="fa fa-sync"></i><span>Sync</span></button>
+                                    <input type="checkbox" class="ml-1 mt-1" @onchange="() => ToggleComparison()" /><span class="ml-2 font-75 ">Compare to @(sessionState.selectedSystem == "Dev" ? "Live" : "Dev") </span>
+                                </div>
+                            }
+                        </div>
 
 
 
@@ -714,27 +720,29 @@ else
                                 <span class=" fa fa-info-circle fa-2x "></span>
                             </span>
                         </ModalTooltip>
-                        @if (sessionState.isAdminUser)
+                        @if (!compareSystems)
                         {
-                            <div class="btn-group">
-                                <button @onclick='() => PrepareFeesForEdit()' class="btn btn-main btn-shadow" title="Update selected list of fees"><i class="fa fa-pencil-alt"></i><span>Update</span></button>
-                                <button @onclick='() => CondenseSeq("Fees")' class="btn btn-main btn-shadow @(SequenceIsValid("Fees") ? "invisible" : "")" title="Re-order Sequence Numbers"><i class="fa fa-sort-numeric-down"></i></button>
-                            </div>
-                        }
-                        <div class="btn-group invisible-md-down">
-                            <button @onclick='(() => PrepareForExport(lstFees, "Chapter Export"))' class="btn btn-main btn-shadow" title="Export data to Excel or CSV"><i class="fa fa-file-export"></i><span>Export</span></button>
-                        </div>
-
-                        <div class="spacer">
-                        </div>
-                        @if (sessionState.isAdminUser)
-                        {
+                            @if (sessionState.isAdminUser)
+                            {
+                                <div class="btn-group">
+                                    <button @onclick='() => PrepareFeesForEdit()' class="btn btn-main btn-shadow" title="Update selected list of fees"><i class="fa fa-pencil-alt"></i><span>Update</span></button>
+                                    <button @onclick='() => CondenseSeq("Fees")' class="btn btn-main btn-shadow @(SequenceIsValid("Fees") ? "invisible" : "")" title="Re-order Sequence Numbers"><i class="fa fa-sort-numeric-down"></i></button>
+                                </div>
+                            }
                             <div class="btn-group invisible-md-down">
-                                <button type="button" @onclick='() => SyncToLive(navDisplay)' class="btn btn-main @(!compareSystems ? "hidden" : "")" title="Sync To @(sessionState.selectedSystem == "Dev" ? "Live" : "Dev")"><i class="fa fa-sync"></i><span>Sync</span></button>
-                                <input type="checkbox" class="ml-1 mt-1" @onchange="() => ToggleComparison()" /><span class="ml-2 font-75 ">Compare to @(sessionState.selectedSystem == "Dev" ? "Live" : "Dev") </span>
+                                <button @onclick='(() => PrepareForExport(lstFees, "Chapter Export"))' class="btn btn-main btn-shadow" title="Export data to Excel or CSV"><i class="fa fa-file-export"></i><span>Export</span></button>
                             </div>
                         }
-                    </div>
+                            <div class="spacer">
+                            </div>
+                            @if (sessionState.isAdminUser)
+                            {
+                                <div class="btn-group invisible-md-down">
+                                    <button type="button" @onclick="() => PrepareChapterSync()" class="btn btn-main @(!compareSystems ? "hidden" : "")" title="Sync To @(sessionState.selectedSystem == "Dev" ? "Live" : "Dev")"><i class="fa fa-sync"></i><span>Sync</span></button>
+                                    <input type="checkbox" class="ml-1 mt-1" @onchange="() => ToggleComparison()" /><span class="ml-2 font-75 ">Compare to @(sessionState.selectedSystem == "Dev" ? "Live" : "Dev") </span>
+                                </div>
+                            }
+                        </div>
 
                     <div class="@(sessionState.isAdminUser ? "grid-can-edit" : "") ">
 
@@ -824,26 +832,31 @@ else
                             <span class="info-icon">
                                 <span class=" fa fa-info-circle fa-2x "></span>
                             </span>
-                        </ModalTooltip>@if (sessionState.isAdminUser)
+                        </ModalTooltip>
+                        @if (!compareSystems)
                         {
-                            <div class="btn-group">
-                                <button @onclick='() => PrepareForInsert(navDisplay,"Status")' class="btn btn-main btn-shadow" title="Add new status"><i class="fa fa-plus"></i><span>New</span></button>
-                                <button @onclick='() => CondenseSeq("Status")' class="btn btn-main btn-shadow @(SequenceIsValid("Status") ? "invisible" : "")" title="Re-order Sequence Numbers"><i class="fa fa-sort-numeric-down"></i></button>
-                            </div>
-                        }
-                        <div class="btn-group invisible-md-down">
-                            <button @onclick='(() => PrepareForExport(lstStatus, "Chapter Export"))' class="btn btn-main btn-shadow" title="Export data to Excel or CSV"><i class="fa fa-file-export"></i><span>Export</span></button>
-                        </div>
-                        <div class="spacer">
-                        </div>
-                        @if (sessionState.isAdminUser)
-                        {
+                            @if (sessionState.isAdminUser)
+                            {
+                                <div class="btn-group">
+                                    <button @onclick='() => PrepareForInsert(navDisplay, "Status")' class="btn btn-main btn-shadow" title="Add new status"><i class="fa fa-plus"></i><span>New</span></button>
+                                    <button @onclick='() => CondenseSeq("Status")' class="btn btn-main btn-shadow @(SequenceIsValid("Status") ? "invisible" : "")" title="Re-order Sequence Numbers"><i class="fa fa-sort-numeric-down"></i></button>
+                                </div>
+                            }
+
                             <div class="btn-group invisible-md-down">
-                                <button type="button" @onclick='() => SyncToLive(navDisplay)' class="btn btn-main @(!compareSystems ? "hidden" : "")" title="Sync To @(sessionState.selectedSystem == "Dev" ? "Live" : "Dev")"><i class="fa fa-sync"></i><span>Sync</span></button>
-                                <input type="checkbox" class="ml-1 mt-1" @onchange="() => ToggleComparison()" /><span class="ml-2 font-75 ">Compare to @(sessionState.selectedSystem == "Dev" ? "Live" : "Dev") </span>
+                                <button @onclick='(() => PrepareForExport(lstStatus, "Chapter Export"))' class="btn btn-main btn-shadow" title="Export data to Excel or CSV"><i class="fa fa-file-export"></i><span>Export</span></button>
                             </div>
                         }
-                    </div>
+                            <div class="spacer">
+                            </div>
+                            @if (sessionState.isAdminUser)
+                            {
+                                <div class="btn-group invisible-md-down">
+                                    <button type="button" @onclick="() => PrepareChapterSync()" class="btn btn-main @(!compareSystems ? "hidden" : "")" title="Sync To @(sessionState.selectedSystem == "Dev" ? "Live" : "Dev")"><i class="fa fa-sync"></i><span>Sync</span></button>
+                                    <input type="checkbox" class="ml-1 mt-1" @onchange="() => ToggleComparison()" /><span class="ml-2 font-75 ">Compare to @(sessionState.selectedSystem == "Dev" ? "Live" : "Dev") </span>
+                                </div>
+                            }
+                        </div>
                     <div class="@(sessionState.isAdminUser ? "grid-can-edit" : "") ">
 
                         @foreach (var status in lstStatus)

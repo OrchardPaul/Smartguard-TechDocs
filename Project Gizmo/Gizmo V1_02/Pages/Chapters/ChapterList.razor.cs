@@ -74,6 +74,7 @@ namespace Gizmo_V1_02.Pages.Chapters
         public VmUsrOrDefChapterManagement editObject = new VmUsrOrDefChapterManagement { ChapterObject = new UsrOrDefChapterManagement() };
         public VmUsrOrDefChapterManagement editChapterObject = new VmUsrOrDefChapterManagement { ChapterObject = new UsrOrDefChapterManagement() };
 
+
         string selectedList = string.Empty;
 
         string displaySection { get; set; } = "";
@@ -975,6 +976,7 @@ namespace Gizmo_V1_02.Pages.Chapters
             Modal.Show<ChapterItemComparison>("Synchronise Chapter Item", parameters, options);
         }
 
+        
 
         private async void HandleChapterDetailDelete()
         {
@@ -993,6 +995,48 @@ namespace Gizmo_V1_02.Pages.Chapters
 
             RefreshChapters();
             StateHasChanged();
+        }
+
+
+        protected void PrepareChapterSync()
+        {
+            string infoText;
+
+            switch (navDisplay)
+            {
+                case "Chapter":
+                    infoText = $"Make the {(sessionState.selectedSystem == "Live" ? "Dev" : "Live")} system the same as {sessionState.selectedSystem} for all chapter items.";
+                    break;
+                default:
+                    infoText = $"Make the {(sessionState.selectedSystem == "Live" ? "Dev" : "Live")} system the same as {sessionState.selectedSystem} for all {navDisplay}.";
+                    break;
+            }
+
+            Action SelectedAction = HandleChapterSync;
+            var parameters = new ModalParameters();
+            parameters.Add("InfoHeader", "Confirm Action");
+            parameters.Add("InfoText", infoText);
+            parameters.Add("ConfirmAction", SelectedAction);
+
+            var options = new ModalOptions()
+            {
+                Class = "blazored-custom-modal modal-confirm"
+            };
+
+            Modal.Show<ModalConfirm>("Confirm", parameters, options);
+        }
+
+        private void HandleChapterSync()
+        {
+            if(navDisplay.ToLower() == "chapter")
+            {
+                SyncAll();
+            }
+            else
+            {
+                SyncToAltSystem(navDisplay);
+            }
+
         }
 
         /// <summary>
@@ -1071,16 +1115,17 @@ namespace Gizmo_V1_02.Pages.Chapters
             return colHTML;
         }
 
+
         private async void SyncAll()
         {
             compareSystems = true;
             await GetAltSytemChapterItems();
             compareSystems = false;
-            SyncToLive("All");
+            SyncToAltSystem("All");
         }
 
 
-        private async void SyncToLive(string option)
+        private async void SyncToAltSystem(string option)
         {
             var selectedCopyItems = new VmChapter { ChapterItems = new List<UsrOrDefChapterManagement>() };           
 
