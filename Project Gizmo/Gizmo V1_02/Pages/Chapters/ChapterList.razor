@@ -297,13 +297,6 @@ else
                                 <button @onclick='PrepareChapterForCopy' class="btn btn-main btn-shadow" title="Copy Chapter"><i class="fa fa-paste"></i><span>Copy</span></button>
                                 <button @onclick="() => PrepareChapterSync()" class="btn btn-main btn-shadow" title="Sync To @(sessionState.selectedSystem == "Dev" ? "Live" : "Dev")"><i class="fa fa-sync"></i><span>Sync</span></button>
                             </div>
-                            @*<div class="form-group">
-                                    <label>Chapter JSON</label>
-                                    <input type="text" @bind="SelectedChapterObject.ChapterData" class="form-control form-control-lg" />
-                                </div>
-                                <div class="button-container">
-                                    <button type="submit" @onclick="SaveJsonFromDirectInput" class="btn btn-main">Save Changes</button>
-                                </div>*@
                         </AuthorizeView>
 
 

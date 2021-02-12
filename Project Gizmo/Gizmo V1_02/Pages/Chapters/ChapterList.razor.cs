@@ -795,8 +795,18 @@ namespace Gizmo_V1_02.Pages.Chapters
                 selectobject.SeqNo += incrementBy;
                 swapItem.ChapterObject.SeqNo = swapItem.ChapterObject.SeqNo + (incrementBy * -1);
 
-                SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(selectedChapter);
-                await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
+                if(listType == "Chapters")
+                {
+                    await chapterManagementService.Update(selectobject).ConfigureAwait(false);
+                    await chapterManagementService.Update(swapItem.ChapterObject).ConfigureAwait(false);
+                }
+                else
+                {
+                    SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(selectedChapter);
+                    await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
+                }
+
+                
             }
 
             await RefreshChapterItems(listType);
