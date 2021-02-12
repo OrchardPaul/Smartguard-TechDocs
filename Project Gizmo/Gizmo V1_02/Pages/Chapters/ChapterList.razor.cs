@@ -65,6 +65,7 @@ namespace Gizmo_V1_02.Pages.Chapters
         public List<fnORCHAGetFeeDefinitions> feeDefinitions;
 
         public string editCaseType { get; set; } = "";
+        public string updateJSON { get; set; } = "";
 
         public UsrOrDefChapterManagement editChapter { get; set; }
         public string isCaseTypeOrGroup { get; set; } = "";
@@ -121,6 +122,11 @@ namespace Gizmo_V1_02.Pages.Chapters
         public bool ListChapterLoaded = false;
 
         public bool IsJsonValid = true;
+
+        public string jsonUpdateMessage { get; set; }
+        
+        public bool showJSON = false;
+
 
         public List<string> lstDocTypes { get; set; } = new List<string> { "Doc", "Letter", "Form", "Email", "Step" };
 
@@ -246,31 +252,7 @@ namespace Gizmo_V1_02.Pages.Chapters
             });
         }
 
-        private async void SaveJsonFromDirectInput()
-        {
-            JSchemaGenerator generator = new JSchemaGenerator();
-
-            JSchema schema = generator.Generate(typeof(VmChapter));
-            JObject jObject = JObject.Parse(SelectedChapterObject.ChapterData);
-
-            IsJsonValid = jObject.IsValid(schema);
-
-            if (IsJsonValid)
-            {
-                var chapterData = JsonConvert.DeserializeObject<VmChapter>(SelectedChapterObject.ChapterData);
-                selectedChapter.ChapterItems = chapterData.ChapterItems;
-                SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(selectedChapter);
-
-                await chapterManagementService.Update(SelectedChapterObject);
-
-                SelectChapter(SelectedChapterObject);
-                await InvokeAsync(() =>
-                {
-                    StateHasChanged();
-                });
-            }
-
-        }
+        
 
 
         private async void RefreshChapters()
@@ -720,6 +702,7 @@ namespace Gizmo_V1_02.Pages.Chapters
             }
         }
 
+       
 
         protected void ShowNav(string displayChange)
         {
@@ -900,7 +883,66 @@ namespace Gizmo_V1_02.Pages.Chapters
             Modal.Show<ChapterAddOrEdit>("Chapter", parameters, options);
         }
 
+        private void ShowUpdateJSON()
+        {
+            updateJSON = SelectedChapterObject.ChapterData;
 
+            IsJsonValid = true;
+
+            showJSON = true;
+
+            StateHasChanged();
+        }
+
+        private void CloseUpdateJSON()
+        {
+            showJSON = false;
+
+            StateHasChanged();
+        }
+
+
+        private async void SaveJsonFromDirectInput()
+        {
+            IsJsonValid = false;
+
+            JSchemaGenerator generator = new JSchemaGenerator();
+            try
+            {
+                JSchema schema = generator.Generate(typeof(VmChapter));
+                JObject jObject = JObject.Parse(updateJSON);
+
+                IsJsonValid = jObject.IsValid(schema);
+
+            }
+            catch
+            {
+                IsJsonValid = false;
+            }
+
+            if (IsJsonValid)
+            {
+                var chapterData = JsonConvert.DeserializeObject<VmChapter>(updateJSON);
+                selectedChapter.ChapterItems = chapterData.ChapterItems;
+                SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(selectedChapter);
+
+                await chapterManagementService.Update(SelectedChapterObject);
+
+                SelectChapter(SelectedChapterObject);
+
+                showJSON = false;
+
+                await InvokeAsync(() =>
+                {
+                    StateHasChanged();
+                });
+            }
+            else
+            {
+                showJSON = false;
+            }
+
+        }
 
         protected void ShowCaseTypeEditModal()
         {

@@ -32,13 +32,7 @@ namespace Gizmo_V1_02.Pages.Shared.Modals
         [Parameter]
         public Action ConfirmAction { get; set; }
 
-        public bool ConfirmDecision { get; set; } = false;
-
-        public void ToggleConfirmDecision()
-        {
-            ConfirmDecision = !ConfirmDecision;
-        }
-
+        
         private void HandleValidSubmit()
         {
             ConfirmAction?.Invoke();

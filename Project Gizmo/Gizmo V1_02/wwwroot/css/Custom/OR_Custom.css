@@ -257,6 +257,17 @@
     flex-grow:1;
 }
 
+.grid-actions .sync-group{
+    padding-right: 10px !important;
+}
+
+.grid-actions .sync-group {
+    margin-top: 4px;
+}
+.grid-actions button {
+    margin-top: -4px;
+}
+
 .data-item-edit {
     padding: 0 !important;
     background-color: rgba(245, 245, 245, 0) !important;
@@ -782,75 +793,90 @@
             font-weight: bold;
         }
 
-    /*---------------------------------------*/
-    /*  CUSTOM GRIDS                         */
-    /*---------------------------------------*/
+/*---------------------------------------*/
+/*  CUSTOM GRIDS                         */
+/*---------------------------------------*/
 
-    .grid-chapter-nav {
-        min-height: 500px;
-    }
+.grid-chapter-nav {
+    min-height: 500px;
+}
 
-    .grid-chapter-agenda {
-        width: 800px;
-        min-height: 400px;
-    }
+.grid-chapter-agenda {
+    width: 800px;
+    min-height: 400px;
+}
 
-    .grid-chapter-docs {
+.grid-chapter-docs {
+    width: 100%;
+    min-height: 400px;
+}
+
+.grid-chapter-fees {
+    width: 800px;
+    min-height: 400px;
+}
+
+.grid-chapter-status {
+    width: 800px;
+    min-height: 400px;
+}
+
+.grid-chapter-chapter {
+    width: 800px;
+    min-height: 400px;
+}
+
+.grid-chapter-chapter .detail-group-box {
+    width: 100%;
+}
+
+.grid-chapter-chapter textarea.form-control {
+    width: 100% !important;
+}
+
+.grid-chapter-chapter #form-controls-json textarea.form-control {
+    height: 300px;
+}
+
+
+.grid-chapter-docs .info-icon, .grid-chapter-agenda .info-icon, .grid-chapter-fees .info-icon, .grid-chapter-status .info-icon {
+    margin-left: 10px;
+}
+
+.grid-chapter-docs .row .data-item:nth-of-type(1) {
+    width: 54%;
+}
+
+.grid-chapter-docs .row .data-item:nth-of-type(2), .grid-chapter-docs .row .data-item:nth-of-type(3) {
+    width: 23%;
+}
+
+@media (max-width: 992px) {
+    .grid-chapter-chapter, .grid-chapter-agenda, .grid-chapter-docs, .grid-chapter-fees, .grid-chapter-status {
         width: 100%;
-        min-height: 400px;
     }
 
-
-    .grid-chapter-fees {
-        width: 800px;
-        min-height: 400px;
-    }
-
-    .grid-chapter-status {
-        width: 800px;
-        min-height: 400px;
-    }
-
-
-
-        .grid-chapter-docs .info-icon, .grid-chapter-agenda .info-icon, .grid-chapter-fees .info-icon, .grid-chapter-status .info-icon {
-            margin-left: 10px;
-        }
-
-    .grid-chapter-docs .row .data-item:nth-of-type(1) {
-        width: 54%;
-    }
-
-    .grid-chapter-docs .row .data-item:nth-of-type(2), .grid-chapter-docs .row .data-item:nth-of-type(3) {
-        width: 23%;
-    }
-
-    @media (max-width: 992px) {
-        .grid-chapter-agenda, .grid-chapter-docs, .grid-chapter-fees, .grid-chapter-status {
+        .grid-chapter-docs .row .data-item:nth-of-type(1) {
             width: 100%;
         }
-
-            .grid-chapter-docs .row .data-item:nth-of-type(1) {
-                width: 100%;
-            }
-    }
-
-    /*---------------------------------------*/
-    /*    CHAPTER LISTINGS                   */
-    /*                                       */
-    /*                                       */
-    /*   SEQUENCE CHANGE OPTIONS             */
-    /*        ^                              */
-    /*        7                              */
-    /*        v                              */
-    /*---------------------------------------*/
+}
 
 
-    /*use grid data to surround the data rows (.grid-row). This is to allow first-child selector to apply within grid-can-edit where there is a preceeding grid-header*/
-    .grid-data {
-        margin: 0;
-        padding: 0;
-    }
+
+/*---------------------------------------*/
+/*    CHAPTER LISTINGS                   */
+/*                                       */
+/*                                       */
+/*   SEQUENCE CHANGE OPTIONS             */
+/*        ^                              */
+/*        7                              */
+/*        v                              */
+/*---------------------------------------*/
+/*use grid data to surround the data rows (.grid-row). This is to allow first-child selector to apply within grid-can-edit where there is a preceeding grid-header*/
+.grid-data {
+    margin: 0;
+    padding: 0;
+}
 
     .schedule-days {
         padding-top: 3px;
