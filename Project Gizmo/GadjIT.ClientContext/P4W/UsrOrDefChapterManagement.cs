@@ -58,6 +58,7 @@ namespace GadjIT.ClientContext.P4W
     public class FollowUpDoc
     {
         public string DocName { get; set; }
+        public string DocAsName { get; set; }
         public string Action { get; set; }
         public int? ScheduleDays { get; set; }
 
