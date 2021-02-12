@@ -312,11 +312,13 @@
     width: 350px;
 }
 
+.modal-confirm{
+    width: 350px;
+}
 
 /*---------------------------------------*/
 /*   EXPORT AND DATATABLES               */
 /*---------------------------------------*/
-
 .modal-chapter-export {
     width: 320px;
     height: 200px;
