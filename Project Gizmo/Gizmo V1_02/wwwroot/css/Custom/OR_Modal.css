@@ -316,6 +316,14 @@
     width: 350px;
 }
 
+.modal-chapter-JSON{
+    width: 800px;
+}
+.modal-chapter-JSON textarea{
+    width: 100%;
+    height: 400px;
+}
+
 /*---------------------------------------*/
 /*   EXPORT AND DATATABLES               */
 /*---------------------------------------*/

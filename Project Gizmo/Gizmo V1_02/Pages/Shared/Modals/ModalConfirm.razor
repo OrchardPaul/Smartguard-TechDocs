@@ -1,4 +1,4 @@
-﻿<EditForm Model="@ConfirmDecision" OnValidSubmit="@HandleValidSubmit">
+﻿
     <div class="modal-body">
         <div class="alert bg-warning" style="margin: 40px 0 40px 0" role="alert">
             @InfoText
@@ -8,7 +8,7 @@
             <div class="container-fluid ">
                 <div class="row">
                     <div class="col-6 text-right">
-                        <button type="submit" class="btn btn-sub">Confirm</button>
+                        <button type="submit" @onclick="@HandleValidSubmit" class="btn btn-sub">Confirm</button>
                     </div>
                     <div class="col-6 text-left">
                         <button type="button" data-dismiss="modal" @onclick="@Close" class="btn btn-secondary">Cancel</button>
@@ -20,4 +20,3 @@
 
 
     </div>
-</EditForm>

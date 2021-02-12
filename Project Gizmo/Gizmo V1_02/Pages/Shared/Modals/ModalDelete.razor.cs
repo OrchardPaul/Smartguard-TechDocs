@@ -31,12 +31,6 @@ namespace Gizmo_V1_02.Pages.Shared.Modals
 
         [Parameter]
         public Action DeleteAction { get; set; }
-        public bool WishToDelete { get; set; } = false;
-
-        public void ToggleDeleteWish()
-        {
-            WishToDelete = !WishToDelete;
-        }
 
         private void HandleValidSubmit()
         {
