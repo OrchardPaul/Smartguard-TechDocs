@@ -27,7 +27,7 @@ else
                     {
                         @if (!(SequenceIsValid("Chapters")))
                         {
-                            <button @onclick='() => CondenseSeq("Chapters")' class="btn btn-main btn-shadow" title="Re-order Sequence Numbers"><i class="fa fa-sort-numeric-down"></i></button>
+                            <button @onclick='() => CondenseChapterSeq()' class="btn btn-main btn-shadow" title="Re-order Sequence Numbers"><i class="fa fa-sort-numeric-down"></i></button>
 
                     }
                 }
@@ -170,7 +170,7 @@ else
                                                             {
                                                                 @if (!(Chapter.ComparisonResult == "Exact match"))
                                                                 {
-                                                                    <div class="btn-dashed"><span class="fa fa-@Chapter.ComparisonIcon"></span></div>
+                                                                    <div class="btn-dashed" @onclick="() => PrepareChapterCreateOnAlt(Chapter.ChapterObject)"><span class="fa fa-@Chapter.ComparisonIcon"></span></div>
                                                                 }
                                                                 else
                                                                 {

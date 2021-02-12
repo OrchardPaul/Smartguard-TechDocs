@@ -391,6 +391,7 @@ namespace Gizmo_V1_02.Pages.Chapters
         private async void ToggleComparison()
         {
             compareSystems = !compareSystems;
+
             if (compareSystems)
             {
                 await CompareSelectedChapterToAltSystem();
@@ -418,6 +419,7 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         private async Task<bool> CompareSelectedChapterToAltSystem()
         {
+
             if (compareSystems)
             {
                 var test = await RefreshChapterItems(navDisplay);
@@ -473,11 +475,27 @@ namespace Gizmo_V1_02.Pages.Chapters
             return true;
         }
 
-
         private async void CompareAllChapters()
         {
-            compareSystems = !compareSystems;
+            lstChapters = lstChapters.Select(C => { C.ComparisonIcon = null; C.ComparisonResult = null; return C; }).ToList();
 
+            var test = new string(SelectedChapterObject.ChapterData);
+
+            lstAltSystemChapters = new List<VmUsrOrDefChapterManagement>();
+            AltChapterObject = new UsrOrDefChapterManagement();
+            compareSystems = !compareSystems;
+            await RefreshCompararisonAllChapters();
+
+
+            await InvokeAsync(() =>
+            {
+                StateHasChanged();
+            });
+
+        }
+
+        private async Task<bool> RefreshCompararisonAllChapters()
+        {
             if (compareSystems)
             {
                 await RefreshAltSystemChaptersList();
@@ -517,7 +535,7 @@ namespace Gizmo_V1_02.Pages.Chapters
                             CompareChapterItemsToAltSytem(item);
                         }
 
-                        if(vmChapterItems.Where(C => C.ComparisonResult == "No match" | C.ComparisonResult == "Partial match").Count() > 0)
+                        if(vmChapterItems.Where(C => C.ComparisonResult == "No match" | C.ComparisonResult == "Partial match").Count() > 0 | vmChapterItems.Count() != lstAltSystemChapterItems.Count())
                         {
                             chapter.ComparisonResult = "Partial match";
                             chapter.ComparisonIcon = "exclamation";
@@ -530,8 +548,7 @@ namespace Gizmo_V1_02.Pages.Chapters
                     }
                 }
             }
-
-            StateHasChanged();
+            return true;
         }
 
         private VmUsrOrDefChapterManagement CompareChapterItemsToAltSytem(VmUsrOrDefChapterManagement chapterItem)
@@ -844,8 +861,6 @@ namespace Gizmo_V1_02.Pages.Chapters
             {
                 seqNo += 1;
                 item.ChapterObject.SeqNo = seqNo;
-
-
             }
 
             SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(selectedChapter);
@@ -858,6 +873,24 @@ namespace Gizmo_V1_02.Pages.Chapters
                 StateHasChanged();
             });
         }
+
+        protected async void CondenseChapterSeq()
+        {
+            var ListItems = GetRelevantChapterList("Chapters");
+
+            int seqNo = 0;
+
+            foreach (VmUsrOrDefChapterManagement item in ListItems.OrderBy(A => A.ChapterObject.SeqNo))
+            {
+                seqNo += 1;
+                item.ChapterObject.SeqNo = seqNo;
+
+                await chapterManagementService.Update(item.ChapterObject);
+            }
+
+            RefreshChapters();
+        }
+
 
         protected void CondenseFeeSeq()
         {
@@ -1102,6 +1135,72 @@ namespace Gizmo_V1_02.Pages.Chapters
             Modal.Show<ModalConfirm>("Confirm", parameters, options);
         }
 
+        private async void CreateSelectedChapterOnAlt()
+        {
+            await sessionState.SwitchSelectedSystem();
+
+            AltChapterObject = lstAltSystemChapters
+                                        .Where(A => A.ChapterObject.Name == SelectedChapterObject.Name)
+                                        .Where(A => A.ChapterObject.CaseType == SelectedChapterObject.CaseType)
+                                        .Where(A => A.ChapterObject.CaseTypeGroup == SelectedChapterObject.CaseTypeGroup)
+                                        .Select(C => C.ChapterObject)
+                                        .SingleOrDefault();
+
+            if(AltChapterObject is null)
+            {
+                var newAltChapterObject = new UsrOrDefChapterManagement 
+                                                    { 
+                                                        SeqNo = SelectedChapterObject.SeqNo,
+                                                        CaseTypeGroup = SelectedChapterObject.CaseTypeGroup,
+                                                        CaseType = SelectedChapterObject.CaseType,
+                                                        Name = SelectedChapterObject.Name,
+                                                        ChapterData = SelectedChapterObject.ChapterData,
+                                                        ParentId = SelectedChapterObject.ParentId,
+                                                        Type = SelectedChapterObject.Type
+                                                    };
+
+                await chapterManagementService.Add(newAltChapterObject);
+            }
+            else
+            {
+                AltChapterObject.ChapterData = SelectedChapterObject.ChapterData;
+
+                await chapterManagementService.Update(AltChapterObject);
+            }
+
+            
+
+            await sessionState.ResetSelectedSystem();
+
+            await RefreshCompararisonAllChapters();
+
+            await InvokeAsync(() =>
+            {
+                StateHasChanged();
+            });
+        }
+
+
+        protected void PrepareChapterCreateOnAlt(UsrOrDefChapterManagement selectedChapter)
+        {
+            SelectedChapterObject = selectedChapter;
+
+            string infoText = $"Do you wish to sync this chapter to {(sessionState.selectedSystem == "Live" ? "Dev" : "Live")}.";
+
+            Action SelectedAction = CreateSelectedChapterOnAlt;
+            var parameters = new ModalParameters();
+            parameters.Add("InfoHeader", "Confirm Action");
+            parameters.Add("InfoText", infoText);
+            parameters.Add("ConfirmAction", SelectedAction);
+
+            var options = new ModalOptions()
+            {
+                Class = "blazored-custom-modal modal-confirm"
+            };
+
+            Modal.Show<ModalConfirm>("Confirm", parameters, options);
+        }
+
         private void HandleChapterSync()
         {
             if(navDisplay.ToLower() == "chapter")
@@ -1245,7 +1344,6 @@ namespace Gizmo_V1_02.Pages.Chapters
                 selectedCopyItems.ChapterItems.AddRange(selectedChapter.ChapterItems.Where(C => lstDocTypes.Contains(C.Type)).ToList());
             }
 
-            
 
             if (option == "Fees" | option == "All")
             {
