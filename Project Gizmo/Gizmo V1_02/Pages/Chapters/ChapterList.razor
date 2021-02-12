@@ -514,6 +514,14 @@ else
                                                     </div>
 
                                                 }
+                                                @if (!(doc.ChapterObject.FollowUpDocs is null))
+                                                {
+                                                    <div class="data-item-right followup-doc">
+                                                        <ModalTooltip Direction="left" Text="This document will have a follow-up document inserted/taken.">
+                                                            <span class="fa fa-paperclip"></span>
+                                                        </ModalTooltip>
+                                                    </div>
+                                                }
                                                 <div class="data-item-right mr-2 seq-change">
                                                     <div @onclick='() => MoveSeq(doc.ChapterObject,"Docs","Up")'><span class="fa fa-angle-up"></span></div>
                                                     <div class="seq-no">@doc.ChapterObject.SeqNo</div>
@@ -609,8 +617,7 @@ else
                                             </div>
                                         }
 
-
-
+                                       
                                     </div>
 
                                 </div>
