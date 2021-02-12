@@ -37,7 +37,6 @@ namespace Gizmo_V1_02.Pages.Chapters
         [Inject]
         private IChapterManagementService chapterManagementService { get; set; }
 
-
         [Inject]
         private IPartnerAccessService partnerAccessService { get; set; }
 
@@ -47,7 +46,6 @@ namespace Gizmo_V1_02.Pages.Chapters
         [Inject]
         public IUserSessionState sessionState { get; set; }
 
-        //private List<UsrOrDefChapterManagement> lstChapters;
         private List<VmUsrOrDefChapterManagement> lstChapters { get; set; } = new List<VmUsrOrDefChapterManagement>();
 
         private List<VmUsrOrDefChapterManagement> lstAltSystemChapters { get; set; } = new List<VmUsrOrDefChapterManagement>();
@@ -394,20 +392,36 @@ namespace Gizmo_V1_02.Pages.Chapters
             compareSystems = !compareSystems;
             if (compareSystems)
             {
-                await GetAltSytemChapterItems();
+                await CompareSelectedChapterToAltSystem();
             }
         }
 
-        private async Task<bool> GetAltSytemChapterItems()
+        private async Task<bool> RefreshAltSystemChaptersList()
+        {
+            try
+            {
+                await sessionState.SwitchSelectedSystem();
+
+                var lstC = await chapterManagementService.GetAllChapters();
+                lstAltSystemChapters = lstC.Select(A => new VmUsrOrDefChapterManagement { ChapterObject = A }).ToList();
+
+                await sessionState.ResetSelectedSystem();
+
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        private async Task<bool> CompareSelectedChapterToAltSystem()
         {
             if (compareSystems)
             {
                 var test = await RefreshChapterItems(navDisplay);
 
-                await sessionState.SwitchSelectedSystem();
-
-                var lstC = await chapterManagementService.GetAllChapters();
-                lstAltSystemChapters = lstC.Select(A => new VmUsrOrDefChapterManagement { ChapterObject = A }).ToList();
+                await RefreshAltSystemChaptersList();
 
                 AltChapterObject = lstAltSystemChapters
                                         .Where(A => A.ChapterObject.Name == SelectedChapterObject.Name)
@@ -416,44 +430,107 @@ namespace Gizmo_V1_02.Pages.Chapters
                                         .Select(C => C.ChapterObject)
                                         .SingleOrDefault();
 
-                altChapter = JsonConvert.DeserializeObject<VmChapter>(AltChapterObject.ChapterData);
-
-                var temp = altChapter.ChapterItems;
-
-
-                lstAltSystemChapterItems = temp.Select(T => new VmUsrOrDefChapterManagement { ChapterObject = T }).ToList();
-
-                foreach (var item in lstDocs)
+                if(!(AltChapterObject is null))
                 {
-                    CompareChapterItemsToAltSytem(item);
+                    altChapter = JsonConvert.DeserializeObject<VmChapter>(AltChapterObject.ChapterData);
+
+                    var temp = altChapter.ChapterItems;
+
+
+                    lstAltSystemChapterItems = temp.Select(T => new VmUsrOrDefChapterManagement { ChapterObject = T }).ToList();
+
+                    foreach (var item in lstDocs)
+                    {
+                        CompareChapterItemsToAltSytem(item);
+                    }
+
+                    foreach (var item in lstAgendas)
+                    {
+                        CompareChapterItemsToAltSytem(item);
+                    }
+
+                    foreach (var item in lstFees)
+                    {
+                        CompareChapterItemsToAltSytem(item);
+                    }
+
+                    foreach (var item in lstStatus)
+                    {
+                        CompareChapterItemsToAltSytem(item);
+                    }
+
+                    await InvokeAsync(() =>
+                    {
+                        StateHasChanged();
+                    });
                 }
 
-                foreach (var item in lstAgendas)
-                {
-                    CompareChapterItemsToAltSytem(item);
-                }
-
-                foreach (var item in lstFees)
-                {
-                    CompareChapterItemsToAltSytem(item);
-                }
-
-                foreach (var item in lstStatus)
-                {
-                    CompareChapterItemsToAltSytem(item);
-                }
-
-                await InvokeAsync(() =>
-                {
-                    StateHasChanged();
-                });
-
-
-                await sessionState.ResetSelectedSystem();
+                
 
             }
 
             return true;
+        }
+
+
+        private async void CompareAllChapters()
+        {
+            compareSystems = !compareSystems;
+
+            if (compareSystems)
+            {
+                await RefreshAltSystemChaptersList();
+
+                /*
+                 * for every chapter get list of chapter items from both current system and alt system
+                 * if any result returns false
+                 * 
+                 * 
+                 */
+                foreach (var chapter in lstChapters)
+                {
+                    var chapterItems = JsonConvert.DeserializeObject<VmChapter>(chapter.ChapterObject.ChapterData);
+
+                    var vmChapterItems = chapterItems.ChapterItems.Select(C => new VmUsrOrDefChapterManagement { ChapterObject = C }).ToList();
+
+                    AltChapterObject = lstAltSystemChapters
+                                        .Where(A => A.ChapterObject.Name == chapter.ChapterObject.Name)
+                                        .Where(A => A.ChapterObject.CaseType == chapter.ChapterObject.CaseType)
+                                        .Where(A => A.ChapterObject.CaseTypeGroup == chapter.ChapterObject.CaseTypeGroup)
+                                        .Select(C => C.ChapterObject)
+                                        .SingleOrDefault();
+
+                    if(AltChapterObject is null)
+                    {
+                        chapter.ComparisonResult = "No match";
+                        chapter.ComparisonIcon = "times";
+                    }
+                    else
+                    {
+                        altChapter = JsonConvert.DeserializeObject<VmChapter>(AltChapterObject.ChapterData);
+
+                        lstAltSystemChapterItems = altChapter.ChapterItems.Select(T => new VmUsrOrDefChapterManagement { ChapterObject = T }).ToList();
+
+                        foreach(var item in vmChapterItems)
+                        {
+                            CompareChapterItemsToAltSytem(item);
+                        }
+
+                        if(vmChapterItems.Where(C => C.ComparisonResult == "No match" | C.ComparisonResult == "Partial match").Count() > 0)
+                        {
+                            chapter.ComparisonResult = "Partial match";
+                            chapter.ComparisonIcon = "exclamation";
+                        }
+                        else
+                        {
+                            chapter.ComparisonResult = "Exact match";
+                            chapter.ComparisonIcon = "check";
+                        }
+                    }
+                }
+            }
+
+            StateHasChanged();
         }
 
         private VmUsrOrDefChapterManagement CompareChapterItemsToAltSytem(VmUsrOrDefChapterManagement chapterItem)
@@ -489,8 +566,7 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         public async void CompareChapterItemsToAltSytemAction()
         {
-
-            await GetAltSytemChapterItems();
+            await CompareSelectedChapterToAltSystem();
         }
 
         private void PrepareForExport(List<VmUsrOrDefChapterManagement> items, string header)
@@ -551,9 +627,9 @@ namespace Gizmo_V1_02.Pages.Chapters
                                     .FirstOrDefault() + 1;
             }
 
-            editObject.ChapterObject.SeqNo = editChapterObject.ChapterObject.SeqNo is null
+            editObject.ChapterObject.SeqNo = editObject.ChapterObject.SeqNo is null
                                                         ? 1
-                                                        : editChapterObject.ChapterObject.SeqNo;
+                                                        : editObject.ChapterObject.SeqNo;
 
             editObject.ChapterObject.ParentId = selectedChapterId;
 
@@ -1074,7 +1150,7 @@ namespace Gizmo_V1_02.Pages.Chapters
         private async void SyncAll()
         {
             compareSystems = true;
-            await GetAltSytemChapterItems();
+            await CompareSelectedChapterToAltSystem();
             compareSystems = false;
             SyncToLive("All");
         }
@@ -1158,7 +1234,7 @@ namespace Gizmo_V1_02.Pages.Chapters
 
             await sessionState.ResetSelectedSystem();
 
-            await GetAltSytemChapterItems();
+            await CompareSelectedChapterToAltSystem();
             StateHasChanged();
         }
     }

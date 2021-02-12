@@ -32,6 +32,7 @@ else
                     }
                 }
                 <button @onclick='(() => PrepareForExport(lstChapters, "Chapter Export"))' class="btn btn-main btn-shadow" title="Export data to Excel or CSV"><i class="fa fa-file-export"></i><span class="pl-2">Export</span></button>
+                <input type="checkbox" @onchange="() => CompareAllChapters()" /><span class="ml-2 font-75">Compare to @(sessionState.selectedSystem == "Dev" ? "Live" : "Dev") </span>
             </div>
 
             }
@@ -140,25 +141,49 @@ else
 
                                                 @if (sessionState.isAdminUser)
                                                 {
-                                                    <div class="btn-ellipses float-left ">
-                                                        <span class="fa fa-ellipsis-v"></span>
-                                                        <div class="ellipsis-menu">
-                                                            <ul>
-                                                                <li class="col-main" @onclick='() => PrepareChapterForEdit(Chapter.ChapterObject, "Chapter")' title="">
-                                                                    <span class="fa fa-font mr-2"></span>
-                                                                    <span>Rename</span>
-                                                                </li>
-                                                                <li class="col-main" @onclick="() => SelectChapter(Chapter.ChapterObject)" title="">
-                                                                    <span class="fa fa-pencil-alt mr-2"></span>
-                                                                    <span>Edit</span>
-                                                                </li>
-                                                                <li class="col-red" @onclick='() => PrepareChapterDelete(Chapter)' title="">
-                                                                    <span class="fa fa-trash-alt mr-2"></span>
-                                                                    <span>Delete</span>
-                                                                </li>
-                                                            </ul>
+                                                    @if (!compareSystems)
+                                                    {
+                                                        <div class="btn-ellipses float-left ">
+                                                            <span class="fa fa-ellipsis-v"></span>
+                                                            <div class="ellipsis-menu">
+                                                                <ul>
+                                                                    <li class="col-main" @onclick='() => PrepareChapterForEdit(Chapter.ChapterObject, "Chapter")' title="">
+                                                                        <span class="fa fa-font mr-2"></span>
+                                                                        <span>Rename</span>
+                                                                    </li>
+                                                                    <li class="col-main" @onclick="() => SelectChapter(Chapter.ChapterObject)" title="">
+                                                                        <span class="fa fa-pencil-alt mr-2"></span>
+                                                                        <span>Edit</span>
+                                                                    </li>
+                                                                    <li class="col-red" @onclick='() => PrepareChapterDelete(Chapter)' title="">
+                                                                        <span class="fa fa-trash-alt mr-2"></span>
+                                                                        <span>Delete</span>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
                                                         </div>
-                                                    </div>
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="btn-ellipses float-left">
+                                                            @if (!(Chapter.ComparisonIcon is null))
+                                                            {
+                                                                @if (!(Chapter.ComparisonResult == "Exact match"))
+                                                                {
+                                                                    <div class="btn-dashed"><span class="fa fa-@Chapter.ComparisonIcon"></span></div>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <span class="fa fa-@Chapter.ComparisonIcon"></span>
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                <div class="spinner"></div>
+                                                            }
+                                                        </div>
+                                                    }
+
                                                 }
                                                 <div class="data-item-sub">
                                                     <span class="hidden-sm-down"><span class=" fa fa-share-alt-square mr-2"></span></span>
@@ -249,8 +274,6 @@ else
                 <li class="nav-item @(navDisplay == "Fees" ? "active" : "")" @onclick='() => ShowNav("Fees")'>
                     <span>Fees</span>
                 </li>
-
-
             </ul>
         </div>
 

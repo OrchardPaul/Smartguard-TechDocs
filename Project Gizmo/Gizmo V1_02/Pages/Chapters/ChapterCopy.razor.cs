@@ -72,10 +72,10 @@ namespace Gizmo_V1_02.Pages.Chapters
                                                         .Where(C => C.ChapterObject.CaseTypeGroup == TaskObject.ChapterObject.CaseTypeGroup)
                                                         .Select(C => C.ChapterObject.CaseType)
                                                         .FirstOrDefault();
-            TaskObject.ChapterObject.Name = AllChapters
+            TaskObject.ChapterObject = AllChapters
                                                         .Where(C => C.ChapterObject.CaseTypeGroup == TaskObject.ChapterObject.CaseTypeGroup)
                                                         .Where(C => C.ChapterObject.CaseType == TaskObject.ChapterObject.CaseType)
-                                                        .Select(C => C.ChapterObject.Name)
+                                                        .Select(C => C.ChapterObject)
                                                         .FirstOrDefault();
 
             StateHasChanged();
@@ -84,11 +84,11 @@ namespace Gizmo_V1_02.Pages.Chapters
         private void SelectExistingCaseType(string caseType)
         {
             TaskObject.ChapterObject.CaseType = caseType;
-            TaskObject.ChapterObject.Name = AllChapters
-                                                        .Where(C => C.ChapterObject.CaseTypeGroup == TaskObject.ChapterObject.CaseTypeGroup)
-                                                        .Where(C => C.ChapterObject.CaseType == TaskObject.ChapterObject.CaseType)
-                                                        .Select(C => C.ChapterObject.Name)
-                                                        .FirstOrDefault();
+            TaskObject.ChapterObject = AllChapters
+                                                .Where(C => C.ChapterObject.CaseTypeGroup == TaskObject.ChapterObject.CaseTypeGroup)
+                                                .Where(C => C.ChapterObject.CaseType == TaskObject.ChapterObject.CaseType)
+                                                .Select(C => C.ChapterObject)
+                                                .FirstOrDefault();
 
             StateHasChanged();
         }
