@@ -158,9 +158,6 @@ C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\bin\Debug\netcor
 C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\GadjIT V1_02.csprojAssemblyReference.cache
 C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\GadjIT V1_02.AssemblyInfoInputs.cache
 C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\GadjIT V1_02.AssemblyInfo.cs
-C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\GadjIT V1_02.csproj.CoreCompileInputs.cache
-C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\GadjIT V1_02.MvcApplicationPartsAssemblyInfo.cs
-C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\GadjIT V1_02.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\GadjIT V1_02.RazorComponent.input.cache
 C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\RazorDeclaration\App.razor.g.cs
 C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\RazorDeclaration\Pages\Admin\AdminNav.razor.g.cs
@@ -191,39 +188,9 @@ C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcor
 C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\RazorDeclaration\Shared\NavMenu.razor.g.cs
 C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\RazorDeclaration\Shared\SurveyPrompt.razor.g.cs
 C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\RazorDeclaration\_Imports.razor.g.cs
-C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\RazorDeclaration\GadjIT V1_02.dll
 C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\GadjIT V1_02.TagHelpers.input.cache
 C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\GadjIT V1_02.TagHelpers.output.cache
 C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\GadjIT V1_02.RazorCoreGenerate.cache
-C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\App.razor.g.cs
-C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\Admin\AdminNav.razor.g.cs
-C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\Admin\CompanyDetails\CompanyDetails.razor.g.cs
-C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\Admin\CompanyWorkTypeManagement\CompanyWorkTypeManagementDetails.razor.g.cs
-C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\Admin\CompanyWorkTypeManagement\CompanyWorkTypeManagementMapping.razor.g.cs
-C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\Admin\CompanyWorkTypeManagement\CompanyWorkTypeManagementOverview.razor.g.cs
-C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\Admin\UserManagement\ManageUsersDetail.razor.g.cs
-C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\Admin\UserManagement\ManageUsersMainPage.razor.g.cs
-C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\Admin\UserManagement\ManageUsersOverview.razor.g.cs
-C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\ConfirmDialog.razor.g.cs
-C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\Index.razor.g.cs
-C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\Shared\Modals\ModalDelete.razor.g.cs
-C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\Shared\Modals\ModalInfo.razor.g.cs
-C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\SystemNav\CompanyManagement\CompanyEdit.razor.g.cs
-C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\SystemNav\CompanyManagement\ManageCompanies.razor.g.cs
-C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\SystemNav\RoleManagement\ManageUserRoles.razor.g.cs
-C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\SystemNav\RoleManagement\RoleDetail.razor.g.cs
-C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\SystemNav\SystemNav.razor.g.cs
-C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\SystemNav\WorkTypeManagement\ManageWorkTypes.razor.g.cs
-C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\SystemNav\WorkTypeManagement\WorkTypeDepartmentDetails.razor.g.cs
-C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\SystemNav\WorkTypeManagement\WorkTypeDetails.razor.g.cs
-C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\SystemNav\WorkTypeManagement\WorkTypeGroupDetails.razor.g.cs
-C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\SystemNav\WorkTypeManagement\WorkTypeGroupingDetails.razor.g.cs
-C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\UserProfile\UserProfile.razor.g.cs
-C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Shared\LoginDisplay.razor.g.cs
-C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Shared\MainLayout.razor.g.cs
-C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Shared\NavMenu.razor.g.cs
-C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Shared\SurveyPrompt.razor.g.cs
-C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\_Imports.razor.g.cs
 C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Areas\Identity\Pages\Account\AccessDenied.cshtml.g.cs
 C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Areas\Identity\Pages\Account\ConfirmEmail.cshtml.g.cs
 C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Areas\Identity\Pages\Account\ConfirmEmailChange.cshtml.g.cs
@@ -905,12 +872,52 @@ C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcor
 C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\RazorDeclaration\Pages\Chapters\ChapterList.razor.g.cs
 C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\RazorDeclaration\Pages\Shared\Modals\ModalSystemSelect.razor.g.cs
 C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\RazorDeclaration\Pages\Shared\Modals\ModalTooltip.razor.g.cs
+C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\RazorDeclaration\Pages\Chapters\ChapterCopy.razor.g.cs
+C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\RazorDeclaration\Pages\Chapters\ChapterExport.razor.g.cs
+C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\RazorDeclaration\Pages\Shared\Modals\ModalConfirm.razor.g.cs
+C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\bin\Debug\netcoreapp3.1\BlazorInputFile.dll
+C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\GadjIT V1_02.csproj.CoreCompileInputs.cache
+C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\GadjIT V1_02.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\GadjIT V1_02.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\RazorDeclaration\GadjIT V1_02.dll
+C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\App.razor.g.cs
+C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\Admin\AdminNav.razor.g.cs
+C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\Admin\CompanyDetails\CompanyDetails.razor.g.cs
+C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\Admin\CompanyWorkTypeManagement\CompanyWorkTypeManagementDetails.razor.g.cs
+C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\Admin\CompanyWorkTypeManagement\CompanyWorkTypeManagementMapping.razor.g.cs
+C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\Admin\CompanyWorkTypeManagement\CompanyWorkTypeManagementOverview.razor.g.cs
+C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\Admin\UserManagement\ManageUsersDetail.razor.g.cs
 C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\Admin\UserManagement\ManageUsersDropDownMenu.razor.g.cs
+C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\Admin\UserManagement\ManageUsersMainPage.razor.g.cs
+C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\Admin\UserManagement\ManageUsersOverview.razor.g.cs
 C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\Chapters\ChapterAddOrEdit.razor.g.cs
 C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\Chapters\ChapterCaseTypeEdit.razor.g.cs
+C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\Chapters\ChapterCopy.razor.g.cs
 C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\Chapters\ChapterDetail.razor.g.cs
+C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\Chapters\ChapterExport.razor.g.cs
 C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\Chapters\ChapterFees.razor.g.cs
 C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\Chapters\ChapterItemComparison.razor.g.cs
 C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\Chapters\ChapterList.razor.g.cs
+C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\ConfirmDialog.razor.g.cs
+C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\Index.razor.g.cs
+C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\Shared\Modals\ModalConfirm.razor.g.cs
+C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\Shared\Modals\ModalDelete.razor.g.cs
+C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\Shared\Modals\ModalInfo.razor.g.cs
 C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\Shared\Modals\ModalSystemSelect.razor.g.cs
 C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\Shared\Modals\ModalTooltip.razor.g.cs
+C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\SystemNav\CompanyManagement\CompanyEdit.razor.g.cs
+C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\SystemNav\CompanyManagement\ManageCompanies.razor.g.cs
+C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\SystemNav\RoleManagement\ManageUserRoles.razor.g.cs
+C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\SystemNav\RoleManagement\RoleDetail.razor.g.cs
+C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\SystemNav\SystemNav.razor.g.cs
+C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\SystemNav\WorkTypeManagement\ManageWorkTypes.razor.g.cs
+C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\SystemNav\WorkTypeManagement\WorkTypeDepartmentDetails.razor.g.cs
+C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\SystemNav\WorkTypeManagement\WorkTypeDetails.razor.g.cs
+C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\SystemNav\WorkTypeManagement\WorkTypeGroupDetails.razor.g.cs
+C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\SystemNav\WorkTypeManagement\WorkTypeGroupingDetails.razor.g.cs
+C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\UserProfile\UserProfile.razor.g.cs
+C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Shared\LoginDisplay.razor.g.cs
+C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Shared\MainLayout.razor.g.cs
+C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Shared\NavMenu.razor.g.cs
+C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Shared\SurveyPrompt.razor.g.cs
+C:\Users\p_taylor\Source\Repos\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\_Imports.razor.g.cs

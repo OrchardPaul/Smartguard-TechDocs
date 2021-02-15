@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "5SSxPbFqZj/f9S42rmsvhq6Qw8UuFWShWhPT6rDA7hGIsNc9PskLXL5jqcj+AHjMy4Qv3FcCLqJ3h9YIVhKecQ==",
+  "dgSpecHash": "M3gTLwUJUiqqNwwmmmVU9IwwlipNgCKsGWBiXbjtZZiBN6NFwOjjdlP+ZyzTXpEofGCcM6h+/ajOYjXv/uN2FA==",
   "success": true,
   "projectFilePath": "C:\\Users\\p_taylor\\Source\\Repos\\GadjIT\\Project Gizmo\\Gizmo V1_02\\GadjIT V1_02.csproj",
   "expectedPackageFiles": [
@@ -8,6 +8,7 @@
     "C:\\Users\\p_taylor\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\8.0.1\\automapper.extensions.microsoft.dependencyinjection.8.0.1.nupkg.sha512",
     "C:\\Users\\p_taylor\\.nuget\\packages\\blazor-dragdrop\\2.1.0\\blazor-dragdrop.2.1.0.nupkg.sha512",
     "C:\\Users\\p_taylor\\.nuget\\packages\\blazored.modal\\6.0.0\\blazored.modal.6.0.0.nupkg.sha512",
+    "C:\\Users\\p_taylor\\.nuget\\packages\\blazorinputfile\\0.2.0\\blazorinputfile.0.2.0.nupkg.sha512",
     "C:\\Users\\p_taylor\\.nuget\\packages\\entityframework\\6.4.4\\entityframework.6.4.4.nupkg.sha512",
     "C:\\Users\\p_taylor\\.nuget\\packages\\microsoft.aspnetcore.authentication\\2.2.0\\microsoft.aspnetcore.authentication.2.2.0.nupkg.sha512",
     "C:\\Users\\p_taylor\\.nuget\\packages\\microsoft.aspnetcore.authentication.abstractions\\2.2.0\\microsoft.aspnetcore.authentication.abstractions.2.2.0.nupkg.sha512",

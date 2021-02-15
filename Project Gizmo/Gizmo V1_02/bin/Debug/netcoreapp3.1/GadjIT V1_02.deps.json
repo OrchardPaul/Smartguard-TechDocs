@@ -26,6 +26,7 @@
         "dependencies": {
           "AutoMapper": "10.0.0",
           "AutoMapper.Extensions.Microsoft.DependencyInjection": "8.0.1",
+          "BlazorInputFile": "0.2.0",
           "Blazored.Modal": "6.0.0",
           "GadjIT.ClientContext": "1.0.0",
           "GadjIT.GadjitContext": "1.0.0",
@@ -369,6 +370,21 @@
         },
         "compile": {
           "lib/netstandard2.1/Blazored.Modal.dll": {}
+        }
+      },
+      "BlazorInputFile/0.2.0": {
+        "dependencies": {
+          "Microsoft.AspNetCore.Components": "3.1.6",
+          "Microsoft.AspNetCore.Components.Web": "3.1.6"
+        },
+        "runtime": {
+          "lib/netstandard2.1/BlazorInputFile.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        },
+        "compile": {
+          "lib/netstandard2.1/BlazorInputFile.dll": {}
         }
       },
       "EntityFramework/6.4.4": {
@@ -4362,6 +4378,13 @@
       "sha512": "sha512-MTfSnPtgb7wxFf078NZRuIy0DhMEflhRrNKQ7MLoWqS1ArV1k/8p+RI/8yVodWAUKzjEnj0rapkka1+nsX6ohA==",
       "path": "blazored.modal/6.0.0",
       "hashPath": "blazored.modal.6.0.0.nupkg.sha512"
+    },
+    "BlazorInputFile/0.2.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-wsPTwoA9fkHOxjEh0W0brNeTaVBaMCFwfBLehbRhfW+RzlIrYtlJ5qFpT5f377Ej6ELk+xeoUrkDBx9c8JF7DQ==",
+      "path": "blazorinputfile/0.2.0",
+      "hashPath": "blazorinputfile.0.2.0.nupkg.sha512"
     },
     "EntityFramework/6.4.4": {
       "type": "package",
