@@ -317,16 +317,31 @@ else
                     <div class="mb-3 flex-box">
                         @if (showJSON)
                         {
-                            <div class="detail-group-box" id="form-controls-json">
-                                <h5>Chapter JSON</h5>
-                                <div class="alert alert-danger mt-3 @(!IsJsonValid ? "hidden" : "")">JSON entered is not valid</div>
-                               
-                                <textarea type="text" class="form-control" @bind="SelectedChapterObject.ChapterData" ></textarea>
-                                <div class="button-container">
-                                    <button type="button" @onclick="SaveJsonFromDirectInput" class="btn btn-main">Save</button>
-                                    <button type="button" class="btn btn-secondary" @onclick="CloseUpdateJSON">Cancel</button>
-                                </div>
+                        <div class="detail-group-box" id="form-controls-json">
+                            <h5>Chapter JSON</h5>
+                            <div class="alert alert-danger mt-3 @(!string.IsNullOrEmpty(alertMsgJSOM) ? "hidden" : "")">@alertMsgJSOM</div>
+
+                            <InputFile multiple OnChange="HandleJSONFileSelection" class="custom-file-"></InputFile>
+                            
+                            <div class="grid-can-edit" id="modal-edit-fees-list">
+                                @foreach (var file in filesJSON)
+                                {
+                                    <div class="grid-row grid-row-sm">
+                                        <div class="data-item">
+                                            <div class="data-item-sub">
+                                                @file.Name
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
                             </div>
+
+                            <textarea type="text" class="form-control" @bind="SelectedChapterObject.ChapterData"></textarea>
+                            <div class="button-container">
+                                <button type="button" @onclick="SaveJsonFromDirectInput" class="btn btn-main">Save</button>
+                                <button type="button" class="btn btn-secondary" @onclick="CloseUpdateJSON">Cancel</button>
+                            </div>
+                        </div>
                         }
                         else
                         {

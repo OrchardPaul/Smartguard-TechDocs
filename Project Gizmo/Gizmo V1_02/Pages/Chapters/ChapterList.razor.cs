@@ -1,13 +1,10 @@
 ﻿using GadjIT.ClientContext.P4W;
 using Microsoft.AspNetCore.Components;
-using Microsoft.JSInterop;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Gizmo_V1_02.Services;
-using Microsoft.AspNetCore.Components.Authorization;
-using System.Net;
 using System.Web;
 using Gizmo_V1_02.Services.SessionState;
 using Blazored.Modal.Services;
@@ -20,6 +17,8 @@ using Newtonsoft.Json;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json.Schema.Generation;
 using Newtonsoft.Json.Schema;
+using Microsoft.AspNetCore.Hosting;
+using BlazorInputFile;
 
 namespace Gizmo_V1_02.Pages.Chapters
 {
@@ -45,6 +44,12 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         [Inject]
         public IUserSessionState sessionState { get; set; }
+
+        [Inject]
+        public IWebHostEnvironment env { get; set; }
+
+        [Inject]
+        private IFileUpload fileUpload { get; set; }
 
         private List<VmUsrOrDefChapterManagement> lstChapters { get; set; } = new List<VmUsrOrDefChapterManagement>();
 
@@ -121,9 +126,7 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         public bool ListChapterLoaded = false;
 
-        public bool IsJsonValid = true;
-
-        public string jsonUpdateMessage { get; set; }
+        public string alertMsgJSOM { get; set; }
         
         public bool showJSON = false;
 
@@ -883,11 +886,13 @@ namespace Gizmo_V1_02.Pages.Chapters
             Modal.Show<ChapterAddOrEdit>("Chapter", parameters, options);
         }
 
+        
+
         private void ShowUpdateJSON()
         {
             updateJSON = SelectedChapterObject.ChapterData;
 
-            IsJsonValid = true;
+            alertMsgJSOM = "";
 
             showJSON = true;
 
@@ -904,7 +909,8 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         private async void SaveJsonFromDirectInput()
         {
-            IsJsonValid = false;
+            alertMsgJSOM = "";
+            var IsJsonValid = false;
 
             JSchemaGenerator generator = new JSchemaGenerator();
             try
@@ -1155,6 +1161,26 @@ namespace Gizmo_V1_02.Pages.Chapters
                 SyncToAltSystem(navDisplay);
             }
 
+        }
+
+        private List<IFileListEntry> filesJSON = new List<IFileListEntry>();
+        private async void HandleJSONFileSelection(IFileListEntry[] entryFiles)
+        {
+            var files = new List<IFileListEntry>();
+            foreach (var file in entryFiles)
+            {
+                if (file != null)
+                {
+                    await fileUpload.Upload(file);
+                    files.Add(file);
+                }
+
+            }
+            if(files != null && files.Count > 0)
+            {
+                filesJSON = files;
+                StateHasChanged();
+            }
         }
 
         /// <summary>

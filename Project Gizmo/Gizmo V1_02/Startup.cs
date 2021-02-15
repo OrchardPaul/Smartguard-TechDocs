@@ -74,6 +74,7 @@ namespace Gizmo_V1_02
             services.AddScoped<IUserManagementSelectedUserState, UserManagementSelectedUserState>();
             services.AddScoped<IChapterState, ChapterState>();
             services.AddBlazoredModal();
+            services.AddScoped<IFileUpload, FileUpload>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
