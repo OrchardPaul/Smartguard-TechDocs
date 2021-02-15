@@ -25,6 +25,7 @@ using Gizmo_V1_02.Services.Email;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Gizmo_V1_02.Services.SessionState;
 using Blazored.Modal;
+using Gizmo_V1_02.Pages.Chapters;
 
 namespace Gizmo_V1_02
 {
@@ -75,6 +76,7 @@ namespace Gizmo_V1_02
             services.AddScoped<IChapterState, ChapterState>();
             services.AddBlazoredModal();
             services.AddScoped<IFileUpload, FileUpload>();
+            services.AddScoped<IChapterFileUpload, ChapterFileUpload>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

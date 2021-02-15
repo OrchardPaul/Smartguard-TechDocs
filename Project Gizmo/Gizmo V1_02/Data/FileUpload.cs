@@ -13,12 +13,14 @@ namespace Gizmo_V1_02.Data
     {
         private readonly IWebHostEnvironment webHostEnvironment;
 
+        public bool IsFileValid { get; set; }
+
+        public Action<string> ValidationAction { get; set; }
 
         public FileUpload(IWebHostEnvironment webHost)
         {
             webHostEnvironment = webHost;
         }
-
 
         public async Task Upload(IFileListEntry file)
         {
@@ -28,11 +30,20 @@ namespace Gizmo_V1_02.Data
 
             await file.Data.CopyToAsync(MemStream);
 
-            using (FileStream fs = new FileStream(path, FileMode.Create, FileAccess.Write))
+            ValidationAction.Invoke(path);
+
+            if (IsFileValid)
             {
-                MemStream.WriteTo(fs);
+
+                using (FileStream fs = new FileStream(path, FileMode.Create, FileAccess.Write))
+                {
+
+                    MemStream.WriteTo(fs);
+                }
             }
-                
         }
+
+
+
     }
 }

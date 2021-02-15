@@ -56,6 +56,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="FileStorage\Chapters\Companies\FBC\" />
+    <Folder Include="FileStorage\Chapters\Companies\Orchard Debt\" />
+    <Folder Include="FileStorage\Chapters\Companies\Orchard Rock\" />
     <Folder Include="UploadedFiles\" />
     <Folder Include="Pages\Shared\GridTemplates\" />
   </ItemGroup>

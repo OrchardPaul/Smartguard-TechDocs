@@ -8,6 +8,8 @@ namespace Gizmo_V1_02.Services
 {
     public interface IFileUpload
     {
+        bool IsFileValid { get; set; }
+        Action<string> ValidationAction { get; set; }
         Task Upload(IFileListEntry file);
     }
 

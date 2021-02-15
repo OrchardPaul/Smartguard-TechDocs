@@ -49,7 +49,7 @@ namespace Gizmo_V1_02.Pages.Chapters
         public IWebHostEnvironment env { get; set; }
 
         [Inject]
-        private IFileUpload fileUpload { get; set; }
+        private IChapterFileUpload ChapterFileUpload { get; set; }
 
         private List<VmUsrOrDefChapterManagement> lstChapters { get; set; } = new List<VmUsrOrDefChapterManagement>();
 
@@ -1273,14 +1273,16 @@ namespace Gizmo_V1_02.Pages.Chapters
         }
 
         private List<IFileListEntry> filesJSON = new List<IFileListEntry>();
-        private async void HandleJSONFileSelection(IFileListEntry[] entryFiles)
+
+
+        private void HandleJSONFileSelection(IFileListEntry[] entryFiles)
         {
             var files = new List<IFileListEntry>();
             foreach (var file in entryFiles)
             {
                 if (file != null)
-                {
-                    await fileUpload.Upload(file);
+                {   
+                    ChapterFileUpload.UploadChapterFiles(file);
                     files.Add(file);
                 }
 
