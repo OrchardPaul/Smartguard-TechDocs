@@ -492,7 +492,7 @@ else
                                                     </div>
                                                 </div>
 
-                                                <div class="data-item-sub ">
+                                                <div class="data-item-sub " title="@doc.DocDisplayName">
                                                     <!--"Doc", "Letter", "Form", "Email", "Step"-->
                                                     @switch (doc.ChapterObject.Type)
                                                     {
@@ -586,7 +586,7 @@ else
                                                 </div>
 
 
-                                                <div class="data-item-sub">
+                                                <div class="data-item-sub" title="@doc.DocDisplayName">
                                                     <span class="fa fa-file mr-2"></span> @doc.DocDisplayName
                                                 </div>
                                                 <div class="data-item-right mr-2 ">
@@ -597,8 +597,8 @@ else
                                         }
                                         else
                                         {
-                                            <div class="data-item-sub">
-                                                <span class="far fa-file mr-1"></span> @doc.ChapterObject.Name
+                                            <div class="data-item-sub" title="@doc.DocDisplayName">
+                                                <span class="far fa-file mr-1"></span> @doc.DocDisplayName
                                                 <div class="data-item-right mr-2 ">
                                                     <div class="seq-no">@doc.ChapterObject.SeqNo</div>
                                                 </div>
@@ -607,7 +607,7 @@ else
                                         }
                                     </div>
                                     <div class="hidden-md-down data-item ">
-                                        <div class="data-item-sub font-85 pl-3">@(string.IsNullOrEmpty(doc.ChapterObject.AsName) ? "" : doc.ChapterObject.AsName)</div>
+                                        <div class="data-item-sub font-85 pl-3" title="@(string.IsNullOrEmpty(doc.ChapterObject.AsName) ? "" : doc.ChapterObject.AsName)">@(string.IsNullOrEmpty(doc.ChapterObject.AsName) ? "" : doc.ChapterObject.AsName)</div>
 
                                         @if (doc.ChapterObject.RescheduleDays.HasValue & !(doc.ChapterObject.RescheduleDays == 0))
                                         {
@@ -622,7 +622,7 @@ else
                                     <div class="hidden-md-down data-item ">
                                         @if (!(string.IsNullOrEmpty(doc.ChapterObject.CompleteName)))
                                         {
-                                            <div class="data-item-sub font-85 pl-3" title="This step will be saved in the agenda as @doc.ChapterObject.CompleteName.">
+                                            <div class="data-item-sub font-85 pl-3" title="This document will be saved in the agenda as @doc.ChapterObject.CompleteName.">
                                                 @doc.ChapterObject.CompleteName
                                             </div>
 
