@@ -4,14 +4,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Gizmo_V1_02.Services
+namespace Gizmo_V1_02.FileManagement.FileProcessing.Interface
 {
-    public interface IFileUpload
+    public interface IFileHelper
     {
         bool IsFileValid { get; set; }
         Action<string> ValidationAction { get; set; }
         Task Upload(IFileListEntry file);
     }
-
-    
 }
