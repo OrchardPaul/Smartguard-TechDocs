@@ -1,15 +1,16 @@
 ﻿using BlazorInputFile;
-using Gizmo_V1_02.Services;
+using Gizmo_V1_02.FileManagement.FileProcessing.Interface;
 using Microsoft.AspNetCore.Hosting;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
-namespace Gizmo_V1_02.Data      
+namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
 {
-    public class FileUpload : IFileUpload
+    public class FileHelper : IFileHelper
     {
         private readonly IWebHostEnvironment webHostEnvironment;
 
@@ -17,7 +18,7 @@ namespace Gizmo_V1_02.Data
 
         public Action<string> ValidationAction { get; set; }
 
-        public FileUpload(IWebHostEnvironment webHost)
+        public FileHelper(IWebHostEnvironment webHost)
         {
             webHostEnvironment = webHost;
         }
@@ -34,16 +35,28 @@ namespace Gizmo_V1_02.Data
 
             if (IsFileValid)
             {
-
                 using (FileStream fs = new FileStream(path, FileMode.Create, FileAccess.Write))
                 {
-
                     MemStream.WriteTo(fs);
                 }
             }
         }
 
+        public string Read(IFileListEntry file)
+        {
+            using FileStream fs = File.OpenRead(file.Name);
 
+            byte[] buf = new byte[1024];
+            int c;
+            var test = "";
+
+            while ((c = fs.Read(buf, 0, buf.Length)) > 0)
+            {
+                test = Encoding.UTF8.GetString(buf, 0, c);
+            }
+
+            return test;
+        }
 
     }
 }

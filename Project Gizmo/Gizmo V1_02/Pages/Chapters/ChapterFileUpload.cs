@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using BlazorInputFile;
 using Gizmo_V1_02.Data;
-using Gizmo_V1_02.Services;
+using Gizmo_V1_02.FileManagement.FileProcessing.Interface;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Hosting;
 using Newtonsoft.Json.Linq;
@@ -15,9 +15,9 @@ namespace Gizmo_V1_02.Pages.Chapters
 {
     public class ChapterFileUpload : IChapterFileUpload
     {
-        public IFileUpload FileUpload { get; set; }
+        public IFileHelper FileUpload { get; set; }
 
-        public ChapterFileUpload(IFileUpload fileUpload)
+        public ChapterFileUpload(IFileHelper fileUpload)
         {
             FileUpload = fileUpload;
         }

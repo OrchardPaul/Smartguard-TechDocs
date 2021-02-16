@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="FileStorage\**" />
+    <Content Remove="FileStorage\**" />
+    <EmbeddedResource Remove="FileStorage\**" />
+    <None Remove="FileStorage\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="Data\Migrations\20200930134632_AddClaimStore.cs" />
     <Compile Remove="Data\Migrations\20200930134632_AddClaimStore.Designer.cs" />              
     <Compile Remove="Data\Migrations\20201001123815_InitCompanyDetailss.cs" />
@@ -56,9 +63,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="FileStorage\Chapters\Companies\FBC\" />
-    <Folder Include="FileStorage\Chapters\Companies\Orchard Debt\" />
-    <Folder Include="FileStorage\Chapters\Companies\Orchard Rock\" />
+    <Folder Include="FileManagement\FileStorage\" />
     <Folder Include="UploadedFiles\" />
     <Folder Include="Pages\Shared\GridTemplates\" />
   </ItemGroup>

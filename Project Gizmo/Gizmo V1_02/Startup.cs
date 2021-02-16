@@ -26,6 +26,8 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Gizmo_V1_02.Services.SessionState;
 using Blazored.Modal;
 using Gizmo_V1_02.Pages.Chapters;
+using Gizmo_V1_02.FileManagement.FileProcessing.Interface;
+using Gizmo_V1_02.FileManagement.FileProcessing.Implementation;
 
 namespace Gizmo_V1_02
 {
@@ -75,7 +77,7 @@ namespace Gizmo_V1_02
             services.AddScoped<IUserManagementSelectedUserState, UserManagementSelectedUserState>();
             services.AddScoped<IChapterState, ChapterState>();
             services.AddBlazoredModal();
-            services.AddScoped<IFileUpload, FileUpload>();
+            services.AddScoped<IFileHelper, FileHelper>();
             services.AddScoped<IChapterFileUpload, ChapterFileUpload>();
         }
 
