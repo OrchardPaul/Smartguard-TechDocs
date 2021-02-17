@@ -10,6 +10,7 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Interface
     {
         bool IsFileValid { get; set; }
         Action<string> ValidationAction { get; set; }
+        string CustomPath { get; set; }
         Task Upload(IFileListEntry file);
     }
 }

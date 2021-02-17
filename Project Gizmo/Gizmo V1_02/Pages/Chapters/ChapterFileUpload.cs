@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using BlazorInputFile;
 using Gizmo_V1_02.Data;
+using Gizmo_V1_02.FileManagement.FileOptions;
 using Gizmo_V1_02.FileManagement.FileProcessing.Interface;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Hosting;
@@ -23,8 +25,9 @@ namespace Gizmo_V1_02.Pages.Chapters
         }
 
 
-        public async void UploadChapterFiles(IFileListEntry files)
+        public async void UploadChapterFiles(IFileListEntry files, ChapterFileOptions chapterFileOptions)
         {
+            FileUpload.CustomPath = $"FileManagement/FileStorage/{chapterFileOptions.Company}/{chapterFileOptions.CaseTypeGroup}/{chapterFileOptions.CaseType}/{chapterFileOptions.CaseTypeGroup}";
             FileUpload.ValidationAction = ChapterFileIsValid;
 
             await FileUpload.Upload(files);

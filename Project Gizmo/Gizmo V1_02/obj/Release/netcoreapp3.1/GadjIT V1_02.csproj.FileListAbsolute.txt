@@ -306,3 +306,11 @@ F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razo
 F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Pages\Chapters\ChapterFees.razor.g.cs
 F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Pages\Chapters\ChapterItemComparison.razor.g.cs
 F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Pages\Chapters\ChapterList.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\BlazorInputFile.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\Newtonsoft.Json.Schema.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\RazorDeclaration\Pages\Chapters\ChapterCopy.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\RazorDeclaration\Pages\Chapters\ChapterExport.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\RazorDeclaration\Pages\Shared\Modals\ModalConfirm.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Pages\Chapters\ChapterCopy.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Pages\Chapters\ChapterExport.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Pages\Shared\Modals\ModalConfirm.razor.g.cs

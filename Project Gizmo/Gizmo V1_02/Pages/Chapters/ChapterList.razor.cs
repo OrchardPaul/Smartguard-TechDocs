@@ -19,6 +19,7 @@ using Newtonsoft.Json.Schema.Generation;
 using Newtonsoft.Json.Schema;
 using Microsoft.AspNetCore.Hosting;
 using BlazorInputFile;
+using Gizmo_V1_02.FileManagement.FileOptions;
 
 namespace Gizmo_V1_02.Pages.Chapters
 {
@@ -1278,11 +1279,19 @@ namespace Gizmo_V1_02.Pages.Chapters
         private void HandleJSONFileSelection(IFileListEntry[] entryFiles)
         {
             var files = new List<IFileListEntry>();
+            var chapterOptions = new ChapterFileOptions
+            {
+                Company = sessionState.Company.CompanyName,
+                CaseTypeGroup = SelectedChapterObject.CaseTypeGroup,
+                CaseType = SelectedChapterObject.CaseType,
+                Chapter = SelectedChapterObject.Name
+            };
+            
             foreach (var file in entryFiles)
             {
                 if (file != null)
                 {   
-                    ChapterFileUpload.UploadChapterFiles(file);
+                    ChapterFileUpload.UploadChapterFiles(file,chapterOptions);
                     files.Add(file);
                 }
 

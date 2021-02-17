@@ -470,139 +470,124 @@ else
                                 <div class="row grid-row grid-row-lg @(rowChanged == doc.ChapterObject.SeqNo ? "row-changed" : "" )">
                                     <div class="data-item ">
 
-                                        @if (sessionState.isAdminUser)
+                                        @if (sessionState.isAdminUser && !compareSystems)
                                         {
-                                            @if (!compareSystems)
-                                            {
-                                                <div class="btn-ellipses float-left">
-                                                    <span class="fa fa-ellipsis-v"></span>
+                                            <div class="btn-ellipses float-left">
+                                                <span class="fa fa-ellipsis-v"></span>
 
-                                                    <div class="ellipsis-menu">
-                                                        <ul>
-                                                            <li class="col-main" @onclick='(() => PrepareForEdit(doc, "Steps and Documents"))'>
-                                                                <span class="fa fa-pencil-alt mr-2"></span>
-                                                                <span>Edit</span>
-                                                            </li>
-                                                            <li class="col-red" @onclick="() => PrepareChapterDetailDelete(doc)">
-                                                                <span class="fa fa-trash-alt mr-2"></span>
-                                                                <span>Delete</span>
-                                                            </li>
+                                                <div class="ellipsis-menu">
+                                                    <ul>
+                                                        <li class="col-main" @onclick='(() => PrepareForEdit(doc, "Steps and Documents"))'>
+                                                            <span class="fa fa-pencil-alt mr-2"></span>
+                                                            <span>Edit</span>
+                                                        </li>
+                                                        <li class="col-red" @onclick="() => PrepareChapterDetailDelete(doc)">
+                                                            <span class="fa fa-trash-alt mr-2"></span>
+                                                            <span>Delete</span>
+                                                        </li>
 
-                                                        </ul>
-                                                    </div>
+                                                    </ul>
                                                 </div>
-
-                                                <div class="data-item-sub " title="@doc.DocDisplayName">
-                                                    <!--"Doc", "Letter", "Form", "Email", "Step"-->
-                                                    @switch (doc.ChapterObject.Type)
+                                            </div>
+                                        }
+                                        else if (sessionState.isAdminUser && compareSystems)
+                                        {
+                                            <div class="btn-ellipses float-left">
+                                                @if (!(doc.ComparisonIcon is null))
+                                                {
+                                                    @if (!(doc.ComparisonResult == "Exact match"))
                                                     {
-                                                        case "Doc":
-                                                            <span class="font-100"><span class="fa fa-file mr-2"></span></span>
-                                                            break;
-                                                        case "Letter":
-                                                            <span class="font-100"><span class="fa fa-file-alt mr-2"></span></span>
-                                                            break;
-                                                        case "Form":
-                                                            <span class="font-100"><span class="fa fa-file-pdf mr-2"></span></span>
-                                                            break;
-                                                        case "Email":
-                                                            <span class="font-100"><span class="fa fa-envelope mr-2"></span></span>
-                                                            break;
-                                                        case "Step":
-                                                            <span class="font-100"><span class="fa fa-list-ol mr-2"></span></span>
-                                                            break;
-                                                        default:
-                                                            <span class="font-100"><span class="fa fa-file mr-2"></span></span>
-                                                            break;
-                                                    }
-
-
-                                                    @doc.DocDisplayName
-                                                </div>
-                                                @if (doc.DocOrigName != "")
-                                                {
-
-                                                    <div class="data-item-right mr-2 font-100 hidden-md-down">
-                                                        <ModalTooltip Direction="top" Text=@("Template: " + doc.DocOrigName) Class="w-3">
-                                                            <span class="fa fa-clone"></span>
-                                                        </ModalTooltip>
-                                                    </div>
-
-                                                }
-                                                @if (!string.IsNullOrEmpty(doc.ChapterObject.UserMessage))
-                                                {
-
-                                                    <div class="data-item-right mr-2 font-100 hidden-md-down">
-                                                        <ModalTooltip Direction="top" Text=@("POPUP: " + doc.ChapterObject.UserMessage) Class="w-3">
-                                                            <span class="fa fa-exclamation-triangle"></span>
-                                                        </ModalTooltip>
-                                                    </div>
-
-                                                }
-                                                @if (!string.IsNullOrEmpty(doc.ChapterObject.UserNotes))
-                                                {
-
-                                                    <div class="data-item-right mr-2 font-100 hidden-md-down">
-                                                        <ModalTooltip Direction="top" Text=@("NOTES: " + doc.ChapterObject.UserNotes) Class="w-3">
-                                                            <span class="fa fa-comment"></span>
-                                                        </ModalTooltip>
-                                                    </div>
-
-                                                }
-                                                @if (!(doc.ChapterObject.FollowUpDocs is null))
-                                                {
-                                                    <div class="data-item-right followup-doc">
-                                                        <ModalTooltip Direction="left" Text="This document will have a follow-up document inserted/taken.">
-                                                            <span class="fa fa-paperclip"></span>
-                                                        </ModalTooltip>
-                                                    </div>
-                                                }
-                                                <div class="data-item-right mr-2 seq-change">
-                                                    <div @onclick='() => MoveSeq(doc.ChapterObject,"Docs","Up")'><span class="fa fa-angle-up"></span></div>
-                                                    <div class="seq-no">@doc.ChapterObject.SeqNo</div>
-                                                    <div @onclick='() => MoveSeq(doc.ChapterObject,"Docs","Down")'><span class="fa fa-angle-down"></span></div>
-                                                </div>
-                                            }
-                                            else
-                                            {
-
-                                                <div class="btn-ellipses float-left">
-                                                    @if (!(doc.ComparisonIcon is null))
-                                                    {
-                                                        @if (!(doc.ComparisonResult == "Exact match"))
-                                                        {
-                                                            <div class="btn-dashed" @onclick="() => PrepareForComparison(doc)"><span class="fa fa-@doc.ComparisonIcon"></span></div>
-                                                        }
-                                                        else
-                                                        {
-                                                            <span class="fa fa-@doc.ComparisonIcon"></span>
-                                                        }
+                                                        <div class="btn-dashed" @onclick="() => PrepareForComparison(doc)"><span class="fa fa-@doc.ComparisonIcon"></span></div>
                                                     }
                                                     else
                                                     {
-                                                        <div class="spinner"></div>
+                                                        <span class="fa fa-@doc.ComparisonIcon"></span>
                                                     }
+                                                }
+                                                else
+                                                {
+                                                    <div class="spinner"></div>
+                                                }
 
-                                                </div>
+                                            </div>
+                                        }
 
-
-                                                <div class="data-item-sub" title="@doc.DocDisplayName">
-                                                    <span class="fa fa-file mr-2"></span> @doc.DocDisplayName
-                                                </div>
-                                                <div class="data-item-right mr-2 ">
-                                                    <div class="seq-no">@doc.ChapterObject.SeqNo</div>
-                                                </div>
-
+                                        <div class="data-item-sub " title="@doc.DocDisplayName">
+                                            <!--"Doc", "Letter", "Form", "Email", "Step"-->
+                                            @switch (doc.ChapterObject.Type)
+                                            {
+                                                case "Doc":
+                                                    <span class="font-100"><span class="fa fa-file mr-2"></span></span>
+                                                    break;
+                                                case "Letter":
+                                                    <span class="font-100"><span class="fa fa-file-alt mr-2"></span></span>
+                                                    break;
+                                                case "Form":
+                                                    <span class="font-100"><span class="fa fa-file-pdf mr-2"></span></span>
+                                                    break;
+                                                case "Email":
+                                                    <span class="font-100"><span class="fa fa-envelope mr-2"></span></span>
+                                                    break;
+                                                case "Step":
+                                                    <span class="font-100"><span class="fa fa-list-ol mr-2"></span></span>
+                                                    break;
+                                                default:
+                                                    <span class="font-100"><span class="fa fa-file mr-2"></span></span>
+                                                    break;
                                             }
+
+
+                                            @doc.DocDisplayName
+                                        </div>
+
+                                        @if (doc.DocOrigName != "")
+                                        {
+                                            <div class="data-item-right mr-2 font-100 hidden-md-down">
+                                                <ModalTooltip Direction="top" Text=@("Template: " + doc.DocOrigName) Class="w-3">
+                                                    <span class="fa fa-clone"></span>
+                                                </ModalTooltip>
+                                            </div>
+                                        }
+
+                                        @if (!string.IsNullOrEmpty(doc.ChapterObject.UserMessage))
+                                        {
+                                            <div class="data-item-right mr-2 font-100 hidden-md-down">
+                                                <ModalTooltip Direction="top" Text=@("POPUP: " + doc.ChapterObject.UserMessage) Class="w-3">
+                                                    <span class="fa fa-exclamation-triangle"></span>
+                                                </ModalTooltip>
+                                            </div>
+                                        }
+
+                                        @if (!string.IsNullOrEmpty(doc.ChapterObject.UserNotes))
+                                        {
+                                            <div class="data-item-right mr-2 font-100 hidden-md-down">
+                                                <ModalTooltip Direction="top" Text=@("NOTES: " + doc.ChapterObject.UserNotes) Class="w-3">
+                                                    <span class="fa fa-comment"></span>
+                                                </ModalTooltip>
+                                            </div>
+                                        }
+
+                                        @if (!(doc.ChapterObject.FollowUpDocs is null))
+                                        {
+                                            <div class="data-item-right followup-doc">
+                                                <ModalTooltip Direction="left" Text="This document will have a follow-up document inserted/taken.">
+                                                    <span class="fa fa-paperclip"></span>
+                                                </ModalTooltip>
+                                            </div>
+                                        }
+
+                                        @if (sessionState.isAdminUser && !compareSystems)
+                                        {
+                                            <div class="data-item-right mr-2 seq-change">
+                                                <div @onclick='() => MoveSeq(doc.ChapterObject,"Docs","Up")'><span class="fa fa-angle-up"></span></div>
+                                                <div class="seq-no">@doc.ChapterObject.SeqNo</div>
+                                                <div @onclick='() => MoveSeq(doc.ChapterObject,"Docs","Down")'><span class="fa fa-angle-down"></span></div>
+                                            </div>
                                         }
                                         else
                                         {
-                                            <div class="data-item-sub" title="@doc.DocDisplayName">
-                                                <span class="far fa-file mr-1"></span> @doc.DocDisplayName
-                                                <div class="data-item-right mr-2 ">
-                                                    <div class="seq-no">@doc.ChapterObject.SeqNo</div>
-                                                </div>
-
+                                            <div class="data-item-right mr-2 ">
+                                                <div class="seq-no">@doc.ChapterObject.SeqNo</div>
                                             </div>
                                         }
                                     </div>
@@ -981,11 +966,22 @@ else
                                         </div>
                                     }
 
-                                    <div class="data-item-right seq-change">
-                                        <div @onclick='() => MoveSeq(status.ChapterObject,"Status","Up")'><span class="fa fa-angle-up"></span></div>
-                                        <div class="seq-no">@status.ChapterObject.SeqNo</div>
-                                        <div @onclick='() => MoveSeq(status.ChapterObject,"Status","Down")'><span class="fa fa-angle-down"></span></div>
-                                    </div>
+                                    @if (sessionState.isAdminUser && !compareSystems)
+                                    {
+                                        
+                                        <div class="data-item-right seq-change">
+                                            <div @onclick='() => MoveSeq(status.ChapterObject,"Status","Up")'><span class="fa fa-angle-up"></span></div>
+                                            <div class="seq-no">@status.ChapterObject.SeqNo</div>
+                                            <div @onclick='() => MoveSeq(status.ChapterObject,"Status","Down")'><span class="fa fa-angle-down"></span></div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="data-item-right seq-change">
+                                            <div class="seq-no">@status.ChapterObject.SeqNo</div>
+                                        </div>
+                                    }
+
 
                                 </div>
 

@@ -63,7 +63,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="FileManagement\FileStorage\" />
+    <Folder Include="FileManagement\FileStorage\Default\" />
     <Folder Include="UploadedFiles\" />
     <Folder Include="Pages\Shared\GridTemplates\" />
   </ItemGroup>

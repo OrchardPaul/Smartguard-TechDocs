@@ -1,4 +1,5 @@
 ﻿using BlazorInputFile;
+using Gizmo_V1_02.FileManagement.FileOptions;
 using Gizmo_V1_02.FileManagement.FileProcessing.Interface;
 
 namespace Gizmo_V1_02.Pages.Chapters
@@ -8,6 +9,6 @@ namespace Gizmo_V1_02.Pages.Chapters
         IFileHelper FileUpload { get; set; }
 
         void ChapterFileIsValid(string path);
-        void UploadChapterFiles(IFileListEntry files);
+        void UploadChapterFiles(IFileListEntry files, ChapterFileOptions chapterFileOptions);
     }
 }

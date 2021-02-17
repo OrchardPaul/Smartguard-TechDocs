@@ -91,6 +91,20 @@ using Blazored.Modal.Services;
 #line hidden
 #nullable disable
 #nullable restore
+#line 12 "F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\_Imports.razor"
+using BlazorInputFile;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 13 "F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\_Imports.razor"
+using System.IO;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
 #line 2 "F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\Pages\Admin\UserManagement\ManageUsersOverview.razor"
 using Gizmo_V1_02.Pages.Shared.Modals;
 

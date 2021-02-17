@@ -18,6 +18,8 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
 
         public Action<string> ValidationAction { get; set; }
 
+        public string CustomPath { get; set; }
+
         public FileHelper(IWebHostEnvironment webHost)
         {
             webHostEnvironment = webHost;
@@ -25,7 +27,10 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
 
         public async Task Upload(IFileListEntry file)
         {
-            var path = Path.Combine(webHostEnvironment.ContentRootPath, "UploadedFiles", file.Name);
+            var path = string.IsNullOrEmpty(CustomPath) ? 
+                                    Path.Combine(webHostEnvironment.ContentRootPath, "FileManagement/FileStorage/Default", file.Name)
+                                    :
+                                    Path.Combine(webHostEnvironment.ContentRootPath, CustomPath, file.Name);
 
             var MemStream = new MemoryStream();
 
@@ -35,16 +40,52 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
 
             if (IsFileValid)
             {
-                using (FileStream fs = new FileStream(path, FileMode.Create, FileAccess.Write))
+                try
                 {
-                    MemStream.WriteTo(fs);
+                    using (FileStream fs = new FileStream(path, FileMode.Create, FileAccess.Write))
+                    {
+                        MemStream.WriteTo(fs);
+                    }
                 }
+                catch
+                {
+                    Directory.CreateDirectory(Path.GetDirectoryName(path));
+
+                    try
+                    {
+                        using (FileStream fs = new FileStream(path, FileMode.Create, FileAccess.Write))
+                        {
+                            MemStream.WriteTo(fs);
+                        }
+                    }
+                    catch
+                    {
+                        string fail = "Failed";
+                    }
+                }
+                
             }
         }
 
         public string Read(IFileListEntry file)
         {
             using FileStream fs = File.OpenRead(file.Name);
+
+            byte[] buf = new byte[1024];
+            int c;
+            var test = "";
+
+            while ((c = fs.Read(buf, 0, buf.Length)) > 0)
+            {
+                test = Encoding.UTF8.GetString(buf, 0, c);
+            }
+
+            return test;
+        }
+
+        public string Write(IFileListEntry file)
+        {
+            using FileStream fs = File.OpenWrite(file.Name);
 
             byte[] buf = new byte[1024];
             int c;

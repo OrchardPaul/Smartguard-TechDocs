@@ -13,6 +13,7 @@ h2 {
 h3 {
     font-weight: normal;
     font-family: Geneva, Tahoma, sans-serif;
+    font-size: 1.5rem;
 }
 
 h5{
@@ -36,8 +37,12 @@ h5{
     color: #777 !important;
 }
 
+.col-white, .font-white {
+    color: #fff !important;
+}
+
 .col-black, .font-black {
-    color: #777 !important;
+    color: #000 !important;
 }
 
 .col-red, .font-red {
@@ -55,7 +60,7 @@ h5{
     color: #009933;
 }
 
-.fa-times {
+.fa-times  {
     color: #cc0000;
 }
 
@@ -176,7 +181,7 @@ ul.ul-simple {
     border-color: #000 transparent transparent transparent;
 }
 
-.tooltip-wrapper span:first-child.tooltip-left {
+.tooltip-left span:first-child {
     left: 0;
     bottom: 0;
     width: 200px;
@@ -184,10 +189,10 @@ ul.ul-simple {
     margin-bottom: -20px;
 }
 
-.tooltip-wrapper span:first-child.tooltip-left::after {
+.tooltip-left span:first-child::after {
     top: calc(50% - 8px);
     left: 100%;
-    border-color: transparent transparent transparent  #000;
+    border-color: transparent transparent transparent #000;
 }
 
 .tooltip-wrapper:hover span:first-child {
@@ -196,16 +201,30 @@ ul.ul-simple {
     transition: opacity 0.5s linear, visibility 0.5s linear;
 }
 
-
-.tooltip-wrapper span:first-child.tooltip-w-1 {
+.tooltip-top span:first-child.tooltip-w-1 {
     min-width: 140px;
-    margin-left: -70px;
+    margin-left: -70px !important;
 }
-.tooltip-wrapper span:first-child.tooltip-w-2 {
+
+.tooltip-top span:first-child.tooltip-w-2 {
     min-width: 220px;
-    margin-left: -110px;
+    margin-left: -110px !important;
 }
-.tooltip-wrapper span:first-child.tooltip-w-3 {
+
+.tooltip-top span:first-child.tooltip-w-3 {
     min-width: 300px;
-    margin-left: -150px;
+    margin-left: -150px !important;
+}
+
+.tooltip-left span:first-child.tooltip-w-1 {
+    min-width: 140px;
+    margin-left: -210px !important;
+}
+.tooltip-left span:first-child.tooltip-w-2 {
+    min-width: 220px;
+    margin-left: -230px !important;
+}
+.tooltip-left span:first-child.tooltip-w-3 {
+    min-width: 300px;
+    margin-left: -310px !important;
 }
