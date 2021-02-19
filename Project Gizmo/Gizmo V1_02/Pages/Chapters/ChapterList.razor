@@ -91,11 +91,11 @@ else
                     {
 
                         @foreach (var caseType in lstChapters.Where(C => C.ChapterObject.ParentId == 0)
-   .Where(C => !(C.ChapterObject.CaseType is null))
-   .Where(C => C.ChapterObject.CaseTypeGroup == selectedChapter.CaseTypeGroup)
-   .Select(C => C.ChapterObject.CaseType)
-   .Distinct()
-   .ToList())
+  .Where(C => !(C.ChapterObject.CaseType is null))
+  .Where(C => C.ChapterObject.CaseTypeGroup == selectedChapter.CaseTypeGroup)
+  .Select(C => C.ChapterObject.CaseType)
+  .Distinct()
+  .ToList())
                         {
 
                             <div class="grid-row-md nav-row-2">
@@ -141,11 +141,11 @@ else
                             {
                                 <div class="grid-nav">
                                     @foreach (var Chapter in lstChapters
-                                                      .Where(C => C.ChapterObject.CaseType == selectedChapter.CaseType)
-                                                      .Where(C => C.ChapterObject.CaseTypeGroup == selectedChapter.CaseTypeGroup)
-                                                      .Where(C => C.ChapterObject.Type == "Chapter")
-                                                      .OrderBy(C => C.ChapterObject.SeqNo)
-                                                      .ToList())
+                                                     .Where(C => C.ChapterObject.CaseType == selectedChapter.CaseType)
+                                                     .Where(C => C.ChapterObject.CaseTypeGroup == selectedChapter.CaseTypeGroup)
+                                                     .Where(C => C.ChapterObject.Type == "Chapter")
+                                                     .OrderBy(C => C.ChapterObject.SeqNo)
+                                                     .ToList())
                                     {
                                         <div class="grid-row-md nav-row-3 no-border @(rowChanged == Chapter.ChapterObject.SeqNo ? ToggleRowChangedClass() : "" )">
                                             <div class="data-item ">
@@ -316,95 +316,99 @@ else
                     <div class="mb-3 flex-box">
                         @if (showJSON)
                         {
-                        <div class="detail-group-box" id="form-controls-json">
-                            <h5>Chapter JSON</h5>
-                            <div class="alert alert-danger mt-3 @(!string.IsNullOrEmpty(alertMsgJSOM) ? "hidden" : "")">@alertMsgJSOM</div>
+                            <div class="detail-group-box" id="form-controls-json">
+                                <h5>Chapter JSON</h5>
+                                <div class="alert alert-danger mt-3 @(!string.IsNullOrEmpty(alertMsgJSOM) ? "hidden" : "")">@alertMsgJSOM</div>
 
-                            <InputFile multiple OnChange="HandleJSONFileSelection" class="custom-file-"></InputFile>
-                            
-                            <div class="grid-can-edit" id="modal-edit-fees-list">
-                                @foreach (var file in filesJSON)
-                                {
-                                    <div class="grid-row grid-row-sm">
-                                        <div class="data-item">
-                                            <div class="data-item-sub">
-                                                @file.Name
+                                <InputFile multiple OnChange="HandleJSONFileSelection" class="custom-file-"></InputFile>
+                                <button @onclick="WriteChapterJSONToFile">Write JSON to file</button>
+
+                                <div class="grid-can-edit" id="modal-edit-fees-list">
+                                    @foreach (var fileDesc in ListFileDescriptions)
+                                    {
+                                        <div class="grid-row grid-row-sm">
+                                            <div class="data-item">
+                                                <div class="data-item-sub" @onclick="() => ReadFile(fileDesc.FilePath)">
+                                                    @fileDesc.FileName
+                                                </div>
+                                                @*<a class="data-item-sub" href="@fileDesc.FilePath" download="@fileDesc.FileName" target="_top">
+                                                        @fileDesc.FileName
+                                                    </a>*@
                                             </div>
                                         </div>
-                                    </div>
-                                }
-                            </div>
+                                    }
+                                </div>
 
-                            <textarea type="text" class="form-control" @bind="SelectedChapterObject.ChapterData"></textarea>
-                            <div class="button-container">
-                                <button type="button" @onclick="SaveJsonFromDirectInput" class="btn btn-main">Save</button>
-                                <button type="button" class="btn btn-secondary" @onclick="CloseUpdateJSON">Cancel</button>
+                                <textarea type="text" class="form-control" @bind="SelectedChapterObject.ChapterData"></textarea>
+                                <div class="button-container">
+                                    <button type="button" @onclick="SaveJsonFromDirectInput" class="btn btn-main">Save</button>
+                                    <button type="button" class="btn btn-secondary" @onclick="CloseUpdateJSON">Cancel</button>
+                                </div>
                             </div>
-                        </div>
                         }
                         else
                         {
 
-                        <div class="detail-group-box">
+                            <div class="detail-group-box">
 
-                            @if ((sessionState.isAdminUser))
-                            {
+                                @if ((sessionState.isAdminUser))
+                                {
 
-                                <EditForm Model="selectedChapter" OnValidSubmit="SaveChapterDetails">
+                                    <EditForm Model="selectedChapter" OnValidSubmit="SaveChapterDetails">
+
+                                        <div class="form-group">
+                                            <label>Chapter Name</label>
+                                            <InputText @bind-Value="selectedChapter.Name" class="form-control form-control-lg" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="BgColour">Background Colour</label>
+                                            <select @bind="selectedChapter.BackgroundColour" style="background-color: @getHTMLColourFromAndroid(selectedChapter.BackgroundColour)" class="form-control form-control-lg">
+                                                @foreach (var colour in ListChapterColours)
+                                                {
+                                                    <option style="background-color: @getHTMLColourFromAndroid(colour.ColourCode)" value="@colour.ColourCode">
+                                                        @colour.ColourName
+                                                    </option>
+                                                }
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>General Notes</label>
+                                            <InputTextArea @bind-Value="selectedChapter.GeneralNotes" class="form-control form-control-lg" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Devloper Notes</label>
+                                            <InputTextArea @bind-Value="selectedChapter.DelvolperNotes" class="form-control form-control-lg" />
+                                        </div>
+
+
+                                        <div class="button-container">
+                                            <button type="submit" class="btn btn-main">Save Changes</button>
+
+                                        </div>
+                                    </EditForm>
+
+
+                                }
+                                else
+                                {
 
                                     <div class="form-group">
-                                        <label>Chapter Name</label>
-                                        <InputText @bind-Value="selectedChapter.Name" class="form-control form-control-lg" />
+                                        <label>Chapter Name: </label>
+                                        <label class="form-control-value">@selectedChapter.Name</label>
                                     </div>
                                     <div class="form-group">
-                                        <label for="BgColour">Background Colour</label>
-                                        <select @bind="selectedChapter.BackgroundColour" style="background-color: @getHTMLColourFromAndroid(selectedChapter.BackgroundColour)" class="form-control form-control-lg">
-                                            @foreach (var colour in ListChapterColours)
-                                            {
-                                                <option style="background-color: @getHTMLColourFromAndroid(colour.ColourCode)" value="@colour.ColourCode">
-                                                    @colour.ColourName
-                                                </option>
-                                            }
-                                        </select>
+                                        <label>Background Colour:</label>
+                                        <label class="form-control-value" style="background-color: @getHTMLColourFromAndroid(selectedChapter.BackgroundColour)">
+                                            @ListChapterColours.Where(C => C.ColourCode == @selectedChapter.BackgroundColour).Select(C => C.ColourName).SingleOrDefault()
+                                        </label>
                                     </div>
 
-                                    <div class="form-group">
-                                        <label>General Notes</label>
-                                        <InputTextArea @bind-Value="selectedChapter.GeneralNotes" class="form-control form-control-lg" />
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Devloper Notes</label>
-                                        <InputTextArea @bind-Value="selectedChapter.DelvolperNotes" class="form-control form-control-lg" />
-                                    </div>
-
-
-                                    <div class="button-container">
-                                        <button type="submit" class="btn btn-main">Save Changes</button>
-
-                                    </div>
-                                </EditForm>
-
-
-                            }
-                            else
-                            {
-
-                                <div class="form-group">
-                                    <label>Chapter Name: </label>
-                                    <label class="form-control-value">@selectedChapter.Name</label>
-                                </div>
-                                <div class="form-group">
-                                    <label>Background Colour:</label>
-                                    <label class="form-control-value" style="background-color: @getHTMLColourFromAndroid(selectedChapter.BackgroundColour)">
-                                        @ListChapterColours.Where(C => C.ColourCode == @selectedChapter.BackgroundColour).Select(C => C.ColourName).SingleOrDefault()
-                                    </label>
-                                </div>
-
-                            }
-                        </div>
+                                }
+                            </div>
                         }
                     </div>
-                    </div>
+                </div>
             }
 
             @if (navDisplay == "Docs")
@@ -637,7 +641,7 @@ else
                                             </div>
                                         }
 
-                                       
+
                                     </div>
 
                                 </div>
@@ -968,7 +972,7 @@ else
 
                                     @if (sessionState.isAdminUser && !compareSystems)
                                     {
-                                        
+
                                         <div class="data-item-right seq-change">
                                             <div @onclick='() => MoveSeq(status.ChapterObject,"Status","Up")'><span class="fa fa-angle-up"></span></div>
                                             <div class="seq-no">@status.ChapterObject.SeqNo</div>

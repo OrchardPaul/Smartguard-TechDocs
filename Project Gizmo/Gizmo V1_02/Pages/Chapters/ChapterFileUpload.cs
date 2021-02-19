@@ -5,7 +5,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using BlazorInputFile;
 using Gizmo_V1_02.Data;
-using Gizmo_V1_02.FileManagement.FileOptions;
+using Gizmo_V1_02.FileManagement.FileClassObjects;
+using Gizmo_V1_02.FileManagement.FileClassObjects.FileOptions;
 using Gizmo_V1_02.FileManagement.FileProcessing.Interface;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Hosting;
@@ -17,27 +18,56 @@ namespace Gizmo_V1_02.Pages.Chapters
 {
     public class ChapterFileUpload : IChapterFileUpload
     {
-        public IFileHelper FileUpload { get; set; }
+        public IFileHelper FileHelper { get; set; }
 
         public ChapterFileUpload(IFileHelper fileUpload)
         {
-            FileUpload = fileUpload;
+            FileHelper = fileUpload;
         }
 
-
-        public async void UploadChapterFiles(IFileListEntry files, ChapterFileOptions chapterFileOptions)
+        public void SetChapterOptions(ChapterFileOptions chapterFileOptions)
         {
-            FileUpload.CustomPath = $"FileManagement/FileStorage/{chapterFileOptions.Company}/{chapterFileOptions.CaseTypeGroup}/{chapterFileOptions.CaseType}/{chapterFileOptions.CaseTypeGroup}";
-            FileUpload.ValidationAction = ChapterFileIsValid;
+            FileHelper.CustomPath = $"FileManagement/FileStorage/{chapterFileOptions.Company}/{chapterFileOptions.CaseTypeGroup}/{chapterFileOptions.CaseType}/{chapterFileOptions.Chapter}";
+        }
 
-            await FileUpload.Upload(files);
+        public async Task<bool> UploadChapterFiles(IFileListEntry files)
+        {
+            try
+            {
+
+                FileHelper.ValidationAction = ChapterFileIsValid;
+
+                return await FileHelper.Upload(files);
+
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public List<FileDesc> GetFileListForChapter()
+        {
+            return FileHelper.GetFileList();
+        }
+
+        public void WriteChapterToFile(string JSON)
+        {
+            List<string> output = new List<string> { JSON };
+
+            FileHelper.Write(output);
+        }
+
+        public string readJson(string path)
+        {
+            return FileHelper.ReadFileIntoString(path);
         }
 
         public void ChapterFileIsValid(string path)
         {
             bool isValid = true;
 
-            FileUpload.IsFileValid = isValid;
+            FileHelper.IsFileValid = isValid;
         }
 
     }

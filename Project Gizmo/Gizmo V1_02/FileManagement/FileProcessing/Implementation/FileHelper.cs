@@ -1,4 +1,5 @@
 ﻿using BlazorInputFile;
+using Gizmo_V1_02.FileManagement.FileClassObjects;
 using Gizmo_V1_02.FileManagement.FileProcessing.Interface;
 using Microsoft.AspNetCore.Hosting;
 using System;
@@ -25,9 +26,9 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
             webHostEnvironment = webHost;
         }
 
-        public async Task Upload(IFileListEntry file)
+        public async Task<bool> Upload(IFileListEntry file)
         {
-            var path = string.IsNullOrEmpty(CustomPath) ? 
+            var path = string.IsNullOrEmpty(CustomPath) ?
                                     Path.Combine(webHostEnvironment.ContentRootPath, "FileManagement/FileStorage/Default", file.Name)
                                     :
                                     Path.Combine(webHostEnvironment.ContentRootPath, CustomPath, file.Name);
@@ -46,6 +47,8 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
                     {
                         MemStream.WriteTo(fs);
                     }
+
+                    return true;
                 }
                 catch
                 {
@@ -57,46 +60,64 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
                         {
                             MemStream.WriteTo(fs);
                         }
+
+                        return true;
                     }
                     catch
                     {
-                        string fail = "Failed";
+                        return false;
                     }
                 }
-                
+
             }
+
+            var test = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+
+            return false;
         }
 
-        public string Read(IFileListEntry file)
+        public List<FileDesc> GetFileList()
         {
-            using FileStream fs = File.OpenRead(file.Name);
+            var fileList = new List<FileDesc>();
+
+            try
+            {
+                fileList.AddRange(Directory.GetFiles(CustomPath).Select(F => new FileDesc { FileName = Path.GetFileName(F), FilePath = Path.GetFullPath(F) }).ToList());
+
+                return fileList;
+            }
+            catch
+            {
+                return fileList;
+            }
+
+        }
+
+        public string ReadFileIntoString(string path)
+        {
+            using FileStream fs = File.OpenRead(path);
 
             byte[] buf = new byte[1024];
             int c;
-            var test = "";
+            var result = "";
 
             while ((c = fs.Read(buf, 0, buf.Length)) > 0)
             {
-                test = Encoding.UTF8.GetString(buf, 0, c);
+                result = Encoding.UTF8.GetString(buf, 0, c);
             }
 
-            return test;
+            return result;
         }
 
-        public string Write(IFileListEntry file)
+        public void Write(List<string> output)
         {
-            using FileStream fs = File.OpenWrite(file.Name);
-
-            byte[] buf = new byte[1024];
-            int c;
-            var test = "";
-
-            while ((c = fs.Read(buf, 0, buf.Length)) > 0)
+            // Write the string array to a new file named "WriteLines.txt".
+            using (StreamWriter outputFile = new StreamWriter(Path.Combine(CustomPath, "JSON.txt")))
             {
-                test = Encoding.UTF8.GetString(buf, 0, c);
+                foreach (string line in output)
+                    outputFile.WriteLine(line);
             }
 
-            return test;
         }
 
     }
