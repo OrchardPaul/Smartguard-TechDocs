@@ -5,7 +5,25 @@
     @media (min-width: 1200px) 
 */
 
+html, body{
+    overflow-x: hidden;
+}
 
+body {
+    overflow-y: hidden;
+}
+
+app {
+    height: 100%;
+}
+
+.main {
+    height: 100% !important;
+}
+
+.main .top-row {
+    justify-content: center;
+}
 
 .main > div {
     padding-left: 0 !important;
@@ -26,6 +44,10 @@
     padding: 0 !important;
 }
 
+.inner-content{
+    overflow-y: auto;
+    height: 100%;
+}
 
 .parallax {
     /* Full height */
@@ -47,24 +69,21 @@
     box-shadow: 0 6px 6px 0px rgba(0, 0, 0, 0.4);
 }
 
-.main .top-row {
-    justify-content: center;
-}
-
-
 
 .sidebar {
-    z-index: 99999;
+    z-index: 999999;
     background-color: #FFFFFF !important;
     box-shadow: 0px 0 4px 4px rgba(0, 0, 0, 0.4);
+ 
+    
 }
 
-    .sidebar .top-row {
-        background-color: #000000;
-        background-image: url(../images/GadJIT_logo_vsmall.jpg);
-        background-repeat: no-repeat;
-        background-position: center;
-    }
+.sidebar .top-row {
+    background-color: #000000;
+    background-image: url(../images/GadJIT_logo_vsmall.jpg);
+    background-repeat: no-repeat;
+    background-position: center;
+}
 
 .page-footer {
     height: 30px;

@@ -11,6 +11,19 @@
     }
 </div>
 
+<div class="tran-block page-header-block ">
+    <div class="page-header-title">
+        <div class="float-left back-link" @onclick="NavigateBack">
+            <span class="col-alt fa fa-angle-double-left"></span>
+        </div>
+        <h3>User Details</h3>
+    </div>
+    @if (!(sessionState.User.FullName is null))
+    {
+        <p>@sessionState.User.FullName</p>
+    }
+</div>
+
 <EditForm Model="@TaskObject" OnValidSubmit="@HandleValidSubmit">
     <DataAnnotationsValidator />
     <ValidationSummary />
@@ -129,8 +142,8 @@
                                         {
                                             <ul class="ul-simple">
                                                 @foreach (var role in selectedRoles
-                                                           .Where(R => R.RoleName != "Super User")
-                                                           .ToList())
+                                                          .Where(R => R.RoleName != "Super User")
+                                                          .ToList())
                                                 {
 
                                                     <li><InputCheckbox class="mr-2" @bind-Value="role.IsSubscribed"></InputCheckbox><label>@role.RoleName</label></li>
