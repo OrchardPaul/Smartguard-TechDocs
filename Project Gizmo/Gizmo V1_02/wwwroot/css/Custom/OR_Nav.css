@@ -78,13 +78,30 @@
 /*  Side Navbar                */
 /*-----------------------------*/
 
+
 .sidebar {
-    position: -webkit-sticky; /* Safari */
-    position: sticky;
-    top: 0;
+    z-index: 99999;
+    box-shadow: 0px 0 4px 4px rgba(0, 0, 0, 0.4);
+    position: relative;
     background: #333 !important;
     border: none;
     min-width: 240px;
+}
+
+.sidebar .top-row {
+    background-color: #000000;
+    background-image: url(../images/GadJIT_logo_vsmall.jpg);
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+
+@media (max-width: 1199px) {
+    .sidebar {
+        position: fixed;
+        top: 0;
+        width: 100%;
+    }
 }
 
 .sidebar .nav-item .nav-link {
@@ -128,7 +145,7 @@
     bottom: 0;
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 1199px) {
     .sidebar .logo {
         display: none;
     }

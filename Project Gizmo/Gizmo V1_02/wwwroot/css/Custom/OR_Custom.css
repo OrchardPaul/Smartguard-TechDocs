@@ -22,7 +22,7 @@ app {
     height: 100%;
 }
 
-.mai {
+.main {
     height: 100% !important;
 }
 
@@ -47,18 +47,21 @@ app {
     padding: 0 !important;
 }
 
+
 .inner-content {
     overflow-y: auto !important;
     height: calc(100% - 50px);
 }
 
 @media (max-width: 1199px) {
-    body {
-        overflow-y: auto;
+    .main {
+        overflow-y: auto !important;
+        margin-top: 55px;
     }
 
     .inner-content {
         overflow-y: hidden !important;
+        height: auto !important;
     }
 }
 
@@ -83,21 +86,14 @@ app {
 }
 
 
-.sidebar {
-    z-index: 99999;
-    background-color: #FFFFFF !important;
-    box-shadow: 0px 0 4px 4px rgba(0, 0, 0, 0.4);
-}
-
-.sidebar .top-row {
-    background-color: #000000;
-    background-image: url(../images/GadJIT_logo_vsmall.jpg);
-    background-repeat: no-repeat;
-    background-position: center;
-}
-
 .main-footer {
     height: 35px;
+}
+
+@media (max-width: 1199px) {
+    .main-footer {
+        height: 15px;
+    }
 }
 
 .page-footer {
