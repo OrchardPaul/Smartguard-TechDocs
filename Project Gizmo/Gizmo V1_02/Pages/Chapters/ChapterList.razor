@@ -15,7 +15,7 @@ else
     @if (selectedChapter.Name == "" | selectedChapter.Name is null)
     {
         <div class="tran-block page-header-block ">
-            <h3>Chapters</h3>
+            <h3>Smart Flows</h3>
             <p class="hidden-md-down">Create and maintain Smart Flows for all case types. <em>Note: please make sure you are pointing to the appropriate system.</em></p>
         </div>
         <div class="mb-4 col-xl-6 col-lg-12 col-md-12 col-sm-12 grid-tran grid-chapter-nav">
@@ -99,7 +99,7 @@ else
                         {
 
                             <div class="grid-row-md nav-row-2">
-                                <div class="data-item" title="Case Type: click to see the chapters within @caseType">
+                                <div class="data-item" title="Case Type: click to see the smart flows within @caseType">
                                     @if (sessionState.isAdminUser)
                                     {
                                         <div class="btn-ellipses float-left">
@@ -627,7 +627,7 @@ else
                                             @if (lstStatus.Where(S => S.ChapterObject.Name == doc.ChapterObject.NextStatus).Select(S => S.ChapterObject.SuppressStep).SingleOrDefault() == "Y")
                                             {
                                                 <div class="data-item-right suppress-step">
-                                                    <ModalTooltip Direction="left" Text="This document will end the Smart Flow when taken.">
+                                                    <ModalTooltip Direction="left" Text="This document will end the smart flow when taken.">
                                                         <span class="fa fa-flag-checkered"></span>
                                                     </ModalTooltip>
                                                 </div>
@@ -762,7 +762,7 @@ else
                 <div class="grid-chapter-fees">
 
                     <div class="grid-actions">
-                        <ModalTooltip Direction="top" Text="Fees to be made available in the Smart Flow. Default values will be automatically calculated where possible.">
+                        <ModalTooltip Direction="top" Text="Fees to be made available in the smart flow. Default values will be automatically calculated where possible.">
                             <span class="info-icon">
                                 <span class=" fa fa-info-circle fa-2x "></span>
                             </span>
@@ -875,7 +875,7 @@ else
 
                 <div class="grid-chapter-status">
                     <div class="grid-actions">
-                        <ModalTooltip Direction="top" Text="Status options to assist with the flow of the cha[ter and to indicate when the chapter is complete *!*">
+                        <ModalTooltip Direction="top" Text="Status options to assist with the flow of the smart flow and to indicate when the smart flow is complete">
                             <span class="info-icon">
                                 <span class=" fa fa-info-circle fa-2x "></span>
                             </span>
@@ -964,7 +964,7 @@ else
                                     @if (status.ChapterObject.SuppressStep == "Y")
                                     {
                                         <div class="data-item-right suppress-step mr-5 font-100">
-                                            <ModalTooltip Direction="left" Text="This status will end the Smart Flow.">
+                                            <ModalTooltip Direction="left" Text="This status will end the smart flow.">
                                                 <span class="fa fa-flag-checkered"></span>
                                             </ModalTooltip>
                                         </div>
