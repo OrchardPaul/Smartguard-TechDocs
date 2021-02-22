@@ -27,7 +27,7 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         public void SetChapterOptions(ChapterFileOptions chapterFileOptions)
         {
-            FileHelper.CustomPath = $"FileManagement/FileStorage/{chapterFileOptions.Company}/{chapterFileOptions.CaseTypeGroup}/{chapterFileOptions.CaseType}/{chapterFileOptions.Chapter}";
+            FileHelper.CustomPath = $"FileManagement/FileStorage/{chapterFileOptions.Company}/Chapters/{chapterFileOptions.CaseTypeGroup}/{chapterFileOptions.CaseType}/{chapterFileOptions.Chapter}";
         }
 
         public async Task<bool> UploadChapterFiles(IFileListEntry files)

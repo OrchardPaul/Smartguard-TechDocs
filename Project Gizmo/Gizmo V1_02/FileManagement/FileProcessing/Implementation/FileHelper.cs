@@ -97,7 +97,7 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
         {
             using FileStream fs = File.OpenRead(path);
 
-            byte[] buf = new byte[1024];
+            byte[] buf = new byte[50000];
             int c;
             var result = "";
 
@@ -112,12 +112,28 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
         public void Write(List<string> output)
         {
             // Write the string array to a new file named "WriteLines.txt".
-            using (StreamWriter outputFile = new StreamWriter(Path.Combine(CustomPath, "JSON.txt")))
+            try
             {
-                foreach (string line in output)
-                    outputFile.WriteLine(line);
+                using (StreamWriter outputFile = new StreamWriter(Path.Combine(CustomPath, "JSON.txt")))
+                {
+                    foreach (string line in output)
+                        outputFile.WriteLine(line);
+                }
+            }
+            catch
+            {
+                Directory.CreateDirectory(Path.GetFullPath(CustomPath));
+
+                using (StreamWriter outputFile = new StreamWriter(Path.Combine(CustomPath, "JSON.txt")))
+                {
+                    foreach (string line in output)
+                        outputFile.WriteLine(line);
+                }
             }
 
+            
+
+            
         }
 
     }

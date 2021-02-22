@@ -603,7 +603,7 @@ namespace Gizmo_V1_02.Pages.Chapters
                 Class = "blazored-custom-modal modal-chapter-export"
             };
 
-            Modal.Show<ChapterExport>("Chapter Export", parameters, options);
+            Modal.Show<ChapterExport>("Smart Flow Export", parameters, options);
         }
 
         private void PrepareForEdit(VmUsrOrDefChapterManagement item, string header)
@@ -929,7 +929,7 @@ namespace Gizmo_V1_02.Pages.Chapters
                 Class = "blazored-custom-modal modal-chapter-chapter"
             };
 
-            Modal.Show<ChapterCopy>("Copy Chapter", parameters, options);
+            Modal.Show<ChapterCopy>("Copy Smart Flow", parameters, options);
         }
 
 
@@ -947,7 +947,7 @@ namespace Gizmo_V1_02.Pages.Chapters
                 Class = "blazored-custom-modal modal-chapter-chapter"
             };
 
-            Modal.Show<ChapterAddOrEdit>("Chapter", parameters, options);
+            Modal.Show<ChapterAddOrEdit>("Smart Flow", parameters, options);
         }
 
 
@@ -1035,7 +1035,7 @@ namespace Gizmo_V1_02.Pages.Chapters
                 Class = "blazored-custom-modal modal-chapter-casetype"
             };
 
-            Modal.Show<ChapterCaseTypeEdit>("Chapter", parameters, options);
+            Modal.Show<ChapterCaseTypeEdit>("Smart Flow", parameters, options);
         }
 
 
@@ -1161,7 +1161,7 @@ namespace Gizmo_V1_02.Pages.Chapters
                 Class = "blazored-custom-modal modal-chapter-comparison"
             };
 
-            Modal.Show<ChapterItemComparison>("Synchronise Chapter Item", parameters, options);
+            Modal.Show<ChapterItemComparison>("Synchronise Smart Flow Item", parameters, options);
         }
 
 
