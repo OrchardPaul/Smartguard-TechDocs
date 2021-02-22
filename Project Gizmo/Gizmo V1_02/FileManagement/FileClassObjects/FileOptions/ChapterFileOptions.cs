@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Gizmo_V1_02.FileManagement.FileOptions
+namespace Gizmo_V1_02.FileManagement.FileClassObjects.FileOptions
 {
     public class ChapterFileOptions
     {

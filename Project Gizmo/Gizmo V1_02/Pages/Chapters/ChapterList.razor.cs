@@ -19,7 +19,10 @@ using Newtonsoft.Json.Schema.Generation;
 using Newtonsoft.Json.Schema;
 using Microsoft.AspNetCore.Hosting;
 using BlazorInputFile;
-using Gizmo_V1_02.FileManagement.FileOptions;
+using System.IO;
+using Gizmo_V1_02.FileManagement.FileClassObjects.FileOptions;
+using Gizmo_V1_02.FileManagement.FileClassObjects;
+using System.Net;
 
 namespace Gizmo_V1_02.Pages.Chapters
 {
@@ -51,6 +54,10 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         [Inject]
         private IChapterFileUpload ChapterFileUpload { get; set; }
+
+        private ChapterFileOptions ChapterFileOption { get; set; }
+
+        private List<FileDesc> ListFileDescriptions { get; set; }
 
         private List<VmUsrOrDefChapterManagement> lstChapters { get; set; } = new List<VmUsrOrDefChapterManagement>();
 
@@ -128,7 +135,7 @@ namespace Gizmo_V1_02.Pages.Chapters
         public bool ListChapterLoaded = false;
 
         public string alertMsgJSOM { get; set; }
-        
+
         public bool showJSON = false;
 
 
@@ -137,7 +144,7 @@ namespace Gizmo_V1_02.Pages.Chapters
 
 
         private List<ChapterColour> ListChapterColours { get; set; } = new List<ChapterColour>
-                                                            { 
+                                                            {
                                                                 new ChapterColour { ColourName = "Grey", ColourCode = "#3F000000"},
                                                                 new ChapterColour { ColourName = "Blue", ColourCode = "#3F0074FF"},
                                                                 new ChapterColour { ColourName = "Pink", ColourCode = "#3FFD64EF"},
@@ -149,7 +156,7 @@ namespace Gizmo_V1_02.Pages.Chapters
                                                                 new ChapterColour { ColourName = "Aqua", ColourCode = "#3F5BDCD0"}
                                                             };
 
-            
+
 
         protected override async Task OnInitializedAsync()
         {
@@ -234,10 +241,22 @@ namespace Gizmo_V1_02.Pages.Chapters
             compareSystems = false;
             rowChanged = 0;
             navDisplay = "Chapter";
+            showJSON = false;
 
             feeDefinitions = await chapterManagementService.GetFeeDefs(selectedChapter.CaseTypeGroup, selectedChapter.CaseType);
 
+            ChapterFileOption = new ChapterFileOptions
+            {
+                Company = sessionState.Company.CompanyName,
+                CaseTypeGroup = selectedChapter.CaseTypeGroup,
+                CaseType = selectedChapter.CaseType,
+                Chapter = selectedChapter.Name
+            };
+
+            ChapterFileUpload.SetChapterOptions(ChapterFileOption);
+
             await RefreshChapterItems("All");
+            GetSeletedChapterFileList();
 
             StateHasChanged();
         }
@@ -256,7 +275,7 @@ namespace Gizmo_V1_02.Pages.Chapters
             });
         }
 
-        
+
 
 
         private async void RefreshChapters()
@@ -297,10 +316,12 @@ namespace Gizmo_V1_02.Pages.Chapters
                 var lst = selectedChapter.ChapterItems;
 
                 lstAll = lst.Select(L => new VmUsrOrDefChapterManagement { ChapterObject = L })
-                                .Select(L => { L.ChapterObject.CaseTypeGroup = selectedChapter.CaseTypeGroup;
-                                                L.ChapterObject.CaseType = selectedChapter.CaseType;
-                                                L.ChapterObject.ChapterName = selectedChapter.Name;
-                                                return L; })
+                                .Select(L => {
+                                    L.ChapterObject.CaseTypeGroup = selectedChapter.CaseTypeGroup;
+                                    L.ChapterObject.CaseType = selectedChapter.CaseType;
+                                    L.ChapterObject.ChapterName = selectedChapter.Name;
+                                    return L;
+                                })
                                 .ToList();
 
                 /*
@@ -419,7 +440,7 @@ namespace Gizmo_V1_02.Pages.Chapters
                                         .Select(C => C.ChapterObject)
                                         .SingleOrDefault();
 
-                if(!(AltChapterObject is null))
+                if (!(AltChapterObject is null))
                 {
                     altChapter = JsonConvert.DeserializeObject<VmChapter>(AltChapterObject.ChapterData);
 
@@ -454,7 +475,6 @@ namespace Gizmo_V1_02.Pages.Chapters
                     });
                 }
 
-                
 
             }
 
@@ -505,7 +525,7 @@ namespace Gizmo_V1_02.Pages.Chapters
                                         .Select(C => C.ChapterObject)
                                         .SingleOrDefault();
 
-                    if(AltChapterObject is null)
+                    if (AltChapterObject is null)
                     {
                         chapter.ComparisonResult = "No match";
                         chapter.ComparisonIcon = "times";
@@ -516,12 +536,12 @@ namespace Gizmo_V1_02.Pages.Chapters
 
                         lstAltSystemChapterItems = altChapter.ChapterItems.Select(T => new VmUsrOrDefChapterManagement { ChapterObject = T }).ToList();
 
-                        foreach(var item in vmChapterItems)
+                        foreach (var item in vmChapterItems)
                         {
                             CompareChapterItemsToAltSytem(item);
                         }
 
-                        if(vmChapterItems.Where(C => C.ComparisonResult == "No match" | C.ComparisonResult == "Partial match").Count() > 0 | vmChapterItems.Count() != lstAltSystemChapterItems.Count())
+                        if (vmChapterItems.Where(C => C.ComparisonResult == "No match" | C.ComparisonResult == "Partial match").Count() > 0 | vmChapterItems.Count() != lstAltSystemChapterItems.Count())
                         {
                             chapter.ComparisonResult = "Partial match";
                             chapter.ComparisonIcon = "exclamation";
@@ -583,7 +603,7 @@ namespace Gizmo_V1_02.Pages.Chapters
                 Class = "blazored-custom-modal modal-chapter-export"
             };
 
-            Modal.Show<ChapterExport>("Chapter Export", parameters, options);
+            Modal.Show<ChapterExport>("Smart Flow Export", parameters, options);
         }
 
         private void PrepareForEdit(VmUsrOrDefChapterManagement item, string header)
@@ -723,7 +743,7 @@ namespace Gizmo_V1_02.Pages.Chapters
             }
         }
 
-       
+
 
         protected void ShowNav(string displayChange)
         {
@@ -782,7 +802,7 @@ namespace Gizmo_V1_02.Pages.Chapters
                 selectobject.SeqNo += incrementBy;
                 swapItem.ChapterObject.SeqNo = swapItem.ChapterObject.SeqNo + (incrementBy * -1);
 
-                if(listType == "Chapters")
+                if (listType == "Chapters")
                 {
                     await chapterManagementService.Update(selectobject).ConfigureAwait(false);
                     await chapterManagementService.Update(swapItem.ChapterObject).ConfigureAwait(false);
@@ -793,15 +813,15 @@ namespace Gizmo_V1_02.Pages.Chapters
                     await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
                 }
 
-                
+
             }
 
             await RefreshChapterItems(listType);
             await InvokeAsync(() =>
             {
                 StateHasChanged();
-            }); 
-            
+            });
+
 
             seqMoving = false;
 
@@ -909,7 +929,7 @@ namespace Gizmo_V1_02.Pages.Chapters
                 Class = "blazored-custom-modal modal-chapter-chapter"
             };
 
-            Modal.Show<ChapterCopy>("Copy Chapter", parameters, options);
+            Modal.Show<ChapterCopy>("Copy Smart Flow", parameters, options);
         }
 
 
@@ -927,10 +947,10 @@ namespace Gizmo_V1_02.Pages.Chapters
                 Class = "blazored-custom-modal modal-chapter-chapter"
             };
 
-            Modal.Show<ChapterAddOrEdit>("Chapter", parameters, options);
+            Modal.Show<ChapterAddOrEdit>("Smart Flow", parameters, options);
         }
 
-        
+
 
         private void ShowUpdateJSON()
         {
@@ -938,7 +958,7 @@ namespace Gizmo_V1_02.Pages.Chapters
 
             alertMsgJSOM = "";
 
-            showJSON = true;
+            showJSON = !showJSON;
 
             StateHasChanged();
         }
@@ -1015,7 +1035,7 @@ namespace Gizmo_V1_02.Pages.Chapters
                 Class = "blazored-custom-modal modal-chapter-casetype"
             };
 
-            Modal.Show<ChapterCaseTypeEdit>("Chapter", parameters, options);
+            Modal.Show<ChapterCaseTypeEdit>("Smart Flow", parameters, options);
         }
 
 
@@ -1024,21 +1044,21 @@ namespace Gizmo_V1_02.Pages.Chapters
             Action action = RefreshSelectedList;
 
             var copyObject = new UsrOrDefChapterManagement
-                                {
-                                    Type = editObject.ChapterObject.Type,
-                                    Name = editObject.ChapterObject.Name,
-                                    EntityType = editObject.ChapterObject.EntityType,
-                                    SeqNo = editObject.ChapterObject.SeqNo,
-                                    SuppressStep = editObject.ChapterObject.SuppressStep,
-                                    CompleteName = editObject.ChapterObject.CompleteName,
-                                    AsName = editObject.ChapterObject.AsName,
-                                    RescheduleDays = editObject.ChapterObject.RescheduleDays,
-                                    AltDisplayName = editObject.ChapterObject.AltDisplayName,
-                                    UserMessage = editObject.ChapterObject.UserMessage,
-                                    UserNotes = editObject.ChapterObject.UserNotes,
-                                    NextStatus = editObject.ChapterObject.NextStatus
-                                };
-         
+            {
+                Type = editObject.ChapterObject.Type,
+                Name = editObject.ChapterObject.Name,
+                EntityType = editObject.ChapterObject.EntityType,
+                SeqNo = editObject.ChapterObject.SeqNo,
+                SuppressStep = editObject.ChapterObject.SuppressStep,
+                CompleteName = editObject.ChapterObject.CompleteName,
+                AsName = editObject.ChapterObject.AsName,
+                RescheduleDays = editObject.ChapterObject.RescheduleDays,
+                AltDisplayName = editObject.ChapterObject.AltDisplayName,
+                UserMessage = editObject.ChapterObject.UserMessage,
+                UserNotes = editObject.ChapterObject.UserNotes,
+                NextStatus = editObject.ChapterObject.NextStatus
+            };
+
             var parameters = new ModalParameters();
             parameters.Add("TaskObject", editObject.ChapterObject);
             parameters.Add("CopyObject", copyObject);
@@ -1141,10 +1161,10 @@ namespace Gizmo_V1_02.Pages.Chapters
                 Class = "blazored-custom-modal modal-chapter-comparison"
             };
 
-            Modal.Show<ChapterItemComparison>("Synchronise Chapter Item", parameters, options);
+            Modal.Show<ChapterItemComparison>("Synchronise Smart Flow Item", parameters, options);
         }
 
-        
+
 
         private async void HandleChapterDetailDelete()
         {
@@ -1205,18 +1225,18 @@ namespace Gizmo_V1_02.Pages.Chapters
                                         .Select(C => C.ChapterObject)
                                         .SingleOrDefault();
 
-            if(AltChapterObject is null)
+            if (AltChapterObject is null)
             {
-                var newAltChapterObject = new UsrOrDefChapterManagement 
-                                                    { 
-                                                        SeqNo = SelectedChapterObject.SeqNo,
-                                                        CaseTypeGroup = SelectedChapterObject.CaseTypeGroup,
-                                                        CaseType = SelectedChapterObject.CaseType,
-                                                        Name = SelectedChapterObject.Name,
-                                                        ChapterData = SelectedChapterObject.ChapterData,
-                                                        ParentId = SelectedChapterObject.ParentId,
-                                                        Type = SelectedChapterObject.Type
-                                                    };
+                var newAltChapterObject = new UsrOrDefChapterManagement
+                {
+                    SeqNo = SelectedChapterObject.SeqNo,
+                    CaseTypeGroup = SelectedChapterObject.CaseTypeGroup,
+                    CaseType = SelectedChapterObject.CaseType,
+                    Name = SelectedChapterObject.Name,
+                    ChapterData = SelectedChapterObject.ChapterData,
+                    ParentId = SelectedChapterObject.ParentId,
+                    Type = SelectedChapterObject.Type
+                };
 
                 await chapterManagementService.Add(newAltChapterObject);
             }
@@ -1227,7 +1247,7 @@ namespace Gizmo_V1_02.Pages.Chapters
                 await chapterManagementService.Update(AltChapterObject);
             }
 
-            
+
 
             await sessionState.ResetSelectedSystem();
 
@@ -1262,7 +1282,7 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         private void HandleChapterSync()
         {
-            if(navDisplay.ToLower() == "chapter")
+            if (navDisplay.ToLower() == "chapter")
             {
                 SyncAll();
             }
@@ -1273,35 +1293,53 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         }
 
-        private List<IFileListEntry> filesJSON = new List<IFileListEntry>();
+        public void ReadFile(string path)
+        {
+            var test = ChapterFileUpload.readJson(path);
+        }
 
+        public void GetFile(FileDesc fileDesc)
+        {
+            NavigationManager.NavigateTo(fileDesc.FilePath + "//" + fileDesc.FileName, true);
+        }
 
-        private void HandleJSONFileSelection(IFileListEntry[] entryFiles)
+        public void WriteChapterJSONToFile()
+        {
+            ChapterFileUpload.WriteChapterToFile(SelectedChapterObject.ChapterData);
+
+            GetSeletedChapterFileList();
+            StateHasChanged();
+        }
+
+        private async void HandleJSONFileSelection(IFileListEntry[] entryFiles)
         {
             var files = new List<IFileListEntry>();
-            var chapterOptions = new ChapterFileOptions
-            {
-                Company = sessionState.Company.CompanyName,
-                CaseTypeGroup = SelectedChapterObject.CaseTypeGroup,
-                CaseType = SelectedChapterObject.CaseType,
-                Chapter = SelectedChapterObject.Name
-            };
-            
+
             foreach (var file in entryFiles)
             {
                 if (file != null)
-                {   
-                    ChapterFileUpload.UploadChapterFiles(file,chapterOptions);
+                {
+                    await ChapterFileUpload.UploadChapterFiles(file);
                     files.Add(file);
                 }
 
             }
-            if(files != null && files.Count > 0)
+            if (files != null && files.Count > 0)
             {
-                filesJSON = files;
                 StateHasChanged();
             }
+
+            GetSeletedChapterFileList();
+
+            StateHasChanged();
         }
+
+
+        private void GetSeletedChapterFileList()
+        {
+            ListFileDescriptions = ChapterFileUpload.GetFileListForChapter();
+        }
+
 
         /// <summary>
         /// swaps the CSS class for indicating that a row has changed.  
@@ -1391,7 +1429,7 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         private async void SyncToAltSystem(string option)
         {
-            var selectedCopyItems = new VmChapter { ChapterItems = new List<UsrOrDefChapterManagement>() };           
+            var selectedCopyItems = new VmChapter { ChapterItems = new List<UsrOrDefChapterManagement>() };
 
             if (!(AltChapterObject.ChapterData is null))
             {
@@ -1409,7 +1447,7 @@ namespace Gizmo_V1_02.Pages.Chapters
                 selectedCopyItems.ChapterItems.AddRange(selectedChapter.ChapterItems.Where(C => C.Type == "Agenda").ToList());
             }
 
-            
+
 
             if (option == "Status" | option == "All")
             {
@@ -1421,7 +1459,7 @@ namespace Gizmo_V1_02.Pages.Chapters
                 selectedCopyItems.ChapterItems.AddRange(selectedChapter.ChapterItems.Where(C => C.Type == "Status").ToList());
             }
 
-            
+
 
             if (option == "Docs" | option == "All")
             {
@@ -1454,7 +1492,7 @@ namespace Gizmo_V1_02.Pages.Chapters
             });
 
             await sessionState.SwitchSelectedSystem();
-            
+
             if (AltChapterObject.Id == 0)
             {
                 await chapterManagementService.Add(AltChapterObject);
