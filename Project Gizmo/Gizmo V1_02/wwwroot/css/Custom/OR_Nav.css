@@ -1,7 +1,9 @@
 ﻿
 .nav {
-    margin-bottom: 40px;
+    
 }
+
+
 .nav-link, .nav-item {
     cursor: pointer;
     white-space: nowrap;
@@ -85,46 +87,46 @@
     min-width: 240px;
 }
 
-    .sidebar .nav-item .nav-link {
-        font-size: 0.9rem !important;
-        color: #CCC !important;
-    }
+.sidebar .nav-item .nav-link {
+    font-size: 0.9rem !important;
+    color: #CCC !important;
+}
 
-        .sidebar .nav-item .nav-link span, .sidebar .nav-item .nav-link svg {
-            margin-right: 10px;
-        }
+.sidebar .nav-item .nav-link span, .sidebar .nav-item .nav-link svg {
+    margin-right: 10px;
+}
 
-    .sidebar .nav-item a.active {
-        color: #000 !important;
-        background-color: #666;
-        font-weight: bold;
-    }
+.sidebar .nav-item a.active {
+    color: #000 !important;
+    background-color: #666;
+    font-weight: bold;
+}
 
-    .sidebar .nav-item a.hover {
-        border: 1pt solid;
-    }
+.sidebar .nav-item a.hover {
+    border: 1pt solid;
+}
 
-    .sidebar .logo {
-        /*
-        background-image: url("../images/GadJIT_logo2.jpg");
-        background-repeat: no-repeat;
-        background-position: center top;
-        */
-        width: 100%;
-        height: 310px;
-        position: absolute;
-        bottom: 0;
-    }
+.sidebar .logo {
+    /*
+    background-image: url("../images/GadJIT_logo2.jpg");
+    background-repeat: no-repeat;
+    background-position: center top;
+    */
+    width: 100%;
+    height: 310px;
+    position: absolute;
+    bottom: 0;
+}
 
-    .sidebar .logo {
-        /*            background-image: url("../images/GadJIT_logo2.jpg");
-        background-repeat: no-repeat;
-        background-position: center top;*/
-        width: 100%;
-        height: 310px;
-        position: absolute;
-        bottom: 0;
-    }
+.sidebar .logo {
+    /*            background-image: url("../images/GadJIT_logo2.jpg");
+    background-repeat: no-repeat;
+    background-position: center top;*/
+    width: 100%;
+    height: 50px;
+    position: absolute;
+    bottom: 0;
+}
 
 @media (max-width: 1200px) {
     .sidebar .logo {
