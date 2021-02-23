@@ -90,11 +90,7 @@ app {
     height: 35px;
 }
 
-@media (max-width: 1199px) {
-    .main-footer {
-        height: 15px;
-    }
-}
+
 
 .page-footer {
     height: 30px;
@@ -905,7 +901,7 @@ app {
 
 
 .grid-chapter-docs .info-icon, .grid-chapter-agenda .info-icon, .grid-chapter-fees .info-icon, .grid-chapter-status .info-icon {
-    margin-left: 10px;
+    margin-left: 25px;
 }
 
 .grid-chapter-docs .row .data-item:nth-of-type(1) {

@@ -417,11 +417,7 @@ else
                 <div class="grid-chapter-docs">
 
                     <div class="grid-actions">
-                        <ModalTooltip Direction="top" Text="Documents and steps to be made available in the chapter for inserting into the case agenda!">
-                            <span class="info-icon">
-                                <span class=" fa fa-info-circle fa-2x "></span>
-                            </span>
-                        </ModalTooltip>
+
                         @if (!compareSystems)
                         {
                             @if (sessionState.isAdminUser)
@@ -436,6 +432,11 @@ else
                                 <button @onclick='(() => PrepareForExport(lstDocs, "Chapter Export"))' class="btn btn-main btn-shadow" title="Export data to Excel or CSV"><i class="fa fa-file-export"></i><span>Export</span></button>
                             </div>
                         }
+                        <ModalTooltip Direction="top shift-right" Text="Documents and steps to be made available in the chapter for inserting into the case agenda!">
+                            <span class="info-icon">
+                                <span class=" fa fa-info-circle fa-2x "></span>
+                            </span>
+                        </ModalTooltip>
                         <div class="spacer">
                         </div>
                         @if (sessionState.isAdminUser)
@@ -661,11 +662,7 @@ else
 
 
                     <div class="grid-actions">
-                        <ModalTooltip Direction="top" Text="Correspondence stored in these agendas will be made avalible on the History tab.">
-                            <span class="info-icon">
-                                <span class=" fa fa-info-circle fa-2x "></span>
-                            </span>
-                        </ModalTooltip>
+
                         @if (!compareSystems)
                         {
                             <div class="btn-group">
@@ -676,6 +673,11 @@ else
                                 <button @onclick='(() => PrepareForExport(lstAgendas, "Chapter Export"))' class="btn btn-main btn-shadow" title="Export data to Excel or CSV"><i class="fa fa-file-export"></i><span>Export</span></button>
                             </div>
                         }
+                        <ModalTooltip Direction="top" Text="Correspondence stored in these agendas will be made avalible on the History tab.">
+                            <span class="info-icon">
+                                <span class=" fa fa-info-circle fa-2x "></span>
+                            </span>
+                        </ModalTooltip>
                         <div class="spacer">
                         </div>
                         @if (sessionState.isAdminUser)
@@ -762,11 +764,7 @@ else
                 <div class="grid-chapter-fees">
 
                     <div class="grid-actions">
-                        <ModalTooltip Direction="top" Text="Fees to be made available in the Smartflow. Default values will be automatically calculated where possible.">
-                            <span class="info-icon">
-                                <span class=" fa fa-info-circle fa-2x "></span>
-                            </span>
-                        </ModalTooltip>
+
                         @if (!compareSystems)
                         {
                             @if (sessionState.isAdminUser)
@@ -780,6 +778,11 @@ else
                                 <button @onclick='(() => PrepareForExport(lstFees, "Chapter Export"))' class="btn btn-main btn-shadow" title="Export data to Excel or CSV"><i class="fa fa-file-export"></i><span>Export</span></button>
                             </div>
                         }
+                        <ModalTooltip Direction="top" Text="Fees to be made available in the Smartflow. Default values will be automatically calculated where possible.">
+                            <span class="info-icon">
+                                <span class=" fa fa-info-circle fa-2x "></span>
+                            </span>
+                        </ModalTooltip>
                         <div class="spacer">
                         </div>
                         @if (sessionState.isAdminUser)
@@ -875,13 +878,9 @@ else
 
                 <div class="grid-chapter-status">
                     <div class="grid-actions">
-                        <ModalTooltip Direction="top" Text="Status options to assist with the flow of the Smartflow and to indicate when the Smartflow is complete">
-                            <span class="info-icon">
-                                <span class=" fa fa-info-circle fa-2x "></span>
-                            </span>
-                        </ModalTooltip>
+
                         @if (!compareSystems)
-                        {
+                        { 
                             @if (sessionState.isAdminUser)
                             {
                                 <div class="btn-group">
@@ -894,6 +893,11 @@ else
                                 <button @onclick='(() => PrepareForExport(lstStatus, "Chapter Export"))' class="btn btn-main btn-shadow" title="Export data to Excel or CSV"><i class="fa fa-file-export"></i><span>Export</span></button>
                             </div>
                         }
+                        <ModalTooltip Direction="top" Text="Status options to assist with the flow of the Smartflow and to indicate when the Smartflow is complete">
+                            <span class="info-icon">
+                                <span class=" fa fa-info-circle fa-2x "></span>
+                            </span>
+                        </ModalTooltip>
                         <div class="spacer">
                         </div>
                         @if (sessionState.isAdminUser)
