@@ -22,9 +22,7 @@ app {
     height: 100%;
 }
 
-.main {
-    height: 100% !important;
-}
+
 
 .main .top-row {
     justify-content: center;
@@ -360,15 +358,15 @@ app {
     color: #555;
 }
 
-    .page-header-block .page-header-title {
-        display: flex;
-        align-items: center;
-        margin: 5px 0 10px 0;
-    }
+.page-header-block .page-header-title {
+    display: flex;
+    align-items: center;
+    margin: 5px 0 10px 0;
+}
 
-        .page-header-block .page-header-title h3 {
-            margin: 0;
-        }
+.page-header-block .page-header-title h3 {
+    margin: 0;
+}
 
 @media (max-width: 1199px) {
     .tran-block {
