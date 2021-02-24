@@ -486,6 +486,10 @@ else
                                                             <span class="fa fa-pencil-alt mr-2"></span>
                                                             <span>Edit</span>
                                                         </li>
+                                                        <li class="col-main" @onclick='(() => PrepareAttachmentForEdit(doc, "Steps and Documents"))'>
+                                                            <span class="fa fa-paperclip mr-2"></span>
+                                                            <span>Attachments</span>
+                                                        </li>
                                                         <li class="col-red" @onclick="() => PrepareChapterDetailDelete(doc)">
                                                             <span class="fa fa-trash-alt mr-2"></span>
                                                             <span>Delete</span>
@@ -575,7 +579,7 @@ else
                                         @if (!(doc.ChapterObject.FollowUpDocs is null))
                                         {
                                             <div class="data-item-right followup-doc">
-                                                <ModalTooltip Direction="left" Text="This document will have a follow-up document inserted/taken.">
+                                                <ModalTooltip Direction="left" Text=@($"This document will {doc.ChapterObject.FollowUpDocs.FirstOrDefault().Action.ToLower()} the following: {doc.ChapterObject.FollowUpDocs.FirstOrDefault().DocName}.")>
                                                     <span class="fa fa-paperclip"></span>
                                                 </ModalTooltip>
                                             </div>
@@ -801,22 +805,24 @@ else
 
                             <div class="row grid-row grid-row-lg @(rowChanged == fee.ChapterObject.SeqNo ? "row-changed" : "" )">
                                 <div class="col-12 data-item">
-                                    @if (sessionState.isAdminUser)
+                                    @if (!compareSystems)
                                     {
-                                        @if (!compareSystems)
-                                        {
 
-                                            <div class="data-item-sub">
-                                                <span class="fa fa-pound-sign mr-2"></span> @fee.ChapterObject.Name
+                                        <div class="data-item-sub">
+                                            <span class="fa fa-pound-sign mr-2"></span> @fee.ChapterObject.Name
+                                        </div>
+
+                                        @if (!(string.IsNullOrEmpty(lstVmFeeModalItems.Where(FMI => FMI.feeDefinition.FeeDesc == fee.ChapterObject.Name).Select(FMI => FMI.feeDefinition.WorkProvider).SingleOrDefault())))
+                                        {
+                                            <div class="data-item-right mr-2 font-100">
+                                                <ModalTooltip Direction="left" Text=@("USED BY: " + lstVmFeeModalItems.Where(FMI => FMI.feeDefinition.FeeDesc == fee.ChapterObject.Name).Select(FMI => FMI.feeDefinition.WorkProvider).SingleOrDefault()) Class="w-3">
+                                                    <span class="fa fa-user-tie"></span>
+                                                </ModalTooltip>
                                             </div>
-                                            @if (!(string.IsNullOrEmpty(lstVmFeeModalItems.Where(FMI => FMI.feeDefinition.FeeDesc == fee.ChapterObject.Name).Select(FMI => FMI.feeDefinition.WorkProvider).SingleOrDefault())))
-                                            {
-                                                <div class="data-item-right mr-2 font-100">
-                                                    <ModalTooltip Direction="left" Text=@("USED BY: " + lstVmFeeModalItems.Where(FMI => FMI.feeDefinition.FeeDesc == fee.ChapterObject.Name).Select(FMI => FMI.feeDefinition.WorkProvider).SingleOrDefault()) Class="w-3">
-                                                        <span class="fa fa-user-tie"></span>
-                                                    </ModalTooltip>
-                                                </div>
-                                            }
+                                        }
+
+                                        @if (sessionState.isAdminUser)
+                                        {
                                             <div class="data-item-right mr-2 seq-change">
                                                 <div @onclick='() => MoveSeq(fee.ChapterObject,"Fees", "Up")'><span class="fa fa-angle-up"></span></div>
                                                 <div class="seq-no">@fee.ChapterObject.SeqNo</div>
@@ -825,44 +831,43 @@ else
                                         }
                                         else
                                         {
-
-                                            <div class="btn-ellipses float-left">
-                                                @if (!(fee.ComparisonIcon is null))
-                                                {
-                                                    @if (!(fee.ComparisonResult == "Exact match"))
-                                                    {
-                                                        <div class="btn-dashed" @onclick="() => PrepareForComparison(fee)"><span class="fa fa-@fee.ComparisonIcon"></span></div>
-                                                    }
-                                                    else
-                                                    {
-                                                        <span class="fa fa-@fee.ComparisonIcon"></span>
-                                                    }
-                                                }
-                                                else
-                                                {
-                                                    <div class="spinner"></div>
-                                                }
-
-                                            </div>
-
-
-                                            <div class="data-item-sub">
-                                                <span class="fa fa-pound-sign mr-2"></span> @fee.ChapterObject.Name
-                                            </div>
                                             <div class="data-item-right mr-2">
                                                 <div class="seq-no">@fee.ChapterObject.SeqNo</div>
                                             </div>
                                         }
+
                                     }
                                     else
                                     {
+
+                                        <div class="btn-ellipses float-left">
+                                            @if (!(fee.ComparisonIcon is null))
+                                            {
+                                                @if (!(fee.ComparisonResult == "Exact match"))
+                                                {
+                                                    <div class="btn-dashed" @onclick="() => PrepareForComparison(fee)"><span class="fa fa-@fee.ComparisonIcon"></span></div>
+                                                }
+                                                else
+                                                {
+                                                    <span class="fa fa-@fee.ComparisonIcon"></span>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <div class="spinner"></div>
+                                            }
+
+                                        </div>
+
+
                                         <div class="data-item-sub">
-                                            <span class="fa fa-money-bill mr-2"></span> @fee.ChapterObject.Name
-                                            <div class="data-item-right mr-2">
-                                                <div class="seq-no">@fee.ChapterObject.SeqNo</div>
-                                            </div>
+                                            <span class="fa fa-pound-sign mr-2"></span> @fee.ChapterObject.Name
+                                        </div>
+                                        <div class="data-item-right mr-2">
+                                            <div class="seq-no">@fee.ChapterObject.SeqNo</div>
                                         </div>
                                     }
+                                    
                                 </div>
 
                             </div>

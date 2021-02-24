@@ -614,6 +614,15 @@ namespace Gizmo_V1_02.Pages.Chapters
             ShowChapterDetailModal("Edit");
         }
 
+        private void PrepareAttachmentForEdit(VmUsrOrDefChapterManagement item, string header)
+        {
+            selectedList = header;
+            editObject = item;
+
+            ShowChapterAttachmentModal();
+        }
+
+
         private void PrepareFeesForEdit()
         {
             ShowChapterFeesModal();
@@ -1084,6 +1093,58 @@ namespace Gizmo_V1_02.Pages.Chapters
 
             Modal.Show<ChapterDetail>(selectedList, parameters, options);
         }
+
+        protected void ShowChapterAttachmentModal()
+        {
+            Action action = RefreshSelectedList;
+
+            var copyObject = new UsrOrDefChapterManagement
+            {
+                Type = editObject.ChapterObject.Type,
+                Name = editObject.ChapterObject.Name,
+                EntityType = editObject.ChapterObject.EntityType,
+                SeqNo = editObject.ChapterObject.SeqNo,
+                SuppressStep = editObject.ChapterObject.SuppressStep,
+                CompleteName = editObject.ChapterObject.CompleteName,
+                AsName = editObject.ChapterObject.AsName,
+                RescheduleDays = editObject.ChapterObject.RescheduleDays,
+                AltDisplayName = editObject.ChapterObject.AltDisplayName,
+                UserMessage = editObject.ChapterObject.UserMessage,
+                UserNotes = editObject.ChapterObject.UserNotes,
+                NextStatus = editObject.ChapterObject.NextStatus,
+                FollowUpDocs = editObject.ChapterObject.FollowUpDocs
+            };
+
+            var attachment = copyObject.FollowUpDocs is null ? new FollowUpDoc() : copyObject.FollowUpDocs.FirstOrDefault();
+
+            attachment = attachment is null ? new FollowUpDoc() : attachment;
+
+            var parameters = new ModalParameters();
+            parameters.Add("TaskObject", editObject.ChapterObject);
+            parameters.Add("CopyObject", copyObject);
+            parameters.Add("DataChanged", action);
+            parameters.Add("selectedList", selectedList);
+            parameters.Add("dropDownChapterList", dropDownChapterList);
+            parameters.Add("CaseTypeGroups", partnerCaseTypeGroups);
+            parameters.Add("ListOfStatus", lstStatus);
+            parameters.Add("SelectedChapter", selectedChapter);
+            parameters.Add("SelectedChapterObject", SelectedChapterObject);
+            parameters.Add("Attachment", attachment);
+
+            string className = "modal-chapter-item";
+
+            if (selectedList == "Steps and Documents")
+            {
+                className = "modal-chapter-doc";
+            }
+            var options = new ModalOptions()
+            {
+                Class = "blazored-custom-modal " + className
+            };
+
+            Modal.Show<ChapterAttachments>(selectedList, parameters, options);
+        }
+
 
         protected void ShowChapterFeesModal()
         {
