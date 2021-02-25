@@ -89,6 +89,12 @@ app {
 }
 
 
+@media (max-width: 1199px) {
+    .main-footer {
+        height: 70px;
+    }
+}
+
 
 .page-footer {
     height: 30px;
@@ -272,7 +278,7 @@ app {
 }
 
 .btn-shadow, .dt-button {
-    box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.7);
+    box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.5);
 }
 
 
@@ -676,7 +682,7 @@ app {
 
 
 .grid-tran .btn {
-    box-shadow: 0 8px 12px 0 rgba(0, 0, 0, 0.5);
+    box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.5);
 }
 
 .grid-tran .btn:hover {
