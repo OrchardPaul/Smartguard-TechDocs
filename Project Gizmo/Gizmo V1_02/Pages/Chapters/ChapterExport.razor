@@ -6,30 +6,34 @@
     <table id="tbl_Export" class="display" style="width:100%">
         <thead>
             <tr>
-                <th>CaseTypeGroup</th>
-                <th>CaseType</th>
+                <th>Case Type Group</th>
+                <th>Case Type</th>
 
                 @if (!(lstChapterItems.FirstOrDefault().ChapterObject.Type == "Chapter"))
                 {
-                    <th>SmartFlowName</th>
-                    <th>Type</th>
+                    <th>Smartflow Name</th>
+                    <th>Item Type</th>
                 }
 
-                <th>Name</th>
-                <th>SeqNo</th>
+                <th>Sequence</th>
+                <th>Item Name</th>
 
                 @if (!(lstChapterItems.FirstOrDefault().ChapterObject.Type == "Chapter"))
                 {
-                    <th>AsName</th>
-                    <th>RescheduleDays</th>
-                    <th>CompleteName</th>
-                    <th>SuppressStep</th>
-                    <th>EntityType</th>
-                    <th>AltDisplayName</th>
-                    <th>UserMessage</th>
-                    <th>UserNotes</th>
-                    <th>NextStatus</th>
+                    <th>Alternative Item Name</th>
+                    <th>Reschedule Days</th>
+                    <th>Reschedule As Description</th>
+                    <th>Step History Description</th>
+                    <th>Status Change</th>
+                    <th>End of Flow</th>
+                    <th>Item User Message</th>
+                    <th>Popup Alert</th>
+                    <th>Notes to Developer</th>
+                    <th>Story Information Notes</th>
                 }
+
+                
+
             </tr>
         </thead>
         <tbody>
@@ -39,27 +43,28 @@
             <tr>
                 <td>@item.ChapterObject.CaseTypeGroup</td>
                 <td>@item.ChapterObject.CaseType</td>
-                
+
                 @if (!(item.ChapterObject.Type == "Chapter"))
                 {
                     <td>@item.ChapterObject.ChapterName</td>
                     <td>@item.ChapterObject.Type</td>
                 }
 
-                <td>@item.ChapterObject.Name</td>
                 <td>@item.ChapterObject.SeqNo</td>
+                <td>@item.ChapterObject.Name</td>
 
                 @if (!(item.ChapterObject.Type == "Chapter"))
                 {
-                    <td>@item.ChapterObject.AsName</td>
-                    <td>@item.ChapterObject.RescheduleDays</td>
-                    <td>@item.ChapterObject.CompleteName</td>
-                    <td>@item.ChapterObject.SuppressStep</td>
-                    <td>@item.ChapterObject.EntityType</td>
                     <td>@item.ChapterObject.AltDisplayName</td>
-                    <td>@item.ChapterObject.UserMessage</td>
-                    <td>@item.ChapterObject.UserNotes</td>
+                    <td>@item.ChapterObject.RescheduleDays</td>
+                    <td>@item.ChapterObject.AsName</td>
+                    <td>@item.ChapterObject.CompleteName</td>
                     <td>@item.ChapterObject.NextStatus</td>
+                    <td>@item.ChapterObject.SuppressStep</td>
+                    <td>@item.ChapterObject.UserMessage</td>
+                    <td>@item.ChapterObject.PopupAlert</td>
+                    <td>@item.ChapterObject.DeveloperNotes</td>
+                    <td>@item.ChapterObject.StoryNotes</td>
                 }
 
 

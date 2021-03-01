@@ -314,12 +314,14 @@ namespace Gizmo_V1_02.Pages.Chapters
             else
             {
                 var lst = selectedChapter.ChapterItems;
+                Dictionary<int?, string> docTypes = new Dictionary<int?, string> { { 1, "Doc" },{ 4, "Form" }, {6, "Step" }, { 8, "Date" }, { 9, "Email" }, { 12, "Email" } };
 
                 lstAll = lst.Select(L => new VmUsrOrDefChapterManagement { ChapterObject = L })
                                 .Select(L => {
                                     L.ChapterObject.CaseTypeGroup = selectedChapter.CaseTypeGroup;
                                     L.ChapterObject.CaseType = selectedChapter.CaseType;
                                     L.ChapterObject.ChapterName = selectedChapter.Name;
+                                    
                                     return L;
                                 })
                                 .ToList();
@@ -339,9 +341,15 @@ namespace Gizmo_V1_02.Pages.Chapters
                 }
                 if (listType == "Docs" | listType == "All")
                 {
-                    lstDocs = lstAll
+                    lstDocs = lstAll    
                                         .OrderBy(A => A.ChapterObject.SeqNo)
                                         .Where(A => lstDocTypes.Contains(A.ChapterObject.Type))
+                                        .Select(A => {
+                                            A.DocType = dropDownChapterList.Where(D => D.Name == A.ChapterObject.Name)
+                                                                                        .Select(D => string.IsNullOrEmpty(docTypes[D.DocumentType]) ? "Doc" : docTypes[D.DocumentType])
+                                                                                        .FirstOrDefault();
+                                                        return A;
+                                        })
                                         .ToList();
 
                 }
@@ -1064,7 +1072,7 @@ namespace Gizmo_V1_02.Pages.Chapters
                 RescheduleDays = editObject.ChapterObject.RescheduleDays,
                 AltDisplayName = editObject.ChapterObject.AltDisplayName,
                 UserMessage = editObject.ChapterObject.UserMessage,
-                UserNotes = editObject.ChapterObject.UserNotes,
+                PopupAlert = editObject.ChapterObject.PopupAlert,
                 NextStatus = editObject.ChapterObject.NextStatus
             };
 
@@ -1110,7 +1118,7 @@ namespace Gizmo_V1_02.Pages.Chapters
                 RescheduleDays = editObject.ChapterObject.RescheduleDays,
                 AltDisplayName = editObject.ChapterObject.AltDisplayName,
                 UserMessage = editObject.ChapterObject.UserMessage,
-                UserNotes = editObject.ChapterObject.UserNotes,
+                PopupAlert = editObject.ChapterObject.PopupAlert,
                 NextStatus = editObject.ChapterObject.NextStatus,
                 FollowUpDocs = editObject.ChapterObject.FollowUpDocs
             };

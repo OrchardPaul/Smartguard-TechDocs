@@ -523,7 +523,7 @@ else
 
                                         <div class="data-item-sub " title="@doc.DocDisplayName">
                                             <!--"Doc", "Letter", "Form", "Email", "Step"-->
-                                            @switch (doc.ChapterObject.Type)
+                                            @switch (doc.DocType)
                                             {
                                                 case "Doc":
                                                     <span class="font-100"><span class="fa fa-file mr-2"></span></span>
@@ -558,19 +558,19 @@ else
                                             </div>
                                         }
 
-                                        @if (!string.IsNullOrEmpty(doc.ChapterObject.UserMessage))
+                                        @if (!string.IsNullOrEmpty(doc.ChapterObject.PopupAlert))
                                         {
                                             <div class="data-item-right mr-2 font-100 hidden-md-down">
-                                                <ModalTooltip Direction="top" Text=@("POPUP: " + doc.ChapterObject.UserMessage) Class="w-3">
+                                                <ModalTooltip Direction="top" Text=@("POPUP: " + doc.ChapterObject.PopupAlert) Class="w-3">
                                                     <span class="fa fa-exclamation-triangle"></span>
                                                 </ModalTooltip>
                                             </div>
                                         }
 
-                                        @if (!string.IsNullOrEmpty(doc.ChapterObject.UserNotes))
+                                        @if (!string.IsNullOrEmpty(doc.ChapterObject.UserMessage))
                                         {
                                             <div class="data-item-right mr-2 font-100 hidden-md-down">
-                                                <ModalTooltip Direction="top" Text=@("NOTES: " + doc.ChapterObject.UserNotes) Class="w-3">
+                                                <ModalTooltip Direction="top" Text=@("NOTES: " + doc.ChapterObject.UserMessage) Class="w-3">
                                                     <span class="fa fa-comment"></span>
                                                 </ModalTooltip>
                                             </div>

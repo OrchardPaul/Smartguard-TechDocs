@@ -67,7 +67,7 @@ namespace Gizmo_V1_02.Pages.Chapters
                 taskObject.RescheduleDays = Object.AltObject.RescheduleDays;
                 taskObject.AltDisplayName = Object.AltObject.AltDisplayName;
                 taskObject.UserMessage = Object.AltObject.UserMessage;
-                taskObject.UserNotes = Object.AltObject.UserNotes;
+                taskObject.PopupAlert = Object.AltObject.PopupAlert;
                 taskObject.NextStatus = Object.AltObject.NextStatus;
 
                 CurrentChapterRow.ChapterData = JsonConvert.SerializeObject(CurrentChapter);
@@ -85,7 +85,7 @@ namespace Gizmo_V1_02.Pages.Chapters
                 taskObject.RescheduleDays = Object.ChapterObject.RescheduleDays;
                 taskObject.AltDisplayName = Object.ChapterObject.AltDisplayName;
                 taskObject.UserMessage = Object.ChapterObject.UserMessage;
-                taskObject.UserNotes = Object.ChapterObject.UserNotes;
+                taskObject.PopupAlert = Object.ChapterObject.PopupAlert;
                 taskObject.NextStatus = Object.ChapterObject.NextStatus;
 
 
@@ -120,7 +120,7 @@ namespace Gizmo_V1_02.Pages.Chapters
                     RescheduleDays = Object.AltObject.RescheduleDays,
                     AltDisplayName = Object.AltObject.AltDisplayName,
                     UserMessage = Object.AltObject.UserMessage,
-                    UserNotes = Object.AltObject.UserNotes,
+                    PopupAlert = Object.AltObject.PopupAlert,
                     NextStatus = Object.AltObject.NextStatus
                 };
 
@@ -146,7 +146,7 @@ namespace Gizmo_V1_02.Pages.Chapters
                     RescheduleDays = Object.ChapterObject.RescheduleDays,
                     AltDisplayName = Object.ChapterObject.AltDisplayName,
                     UserMessage = Object.ChapterObject.UserMessage,
-                    UserNotes = Object.ChapterObject.UserNotes,
+                    PopupAlert = Object.ChapterObject.PopupAlert,
                     NextStatus = Object.ChapterObject.NextStatus
                 };
 

@@ -14,8 +14,9 @@ namespace Gizmo_V1_02.Pages.Shared.Modals
         [Parameter] public string Class { get; set; } = "";
 
 
-        protected override void OnInitialized()
+        protected override void OnParametersSet()
         {
+         
             Direction = "tooltip-" + Direction.ToLower();
             
             if(Class != "")

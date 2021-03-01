@@ -109,7 +109,7 @@ namespace Gizmo_V1_02.Pages.Chapters
             TaskObject.RescheduleDays = CopyObject.RescheduleDays;
             TaskObject.AltDisplayName = CopyObject.AltDisplayName;
             TaskObject.UserMessage = CopyObject.UserMessage;
-            TaskObject.UserNotes = CopyObject.UserNotes;
+            TaskObject.PopupAlert = CopyObject.PopupAlert;
             TaskObject.NextStatus = CopyObject.NextStatus;
 
             TaskObject.FollowUpDocs = CopyObject.FollowUpDocs;
