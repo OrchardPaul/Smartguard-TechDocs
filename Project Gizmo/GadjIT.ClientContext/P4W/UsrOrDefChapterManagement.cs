@@ -49,7 +49,9 @@ namespace GadjIT.ClientContext.P4W
         public string NextStatus { get; set; }
         public string ChapterData { get; set; }
         public string UserMessage { get; set; }
-        public string UserNotes { get; set; }
+        public string PopupAlert { get; set; }
+        public string DeveloperNotes { get; set; }
+        public string StoryNotes { get; set; }
 
         public List<FollowUpDoc> FollowUpDocs { get; set; }
         

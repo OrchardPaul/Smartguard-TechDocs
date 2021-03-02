@@ -10,6 +10,8 @@ namespace GadjIT.ClientContext.P4W.Custom
 
         public UsrOrDefChapterManagement AltObject { get; set; }
 
+        public string DocType { get; set; }
+
         public string ComparisonResult { get; set; }
         public string ComparisonIcon { get; set; }
         public List<string> ComparisonList { get; set; } = new List<string>();
@@ -102,10 +104,10 @@ namespace GadjIT.ClientContext.P4W.Custom
                 ComparisonList.Add("UserMessage");
             }
 
-            if (ChapterObject.UserNotes != compItem.UserNotes)
+            if (ChapterObject.PopupAlert != compItem.PopupAlert)
             {
                 isSame = false;
-                ComparisonList.Add("UserNotes");
+                ComparisonList.Add("PopupAlert");
             }
 
             if (ChapterObject.NextStatus != compItem.NextStatus)
