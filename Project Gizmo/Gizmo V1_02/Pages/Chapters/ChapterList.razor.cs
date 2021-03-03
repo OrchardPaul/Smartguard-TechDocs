@@ -23,6 +23,7 @@ using System.IO;
 using Gizmo_V1_02.FileManagement.FileClassObjects.FileOptions;
 using Gizmo_V1_02.FileManagement.FileClassObjects;
 using System.Net;
+using Microsoft.JSInterop;
 
 namespace Gizmo_V1_02.Pages.Chapters
 {
@@ -1531,48 +1532,60 @@ namespace Gizmo_V1_02.Pages.Chapters
             StateHasChanged();
         }
 
-        //private async void SaveJsonFromDirectInput()
-        //{
-        //    alertMsgJSOM = "";
-        //    var IsJsonValid = false;
+        private void ReadBackUpFile(string filePath)
+        {
+            var readJSON = ChapterFileUpload.readJson(filePath);
+            SaveJson(readJSON);
+        }
 
-        //    JSchemaGenerator generator = new JSchemaGenerator();
-        //    try
-        //    {
-        //        JSchema schema = generator.Generate(typeof(VmChapter));
-        //        JObject jObject = JObject.Parse(updateJSON);
+        private void ReadExcelFile(string filePath)
+        {
+            var chapterObjects = ChapterFileUpload.readChapterItemsFromExcel(filePath);
+            selectedChapter.ChapterItems = chapterObjects;
+            var chapterJson = JsonConvert.SerializeObject(selectedChapter);
+            SaveJson(chapterJson);
+        }
 
-        //        IsJsonValid = jObject.IsValid(schema);
+        private async void DownloadFile(FileDesc file)
+        {
+            var data = ChapterFileUpload.ReadFileToByteArray(file.FilePath);
 
-        //    }
-        //    catch
-        //    {
-        //        IsJsonValid = false;
-        //    }
+            await jsRuntime.InvokeAsync<object>(
+                 "DownloadTextFile",
+                 file.FileName,
+                 Convert.ToBase64String(data));
 
-        //    if (IsJsonValid)
-        //    {
-        //        var chapterData = JsonConvert.DeserializeObject<VmChapter>(updateJSON);
-        //        selectedChapter.ChapterItems = chapterData.ChapterItems;
-        //        SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(selectedChapter);
 
-        //        await chapterManagementService.Update(SelectedChapterObject);
+        }
 
-        //        SelectChapter(SelectedChapterObject);
+        private void DeleteFile(FileDesc file)
+        {
+            ChapterFileUpload.DeleteFile(file.FilePath);
+            GetSeletedChapterFileList();
+            StateHasChanged();
+        }
 
-        //        showJSON = false;
 
-        //        await InvokeAsync(() =>
-        //        {
-        //            StateHasChanged();
-        //        });
-        //    }
-        //    else
-        //    {
-        //        showJSON = false;
-        //    }
+        private async void SaveJson(string Json)
+        {
+            if (ChapterFileUpload.ValidateChapterJSON(Json))
+            {
+                var chapterData = JsonConvert.DeserializeObject<VmChapter>(Json);
+                selectedChapter.ChapterItems = chapterData.ChapterItems;
+                SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(selectedChapter);
 
-        //}
+                await chapterManagementService.Update(SelectedChapterObject);
+
+                SelectChapter(SelectedChapterObject);
+
+                showJSON = false;
+
+                await InvokeAsync(() =>
+                {
+                    StateHasChanged();
+                });
+            }
+        }
 
         //private void CloseUpdateJSON()
         //{

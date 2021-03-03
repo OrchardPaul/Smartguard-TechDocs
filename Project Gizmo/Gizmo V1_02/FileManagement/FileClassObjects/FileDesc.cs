@@ -9,5 +9,7 @@ namespace Gizmo_V1_02.FileManagement.FileClassObjects
     {
         public string FileName { get; set; }
         public string FilePath { get; set; }
+
+        public string FileDirectory { get; set; }
     }
 }

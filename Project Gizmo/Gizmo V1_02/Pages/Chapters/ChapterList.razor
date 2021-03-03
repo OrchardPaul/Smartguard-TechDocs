@@ -320,12 +320,33 @@ else
                             {
                                 <div class="grid-row grid-row-sm">
                                     <div class="data-item">
-                                        @*<div class="data-item-sub" @onclick="() => ReadFile(fileDesc.FilePath)">
-                            @fileDesc.FileName
-                        </div>*@
-                                        <a class="data-item-sub" href="@fileDesc.FilePath" download="@fileDesc.FileName" target="_top">
+                                        <div class="btn-ellipses float-left">
+                                            <span class="fa fa-ellipsis-v"></span>
+                                            <div class="ellipsis-menu">
+                                                <ul>
+                                                    <li class="col-main" @onclick='(() => ReadBackUpFile(fileDesc.FilePath))'>
+                                                        <span class="fa fa-upload mr-2"></span>
+                                                        <span>Import</span>
+                                                    </li>
+                                                    <li class="col-main" @onclick='(() => ReadExcelFile(fileDesc.FilePath))'>
+                                                        <span class="fa fa-upload mr-2"></span>
+                                                        <span>Import From Excel</span>
+                                                    </li>
+                                                    <li class="col-main" @onclick='(() => DownloadFile(fileDesc))'>
+                                                        <span class="fa fa-upload mr-2"></span>
+                                                        <span>Download</span>
+                                                    </li>
+                                                    <li class="col-main" @onclick='(() => DeleteFile(fileDesc))'>
+                                                        <span class="fa fa-upload mr-2"></span>
+                                                        <span>Delete</span>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="data-item-sub">
+
                                             @fileDesc.FileName
-                                        </a>
+                                        </div>
                                     </div>
 
                                 </div>

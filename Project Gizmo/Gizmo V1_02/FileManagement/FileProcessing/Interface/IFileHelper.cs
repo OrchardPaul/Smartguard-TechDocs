@@ -1,20 +1,30 @@
 ﻿using BlazorInputFile;
+using GadjIT.ClientContext.P4W;
 using Gizmo_V1_02.FileManagement.FileClassObjects;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Gizmo_V1_02.FileManagement.FileProcessing.Interface
 {
     public interface IFileHelper
     {
+        string CustomPath { get; set; }
         bool IsFileValid { get; set; }
         Action<string> ValidationAction { get; set; }
-        string CustomPath { get; set; }
-        Task<bool> Upload(IFileListEntry file);
+
+        string DeleteFile(string path);
+        string DeleteFolder(string path);
         List<FileDesc> GetFileList();
-        void Write(List<string> output);
+        string MoveFile(string oldPath, string newPath);
+        string MoveFolder(string oldPath, string newPath);
+        List<UsrOrDefChapterManagement> ReadChapterDataFromExcel(string FilePath);
         string ReadFileIntoString(string path);
+        string RenameFile(string path, string oldName, string newName);
+        string RenameFolder(string path, string oldName, string newName);
+        Task<bool> Upload(IFileListEntry file);
+
+        byte[] ReadFileIntoByteArray(string path);
+        void Write(List<string> output);
     }
 }

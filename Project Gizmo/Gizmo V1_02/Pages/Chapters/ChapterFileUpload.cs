@@ -4,6 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using BlazorInputFile;
+using GadjIT.ClientContext.P4W;
+using GadjIT.ClientContext.P4W.Custom;
 using Gizmo_V1_02.Data;
 using Gizmo_V1_02.FileManagement.FileClassObjects;
 using Gizmo_V1_02.FileManagement.FileClassObjects.FileOptions;
@@ -62,6 +64,44 @@ namespace Gizmo_V1_02.Pages.Chapters
         {
             return FileHelper.ReadFileIntoString(path);
         }
+
+        public byte[] ReadFileToByteArray(string path)
+        {
+            return FileHelper.ReadFileIntoByteArray(path);
+        }
+
+        public string DeleteFile(string path)
+        {
+            return FileHelper.DeleteFile(path);
+        }
+
+
+        public List<UsrOrDefChapterManagement> readChapterItemsFromExcel(string path)
+        {
+            return FileHelper.ReadChapterDataFromExcel(path);
+        }
+
+        public bool ValidateChapterJSON(string JSON)
+        {
+            var IsJsonValid = false;
+
+            JSchemaGenerator generator = new JSchemaGenerator();
+            try
+            {
+                JSchema schema = generator.Generate(typeof(VmChapter));
+                JObject jObject = JObject.Parse(JSON);
+
+                IsJsonValid = jObject.IsValid(schema);
+
+            }
+            catch
+            {
+                IsJsonValid = false;
+            }
+
+            return IsJsonValid;
+        }
+
 
         public void ChapterFileIsValid(string path)
         {

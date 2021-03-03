@@ -110,6 +110,8 @@ namespace Gizmo_V1_02
                 endpoints.MapBlazorHub();
                 endpoints.MapFallbackToPage("/_Host");
             });
+
+
         }
     }
 }
