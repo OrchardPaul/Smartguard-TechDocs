@@ -260,7 +260,12 @@ else
                     <li class="nav-item @(navDisplay == "Fees" ? "active" : "")" @onclick='() => ShowNav("Fees")'>
                         <span>Fees</span>
                     </li>
-
+                    @if ((sessionState.isAdminUser))
+                    {
+                        <li class="nav-item @(navDisplay == "Backups" ? "active" : "")" @onclick='() => ShowNav("Backups")'>
+                            <span>Backups</span>
+                        </li>
+                    }
 
                 </ul>
 
@@ -284,7 +289,9 @@ else
                 <li class="nav-item @(navDisplay == "Fees" ? "active" : "")" @onclick='() => ShowNav("Fees")'>
                     <span>Fees</span>
                 </li>
+
             </ul>
+
         </div>
 
         @if (displaySpinner)
@@ -293,6 +300,44 @@ else
         }
         else
         {
+            @if (navDisplay == "Backups")
+            {
+                <div class="grid-chapter-chapter">
+                    <div class="detail-group-box" id="form-controls-json">
+                        <h5>Backup and Recovery: @selectedChapter.Name</h5>
+                        <div class="btn-group mt-2">
+                            <button @onclick="WriteChapterJSONToFile" class="btn btn-main btn-shadow"><i class="fa fa-save"></i><span>New Backup</span></button>
+                        </div>
+                        <div class="alert alert-danger mt-3 @(string.IsNullOrEmpty(alertMsgJSOM) ? "hidden" : "")">@alertMsgJSOM</div>
+                                                
+                            <div class="custom-file">
+                                <InputFile multiple OnChange="HandleJSONFileSelection" class="custom-file-input" id="customFileInput" ></InputFile>
+                                <label class="custom-file-label" for="customInput">Upload backup files</label>
+                            </div>
+                        
+                        <div class="grid-can-edit" id="modal-edit-fees-list">
+                            @foreach (var fileDesc in ListFileDescriptions)
+                            {
+                                <div class="grid-row grid-row-sm">
+                                    <div class="data-item">
+                                        @*<div class="data-item-sub" @onclick="() => ReadFile(fileDesc.FilePath)">
+                            @fileDesc.FileName
+                        </div>*@
+                                        <a class="data-item-sub" href="@fileDesc.FilePath" download="@fileDesc.FileName" target="_top">
+                                            @fileDesc.FileName
+                                        </a>
+                                    </div>
+
+                                </div>
+                            }
+                        </div>
+
+
+
+                    </div>
+                    </div>
+
+            }
             @if (navDisplay == "Chapter")
             {
 
@@ -302,111 +347,77 @@ else
                         <div class="btn-group">
                             <button @onclick='(() => PrepareForExport(lstAll, "Chapter Export"))' class="btn btn-main btn-shadow" title="Export Smartflow Details"><i class="fa fa-file-export"></i><span>Export</span></button>
                         </div>
-                        <AuthorizeView Roles="Super User">
+                        @if ((sessionState.isAdminUser))
+                        {
                             <div class="invisible-md-down btn-group">
                                 <button @onclick='PrepareChapterForCopy' class="btn btn-main btn-shadow" title="Copy Smartflow"><i class="fa fa-paste"></i><span>Copy</span></button>
                                 <button @onclick="() => PrepareChapterSync()" class="btn btn-main btn-shadow" title="Sync To @(sessionState.selectedSystem == "Dev" ? "Live" : "Dev")"><i class="fa fa-sync"></i><span>Sync</span></button>
-                                <button @onclick='() => ShowUpdateJSON()' class="btn btn-main btn-shadow" title="View/Update JSON"><i class="fa fa-code"></i><span>JSON</span></button>
                             </div>
-                        </AuthorizeView>
+                        }
 
 
-                    </div>
+                        </div>
 
                     <div class="mb-3 flex-box">
-                        @if (showJSON)
-                        {
-                            <div class="detail-group-box" id="form-controls-json">
-                                <h5>Smartflow JSON</h5>
-                                <div class="alert alert-danger mt-3 @(!string.IsNullOrEmpty(alertMsgJSOM) ? "hidden" : "")">@alertMsgJSOM</div>
 
-                                <InputFile multiple OnChange="HandleJSONFileSelection" class="custom-file-"></InputFile>
-                                <button @onclick="WriteChapterJSONToFile">Write JSON to file</button>
+                        <div class="detail-group-box">
 
-                                <div class="grid-can-edit" id="modal-edit-fees-list">
-                                    @foreach (var fileDesc in ListFileDescriptions)
-                                    {
-                                        <div class="grid-row grid-row-sm">
-                                            <div class="data-item">
-                                                @*<div class="data-item-sub" @onclick="() => ReadFile(fileDesc.FilePath)">
-                                                    @fileDesc.FileName
-                                                </div>*@
-                                                <a class="data-item-sub" href="@fileDesc.FilePath" download="@fileDesc.FileName" target="_top">
-                                                        @fileDesc.FileName
-                                                 </a>
-                                            </div>
-                                        </div>
-                                    }
-                                </div>
+                            @if ((sessionState.isAdminUser))
+                            {
 
-                                <textarea type="text" class="form-control" @bind="SelectedChapterObject.ChapterData"></textarea>
-                                <div class="button-container">
-                                    <button type="button" @onclick="SaveJsonFromDirectInput" class="btn btn-main">Save</button>
-                                    <button type="button" class="btn btn-secondary" @onclick="CloseUpdateJSON">Cancel</button>
-                                </div>
-                            </div>
-                        }
-                        else
-                        {
-
-                            <div class="detail-group-box">
-
-                                @if ((sessionState.isAdminUser))
-                                {
-
-                                    <EditForm Model="selectedChapter" OnValidSubmit="SaveChapterDetails">
-
-                                        <div class="form-group">
-                                            <label>Smartflow Name</label>
-                                            <InputText @bind-Value="selectedChapter.Name" class="form-control form-control-lg" />
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="BgColour">Background Colour</label>
-                                            <select @bind="selectedChapter.BackgroundColour" style="background-color: @getHTMLColourFromAndroid(selectedChapter.BackgroundColour)" class="form-control form-control-lg">
-                                                @foreach (var colour in ListChapterColours)
-                                                {
-                                                    <option style="background-color: @getHTMLColourFromAndroid(colour.ColourCode)" value="@colour.ColourCode">
-                                                        @colour.ColourName
-                                                    </option>
-                                                }
-                                            </select>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label>General Notes</label>
-                                            <InputTextArea @bind-Value="selectedChapter.GeneralNotes" class="form-control form-control-lg" />
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Devloper Notes</label>
-                                            <InputTextArea @bind-Value="selectedChapter.DelvolperNotes" class="form-control form-control-lg" />
-                                        </div>
-
-
-                                        <div class="button-container">
-                                            <button type="submit" class="btn btn-main">Save Changes</button>
-
-                                        </div>
-                                    </EditForm>
-
-
-                                }
-                                else
-                                {
+                                <EditForm Model="selectedChapter" OnValidSubmit="SaveChapterDetails">
 
                                     <div class="form-group">
-                                        <label>Smartflow Name: </label>
-                                        <label class="form-control-value">@selectedChapter.Name</label>
+                                        <label>Smartflow Name</label>
+                                        <InputText @bind-Value="selectedChapter.Name" class="form-control form-control-lg" />
                                     </div>
                                     <div class="form-group">
-                                        <label>Background Colour:</label>
-                                        <label class="form-control-value" style="background-color: @getHTMLColourFromAndroid(selectedChapter.BackgroundColour)">
-                                            @ListChapterColours.Where(C => C.ColourCode == @selectedChapter.BackgroundColour).Select(C => C.ColourName).SingleOrDefault()
-                                        </label>
+                                        <label for="BgColour">Background Colour</label>
+                                        <select @bind="selectedChapter.BackgroundColour" style="background-color: @getHTMLColourFromAndroid(selectedChapter.BackgroundColour)" class="form-control form-control-lg">
+                                            @foreach (var colour in ListChapterColours)
+                                            {
+                                                <option style="background-color: @getHTMLColourFromAndroid(colour.ColourCode)" value="@colour.ColourCode">
+                                                    @colour.ColourName
+                                                </option>
+                                            }
+                                        </select>
                                     </div>
 
-                                }
-                            </div>
-                        }
+                                    <div class="form-group">
+                                        <label>General Notes</label>
+                                        <InputTextArea @bind-Value="selectedChapter.GeneralNotes" class="form-control form-control-lg" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Devloper Notes</label>
+                                        <InputTextArea @bind-Value="selectedChapter.DelvolperNotes" class="form-control form-control-lg" />
+                                    </div>
+
+
+                                    <div class="button-container">
+                                        <button type="submit" class="btn btn-main">Save Changes</button>
+
+                                    </div>
+                                </EditForm>
+
+
+                            }
+                            else
+                            {
+
+                                <div class="form-group">
+                                    <label>Smartflow Name: </label>
+                                    <label class="form-control-value">@selectedChapter.Name</label>
+                                </div>
+                                <div class="form-group">
+                                    <label>Background Colour:</label>
+                                    <label class="form-control-value" style="background-color: @getHTMLColourFromAndroid(selectedChapter.BackgroundColour)">
+                                        @ListChapterColours.Where(C => C.ColourCode == @selectedChapter.BackgroundColour).Select(C => C.ColourName).SingleOrDefault()
+                                    </label>
+                                </div>
+
+                            }
+                        </div>
+
                     </div>
                 </div>
             }
@@ -867,7 +878,7 @@ else
                                             <div class="seq-no">@fee.ChapterObject.SeqNo</div>
                                         </div>
                                     }
-                                    
+
                                 </div>
 
                             </div>
@@ -885,7 +896,7 @@ else
                     <div class="grid-actions">
 
                         @if (!compareSystems)
-                        { 
+                        {
                             @if (sessionState.isAdminUser)
                             {
                                 <div class="btn-group">

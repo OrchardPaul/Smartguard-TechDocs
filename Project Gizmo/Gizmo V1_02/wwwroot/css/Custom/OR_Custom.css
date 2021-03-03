@@ -241,10 +241,32 @@ app {
 /*-----------------------------*/
 /*  FILE INPUTS                */
 /*-----------------------------*/
-/*.custom-file-input::-webkit-file-upload-button {
-    visibility: hidden;
+.custom-file{
+    width: 300px;
+    margin: 5px 0 5px 0;
 }
 
+.custom-file-input[disabled] ~ .custom-file-label,
+.custom-file-input:disabled ~ .custom-file-label, 
+.custom-file-label {
+    background-color: #eee !important;
+}
+
+.custom-file-input:lang(en) ~ .custom-file-label::after {
+    content: "Browse";
+    display: inline-block;
+    border: 1px solid #999;
+    border-radius: 3px;
+    padding: 5px 8px;
+    outline: none;
+    white-space: nowrap;
+    -webkit-user-select: none;
+    cursor: pointer;
+}
+/*.custom-file-input::-webkit-file-upload-button {
+    visibility: hidden;
+}*/
+/*
 .custom-file-input::before {
     content: 'Select some files';
     display: inline-block;
@@ -259,20 +281,17 @@ app {
     text-shadow: 1px 1px #fff;
     font-weight: 700;
     font-size: 10pt;
-}
-
-.custom-file-input:hover::before {
+}*/
+/*.custom-file-input:hover::before {
     border-color: black;
 }
 
 .custom-file-input:active::before {
     background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
 }*/
-
 /*-----------------------------*/
 /*  BLOCKS                     */
 /*-----------------------------*/
-
 .tran-block .btn-edit {
     background-color: rgba(245, 245, 245, 0) !important;
 }
@@ -311,7 +330,7 @@ app {
     margin-left: 0px;
 }
 
-.grid-actions .btn span {
+.btn span {
     margin-left: 3px !important;
     font-size: 0.85rem;
 }

@@ -980,56 +980,10 @@ namespace Gizmo_V1_02.Pages.Chapters
             StateHasChanged();
         }
 
-        private void CloseUpdateJSON()
-        {
-            showJSON = false;
-
-            StateHasChanged();
-        }
+        
 
 
-        private async void SaveJsonFromDirectInput()
-        {
-            alertMsgJSOM = "";
-            var IsJsonValid = false;
-
-            JSchemaGenerator generator = new JSchemaGenerator();
-            try
-            {
-                JSchema schema = generator.Generate(typeof(VmChapter));
-                JObject jObject = JObject.Parse(updateJSON);
-
-                IsJsonValid = jObject.IsValid(schema);
-
-            }
-            catch
-            {
-                IsJsonValid = false;
-            }
-
-            if (IsJsonValid)
-            {
-                var chapterData = JsonConvert.DeserializeObject<VmChapter>(updateJSON);
-                selectedChapter.ChapterItems = chapterData.ChapterItems;
-                SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(selectedChapter);
-
-                await chapterManagementService.Update(SelectedChapterObject);
-
-                SelectChapter(SelectedChapterObject);
-
-                showJSON = false;
-
-                await InvokeAsync(() =>
-                {
-                    StateHasChanged();
-                });
-            }
-            else
-            {
-                showJSON = false;
-            }
-
-        }
+        
 
         protected void ShowCaseTypeEditModal()
         {
@@ -1576,5 +1530,55 @@ namespace Gizmo_V1_02.Pages.Chapters
             await CompareSelectedChapterToAltSystem();
             StateHasChanged();
         }
+
+        //private async void SaveJsonFromDirectInput()
+        //{
+        //    alertMsgJSOM = "";
+        //    var IsJsonValid = false;
+
+        //    JSchemaGenerator generator = new JSchemaGenerator();
+        //    try
+        //    {
+        //        JSchema schema = generator.Generate(typeof(VmChapter));
+        //        JObject jObject = JObject.Parse(updateJSON);
+
+        //        IsJsonValid = jObject.IsValid(schema);
+
+        //    }
+        //    catch
+        //    {
+        //        IsJsonValid = false;
+        //    }
+
+        //    if (IsJsonValid)
+        //    {
+        //        var chapterData = JsonConvert.DeserializeObject<VmChapter>(updateJSON);
+        //        selectedChapter.ChapterItems = chapterData.ChapterItems;
+        //        SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(selectedChapter);
+
+        //        await chapterManagementService.Update(SelectedChapterObject);
+
+        //        SelectChapter(SelectedChapterObject);
+
+        //        showJSON = false;
+
+        //        await InvokeAsync(() =>
+        //        {
+        //            StateHasChanged();
+        //        });
+        //    }
+        //    else
+        //    {
+        //        showJSON = false;
+        //    }
+
+        //}
+
+        //private void CloseUpdateJSON()
+        //{
+        //    showJSON = false;
+
+        //    StateHasChanged();
+        //}
     }
 }
