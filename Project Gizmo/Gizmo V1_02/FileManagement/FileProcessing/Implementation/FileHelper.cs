@@ -291,6 +291,35 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
 
         }
 
+        public List<string> ValidateChapterExcel(string FilePath)
+        {
+            var isExcelValid = new List<string>();
+
+            try
+            {
+
+            }
+            catch
+            {
+
+            }
+
+            FileInfo fileInfo = new FileInfo(FilePath);
+
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+            using (ExcelPackage excelPackage = new ExcelPackage(fileInfo))
+            {
+                ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets.FirstOrDefault();
+                int totalColumns = worksheet.Dimension.End.Column;
+                int totalRows = worksheet.Dimension.End.Row;
+
+                if (totalRows <= 2) isExcelValid.Add("No data in spreadsheet to import");
+                if (totalColumns != 16) isExcelValid.Add("No data in spreadsheet to import");
+            }
+
+            return isExcelValid;
+        }
+
 
         public List<UsrOrDefChapterManagement> ReadChapterDataFromExcel(string FilePath)
         {

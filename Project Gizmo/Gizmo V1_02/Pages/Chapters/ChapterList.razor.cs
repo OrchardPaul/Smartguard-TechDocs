@@ -1335,7 +1335,7 @@ namespace Gizmo_V1_02.Pages.Chapters
             StateHasChanged();
         }
 
-        private async void HandleJSONFileSelection(IFileListEntry[] entryFiles)
+        private async void HandleFileSelection(IFileListEntry[] entryFiles)
         {
             var files = new List<IFileListEntry>();
 

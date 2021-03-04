@@ -311,7 +311,7 @@ else
                         <div class="alert alert-danger mt-3 @(string.IsNullOrEmpty(alertMsgJSOM) ? "hidden" : "")">@alertMsgJSOM</div>
                                                 
                             <div class="custom-file">
-                                <InputFile multiple OnChange="HandleJSONFileSelection" class="custom-file-input" id="customFileInput" ></InputFile>
+                                <InputFile multiple OnChange="HandleFileSelection" class="custom-file-input" id="customFileInput" ></InputFile>
                                 <label class="custom-file-label" for="customInput">Upload backup files</label>
                             </div>
                         
@@ -326,7 +326,7 @@ else
                                                 <ul>
                                                     <li class="col-main" @onclick='(() => ReadBackUpFile(fileDesc.FilePath))'>
                                                         <span class="fa fa-upload mr-2"></span>
-                                                        <span>Import</span>
+                                                        <span>Upload</span>
                                                     </li>
                                                     <li class="col-main" @onclick='(() => ReadExcelFile(fileDesc.FilePath))'>
                                                         <span class="fa fa-upload mr-2"></span>
@@ -337,7 +337,7 @@ else
                                                         <span>Download</span>
                                                     </li>
                                                     <li class="col-main" @onclick='(() => DeleteFile(fileDesc))'>
-                                                        <span class="fa fa-remove mr-2"></span>
+                                                        <span class="fa fa-trash-alt mr-2"></span>
                                                         <span>Delete</span>
                                                     </li>
                                                 </ul>
