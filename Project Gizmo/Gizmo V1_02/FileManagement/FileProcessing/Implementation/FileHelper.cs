@@ -112,7 +112,7 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
         //    return result;
         //}
 
-       
+
 
         public string ReadFileIntoString(string path)
         {

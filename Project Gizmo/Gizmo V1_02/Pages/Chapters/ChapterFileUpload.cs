@@ -83,7 +83,7 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         public bool ValidateChapterJSON(string JSON)
         {
-            var IsJsonValid = false;
+            var IsJsonValid = true;
 
             JSchemaGenerator generator = new JSchemaGenerator();
             try

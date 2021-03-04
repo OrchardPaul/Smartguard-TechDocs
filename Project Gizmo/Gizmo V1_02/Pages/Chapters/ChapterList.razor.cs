@@ -315,7 +315,7 @@ namespace Gizmo_V1_02.Pages.Chapters
             else
             {
                 var lst = selectedChapter.ChapterItems;
-                Dictionary<int?, string> docTypes = new Dictionary<int?, string> { { 1, "Doc" },{ 4, "Form" }, {6, "Step" }, { 8, "Date" }, { 9, "Email" }, { 12, "Email" } };
+                Dictionary<int?, string> docTypes = new Dictionary<int?, string> { { 1, "Doc" },{ 4, "Form" }, {6, "Step" }, { 8, "Date" }, { 9, "Email" }, {11,"Doc" } , { 12, "Email" } };
 
                 lstAll = lst.Select(L => new VmUsrOrDefChapterManagement { ChapterObject = L })
                                 .Select(L => {
