@@ -941,3 +941,5 @@ F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\
 F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Shared\NavMenu.razor.g.cs
 F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Shared\SurveyPrompt.razor.g.cs
 F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\_Imports.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\RazorDeclaration\Pages\Chapters\ChapterImport.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Debug\netcoreapp3.1\Razor\Pages\Chapters\ChapterImport.razor.g.cs

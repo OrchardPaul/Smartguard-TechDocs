@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GadjIT.GadjitContext", "Gad
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GadjIT.ClientContext", "Gadjit.ClientContext\GadjIT.ClientContext.csproj", "{A6534BC2-27AA-45B1-B4C4-156A02389E43}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GadjIT.TableHelper", "GadjIT.TableHelper\GadjIT.TableHelper.csproj", "{083F837B-39E0-4CCE-A834-C493A740F64F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GadjIT.TableHelper", "GadjIT.TableHelper\GadjIT.TableHelper.csproj", "{083F837B-39E0-4CCE-A834-C493A740F64F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

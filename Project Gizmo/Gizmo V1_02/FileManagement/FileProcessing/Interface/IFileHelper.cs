@@ -23,8 +23,8 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Interface
         string RenameFile(string path, string oldName, string newName);
         string RenameFolder(string path, string oldName, string newName);
         Task<bool> Upload(IFileListEntry file);
-
+        List<string> ValidateChapterExcel(string FilePath);
         byte[] ReadFileIntoByteArray(string path);
-        void Write(List<string> output);
+        void Write(List<string> output, string fileName);
     }
 }

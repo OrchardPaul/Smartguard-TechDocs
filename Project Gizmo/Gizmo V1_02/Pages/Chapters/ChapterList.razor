@@ -328,10 +328,6 @@ else
                                                         <span class="fa fa-upload mr-2"></span>
                                                         <span>Upload</span>
                                                     </li>
-                                                    <li class="col-main" @onclick='(() => ReadExcelFile(fileDesc.FilePath))'>
-                                                        <span class="fa fa-upload mr-2"></span>
-                                                        <span>Import From Excel</span>
-                                                    </li>
                                                     <li class="col-main" @onclick='(() => DownloadFile(fileDesc))'>
                                                         <span class="fa fa-download mr-2"></span>
                                                         <span>Download</span>
@@ -367,6 +363,7 @@ else
 
                         <div class="btn-group">
                             <button @onclick='(() => PrepareForExport(lstAll, "Chapter Export"))' class="btn btn-main btn-shadow" title="Export Smartflow Details"><i class="fa fa-file-export"></i><span>Export</span></button>
+                            <button @onclick='(() => ShowChapterImportModel())' class="btn btn-main btn-shadow" title="Import Smartflow Details"><i class="fa fa-file-import"></i><span>Import</span></button>
                         </div>
                         @if ((sessionState.isAdminUser))
                         {

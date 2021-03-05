@@ -1141,7 +1141,12 @@ namespace Gizmo_V1_02.Pages.Chapters
             parameters.Add("ModalWidth", "500px");
             parameters.Add("DeleteAction", SelectedDeleteAction);
 
-            Modal.Show<ModalDelete>("Delete?", parameters);
+            var options = new ModalOptions()
+            {
+                Class = "blazored-custom-modal"
+            };
+
+            Modal.Show<ModalDelete>("Delete?", parameters, options);
         }
 
         protected void PrepareChapterDelete(VmUsrOrDefChapterManagement selectedChapterItem)
@@ -1155,7 +1160,13 @@ namespace Gizmo_V1_02.Pages.Chapters
             parameters.Add("ModalWidth", "500px");
             parameters.Add("DeleteAction", SelectedDeleteAction);
 
-            Modal.Show<ModalDelete>("Delete?", parameters);
+
+            var options = new ModalOptions()
+            {
+                Class = "blazored-custom-modal"
+            };
+
+            Modal.Show<ModalDelete>("Delete?", parameters, options);
         }
 
         private void PrepareForComparison(VmUsrOrDefChapterManagement selectedItem)
@@ -1317,11 +1328,6 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         }
 
-        public void ReadFile(string path)
-        {
-            var test = ChapterFileUpload.readJson(path);
-        }
-
         public void GetFile(FileDesc fileDesc)
         {
             NavigationManager.NavigateTo(fileDesc.FilePath + "//" + fileDesc.FileName, true);
@@ -1329,7 +1335,9 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         public void WriteChapterJSONToFile()
         {
-            ChapterFileUpload.WriteChapterToFile(SelectedChapterObject.ChapterData);
+            var fileName = selectedChapter.Name + "_" + DateTime.Now.ToString("yyyymmdd_HHmmss") + ".txt";
+
+            ChapterFileUpload.WriteChapterToFile(SelectedChapterObject.ChapterData, fileName);
 
             GetSeletedChapterFileList();
             StateHasChanged();
@@ -1538,14 +1546,6 @@ namespace Gizmo_V1_02.Pages.Chapters
             SaveJson(readJSON);
         }
 
-        private void ReadExcelFile(string filePath)
-        {
-            var chapterObjects = ChapterFileUpload.readChapterItemsFromExcel(filePath);
-            selectedChapter.ChapterItems = chapterObjects;
-            var chapterJson = JsonConvert.SerializeObject(selectedChapter);
-            SaveJson(chapterJson);
-        }
-
         private async void DownloadFile(FileDesc file)
         {
             var data = ChapterFileUpload.ReadFileToByteArray(file.FilePath);
@@ -1585,6 +1585,31 @@ namespace Gizmo_V1_02.Pages.Chapters
                     StateHasChanged();
                 });
             }
+        }
+
+        private void RefreshJson()
+        {
+            SaveJson(SelectedChapterObject.ChapterData);
+        }
+
+
+        protected void ShowChapterImportModel()
+        {
+            Action WriteBackUp = WriteChapterJSONToFile;
+
+            Action SelectedAction = RefreshJson;
+            var parameters = new ModalParameters();
+            parameters.Add("TaskObject", SelectedChapterObject);
+            parameters.Add("ListFileDescriptions", ListFileDescriptions);
+            parameters.Add("DataChanged", SelectedAction);
+            parameters.Add("WriteBackUp", WriteBackUp);
+
+            var options = new ModalOptions()
+            {
+                Class = "blazored-custom-modal modal-confirm"
+            };
+
+            Modal.Show<ChapterImport>("ExcelImport", parameters, options);
         }
 
         //private void CloseUpdateJSON()

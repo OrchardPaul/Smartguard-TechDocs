@@ -16,11 +16,14 @@ namespace Gizmo_V1_02.Pages.Chapters
         List<FileDesc> GetFileListForChapter();
         void SetChapterOptions(ChapterFileOptions chapterFileOptions);
         Task<bool> UploadChapterFiles(IFileListEntry files);
-        void WriteChapterToFile(string JSON);
+        void WriteChapterToFile(string JSON, string fileName);
         string readJson(string path);
         bool ValidateChapterJSON(string JSON);
         List<UsrOrDefChapterManagement> readChapterItemsFromExcel(string path);
         byte[] ReadFileToByteArray(string path);
         string DeleteFile(string path);
+        List<string> ValidateChapterExcel(string filePath);
+
+
     }
 }

@@ -27,6 +27,11 @@ namespace Gizmo_V1_02.Pages.Chapters
             FileHelper = fileUpload;
         }
 
+        public List<string> ValidateChapterExcel(string filePath)
+        {
+            return FileHelper.ValidateChapterExcel(filePath);
+        }
+
         public void SetChapterOptions(ChapterFileOptions chapterFileOptions)
         {
             FileHelper.CustomPath = $"FileManagement/FileStorage/{chapterFileOptions.Company}/Chapters/{chapterFileOptions.CaseTypeGroup}/{chapterFileOptions.CaseType}/{chapterFileOptions.Chapter}";
@@ -53,11 +58,11 @@ namespace Gizmo_V1_02.Pages.Chapters
             return FileHelper.GetFileList();
         }
 
-        public void WriteChapterToFile(string JSON)
+        public void WriteChapterToFile(string JSON, string fileName)
         {
             List<string> output = new List<string> { JSON };
 
-            FileHelper.Write(output);
+            FileHelper.Write(output, fileName);
         }
 
         public string readJson(string path)

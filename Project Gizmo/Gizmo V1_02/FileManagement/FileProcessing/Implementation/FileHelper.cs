@@ -267,12 +267,12 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
 
 
 
-        public void Write(List<string> output)
+        public void Write(List<string> output,string fileName)
         {
             // Write the string array to a new file named "WriteLines.txt".
             try
             {
-                using (StreamWriter outputFile = new StreamWriter(Path.Combine(CustomPath, "JSON.txt")))
+                using (StreamWriter outputFile = new StreamWriter(Path.Combine(CustomPath, fileName)))
                 {
                     foreach (string line in output)
                         outputFile.WriteLine(line);
@@ -282,7 +282,7 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
             {
                 Directory.CreateDirectory(Path.GetFullPath(CustomPath));
 
-                using (StreamWriter outputFile = new StreamWriter(Path.Combine(CustomPath, "JSON.txt")))
+                using (StreamWriter outputFile = new StreamWriter(Path.Combine(CustomPath, fileName)))
                 {
                     foreach (string line in output)
                         outputFile.WriteLine(line);
@@ -297,25 +297,25 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
 
             try
             {
+                FileInfo fileInfo = new FileInfo(FilePath);
+
+                ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+                using (ExcelPackage excelPackage = new ExcelPackage(fileInfo))
+                {
+                    ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets.FirstOrDefault();
+                    int totalColumns = worksheet.Dimension.End.Column;
+                    int totalRows = worksheet.Dimension.End.Row;
+
+                    if (totalRows <= 2) isExcelValid.Add("No data in spreadsheet to import");
+                    if (totalColumns != 16) isExcelValid.Add("No data in spreadsheet to import");
+                }
 
             }
             catch
             {
-
+                isExcelValid.Add("Error Processing Excel");
             }
 
-            FileInfo fileInfo = new FileInfo(FilePath);
-
-            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-            using (ExcelPackage excelPackage = new ExcelPackage(fileInfo))
-            {
-                ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets.FirstOrDefault();
-                int totalColumns = worksheet.Dimension.End.Column;
-                int totalRows = worksheet.Dimension.End.Row;
-
-                if (totalRows <= 2) isExcelValid.Add("No data in spreadsheet to import");
-                if (totalColumns != 16) isExcelValid.Add("No data in spreadsheet to import");
-            }
 
             return isExcelValid;
         }
