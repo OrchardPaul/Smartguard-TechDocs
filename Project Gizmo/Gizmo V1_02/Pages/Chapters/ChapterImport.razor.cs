@@ -222,11 +222,11 @@ namespace Gizmo_V1_02.Pages.Chapters
             }
             else
             {
-                var isJsonValid = ChapterFileUpload.ValidateChapterJSON(Json);
+                var jsonErrors = ChapterFileUpload.ValidateChapterJSON(Json);
 
-                if (!isJsonValid)
+                if (jsonErrors.Count > 0)
                 {
-                    ErrorList.Add("Error validating JSON");
+                    ErrorList.AddRange(jsonErrors);
                     ToggleErrorList(true);
                 }
                 else

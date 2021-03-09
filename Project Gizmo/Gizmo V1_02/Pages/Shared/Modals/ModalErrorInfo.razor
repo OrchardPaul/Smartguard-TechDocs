@@ -1,6 +1,12 @@
-﻿
-<div class="modal-body">
-    <div class="info-text">@((MarkupString)InfoText)</div>
+﻿<div class="modal-body">
+    <div class="info-text">@((MarkupString)ErrorDesc)</div>
+    <ul>
+        @foreach(var error in ErrorDetails)
+        {
+            <li>@((MarkupString)error)</li>
+        }
+    </ul>
+
 </div>
 <div class="modal-footer">
     <div class="container-fluid ">

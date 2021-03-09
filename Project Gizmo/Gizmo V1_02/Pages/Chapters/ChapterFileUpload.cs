@@ -86,9 +86,9 @@ namespace Gizmo_V1_02.Pages.Chapters
             return FileHelper.ReadChapterDataFromExcel(path);
         }
 
-        public bool ValidateChapterJSON(string JSON)
+        public IList<string> ValidateChapterJSON(string JSON)
         {
-            var IsJsonValid = true;
+            IList<string> lstErrors = new List<string>();
 
             JSchemaGenerator generator = new JSchemaGenerator();
             try
@@ -96,15 +96,15 @@ namespace Gizmo_V1_02.Pages.Chapters
                 JSchema schema = generator.Generate(typeof(VmChapter));
                 JObject jObject = JObject.Parse(JSON);
 
-                IsJsonValid = jObject.IsValid(schema);
+                jObject.IsValid(schema, out lstErrors);
 
             }
             catch
             {
-                IsJsonValid = false;
+                lstErrors.Add("Error parsing JSON");
             }
 
-            return IsJsonValid;
+            return lstErrors;
         }
 
 

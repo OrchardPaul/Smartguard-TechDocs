@@ -307,7 +307,7 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
                     int totalRows = worksheet.Dimension.End.Row;
 
                     if (totalRows <= 2) isExcelValid.Add("No data in spreadsheet to import");
-                    if (totalColumns != 16) isExcelValid.Add("No data in spreadsheet to import");
+                    if (totalColumns != 16) isExcelValid.Add("Spreadsheet has an invalid number of columns");
                 }
 
             }
@@ -344,10 +344,25 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
                         if (column == 2) readObject.CaseType = worksheet.Cells[row, column].FirstOrDefault() is null ? "" : worksheet.Cells[row, column].Value.ToString();
                         if (column == 3) readObject.ChapterName = worksheet.Cells[row, column].FirstOrDefault() is null ? "" : worksheet.Cells[row, column].Value.ToString();
                         if (column == 4) readObject.Type = worksheet.Cells[row, column].FirstOrDefault() is null ? "" : worksheet.Cells[row, column].Value.ToString();
-                        if (column == 5) readObject.SeqNo = worksheet.Cells[row, column].FirstOrDefault() is null ? 0 : Convert.ToInt32(worksheet.Cells[row, column].Value.ToString());
+                        try
+                        {
+                            if (column == 5) readObject.SeqNo = worksheet.Cells[row, column].FirstOrDefault() is null ? 0 : Convert.ToInt32(worksheet.Cells[row, column].Value.ToString());
+                        }
+                        catch
+                        {
+                            readObject.SeqNo = null;
+                        }
                         if (column == 6) readObject.Name = worksheet.Cells[row, column].FirstOrDefault() is null ? "" : worksheet.Cells[row, column].Value.ToString();
                         if (column == 7) readObject.AltDisplayName = worksheet.Cells[row, column].FirstOrDefault() is null ? "" : worksheet.Cells[row, column].Value.ToString();
-                        if (column == 8) readObject.RescheduleDays = worksheet.Cells[row, column].FirstOrDefault() is null ? 0 : Convert.ToInt32(worksheet.Cells[row, column].Value.ToString());
+                        try
+                        {
+                            if (column == 8) readObject.RescheduleDays = worksheet.Cells[row, column].FirstOrDefault() is null ? 0 : Convert.ToInt32(worksheet.Cells[row, column].Value.ToString());
+                        }
+                        catch
+                        {
+                            readObject.RescheduleDays = null;
+                        }
+       
                         if (column == 9) readObject.AsName = worksheet.Cells[row, column].FirstOrDefault() is null ? "" : worksheet.Cells[row, column].Value.ToString();
                         if (column == 10) readObject.CompleteName = worksheet.Cells[row, column].FirstOrDefault() is null ? "" : worksheet.Cells[row, column].Value.ToString();
                         if (column == 11) readObject.NextStatus = worksheet.Cells[row, column].FirstOrDefault() is null ? "" : worksheet.Cells[row, column].Value.ToString();

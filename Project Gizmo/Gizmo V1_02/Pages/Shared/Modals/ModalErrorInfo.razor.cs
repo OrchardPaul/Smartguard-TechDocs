@@ -10,14 +10,16 @@ using System.Threading.Tasks;
 
 namespace Gizmo_V1_02.Pages.Shared.Modals
 {
-    public partial class ModalInfo
+    public partial class ModalErrorInfo
     {
         [CascadingParameter]
         BlazoredModalInstance ModalInstance { get; set; }
 
+        [Parameter]
+        public string ErrorDesc { get; set; }
 
         [Parameter]
-        public string InfoText { get; set; }
+        public IList<string> ErrorDetails { get; set; }
 
         private async void Close()
         {

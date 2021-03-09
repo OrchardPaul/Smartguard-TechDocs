@@ -28,6 +28,7 @@ namespace GadjIT.ClientContext.P4W
         [Required]
         public string Name { get; set; }
         public string ChapterName { get; set; }
+        [Required]
         public int? SeqNo { get; set; }
         [Column("Suppress_Step")]
         [StringLength(1)]

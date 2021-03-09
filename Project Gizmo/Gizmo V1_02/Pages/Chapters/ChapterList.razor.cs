@@ -60,6 +60,8 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         private List<FileDesc> ListFileDescriptions { get; set; }
 
+        private FileDesc SelectedFileDescription { get; set; }
+
         private List<VmUsrOrDefChapterManagement> lstChapters { get; set; } = new List<VmUsrOrDefChapterManagement>();
 
         private List<VmUsrOrDefChapterManagement> lstAltSystemChapters { get; set; } = new List<VmUsrOrDefChapterManagement>();
@@ -139,6 +141,7 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         public bool showJSON = false;
 
+        public IList<string> JSONErrors { get; set; }
 
         public List<string> lstDocTypes { get; set; } = new List<string> { "Doc", "Letter", "Form", "Email", "Step" };
 
@@ -1169,6 +1172,26 @@ namespace Gizmo_V1_02.Pages.Chapters
             Modal.Show<ModalDelete>("Delete?", parameters, options);
         }
 
+
+        protected void PrepareBackUpForDelete(FileDesc selectedFile)
+        {
+            SelectedFileDescription = selectedFile;
+
+            Action SelectedDeleteAction = HandleDeleteFile;
+            var parameters = new ModalParameters();
+            parameters.Add("InfoHeader", "Delete?");
+            parameters.Add("ModalHeight", "300px");
+            parameters.Add("ModalWidth", "500px");
+            parameters.Add("DeleteAction", SelectedDeleteAction);
+
+            var options = new ModalOptions()
+            {
+                Class = "blazored-custom-modal"
+            };
+
+            Modal.Show<ModalDelete>("Delete?", parameters, options);
+        }
+
         private void PrepareForComparison(VmUsrOrDefChapterManagement selectedItem)
         {
             editObject = selectedItem;
@@ -1335,7 +1358,7 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         public void WriteChapterJSONToFile()
         {
-            var fileName = selectedChapter.Name + "_" + DateTime.Now.ToString("yyyymmdd_HHmmss") + ".txt";
+            var fileName = selectedChapter.Name + "_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".txt";
 
             ChapterFileUpload.WriteChapterToFile(SelectedChapterObject.ChapterData, fileName);
 
@@ -1346,19 +1369,42 @@ namespace Gizmo_V1_02.Pages.Chapters
         private async void HandleFileSelection(IFileListEntry[] entryFiles)
         {
             var files = new List<IFileListEntry>();
+            IList<string> fileErrorDescs = new List<string>();
 
             foreach (var file in entryFiles)
             {
                 if (file != null)
                 {
-                    await ChapterFileUpload.UploadChapterFiles(file);
-                    files.Add(file);
+                    if(!(file.Name.Contains(".txt") || file.Name.Contains(".JSON")))
+                    {
+                        fileErrorDescs.Add($"The file: {file.Name} is not the correct type for a backup. Backup files must be either .txt or .JSON");
+                    }
+                    else
+                    {
+                        if(ListFileDescriptions.Where(F => F.FileName == file.Name).FirstOrDefault() is null)
+                        {
+                            await ChapterFileUpload.UploadChapterFiles(file);
+                            files.Add(file);
+                        }
+                        else
+                        {
+                            fileErrorDescs.Add($"The file: {file.Name} already exists on the system");
+                        }
+
+                        
+                    }
+                    
                 }
 
             }
             if (files != null && files.Count > 0)
             {
                 StateHasChanged();
+            }
+
+            if(fileErrorDescs.Count > 0)
+            {
+                ShowErrorModal("File Upload Error", "The following errors occured during the upload:", fileErrorDescs);
             }
 
             GetSeletedChapterFileList();
@@ -1558,6 +1604,11 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         }
 
+        private void HandleDeleteFile()
+        {
+            DeleteFile(SelectedFileDescription);
+        }
+
         private void DeleteFile(FileDesc file)
         {
             ChapterFileUpload.DeleteFile(file.FilePath);
@@ -1568,7 +1619,10 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         private async void SaveJson(string Json)
         {
-            if (ChapterFileUpload.ValidateChapterJSON(Json))
+            JSONErrors = new List<string>();
+            JSONErrors = ChapterFileUpload.ValidateChapterJSON(Json);
+
+            if (JSONErrors.Count == 0)
             {
                 var chapterData = JsonConvert.DeserializeObject<VmChapter>(Json);
                 selectedChapter.ChapterItems = chapterData.ChapterItems;
@@ -1585,6 +1639,25 @@ namespace Gizmo_V1_02.Pages.Chapters
                     StateHasChanged();
                 });
             }
+            else
+            {
+                ShowErrorModal("Backup Restore Error", "The following errors occured during the restore:", JSONErrors);
+            }
+        }
+
+
+        protected void ShowErrorModal(string header, string errorDesc, IList<string> errorDets)
+        {
+            var parameters = new ModalParameters();
+            parameters.Add("ErrorDesc", errorDesc);
+            parameters.Add("ErrorDetails", errorDets);
+
+            var options = new ModalOptions()
+            {
+                Class = "blazored-custom-modal"
+            };
+
+            Modal.Show<ModalErrorInfo>(header, parameters, options);
         }
 
         private void RefreshJson()
@@ -1612,11 +1685,5 @@ namespace Gizmo_V1_02.Pages.Chapters
             Modal.Show<ChapterImport>("ExcelImport", parameters, options);
         }
 
-        //private void CloseUpdateJSON()
-        //{
-        //    showJSON = false;
-
-        //    StateHasChanged();
-        //}
     }
 }

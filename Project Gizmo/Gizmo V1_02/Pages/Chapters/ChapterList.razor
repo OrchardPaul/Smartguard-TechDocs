@@ -316,7 +316,7 @@ else
                             </div>
                         
                         <div class="grid-can-edit" id="modal-edit-fees-list">
-                            @foreach (var fileDesc in ListFileDescriptions)
+                            @foreach (var fileDesc in ListFileDescriptions.Where(F => F.FilePath.Contains(".txt") || F.FilePath.Contains(".JSON")).ToList())
                             {
                                 <div class="grid-row grid-row-sm">
                                     <div class="data-item">
@@ -332,7 +332,7 @@ else
                                                         <span class="fa fa-download mr-2"></span>
                                                         <span>Download</span>
                                                     </li>
-                                                    <li class="col-main" @onclick='(() => DeleteFile(fileDesc))'>
+                                                    <li class="col-main" @onclick='(() => PrepareBackUpForDelete(fileDesc))'>
                                                         <span class="fa fa-trash-alt mr-2"></span>
                                                         <span>Delete</span>
                                                     </li>

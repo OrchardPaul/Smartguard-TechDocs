@@ -18,7 +18,7 @@ namespace Gizmo_V1_02.Pages.Chapters
         Task<bool> UploadChapterFiles(IFileListEntry files);
         void WriteChapterToFile(string JSON, string fileName);
         string readJson(string path);
-        bool ValidateChapterJSON(string JSON);
+        IList<string> ValidateChapterJSON(string JSON);
         List<UsrOrDefChapterManagement> readChapterItemsFromExcel(string path);
         byte[] ReadFileToByteArray(string path);
         string DeleteFile(string path);
