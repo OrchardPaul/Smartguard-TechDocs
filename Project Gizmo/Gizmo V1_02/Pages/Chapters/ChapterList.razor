@@ -325,8 +325,8 @@ else
                                             <div class="ellipsis-menu">
                                                 <ul>
                                                     <li class="col-main" @onclick='(() => ReadBackUpFile(fileDesc.FilePath))'>
-                                                        <span class="fa fa-upload mr-2"></span>
-                                                        <span>Upload</span>
+                                                        <span class="fa fa-window-restore mr-2"></span>
+                                                        <span>Restore</span>
                                                     </li>
                                                     <li class="col-main" @onclick='(() => DownloadFile(fileDesc))'>
                                                         <span class="fa fa-download mr-2"></span>
@@ -363,11 +363,11 @@ else
 
                         <div class="btn-group">
                             <button @onclick='(() => PrepareForExport(lstAll, "Chapter Export"))' class="btn btn-main btn-shadow" title="Export Smartflow Details"><i class="fa fa-file-export"></i><span>Export</span></button>
-                            <button @onclick='(() => ShowChapterImportModel())' class="btn btn-main btn-shadow" title="Import Smartflow Details"><i class="fa fa-file-import"></i><span>Import</span></button>
                         </div>
                         @if ((sessionState.isAdminUser))
                         {
                             <div class="invisible-md-down btn-group">
+                                <button @onclick='(() => ShowChapterImportModel())' class="btn btn-main btn-shadow" title="Import Smartflow Details"><i class="fa fa-file-import"></i><span>Import</span></button>
                                 <button @onclick='PrepareChapterForCopy' class="btn btn-main btn-shadow" title="Copy Smartflow"><i class="fa fa-paste"></i><span>Copy</span></button>
                                 <button @onclick="() => PrepareChapterSync()" class="btn btn-main btn-shadow" title="Sync To @(sessionState.selectedSystem == "Dev" ? "Live" : "Dev")"><i class="fa fa-sync"></i><span>Sync</span></button>
                             </div>

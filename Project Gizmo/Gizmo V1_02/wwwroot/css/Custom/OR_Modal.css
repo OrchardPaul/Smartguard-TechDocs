@@ -368,6 +368,13 @@
     overflow-y: scroll;
 }
 
+.modal-chapter-import .modal-body {
+    max-height: 400px;
+    max-width: 500px;
+    min-width: 300px;
+    overflow-y: auto;
+}
+
 .modal-chapter-fees {
     width: 500px;
     overflow: hidden;

@@ -21,6 +21,7 @@ namespace Gizmo_V1_02.Pages.Chapters
         {
             public string Option { get; set; }
             public bool Selected { get; set; }
+            public int OptionCount { get; set; }
         }
 
         [CascadingParameter]
@@ -44,19 +45,16 @@ namespace Gizmo_V1_02.Pages.Chapters
         [Parameter]
         public List<FileDesc> ListFileDescriptions { get; set; }
 
-        public List<CopyOption> CopyOptions { get; set; } = new List<CopyOption>
-                                                                    {
-                                                                        new CopyOption { Option = "Agenda", Selected = false },
-                                                                        new CopyOption { Option = "Status", Selected = false },
-                                                                        new CopyOption { Option = "Documents/Steps", Selected = false },
-                                                                        new CopyOption { Option = "Fees", Selected = false },
-                                                                    };
-
+        public List<CopyOption> CopyOptions { get; set; } 
         public List<string> lstDocTypes { get; set; } = new List<string> { "Doc", "Letter", "Form", "Email", "Step" };
 
         public List<string> ErrorList { get; set; } = new List<string>();
 
         public bool ToggleError { get; set; }
+
+        private string ImportedJSON { get; set; }
+
+        private List<UsrOrDefChapterManagement> ChapterItems { get; set; }
 
         private async void Close()
         {
@@ -120,27 +118,19 @@ namespace Gizmo_V1_02.Pages.Chapters
                 }
                 else if (files != null && files.Count > 0)
                 {
+                    ChapterItems = ChapterFileUpload.readChapterItemsFromExcel(ListFileDescriptions.Where(F => F.FileName == fileName).FirstOrDefault().FilePath);
+                    CopyOptions = new List<CopyOption>
+                                                {
+                                                    new CopyOption { Option = "Agenda", Selected = false, OptionCount = ChapterItems.Where(C => C.Type == "Agenda").ToList().Count() },
+                                                    new CopyOption { Option = "Status", Selected = false, OptionCount = ChapterItems.Where(C => C.Type == "Status").ToList().Count() },
+                                                    new CopyOption { Option = "Documents/Steps", Selected = false, OptionCount = ChapterItems.Where(C => lstDocTypes.Contains(C.Type)).ToList().Count() },
+                                                    new CopyOption { Option = "Fees", Selected = false, OptionCount = ChapterItems.Where(C => C.Type == "Fee").ToList().Count() },
+                                                };
+
+
                     StateHasChanged();
                 }
             }
-        }
-
-        private async void DownloadFile(FileDesc file)
-        {
-            var data = ChapterFileUpload.ReadFileToByteArray(file.FilePath);
-
-            await jsRuntime.InvokeAsync<object>(
-                 "DownloadTextFile",
-                 file.FileName,
-                 Convert.ToBase64String(data));
-
-        }
-
-        private void DeleteFile(FileDesc file)
-        {
-            ChapterFileUpload.DeleteFile(file.FilePath);
-            GetSeletedChapterFileList();
-            StateHasChanged();
         }
 
         /// <summary>
@@ -153,76 +143,76 @@ namespace Gizmo_V1_02.Pages.Chapters
         /// </remarks>
         /// <returns>string: row-changed or row-changedx</returns>
 
-        private async void HandleValidSubmit(string filePath)
+        private async void HandleValidSubmit()
         {
-            var selectedCopyItems = new VmChapter { ChapterItems = new List<UsrOrDefChapterManagement>() };
-            var chapterObjects = ChapterFileUpload.readChapterItemsFromExcel(filePath);
-
             var originalJson = new string(TaskObject.ChapterData);
+            var SelectedCopyItems = new VmChapter { ChapterItems = new List<UsrOrDefChapterManagement>() };
 
             if (!(TaskObject.ChapterData is null))
             {
-                selectedCopyItems = JsonConvert.DeserializeObject<VmChapter>(TaskObject.ChapterData);
+                SelectedCopyItems = JsonConvert.DeserializeObject<VmChapter>(TaskObject.ChapterData);
             }
 
 
             if (CopyOptions.Where(C => C.Option == "Agenda").Select(C => C.Selected).FirstOrDefault())
             {
-                foreach (var item in selectedCopyItems.ChapterItems.Where(C => C.Type == "Agenda").ToList())
+                foreach (var item in SelectedCopyItems.ChapterItems.Where(C => C.Type == "Agenda").ToList())
                 {
-                    selectedCopyItems.ChapterItems.Remove(item);
+                    SelectedCopyItems.ChapterItems.Remove(item);
                 }
 
-                selectedCopyItems.ChapterItems.AddRange(chapterObjects.Where(C => C.Type == "Agenda").ToList());
+                SelectedCopyItems.ChapterItems.AddRange(ChapterItems.Where(C => C.Type == "Agenda").ToList());
             }
 
             if (CopyOptions.Where(C => C.Option == "Status").Select(C => C.Selected).FirstOrDefault())
             {
-                foreach (var item in selectedCopyItems.ChapterItems.Where(C => C.Type == "Status").ToList())
+                foreach (var item in SelectedCopyItems.ChapterItems.Where(C => C.Type == "Status").ToList())
                 {
-                    selectedCopyItems.ChapterItems.Remove(item);
+                    SelectedCopyItems.ChapterItems.Remove(item);
                 }
 
-                selectedCopyItems.ChapterItems.AddRange(chapterObjects.Where(C => C.Type == "Status").ToList());
+                SelectedCopyItems.ChapterItems.AddRange(ChapterItems.Where(C => C.Type == "Status").ToList());
             }
 
             if (CopyOptions.Where(C => C.Option == "Documents/Steps").Select(C => C.Selected).FirstOrDefault())
             {
-                foreach (var item in selectedCopyItems.ChapterItems.Where(C => lstDocTypes.Contains(C.Type)).ToList())
+                foreach (var item in SelectedCopyItems.ChapterItems.Where(C => lstDocTypes.Contains(C.Type)).ToList())
                 {
-                    selectedCopyItems.ChapterItems.Remove(item);
+                    SelectedCopyItems.ChapterItems.Remove(item);
                 }
 
-                selectedCopyItems.ChapterItems.AddRange(chapterObjects.Where(C => lstDocTypes.Contains(C.Type)).ToList());
+                SelectedCopyItems.ChapterItems.AddRange(ChapterItems.Where(C => lstDocTypes.Contains(C.Type)).ToList());
             }
 
             if (CopyOptions.Where(C => C.Option == "Fees").Select(C => C.Selected).FirstOrDefault())
             {
-                foreach (var item in selectedCopyItems.ChapterItems.Where(C => C.Type == "Fee").ToList())
+                foreach (var item in SelectedCopyItems.ChapterItems.Where(C => C.Type == "Fee").ToList())
                 {
-                    selectedCopyItems.ChapterItems.Remove(item);
+                    SelectedCopyItems.ChapterItems.Remove(item);
                 }
 
-                selectedCopyItems.ChapterItems.AddRange(chapterObjects.Where(C => C.Type == "Fee").ToList());
+                SelectedCopyItems.ChapterItems.AddRange(ChapterItems.Where(C => C.Type == "Fee").ToList());
             }
 
-            var Json = JsonConvert.SerializeObject(new VmChapter
+
+            ImportedJSON = JsonConvert.SerializeObject(new VmChapter
             {
                 CaseTypeGroup = TaskObject.CaseTypeGroup,
                 CaseType = TaskObject.CaseType,
                 Name = TaskObject.Name,
                 SeqNo = TaskObject.SeqNo.GetValueOrDefault(),
-                ChapterItems = selectedCopyItems.ChapterItems
+                ChapterItems = SelectedCopyItems.ChapterItems
             });
 
-            if(Json == originalJson)
+
+            if (ImportedJSON == originalJson)
             {
                 ErrorList.Add("No new updates are present in the import.");
                 ToggleErrorList(true);
             }
             else
             {
-                var jsonErrors = ChapterFileUpload.ValidateChapterJSON(Json);
+                var jsonErrors = ChapterFileUpload.ValidateChapterJSON(ImportedJSON);
 
                 if (jsonErrors.Count > 0)
                 {
@@ -233,7 +223,7 @@ namespace Gizmo_V1_02.Pages.Chapters
                 {
                     WriteBackUp?.Invoke();
 
-                    TaskObject.ChapterData = Json;
+                    TaskObject.ChapterData = ImportedJSON;
 
                     ChapterFileUpload.DeleteFile(ListFileDescriptions.Where(F => F.FilePath.Contains(".xlsx")).FirstOrDefault().FilePath);
 

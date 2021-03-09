@@ -1668,6 +1668,14 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         protected void ShowChapterImportModel()
         {
+
+            while (!(ListFileDescriptions.Where(F => F.FilePath.Contains(".xlsx")).FirstOrDefault() is null))
+            {
+                ChapterFileUpload.DeleteFile(ListFileDescriptions.Where(F => F.FilePath.Contains(".xlsx")).FirstOrDefault().FilePath);
+                GetSeletedChapterFileList();
+            }
+
+
             Action WriteBackUp = WriteChapterJSONToFile;
 
             Action SelectedAction = RefreshJson;
@@ -1679,10 +1687,10 @@ namespace Gizmo_V1_02.Pages.Chapters
 
             var options = new ModalOptions()
             {
-                Class = "blazored-custom-modal modal-confirm"
+                Class = "blazored-custom-modal modal-chapter-import"
             };
 
-            Modal.Show<ChapterImport>("ExcelImport", parameters, options);
+            Modal.Show<ChapterImport>("Excel Import", parameters, options);
         }
 
     }
