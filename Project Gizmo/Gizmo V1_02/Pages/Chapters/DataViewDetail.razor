@@ -1,0 +1,27 @@
+﻿@using Gizmo_V1_02.Data.CustomFormObjects;
+
+<EditForm Model="@CopyObject" OnValidSubmit="HandleValidSubmit">
+    <div class="modal-body">
+        <DataAnnotationsValidator />
+
+        <div class="form-group">
+            <label for="CompleteName">View Name</label>
+            <InputText class="form-control" @bind-Value="@CopyObject.ViewName" />
+        </div>
+
+        <div class="form-group">
+            <label for="CompleteName">Display Name</label>
+            <InputText class="form-control" @bind-Value="@CopyObject.DisplayName" />
+        </div>
+
+        <div class="form-group">
+            <label for="CompleteName">Block Number</label>
+            <InputNumber class="form-control" @bind-Value="@CopyObject.BlockNo" />
+        </div>
+    </div>
+
+    <div class="button-container">
+        <button type="submit" class="btn btn-main">Save</button>
+        <button type="button" class="btn btn-secondary" @onclick="Close">Cancel</button>
+    </div>
+</EditForm>

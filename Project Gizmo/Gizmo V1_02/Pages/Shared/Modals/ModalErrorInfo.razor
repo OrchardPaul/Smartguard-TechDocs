@@ -1,20 +1,16 @@
 ﻿<div class="modal-body">
-    <div class="info-text">@((MarkupString)ErrorDesc)</div>
+    <div class="alert alert-danger " role="alert">@((MarkupString)ErrorDesc)</div>
     <ul>
-        @foreach(var error in ErrorDetails)
+        @foreach (var error in ErrorDetails)
         {
-            <li>@((MarkupString)error)</li>
+            <li class="font-85">@((MarkupString)error)</li>
         }
     </ul>
-</div>
-<div class="modal-footer">
-    <div class="container-fluid ">
-        <div class="row">
-            <div class="col-6 text-left">
-                <button type="button" data-dismiss="modal" @onclick="@Close" class="btn btn-secondary">Cancel</button>
-            </div>
 
-        </div>
+    <div class="button-container">
+        <button type="button" class="btn btn-secondary" @onclick="Close">Cancel</button>
     </div>
+
 </div>
+    
 

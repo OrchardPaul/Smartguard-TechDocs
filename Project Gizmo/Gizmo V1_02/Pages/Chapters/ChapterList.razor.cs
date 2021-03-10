@@ -75,6 +75,7 @@ namespace Gizmo_V1_02.Pages.Chapters
         private List<VmUsrOrDefChapterManagement> lstDocs { get; set; } = new List<VmUsrOrDefChapterManagement>();
         private List<VmUsrOrDefChapterManagement> lstStatus { get; set; } = new List<VmUsrOrDefChapterManagement>();
 
+        private List<VmDataViews> ListVmDataViews { get; set; } = new List<VmDataViews>();
 
         public List<DmDocuments> dropDownChapterList;
         public List<CaseTypeGroups> partnerCaseTypeGroups;
@@ -86,6 +87,7 @@ namespace Gizmo_V1_02.Pages.Chapters
         public UsrOrDefChapterManagement editChapter { get; set; }
         public string isCaseTypeOrGroup { get; set; } = "";
 
+        public VmDataViews EditDataViewObject = new VmDataViews { DataView = new DataViews() };
         public VmUsrOrDefChapterManagement editObject = new VmUsrOrDefChapterManagement { ChapterObject = new UsrOrDefChapterManagement() };
         public VmUsrOrDefChapterManagement editChapterObject = new VmUsrOrDefChapterManagement { ChapterObject = new UsrOrDefChapterManagement() };
 
@@ -235,7 +237,7 @@ namespace Gizmo_V1_02.Pages.Chapters
             else
             {
                 //Initialise the VmChapter in case of null Json
-                selectedChapter = new VmChapter { ChapterItems = new List<UsrOrDefChapterManagement>() };
+                selectedChapter = new VmChapter { ChapterItems = new List<UsrOrDefChapterManagement>(), DataViews = new List<DataViews>() };
                 selectedChapter.CaseTypeGroup = chapter.CaseTypeGroup;
                 selectedChapter.CaseType = chapter.CaseType;
                 selectedChapter.Name = chapter.Name;
@@ -399,6 +401,15 @@ namespace Gizmo_V1_02.Pages.Chapters
                                         .OrderBy(A => A.ChapterObject.SeqNo)
                                         .Where(A => A.ChapterObject.Type == "Status")
                                         .ToList();
+                }
+                if(listType == "DataViews" | listType == "All")
+                {
+                    ListVmDataViews = (selectedChapter.DataViews is null) 
+                                                    ? new List<VmDataViews>() 
+                                                    : selectedChapter
+                                                            .DataViews
+                                                            .Select(D => new VmDataViews { DataView = D })
+                                                            .ToList();
                 }
             }
 
@@ -626,6 +637,15 @@ namespace Gizmo_V1_02.Pages.Chapters
             ShowChapterDetailModal("Edit");
         }
 
+        private void PrepareDataViewForEdit(VmDataViews item, string header)
+        {
+            selectedList = header;
+            EditDataViewObject = item;
+
+            ShowDataViewDetailModal("Edit");
+        }
+
+
         private void PrepareAttachmentForEdit(VmUsrOrDefChapterManagement item, string header)
         {
             selectedList = header;
@@ -680,6 +700,31 @@ namespace Gizmo_V1_02.Pages.Chapters
 
             ShowChapterDetailModal("Insert");
         }
+
+        private void PrepareDataViewForInsert(string header)
+        {
+            selectedList = header;
+            EditDataViewObject = new VmDataViews { DataView = new DataViews() } ;
+
+            if(ListVmDataViews.Count > 0)
+            {
+
+                EditDataViewObject.DataView.BlockNo = ListVmDataViews
+                                                       .OrderByDescending(D => D.DataView.BlockNo)
+                                                       .Select(D => D.DataView.BlockNo)
+                                                       .FirstOrDefault() + 1;
+            }
+            else
+            {
+                EditDataViewObject.DataView.BlockNo = 1;
+            }
+
+
+            ShowDataViewDetailModal("Insert");
+        }
+
+
+
 
         private void PrepNewChapter()
         {
@@ -1060,6 +1105,35 @@ namespace Gizmo_V1_02.Pages.Chapters
             Modal.Show<ChapterDetail>(selectedList, parameters, options);
         }
 
+        protected void ShowDataViewDetailModal(string option)
+        {
+            Action action = RefreshSelectedList;
+
+            var copyObject = new DataViews
+            {
+                BlockNo = EditDataViewObject.DataView.BlockNo,
+                DisplayName = EditDataViewObject.DataView.DisplayName,
+                ViewName = EditDataViewObject.DataView.ViewName
+            };
+
+            var parameters = new ModalParameters();
+            parameters.Add("TaskObject", EditDataViewObject.DataView);
+            parameters.Add("CopyObject", copyObject);
+            parameters.Add("DataChanged", action);
+            parameters.Add("SelectedChapter", selectedChapter);
+            parameters.Add("SelectedChapterObject", SelectedChapterObject);
+            parameters.Add("Option", option);
+
+            var options = new ModalOptions()
+            {
+                Class = "blazored-custom-modal modal-chapter-item"
+            };
+
+            Modal.Show<DataViewDetail>("Data View", parameters, options);
+        }
+
+
+
         protected void ShowChapterAttachmentModal()
         {
             Action action = RefreshSelectedList;
@@ -1152,6 +1226,27 @@ namespace Gizmo_V1_02.Pages.Chapters
             Modal.Show<ModalDelete>("Delete?", parameters, options);
         }
 
+
+
+        protected void PrepareDataViewDelete(VmDataViews selectedDataView)
+        {
+            EditDataViewObject = selectedDataView;
+
+            Action SelectedDeleteAction = HandleDataViewDelete;
+            var parameters = new ModalParameters();
+            parameters.Add("InfoHeader", "Delete?");
+            parameters.Add("ModalHeight", "300px");
+            parameters.Add("ModalWidth", "500px");
+            parameters.Add("DeleteAction", SelectedDeleteAction);
+
+            var options = new ModalOptions()
+            {
+                Class = "blazored-custom-modal"
+            };
+
+            Modal.Show<ModalDelete>("Delete?", parameters, options);
+        }
+
         protected void PrepareChapterDelete(VmUsrOrDefChapterManagement selectedChapterItem)
         {
             editObject = selectedChapterItem;
@@ -1228,6 +1323,16 @@ namespace Gizmo_V1_02.Pages.Chapters
         {
 
             selectedChapter.ChapterItems.Remove(editObject.ChapterObject);
+            SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(selectedChapter);
+            await chapterManagementService.Update(SelectedChapterObject);
+
+            await RefreshChapterItems(navDisplay);
+            StateHasChanged();
+        }
+
+        private async void HandleDataViewDelete()
+        {
+            selectedChapter.DataViews.Remove(EditDataViewObject.DataView);
             SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(selectedChapter);
             await chapterManagementService.Update(SelectedChapterObject);
 
@@ -1654,7 +1759,7 @@ namespace Gizmo_V1_02.Pages.Chapters
 
             var options = new ModalOptions()
             {
-                Class = "blazored-custom-modal"
+                Class = "blazored-custom-modal modal-chapter-import"
             };
 
             Modal.Show<ModalErrorInfo>(header, parameters, options);
@@ -1692,6 +1797,9 @@ namespace Gizmo_V1_02.Pages.Chapters
 
             Modal.Show<ChapterImport>("Excel Import", parameters, options);
         }
+
+
+
 
     }
 }
