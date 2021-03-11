@@ -1875,6 +1875,7 @@ namespace Gizmo_V1_02.Pages.Chapters
             parameters.Add("ListFileDescriptions", ListFileDescriptions);
             parameters.Add("DataChanged", SelectedAction);
             parameters.Add("WriteBackUp", WriteBackUp);
+            parameters.Add("OriginalDataViews", ListVmDataViews);
 
             var options = new ModalOptions()
             {

@@ -52,9 +52,16 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         public bool ToggleError { get; set; }
 
+        public bool ToggleSuccess { get; set; }
+
         private string ImportedJSON { get; set; }
 
         private List<UsrOrDefChapterManagement> ChapterItems { get; set; }
+
+        [Parameter]
+        public List<VmDataViews> OriginalDataViews { get; set; }
+        
+        
 
         private async void Close()
         {
@@ -148,6 +155,8 @@ namespace Gizmo_V1_02.Pages.Chapters
             var originalJson = new string(TaskObject.ChapterData);
             var SelectedCopyItems = new VmChapter { ChapterItems = new List<UsrOrDefChapterManagement>() };
 
+            ToggleSuccess = false;
+
             if (!(TaskObject.ChapterData is null))
             {
                 SelectedCopyItems = JsonConvert.DeserializeObject<VmChapter>(TaskObject.ChapterData);
@@ -201,7 +210,8 @@ namespace Gizmo_V1_02.Pages.Chapters
                 CaseType = TaskObject.CaseType,
                 Name = TaskObject.Name,
                 SeqNo = TaskObject.SeqNo.GetValueOrDefault(),
-                ChapterItems = SelectedCopyItems.ChapterItems
+                ChapterItems = SelectedCopyItems.ChapterItems,
+                DataViews = OriginalDataViews.Select(D => D.DataView).ToList()
             });
 
 
@@ -230,7 +240,9 @@ namespace Gizmo_V1_02.Pages.Chapters
                     await chapterManagementService.Update(TaskObject);
 
                     DataChanged?.Invoke();
-                    Close();
+                    ToggleSuccess = true;
+
+                    StateHasChanged();
                 }
             }
             

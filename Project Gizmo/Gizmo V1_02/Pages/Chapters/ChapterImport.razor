@@ -1,9 +1,9 @@
 ﻿@inject IJSRuntime jsRuntime
 
 <div class="modal-body">
+    
 
-
-    @if (!ToggleError)
+    @if (!ToggleError && !ToggleSuccess)
     {
         @if (!(ListFileDescriptions is null) && ListFileDescriptions.Where(F => F.FilePath.Contains(".xlsx")).ToList().Count() > 0)
         {
@@ -55,18 +55,25 @@
     else
     {
         <div class="form-group">
-            <div class="alert alert-danger " role="alert">Errors occured when downloading excel spreadsheet, Import was not completed:</div>
-            <ul>
-                @foreach (var error in ErrorList)
-                {
-                    <li class="font-85">@((MarkupString)error)</li>
-                }
-            </ul>
+            @if (ToggleError)
+            {
+                <div class="alert alert-danger " role="alert">Errors occured when downloading excel spreadsheet, Import was not completed:</div>
+                <ul>
+                    @foreach (var error in ErrorList)
+                    {
+                        <li class="font-85">@((MarkupString)error)</li>
+                    }
+                </ul>
+            }
+            @if (ToggleSuccess)
+            {
+                <div class="alert alert-info " role="alert">Import was successful!</div>
+            }
 
         </div>
 
         <div class="button-container">
-            <button type="button" class="btn btn-secondary" @onclick="Close">Cancel</button>
+            <button type="button" class="btn btn-secondary" @onclick="Close">Close</button>
         </div>
     }
 
