@@ -30,7 +30,7 @@ namespace GadjIT.TableHelper
         {
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            services.AddScoped<IFileUpload, FileUpload>();
+            //services.AddScoped<IFileUpload, FileUpload>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -905,6 +905,11 @@ app {
     min-height: 400px;
 }
 
+.grid-chapter-dataviews {
+    width: 800px;
+    min-height: 400px;
+}
+
 .grid-chapter-chapter {
     width: 800px;
     min-height: 400px;
@@ -923,7 +928,7 @@ app {
 }
 
 
-.grid-chapter-docs .info-icon, .grid-chapter-agenda .info-icon, .grid-chapter-fees .info-icon, .grid-chapter-status .info-icon {
+.grid-chapter-docs .info-icon, .grid-chapter-agenda .info-icon, .grid-chapter-fees .info-icon, .grid-chapter-status .grid-chapter-dataviews .info-icon {
     margin-left: 25px;
 }
 
@@ -936,7 +941,7 @@ app {
 }
 
 @media (max-width: 991px) {
-    .grid-chapter-chapter, .grid-chapter-agenda, .grid-chapter-docs, .grid-chapter-fees, .grid-chapter-status {
+    .grid-chapter-chapter, .grid-chapter-agenda, .grid-chapter-docs, .grid-chapter-fees, .grid-chapter-status .grid-chapter-dataviews {
         width: 100%;
     }
 

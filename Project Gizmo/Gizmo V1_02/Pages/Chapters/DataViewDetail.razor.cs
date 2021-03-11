@@ -28,6 +28,9 @@ namespace Gizmo_V1_02.Pages.Chapters
         public string Option { get; set; }
 
         [Parameter]
+        public List<MpSysViews> ListPartnerViews { get; set; }
+
+        [Parameter]
         public UsrOrDefChapterManagement SelectedChapterObject { get; set; }
 
         [Parameter]

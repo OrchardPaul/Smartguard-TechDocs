@@ -48,5 +48,18 @@ namespace GadjIT.ClientAPI.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
+
+        [HttpGet]
+        public async Task<ActionResult> GetAllP4WViews()
+        {
+            try
+            {
+                return Ok(await partner_Access_Service.GetAllP4WViews());
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
     }
 }

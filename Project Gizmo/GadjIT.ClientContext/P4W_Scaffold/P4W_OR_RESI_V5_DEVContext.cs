@@ -23,6 +23,7 @@ namespace GadjIT.ClientContext.P4W_Scaffold
         public virtual DbSet<CaseTypes> CaseTypes { get; set; }
         public virtual DbSet<DmDocuments> DmDocuments { get; set; }
         public virtual DbSet<DmDocumentsPermissions> DmDocumentsPermissions { get; set; }
+        public virtual DbSet<MpSysViews> MpSysViews { get; set; }
         public virtual DbSet<UsrOrDefChapterManagement> UsrOrDefChapterManagement { get; set; }
         public virtual DbSet<UsrOrResiMtFees> UsrOrResiMtFees { get; set; }
 
@@ -207,6 +208,52 @@ namespace GadjIT.ClientContext.P4W_Scaffold
             {
                 entity.HasKey(e => new { e.Doccode, e.Casetype })
                     .HasName("PK__DM_DocumentsPerm__1F7A4DDE");
+            });
+
+            modelBuilder.Entity<MpSysViews>(entity =>
+            {
+                entity.HasKey(e => e.Id)
+                    .IsClustered(false);
+
+                entity.Property(e => e.Id).ValueGeneratedNever();
+
+                entity.Property(e => e.CaseGroupRef).HasDefaultValueSql("(0)");
+
+                entity.Property(e => e.DescriptionField).HasDefaultValueSql("(0)");
+
+                entity.Property(e => e.Designable).HasDefaultValueSql("(1)");
+
+                entity.Property(e => e.Flags).HasDefaultValueSql("(0)");
+
+                entity.Property(e => e.Form)
+                    .IsUnicode(false)
+                    .HasDefaultValueSql("('')");
+
+                entity.Property(e => e.Icon)
+                    .IsUnicode(false)
+                    .HasDefaultValueSql("('')");
+
+                entity.Property(e => e.InternalName).IsUnicode(false);
+
+                entity.Property(e => e.InternalNote).IsUnicode(false);
+
+                entity.Property(e => e.Name).IsUnicode(false);
+
+                entity.Property(e => e.NextItem).HasDefaultValueSql("(0)");
+
+                entity.Property(e => e.ReadLock).HasDefaultValueSql("(0)");
+
+                entity.Property(e => e.System).HasDefaultValueSql("(0)");
+
+                entity.Property(e => e.SystemName)
+                    .IsUnicode(false)
+                    .HasDefaultValueSql("('')");
+
+                entity.Property(e => e.Type).HasDefaultValueSql("(0)");
+
+                entity.Property(e => e.Visibility).HasDefaultValueSql("(1)");
+
+                entity.Property(e => e.WriteLock).HasDefaultValueSql("(0)");
             });
 
             modelBuilder.Entity<UsrOrDefChapterManagement>(entity =>

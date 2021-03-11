@@ -11,6 +11,7 @@ namespace Gizmo_V1_02.Services
     {
         Task<List<CaseTypes>> GetPartnerCaseTypes();
         Task<List<CaseTypeGroups>> GetPartnerCaseTypeGroups();
+        Task<List<MpSysViews>> GetPartnerViews();
     }
 
     public class PartnerAccessService : IPartnerAccessService
@@ -41,6 +42,20 @@ namespace Gizmo_V1_02.Services
         public Task<List<CaseTypeGroups>> GetPartnerCaseTypeGroups()
         {
             var result = httpClient.GetJsonAsync<List<CaseTypeGroups>>($"{userSession.baseUri}api/PartnerAccess/GetAllCaseTypeGroups");
+
+            if (result.Exception is null)
+            {
+                return result;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public Task<List<MpSysViews>> GetPartnerViews()
+        {
+            var result = httpClient.GetJsonAsync<List<MpSysViews>>($"{userSession.baseUri}api/PartnerAccess/GetAllP4WViews");
 
             if (result.Exception is null)
             {

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using GadjIT.ClientAPI.Repository.Chapters;
 using GadjIT.ClientAPI.Repository.Partner;
 using GadjIT.ClientContext.P4W;
+using GadjIT.ClientContext.P4W_Scaffold;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;

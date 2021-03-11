@@ -27,6 +27,7 @@ namespace GadjIT.ClientContext.P4W
         [StringLength(250)]
         [Required]
         public string Name { get; set; }
+        [NotMapped]
         public string ChapterName { get; set; }
         [Required]
         public int? SeqNo { get; set; }
@@ -49,11 +50,16 @@ namespace GadjIT.ClientContext.P4W
         [StringLength(100)]
         public string NextStatus { get; set; }
         public string ChapterData { get; set; }
+        [NotMapped]
         public string UserMessage { get; set; }
+        [NotMapped]
         public string PopupAlert { get; set; }
+        [NotMapped]
         public string DeveloperNotes { get; set; }
+        [NotMapped]
         public string StoryNotes { get; set; }
 
+        [NotMapped]
         public List<FollowUpDoc> FollowUpDocs { get; set; }
         
     }
