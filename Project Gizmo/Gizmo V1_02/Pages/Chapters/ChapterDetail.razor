@@ -85,21 +85,6 @@
             </div>
 
             <div class="form-group">
-                <label for="DocType">Type</label>
-                <InputSelect class="form-control form-control-sm"
-                             @bind-Value="CopyObject.Type">
-                    <option value="">Select</option>
-                    @foreach (var type in DocTypeList)
-                        {
-                        <option value="@type">
-                            @type
-                        </option>
-                        }
-                </InputSelect>
-                <ValidationMessage For="@(() => CopyObject.Type)" />
-            </div>
-
-            <div class="form-group">
                 <label for="AsName">Schedule As Name</label>
                 <InputText class="form-control form-control-xl" @bind-Value="@CopyObject.AsName" />
             </div>

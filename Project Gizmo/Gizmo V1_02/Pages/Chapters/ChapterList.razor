@@ -508,7 +508,16 @@ else
                                             @switch (doc.DocType)
                                             {
                                                 case "Doc":
-                                                    <span class="font-100"><span class="fa fa-file mr-2"></span></span>
+                                                    
+                                                    @if (!string.IsNullOrEmpty(doc.DocDisplayName) 
+                                                                && (doc.DocDisplayName.ToUpper().Contains("LTR")
+                                                                || doc.DocDisplayName.ToUpper().Contains("BLANK LETTER")))
+                                                    {
+                                                        <span class="font-100"><span class="fa fa-file-alt mr-2"></span></span>
+                                                    }else 
+                                                    {
+                                                        <span class="font-100"><span class="fa fa-file mr-2"></span></span>
+                                                    }
                                                     break;
                                                 case "Letter":
                                                     <span class="font-100"><span class="fa fa-file-alt mr-2"></span></span>

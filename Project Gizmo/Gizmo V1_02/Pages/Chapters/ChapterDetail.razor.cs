@@ -106,7 +106,11 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         private async void HandleValidSubmit()
         {
-            TaskObject.Type = CopyObject.Type;
+            Dictionary<int?, string> docTypes = new Dictionary<int?, string> { { 1, "Doc" }, { 4, "Form" }, { 6, "Step" }, { 8, "Date" }, { 9, "Email" }, { 11, "Doc" }, { 12, "Email" } };
+
+            TaskObject.Type = dropDownChapterList.Where(D => D.Name == CopyObject.Name)
+                                                    .Select(D => string.IsNullOrEmpty(docTypes[D.DocumentType]) ? "Doc" : docTypes[D.DocumentType])
+                                                    .FirstOrDefault();
             TaskObject.Name = CopyObject.Name;
             TaskObject.EntityType = CopyObject.EntityType;
             TaskObject.SeqNo = CopyObject.SeqNo;

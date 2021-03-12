@@ -622,6 +622,11 @@ namespace Gizmo_V1_02.Pages.Chapters
         private void PrepareForExport(List<VmUsrOrDefChapterManagement> items, string header)
         {
             var parameters = new ModalParameters();
+            if (items is null)
+            {
+                items = new List<VmUsrOrDefChapterManagement> ();
+            }
+
             parameters.Add("lstChapterItems", items);
 
             var options = new ModalOptions()
@@ -1699,9 +1704,16 @@ namespace Gizmo_V1_02.Pages.Chapters
         {
             var selectedCopyItems = new VmChapter { ChapterItems = new List<UsrOrDefChapterManagement>() };
 
-            if (!(AltChapterObject.ChapterData is null))
+            if (!(AltChapterObject is null))
             {
-                selectedCopyItems = JsonConvert.DeserializeObject<VmChapter>(AltChapterObject.ChapterData);
+                if (!string.IsNullOrEmpty(AltChapterObject.ChapterData))
+                {
+                    selectedCopyItems = JsonConvert.DeserializeObject<VmChapter>(AltChapterObject.ChapterData);
+                }
+            }
+            else
+            {
+                AltChapterObject = new UsrOrDefChapterManagement();
             }
 
 
@@ -1756,7 +1768,8 @@ namespace Gizmo_V1_02.Pages.Chapters
                 CaseType = AltChapterObject.CaseType,
                 Name = AltChapterObject.Name,
                 SeqNo = AltChapterObject.SeqNo.GetValueOrDefault(),
-                ChapterItems = selectedCopyItems.ChapterItems
+                ChapterItems = selectedCopyItems.ChapterItems,
+                DataViews = selectedChapter.DataViews
             });
 
             await sessionState.SwitchSelectedSystem();

@@ -45,8 +45,16 @@ namespace Gizmo_V1_02.Pages.Shared.Modals
 
         private async void HandleValidSubmit()
         {
-            sessionState.SetCurrentUser(currentUser);
-            await sessionState.switchSelectedCompany();
+            try
+            {
+                sessionState.SetCurrentUser(currentUser);
+                await sessionState.switchSelectedCompany();
+            }
+            catch
+            {
+                Console.WriteLine("Switch system clicked too many times");
+            }
+            
 
             NavigationManager.NavigateTo("/Identity/Account/LogOutOnGet", true);
         }
