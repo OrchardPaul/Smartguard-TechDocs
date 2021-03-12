@@ -353,7 +353,7 @@ namespace Gizmo_V1_02.Pages.Chapters
                                         .OrderBy(A => A.ChapterObject.SeqNo)
                                         .Where(A => lstDocTypes.Contains(A.ChapterObject.Type))
                                         .Select(A => {
-                                            A.DocType = dropDownChapterList.Where(D => D.Name == A.ChapterObject.Name)
+                                            A.DocType = dropDownChapterList.Where(D => D.Name.ToUpper() == A.ChapterObject.Name.ToUpper())
                                                                                         .Select(D => string.IsNullOrEmpty(docTypes[D.DocumentType]) ? "Doc" : docTypes[D.DocumentType])
                                                                                         .FirstOrDefault();
                                                         return A;

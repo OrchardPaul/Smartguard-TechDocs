@@ -148,7 +148,7 @@ else
                                                      .ToList())
                                     {
                                         <div class="grid-row-md nav-row-3 no-border">
-                                            <div class="data-item @(Chapter.ChapterObject.Name.Substring(0,6) == "GROUP " ? "data-item-group" : "" ) @(rowChanged == Chapter.ChapterObject.SeqNo ? ToggleRowChangedClass() : "" )">
+                                            <div class="data-item @(Chapter.ChapterObject.Name.Length > 6 && Chapter.ChapterObject.Name.Substring(0,6) == "GROUP " ? "data-item-group" : "") @(rowChanged == Chapter.ChapterObject.SeqNo ? ToggleRowChangedClass() : "" )">
 
                                                 @if (sessionState.isAdminUser)
                                                 {
@@ -510,8 +510,7 @@ else
                                                 case "Doc":
                                                     
                                                     @if (!string.IsNullOrEmpty(doc.DocDisplayName) 
-                                                                && (doc.DocDisplayName.ToUpper().Contains("LTR")
-                                                                || doc.DocDisplayName.ToUpper().Contains("BLANK LETTER")))
+                                                                && (doc.DocDisplayName.Substring(0,9).ToUpper().Contains("LTR")) )
                                                     {
                                                         <span class="font-100"><span class="fa fa-file-alt mr-2"></span></span>
                                                     }else 
@@ -532,7 +531,7 @@ else
                                                     <span class="font-100"><span class="fa fa-list-ol mr-2"></span></span>
                                                     break;
                                                 default:
-                                                    <span class="font-100"><span class="fa fa-file mr-2"></span></span>
+                                                    <span class="font-100"><span class="fa fa-times mr-2"></span></span>
                                                     break;
                                             }
 

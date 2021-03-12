@@ -108,9 +108,17 @@ namespace Gizmo_V1_02.Pages.Chapters
         {
             Dictionary<int?, string> docTypes = new Dictionary<int?, string> { { 1, "Doc" }, { 4, "Form" }, { 6, "Step" }, { 8, "Date" }, { 9, "Email" }, { 11, "Doc" }, { 12, "Email" } };
 
-            TaskObject.Type = dropDownChapterList.Where(D => D.Name == CopyObject.Name)
+            if(CopyObject.Type == "Doc")
+            {
+                TaskObject.Type = dropDownChapterList.Where(D => D.Name.ToUpper() == CopyObject.Name.ToUpper())
                                                     .Select(D => string.IsNullOrEmpty(docTypes[D.DocumentType]) ? "Doc" : docTypes[D.DocumentType])
                                                     .FirstOrDefault();
+            }
+            else
+            {
+                TaskObject.Type = CopyObject.Type;
+            }
+            
             TaskObject.Name = CopyObject.Name;
             TaskObject.EntityType = CopyObject.EntityType;
             TaskObject.SeqNo = CopyObject.SeqNo;
