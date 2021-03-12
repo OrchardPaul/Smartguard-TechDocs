@@ -1002,13 +1002,13 @@ else
                             @if (sessionState.isAdminUser)
                             {
                                 <div class="btn-group">
-                                    <button @onclick='() => PrepareDataViewForInsert(navDisplay)' class="btn btn-main btn-shadow" title="Add new document/step"><i class="fa fa-plus"></i><span>New</span></button>
-                                    <button @onclick='() => CondenseSeq("Docs")' class="btn btn-main btn-shadow @(SequenceIsValid("DataViews") ? "invisible" : "")" title="Re-order Sequence Numbers"><i class="fa fa-sort-numeric-down"></i></button>
+                                    <button @onclick='() => PrepareDataViewForInsert(navDisplay)' class="btn btn-main btn-shadow" title="Add new data view"><i class="fa fa-plus"></i><span>New</span></button>
+                                    <button @onclick='() => CondenseBlockNo("DataViews")' class="btn btn-main btn-shadow @(BlockNoIsValid() ? "invisible" : "")" title="Re-order Sequence Numbers"><i class="fa fa-sort-numeric-down"></i></button>
                                 </div>
                             }
                         }
 
-                        <ModalTooltip Direction="top shift-right" Text="Data Views to be made available in the chapter!">
+                        <ModalTooltip Direction="top" Text="Data Views to be made available in the chapter!">
                             <span class="info-icon">
                                 <span class=" fa fa-info-circle fa-2x "></span>
                             </span>
@@ -1048,7 +1048,7 @@ else
                                     </div>
 
 
-                                    @if (vmdataView.DataView.DisplayName != "")
+                                    @if (!string.IsNullOrEmpty(vmdataView.DataView.DisplayName))
                                     {
                                         <div class="data-item-right mr-2 font-100 hidden-md-down">
                                             <ModalTooltip Direction="top" Text=@("Template: " + vmdataView.DataView.ViewName) Class="w-3">
@@ -1060,10 +1060,10 @@ else
                                     @if (sessionState.isAdminUser && !compareSystems)
                                     {
 
-                                        <div class="data-item-right">
-                                            @*<div @onclick='() => MoveSeq(status.ChapterObject,"Status","Up")'><span class="fa fa-angle-up"></span></div>*@
+                                        <div class="data-item-right seq-change">
+                                            <div @onclick='() => MoveBlockNo(vmdataView.DataView,"DataViews","Up")'><span class="fa fa-angle-up"></span></div>
                                             <div class="seq-no">@vmdataView.DataView.BlockNo</div>
-                                            @*<div @onclick='() => MoveSeq(status.ChapterObject,"Status","Down")'><span class="fa fa-angle-down"></span></div>*@
+                                            <div @onclick='() => MoveBlockNo(vmdataView.DataView,"DataViews","Down")'><span class="fa fa-angle-down"></span></div>
                                         </div>
                                     }
                                     else

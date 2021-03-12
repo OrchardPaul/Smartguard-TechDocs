@@ -77,6 +77,7 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         private List<VmDataViews> ListVmDataViews { get; set; } = new List<VmDataViews>();
 
+        public List<MpSysViews> ListP4WViews;
         public List<DmDocuments> dropDownChapterList;
         public List<CaseTypeGroups> partnerCaseTypeGroups;
         public List<fnORCHAGetFeeDefinitions> feeDefinitions;
@@ -185,6 +186,7 @@ namespace Gizmo_V1_02.Pages.Chapters
             {
                 RefreshChapters();
                 partnerCaseTypeGroups = await partnerAccessService.GetPartnerCaseTypeGroups();
+                ListP4WViews = await partnerAccessService.GetPartnerViews();
             }
             catch (Exception)
             {
@@ -409,6 +411,7 @@ namespace Gizmo_V1_02.Pages.Chapters
                                                     : selectedChapter
                                                             .DataViews
                                                             .Select(D => new VmDataViews { DataView = D })
+                                                            .OrderBy(D => D.DataView.BlockNo)
                                                             .ToList();
                 }
             }
@@ -893,6 +896,40 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         }
 
+
+        protected async void MoveBlockNo(DataViews selectobject, string listType, string direction)
+        {
+            seqMoving = true; //prevents changes to the form whilst process of changing seq is carried out
+
+            int incrementBy;
+
+            incrementBy = (direction.ToLower() == "up" ? -1 : 1);
+
+            rowChanged = (int)(selectobject.BlockNo + incrementBy);
+
+            var swapItem = ListVmDataViews.Where(D => D.DataView.BlockNo == (selectobject.BlockNo + incrementBy)).SingleOrDefault();
+            if (!(swapItem is null))
+            {
+                selectobject.BlockNo += incrementBy;
+                swapItem.DataView.BlockNo = swapItem.DataView.BlockNo + (incrementBy * -1);
+
+                SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(selectedChapter);
+                await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
+
+            }
+
+            await RefreshChapterItems(listType);
+            await InvokeAsync(() =>
+            {
+                StateHasChanged();
+            });
+
+
+            seqMoving = false;
+
+        }
+
+
         private List<VmUsrOrDefChapterManagement> GetRelevantChapterList(string listType)
         {
             var listItems = new List<VmUsrOrDefChapterManagement>();
@@ -944,6 +981,29 @@ namespace Gizmo_V1_02.Pages.Chapters
             {
                 seqNo += 1;
                 item.ChapterObject.SeqNo = seqNo;
+            }
+
+            SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(selectedChapter);
+            await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
+
+            await RefreshChapterItems(ListType);
+
+            await InvokeAsync(() =>
+            {
+                StateHasChanged();
+            });
+        }
+
+        protected async void CondenseBlockNo(string ListType)
+        {
+            await RefreshChapterItems(ListType);
+
+            int seqNo = 0;
+
+            foreach (var item in ListVmDataViews.OrderBy(A => A.DataView.BlockNo))
+            {
+                seqNo += 1;
+                item.DataView.BlockNo = seqNo;
             }
 
             SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(selectedChapter);
@@ -1118,6 +1178,7 @@ namespace Gizmo_V1_02.Pages.Chapters
 
             var parameters = new ModalParameters();
             parameters.Add("TaskObject", EditDataViewObject.DataView);
+            parameters.Add("ListPartnerViews", ListP4WViews);
             parameters.Add("CopyObject", copyObject);
             parameters.Add("DataChanged", action);
             parameters.Add("SelectedChapter", selectedChapter);
@@ -1573,8 +1634,32 @@ namespace Gizmo_V1_02.Pages.Chapters
             {
                 return true;
             }
-
         }
+
+        private bool BlockNoIsValid()
+        {
+            if (seqMoving == false | compareSystems == true)
+            {
+
+                bool isValid = true;
+
+                for (int i = 0; i < ListVmDataViews.Count; i++)
+                {
+                    if (ListVmDataViews[i].DataView.BlockNo != i + 1)
+                    {
+                        isValid = false;
+                    }
+
+                }
+
+                return isValid;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
 
         /// <summary>
         /// moves the AA (transparancy) element of an android hex color to the end of the string
@@ -1731,6 +1816,7 @@ namespace Gizmo_V1_02.Pages.Chapters
             {
                 var chapterData = JsonConvert.DeserializeObject<VmChapter>(Json);
                 selectedChapter.ChapterItems = chapterData.ChapterItems;
+                selectedChapter.DataViews = chapterData.DataViews;
                 SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(selectedChapter);
 
                 await chapterManagementService.Update(SelectedChapterObject);
@@ -1789,6 +1875,7 @@ namespace Gizmo_V1_02.Pages.Chapters
             parameters.Add("ListFileDescriptions", ListFileDescriptions);
             parameters.Add("DataChanged", SelectedAction);
             parameters.Add("WriteBackUp", WriteBackUp);
+            parameters.Add("OriginalDataViews", ListVmDataViews);
 
             var options = new ModalOptions()
             {

@@ -9,6 +9,7 @@ namespace GadjIT.ClientAPI.Repository.Partner
     {
         Task<List<CaseTypes>> GetAllCaseTypes();
         Task<List<CaseTypeGroups>> GetAllCaseTypeGroups();
+        Task<List<MpSysViews>> GetAllP4WViews();
     }
 
     public class Partner_Access_Service : IPartner_Access_Service
@@ -28,6 +29,11 @@ namespace GadjIT.ClientAPI.Repository.Partner
         public async Task<List<CaseTypeGroups>> GetAllCaseTypeGroups()
         {
             return await context.CaseTypeGroups.ToListAsync();
+        }
+
+        public async Task<List<MpSysViews>> GetAllP4WViews()
+        {
+            return await context.MpSysViews.ToListAsync();
         }
 
     }

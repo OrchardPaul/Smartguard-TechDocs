@@ -51,14 +51,9 @@ namespace GadjIT.ClientAPI.Controllers
         [HttpGet]
         public async Task<ActionResult> GetAllChapters()
         {
-            try
-            {
+
                 return Ok(await chapterRepository.GetAllChapters());
-            }
-            catch (Exception)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
+
         }
 
         [HttpGet("{caseTypeGroup}/{caseType}")]
