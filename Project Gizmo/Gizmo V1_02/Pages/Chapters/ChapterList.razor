@@ -147,8 +147,8 @@ else
                                                      .OrderBy(C => C.ChapterObject.SeqNo)
                                                      .ToList())
                                     {
-                                        <div class="grid-row-md nav-row-3 no-border @(rowChanged == Chapter.ChapterObject.SeqNo ? ToggleRowChangedClass() : "" )">
-                                            <div class="data-item ">
+                                        <div class="grid-row-md nav-row-3 no-border">
+                                            <div class="data-item @(Chapter.ChapterObject.Name.Substring(0,6) == "GROUP " ? "data-item-group" : "" ) @(rowChanged == Chapter.ChapterObject.SeqNo ? ToggleRowChangedClass() : "" )">
 
                                                 @if (sessionState.isAdminUser)
                                                 {
@@ -359,7 +359,7 @@ else
                                         <InputTextArea @bind-Value="selectedChapter.GeneralNotes" class="form-control form-control-lg" />
                                     </div>
                                     <div class="form-group">
-                                        <label>Devloper Notes</label>
+                                        <label>Developer Notes</label>
                                         <InputTextArea @bind-Value="selectedChapter.DelvolperNotes" class="form-control form-control-lg" />
                                     </div>
 
@@ -993,7 +993,7 @@ else
             @if (navDisplay == "DataViews")
             {
 
-                <div class="grid-chapter-docs">
+                <div class="grid-chapter-dataviews">
 
                     <div class="grid-actions">
 
@@ -1088,7 +1088,7 @@ else
 
             @if (navDisplay == "Backups")
             {
-                <div class="grid-chapter-chapter">
+                <div class="grid-chapter-backups">
                     <div class="detail-group-box" id="form-controls-json">
                         <h5>Backup and Recovery: @selectedChapter.Name</h5>
                         <div class="btn-group mt-2">
@@ -1103,40 +1103,42 @@ else
 
 
 
-                        <div class="grid-can-edit" id="modal-edit-fees-list">
+                        <div class="grid-can-edit chapter-scroll-list" >
                             @foreach (var fileDesc in ListFileDescriptions.Where(F => F.FilePath.Contains(".txt") || F.FilePath.Contains(".JSON")).ToList().OrderByDescending(F => F.FileDate))
                             {
-                                <div class="grid-row grid-row-sm">
-                                    <div class="data-item">
-                                        <div class="btn-ellipses float-left">
-                                            <span class="fa fa-ellipsis-v"></span>
-                                            <div class="ellipsis-menu">
-                                                <ul>
-                                                    <li class="col-main" @onclick='(() => ReadBackUpFile(fileDesc.FilePath))'>
-                                                        <span class="fa fa-window-restore mr-2"></span>
-                                                        <span>Restore</span>
-                                                    </li>
-                                                    <li class="col-main" @onclick='(() => DownloadFile(fileDesc))'>
-                                                        <span class="fa fa-download mr-2"></span>
-                                                        <span>Download</span>
-                                                    </li>
-                                                    <li class="col-main" @onclick='(() => PrepareBackUpForDelete(fileDesc))'>
-                                                        <span class="fa fa-trash-alt mr-2"></span>
-                                                        <span>Delete</span>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <div class="data-item-sub">
-                                            @fileDesc.FileName
-                                        </div>
-                                        <div class="data-item-sub">
-                                            @fileDesc.FileDate.ToString("dd MMM yyyy")
+                            <div class="row grid-row grid-row-sm">
+                                <div class="data-item">
+                                    <div class="btn-ellipses float-left">
+                                        <span class="fa fa-ellipsis-v"></span>
+                                        <div class="ellipsis-menu">
+                                            <ul>
+                                                <li class="col-main" @onclick='(() => ReadBackUpFile(fileDesc.FilePath))'>
+                                                    <span class="fa fa-window-restore mr-2"></span>
+                                                    <span>Restore</span>
+                                                </li>
+                                                <li class="col-main" @onclick='(() => DownloadFile(fileDesc))'>
+                                                    <span class="fa fa-download mr-2"></span>
+                                                    <span>Download</span>
+                                                </li>
+                                                <li class="col-main" @onclick='(() => PrepareBackUpForDelete(fileDesc))'>
+                                                    <span class="fa fa-trash-alt mr-2"></span>
+                                                    <span>Delete</span>
+                                                </li>
+                                            </ul>
                                         </div>
                                     </div>
-
-
+                                    <div class="data-item-sub">
+                                        @fileDesc.FileName
+                                    </div>
                                 </div>
+                                <div class="data-item ">
+                                    <div class="data-item-sub">
+                                        @fileDesc.FileDate.ToString("dd MMM yyyy")
+                                    </div>
+                                </div>
+
+
+                            </div>
                             }
                         </div>
 
