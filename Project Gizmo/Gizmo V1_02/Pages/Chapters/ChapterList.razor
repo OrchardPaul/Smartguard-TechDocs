@@ -311,7 +311,7 @@ else
             @if (navDisplay == "Chapter")
             {
 
-                <div class="grid-chapter-chapter">
+                <div class="grid-chapter grid-chapter-chapter">
                     <div class="grid-actions">
 
                         <div class="btn-group">
@@ -396,7 +396,7 @@ else
             @if (navDisplay == "Docs")
             {
 
-                <div class="grid-chapter-docs">
+                <div class="grid-chapter grid-chapter-docs">
 
                     <div class="grid-actions">
 
@@ -568,7 +568,7 @@ else
 
                                         @if (!(doc.ChapterObject.FollowUpDocs is null))
                                         {
-                                            <div class="data-item-right followup-doc">
+                                            <div class="data-item-right mr-2 font-100 hidden-md-down">
                                                 <ModalTooltip Direction="left" Text=@($"This document will {doc.ChapterObject.FollowUpDocs.FirstOrDefault().Action.ToLower()} the following: {doc.ChapterObject.FollowUpDocs.FirstOrDefault().DocName}.")>
                                                     <span class="fa fa-paperclip"></span>
                                                 </ModalTooltip>
@@ -652,7 +652,7 @@ else
             @if (navDisplay == "Agenda")
             {
 
-                <div class="grid-chapter-agenda">
+                <div class="grid-chapter grid-chapter-agenda">
 
 
                     <div class="grid-actions">
@@ -755,7 +755,7 @@ else
             @if (navDisplay == "Fees")
             {
 
-                <div class="grid-chapter-fees">
+                <div class="grid-chapter grid-chapter-fees">
 
                     <div class="grid-actions">
 
@@ -873,7 +873,7 @@ else
             @if (navDisplay == "Status")
             {
 
-                <div class="grid-chapter-status">
+                <div class="grid-chapter grid-chapter-status">
                     <div class="grid-actions">
 
                         @if (!compareSystems)
@@ -1001,7 +1001,7 @@ else
             @if (navDisplay == "DataViews")
             {
 
-                <div class="grid-chapter-dataviews">
+                <div class="grid-chapter grid-chapter-dataviews">
 
                     <div class="grid-actions">
 
@@ -1096,7 +1096,7 @@ else
 
             @if (navDisplay == "Backups")
             {
-                <div class="grid-chapter-backups">
+                <div class="grid-chapter grid-chapter-backups">
                     <div class="detail-group-box" id="form-controls-json">
                         <h5>Backup and Recovery: @selectedChapter.Name</h5>
                         <div class="btn-group mt-2">

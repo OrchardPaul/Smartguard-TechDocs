@@ -221,12 +221,11 @@
 }
 
 @media (max-width: 576px) {
-     .form-control-xxl, .form-control-xl {
-        width: 250px;
+
+    .form-control-xxl, .form-control-xl, .form-control-lg {
+        width: 100%;
     }
-    .form-control{
-        max-width: 250px;
-    }
+    
 }
 
 .form-group label {
@@ -386,7 +385,7 @@
     overflow-y: scroll;
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 768px) {
     .modal-chapter-item,.modal-chapter-doc, .modal-chapter-fees {
         width: calc(100% - 20px);
     }

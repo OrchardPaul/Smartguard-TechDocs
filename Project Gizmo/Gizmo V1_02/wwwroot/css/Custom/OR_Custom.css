@@ -885,7 +885,7 @@ app {
 .grid-chapter-nav {
 }
 
-.grid-chapter-agenda {
+.grid-chapter {
     width: 800px;
     min-height: 400px;
 }
@@ -895,25 +895,6 @@ app {
     min-height: 400px;
 }
 
-.grid-chapter-fees {
-    width: 800px;
-    min-height: 400px;
-}
-
-.grid-chapter-status {
-    width: 800px;
-    min-height: 400px;
-}
-
-.grid-chapter-dataviews {
-    width: 800px;
-    min-height: 400px;
-}
-
-.grid-chapter-chapter {
-    width: 800px;
-    min-height: 400px;
-}
 
 .grid-chapter-chapter .detail-group-box {
     width: 100%;
@@ -940,7 +921,8 @@ app {
 }
 
 @media (max-width: 991px) {
-    .grid-chapter-chapter, .grid-chapter-agenda, .grid-chapter-docs, .grid-chapter-fees, .grid-chapter-status .grid-chapter-dataviews {
+    .grid-chapter
+    {
         width: 100%;
     }
 
@@ -949,11 +931,6 @@ app {
     }
 }
 
-
-.grid-chapter-dataviews, .grid-chapter-backups {
-    width: 800px;
-    min-height: 400px;
-}
 
 .grid-chapter-backups .chapter-scroll-list {
     height: 400px;
@@ -997,9 +974,7 @@ app {
     padding-left: 5px;
 }
 
-.followup-doc {
-    padding-left: 5px;
-}
+
 
 /*   SEQUENCE CHANGE OPTIONS             */
 
