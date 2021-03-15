@@ -147,8 +147,8 @@ else
                                                      .OrderBy(C => C.ChapterObject.SeqNo)
                                                      .ToList())
                                     {
-                                        <div class="grid-row-md nav-row-3 no-border">
-                                            <div class="data-item @(Chapter.ChapterObject.Name.Length > 6 && Chapter.ChapterObject.Name.Substring(0,6) == "GROUP " ? "data-item-group" : "") @(rowChanged == Chapter.ChapterObject.SeqNo ? ToggleRowChangedClass() : "" )">
+                                        <div class="grid-row-md nav-row-3 no-border  @(rowChanged == Chapter.ChapterObject.SeqNo ? ToggleRowChangedClass() : "" )">
+                                            <div class="data-item @(Chapter.ChapterObject.Name.Length > 6 && Chapter.ChapterObject.Name.Substring(0,6) == "GROUP " ? "data-item-group" : "")">
 
                                                 @if (sessionState.isAdminUser)
                                                 {

@@ -37,7 +37,12 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in lstChapterItems)
+            @foreach (var item in lstChapterItems
+                                        .OrderBy(C => C.ChapterObject.SeqNo)
+                                        .OrderByDescending(C => C.ChapterObject.Type == "Agenda")
+                                        .ThenByDescending(C => C.ChapterObject.Type == "Fee")
+                                        .ThenByDescending(C => C.ChapterObject.Type == "Status")
+                                        .ToList())
             {
 
             <tr>
@@ -50,7 +55,15 @@
                     <td>@item.ChapterObject.Type</td>
                 }
 
-                <td>@item.ChapterObject.SeqNo</td>
+                @if (item.ChapterObject.Type == "Agenda")
+                {
+                    <td>0</td>
+                }
+                else
+                {
+                    <td>@item.ChapterObject.SeqNo</td>
+                }
+
                 <td>@item.ChapterObject.Name</td>
 
                 @if (!(item.ChapterObject.Type == "Chapter"))

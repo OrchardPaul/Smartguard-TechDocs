@@ -622,6 +622,10 @@ namespace Gizmo_V1_02.Pages.Chapters
         private void PrepareForExport(List<VmUsrOrDefChapterManagement> items, string header)
         {
             var parameters = new ModalParameters();
+
+
+
+
             if (items is null)
             {
                 items = new List<VmUsrOrDefChapterManagement> ();
