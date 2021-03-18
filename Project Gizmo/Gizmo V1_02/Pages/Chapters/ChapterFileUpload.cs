@@ -80,6 +80,10 @@ namespace Gizmo_V1_02.Pages.Chapters
             return FileHelper.DeleteFile(path);
         }
 
+        public async Task<string> WriteChapterDataToExcel(VmChapter selectedChapter)
+        {
+            return await FileHelper.WriteChapterDataToExcel(selectedChapter);
+        }
 
         public List<UsrOrDefChapterManagement> readChapterItemsFromExcel(string path)
         {

@@ -1,5 +1,6 @@
 ﻿using BlazorInputFile;
 using GadjIT.ClientContext.P4W;
+using GadjIT.ClientContext.P4W.Custom;
 using Gizmo_V1_02.FileManagement.FileClassObjects;
 using System;
 using System.Collections.Generic;
@@ -26,5 +27,7 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Interface
         List<string> ValidateChapterExcel(string FilePath);
         byte[] ReadFileIntoByteArray(string path);
         void Write(List<string> output, string fileName);
+
+        Task<string> WriteChapterDataToExcel(VmChapter selectedChapter);
     }
 }

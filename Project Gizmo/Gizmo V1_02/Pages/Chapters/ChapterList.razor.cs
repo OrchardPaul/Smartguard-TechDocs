@@ -85,6 +85,18 @@ namespace Gizmo_V1_02.Pages.Chapters
         public string editCaseType { get; set; } = "";
         public string updateJSON { get; set; } = "";
 
+        public string selectColour { 
+            get 
+            { 
+                return selectedChapter.BackgroundColour; 
+            } 
+            set 
+            { 
+                selectedChapter.BackgroundColour = value; 
+                selectedChapter.BackgroundColourName = ListChapterColours.Where(C => C.ColourCode == value).Select(C => C.ColourName).FirstOrDefault(); 
+            } 
+        }
+
         public UsrOrDefChapterManagement editChapter { get; set; }
         public string isCaseTypeOrGroup { get; set; } = "";
 
@@ -163,6 +175,22 @@ namespace Gizmo_V1_02.Pages.Chapters
                                                                 new ChapterColour { ColourName = "Aqua", ColourCode = "#3F5BDCD0"}
                                                             };
 
+
+        public bool PartnerShowNotes
+        {
+            get { return (selectedChapter.ShowPartnerNotes == "Y" ? true : false); }
+            set
+            {
+                if (value)
+                {
+                    selectedChapter.ShowPartnerNotes = "Y";
+                }
+                else
+                {
+                    selectedChapter.ShowPartnerNotes = "N";
+                }
+            }
+        }
 
 
         protected override async Task OnInitializedAsync()
@@ -622,9 +650,6 @@ namespace Gizmo_V1_02.Pages.Chapters
         private void PrepareForExport(List<VmUsrOrDefChapterManagement> items, string header)
         {
             var parameters = new ModalParameters();
-
-
-
 
             if (items is null)
             {
@@ -1900,6 +1925,21 @@ namespace Gizmo_V1_02.Pages.Chapters
             };
 
             Modal.Show<ChapterImport>("Excel Import", parameters, options);
+        }
+
+
+        protected void ShowChapterExportExcelModel()
+        {
+            var parameters = new ModalParameters();
+            parameters.Add("ChapterFileUpload", ChapterFileUpload);
+            parameters.Add("SelectedChapter", selectedChapter);
+
+            var options = new ModalOptions()
+            {
+                Class = "blazored-custom-modal modal-chapter-export"
+            };
+
+            Modal.Show<ChapterExportExcel>("Smartflow Export", parameters, options);
         }
 
 

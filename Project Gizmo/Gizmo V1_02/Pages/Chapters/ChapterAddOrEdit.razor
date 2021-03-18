@@ -49,8 +49,6 @@
             @if (!addNewCaseTypeOption)
             {
 
-
-
                 @if (AllObjects is null)
                 {
                     <div class="spinner"></div>
@@ -58,7 +56,9 @@
                 else
                 {
                     <InputSelect class="form-control" @bind-Value="TaskObject.ChapterObject.CaseType">
-                        @foreach (var c in AllObjects.Where(C => C.ChapterObject.ParentId == 0)
+                        @if (string.IsNullOrEmpty(TaskObject.ChapterObject.CaseTypeGroup))
+                        {
+                              @foreach (var c in AllObjects.Where(C => C.ChapterObject.ParentId == 0)
                                          .Where(C => !(C.ChapterObject.CaseType is null))
                                          .Select(C => C.ChapterObject.CaseType)
                                          .Distinct()
@@ -68,6 +68,20 @@
                                 @c
                             </option>
                                 }
+                        }
+                        else
+                        {
+                            @foreach (var c in AllObjects.Where(C => C.ChapterObject.ParentId == 0)
+                                         .Where(C => !(C.ChapterObject.CaseType is null) && (C.ChapterObject.CaseTypeGroup == TaskObject.ChapterObject.CaseTypeGroup))
+                                         .Select(C => C.ChapterObject.CaseType)
+                                         .Distinct()
+                                         .ToList())
+                                {
+                            <option value="@c">
+                                @c
+                            </option>
+                                }
+                        }
                     </InputSelect>
                 }
 

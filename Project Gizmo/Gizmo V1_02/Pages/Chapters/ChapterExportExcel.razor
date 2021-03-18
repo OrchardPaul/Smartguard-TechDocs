@@ -1,14 +1,14 @@
 ﻿
 <div class="modal-body">
-    <div class="info-text">@((MarkupString)InfoText)</div>
+    <div class="info-text">Do you wish to export to excel?</div>
 </div>
 <div class="modal-footer">
     <div class="container-fluid ">
         <div class="row">
             <div class="col-6 text-left">
+                <button type="button" data-dismiss="modal" @onclick="@WriteToExcel" class="btn btn-primary">Export</button>
                 <button type="button" data-dismiss="modal" @onclick="@Close" class="btn btn-secondary">Cancel</button>
             </div>
         </div>
     </div>
 </div>
-

@@ -1,5 +1,6 @@
 ﻿using BlazorInputFile;
 using GadjIT.ClientContext.P4W;
+using GadjIT.ClientContext.P4W.Custom;
 using Gizmo_V1_02.FileManagement.FileClassObjects;
 using Gizmo_V1_02.FileManagement.FileClassObjects.FileOptions;
 using Gizmo_V1_02.FileManagement.FileProcessing.Interface;
@@ -19,6 +20,7 @@ namespace Gizmo_V1_02.Pages.Chapters
         void WriteChapterToFile(string JSON, string fileName);
         string readJson(string path);
         IList<string> ValidateChapterJSON(string JSON);
+        Task<string> WriteChapterDataToExcel(VmChapter selectedChapter);
         List<UsrOrDefChapterManagement> readChapterItemsFromExcel(string path);
         byte[] ReadFileToByteArray(string path);
         string DeleteFile(string path);

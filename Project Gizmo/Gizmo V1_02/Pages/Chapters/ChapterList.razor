@@ -315,7 +315,8 @@ else
                     <div class="grid-actions">
 
                         <div class="btn-group">
-                            <button @onclick='(() => PrepareForExport(lstAll, "Chapter Export"))' class="btn btn-main btn-shadow" title="Export Smartflow Details"><i class="fa fa-file-export"></i><span>Export</span></button>
+                            @*<button @onclick='(() => PrepareForExport(lstAll, "Chapter Export"))' class="btn btn-main btn-shadow" title="Export Smartflow Details"><i class="fa fa-file-export"></i><span>Export</span></button>*@
+                            <button @onclick='(() => ShowChapterExportExcelModel())' class="btn btn-main btn-shadow" title="Export Smartflow Details"><i class="fa fa-file-export"></i><span>Export</span></button>
                         </div>
                         @if ((sessionState.isAdminUser))
                         {
@@ -344,7 +345,7 @@ else
                                     </div>
                                     <div class="form-group">
                                         <label for="BgColour">Background Colour</label>
-                                        <select @bind="selectedChapter.BackgroundColour" style="background-color: @getHTMLColourFromAndroid(selectedChapter.BackgroundColour)" class="form-control form-control-lg">
+                                        <select @bind="selectColour" style="background-color: @getHTMLColourFromAndroid(selectedChapter.BackgroundColour)" class="form-control form-control-lg">
                                             @foreach (var colour in ListChapterColours)
                                             {
                                                 <option style="background-color: @getHTMLColourFromAndroid(colour.ColourCode)" value="@colour.ColourCode">
@@ -352,6 +353,10 @@ else
                                                 </option>
                                             }
                                         </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Show Notes</label>
+                                        <InputCheckbox class="form-control" @bind-Value="PartnerShowNotes" />
                                     </div>
 
                                     <div class="form-group">
@@ -735,8 +740,6 @@ else
 
                                             </div>
                                         }
-
-
 
                                     }
                                     <div class="data-item-sub">
