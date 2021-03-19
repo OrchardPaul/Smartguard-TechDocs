@@ -337,43 +337,57 @@ else
                             @if ((sessionState.isAdminUser))
                             {
 
-                                <EditForm Model="selectedChapter" OnValidSubmit="SaveChapterDetails">
+                            <EditForm Model="selectedChapter" OnValidSubmit="SaveChapterDetails">
 
-                                    <div class="form-group">
-                                        <label>Smartflow Name</label>
-                                        <InputText @bind-Value="selectedChapter.Name" class="form-control form-control-lg" />
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="BgColour">Background Colour</label>
-                                        <select @bind="selectColour" style="background-color: @getHTMLColourFromAndroid(selectedChapter.BackgroundColour)" class="form-control form-control-lg">
-                                            @foreach (var colour in ListChapterColours)
-                                            {
-                                                <option style="background-color: @getHTMLColourFromAndroid(colour.ColourCode)" value="@colour.ColourCode">
-                                                    @colour.ColourName
-                                                </option>
-                                            }
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Show Notes</label>
-                                        <InputCheckbox class="form-control" @bind-Value="PartnerShowNotes" />
-                                    </div>
+                                <div class="form-group">
+                                    <label for="P4WCTG">Case Type Group</label>
+                                    <InputSelect class="form-control form-control-lg"
+                                                 @bind-Value="selectedChapter.P4WCaseTypeGroup">
+                                        <option value="">Select</option>
+                                        @foreach (var group in partnerCaseTypeGroups)
+                                                        {
+                                            <option value="@group.Name">
+                                                @group.Name
+                                            </option>
+                                                        }
+                                    </InputSelect>
+                                </div>
+                                <div class="form-group">
+                                    <label>Step Name</label>
+                                    <InputText @bind-Value="selectedChapter.StepName" class="form-control form-control-lg" />
+                                </div>
+                                <div class="form-group">
+                                    <label for="BgColour">Background Colour</label>
+                                    <select @bind="selectColour" style="background-color: @getHTMLColourFromAndroid(selectedChapter.BackgroundColour)" class="form-control form-control-lg">
+                                        @foreach (var colour in ListChapterColours)
+                                        {
+                                            <option style="background-color: @getHTMLColourFromAndroid(colour.ColourCode)" value="@colour.ColourCode">
+                                                @colour.ColourName
+                                            </option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Show Notes</label>
+                                    <InputCheckbox class="form-control" @bind-Value="PartnerShowNotes" />
+                                </div>
 
-                                    <div class="form-group">
-                                        <label>General Notes</label>
-                                        <InputTextArea @bind-Value="selectedChapter.GeneralNotes" class="form-control form-control-lg" />
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Developer Notes</label>
-                                        <InputTextArea @bind-Value="selectedChapter.DelvolperNotes" class="form-control form-control-lg" />
-                                    </div>
+                                <div class="form-group">
+                                    <label>General Notes</label>
+                                    <InputTextArea @bind-Value="selectedChapter.GeneralNotes" class="form-control form-control-lg" />
+                                </div>
+                                <!--
+                                <div class="form-group">
+                                    <label>Developer Notes</label>
+                                    <InputTextArea @bind-Value="selectedChapter.DelvolperNotes" class="form-control form-control-lg" />
+                                </div>
+                                -->
 
+                                <div class="button-container">
+                                    <button type="submit" class="btn btn-main">Save Changes</button>
 
-                                    <div class="button-container">
-                                        <button type="submit" class="btn btn-main">Save Changes</button>
-
-                                    </div>
-                                </EditForm>
+                                </div>
+                            </EditForm>
 
 
                             }

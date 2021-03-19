@@ -8,6 +8,8 @@ namespace GadjIT.ClientContext.P4W.Custom
     {
         public string CaseTypeGroup { get; set; }
         public string CaseType { get; set; }
+        public string P4WCaseTypeGroup { get; set; }
+        public string StepName { get; set; }
         public string Name { get; set; }
         public int SeqNo { get; set; }
         public string BackgroundColour { get; set; }
@@ -17,6 +19,5 @@ namespace GadjIT.ClientContext.P4W.Custom
         public string DelvolperNotes { get; set; }
         public List<UsrOrDefChapterManagement> ChapterItems { get; set; }
         public List<DataViews> DataViews { get; set; }
-
     }
 }
