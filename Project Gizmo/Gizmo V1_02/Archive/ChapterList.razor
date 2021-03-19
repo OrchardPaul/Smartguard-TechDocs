@@ -1,7 +1,4 @@
-﻿@page "/Smartflow"
-@page "/Smartflow/{UrlCaseTypeGroup}/{UrlCaseType}/{UrlChapter}"
-
-@inject IJSRuntime jsRuntime
+﻿@inject IJSRuntime jsRuntime
 @using Gizmo_V1_02.Pages.Shared.Modals
 
 
@@ -777,7 +774,7 @@ else
                             @if (sessionState.isAdminUser)
                             {
                                 <div class="btn-group">
-                                    <button @onclick='() => PrepareFeeForInsert("Insert")' class="btn btn-main btn-shadow" title="Add new fee"><i class="fa fa-plus"></i><span>New</span></button>
+                                    <button @onclick='() => PrepareFeesForEdit()' class="btn btn-main btn-shadow" title="Update selected list of fees"><i class="fa fa-pencil-alt"></i><span>Update</span></button>
                                     <button @onclick='() => CondenseSeq("Fees")' class="btn btn-main btn-shadow @(SequenceIsValid("Fees") ? "invisible" : "")" title="Re-order Sequence Numbers"><i class="fa fa-sort-numeric-down"></i></button>
                                 </div>
                             }
@@ -794,7 +791,7 @@ else
                         {
                             <div class="btn-group sync-group invisible-md-down">
                                 <button type="button" @onclick="() => PrepareChapterSync()" class="btn btn-main btn-shadow @(!compareSystems ? "hidden" : "")" title="Sync To @(sessionState.selectedSystem == "Dev" ? "Live" : "Dev")"><i class="fa fa-sync"></i><span>Sync</span></button>
-                                <input type="checkbox" class="ml-1 mt-1" @onchange="() => ToggleFeeComparison()" /><span class="ml-2 font-75 ">Compare to @(sessionState.selectedSystem == "Dev" ? "Live" : "Dev") </span>
+                                <input type="checkbox" class="ml-1 mt-1" @onchange="() => ToggleComparison()" /><span class="ml-2 font-75 ">Compare to @(sessionState.selectedSystem == "Dev" ? "Live" : "Dev") </span>
                             </div>
                         }
                     </div>
@@ -808,21 +805,7 @@ else
                                 <div class="col-12 data-item">
                                     @if (!compareSystems)
                                     {
-                                        <div class="btn-ellipses float-left">
-                                            <span class="fa fa-ellipsis-v"></span>
-                                            <div class="ellipsis-menu">
-                                                <ul>
-                                                    <li class="col-main" @onclick='(() => ShowChapterFeesModal("Edit", fee.FeeObject))'>
-                                                        <span class="fa fa-pencil-alt mr-2"></span>
-                                                        <span>Edit</span>
-                                                    </li>
-                                                    <li class="col-red" @onclick="() => PrepareChapterFeeDelete(fee)">
-                                                        <span class="fa fa-trash-alt mr-2"></span>
-                                                        <span>Delete</span>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
+
                                         <div class="data-item-sub">
                                             <span class="fa fa-pound-sign mr-2"></span> @fee.FeeObject.FeeName
                                         </div>
@@ -861,7 +844,7 @@ else
                                                 @if (!(fee.ComparisonResult == "Exact match"))
                                                 {
                                                     <div class="btn-dashed"></div>
-                                                    <div class="btn-dashed" @onclick="() => PrepareFeeForComparison(fee)"><span class="fa fa-@fee.ComparisonIcon"></span></div>
+                                                    @*<div class="btn-dashed" @onclick="() => PrepareForComparison(fee)"><span class="fa fa-@fee.ComparisonIcon"></span></div>*@
                                                 }
                                                 else
                                                 {

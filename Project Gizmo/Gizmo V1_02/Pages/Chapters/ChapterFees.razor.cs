@@ -5,6 +5,7 @@ using Gizmo_V1_02.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,23 @@ namespace Gizmo_V1_02.Pages.Chapters
 {
     public partial class ChapterFees
     {
+        public bool VATable
+        {
+            get { return CopyObject.VATable == "Y" ? true : false; }
+            set 
+            {
+                if (value)
+                {
+                    CopyObject.VATable = "Y";
+                }
+                else
+                {
+                    CopyObject.VATable = "N";
+                }
+            }
+        }
+
+
         [CascadingParameter]
         BlazoredModalInstance ModalInstance { get; set; }
 
@@ -21,11 +39,7 @@ namespace Gizmo_V1_02.Pages.Chapters
         IChapterManagementService chapterManagementService { get; set; }
 
         [Parameter]
-        public Action RefreshFeeOrder { get; set; }
-
-
-        [Parameter]
-        public List<VmChapterFee> feeItems { get; set; }
+        public string Option { get; set; }
 
         [Parameter]
         public UsrOrDefChapterManagement SelectedChapterObject { get; set; }
@@ -33,70 +47,79 @@ namespace Gizmo_V1_02.Pages.Chapters
         [Parameter]
         public VmChapter SelectedChapter { get; set; }
 
-
+        [Parameter]
+        public Fee TaskObject { get; set; }
 
         [Parameter]
-        public int SeletedChapterId { get; set; }
+        public Fee CopyObject { get; set; }
+
+        [Parameter]
+        public Action DataChanged { get; set; }
+
+        private int selectedCaseTypeGroup { get; set; } = -1;
+
+        private List<string> PostingTypes { get; set; } = new List<string> 
+                                                                            {
+                                                                                "DSO"
+                                                                                ,"DSP"
+                                                                                ,"WOD"
+                                                                                ,"O/N"
+                                                                                ,"OCR"
+                                                                                ,"OCR"
+                                                                                ,"OCP"
+                                                                                ,"OTO"
+                                                                                ,"OTC"
+                                                                                ,"OCR"
+                                                                                ,"CDR"
+                                                                                ,"CCR"
+                                                                                ,"CIN"
+                                                                                ,"CTO"
+                                                                                ,"CTC"
+                                                                                ,"CTD"
+                                                                                ,"DFD"
+                                                                                ,"DOD"
+                                                                            };
+
+        private List<string> FeeCategories { get; set; } = new List<string>
+                                                                            {
+                                                                                "Disbursement"
+                                                                                ,"Additional Fee"
+                                                                                ,"Our Fee"
+                                                                                ,"Search Fee"
+                                                                                ,"Referral Fee"
+                                                                                ,"Other"
+                                                                            };
 
         private async void Close()
         {
+            TaskObject = new Fee();
             await ModalInstance.CloseAsync();
-        }
 
-        private void ToggleSelectedFee(VmChapterFee selectedFee)
-        {
-            selectedFee.selected = !selectedFee.selected;
-        }
 
+        }
 
         private async void HandleValidSubmit()
         {
-            bool change = false;
-
-            var existingItems = SelectedChapter.ChapterItems.Where(C => C.Type == "Fee").ToList(); ;
-
-            var itemsToAdd = feeItems
-                                .Where(C => C.selected)
-                                .Where(C => !existingItems
-                                                .Select(E => E.Name)
-                                                .ToList()
-                                                .Contains(C.FeeItem.Name))
-                                .Select(C => C.FeeItem)
-                                .ToList();
-
-            var itemsToRemove = existingItems
-                                    .Where(C => feeItems
-                                                    .Where(V => !V.selected)
-                                                    .Select(V => V.FeeItem.Name)
-                                                    .ToList()
-                                                    .Contains(C.Name))
-                                    .ToList();
-
-
-            if (itemsToAdd.Count() > 0)
+            TaskObject.FeeName = CopyObject.FeeName;
+            TaskObject.FeeCategory = CopyObject.FeeCategory;
+            TaskObject.SeqNo = CopyObject.SeqNo;
+            TaskObject.Amount = CopyObject.Amount;
+            TaskObject.VATable = CopyObject.VATable;
+            TaskObject.PostingType = CopyObject.PostingType;
+            
+            if (Option == "Insert")
             {
-                SelectedChapter.ChapterItems.AddRange(itemsToAdd);
-                change = true;
+                SelectedChapter.Fees.Add(TaskObject);
             }
 
-            if (itemsToRemove.Count() > 0)
-            {
-                foreach(var remove in itemsToRemove)
-                {
-                    SelectedChapter.ChapterItems.Remove(remove);
-                }
-                change = true;
-            }
+            SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(SelectedChapter);
+            await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
 
-            if (change)
-            {
-                SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(SelectedChapter);
-                await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
-            }
+            TaskObject = new Fee();
 
-
-            RefreshFeeOrder?.Invoke();
+            DataChanged?.Invoke();
             Close();
+
         }
 
     }

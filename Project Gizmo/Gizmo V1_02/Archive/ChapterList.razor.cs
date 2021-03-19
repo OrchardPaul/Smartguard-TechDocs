@@ -24,8 +24,9 @@ using Gizmo_V1_02.FileManagement.FileClassObjects.FileOptions;
 using Gizmo_V1_02.FileManagement.FileClassObjects;
 using System.Net;
 using Microsoft.JSInterop;
+using Gizmo_V1_02.Pages.Chapters;
 
-namespace Gizmo_V1_02.Pages.Chapters
+namespace Gizmo_V1_02.Archive
 {
     public partial class ChapterList
     {
@@ -68,7 +69,6 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         private List<VmUsrOrDefChapterManagement> lstAll { get; set; } = new List<VmUsrOrDefChapterManagement>();
         private List<VmUsrOrDefChapterManagement> lstAltSystemChapterItems { get; set; } = new List<VmUsrOrDefChapterManagement>();
-        private List<VmFee> lstAltSystemFeeItems { get; set; } = new List<VmFee>();
 
         private List<VmUsrOrDefChapterManagement> lstAgendas { get; set; } = new List<VmUsrOrDefChapterManagement>();
         private List<VmFee> lstFees { get; set; } = new List<VmFee>();
@@ -458,16 +458,6 @@ namespace Gizmo_V1_02.Pages.Chapters
             }
         }
 
-        private async void ToggleFeeComparison()
-        {
-            compareSystems = !compareSystems;
-
-            if (compareSystems)
-            {
-                await CompareSelectedChapterToAltSystem();
-            }
-        }
-
         private async Task<bool> RefreshAltSystemChaptersList()
         {
             try
@@ -486,7 +476,6 @@ namespace Gizmo_V1_02.Pages.Chapters
                 return false;
             }
         }
-
 
         private async Task<bool> CompareSelectedChapterToAltSystem()
         {
@@ -540,44 +529,6 @@ namespace Gizmo_V1_02.Pages.Chapters
                 }
 
 
-            }
-
-            return true;
-        }
-
-        private async Task<bool> CompareSelectedFeeToAltSystem()
-        {
-            if (compareSystems)
-            {
-                var test = await RefreshChapterItems(navDisplay);
-
-                await RefreshAltSystemChaptersList();
-
-                AltChapterObject = lstAltSystemChapters
-                                        .Where(A => A.ChapterObject.Name == SelectedChapterObject.Name)
-                                        .Where(A => A.ChapterObject.CaseType == SelectedChapterObject.CaseType)
-                                        .Where(A => A.ChapterObject.CaseTypeGroup == SelectedChapterObject.CaseTypeGroup)
-                                        .Select(C => C.ChapterObject)
-                                        .SingleOrDefault();
-
-                if (!(AltChapterObject is null))
-                {
-                    altChapter = JsonConvert.DeserializeObject<VmChapter>(AltChapterObject.ChapterData);
-
-                    var temp = altChapter.Fees;
-
-                    lstAltSystemFeeItems = temp.Select(T => new VmFee { FeeObject = T }).ToList();
-
-                    foreach (var item in lstFees)
-                    {
-                        CompareFeeItemsToAltSytem(item);
-                    }
-
-                    await InvokeAsync(() =>
-                    {
-                        StateHasChanged();
-                    });
-                }
             }
 
             return true;
@@ -690,45 +641,9 @@ namespace Gizmo_V1_02.Pages.Chapters
             return chapterItem;
         }
 
-        private VmFee CompareFeeItemsToAltSytem(VmFee chapterItem)
-        {
-            var altObject = lstAltSystemFeeItems
-                                .Where(A => A.FeeObject.FeeName == chapterItem.FeeObject.FeeName)
-                                .SingleOrDefault();
-
-            if (altObject is null)
-            {
-                chapterItem.ComparisonResult = "No match";
-                chapterItem.ComparisonIcon = "times";
-            }
-            else
-            {
-                if (chapterItem.IsChapterItemMatch(altObject))
-                {
-                    chapterItem.ComparisonResult = "Exact match";
-                    chapterItem.ComparisonIcon = "check";
-
-                }
-                else
-                {
-                    chapterItem.ComparisonResult = "Partial match";
-                    chapterItem.ComparisonIcon = "exclamation";
-
-                }
-
-            }
-
-            return chapterItem;
-        }
-
         public async void CompareChapterItemsToAltSytemAction()
         {
             await CompareSelectedChapterToAltSystem();
-        }
-
-        public async void CompareFeeItemsToAltSytemAction()
-        {
-            await CompareSelectedFeeToAltSystem();
         }
 
         private void PrepareForExport(List<VmUsrOrDefChapterManagement> items, string header)
@@ -775,6 +690,11 @@ namespace Gizmo_V1_02.Pages.Chapters
             ShowChapterAttachmentModal();
         }
 
+
+        private void PrepareFeesForEdit()
+        {
+            ShowChapterFeesModal();
+        }
 
         private void PrepareForInsert(string header, string type)
         {
@@ -1363,30 +1283,17 @@ namespace Gizmo_V1_02.Pages.Chapters
             Modal.Show<ChapterAttachments>(selectedList, parameters, options);
         }
 
-        protected void PrepareFeeForInsert (string option)
-        {
-            Fee taskObject = new Fee();
-            ShowChapterFeesModal(option, taskObject);
-        }
 
-        protected void ShowChapterFeesModal(string option, Fee taskObject)
+        protected void ShowChapterFeesModal()
         {
-            Action dataChanged = CondenseFeeSeq;
-            Fee copyObject = new Fee { 
-                FeeName = taskObject.FeeName 
-                , FeeCategory = taskObject.FeeCategory
-                , SeqNo = taskObject.SeqNo
-                , Amount = taskObject.Amount
-                , VATable = taskObject.VATable
-                , PostingType = taskObject.PostingType
-            };
+            Action RefreshFeeOrder = CondenseFeeSeq;
+
             var parameters = new ModalParameters();
-            parameters.Add("Option", option);
-            parameters.Add("TaskObject", taskObject);
-            parameters.Add("CopyObject", copyObject);
+            parameters.Add("RefreshFeeOrder", RefreshFeeOrder);
+            parameters.Add("feeItems", lstVmFeeModalItems);
+            parameters.Add("SeletedChapterId", selectedChapterId);
             parameters.Add("SelectedChapter", selectedChapter);
             parameters.Add("SelectedChapterObject", SelectedChapterObject);
-            parameters.Add("DataChanged", dataChanged);
 
             var options = new ModalOptions()
             {
@@ -1417,24 +1324,6 @@ namespace Gizmo_V1_02.Pages.Chapters
             Modal.Show<ModalDelete>("Delete?", parameters, options);
         }
 
-        protected void PrepareChapterFeeDelete(VmFee selectedChapterItem)
-        {
-            editFeeObject = selectedChapterItem;
-
-            Action SelectedDeleteAction = HandleChapterFeeDelete;
-            var parameters = new ModalParameters();
-            parameters.Add("InfoHeader", "Delete?");
-            parameters.Add("ModalHeight", "300px");
-            parameters.Add("ModalWidth", "500px");
-            parameters.Add("DeleteAction", SelectedDeleteAction);
-
-            var options = new ModalOptions()
-            {
-                Class = "blazored-custom-modal"
-            };
-
-            Modal.Show<ModalDelete>("Delete?", parameters, options);
-        }
 
 
         protected void PrepareDataViewDelete(VmDataViews selectedDataView)
@@ -1526,51 +1415,12 @@ namespace Gizmo_V1_02.Pages.Chapters
             Modal.Show<ChapterItemComparison>("Synchronise Smartflow Item", parameters, options);
         }
 
-        private void PrepareFeeForComparison(VmFee selectedItem)
-        {
-            editFeeObject = selectedItem;
 
-            ShowFeeComparisonModal();
-        }
-
-        protected void ShowFeeComparisonModal()
-        {
-            Action Compare = CompareFeeItemsToAltSytemAction;
-
-            var parameters = new ModalParameters();
-            parameters.Add("Object", editFeeObject);
-            parameters.Add("ComparisonRefresh", Compare);
-            parameters.Add("sessionState", sessionState);
-            parameters.Add("CurrentSysParentId", selectedChapterId);
-            parameters.Add("AlternateSysParentId", altSysSelectedChapterId);
-            parameters.Add("CurrentChapter", selectedChapter);
-            parameters.Add("AltChapter", altChapter);
-            parameters.Add("CurrentChapterRow", SelectedChapterObject);
-            parameters.Add("AltChapterRow", AltChapterObject);
-
-            var options = new ModalOptions()
-            {
-                Class = "blazored-custom-modal modal-chapter-comparison"
-            };
-
-            Modal.Show<ChapterFeeComparison>("Synchronise Smartflow Item", parameters, options);
-        }
 
         private async void HandleChapterDetailDelete()
         {
 
             selectedChapter.ChapterItems.Remove(editObject.ChapterObject);
-            SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(selectedChapter);
-            await chapterManagementService.Update(SelectedChapterObject);
-
-            await RefreshChapterItems(navDisplay);
-            StateHasChanged();
-        }
-
-        private async void HandleChapterFeeDelete()
-        {
-
-            selectedChapter.Fees.Remove(editFeeObject.FeeObject);
             SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(selectedChapter);
             await chapterManagementService.Update(SelectedChapterObject);
 

@@ -72,4 +72,5 @@ namespace GadjIT.ClientContext.P4W
         public int? ScheduleDays { get; set; }
 
     }
+
 }

@@ -7,7 +7,7 @@ namespace GadjIT.ClientContext.P4W.Custom
 {
     public partial class VmChapterFee
     {
-        public UsrOrDefChapterManagement FeeItem { get; set; }
+        public Fee FeeItem { get; set; }
 
         public fnORCHAGetFeeDefinitions feeDefinition { get; set; }
 
