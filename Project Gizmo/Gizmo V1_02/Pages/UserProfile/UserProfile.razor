@@ -4,19 +4,10 @@
 @using Gizmo_V1_02.Data.CustomFormObjects
 
 
-<div class="tran-block rounded ">
-    @if (!(sessionState.User.FullName is null))
-    {
-        <h3>@sessionState.User.FullName</h3>
-    }
-</div>
-
 <div class="tran-block page-header-block ">
     <div class="page-header-title">
-        <div class="float-left back-link" @onclick="NavigateBack">
-            <span class="col-alt fa fa-angle-double-left"></span>
-        </div>
-        <h3>User Details</h3>
+        
+        <h3>Profile Details</h3>
     </div>
     @if (!(sessionState.User.FullName is null))
     {
@@ -27,7 +18,7 @@
 <EditForm Model="@TaskObject" OnValidSubmit="@HandleValidSubmit">
     <DataAnnotationsValidator />
     <ValidationSummary />
-    <div class="tran-block detail-block">
+    <div class="tran-block ">
         <div class="container-fluid">
             <div class="row">
 
@@ -142,8 +133,8 @@
                                         {
                                             <ul class="ul-simple">
                                                 @foreach (var role in selectedRoles
-                                                          .Where(R => R.RoleName != "Super User")
-                                                          .ToList())
+                                                         .Where(R => R.RoleName != "Super User")
+                                                         .ToList())
                                                 {
 
                                                     <li><InputCheckbox class="mr-2" @bind-Value="role.IsSubscribed"></InputCheckbox><label>@role.RoleName</label></li>
@@ -156,11 +147,45 @@
                             </div>
                         </div>
                     </div>
+                    <h5>Preferences</h5>
+                    <div class="detail-group-box">
+                        <div class="form-group">
+                            <div class="container-fluid">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-6 p-2">
+                                        <label >Background</label>
+                                        <InputSelectInteger class="form-control form-control-lg"
+                                                            @bind-Value="TaskObject.MainBackgroundImage">
+                                            <option value="-1">Select</option>
+                                            @if (ListFileDescriptions is null)
+                                            {
+                                                <div class="spinner"></div>
+                                            }
+                                            else
+                                            {
+                                                @foreach (var fileDesc in ListFileDescriptions.ToList().OrderByDescending(F => F.FileName))
+                                                {
+                                                    <option value="@fileDesc.FileName">
+                                                        @fileDesc.FileName
+                                                    </option>
+                                                }
+                                            }
+
+                                        </InputSelectInteger>
+                                        <label>@TaskObject.MainBackgroundImage</label>
+                                        <a href="images/BackgroundImages/@TaskObject.MainBackgroundImage">
+                                            @TaskObject.MainBackgroundImage</a>
+                                            <div class="thumbnails">
+                                                <img src="images/BackgroundImages/@TaskObject.MainBackgroundImage" alt="" class="img-thumbnail" />
+                                            </div>
+</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
             </div>
 
-            <div class="detail-group-box ">
+            <div class="button-container">
                 <button type="submit" class="float-left btn btn-alt">Save Changes</button>
                 <button type="button" class="float-left ml-2 btn btn-secondary" @onclick="NavigateBack">Cancel</button>
             </div>
