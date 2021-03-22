@@ -15,6 +15,12 @@ namespace Gizmo_V1_02.Pages.Chapters
 {
     public partial class ChapterFees
     {
+        private class PostingType
+        {
+            public string Code { get; set; }
+            public string Description { get; set; }
+        }
+
         public bool VATable
         {
             get { return CopyObject.VATable == "Y" ? true : false; }
@@ -58,26 +64,24 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         private int selectedCaseTypeGroup { get; set; } = -1;
 
-        private List<string> PostingTypes { get; set; } = new List<string> 
+        private List<PostingType> PostingTypes { get; set; } = new List<PostingType> 
                                                                             {
-                                                                                "DSO"
-                                                                                ,"DSP"
-                                                                                ,"WOD"
-                                                                                ,"O/N"
-                                                                                ,"OCR"
-                                                                                ,"OCR"
-                                                                                ,"OCP"
-                                                                                ,"OTO"
-                                                                                ,"OTC"
-                                                                                ,"OCR"
-                                                                                ,"CDR"
-                                                                                ,"CCR"
-                                                                                ,"CIN"
-                                                                                ,"CTO"
-                                                                                ,"CTC"
-                                                                                ,"CTD"
-                                                                                ,"DFD"
-                                                                                ,"DOD"
+                                                                                  new PostingType {Code = "DSO", Description = "DSO - Office Payout to Bank (Disbursement)" }
+                                                                                , new PostingType {Code = "DSP", Description = "DSP - Office Payout to Petty Cash (Disbursement)"}
+                                                                                , new PostingType {Code = "WOD", Description = "WOD - Office Write Off Debt (Write Off Debt)"}
+                                                                                , new PostingType {Code = "O/N", Description = "O/N - Office Payout to Non-Bank (Office to Nominal Transfer)"}
+                                                                                , new PostingType {Code = "OCR", Description = "OCR - Office Received to Bank (Office Credit)"}
+                                                                                , new PostingType {Code = "OCP", Description = "OCP - Office Received to Petty Cash (Office Credit)"}
+                                                                                , new PostingType {Code = "OTO", Description = "OTO - Office Transfer to Office (Office to Office Transfer)"}
+                                                                                , new PostingType {Code = "OTC", Description = "OTC - Office Transfer to Client (Office to Client Transfer)"}
+                                                                                , new PostingType {Code = "CDR", Description = "CDR - Client Payout (Client Debit)"}
+                                                                                , new PostingType {Code = "CCR", Description = "CCR - Client Received (Client Credit)"}
+                                                                                , new PostingType {Code = "CIN", Description = "CIN - Client Interest (Client Interest)"}
+                                                                                , new PostingType {Code = "CTO", Description = "CTO - Client Transfer to Office (Client to Office Transfer)"}
+                                                                                , new PostingType {Code = "CTC", Description = "CTC - Client Transfer to Client (Client to Client Transfer)"}
+                                                                                , new PostingType {Code = "CTD", Description = "CTD - Client Transfer to Deposit (Client to Designated Deposit)"}
+                                                                                , new PostingType {Code = "DFD", Description = "DFD - Deposit Payout (Direct from Designated Deposit)"}
+                                                                                , new PostingType {Code = "DOD", Description = "DOD - Deposit Received (Direct on Deposit)" }
                                                                             };
 
         private List<string> FeeCategories { get; set; } = new List<string>

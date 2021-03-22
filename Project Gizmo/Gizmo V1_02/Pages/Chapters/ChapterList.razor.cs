@@ -464,7 +464,7 @@ namespace Gizmo_V1_02.Pages.Chapters
 
             if (compareSystems)
             {
-                await CompareSelectedChapterToAltSystem();
+                await CompareSelectedFeeToAltSystem();
             }
         }
 
@@ -564,7 +564,7 @@ namespace Gizmo_V1_02.Pages.Chapters
                 {
                     altChapter = JsonConvert.DeserializeObject<VmChapter>(AltChapterObject.ChapterData);
 
-                    var temp = altChapter.Fees;
+                    var temp = altChapter.Fees is null ? new List<Fee>() : altChapter.Fees;
 
                     lstAltSystemFeeItems = temp.Select(T => new VmFee { FeeObject = T }).ToList();
 
@@ -1046,6 +1046,37 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         }
 
+        protected async void MoveFeeSeqNo(Fee selectobject, string listType, string direction)
+        {
+            seqMoving = true; //prevents changes to the form whilst process of changing seq is carried out
+
+            int incrementBy;
+
+            incrementBy = (direction.ToLower() == "up" ? -1 : 1);
+
+            rowChanged = (int)(selectobject.SeqNo + incrementBy);
+
+            var swapItem = lstFees.Where(D => D.FeeObject.SeqNo == (selectobject.SeqNo + incrementBy)).SingleOrDefault();
+            if (!(swapItem is null))
+            {
+                selectobject.SeqNo += incrementBy;
+                swapItem.FeeObject.SeqNo = swapItem.FeeObject.SeqNo + (incrementBy * -1);
+
+                SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(selectedChapter);
+                await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
+
+            }
+
+            await RefreshChapterItems(listType);
+            await InvokeAsync(() =>
+            {
+                StateHasChanged();
+            });
+
+
+            seqMoving = false;
+
+        }
 
         private List<VmUsrOrDefChapterManagement> GetRelevantChapterList(string listType)
         {
@@ -1121,6 +1152,31 @@ namespace Gizmo_V1_02.Pages.Chapters
             {
                 seqNo += 1;
                 item.DataView.BlockNo = seqNo;
+            }
+
+            SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(selectedChapter);
+            await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
+
+            await RefreshChapterItems(ListType);
+
+            await InvokeAsync(() =>
+            {
+                StateHasChanged();
+            });
+        }
+
+        protected async void CondenseFeeSeq(string ListType)
+        {
+            await RefreshChapterItems(ListType);
+
+            var ListItems = lstFees;
+
+            int seqNo = 0;
+
+            foreach (VmFee item in ListItems.OrderBy(A => A.FeeObject.SeqNo))
+            {
+                seqNo += 1;
+                item.FeeObject.SeqNo = seqNo;
             }
 
             SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(selectedChapter);
@@ -1366,6 +1422,14 @@ namespace Gizmo_V1_02.Pages.Chapters
         protected void PrepareFeeForInsert (string option)
         {
             Fee taskObject = new Fee();
+            if (!(lstFees is null ) && lstFees.Count() > 0)
+            {
+                taskObject.SeqNo = lstFees.Select(F => F.FeeObject.SeqNo).OrderByDescending(F => F).FirstOrDefault() + 1;
+            }
+            else
+            {
+                taskObject.SeqNo = 1;
+            }
             ShowChapterFeesModal(option, taskObject);
         }
 
@@ -1847,6 +1911,29 @@ namespace Gizmo_V1_02.Pages.Chapters
             }
         }
 
+        private bool FeeSeqNoIsValid()
+        {
+            if (seqMoving == false | compareSystems == true)
+            {
+
+                bool isValid = true;
+
+                for (int i = 0; i < lstFees.Count; i++)
+                {
+                    if (lstFees[i].FeeObject.SeqNo != i + 1)
+                    {
+                        isValid = false;
+                    }
+
+                }
+
+                return isValid;
+            }
+            else
+            {
+                return true;
+            }
+        }
 
         /// <summary>
         /// moves the AA (transparancy) element of an android hex color to the end of the string

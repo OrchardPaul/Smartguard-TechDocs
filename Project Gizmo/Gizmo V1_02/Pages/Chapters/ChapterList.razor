@@ -778,7 +778,7 @@ else
                             {
                                 <div class="btn-group">
                                     <button @onclick='() => PrepareFeeForInsert("Insert")' class="btn btn-main btn-shadow" title="Add new fee"><i class="fa fa-plus"></i><span>New</span></button>
-                                    <button @onclick='() => CondenseSeq("Fees")' class="btn btn-main btn-shadow @(SequenceIsValid("Fees") ? "invisible" : "")" title="Re-order Sequence Numbers"><i class="fa fa-sort-numeric-down"></i></button>
+                                    <button @onclick='() => CondenseFeeSeq("Fees")' class="btn btn-main btn-shadow @(FeeSeqNoIsValid() ? "invisible" : "")" title="Re-order Sequence Numbers"><i class="fa fa-sort-numeric-down"></i></button>
                                 </div>
                             }
 
@@ -801,7 +801,7 @@ else
 
                     <div class="@(sessionState.isAdminUser ? "grid-can-edit" : "") ">
 
-                        @foreach (var fee in lstFees)
+                        @foreach (var fee in lstFees.OrderBy(F => F.FeeObject.SeqNo).ToList())
                         {
 
                             <div class="row grid-row grid-row-lg @(rowChanged == fee.FeeObject.SeqNo ? "row-changed" : "" )">
@@ -839,9 +839,9 @@ else
                                         @if (sessionState.isAdminUser)
                                         {
                                             <div class="data-item-right mr-2 seq-change">
-                                                @*<div @onclick='() => MoveSeq(fee.ChapterObject,"Fees", "Up")'><span class="fa fa-angle-up"></span></div>*@
+                                                <div @onclick='() => MoveFeeSeqNo(fee.FeeObject,"Fees", "Up")'><span class="fa fa-angle-up"></span></div>
                                                 <div class="seq-no">@fee.FeeObject.SeqNo</div>
-                                                @*<div @onclick='() => MoveSeq(fee.ChapterObject,"Fees", "Down")'><span class="fa fa-angle-down"></span></div>*@
+                                                <div @onclick='() => MoveFeeSeqNo(fee.FeeObject,"Fees", "Down")'><span class="fa fa-angle-down"></span></div>
                                             </div>
                                         }
                                         else

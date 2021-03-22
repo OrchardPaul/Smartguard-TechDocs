@@ -117,14 +117,15 @@ namespace Gizmo_V1_02.Pages.Chapters
             {
                 var PushObject = new Fee
                 {
-                    SeqNo = Object.AltObject.SeqNo,
-                    FeeName = Object.AltObject.FeeName,
-                    FeeCategory = Object.AltObject.FeeCategory,
-                    Amount = Object.AltObject.Amount,
-                    VATable = Object.AltObject.VATable,
-                    PostingType = Object.AltObject.PostingType,
+                    SeqNo = Object.FeeObject.SeqNo,
+                    FeeName = Object.FeeObject.FeeName,
+                    FeeCategory = Object.FeeObject.FeeCategory,
+                    Amount = Object.FeeObject.Amount,
+                    VATable = Object.FeeObject.VATable,
+                    PostingType = Object.FeeObject.PostingType,
                 };
 
+                AltChapter.Fees = AltChapter.Fees is null ? new List<Fee>() : AltChapter.Fees;
                 AltChapter.Fees.Add(PushObject);
 
                 await sessionState.SwitchSelectedSystem();

@@ -47,14 +47,14 @@
                 }
                 else
                 {
-                    <option value="@CopyObject.PostingType">@CopyObject.PostingType</option>
+                    <option value="@CopyObject.PostingType">@PostingTypes.Where(P => P.Code == CopyObject.PostingType).Select(P => P.Description).SingleOrDefault()</option>
                 }
 
 
-                @foreach (var postingtype in PostingTypes.Where(C => C != CopyObject.PostingType).OrderBy(C => C).ToList())
+                @foreach (var postingtype in PostingTypes.Where(C => C.Code != CopyObject.PostingType).OrderBy(C => C.Code).ToList())
                 {
-                    <option value="@postingtype">
-                        @postingtype
+                    <option value="@postingtype.Code">
+                        @postingtype.Description
                     </option>
                 }
             </InputSelect>
