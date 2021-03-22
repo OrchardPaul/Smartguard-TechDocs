@@ -73,12 +73,12 @@ namespace Gizmo_V1_02.Pages.Chapters
             {
                 var taskObject = AltChapter.Fees.Where(C => C.FeeName == Object.FeeObject.FeeName).SingleOrDefault();
 
-                taskObject.SeqNo = Object.AltObject.SeqNo;
-                taskObject.FeeName = Object.AltObject.FeeName;
-                taskObject.FeeCategory = Object.AltObject.FeeCategory;
-                taskObject.Amount = Object.AltObject.Amount;
-                taskObject.VATable = Object.AltObject.VATable;
-                taskObject.PostingType = Object.AltObject.PostingType;
+                taskObject.SeqNo = Object.FeeObject.SeqNo;
+                taskObject.FeeName = Object.FeeObject.FeeName;
+                taskObject.FeeCategory = Object.FeeObject.FeeCategory;
+                taskObject.Amount = Object.FeeObject.Amount;
+                taskObject.VATable = Object.FeeObject.VATable;
+                taskObject.PostingType = Object.FeeObject.PostingType;
 
 
 

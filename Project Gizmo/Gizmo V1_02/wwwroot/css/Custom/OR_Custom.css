@@ -532,6 +532,7 @@ app {
 
 .data-item-sub {
     padding-left: 10px !important;
+    padding-right: 10px !important;
     padding-top: 0px !important;
     width: 100%;
     min-width: 0;
@@ -883,14 +884,29 @@ app {
 /*---------------------------------------*/
 
 .grid-chapter-nav {
+    width: 100%;
+    max-width: 800px;
 }
+
+@media (min-width: 1200px) {
+    .grid-chapter-nav {
+        width: 75%;
+    }
+}
+
+@media (min-width: 1500px) {
+    .grid-chapter-nav {
+        width: 50%;
+    }
+}
+
 
 .grid-chapter {
     width: 800px;
     min-height: 400px;
 }
 
-.grid-chapter-docs {
+.grid-chapter-docs, .grid-chapter-fees {
     width: 100%;
     min-height: 400px;
 }
@@ -920,17 +936,31 @@ app {
     width: 23%;
 }
 
+.grid-chapter-fees .row .data-item:nth-of-type(1) {
+    width: 40%;
+}
+
+.grid-chapter-fees .row .data-item:nth-of-type(2), .grid-chapter-fees .row .data-item:nth-of-type(3), .grid-chapter-fees .row .data-item:nth-of-type(4) {
+    width: 20%;
+}
+
 @media (max-width: 991px) {
-    .grid-chapter
-    {
+    .grid-chapter {
         width: 100%;
     }
 
     .grid-chapter-docs .row .data-item:nth-of-type(1) {
         width: 100%;
     }
-}
 
+    .grid-chapter-fees .row .data-item:nth-of-type(1) {
+        width: 75%;
+    }
+
+    .grid-chapter-fees .row .data-item:nth-of-type(4) {
+        width: 25%;
+    }
+}
 
 .grid-chapter-backups .chapter-scroll-list {
     height: 400px;

@@ -19,7 +19,7 @@ else
             <p class="hidden-md-down">Create and maintain Smartflows for all case types. <em>Note: please make sure you are pointing to the appropriate system.</em></p>
         </div>
        
-        <div class="mb-4 col-xl-6 col-lg-12 col-md-12 col-sm-12 grid-tran grid-chapter-nav">
+        <div class="mb-4 grid-tran grid-chapter-nav">
             <div class="tran-block rounded">
                 @if (sessionState.isAdminUser)
                 {
@@ -803,93 +803,122 @@ else
                     </div>
 
                     <div class="@(sessionState.isAdminUser ? "grid-can-edit" : "") ">
-
+                        <div class="row grid-header invisible-md-down">
+                            <div class="data-item ">
+                                <div class="data-item-sub">
+                                    Name
+                                </div>
+                            </div>
+                            <div class="data-item ">
+                                <div class="data-item-sub">
+                                    Category
+                                </div>
+                            </div>
+                            <div class="data-item ">
+                                <div class="data-item-sub">
+                                    Posting Type
+                                </div>
+                            </div>
+                            <div class="data-item ">
+                                <div class="data-item-sub text-right">
+                                    Amount
+                                </div>
+                            </div>
+                        </div>
                         @foreach (var fee in lstFees.OrderBy(F => F.FeeObject.SeqNo).ToList())
                         {
 
-                            <div class="row grid-row grid-row-lg @(rowChanged == fee.FeeObject.SeqNo ? "row-changed" : "" )">
-                                <div class="col-12 data-item">
-                                    @if (!compareSystems)
+                    <div class="row grid-row grid-row-lg @(rowChanged == fee.FeeObject.SeqNo ? "row-changed" : "" )">
+                        <div class="data-item">
+                            @if (!compareSystems)
+                            {
+                                <div class="btn-ellipses float-left">
+                                    <span class="fa fa-ellipsis-v"></span>
+                                    <div class="ellipsis-menu">
+                                        <ul>
+                                            <li class="col-main" @onclick='(() => ShowChapterFeesModal("Edit", fee.FeeObject))'>
+                                                <span class="fa fa-pencil-alt mr-2"></span>
+                                                <span>Edit</span>
+                                            </li>
+                                            <li class="col-red" @onclick="() => PrepareChapterFeeDelete(fee)">
+                                                <span class="fa fa-trash-alt mr-2"></span>
+                                                <span>Delete</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="data-item-sub">
+                                    <span class="fa fa-pound-sign mr-2"></span> @fee.FeeObject.FeeName
+                                </div>
+
+                                @if (fee.FeeObject.VATable == "Y")
+                                {
+                                    <div class="data-item-right mr-2 font-100 hidden-md-down">
+                                        <ModalTooltip Direction="top" Text=@("VAT Included") Class="w-3">
+                                            <span class="fa fa-coins"></span>
+                                        </ModalTooltip>
+                                    </div>
+                                }
+
+                                @if (sessionState.isAdminUser)
+                                {
+                                    <div class="data-item-right mr-2 seq-change">
+                                        <div @onclick='() => MoveFeeSeqNo(fee.FeeObject,"Fees", "Up")'><span class="fa fa-angle-up"></span></div>
+                                        <div class="seq-no">@fee.FeeObject.SeqNo</div>
+                                        <div @onclick='() => MoveFeeSeqNo(fee.FeeObject,"Fees", "Down")'><span class="fa fa-angle-down"></span></div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="data-item-right mr-2">
+                                        <div class="seq-no">@fee.FeeObject.SeqNo</div>
+                                    </div>
+                                }
+
+
+                            }
+                            else
+                            {
+
+                                <div class="btn-ellipses float-left">
+                                    @if (!(fee.ComparisonIcon is null))
                                     {
-                                        <div class="btn-ellipses float-left">
-                                            <span class="fa fa-ellipsis-v"></span>
-                                            <div class="ellipsis-menu">
-                                                <ul>
-                                                    <li class="col-main" @onclick='(() => ShowChapterFeesModal("Edit", fee.FeeObject))'>
-                                                        <span class="fa fa-pencil-alt mr-2"></span>
-                                                        <span>Edit</span>
-                                                    </li>
-                                                    <li class="col-red" @onclick="() => PrepareChapterFeeDelete(fee)">
-                                                        <span class="fa fa-trash-alt mr-2"></span>
-                                                        <span>Delete</span>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <div class="data-item-sub">
-                                            <span class="fa fa-pound-sign mr-2"></span> @fee.FeeObject.FeeName
-                                        </div>
-
-                                        @if (!(string.IsNullOrEmpty(lstVmFeeModalItems.Where(FMI => FMI.feeDefinition.FeeDesc == fee.FeeObject.FeeName).Select(FMI => FMI.feeDefinition.WorkProvider).SingleOrDefault())))
+                                        @if (!(fee.ComparisonResult == "Exact match"))
                                         {
-                                            <div class="data-item-right mr-2 font-100">
-                                                <ModalTooltip Direction="left" Text=@("USED BY: " + lstVmFeeModalItems.Where(FMI => FMI.feeDefinition.FeeDesc == fee.FeeObject.FeeName).Select(FMI => FMI.feeDefinition.WorkProvider).SingleOrDefault()) Class="w-3">
-                                                    <span class="fa fa-user-tie"></span>
-                                                </ModalTooltip>
-                                            </div>
-                                        }
-
-                                        @if (sessionState.isAdminUser)
-                                        {
-                                            <div class="data-item-right mr-2 seq-change">
-                                                <div @onclick='() => MoveFeeSeqNo(fee.FeeObject,"Fees", "Up")'><span class="fa fa-angle-up"></span></div>
-                                                <div class="seq-no">@fee.FeeObject.SeqNo</div>
-                                                <div @onclick='() => MoveFeeSeqNo(fee.FeeObject,"Fees", "Down")'><span class="fa fa-angle-down"></span></div>
-                                            </div>
+                                            <div class="btn-dashed" @onclick="() => PrepareFeeForComparison(fee)"><span class="fa fa-@fee.ComparisonIcon"></span></div>
                                         }
                                         else
                                         {
-                                            <div class="data-item-right mr-2">
-                                                <div class="seq-no">@fee.FeeObject.SeqNo</div>
-                                            </div>
+                                            <span class="fa fa-@fee.ComparisonIcon"></span>
                                         }
-
                                     }
                                     else
                                     {
-
-                                        <div class="btn-ellipses float-left">
-                                            @if (!(fee.ComparisonIcon is null))
-                                            {
-                                                @if (!(fee.ComparisonResult == "Exact match"))
-                                                {
-                                                    <div class="btn-dashed"></div>
-                                                    <div class="btn-dashed" @onclick="() => PrepareFeeForComparison(fee)"><span class="fa fa-@fee.ComparisonIcon"></span></div>
-                                                }
-                                                else
-                                                {
-                                                    <span class="fa fa-@fee.ComparisonIcon"></span>
-                                                }
-                                            }
-                                            else
-                                            {
-                                                <div class="spinner"></div>
-                                            }
-
-                                        </div>
-
-
-                                        <div class="data-item-sub">
-                                            <span class="fa fa-pound-sign mr-2"></span> @fee.FeeObject.FeeName
-                                        </div>
-                                        <div class="data-item-right mr-2">
-                                            <div class="seq-no">@fee.FeeObject.SeqNo</div>
-                                        </div>
+                                        <div class="spinner"></div>
                                     }
 
                                 </div>
 
-                            </div>
+
+                                <div class="data-item-sub">
+                                    <span class="fa fa-pound-sign mr-2"></span> @fee.FeeObject.FeeName
+                                </div>
+                                <div class="data-item-right mr-2">
+                                    <div class="seq-no">@fee.FeeObject.SeqNo</div>
+                                </div>
+                            }
+
+                        </div>
+                        <div class="hidden-md-down data-item ">
+                            <div class="data-item-sub font-85 pl-3">@fee.FeeObject.FeeCategory</div>
+                        </div>
+                        <div class="hidden-md-down data-item ">
+                            <div class="data-item-sub font-85 pl-3">@fee.FeeObject.PostingType</div>
+                        </div>
+                        <div class="data-item">
+                            <div class="data-item-sub text-right font-85 pl-3">@string.Format("{0:C2}", fee.FeeObject.Amount)</div>
+                        </div>
+                    </div>
 
                         }
                     </div>
