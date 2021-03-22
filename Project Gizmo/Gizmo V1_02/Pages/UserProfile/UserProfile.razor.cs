@@ -13,6 +13,7 @@ using Gizmo_V1_02.FileManagement.FileClassObjects;
 using Gizmo_V1_02.FileManagement.FileClassObjects.FileOptions;
 using Gizmo_V1_02.FileManagement.FileProcessing.Interface;
 
+
 namespace Gizmo_V1_02.Pages.UserProfile
 {
     public partial class UserProfile
@@ -178,6 +179,8 @@ namespace Gizmo_V1_02.Pages.UserProfile
             FileHelper.CustomPath = $"wwwroot/images/BackgroundImages";
 
             ListFileDescriptions = FileHelper.GetFileList();
+
+
         }
 
     }

@@ -192,6 +192,7 @@ namespace Gizmo_V1_02.Pages.Chapters
                     selectedChapter.ShowPartnerNotes = "N";
                 }
             }
+
         }
 
 

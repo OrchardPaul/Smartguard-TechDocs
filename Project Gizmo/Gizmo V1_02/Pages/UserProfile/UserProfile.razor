@@ -152,32 +152,26 @@
                         <div class="form-group">
                             <div class="container-fluid">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-6 p-2">
-                                        <label >Background</label>
-                                        <InputSelectInteger class="form-control form-control-lg"
-                                                            @bind-Value="TaskObject.MainBackgroundImage">
-                                            <option value="-1">Select</option>
-                                            @if (ListFileDescriptions is null)
+                                    <label>Background</label>
+                                    <div class="thumbnails">
+                                        <img src="@TaskObject.MainBackgroundImage" alt="" class="img-thumbnail" />
+                                    </div>
+                                    <InputSelect class="form-control form-control-lg"
+                                                 @bind-Value="TaskObject.MainBackgroundImage">
+                                        <option value="">Change Background</option>
+                                        @if (!(ListFileDescriptions is null))
+                                        {
+                                            @foreach (var fileDesc in ListFileDescriptions.ToList().OrderByDescending(F => F.FileName))
                                             {
-                                                <div class="spinner"></div>
+                                                <option value="@(fileDesc.FileDirectory.Replace("\\","/").Replace("wwwroot/","") + "/" + fileDesc.FileName)">
+                                                    @fileDesc.FileName
+                                                </option>
                                             }
-                                            else
-                                            {
-                                                @foreach (var fileDesc in ListFileDescriptions.ToList().OrderByDescending(F => F.FileName))
-                                                {
-                                                    <option value="@fileDesc.FileName">
-                                                        @fileDesc.FileName
-                                                    </option>
-                                                }
-                                            }
+                                        }
 
-                                        </InputSelectInteger>
-                                        <label>@TaskObject.MainBackgroundImage</label>
-                                        <a href="images/BackgroundImages/@TaskObject.MainBackgroundImage">
-                                            @TaskObject.MainBackgroundImage</a>
-                                            <div class="thumbnails">
-                                                <img src="images/BackgroundImages/@TaskObject.MainBackgroundImage" alt="" class="img-thumbnail" />
-                                            </div>
-</div>
+                                    </InputSelect>
+                                    
+                                </div>
                             </div>
                         </div>
                     </div>

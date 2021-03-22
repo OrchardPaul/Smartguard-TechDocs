@@ -15,5 +15,8 @@ namespace Gizmo_V1_02.Data
         public string SelectedUri { get; set; }
 
         public int SelectedCompanyId { get; set; }
+
+        [StringLength(500)]
+        public string MainBackgroundImage { get; set; }
     }
 }

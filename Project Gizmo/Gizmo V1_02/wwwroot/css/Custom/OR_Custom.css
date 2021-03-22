@@ -67,7 +67,7 @@ app {
     /* Full height */
     /*height: calc(100% - 53px);*/
     /* The image used */
-    background-image: url('../../images/backgroundimages/Blue Sky.jpg');
+    
     /* Create the parallax scrolling effect */
     background-attachment: fixed;
     background-position: center;
