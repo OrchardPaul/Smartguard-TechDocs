@@ -356,7 +356,8 @@ namespace Gizmo_V1_02.Data.Admin
                     PhoneNumber = item.PhoneNumber,
                     EmailConfirmed = true,
                     SelectedUri = item.SelectedUri,
-                    SelectedCompanyId = item.SelectedCompanyId
+                    SelectedCompanyId = item.SelectedCompanyId,
+                    MainBackgroundImage = item.MainBackgroundImage
                 };
 
                 var CreateResult = await userManager.CreateAsync(NewUser, item.PasswordHash);
@@ -409,6 +410,8 @@ namespace Gizmo_V1_02.Data.Admin
                 selectedUser.AccessFailedCount = item.AccessFailedCount;
                 selectedUser.SelectedUri = item.SelectedUri;
                 selectedUser.SelectedCompanyId = item.SelectedCompanyId;
+                selectedUser.MainBackgroundImage = item.MainBackgroundImage;
+                
 
                 await userManager.UpdateAsync(selectedUser);
 

@@ -349,7 +349,7 @@
 }
 
 .nav-row-1 .data-item, .nav-row-2 .data-item {
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: rgba(0, 0, 0, 0.7);
     color: #FFF;
     margin: 0 !important;
     /*box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.5);*/
@@ -381,10 +381,9 @@
 
 
 .nav-row-3 .data-item-nav {
-    background-color: rgba(255, 255, 255, 0.7);
     color: #000;
     border: 1pt solid;
-    background-color: rgba(255, 255, 255, 0.5);
+    background-color: rgba(255, 255, 255, 1);
     border-color: #eee #ccc #ccc #eee;
 }
 
@@ -598,7 +597,6 @@
     align-items: center;
     justify-content: center;
     position: relative;
-    font-size: 1.3em;
 }
 
 .btn-uprofile .nav-link{
@@ -610,7 +608,7 @@
     position: absolute;
     display: block;
     width: 180px;
-    top: 20px;
+    top: 28px;
     left: 8px;
     margin: 0;
     padding: 10px 3px 3px 3px;
@@ -631,7 +629,7 @@
 }
 
 .btn-uprofile .uprofile-menu {
-    top: 33px;
+    top: 42px;
     left: calc(100% - 120px) !important;
 }
 
@@ -639,11 +637,11 @@
     width: 100%;
     margin: 0;
     padding: 5px;
-    background-color: #aaa;
+    background-color: #fff;
     font-size: 0.9rem;
     color: #555;
-    box-shadow: 0 5px 8px rgba(0,0,0,0.4);
-    border-radius: 3px;
+    box-shadow: 0px 5px 5px 0px rgba(0,0,0,0.4);
+    border-radius: 0px;
     display: block;
 }
 
@@ -662,7 +660,7 @@
 
 
 .btn-uprofile ul li:first-of-type {
-    background: #ccc;
+    background: #fff;
     height: 30px;
     font-weight: bold;
 }

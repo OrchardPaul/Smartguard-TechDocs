@@ -67,7 +67,7 @@ app {
     /* Full height */
     /*height: calc(100% - 53px);*/
     /* The image used */
-    background-image: url(../images/parallax_4.jpg);
+    
     /* Create the parallax scrolling effect */
     background-attachment: fixed;
     background-position: center;
@@ -512,7 +512,7 @@ app {
     padding: 0;
     height: 100%;
     border: 1pt solid;
-    background-color: rgba(255, 255, 255, 0.5);
+    background-color: rgba(255, 255, 255, 0.7);
     border-color: #FFF #DDD #DDD #FFF;
     font-size: 0.9rem !important;
     display: flex;
