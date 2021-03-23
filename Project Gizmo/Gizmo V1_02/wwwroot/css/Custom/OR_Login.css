@@ -22,7 +22,7 @@ label {
     /* Full height */
     height: 100%;
     /* The image used */
-    background-image: url(../images/parallax_8.jpg);
+    background-image: url('../../images/backgroundimages/Blue Sky.jpg');
     /* Create the parallax scrolling effect */
     background-attachment: fixed;
     background-position: center;
@@ -37,7 +37,7 @@ label {
 .auth-block {
     padding: 20px;
     background: #fff;
-    border-radius: 5px;
+    border-radius: 25px;
     box-shadow: 0 8px 12px 0 rgba(0,0,0,0.5);
 }
 
@@ -49,6 +49,10 @@ label {
 
     .auth-block {
         box-shadow: 0 0 0 0 rgba(0,0,0,0);
+    }
+
+    .form-control {
+        font-size: 16pt;
     }
 }
 
@@ -76,14 +80,12 @@ label {
     }
 
 .login-top-row {
-    background-color: #000000;
-    background-image: url(../images/GadJIT_logo_vsmall.jpg);
+    background-color: #ffffff;
+    background-image: url(../images/GadjIT_logo_col_1.png);
     background-repeat: no-repeat;
     background-position: center;
-    height: 50px;
-    border-color: #aaa #ccc #ccc #aaa;
-    border-width: 2pt;
-    border-style: solid;
+    height: 80px;
+    
 }
 
 .button-container {
@@ -93,6 +95,3 @@ label {
     padding-bottom: 15px;
 }
 
-.form-control {
-    font-size: 16pt;
-}

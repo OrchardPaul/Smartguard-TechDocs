@@ -9,6 +9,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Gizmo_V1_02.FileManagement.FileClassObjects;
+using Gizmo_V1_02.FileManagement.FileClassObjects.FileOptions;
+using Gizmo_V1_02.FileManagement.FileProcessing.Interface;
+
 
 namespace Gizmo_V1_02.Pages.UserProfile
 {
@@ -54,6 +58,13 @@ namespace Gizmo_V1_02.Pages.UserProfile
         private List<AspNetRoles> lstRoles { get; set; }
 
         private List<string> usersClaimId { get; set; }
+        
+        [Inject]
+        public IFileHelper FileHelper { get; set; }
+
+        private List<FileDesc> ListFileDescriptions { get; set; }
+
+        
 
         protected override async Task OnInitializedAsync()
         {
@@ -95,6 +106,8 @@ namespace Gizmo_V1_02.Pages.UserProfile
                     RoleId = L.Id
                 })
                 .ToList();
+
+            GetBackgroundFileList();
 
         }
 
@@ -159,6 +172,15 @@ namespace Gizmo_V1_02.Pages.UserProfile
             await sessionState.SetSessionState();
 
             return returnObject;
+        }
+
+        private void GetBackgroundFileList()
+        {
+            FileHelper.CustomPath = $"wwwroot/images/BackgroundImages";
+
+            ListFileDescriptions = FileHelper.GetFileList();
+
+
         }
 
     }

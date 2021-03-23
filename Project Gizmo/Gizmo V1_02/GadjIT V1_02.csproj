@@ -1734,6 +1734,14 @@
     <None Include="wwwroot\fontawesome\webfonts\fa-regular-400.woff2" />
     <None Include="wwwroot\fontawesome\webfonts\fa-solid-900.svg" />
     <None Include="wwwroot\fontawesome\webfonts\fa-solid-900.woff2" />
+    <None Include="wwwroot\images\BackgroundImages\Blue Sky.jpg" />
+    <None Include="wwwroot\images\BackgroundImages\Calm Lake 2.jpg" />
+    <None Include="wwwroot\images\BackgroundImages\Calm Lake.jpg" />
+    <None Include="wwwroot\images\BackgroundImages\Crashing Waves.jpg" />
+    <None Include="wwwroot\images\BackgroundImages\Futuristic Blue.jpg" />
+    <None Include="wwwroot\images\BackgroundImages\Grey Building.jpg" />
+    <None Include="wwwroot\images\BackgroundImages\Jigsaw.jpg" />
+    <None Include="wwwroot\images\BackgroundImages\Turquoise Sea.jpg" />
   </ItemGroup>
 
 </Project>

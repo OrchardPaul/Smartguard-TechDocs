@@ -92,7 +92,13 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
 
             try
             {
-                fileList.AddRange(Directory.GetFiles(CustomPath).Select(F => new FileDesc { FileName = Path.GetFileName(F), FilePath = Path.GetFullPath(F), FileDirectory = Path.GetDirectoryName(F), FileDate = File.GetCreationTime(F)}).ToList());
+                fileList.AddRange(Directory
+                    .GetFiles(CustomPath)
+                    .Select(F => new FileDesc 
+                    { FileName = Path.GetFileName(F)
+                    , FilePath = Path.GetFullPath(F)
+                    , FileDirectory = Path.GetDirectoryName(F)
+                    , FileDate = File.GetCreationTime(F)}).ToList());
 
                 return fileList;
             }

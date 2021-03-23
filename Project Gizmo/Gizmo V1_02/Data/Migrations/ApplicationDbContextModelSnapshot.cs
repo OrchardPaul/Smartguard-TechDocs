@@ -15,7 +15,7 @@ namespace Gizmo_V1_02.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.8")
+                .HasAnnotation("ProductVersion", "3.1.11")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -90,7 +90,8 @@ namespace Gizmo_V1_02.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("CompanyID")
+                    b.Property<int>("CompanyId")
+                        .HasColumnName("CompanyID")
                         .HasColumnType("int");
 
                     b.Property<int>("WorkTypeGroupId")
@@ -154,7 +155,8 @@ namespace Gizmo_V1_02.Data.Migrations
                         .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
 
-                    b.Property<int>("parentId")
+                    b.Property<int>("ParentId")
+                        .HasColumnName("parentId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -257,6 +259,10 @@ namespace Gizmo_V1_02.Data.Migrations
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("MainBackgroundImage")
+                        .HasColumnType("nvarchar(500)")
+                        .HasMaxLength(500);
 
                     b.Property<string>("NormalizedEmail")
                         .HasColumnType("nvarchar(256)")

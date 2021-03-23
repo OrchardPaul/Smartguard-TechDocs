@@ -136,24 +136,20 @@ namespace GadjIT.ClientAPI.Repository.Chapters
                                 .Where(C => !existingItems
                                                 .Select(E => E.Name)
                                                 .ToList()
-                                                .Contains(C.FeeItem.Name))
+                                                .Contains(C.FeeItem.FeeName))
                                 .Select(C => C.FeeItem)
                                 .ToList();
 
             var itemsToRemove = existingItems
                                     .Where(C => vmChapterFees
                                                     .Where(V => !V.selected)
-                                                    .Select(V => V.FeeItem.Name)
+                                                    .Select(V => V.FeeItem.FeeName)
                                                     .ToList()
                                                     .Contains(C.Name))
                                     .ToList();
 
 
-            if (itemsToAdd.Count() > 0)
-            {
-                _context.UsrOrDefChapterManagement.AddRange(itemsToAdd);
-                change = true;
-            }
+            
 
             if (itemsToRemove.Count() > 0)
             {

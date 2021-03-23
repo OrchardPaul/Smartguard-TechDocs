@@ -18,212 +18,214 @@ else
             <h3>Smartflow</h3>
             <p class="hidden-md-down">Create and maintain Smartflows for all case types. <em>Note: please make sure you are pointing to the appropriate system.</em></p>
         </div>
-        <div class="mb-4 col-xl-6 col-lg-12 col-md-12 col-sm-12 grid-tran grid-chapter-nav">
-            @if (sessionState.isAdminUser)
-            {
-                <div class="grid-actions">
-                    <div class="btn-group">
-                        <button @onclick='PrepareChapterForInsert' class="btn btn-main btn-shadow" title="Add new Smartflow"><i class="fa fa-plus pr-1"></i><span>New Smartflow</span></button>
-                        @if (!(string.IsNullOrEmpty(selectedChapter.CaseType)))
-                        {
-                            @if (!(SequenceIsValid("Chapters")))
+       
+        <div class="mb-4 grid-tran grid-chapter-nav">
+            <div class="tran-block rounded">
+                @if (sessionState.isAdminUser)
+                {
+                    <div class="grid-actions">
+                        <div class="btn-group">
+                            <button @onclick='PrepareChapterForInsert' class="btn btn-main btn-shadow" title="Add new Smartflow"><i class="fa fa-plus pr-1"></i><span>New Smartflow</span></button>
+                            @if (!(string.IsNullOrEmpty(selectedChapter.CaseType)))
                             {
-                                <button @onclick='() => CondenseChapterSeq()' class="btn btn-main btn-shadow" title="Re-order Sequence Numbers"><i class="fa fa-sort-numeric-down"></i></button>
+                                @if (!(SequenceIsValid("Chapters")))
+                                {
+                                    <button @onclick='() => CondenseChapterSeq()' class="btn btn-main btn-shadow" title="Re-order Sequence Numbers"><i class="fa fa-sort-numeric-down"></i></button>
 
+                                }
                             }
+                        </div>
+                        <div class="btn-group">
+                            <button @onclick='(() => PrepareForExport(lstChapters, "Chapter Export"))' class="btn btn-main btn-shadow" title="Export data to Excel or CSV"><i class="fa fa-file-export"></i><span class="pl-2">Export</span></button>
+                        </div>
+                        <div class="spacer"></div>
+                        @if (sessionState.isAdminUser)
+                        {
+                            <div class="btn-group sync-group invisible-sm-down">
+                                <input type="checkbox" class="ml-1 mt-1" @onchange="() => CompareAllChapters()" /><span class="ml-2 font-75">Compare to @(sessionState.selectedSystem == "Dev" ? "Live" : "Dev") </span>
+                            </div>
+
                         }
                     </div>
-                    <div class="btn-group">
-                        <button @onclick='(() => PrepareForExport(lstChapters, "Chapter Export"))' class="btn btn-main btn-shadow" title="Export data to Excel or CSV"><i class="fa fa-file-export"></i><span class="pl-2">Export</span></button>
-                    </div>
-                    <div class="spacer"></div>
-                    @if (sessionState.isAdminUser)
-                    {
-                        <div class="btn-group sync-group invisible-sm-down">
-                            <input type="checkbox" class="ml-1 mt-1" @onchange="() => CompareAllChapters()" /><span class="ml-2 font-75">Compare to @(sessionState.selectedSystem == "Dev" ? "Live" : "Dev") </span>
-                        </div>
 
-                    }
-                </div>
+                }
+                <div class="container-fluid">
 
-            }
-            <div class="container-fluid">
-
-                <!-- SHOW ALL GROUPS -->
-                @foreach (var caseTypeGroup in lstChapters.Where(C => C.ChapterObject.ParentId == 0)
-.Where(C => !(C.ChapterObject.CaseTypeGroup is null))
-.Select(C => C.ChapterObject.CaseTypeGroup)
-.Distinct()
-.ToList())
-                {
-
-                    <div class="grid-row-lg mt-3 nav-row-1">
-                        <div class="data-item" title="Group: click to see case types assigned to @caseTypeGroup">
-                            @if (sessionState.isAdminUser)
-                            {
-                                <div class="btn-ellipses float-left">
-                                    <span class="fa fa-ellipsis-v"></span>
-                                    <div class="ellipsis-menu" style="margin-top: 20px">
-                                        <ul>
-                                            <li class="col-main" @onclick='() => PrepareCaseTypeForEdit(caseTypeGroup, "CaseTypeGroup")'>
-                                                <span class="fa fa-font mr-2"></span>
-                                                <span>Rename</span>
-                                            </li>
-
-                                        </ul>
-                                    </div>
-                                </div>
-                            }
-
-                            <div class="data-item-nav" @onclick='() => SelectCaseTypeGroup(caseTypeGroup)'>
-                                <div class="data-item-sub"><span class="fa fa-boxes mr-2"></span>@caseTypeGroup</div>
-                                <div class="data-item-right col-alt"><div class="link-direction @(caseTypeGroup == selectedChapter.CaseTypeGroup ? "triangle-up col-grey" : "triangle-down")"></div></div>
-                            </div>
-                        </div>
-
-
-                    </div>
-
-
-
-                    <!-- GROUP SELECTED SHOW CASE TYPES-->
-                    @if (caseTypeGroup == selectedChapter.CaseTypeGroup)
-                    {
-
-                        @foreach (var caseType in lstChapters.Where(C => C.ChapterObject.ParentId == 0)
-  .Where(C => !(C.ChapterObject.CaseType is null))
-  .Where(C => C.ChapterObject.CaseTypeGroup == selectedChapter.CaseTypeGroup)
-  .Select(C => C.ChapterObject.CaseType)
+                    <!-- SHOW ALL GROUPS -->
+                    @foreach (var caseTypeGroup in lstChapters.Where(C => C.ChapterObject.ParentId == 0)
+  .Where(C => !(C.ChapterObject.CaseTypeGroup is null))
+  .Select(C => C.ChapterObject.CaseTypeGroup)
   .Distinct()
   .ToList())
+                    {
+
+                        <div class="grid-row-lg mt-3 nav-row-1">
+                            <div class="data-item" title="Group: click to see case types assigned to @caseTypeGroup">
+                                @if (sessionState.isAdminUser)
+                                {
+                                    <div class="btn-ellipses float-left">
+                                        <span class="fa fa-ellipsis-v"></span>
+                                        <div class="ellipsis-menu" style="margin-top: 20px">
+                                            <ul>
+                                                <li class="col-main" @onclick='() => PrepareCaseTypeForEdit(caseTypeGroup, "CaseTypeGroup")'>
+                                                    <span class="fa fa-font mr-2"></span>
+                                                    <span>Rename</span>
+                                                </li>
+
+                                            </ul>
+                                        </div>
+                                    </div>
+                                }
+
+                                <div class="data-item-nav" @onclick='() => SelectCaseTypeGroup(caseTypeGroup)'>
+                                    <div class="data-item-sub"><span class="fa fa-boxes mr-2"></span>@caseTypeGroup</div>
+                                    <div class="data-item-right col-alt"><div class="link-direction @(caseTypeGroup == selectedChapter.CaseTypeGroup ? "triangle-up col-grey" : "triangle-down")"></div></div>
+                                </div>
+                            </div>
+
+
+                        </div>
+
+
+
+                        <!-- GROUP SELECTED SHOW CASE TYPES-->
+                        @if (caseTypeGroup == selectedChapter.CaseTypeGroup)
                         {
 
-                            <div class="grid-row-md nav-row-2">
-                                <div class="data-item" title="Case Type: click to see the Smartflows within @caseType">
-                                    @if (sessionState.isAdminUser)
-                                    {
-                                        <div class="btn-ellipses float-left">
-                                            <span class="fa fa-ellipsis-v"></span>
-                                            <div class="ellipsis-menu">
-                                                <ul>
-                                                    <li class="col-main" @onclick='() => PrepareCaseTypeForEdit(caseType, "CaseType")'>
-
-                                                        <span class="fa fa-font mr-2"></span>
-                                                        <span>Rename</span>
-
-                                                    </li>
-
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    }
-                                    <div class="data-item-nav" @onclick='() => SelectCaseType(caseType)'>
-                                        @if (caseType == selectedChapter.CaseType)
-                                        {
-                                            <div class="data-item-sub">
-                                                <span class="fa fa-folder-open mr-2"></span>@caseType
-                                            </div>
-                                        }
-                                        else
-                                        {
-                                            <div class="data-item-sub">
-                                                <span class="fa fa-folder mr-2"></span>@caseType
-                                            </div>
-                                        }
-
-
-                                        <div class="data-item-right col-alt "><div class="link-direction @(caseType == selectedChapter.CaseType ? "triangle-up col-grey" : "triangle-down")"></div></div>
-                                    </div>
-                                </div>
-
-                            </div>
-                            @if (caseType == selectedChapter.CaseType)
+                            @foreach (var caseType in lstChapters.Where(C => C.ChapterObject.ParentId == 0)
+    .Where(C => !(C.ChapterObject.CaseType is null))
+    .Where(C => C.ChapterObject.CaseTypeGroup == selectedChapter.CaseTypeGroup)
+    .Select(C => C.ChapterObject.CaseType)
+    .Distinct()
+    .ToList())
                             {
-                                <div class="grid-nav">
-                                    @foreach (var Chapter in lstChapters
-                                                     .Where(C => C.ChapterObject.CaseType == selectedChapter.CaseType)
-                                                     .Where(C => C.ChapterObject.CaseTypeGroup == selectedChapter.CaseTypeGroup)
-                                                     .Where(C => C.ChapterObject.Type == "Chapter")
-                                                     .OrderBy(C => C.ChapterObject.SeqNo)
-                                                     .ToList())
-                                    {
-                                        <div class="grid-row-md nav-row-3 no-border  @(rowChanged == Chapter.ChapterObject.SeqNo ? ToggleRowChangedClass() : "" )">
-                                            <div class="data-item @(Chapter.ChapterObject.Name.Length > 6 && Chapter.ChapterObject.Name.Substring(0,6) == "GROUP " ? "data-item-group" : "")">
 
-                                                @if (sessionState.isAdminUser)
-                                                {
-                                                    @if (!compareSystems)
+                                <div class="grid-row-md nav-row-2">
+                                    <div class="data-item" title="Case Type: click to see the Smartflows within @caseType">
+                                        @if (sessionState.isAdminUser)
+                                        {
+                                            <div class="btn-ellipses float-left">
+                                                <span class="fa fa-ellipsis-v"></span>
+                                                <div class="ellipsis-menu">
+                                                    <ul>
+                                                        <li class="col-main" @onclick='() => PrepareCaseTypeForEdit(caseType, "CaseType")'>
+
+                                                            <span class="fa fa-font mr-2"></span>
+                                                            <span>Rename</span>
+
+                                                        </li>
+
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        }
+                                        <div class="data-item-nav" @onclick='() => SelectCaseType(caseType)'>
+                                            @if (caseType == selectedChapter.CaseType)
+                                            {
+                                                <div class="data-item-sub">
+                                                    <span class="fa fa-folder-open mr-2"></span>@caseType
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="data-item-sub">
+                                                    <span class="fa fa-folder mr-2"></span>@caseType
+                                                </div>
+                                            }
+
+
+                                            <div class="data-item-right col-alt "><div class="link-direction @(caseType == selectedChapter.CaseType ? "triangle-up col-grey" : "triangle-down")"></div></div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                @if (caseType == selectedChapter.CaseType)
+                                {
+                                    <div class="grid-nav">
+                                        @foreach (var Chapter in lstChapters
+                                                       .Where(C => C.ChapterObject.CaseType == selectedChapter.CaseType)
+                                                       .Where(C => C.ChapterObject.CaseTypeGroup == selectedChapter.CaseTypeGroup)
+                                                       .Where(C => C.ChapterObject.Type == "Chapter")
+                                                       .OrderBy(C => C.ChapterObject.SeqNo)
+                                                       .ToList())
+                                        {
+                                            <div class="grid-row-md nav-row-3 no-border  @(rowChanged == Chapter.ChapterObject.SeqNo ? ToggleRowChangedClass() : "" )">
+                                                <div class="data-item @(Chapter.ChapterObject.Name.Length > 6 && Chapter.ChapterObject.Name.Substring(0,6) == "GROUP " ? "data-item-group" : "")">
+
+                                                    @if (sessionState.isAdminUser)
                                                     {
-                                                        <div class="btn-ellipses float-left ">
-                                                            <span class="fa fa-ellipsis-v"></span>
-                                                            <div class="ellipsis-menu">
-                                                                <ul>
-                                                                    <li class="col-main" @onclick='() => PrepareChapterForEdit(Chapter.ChapterObject, "Chapter")' title="">
-                                                                        <span class="fa fa-font mr-2"></span>
-                                                                        <span>Rename</span>
-                                                                    </li>
-                                                                    <li class="col-main" @onclick="() => SelectChapter(Chapter.ChapterObject)" title="">
-                                                                        <span class="fa fa-pencil-alt mr-2"></span>
-                                                                        <span>Edit</span>
-                                                                    </li>
-                                                                    <li class="col-red" @onclick='() => PrepareChapterDelete(Chapter)' title="">
-                                                                        <span class="fa fa-trash-alt mr-2"></span>
-                                                                        <span>Delete</span>
-                                                                    </li>
-                                                                </ul>
+                                                        @if (!compareSystems)
+                                                        {
+                                                            <div class="btn-ellipses float-left ">
+                                                                <span class="fa fa-ellipsis-v"></span>
+                                                                <div class="ellipsis-menu">
+                                                                    <ul>
+                                                                        <li class="col-main" @onclick='() => PrepareChapterForEdit(Chapter.ChapterObject, "Chapter")' title="">
+                                                                            <span class="fa fa-font mr-2"></span>
+                                                                            <span>Rename</span>
+                                                                        </li>
+                                                                        <li class="col-main" @onclick="() => SelectChapter(Chapter.ChapterObject)" title="">
+                                                                            <span class="fa fa-pencil-alt mr-2"></span>
+                                                                            <span>Edit</span>
+                                                                        </li>
+                                                                        <li class="col-red" @onclick='() => PrepareChapterDelete(Chapter)' title="">
+                                                                            <span class="fa fa-trash-alt mr-2"></span>
+                                                                            <span>Delete</span>
+                                                                        </li>
+                                                                    </ul>
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                    }
-                                                    else
-                                                    {
-                                                        <div class="btn-ellipses float-left">
-                                                            @if (!(Chapter.ComparisonIcon is null))
-                                                            {
-                                                                @if (!(Chapter.ComparisonResult == "Exact match"))
+                                                        }
+                                                        else
+                                                        {
+                                                            <div class="btn-ellipses float-left">
+                                                                @if (!(Chapter.ComparisonIcon is null))
                                                                 {
-                                                                    <div class="btn-dashed" @onclick="() => PrepareChapterCreateOnAlt(Chapter.ChapterObject)"><span class="fa fa-@Chapter.ComparisonIcon"></span></div>
+                                                                    @if (!(Chapter.ComparisonResult == "Exact match"))
+                                                                    {
+                                                                        <div class="btn-dashed" @onclick="() => PrepareChapterCreateOnAlt(Chapter.ChapterObject)"><span class="fa fa-@Chapter.ComparisonIcon"></span></div>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <span class="fa fa-@Chapter.ComparisonIcon"></span>
+                                                                    }
                                                                 }
                                                                 else
                                                                 {
-                                                                    <span class="fa fa-@Chapter.ComparisonIcon"></span>
+                                                                    <div class="spinner"></div>
                                                                 }
-                                                            }
-                                                            else
-                                                            {
-                                                                <div class="spinner"></div>
-                                                            }
+                                                            </div>
+                                                        }
+
+                                                    }
+                                                    <div class="data-item-sub">
+                                                        <span class="hidden-sm-down"><span class=" fa fa-share-alt-square mr-2"></span></span>
+                                                        @Chapter.ChapterObject.Name
+                                                    </div>
+                                                    @if (sessionState.isAdminUser)
+                                                    {
+                                                        <div class="data-item-right seq-change">
+                                                            <div @onclick='() => MoveSeq(Chapter.ChapterObject, "Chapters", "Up")'><span class="fa fa-angle-up"></span></div>
+                                                            <div class="seq-no">@Chapter.ChapterObject.SeqNo</div>
+                                                            <div @onclick='() => MoveSeq(Chapter.ChapterObject, "Chapters", "Down")'><span class="fa fa-angle-down"></span></div>
                                                         </div>
                                                     }
-
-                                                }
-                                                <div class="data-item-sub">
-                                                    <span class="hidden-sm-down"><span class=" fa fa-share-alt-square mr-2"></span></span>
-                                                    @Chapter.ChapterObject.Name
-                                                </div>
-                                                @if (sessionState.isAdminUser)
-                                                {
-                                                    <div class="data-item-right seq-change">
-                                                        <div @onclick='() => MoveSeq(Chapter.ChapterObject, "Chapters", "Up")'><span class="fa fa-angle-up"></span></div>
-                                                        <div class="seq-no">@Chapter.ChapterObject.SeqNo</div>
-                                                        <div @onclick='() => MoveSeq(Chapter.ChapterObject, "Chapters", "Down")'><span class="fa fa-angle-down"></span></div>
+                                                    <div title="Chapter: click to configure @Chapter.ChapterObject.Name" class="data-item-right link-direction" @onclick="() => SelectChapter(Chapter.ChapterObject)">
+                                                        <div class="fa fa-chevron-circle-right"></div>
                                                     </div>
-                                                }
-                                                <div title="Chapter: click to configure @Chapter.ChapterObject.Name" class="data-item-right link-direction" @onclick="() => SelectChapter(Chapter.ChapterObject)">
-                                                    <div class="fa fa-chevron-circle-right"></div>
                                                 </div>
                                             </div>
-                                        </div>
 
-                                    }
-                                </div>
+                                        }
+                                    </div>
+                                }
+
                             }
-
                         }
                     }
-                }
+                </div>
             </div>
         </div>
-
     }
 }
 
@@ -315,7 +317,6 @@ else
                     <div class="grid-actions">
 
                         <div class="btn-group">
-                            @*<button @onclick='(() => PrepareForExport(lstAll, "Chapter Export"))' class="btn btn-main btn-shadow" title="Export Smartflow Details"><i class="fa fa-file-export"></i><span>Export</span></button>*@
                             <button @onclick='(() => ShowChapterExportExcelModel())' class="btn btn-main btn-shadow" title="Export Smartflow Details"><i class="fa fa-file-export"></i><span>Export</span></button>
                         </div>
                         @if ((sessionState.isAdminUser))
@@ -340,8 +341,21 @@ else
                                 <EditForm Model="selectedChapter" OnValidSubmit="SaveChapterDetails">
 
                                     <div class="form-group">
-                                        <label>Smartflow Name</label>
-                                        <InputText @bind-Value="selectedChapter.Name" class="form-control form-control-lg" />
+                                        <label for="P4WCTG">Case Type Group</label>
+                                        <InputSelect class="form-control form-control-lg"
+                                                     @bind-Value="selectedChapter.P4WCaseTypeGroup">
+                                            <option value="">Select</option>
+                                            @foreach (var group in partnerCaseTypeGroups)
+                                                            {
+                                                <option value="@group.Name">
+                                                    @group.Name
+                                                </option>
+                                                            }
+                                        </InputSelect>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Step Name</label>
+                                        <InputText @bind-Value="selectedChapter.StepName" class="form-control form-control-lg" />
                                     </div>
                                     <div class="form-group">
                                         <label for="BgColour">Background Colour</label>
@@ -363,11 +377,12 @@ else
                                         <label>General Notes</label>
                                         <InputTextArea @bind-Value="selectedChapter.GeneralNotes" class="form-control form-control-lg" />
                                     </div>
+                                    <!--
                                     <div class="form-group">
                                         <label>Developer Notes</label>
                                         <InputTextArea @bind-Value="selectedChapter.DelvolperNotes" class="form-control form-control-lg" />
                                     </div>
-
+                                    -->
 
                                     <div class="button-container">
                                         <button type="submit" class="btn btn-main">Save Changes</button>
@@ -415,9 +430,7 @@ else
                                     <button @onclick='() => CondenseSeq("Docs")' class="btn btn-main btn-shadow @(SequenceIsValid("Docs") ? "invisible" : "")" title="Re-order Sequence Numbers"><i class="fa fa-sort-numeric-down"></i></button>
                                 </div>
                             }
-                            <div class="btn-group">
-                                <button @onclick='(() => PrepareForExport(lstDocs, "Chapter Export"))' class="btn btn-main btn-shadow" title="Export data to Excel or CSV"><i class="fa fa-file-export"></i><span>Export</span></button>
-                            </div>
+
                         }
                         <ModalTooltip Direction="top shift-right" Text="Documents and steps to be made available in the chapter for inserting into the case agenda!">
                             <span class="info-icon">
@@ -513,12 +526,13 @@ else
                                             @switch (doc.DocType)
                                             {
                                                 case "Doc":
-                                                    
-                                                    @if (!string.IsNullOrEmpty(doc.DocDisplayName) 
-                                                                && (doc.DocDisplayName.Substring(0,9).ToUpper().Contains("LTR")) )
+
+                                                    @if (!string.IsNullOrEmpty(doc.DocDisplayName)
+                                                               && (doc.DocDisplayName.Substring(0, 9).ToUpper().Contains("LTR")))
                                                     {
                                                         <span class="font-100"><span class="fa fa-file-alt mr-2"></span></span>
-                                                    }else 
+                                                    }
+                                                    else
                                                     {
                                                         <span class="font-100"><span class="fa fa-file mr-2"></span></span>
                                                     }
@@ -669,7 +683,6 @@ else
                                 {
                                     <button @onclick='() => PrepareForInsert(navDisplay, "Agenda")' class="btn btn-main btn-shadow" title="Add new agenda"><i class="fa fa-plus"></i><span>New</span></button>
                                 }
-                                <button @onclick='(() => PrepareForExport(lstAgendas, "Chapter Export"))' class="btn btn-main btn-shadow" title="Export data to Excel or CSV"><i class="fa fa-file-export"></i><span>Export</span></button>
                             </div>
                         }
                         <ModalTooltip Direction="top" Text="Correspondence stored in these agendas will be made avalible on the History tab.">
@@ -767,13 +780,11 @@ else
                             @if (sessionState.isAdminUser)
                             {
                                 <div class="btn-group">
-                                    <button @onclick='() => PrepareFeesForEdit()' class="btn btn-main btn-shadow" title="Update selected list of fees"><i class="fa fa-pencil-alt"></i><span>Update</span></button>
-                                    <button @onclick='() => CondenseSeq("Fees")' class="btn btn-main btn-shadow @(SequenceIsValid("Fees") ? "invisible" : "")" title="Re-order Sequence Numbers"><i class="fa fa-sort-numeric-down"></i></button>
+                                    <button @onclick='() => PrepareFeeForInsert("Insert")' class="btn btn-main btn-shadow" title="Add new fee"><i class="fa fa-plus"></i><span>New</span></button>
+                                    <button @onclick='() => CondenseFeeSeq("Fees")' class="btn btn-main btn-shadow @(FeeSeqNoIsValid() ? "invisible" : "")" title="Re-order Sequence Numbers"><i class="fa fa-sort-numeric-down"></i></button>
                                 </div>
                             }
-                            <div class="btn-group">
-                                <button @onclick='(() => PrepareForExport(lstFees, "Chapter Export"))' class="btn btn-main btn-shadow" title="Export data to Excel or CSV"><i class="fa fa-file-export"></i><span>Export</span></button>
-                            </div>
+
                         }
                         <ModalTooltip Direction="top" Text="Fees to be made available in the Smartflow. Default values will be automatically calculated where possible.">
                             <span class="info-icon">
@@ -786,84 +797,128 @@ else
                         {
                             <div class="btn-group sync-group invisible-md-down">
                                 <button type="button" @onclick="() => PrepareChapterSync()" class="btn btn-main btn-shadow @(!compareSystems ? "hidden" : "")" title="Sync To @(sessionState.selectedSystem == "Dev" ? "Live" : "Dev")"><i class="fa fa-sync"></i><span>Sync</span></button>
-                                <input type="checkbox" class="ml-1 mt-1" @onchange="() => ToggleComparison()" /><span class="ml-2 font-75 ">Compare to @(sessionState.selectedSystem == "Dev" ? "Live" : "Dev") </span>
+                                <input type="checkbox" class="ml-1 mt-1" @onchange="() => ToggleFeeComparison()" /><span class="ml-2 font-75 ">Compare to @(sessionState.selectedSystem == "Dev" ? "Live" : "Dev") </span>
                             </div>
                         }
                     </div>
 
                     <div class="@(sessionState.isAdminUser ? "grid-can-edit" : "") ">
-
-                        @foreach (var fee in lstFees)
+                        <div class="row grid-header invisible-md-down">
+                            <div class="data-item ">
+                                <div class="data-item-sub">
+                                    Name
+                                </div>
+                            </div>
+                            <div class="data-item ">
+                                <div class="data-item-sub">
+                                    Category
+                                </div>
+                            </div>
+                            <div class="data-item ">
+                                <div class="data-item-sub">
+                                    Posting Type
+                                </div>
+                            </div>
+                            <div class="data-item ">
+                                <div class="data-item-sub text-right">
+                                    Amount
+                                </div>
+                            </div>
+                        </div>
+                        @foreach (var fee in lstFees.OrderBy(F => F.FeeObject.SeqNo).ToList())
                         {
 
-                            <div class="row grid-row grid-row-lg @(rowChanged == fee.ChapterObject.SeqNo ? "row-changed" : "" )">
-                                <div class="col-12 data-item">
-                                    @if (!compareSystems)
+                    <div class="row grid-row grid-row-lg @(rowChanged == fee.FeeObject.SeqNo ? "row-changed" : "" )">
+                        <div class="data-item">
+                            @if (!compareSystems)
+                            {
+                                <div class="btn-ellipses float-left">
+                                    <span class="fa fa-ellipsis-v"></span>
+                                    <div class="ellipsis-menu">
+                                        <ul>
+                                            <li class="col-main" @onclick='(() => ShowChapterFeesModal("Edit", fee.FeeObject))'>
+                                                <span class="fa fa-pencil-alt mr-2"></span>
+                                                <span>Edit</span>
+                                            </li>
+                                            <li class="col-red" @onclick="() => PrepareChapterFeeDelete(fee)">
+                                                <span class="fa fa-trash-alt mr-2"></span>
+                                                <span>Delete</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="data-item-sub">
+                                    <span class="fa fa-pound-sign mr-2"></span> @fee.FeeObject.FeeName
+                                </div>
+
+                                @if (fee.FeeObject.VATable == "Y")
+                                {
+                                    <div class="data-item-right mr-2 font-100 hidden-md-down">
+                                        <ModalTooltip Direction="top" Text=@("VAT Included") Class="w-3">
+                                            <span class="fa fa-coins"></span>
+                                        </ModalTooltip>
+                                    </div>
+                                }
+
+                                @if (sessionState.isAdminUser)
+                                {
+                                    <div class="data-item-right mr-2 seq-change">
+                                        <div @onclick='() => MoveFeeSeqNo(fee.FeeObject,"Fees", "Up")'><span class="fa fa-angle-up"></span></div>
+                                        <div class="seq-no">@fee.FeeObject.SeqNo</div>
+                                        <div @onclick='() => MoveFeeSeqNo(fee.FeeObject,"Fees", "Down")'><span class="fa fa-angle-down"></span></div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="data-item-right mr-2">
+                                        <div class="seq-no">@fee.FeeObject.SeqNo</div>
+                                    </div>
+                                }
+
+
+                            }
+                            else
+                            {
+
+                                <div class="btn-ellipses float-left">
+                                    @if (!(fee.ComparisonIcon is null))
                                     {
-
-                                        <div class="data-item-sub">
-                                            <span class="fa fa-pound-sign mr-2"></span> @fee.ChapterObject.Name
-                                        </div>
-
-                                        @if (!(string.IsNullOrEmpty(lstVmFeeModalItems.Where(FMI => FMI.feeDefinition.FeeDesc == fee.ChapterObject.Name).Select(FMI => FMI.feeDefinition.WorkProvider).SingleOrDefault())))
+                                        @if (!(fee.ComparisonResult == "Exact match"))
                                         {
-                                            <div class="data-item-right mr-2 font-100">
-                                                <ModalTooltip Direction="left" Text=@("USED BY: " + lstVmFeeModalItems.Where(FMI => FMI.feeDefinition.FeeDesc == fee.ChapterObject.Name).Select(FMI => FMI.feeDefinition.WorkProvider).SingleOrDefault()) Class="w-3">
-                                                    <span class="fa fa-user-tie"></span>
-                                                </ModalTooltip>
-                                            </div>
-                                        }
-
-                                        @if (sessionState.isAdminUser)
-                                        {
-                                            <div class="data-item-right mr-2 seq-change">
-                                                <div @onclick='() => MoveSeq(fee.ChapterObject,"Fees", "Up")'><span class="fa fa-angle-up"></span></div>
-                                                <div class="seq-no">@fee.ChapterObject.SeqNo</div>
-                                                <div @onclick='() => MoveSeq(fee.ChapterObject,"Fees", "Down")'><span class="fa fa-angle-down"></span></div>
-                                            </div>
+                                            <div class="btn-dashed" @onclick="() => PrepareFeeForComparison(fee)"><span class="fa fa-@fee.ComparisonIcon"></span></div>
                                         }
                                         else
                                         {
-                                            <div class="data-item-right mr-2">
-                                                <div class="seq-no">@fee.ChapterObject.SeqNo</div>
-                                            </div>
+                                            <span class="fa fa-@fee.ComparisonIcon"></span>
                                         }
-
                                     }
                                     else
                                     {
-
-                                        <div class="btn-ellipses float-left">
-                                            @if (!(fee.ComparisonIcon is null))
-                                            {
-                                                @if (!(fee.ComparisonResult == "Exact match"))
-                                                {
-                                                    <div class="btn-dashed" @onclick="() => PrepareForComparison(fee)"><span class="fa fa-@fee.ComparisonIcon"></span></div>
-                                                }
-                                                else
-                                                {
-                                                    <span class="fa fa-@fee.ComparisonIcon"></span>
-                                                }
-                                            }
-                                            else
-                                            {
-                                                <div class="spinner"></div>
-                                            }
-
-                                        </div>
-
-
-                                        <div class="data-item-sub">
-                                            <span class="fa fa-pound-sign mr-2"></span> @fee.ChapterObject.Name
-                                        </div>
-                                        <div class="data-item-right mr-2">
-                                            <div class="seq-no">@fee.ChapterObject.SeqNo</div>
-                                        </div>
+                                        <div class="spinner"></div>
                                     }
 
                                 </div>
 
-                            </div>
+
+                                <div class="data-item-sub">
+                                    <span class="fa fa-pound-sign mr-2"></span> @fee.FeeObject.FeeName
+                                </div>
+                                <div class="data-item-right mr-2">
+                                    <div class="seq-no">@fee.FeeObject.SeqNo</div>
+                                </div>
+                            }
+
+                        </div>
+                        <div class="hidden-md-down data-item ">
+                            <div class="data-item-sub font-85 pl-3">@fee.FeeObject.FeeCategory</div>
+                        </div>
+                        <div class="hidden-md-down data-item ">
+                            <div class="data-item-sub font-85 pl-3">@fee.FeeObject.PostingType</div>
+                        </div>
+                        <div class="data-item">
+                            <div class="data-item-sub text-right font-85 pl-3">@string.Format("{0:C2}", fee.FeeObject.Amount)</div>
+                        </div>
+                    </div>
 
                         }
                     </div>
@@ -889,9 +944,6 @@ else
                                 </div>
                             }
 
-                            <div class="btn-group">
-                                <button @onclick='(() => PrepareForExport(lstStatus, "Chapter Export"))' class="btn btn-main btn-shadow" title="Export data to Excel or CSV"><i class="fa fa-file-export"></i><span>Export</span></button>
-                            </div>
                         }
                         <ModalTooltip Direction="top" Text="Status options to assist with the flow of the Smartflow and to indicate when the Smartflow is complete">
                             <span class="info-icon">
@@ -1114,42 +1166,42 @@ else
 
 
 
-                        <div class="grid-can-edit chapter-scroll-list" >
+                        <div class="grid-can-edit chapter-scroll-list">
                             @foreach (var fileDesc in ListFileDescriptions.Where(F => F.FilePath.Contains(".txt") || F.FilePath.Contains(".JSON")).ToList().OrderByDescending(F => F.FileDate))
                             {
-                            <div class="row grid-row grid-row-sm">
-                                <div class="data-item">
-                                    <div class="btn-ellipses float-left">
-                                        <span class="fa fa-ellipsis-v"></span>
-                                        <div class="ellipsis-menu">
-                                            <ul>
-                                                <li class="col-main" @onclick='(() => ReadBackUpFile(fileDesc.FilePath))'>
-                                                    <span class="fa fa-window-restore mr-2"></span>
-                                                    <span>Restore</span>
-                                                </li>
-                                                <li class="col-main" @onclick='(() => DownloadFile(fileDesc))'>
-                                                    <span class="fa fa-download mr-2"></span>
-                                                    <span>Download</span>
-                                                </li>
-                                                <li class="col-main" @onclick='(() => PrepareBackUpForDelete(fileDesc))'>
-                                                    <span class="fa fa-trash-alt mr-2"></span>
-                                                    <span>Delete</span>
-                                                </li>
-                                            </ul>
+                                <div class="row grid-row grid-row-sm">
+                                    <div class="data-item">
+                                        <div class="btn-ellipses float-left">
+                                            <span class="fa fa-ellipsis-v"></span>
+                                            <div class="ellipsis-menu">
+                                                <ul>
+                                                    <li class="col-main" @onclick='(() => ReadBackUpFile(fileDesc.FilePath))'>
+                                                        <span class="fa fa-window-restore mr-2"></span>
+                                                        <span>Restore</span>
+                                                    </li>
+                                                    <li class="col-main" @onclick='(() => DownloadFile(fileDesc))'>
+                                                        <span class="fa fa-download mr-2"></span>
+                                                        <span>Download</span>
+                                                    </li>
+                                                    <li class="col-main" @onclick='(() => PrepareBackUpForDelete(fileDesc))'>
+                                                        <span class="fa fa-trash-alt mr-2"></span>
+                                                        <span>Delete</span>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="data-item-sub">
+                                            @fileDesc.FileName
                                         </div>
                                     </div>
-                                    <div class="data-item-sub">
-                                        @fileDesc.FileName
+                                    <div class="data-item ">
+                                        <div class="data-item-sub">
+                                            @fileDesc.FileDate.ToString("dd MMM yyyy")
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="data-item ">
-                                    <div class="data-item-sub">
-                                        @fileDesc.FileDate.ToString("dd MMM yyyy")
-                                    </div>
-                                </div>
 
 
-                            </div>
+                                </div>
                             }
                         </div>
 

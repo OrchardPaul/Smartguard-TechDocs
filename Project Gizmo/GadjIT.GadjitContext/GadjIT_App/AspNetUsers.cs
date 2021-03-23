@@ -43,6 +43,8 @@ namespace GadjIT.GadjitContext.GadjIT_App
         [StringLength(256)]
         public string SelectedUri { get; set; }
         public int SelectedCompanyId { get; set; }
+        public string MainBackgroundImage { get; set; }
+
 
         [InverseProperty("User")]
         public virtual ICollection<AspNetUserClaims> AspNetUserClaims { get; set; }

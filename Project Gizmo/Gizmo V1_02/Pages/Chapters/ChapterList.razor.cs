@@ -68,9 +68,10 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         private List<VmUsrOrDefChapterManagement> lstAll { get; set; } = new List<VmUsrOrDefChapterManagement>();
         private List<VmUsrOrDefChapterManagement> lstAltSystemChapterItems { get; set; } = new List<VmUsrOrDefChapterManagement>();
+        private List<VmFee> lstAltSystemFeeItems { get; set; } = new List<VmFee>();
 
         private List<VmUsrOrDefChapterManagement> lstAgendas { get; set; } = new List<VmUsrOrDefChapterManagement>();
-        private List<VmUsrOrDefChapterManagement> lstFees { get; set; } = new List<VmUsrOrDefChapterManagement>();
+        private List<VmFee> lstFees { get; set; } = new List<VmFee>();
         private List<VmChapterFee> lstVmFeeModalItems { get; set; } = new List<VmChapterFee>();
         private List<VmUsrOrDefChapterManagement> lstDocs { get; set; } = new List<VmUsrOrDefChapterManagement>();
         private List<VmUsrOrDefChapterManagement> lstStatus { get; set; } = new List<VmUsrOrDefChapterManagement>();
@@ -102,6 +103,7 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         public VmDataViews EditDataViewObject = new VmDataViews { DataView = new DataViews() };
         public VmUsrOrDefChapterManagement editObject = new VmUsrOrDefChapterManagement { ChapterObject = new UsrOrDefChapterManagement() };
+        public VmFee editFeeObject = new VmFee { FeeObject = new Fee() };
         public VmUsrOrDefChapterManagement editChapterObject = new VmUsrOrDefChapterManagement { ChapterObject = new UsrOrDefChapterManagement() };
 
 
@@ -190,6 +192,7 @@ namespace Gizmo_V1_02.Pages.Chapters
                     selectedChapter.ShowPartnerNotes = "N";
                 }
             }
+
         }
 
 
@@ -273,6 +276,7 @@ namespace Gizmo_V1_02.Pages.Chapters
                 selectedChapter.Name = chapter.Name;
             }
 
+            selectedChapter.Fees = selectedChapter.Fees is null ? new List<Fee>() : selectedChapter.Fees;
             selectedChapterId = chapter.Id;
             compareSystems = false;
             rowChanged = 0;
@@ -391,34 +395,30 @@ namespace Gizmo_V1_02.Pages.Chapters
                 }
                 if (listType == "Fees" | listType == "All")
                 {
-                    lstFees = lstAll
-                                    .OrderBy(A => A.ChapterObject.SeqNo)
-                                    .Where(A => A.ChapterObject.Type == "Fee")
-                                    .ToList();
+                    lstFees = selectedChapter.Fees.Select(F => new VmFee { FeeObject = F }).ToList();
 
                     lstVmFeeModalItems = feeDefinitions
                                             .Select(FD => new VmChapterFee
                                             {
                                                 FeeItem = lstFees
-                                                                .Where(F => FD.FeeDesc == F.ChapterObject.Name)
+                                                                .Where(F => FD.FeeDesc == F.FeeObject.FeeName)
                                                                 .SingleOrDefault() is null
-                                                                ? new UsrOrDefChapterManagement
+                                                                ? new Fee
                                                                 {
-                                                                    ParentId = selectedChapterId,
-                                                                    Name = FD.FeeDesc,
+                                                                    FeeName = FD.FeeDesc,
                                                                     SeqNo = 1000,
-                                                                    Type = "Fee",
-                                                                    CaseType = "",
-                                                                    CaseTypeGroup = "",
-                                                                    CompleteName = ""
+                                                                    FeeCategory = FD.Category,
+                                                                    Amount = 0,
+                                                                    VATable = "N",
+                                                                    PostingType = ""
                                                                 }
                                                                 : lstFees
-                                                                    .Where(F => FD.FeeDesc == F.ChapterObject.Name)
-                                                                    .Select(F => F.ChapterObject)
+                                                                    .Where(F => FD.FeeDesc == F.FeeObject.FeeName)
+                                                                    .Select(F => F.FeeObject)
                                                                     .SingleOrDefault(),
                                                 feeDefinition = FD,
                                                 selected = lstFees
-                                                                .Where(F => FD.FeeDesc == F.ChapterObject.Name)
+                                                                .Where(F => FD.FeeDesc == F.FeeObject.FeeName)
                                                                 .SingleOrDefault() is null
                                                                 ? false : true
                                             })
@@ -459,6 +459,16 @@ namespace Gizmo_V1_02.Pages.Chapters
             }
         }
 
+        private async void ToggleFeeComparison()
+        {
+            compareSystems = !compareSystems;
+
+            if (compareSystems)
+            {
+                await CompareSelectedFeeToAltSystem();
+            }
+        }
+
         private async Task<bool> RefreshAltSystemChaptersList()
         {
             try
@@ -477,6 +487,7 @@ namespace Gizmo_V1_02.Pages.Chapters
                 return false;
             }
         }
+
 
         private async Task<bool> CompareSelectedChapterToAltSystem()
         {
@@ -513,10 +524,10 @@ namespace Gizmo_V1_02.Pages.Chapters
                         CompareChapterItemsToAltSytem(item);
                     }
 
-                    foreach (var item in lstFees)
-                    {
-                        CompareChapterItemsToAltSytem(item);
-                    }
+                    //foreach (var item in lstFees)
+                    //{
+                    //    CompareChapterItemsToAltSytem(item);
+                    //}
 
                     foreach (var item in lstStatus)
                     {
@@ -530,6 +541,44 @@ namespace Gizmo_V1_02.Pages.Chapters
                 }
 
 
+            }
+
+            return true;
+        }
+
+        private async Task<bool> CompareSelectedFeeToAltSystem()
+        {
+            if (compareSystems)
+            {
+                var test = await RefreshChapterItems(navDisplay);
+
+                await RefreshAltSystemChaptersList();
+
+                AltChapterObject = lstAltSystemChapters
+                                        .Where(A => A.ChapterObject.Name == SelectedChapterObject.Name)
+                                        .Where(A => A.ChapterObject.CaseType == SelectedChapterObject.CaseType)
+                                        .Where(A => A.ChapterObject.CaseTypeGroup == SelectedChapterObject.CaseTypeGroup)
+                                        .Select(C => C.ChapterObject)
+                                        .SingleOrDefault();
+
+                if (!(AltChapterObject is null))
+                {
+                    altChapter = JsonConvert.DeserializeObject<VmChapter>(AltChapterObject.ChapterData);
+
+                    var temp = altChapter.Fees is null ? new List<Fee>() : altChapter.Fees;
+
+                    lstAltSystemFeeItems = temp.Select(T => new VmFee { FeeObject = T }).ToList();
+
+                    foreach (var item in lstFees)
+                    {
+                        CompareFeeItemsToAltSytem(item);
+                    }
+
+                    await InvokeAsync(() =>
+                    {
+                        StateHasChanged();
+                    });
+                }
             }
 
             return true;
@@ -642,9 +691,45 @@ namespace Gizmo_V1_02.Pages.Chapters
             return chapterItem;
         }
 
+        private VmFee CompareFeeItemsToAltSytem(VmFee chapterItem)
+        {
+            var altObject = lstAltSystemFeeItems
+                                .Where(A => A.FeeObject.FeeName == chapterItem.FeeObject.FeeName)
+                                .SingleOrDefault();
+
+            if (altObject is null)
+            {
+                chapterItem.ComparisonResult = "No match";
+                chapterItem.ComparisonIcon = "times";
+            }
+            else
+            {
+                if (chapterItem.IsChapterItemMatch(altObject))
+                {
+                    chapterItem.ComparisonResult = "Exact match";
+                    chapterItem.ComparisonIcon = "check";
+
+                }
+                else
+                {
+                    chapterItem.ComparisonResult = "Partial match";
+                    chapterItem.ComparisonIcon = "exclamation";
+
+                }
+
+            }
+
+            return chapterItem;
+        }
+
         public async void CompareChapterItemsToAltSytemAction()
         {
             await CompareSelectedChapterToAltSystem();
+        }
+
+        public async void CompareFeeItemsToAltSytemAction()
+        {
+            await CompareSelectedFeeToAltSystem();
         }
 
         private void PrepareForExport(List<VmUsrOrDefChapterManagement> items, string header)
@@ -692,11 +777,6 @@ namespace Gizmo_V1_02.Pages.Chapters
         }
 
 
-        private void PrepareFeesForEdit()
-        {
-            ShowChapterFeesModal();
-        }
-
         private void PrepareForInsert(string header, string type)
         {
             selectedList = type;
@@ -723,15 +803,19 @@ namespace Gizmo_V1_02.Pages.Chapters
             }
             else
             {
-                editObject.ChapterObject.SeqNo = lstFees
-                                    .OrderByDescending(A => A.ChapterObject.SeqNo)
-                                    .Select(A => A.ChapterObject.SeqNo)
+                editFeeObject.FeeObject.SeqNo = lstFees
+                                    .OrderByDescending(A => A.FeeObject.SeqNo)
+                                    .Select(A => A.FeeObject.SeqNo)
                                     .FirstOrDefault() + 1;
             }
 
             editObject.ChapterObject.SeqNo = editObject.ChapterObject.SeqNo is null
                                                         ? 1
                                                         : editObject.ChapterObject.SeqNo;
+
+            editFeeObject.FeeObject.SeqNo = editFeeObject.FeeObject.SeqNo is null
+                                                        ? 1
+                                                        : editFeeObject.FeeObject.SeqNo;
 
             editObject.ChapterObject.ParentId = selectedChapterId;
 
@@ -883,9 +967,9 @@ namespace Gizmo_V1_02.Pages.Chapters
                 case "Docs":
                     lstItems = lstDocs;
                     break;
-                case "Fees":
-                    lstItems = lstFees;
-                    break;
+                //case "Fees":
+                //    lstItems = lstFees;
+                //    break;
                 case "Status":
                     lstItems = lstStatus;
                     break;
@@ -963,6 +1047,37 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         }
 
+        protected async void MoveFeeSeqNo(Fee selectobject, string listType, string direction)
+        {
+            seqMoving = true; //prevents changes to the form whilst process of changing seq is carried out
+
+            int incrementBy;
+
+            incrementBy = (direction.ToLower() == "up" ? -1 : 1);
+
+            rowChanged = (int)(selectobject.SeqNo + incrementBy);
+
+            var swapItem = lstFees.Where(D => D.FeeObject.SeqNo == (selectobject.SeqNo + incrementBy)).SingleOrDefault();
+            if (!(swapItem is null))
+            {
+                selectobject.SeqNo += incrementBy;
+                swapItem.FeeObject.SeqNo = swapItem.FeeObject.SeqNo + (incrementBy * -1);
+
+                SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(selectedChapter);
+                await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
+
+            }
+
+            await RefreshChapterItems(listType);
+            await InvokeAsync(() =>
+            {
+                StateHasChanged();
+            });
+
+
+            seqMoving = false;
+
+        }
 
         private List<VmUsrOrDefChapterManagement> GetRelevantChapterList(string listType)
         {
@@ -973,9 +1088,9 @@ namespace Gizmo_V1_02.Pages.Chapters
                 case "Docs":
                     listItems = lstDocs;
                     break;
-                case "Fees":
-                    listItems = lstFees;
-                    break;
+                //case "Fees":
+                //    listItems = lstFees;
+                //    break;
                 case "Status":
                     listItems = lstStatus;
                     break;
@@ -1038,6 +1153,31 @@ namespace Gizmo_V1_02.Pages.Chapters
             {
                 seqNo += 1;
                 item.DataView.BlockNo = seqNo;
+            }
+
+            SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(selectedChapter);
+            await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
+
+            await RefreshChapterItems(ListType);
+
+            await InvokeAsync(() =>
+            {
+                StateHasChanged();
+            });
+        }
+
+        protected async void CondenseFeeSeq(string ListType)
+        {
+            await RefreshChapterItems(ListType);
+
+            var ListItems = lstFees;
+
+            int seqNo = 0;
+
+            foreach (VmFee item in ListItems.OrderBy(A => A.FeeObject.SeqNo))
+            {
+                seqNo += 1;
+                item.FeeObject.SeqNo = seqNo;
             }
 
             SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(selectedChapter);
@@ -1280,17 +1420,38 @@ namespace Gizmo_V1_02.Pages.Chapters
             Modal.Show<ChapterAttachments>(selectedList, parameters, options);
         }
 
-
-        protected void ShowChapterFeesModal()
+        protected void PrepareFeeForInsert (string option)
         {
-            Action RefreshFeeOrder = CondenseFeeSeq;
+            Fee taskObject = new Fee();
+            if (!(lstFees is null ) && lstFees.Count() > 0)
+            {
+                taskObject.SeqNo = lstFees.Select(F => F.FeeObject.SeqNo).OrderByDescending(F => F).FirstOrDefault() + 1;
+            }
+            else
+            {
+                taskObject.SeqNo = 1;
+            }
+            ShowChapterFeesModal(option, taskObject);
+        }
 
+        protected void ShowChapterFeesModal(string option, Fee taskObject)
+        {
+            Action dataChanged = CondenseFeeSeq;
+            Fee copyObject = new Fee { 
+                FeeName = taskObject.FeeName 
+                , FeeCategory = taskObject.FeeCategory
+                , SeqNo = taskObject.SeqNo
+                , Amount = taskObject.Amount
+                , VATable = taskObject.VATable
+                , PostingType = taskObject.PostingType
+            };
             var parameters = new ModalParameters();
-            parameters.Add("RefreshFeeOrder", RefreshFeeOrder);
-            parameters.Add("feeItems", lstVmFeeModalItems);
-            parameters.Add("SeletedChapterId", selectedChapterId);
+            parameters.Add("Option", option);
+            parameters.Add("TaskObject", taskObject);
+            parameters.Add("CopyObject", copyObject);
             parameters.Add("SelectedChapter", selectedChapter);
             parameters.Add("SelectedChapterObject", SelectedChapterObject);
+            parameters.Add("DataChanged", dataChanged);
 
             var options = new ModalOptions()
             {
@@ -1321,6 +1482,24 @@ namespace Gizmo_V1_02.Pages.Chapters
             Modal.Show<ModalDelete>("Delete?", parameters, options);
         }
 
+        protected void PrepareChapterFeeDelete(VmFee selectedChapterItem)
+        {
+            editFeeObject = selectedChapterItem;
+
+            Action SelectedDeleteAction = HandleChapterFeeDelete;
+            var parameters = new ModalParameters();
+            parameters.Add("InfoHeader", "Delete?");
+            parameters.Add("ModalHeight", "300px");
+            parameters.Add("ModalWidth", "500px");
+            parameters.Add("DeleteAction", SelectedDeleteAction);
+
+            var options = new ModalOptions()
+            {
+                Class = "blazored-custom-modal"
+            };
+
+            Modal.Show<ModalDelete>("Delete?", parameters, options);
+        }
 
 
         protected void PrepareDataViewDelete(VmDataViews selectedDataView)
@@ -1412,12 +1591,51 @@ namespace Gizmo_V1_02.Pages.Chapters
             Modal.Show<ChapterItemComparison>("Synchronise Smartflow Item", parameters, options);
         }
 
+        private void PrepareFeeForComparison(VmFee selectedItem)
+        {
+            editFeeObject = selectedItem;
 
+            ShowFeeComparisonModal();
+        }
+
+        protected void ShowFeeComparisonModal()
+        {
+            Action Compare = CompareFeeItemsToAltSytemAction;
+
+            var parameters = new ModalParameters();
+            parameters.Add("Object", editFeeObject);
+            parameters.Add("ComparisonRefresh", Compare);
+            parameters.Add("sessionState", sessionState);
+            parameters.Add("CurrentSysParentId", selectedChapterId);
+            parameters.Add("AlternateSysParentId", altSysSelectedChapterId);
+            parameters.Add("CurrentChapter", selectedChapter);
+            parameters.Add("AltChapter", altChapter);
+            parameters.Add("CurrentChapterRow", SelectedChapterObject);
+            parameters.Add("AltChapterRow", AltChapterObject);
+
+            var options = new ModalOptions()
+            {
+                Class = "blazored-custom-modal modal-chapter-comparison"
+            };
+
+            Modal.Show<ChapterFeeComparison>("Synchronise Smartflow Item", parameters, options);
+        }
 
         private async void HandleChapterDetailDelete()
         {
 
             selectedChapter.ChapterItems.Remove(editObject.ChapterObject);
+            SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(selectedChapter);
+            await chapterManagementService.Update(SelectedChapterObject);
+
+            await RefreshChapterItems(navDisplay);
+            StateHasChanged();
+        }
+
+        private async void HandleChapterFeeDelete()
+        {
+
+            selectedChapter.Fees.Remove(editFeeObject.FeeObject);
             SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(selectedChapter);
             await chapterManagementService.Update(SelectedChapterObject);
 
@@ -1694,6 +1912,29 @@ namespace Gizmo_V1_02.Pages.Chapters
             }
         }
 
+        private bool FeeSeqNoIsValid()
+        {
+            if (seqMoving == false | compareSystems == true)
+            {
+
+                bool isValid = true;
+
+                for (int i = 0; i < lstFees.Count; i++)
+                {
+                    if (lstFees[i].FeeObject.SeqNo != i + 1)
+                    {
+                        isValid = false;
+                    }
+
+                }
+
+                return isValid;
+            }
+            else
+            {
+                return true;
+            }
+        }
 
         /// <summary>
         /// moves the AA (transparancy) element of an android hex color to the end of the string

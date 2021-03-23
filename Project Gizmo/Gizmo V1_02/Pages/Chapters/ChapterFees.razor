@@ -1,43 +1,70 @@
-﻿@using Gizmo_V1_02.Pages.Shared.Modals
-    
-<div class="modal-body">
-<h4>Select fees to be included in the Smartflow</h4>
-<div class="grid-can-edit" id="modal-edit-fees-list">
-    @foreach (var fee in feeItems)
-    {
-        <div class="row grid-row grid-row-md">
-            <div class="col-12 data-item @(fee.selected ? "data-item-selected" : "" )">
-                <div class="data-item-sub">
-                    @fee.FeeItem.Name
-                </div>  
-                @if (!string.IsNullOrEmpty(@fee.feeDefinition.WorkProvider))
-                    {
-            <div class="data-item-right font-100">
-                <ModalTooltip Direction="tooltip-left" Text=@("USED BY: " + @fee.feeDefinition.WorkProvider) Class="tooltip-w-3">
-                    <span class="fa fa-user-tie"></span>
-                </ModalTooltip>
-            </div>
-                    }
-                    @if (fee.selected)
-                    {
-                        <div class="data-item-right link-item" title="Click to remove" @onclick="() => ToggleSelectedFee(fee)">
-                            <span class="fa fa-check"></span>
-                        </div>
-                    }
-                    else
-                    {
-                        <div class="data-item-right link-item col-red" title="Click to include this fee" @onclick="() => ToggleSelectedFee(fee)">
-                            <span class="fa fa-times-circle"></span>
-                        </div>
-                    }
+﻿@using Gizmo_V1_02.Data.CustomFormObjects;
 
-                
-            </div>
+<EditForm Model="@CopyObject" OnValidSubmit="HandleValidSubmit">
+    <div class="modal-body">
+
+        <DataAnnotationsValidator />
+
+        <div class="form-group">
+            <label for="FeeName">Fee Name</label>
+            <InputText class="form-control form-control-xl" @bind-Value="@CopyObject.FeeName" />
         </div>
-    }
-</div>
+        <div class="form-group">
+            <label for="FeeNCategory">Fee Category</label>
+            <InputSelect class="form-control form-control-xl" @bind-Value="CopyObject.FeeCategory">
+                @if (CopyObject.FeeCategory is null)
+                {
+                    <option value="">Select</option>
+                }
+                else
+                {
+                    <option value="@CopyObject.FeeCategory">@CopyObject.FeeCategory</option>
+                }
 
-<div class="button-container">
-    <button type="submit" class="btn btn-main btn-shadow" @onclick="() => HandleValidSubmit()">Save Changes</button>
-</div>
-</div>
+
+                @foreach (var category in FeeCategories.Where(C => C != CopyObject.FeeCategory).OrderBy(C => C).ToList())
+                {
+                    <option value="@category">
+                        @category
+                    </option>
+                }
+            </InputSelect>
+        </div>
+        <div class="form-group">
+            <label for="Amount">Amount</label>
+            <InputNumber class="form-control form-control-xl" @bind-Value="@CopyObject.Amount" />
+        </div>
+        <div class="form-group">
+            <label for="VATable">VAT</label>
+            <InputCheckbox class="form-control" @bind-Value="VATable" />
+        </div>
+        <div class="form-group">
+            <label for="PostingType">Posting Type</label>
+            <InputSelect class="form-control form-control-xl" @bind-Value="CopyObject.PostingType">
+                @if (CopyObject.PostingType is null)
+                {
+                    <option value="">Select</option>
+                }
+                else
+                {
+                    <option value="@CopyObject.PostingType">@PostingTypes.Where(P => P.Code == CopyObject.PostingType).Select(P => P.Description).SingleOrDefault()</option>
+                }
+
+
+                @foreach (var postingtype in PostingTypes.Where(C => C.Code != CopyObject.PostingType).OrderBy(C => C.Code).ToList())
+                {
+                    <option value="@postingtype.Code">
+                        @postingtype.Description
+                    </option>
+                }
+            </InputSelect>
+        </div>
+
+ 
+    </div>
+
+    <div class="button-container">
+        <button type="submit" class="btn btn-main">Save</button>
+        <button type="button" class="btn btn-secondary" @onclick="Close">Cancel</button>
+    </div>
+</EditForm>

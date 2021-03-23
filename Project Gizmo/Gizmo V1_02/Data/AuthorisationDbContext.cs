@@ -14,10 +14,7 @@ namespace Gizmo_V1_02.Data
 
     public class AuthorisationDBContext : DbContext
     {
-        public AuthorisationDBContext()
-        {
-        }
-
+        
         public AuthorisationDBContext(DbContextOptions<AuthorisationDBContext> options)
             : base(options)
         {
