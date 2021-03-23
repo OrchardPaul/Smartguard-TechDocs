@@ -88,12 +88,12 @@ namespace Gizmo_V1_02.Pages.Chapters
         public string selectColour { 
             get 
             { 
-                return selectedChapter.BackgroundColour; 
+                return selectedChapter.BackgroundColourName; 
             } 
             set 
             { 
-                selectedChapter.BackgroundColour = value; 
-                selectedChapter.BackgroundColourName = ListChapterColours.Where(C => C.ColourCode == value).Select(C => C.ColourName).FirstOrDefault(); 
+                selectedChapter.BackgroundColour = ListChapterColours.Where(C => C.ColourName == value).Select(C => C.ColourCode).FirstOrDefault(); 
+                selectedChapter.BackgroundColourName = value; 
             } 
         }
 

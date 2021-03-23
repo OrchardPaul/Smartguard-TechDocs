@@ -368,7 +368,7 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
             workSheetHeader.Cells[6, 1].Value = "Colour:";
             workSheetHeader.Cells[6, 2].Value = selectedChapter.BackgroundColourName;
 
-            workSheetHeader.Cells[7, 1].Value = "General Notes (Ticker): ";
+            workSheetHeader.Cells[7, 1].Value = "General Notes: ";
             workSheetHeader.Cells[7, 2].Value = selectedChapter.GeneralNotes;
 
             /*
@@ -384,14 +384,14 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
             workSheetAgenda.DefaultRowHeight = 12;
 
             //Header of table
-            workSheetAgenda.Row(1).Height = 20;
-            workSheetAgenda.Row(1).Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-            workSheetAgenda.Row(1).Style.Font.Bold = true;
-            workSheetAgenda.Cells[1, 1].Value = "Agenda Name";
+            workSheetAgenda.Row(2).Height = 20;
+            workSheetAgenda.Row(2).Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+            workSheetAgenda.Row(2).Style.Font.Bold = true;
+            workSheetAgenda.Cells[2, 1].Value = "Agenda Name";
 
             
             //Body of table
-            int recordIndex = 2;
+            int recordIndex = 3;
             foreach (var chapterItem in selectedChapter.ChapterItems.Where(C => C.Type == "Agenda").OrderBy(C => C.SeqNo).ToList())
             {
                 workSheetAgenda.Cells[recordIndex, 1].Value = string.IsNullOrEmpty(chapterItem.Name) ? "" : chapterItem.Name;
@@ -415,15 +415,15 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
             workSheetStatus.DefaultRowHeight = 12;
 
             //Header of table
-            workSheetStatus.Row(1).Height = 20;
-            workSheetStatus.Row(1).Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-            workSheetStatus.Row(1).Style.Font.Bold = true;
-            workSheetStatus.Cells[1, 1].Value = "Status Name";
-            workSheetStatus.Cells[1, 2].Value = "End Of Flow (Y or Blank)";
+            workSheetStatus.Row(2).Height = 20;
+            workSheetStatus.Row(2).Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+            workSheetStatus.Row(2).Style.Font.Bold = true;
+            workSheetStatus.Cells[2, 1].Value = "Status Name";
+            workSheetStatus.Cells[2, 2].Value = "End Of Flow (Y or Blank)";
 
 
             //Body of table
-            recordIndex = 2;
+            recordIndex = 3;
             foreach (var chapterItem in selectedChapter.ChapterItems.Where(C => C.Type == "Status").OrderBy(C => C.SeqNo).ToList())
             {
                 workSheetStatus.Cells[recordIndex, 1].Value = string.IsNullOrEmpty(chapterItem.Name) ? "" : chapterItem.Name;
@@ -434,6 +434,41 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
 
             workSheetStatus.Column(1).AutoFit();
             workSheetStatus.Column(2).AutoFit();
+
+
+            /*
+             * 
+             * Fee
+             * 
+             * 
+             */
+
+            var workSheetFees = excel.Workbook.Worksheets.Add("Fees");
+
+            workSheetFees.TabColor = System.Drawing.Color.Black;
+            workSheetFees.DefaultRowHeight = 12;
+
+            //Header of table
+            workSheetFees.Row(1).Height = 20;
+            workSheetFees.Row(1).Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+            workSheetFees.Row(1).Style.Font.Bold = true;
+            workSheetFees.Cells[2, 1].Value = "Fee Name";
+            workSheetFees.Cells[2, 2].Value = "Fee Category";
+            workSheetFees.Cells[2, 3].Value = "Fee Amount";
+            workSheetFees.Cells[2, 4].Value = "VATable";
+            workSheetFees.Cells[2, 5].Value = "Posting Type";
+
+            //Body of table
+            recordIndex = 3;
+            foreach (var chapterItem in selectedChapter.ChapterItems.Where(C => C.Type == "Fee").OrderBy(C => C.SeqNo).ToList())
+            {
+                workSheetFees.Cells[recordIndex, 1].Value = string.IsNullOrEmpty(chapterItem.Name) ? "" : chapterItem.Name;
+
+                recordIndex++;
+            }
+
+            workSheetFees.Column(1).AutoFit();
+
 
 
             /*
@@ -452,18 +487,18 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
             workSheetDocument.Row(1).Height = 20;
             workSheetDocument.Row(1).Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
             workSheetDocument.Row(1).Style.Font.Bold = true;
-            workSheetDocument.Cells[1, 1].Value = "Item Name";
-            workSheetDocument.Cells[1, 2].Value = "Alternative Item Name";
-            workSheetDocument.Cells[1, 3].Value = "Reschedule Days";
-            workSheetDocument.Cells[1, 4].Value = "Reschedule As Description";
-            workSheetDocument.Cells[1, 5].Value = "Step History Description";
-            workSheetDocument.Cells[1, 6].Value = "Status Change";
-            workSheetDocument.Cells[1, 7].Value = "Item User Message";
-            workSheetDocument.Cells[1, 8].Value = "Popup Alert";
-            workSheetDocument.Cells[1, 9].Value = "Notes to Developer";
+            workSheetDocument.Cells[2, 1].Value = "Item Name";
+            workSheetDocument.Cells[2, 2].Value = "Alternative Item Name";
+            workSheetDocument.Cells[2, 3].Value = "Reschedule Days";
+            workSheetDocument.Cells[2, 4].Value = "Reschedule As Description";
+            workSheetDocument.Cells[2, 5].Value = "Step History Description";
+            workSheetDocument.Cells[2, 6].Value = "Status Change";
+            workSheetDocument.Cells[2, 7].Value = "Item User Message";
+            workSheetDocument.Cells[2, 8].Value = "Popup Alert";
+            workSheetDocument.Cells[2, 9].Value = "Notes to Developer";
 
             //Body of table
-            recordIndex = 2;
+            recordIndex = 3;
             foreach (var chapterItem in selectedChapter.ChapterItems.Where(C => docTypes.Contains(C.Type)).OrderBy(C => C.SeqNo).ToList())
             {
                 workSheetDocument.Cells[recordIndex, 1].Value = string.IsNullOrEmpty(chapterItem.Name) ? "" : chapterItem.Name;
@@ -500,7 +535,7 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
 
             var workSheetAttachments = excel.Workbook.Worksheets.Add("Attachments");
 
-            workSheetAttachments.TabColor = System.Drawing.Color.Black;
+            workSheetAttachments.TabColor = System.Drawing.Color.DarkGray;
             workSheetAttachments.DefaultRowHeight = 12;
 
             //Header of table
@@ -520,18 +555,18 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
             workSheetAttachments.Row(1).Height = 20;
             workSheetAttachments.Row(1).Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
             workSheetAttachments.Row(1).Style.Font.Bold = true;
-            workSheetAttachments.Cells[1, 1].Value = "Item Name";
-            workSheetAttachments.Cells[1, 2].Value = "Alternative Item Name";
-            workSheetAttachments.Cells[1, 3].Value = "Reschedule Days";
-            workSheetAttachments.Cells[1, 4].Value = "Reschedule As Description";
-            workSheetAttachments.Cells[1, 5].Value = "Step History Description";
-            workSheetAttachments.Cells[1, 6].Value = "Status Change";
-            workSheetAttachments.Cells[1, 7].Value = "Item User Message";
-            workSheetAttachments.Cells[1, 8].Value = "Popup Alert";
-            workSheetAttachments.Cells[1, 9].Value = "Notes to Developer";
+            workSheetAttachments.Cells[2, 1].Value = "Item Name";
+            workSheetAttachments.Cells[2, 2].Value = "Alternative Item Name";
+            workSheetAttachments.Cells[2, 3].Value = "Reschedule Days";
+            workSheetAttachments.Cells[2, 4].Value = "Reschedule As Description";
+            workSheetAttachments.Cells[2, 5].Value = "Step History Description";
+            workSheetAttachments.Cells[2, 6].Value = "Status Change";
+            workSheetAttachments.Cells[2, 7].Value = "Item User Message";
+            workSheetAttachments.Cells[2, 8].Value = "Popup Alert";
+            workSheetAttachments.Cells[2, 9].Value = "Notes to Developer";
 
             //Body of table
-            recordIndex = 2;
+            recordIndex = 3;
             foreach (var chapterItem in selectedChapter.ChapterItems.Where(C => docTypes.Contains(C.Type)).OrderBy(C => C.SeqNo).ToList())
             {
                 workSheetAttachments.Cells[recordIndex, 1].Value = string.IsNullOrEmpty(chapterItem.Name) ? "" : chapterItem.Name;
@@ -556,84 +591,6 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
             workSheetAttachments.Column(7).AutoFit();
             workSheetAttachments.Column(8).AutoFit();
             workSheetAttachments.Column(9).AutoFit();
-
-
-
-
-            /*
-             * 
-             * Fee
-             * 
-             * 
-             */
-
-            var workSheetFees = excel.Workbook.Worksheets.Add("Fees");
-
-            workSheetFees.TabColor = System.Drawing.Color.Black;
-            workSheetFees.DefaultRowHeight = 12;
-
-            //Header of table
-            workSheetFees.Row(1).Height = 20;
-            workSheetFees.Row(1).Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-            workSheetFees.Row(1).Style.Font.Bold = true;
-            workSheetFees.Cells[1, 1].Value = "Case Type Group";
-            workSheetFees.Cells[1, 2].Value = "Case Type";
-            workSheetFees.Cells[1, 3].Value = "Smartflow Name";
-            workSheetFees.Cells[1, 4].Value = "Item Type";
-            workSheetFees.Cells[1, 5].Value = "Sequence";
-            workSheetFees.Cells[1, 6].Value = "Item Name";
-            workSheetFees.Cells[1, 7].Value = "Alternative Item Name";
-            workSheetFees.Cells[1, 8].Value = "Reschedule Days";
-            workSheetFees.Cells[1, 9].Value = "Reschedule As Description";
-            workSheetFees.Cells[1, 10].Value = "Step History Description";
-            workSheetFees.Cells[1, 11].Value = "Status Change";
-            workSheetFees.Cells[1, 12].Value = "End of Flow";
-            workSheetFees.Cells[1, 13].Value = "Item User Message";
-            workSheetFees.Cells[1, 14].Value = "Popup Alert";
-            workSheetFees.Cells[1, 15].Value = "Notes to Developer";
-            workSheetFees.Cells[1, 16].Value = "Story Information Notes";
-
-            //Body of table
-            recordIndex = 2;
-            foreach (var chapterItem in selectedChapter.ChapterItems.Where(C => C.Type == "Fee").OrderBy(C => C.SeqNo).ToList())
-            {
-                workSheetFees.Cells[recordIndex, 1].Value = string.IsNullOrEmpty(chapterItem.CaseTypeGroup) ? "" : chapterItem.CaseTypeGroup;
-                workSheetFees.Cells[recordIndex, 2].Value = string.IsNullOrEmpty(chapterItem.CaseType) ? "" : chapterItem.CaseType;
-                workSheetFees.Cells[recordIndex, 3].Value = string.IsNullOrEmpty(chapterItem.ChapterName) ? "" : chapterItem.ChapterName;
-                workSheetFees.Cells[recordIndex, 4].Value = string.IsNullOrEmpty(chapterItem.Type) ? "" : chapterItem.Type;
-                workSheetFees.Cells[recordIndex, 5].Value = chapterItem.SeqNo is null ? "" : chapterItem.SeqNo.ToString();
-                workSheetFees.Cells[recordIndex, 6].Value = string.IsNullOrEmpty(chapterItem.Name) ? "" : chapterItem.Name;
-                workSheetFees.Cells[recordIndex, 7].Value = string.IsNullOrEmpty(chapterItem.AltDisplayName) ? "" : chapterItem.AltDisplayName;
-                workSheetFees.Cells[recordIndex, 8].Value = chapterItem.RescheduleDays is null ? "" : chapterItem.RescheduleDays.ToString();
-                workSheetFees.Cells[recordIndex, 9].Value = string.IsNullOrEmpty(chapterItem.AsName) ? "" : chapterItem.AsName;
-                workSheetFees.Cells[recordIndex, 10].Value = string.IsNullOrEmpty(chapterItem.CompleteName) ? "" : chapterItem.CompleteName;
-                workSheetFees.Cells[recordIndex, 11].Value = string.IsNullOrEmpty(chapterItem.NextStatus) ? "" : chapterItem.NextStatus;
-                workSheetFees.Cells[recordIndex, 12].Value = string.IsNullOrEmpty(chapterItem.SuppressStep) ? "" : chapterItem.SuppressStep;
-                workSheetFees.Cells[recordIndex, 13].Value = string.IsNullOrEmpty(chapterItem.UserMessage) ? "" : chapterItem.UserMessage;
-                workSheetFees.Cells[recordIndex, 14].Value = string.IsNullOrEmpty(chapterItem.PopupAlert) ? "" : chapterItem.PopupAlert;
-                workSheetFees.Cells[recordIndex, 15].Value = string.IsNullOrEmpty(chapterItem.DeveloperNotes) ? "" : chapterItem.DeveloperNotes;
-                workSheetFees.Cells[recordIndex, 16].Value = string.IsNullOrEmpty(chapterItem.StoryNotes) ? "" : chapterItem.StoryNotes;
-
-                recordIndex++;
-            }
-
-            workSheetFees.Column(1).AutoFit();
-            workSheetFees.Column(2).AutoFit();
-            workSheetFees.Column(3).AutoFit();
-            workSheetFees.Column(4).AutoFit();
-            workSheetFees.Column(5).AutoFit();
-            workSheetFees.Column(6).AutoFit();
-            workSheetFees.Column(7).AutoFit();
-            workSheetFees.Column(8).AutoFit();
-            workSheetFees.Column(9).AutoFit();
-            workSheetFees.Column(10).AutoFit();
-            workSheetFees.Column(11).AutoFit();
-            workSheetFees.Column(12).AutoFit();
-            workSheetFees.Column(13).AutoFit();
-            workSheetFees.Column(14).AutoFit();
-            workSheetFees.Column(15).AutoFit();
-            workSheetFees.Column(16).AutoFit();
-
 
 
 

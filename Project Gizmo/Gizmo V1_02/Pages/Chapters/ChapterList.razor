@@ -345,10 +345,10 @@ else
                                     </div>
                                     <div class="form-group">
                                         <label for="BgColour">Background Colour</label>
-                                        <select @bind="selectColour" style="background-color: @getHTMLColourFromAndroid(selectedChapter.BackgroundColour)" class="form-control form-control-lg">
+                                        <select @bind="selectColour" style="background-color: @getHTMLColourFromAndroid(ListChapterColours.Where(C => C.ColourName == selectColour).Select(C => C.ColourCode).FirstOrDefault())" class="form-control form-control-lg">
                                             @foreach (var colour in ListChapterColours)
                                             {
-                                                <option style="background-color: @getHTMLColourFromAndroid(colour.ColourCode)" value="@colour.ColourCode">
+                                                <option style="background-color: @getHTMLColourFromAndroid(colour.ColourCode)" value="@colour.ColourName">
                                                     @colour.ColourName
                                                 </option>
                                             }
