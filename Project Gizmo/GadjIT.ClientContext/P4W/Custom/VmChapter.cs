@@ -17,6 +17,8 @@ namespace GadjIT.ClientContext.P4W.Custom
         public string ShowPartnerNotes { get; set; }
         public string GeneralNotes { get; set; }
         public string DelvolperNotes { get; set; }
+        public string SelectedView { get; set; }
+        public string SelectedStep { get; set; }
         public List<UsrOrDefChapterManagement> ChapterItems { get; set; }
         public List<DataViews> DataViews { get; set; }
         public List<Fee> Fees { get; set; }

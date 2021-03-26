@@ -64,7 +64,10 @@ namespace Gizmo_V1_02.Pages.Chapters
                                                                                             CaseType = TaskObject.ChapterObject.CaseType,
                                                                                             Name = TaskObject.ChapterObject.Name,
                                                                                             SeqNo = TaskObject.ChapterObject.SeqNo.GetValueOrDefault(),
-                                                                                            ChapterItems = new List<UsrOrDefChapterManagement>()
+                                                                                            StepName = $"SF {TaskObject.ChapterObject.Name} Smartflow",
+                                                                                            ChapterItems = new List<UsrOrDefChapterManagement>(),
+                                                                                            Fees = new List<Fee>(),
+                                                                                            DataViews = new List<DataViews>()
                                                                                         }); 
 
 

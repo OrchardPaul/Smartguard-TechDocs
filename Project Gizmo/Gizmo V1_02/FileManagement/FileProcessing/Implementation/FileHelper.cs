@@ -22,6 +22,15 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
 {
     public class FileHelper : IFileHelper
     {
+        public class FeeDefinition
+        {
+            public string PostingCode { get; set; }
+            public string Account { get; set; }
+            public string TransactionType { get; set; }
+            public string Destination { get; set; }
+            public string TransactionDescription { get; set; }
+        }
+
         private readonly IWebHostEnvironment webHostEnvironment;
         private readonly IJSRuntime jsRuntime;
 
@@ -31,13 +40,33 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
 
         public string CustomPath { get; set; }
 
+        public List<FeeDefinition> FeeDefinitions = new List<FeeDefinition>
+        {
+            new FeeDefinition { PostingCode = "DSO", Account = "Office" , TransactionType = "Payout"        , Destination = "Bank"          , TransactionDescription = "Disbursement" },
+            new FeeDefinition { PostingCode = "DSP", Account = "Office" , TransactionType = "Payout"        , Destination = "Petty Cash"    , TransactionDescription = "Disbursement" },
+            new FeeDefinition { PostingCode = "WOD", Account = "Office" , TransactionType = "Write Off Debt", Destination = ""              , TransactionDescription = "Write Off Debts" },
+            new FeeDefinition { PostingCode = "O/N", Account = "Office" , TransactionType = "Payout"        , Destination = "Non-Bank"      , TransactionDescription = "Office to Nominal Transfer" },
+            new FeeDefinition { PostingCode = "OCR", Account = "Office" , TransactionType = "Received"      , Destination = "Bank"          , TransactionDescription = "Office Credit" },
+            new FeeDefinition { PostingCode = "OCP", Account = "Office" , TransactionType = "Received"      , Destination = "Petty Cash"    , TransactionDescription = "Office Credit" },
+            new FeeDefinition { PostingCode = "OTO", Account = "Office" , TransactionType = "Transfer"      , Destination = "Office"        , TransactionDescription = "Office to Office Transfer" },
+            new FeeDefinition { PostingCode = "OTC", Account = "Office" , TransactionType = "Transfer"      , Destination = "Client"        , TransactionDescription = "Office to Client Transfer" },
+            new FeeDefinition { PostingCode = "OCR", Account = "Office" , TransactionType = "Received"      , Destination = "Bank"          , TransactionDescription = "Office Credit" },
+            new FeeDefinition { PostingCode = "CDR", Account = "Client" , TransactionType = "Payout"        , Destination = ""              , TransactionDescription = "Client Debit" },
+            new FeeDefinition { PostingCode = "CCR", Account = "Client" , TransactionType = "Received"      , Destination = ""              , TransactionDescription = "Client Credit" },
+            new FeeDefinition { PostingCode = "CIN", Account = "Client" , TransactionType = "Interest"      , Destination = ""              , TransactionDescription = "Client Interest" },
+            new FeeDefinition { PostingCode = "CTO", Account = "Client" , TransactionType = "Transfer"      , Destination = "Office"        , TransactionDescription = "Client to Office Transfer" },
+            new FeeDefinition { PostingCode = "CTC", Account = "Client" , TransactionType = "Transfer"      , Destination = "Client"        , TransactionDescription = "Client to Client Transfer" },
+            new FeeDefinition { PostingCode = "CTD", Account = "Client" , TransactionType = "Transfer"      , Destination = "Deposit"       , TransactionDescription = "Client to Designated Deposit" },
+            new FeeDefinition { PostingCode = "DFD", Account = "Deposit", TransactionType = "Payout"        , Destination = ""              , TransactionDescription = "Direct from Designated Deposit" },
+            new FeeDefinition { PostingCode = "DOD", Account = "Deposit", TransactionType = "Received"      , Destination = ""              , TransactionDescription = "Direct on Deposit" }
+        };
+
+
         public FileHelper(IWebHostEnvironment webHost, IJSRuntime jsRuntime)
         {
             webHostEnvironment = webHost;
             this.jsRuntime = jsRuntime;
         }
-
-
 
         public async Task<bool> Upload(IFileListEntry file)
         {
@@ -319,9 +348,6 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
                     ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets.FirstOrDefault();
                     int totalColumns = worksheet.Dimension.End.Column;
                     int totalRows = worksheet.Dimension.End.Row;
-
-                    if (totalRows <= 2) isExcelValid.Add("No data in spreadsheet to import");
-                    if (totalColumns != 16) isExcelValid.Add("Spreadsheet has an invalid number of columns");
                 }
 
             }
@@ -334,20 +360,17 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
             return isExcelValid;
         }
 
-        public async Task<string> WriteChapterDataToExcel(VmChapter selectedChapter)
+        public async Task<string> WriteChapterDataToExcel(VmChapter selectedChapter, List<DmDocuments> documents)
         {
             List<string> docTypes = new List<string> { "Doc", "Letter", "Form", "Step", "Date", "Email" };
+            Dictionary<int?, string> docP4WTypes = new Dictionary<int?, string> { { 1, "Doc" }, { 4, "Form" }, { 6, "Step" }, { 8, "Date" }, { 9, "Email" }, { 11, "Doc" }, { 12, "Email" }, { 13, "Doc" }, { 19, "Doc" } };
 
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             ExcelPackage excel = new ExcelPackage();
             
-           
-
             var workSheetHeader = excel.Workbook.Worksheets.Add(selectedChapter.Name);
             workSheetHeader.TabColor = System.Drawing.Color.RoyalBlue;
             workSheetHeader.DefaultRowHeight = 12;
-
-           
 
             workSheetHeader.Cells[1, 1, 1, 16].Merge = true;
 
@@ -389,8 +412,14 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
             workSheetAgenda.TabColor = System.Drawing.Color.Black;
             workSheetAgenda.DefaultRowHeight = 12;
 
+            workSheetAgenda.Row(1).Height = 32;
+            workSheetAgenda.Row(1).Style.Font.Size = 8;
+            workSheetAgenda.Row(1).Style.Font.Color.SetColor(System.Drawing.Color.LightGray);
+            workSheetAgenda.Cells[1, 1].Style.WrapText = true;
+            workSheetAgenda.Cells[1, 1].Value = "Progess File names. Correspondence saved in these Progress Files will be made avalible in the history tab.";
+
             //Header of table
-            workSheetAgenda.Row(2).Height = 20;
+            workSheetAgenda.Row(2).Height = 14;
             workSheetAgenda.Row(2).Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
             workSheetAgenda.Row(2).Style.Font.Bold = true;
             workSheetAgenda.Cells[2, 1].Value = "Agenda Name";
@@ -405,7 +434,7 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
                 recordIndex++;
             }
 
-            workSheetAgenda.Column(1).AutoFit();
+            workSheetAgenda.Column(1).Width = 30;
 
 
             /*
@@ -421,7 +450,13 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
             workSheetStatus.DefaultRowHeight = 12;
 
             //Header of table
-            workSheetStatus.Row(2).Height = 20;
+            workSheetStatus.Row(1).Height = 32;
+            workSheetStatus.Row(1).Style.Font.Size = 8;
+            workSheetStatus.Row(1).Style.Font.Color.SetColor(System.Drawing.Color.LightGray);
+            workSheetStatus.Cells[1, 2].Style.WrapText = true;
+            workSheetStatus.Cells[1, 2].Value = "The Smartflow will no longer reschedule when this status has been reached.";
+
+            workSheetStatus.Row(2).Height = 14;
             workSheetStatus.Row(2).Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
             workSheetStatus.Row(2).Style.Font.Bold = true;
             workSheetStatus.Cells[2, 1].Value = "Status Name";
@@ -438,8 +473,8 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
                 recordIndex++;
             }
 
-            workSheetStatus.Column(1).AutoFit();
-            workSheetStatus.Column(2).AutoFit();
+            workSheetStatus.Column(1).Width = 22;
+            workSheetStatus.Column(2).Width = 31;
 
 
             /*
@@ -455,9 +490,15 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
             workSheetFees.DefaultRowHeight = 12;
 
             //Header of table
-            workSheetFees.Row(1).Height = 20;
-            workSheetFees.Row(1).Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-            workSheetFees.Row(1).Style.Font.Bold = true;
+            workSheetFees.Row(1).Height = 30;
+            workSheetFees.Row(1).Style.Font.Size = 8;
+            workSheetFees.Row(1).Style.Font.Color.SetColor(System.Drawing.Color.LightGray);
+            workSheetFees.Cells[1, 2].Style.WrapText = true;
+            workSheetFees.Cells[1, 2].Value = "e.g. Disbursement, Our Fee or Additional Fee.";
+
+            workSheetFees.Row(2).Height = 14;
+            workSheetFees.Row(2).Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+            workSheetFees.Row(2).Style.Font.Bold = true;
             workSheetFees.Cells[2, 1].Value = "Fee Name";
             workSheetFees.Cells[2, 2].Value = "Fee Category";
             workSheetFees.Cells[2, 3].Value = "Fee Amount";
@@ -466,14 +507,25 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
 
             //Body of table
             recordIndex = 3;
-            foreach (var chapterItem in selectedChapter.ChapterItems.Where(C => C.Type == "Fee").OrderBy(C => C.SeqNo).ToList())
+            foreach (var feeItem in selectedChapter.Fees.OrderBy(C => C.SeqNo).ToList())
             {
-                workSheetFees.Cells[recordIndex, 1].Value = string.IsNullOrEmpty(chapterItem.Name) ? "" : chapterItem.Name;
+                workSheetFees.Cells[recordIndex, 1].Value = string.IsNullOrEmpty(feeItem.FeeName) ? "" : feeItem.FeeName;
+                workSheetFees.Cells[recordIndex, 2].Value = string.IsNullOrEmpty(feeItem.FeeName) ? "" : feeItem.FeeCategory;
+                workSheetFees.Cells[recordIndex, 3].Value = feeItem.Amount.ToString();
+                workSheetFees.Cells[recordIndex, 4].Value = string.IsNullOrEmpty(feeItem.FeeName) ? "" : feeItem.VATable;
+                workSheetFees.Cells[recordIndex, 5].Value = string.IsNullOrEmpty(feeItem.FeeName) ? "" : feeItem.PostingType;
+
+
+                workSheetFees.Cells[recordIndex, 5].DataValidation.AddListDataValidation().Formula.ExcelFormula = $"= Lookups!$D$3:$D${FeeDefinitions.Count()}";
 
                 recordIndex++;
             }
 
             workSheetFees.Column(1).AutoFit();
+            workSheetFees.Column(2).AutoFit();
+            workSheetFees.Column(3).AutoFit();
+            workSheetFees.Column(4).AutoFit();
+            workSheetFees.Column(5).AutoFit();
 
 
 
@@ -490,9 +542,9 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
             workSheetDocument.DefaultRowHeight = 12;
 
             //Header of table
-            workSheetDocument.Row(1).Height = 20;
-            workSheetDocument.Row(1).Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-            workSheetDocument.Row(1).Style.Font.Bold = true;
+            workSheetDocument.Row(2).Height = 30;
+            workSheetDocument.Row(2).Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+            workSheetDocument.Row(2).Style.Font.Bold = true;
             workSheetDocument.Cells[2, 1].Value = "Item Name";
             workSheetDocument.Cells[2, 2].Value = "Alternative Item Name";
             workSheetDocument.Cells[2, 3].Value = "Reschedule Days";
@@ -545,60 +597,123 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
             workSheetAttachments.DefaultRowHeight = 12;
 
             //Header of table
-            workSheetAttachments.Row(1).Height = 20;
-            workSheetAttachments.Row(1).Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-            workSheetAttachments.Row(1).Style.Font.Bold = true;
-            workSheetAttachments.Cells[1, 1].Value = "Item Name";
-            workSheetAttachments.Cells[1, 2].Value = "Alternative Item Name";
-            workSheetAttachments.Cells[1, 3].Value = "Reschedule Days";
-            workSheetAttachments.Cells[1, 4].Value = "Reschedule As Description";
-            workSheetAttachments.Cells[1, 5].Value = "Step History Description";
-            workSheetAttachments.Cells[1, 6].Value = "Status Change";
-            workSheetAttachments.Cells[1, 7].Value = "Item User Message";
-            workSheetAttachments.Cells[1, 8].Value = "Popup Alert";
-            workSheetAttachments.Cells[1, 9].Value = "Notes to Developer";
+            workSheetAttachments.Row(1).Height = 30;
+            workSheetAttachments.Row(1).Style.Font.Size = 8;
+            workSheetAttachments.Row(1).Style.Font.Color.SetColor(System.Drawing.Color.LightGray);
+            workSheetAttachments.Cells[1, 1].Style.WrapText = true;
+            workSheetAttachments.Cells[1, 1].Value = "Document name from which item to be attached to (Documents > Item Name).";
+            workSheetAttachments.Cells[1, 2].Style.WrapText = true;
+            workSheetAttachments.Cells[1, 2].Value = "Document name to be attached.";
+            workSheetAttachments.Cells[1, 3].Style.WrapText = true;
+            workSheetAttachments.Cells[1, 3].Value = "Alternative name to be shown in agenda.";
+            workSheetAttachments.Cells[1, 4].Style.WrapText = true;
+            workSheetAttachments.Cells[1, 4].Value = "TAKE or INSERT.";
+            workSheetAttachments.Cells[1, 5].Style.WrapText = true;
+            workSheetAttachments.Cells[1, 5].Value = "If INSERT then days to be scheduled from current date.";
 
-            workSheetAttachments.Row(1).Height = 20;
-            workSheetAttachments.Row(1).Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-            workSheetAttachments.Row(1).Style.Font.Bold = true;
-            workSheetAttachments.Cells[2, 1].Value = "Item Name";
-            workSheetAttachments.Cells[2, 2].Value = "Alternative Item Name";
-            workSheetAttachments.Cells[2, 3].Value = "Reschedule Days";
-            workSheetAttachments.Cells[2, 4].Value = "Reschedule As Description";
-            workSheetAttachments.Cells[2, 5].Value = "Step History Description";
-            workSheetAttachments.Cells[2, 6].Value = "Status Change";
-            workSheetAttachments.Cells[2, 7].Value = "Item User Message";
-            workSheetAttachments.Cells[2, 8].Value = "Popup Alert";
-            workSheetAttachments.Cells[2, 9].Value = "Notes to Developer";
+
+            workSheetAttachments.Row(2).Height = 20;
+            workSheetAttachments.Row(2).Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+            workSheetAttachments.Row(2).Style.Font.Bold = true;
+            workSheetAttachments.Cells[2, 1].Value = "Document Item Name ";
+            workSheetAttachments.Cells[2, 2].Value = "Attachment Name";
+            workSheetAttachments.Cells[2, 3].Value = "Attachment Display Name";
+            workSheetAttachments.Cells[2, 4].Value = "Action";
+            workSheetAttachments.Cells[2, 5].Value = "Schedule Days";
 
             //Body of table
             recordIndex = 3;
-            foreach (var chapterItem in selectedChapter.ChapterItems.Where(C => docTypes.Contains(C.Type)).OrderBy(C => C.SeqNo).ToList())
+            foreach (var chapterItem in selectedChapter
+                                            .ChapterItems
+                                            .Where(C => !(C.FollowUpDocs is null) && C.FollowUpDocs.Count() > 0)
+                                            .OrderBy(C => C.SeqNo)
+                                            .ToList())
             {
-                workSheetAttachments.Cells[recordIndex, 1].Value = string.IsNullOrEmpty(chapterItem.Name) ? "" : chapterItem.Name;
-                workSheetAttachments.Cells[recordIndex, 2].Value = string.IsNullOrEmpty(chapterItem.AltDisplayName) ? "" : chapterItem.AltDisplayName;
-                workSheetAttachments.Cells[recordIndex, 3].Value = chapterItem.RescheduleDays is null ? "" : chapterItem.RescheduleDays.ToString();
-                workSheetAttachments.Cells[recordIndex, 4].Value = string.IsNullOrEmpty(chapterItem.AsName) ? "" : chapterItem.AsName;
-                workSheetAttachments.Cells[recordIndex, 5].Value = string.IsNullOrEmpty(chapterItem.CompleteName) ? "" : chapterItem.CompleteName;
-                workSheetAttachments.Cells[recordIndex, 6].Value = string.IsNullOrEmpty(chapterItem.NextStatus) ? "" : chapterItem.NextStatus;
-                workSheetAttachments.Cells[recordIndex, 7].Value = string.IsNullOrEmpty(chapterItem.UserMessage) ? "" : chapterItem.UserMessage;
-                workSheetAttachments.Cells[recordIndex, 8].Value = string.IsNullOrEmpty(chapterItem.PopupAlert) ? "" : chapterItem.PopupAlert;
-                workSheetAttachments.Cells[recordIndex, 9].Value = string.IsNullOrEmpty(chapterItem.DeveloperNotes) ? "" : chapterItem.DeveloperNotes;
+                foreach(var doc in chapterItem.FollowUpDocs)
+                {
+                    workSheetAttachments.Cells[recordIndex, 1].Value = string.IsNullOrEmpty(chapterItem.Name) ? "" : chapterItem.Name;
+                    workSheetAttachments.Cells[recordIndex, 2].Value = string.IsNullOrEmpty(doc.DocName) ? "" : doc.DocName;
+                    workSheetAttachments.Cells[recordIndex, 3].Value = string.IsNullOrEmpty(doc.DocAsName) ? "" : doc.DocAsName;
+                    workSheetAttachments.Cells[recordIndex, 4].Value = string.IsNullOrEmpty(doc.Action) ? "" : doc.Action;
+                    workSheetAttachments.Cells[recordIndex, 5].Value = doc.ScheduleDays is null ? "" : doc.ScheduleDays.ToString();
+
+                    recordIndex++;
+                }
+
+
+                
+            }
+
+            workSheetAttachments.Column(1).Width = 31;
+            workSheetAttachments.Column(2).Width = 19;
+            workSheetAttachments.Column(3).Width = 25;
+            workSheetAttachments.Column(4).Width = 10;
+            workSheetAttachments.Column(5).Width = 22;
+
+            /*
+             * 
+             * Fee
+             * 
+             * 
+             */
+
+            var workSheetLookUp = excel.Workbook.Worksheets.Add("Lookups");
+
+            workSheetLookUp.DefaultRowHeight = 12;
+
+            //Header of table
+
+            workSheetLookUp.Row(1).Height = 14;
+            workSheetLookUp.Row(1).Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+            workSheetLookUp.Row(1).Style.Font.Bold = true;
+            workSheetLookUp.Row(1).Style.Font.Color.SetColor(System.Drawing.Color.White);
+
+            workSheetLookUp.Cells[1, 1, 1, 2].Merge = true;
+
+            workSheetLookUp.Cells[1, 1].Style.Fill.SetBackground(System.Drawing.Color.Black);
+            workSheetLookUp.Cells[1, 1].Value = "Documents for Case Type Group: 'Case type group name'";
+            workSheetLookUp.Cells[2, 1].Value = "Document Type";
+            workSheetLookUp.Cells[2, 2].Value = "Document Name";
+
+
+            workSheetLookUp.Cells[1, 4, 1, 8].Merge = true;
+
+            workSheetLookUp.Cells[1, 4].Style.Fill.SetBackground(System.Drawing.Color.Black);
+            workSheetLookUp.Cells[1, 4].Value = "Posting Types For Fees";
+
+            workSheetLookUp.Cells[2, 4].Value = "Posting Code";
+            workSheetLookUp.Cells[2, 5].Value = "Account";
+            workSheetLookUp.Cells[2, 6].Value = "Transaction Type";
+            workSheetLookUp.Cells[2, 7].Value = "Destination";
+            workSheetLookUp.Cells[2, 8].Value = "Transaction Description";
+
+
+            //Body of table
+            recordIndex = 3;
+            foreach (var doc in documents.OrderBy(D => D.Name).ToList())
+            {
+                workSheetLookUp.Cells[recordIndex, 1].Value = doc.DocumentType is null ? "" : docP4WTypes.Where(D => D.Key == doc.DocumentType).Select(D => D.Value).SingleOrDefault();
+                workSheetLookUp.Cells[recordIndex, 2].Value = string.IsNullOrEmpty(doc.Name) ? "" : doc.Name;
 
                 recordIndex++;
             }
 
-            workSheetAttachments.Column(1).AutoFit();
-            workSheetAttachments.Column(2).AutoFit();
-            workSheetAttachments.Column(3).AutoFit();
-            workSheetAttachments.Column(4).AutoFit();
-            workSheetAttachments.Column(5).AutoFit();
-            workSheetAttachments.Column(6).AutoFit();
-            workSheetAttachments.Column(7).AutoFit();
-            workSheetAttachments.Column(8).AutoFit();
-            workSheetAttachments.Column(9).AutoFit();
+            recordIndex = 3;
+            foreach (var definition in FeeDefinitions.OrderBy(F => F.PostingCode).ToList())
+            {
+                workSheetLookUp.Cells[recordIndex, 4].Value = string.IsNullOrEmpty(definition.PostingCode) ? "" : definition.PostingCode;
+                workSheetLookUp.Cells[recordIndex, 5].Value = string.IsNullOrEmpty(definition.Account) ? "" : definition.Account;
+                workSheetLookUp.Cells[recordIndex, 6].Value = string.IsNullOrEmpty(definition.TransactionType) ? "" : definition.TransactionType;
+                workSheetLookUp.Cells[recordIndex, 7].Value = string.IsNullOrEmpty(definition.Destination) ? "" : definition.Destination;
+                workSheetLookUp.Cells[recordIndex, 8].Value = string.IsNullOrEmpty(definition.TransactionDescription) ? "" : definition.TransactionDescription;
+                recordIndex++;
+            }
 
-
+            workSheetLookUp.Column(1).AutoFit();
+            workSheetLookUp.Column(2).AutoFit();
+            workSheetLookUp.Column(3).AutoFit();
+            workSheetLookUp.Column(4).AutoFit();
+            workSheetLookUp.Column(5).AutoFit();
 
 
             //Download SpreadSheet
@@ -613,60 +728,115 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
         }
 
 
-
-
-        public List<UsrOrDefChapterManagement> ReadChapterDataFromExcel(string FilePath)
+        public VmChapter ReadChapterDataFromExcel(string FilePath)
         {
-            List<UsrOrDefChapterManagement> readChapters = new List<UsrOrDefChapterManagement>();
+            VmChapter readChapters = new VmChapter { ChapterItems = new List<UsrOrDefChapterManagement>(), Fees = new List<Fee>()};
+            UsrOrDefChapterManagement readObject;
+            Fee feeObject;
 
             FileInfo fileInfo = new FileInfo(FilePath);
 
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             using (ExcelPackage excelPackage = new ExcelPackage(fileInfo))
             {
-                ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets.FirstOrDefault();
-                int totalColumns = worksheet.Dimension.End.Column;
-                int totalRows = worksheet.Dimension.End.Row;
+                ExcelWorksheet worksheetAgenda = excelPackage.Workbook.Worksheets.Where(W => W.Name == "Agenda").SingleOrDefault();
+                int totalColumns = worksheetAgenda.Dimension.End.Column;
+                int totalRows = worksheetAgenda.Dimension.End.Row;
 
                 for (int row = 3; row <= totalRows; row++)
                 {
-                    UsrOrDefChapterManagement readObject = new UsrOrDefChapterManagement();
+                    readObject = new UsrOrDefChapterManagement();
 
-                    for (int column = 3; column <= totalColumns; column++)
+                    for (int column = 1; column <= totalColumns; column++)
                     {
-                        if (column == 1) readObject.CaseTypeGroup = worksheet.Cells[row, column].FirstOrDefault() is null ? "" : worksheet.Cells[row, column].Value.ToString();
-                        if (column == 2) readObject.CaseType = worksheet.Cells[row, column].FirstOrDefault() is null ? "" : worksheet.Cells[row, column].Value.ToString();
-                        if (column == 3) readObject.ChapterName = worksheet.Cells[row, column].FirstOrDefault() is null ? "" : worksheet.Cells[row, column].Value.ToString();
-                        if (column == 4) readObject.Type = worksheet.Cells[row, column].FirstOrDefault() is null ? "" : worksheet.Cells[row, column].Value.ToString();
+                        if (column == 1) readObject.CaseTypeGroup = worksheetAgenda.Cells[row, column].FirstOrDefault() is null ? "" : worksheetAgenda.Cells[row, column].Value.ToString();
+                    }
+
+                    readObject.Type = "Agenda";
+
+                    readChapters.ChapterItems.Add(readObject);
+                }
+
+                ExcelWorksheet worksheetStatus = excelPackage.Workbook.Worksheets.Where(W => W.Name == "Status").SingleOrDefault();
+                totalColumns = worksheetStatus.Dimension.End.Column;
+                totalRows = worksheetStatus.Dimension.End.Row;
+
+                for (int row = 3; row <= totalRows; row++)
+                {
+                    readObject = new UsrOrDefChapterManagement();
+
+                    for (int column = 1; column <= totalColumns; column++)
+                    {
+                        if (column == 1) readObject.CaseTypeGroup = worksheetStatus.Cells[row, column].FirstOrDefault() is null ? "" : worksheetStatus.Cells[row, column].Value.ToString();
+                        if (column == 2) readObject.CaseTypeGroup = worksheetStatus.Cells[row, column].FirstOrDefault() is null ? "" : worksheetStatus.Cells[row, column].Value.ToString();
+                    }
+
+                    readObject.Type = "Status";
+
+                    readChapters.ChapterItems.Add(readObject);
+                }
+
+                ExcelWorksheet worksheetFees = excelPackage.Workbook.Worksheets.Where(W => W.Name == "Fees").SingleOrDefault();
+                totalColumns = worksheetFees.Dimension.End.Column;
+                totalRows = worksheetFees.Dimension.End.Row;
+
+                for (int row = 3; row <= totalRows; row++)
+                {
+                    feeObject = new Fee();
+
+                    for (int column = 1; column <= totalColumns; column++)
+                    {
+                        if (column == 1) feeObject.FeeName = worksheetFees.Cells[row, column].FirstOrDefault() is null ? "" : worksheetFees.Cells[row, column].Value.ToString();
+                        if (column == 2) feeObject.FeeCategory = worksheetFees.Cells[row, column].FirstOrDefault() is null ? "" : worksheetFees.Cells[row, column].Value.ToString();
                         try
                         {
-                            if (column == 5) readObject.SeqNo = worksheet.Cells[row, column].FirstOrDefault() is null ? 0 : Convert.ToInt32(worksheet.Cells[row, column].Value.ToString());
+                            if (column == 3) feeObject.Amount = worksheetFees.Cells[row, column].FirstOrDefault() is null ? 0 : Convert.ToInt32(worksheetFees.Cells[row, column].Value.ToString());
                         }
                         catch
                         {
-                            readObject.SeqNo = null;
+                            feeObject.Amount = 0;
                         }
-                        if (column == 6) readObject.Name = worksheet.Cells[row, column].FirstOrDefault() is null ? "" : worksheet.Cells[row, column].Value.ToString();
-                        if (column == 7) readObject.AltDisplayName = worksheet.Cells[row, column].FirstOrDefault() is null ? "" : worksheet.Cells[row, column].Value.ToString();
+                        if (column == 4) feeObject.VATable = worksheetFees.Cells[row, column].FirstOrDefault() is null ? "" : worksheetFees.Cells[row, column].Value.ToString();
+                        if (column == 5) feeObject.PostingType = worksheetFees.Cells[row, column].FirstOrDefault() is null ? "" : worksheetFees.Cells[row, column].Value.ToString();
+                    }
+
+                    feeObject.SeqNo = row - 2;
+
+                    readChapters.Fees.Add(feeObject);
+                }
+
+
+                ExcelWorksheet worksheetDocuments = excelPackage.Workbook.Worksheets.FirstOrDefault();
+                totalColumns = worksheetDocuments.Dimension.End.Column;
+                totalRows = worksheetDocuments.Dimension.End.Row;
+
+                for (int row = 3; row <= totalRows; row++)
+                {
+                    readObject = new UsrOrDefChapterManagement();
+
+                    for (int column = 3; column <= totalColumns; column++)
+                    {
+                        
+                        if (column == 1) readObject.Name = worksheetDocuments.Cells[row, column].FirstOrDefault() is null ? "" : worksheetDocuments.Cells[row, column].Value.ToString();
+                        if (column == 2) readObject.AltDisplayName = worksheetDocuments.Cells[row, column].FirstOrDefault() is null ? "" : worksheetDocuments.Cells[row, column].Value.ToString();
                         try
                         {
-                            if (column == 8) readObject.RescheduleDays = worksheet.Cells[row, column].FirstOrDefault() is null ? 0 : Convert.ToInt32(worksheet.Cells[row, column].Value.ToString());
+                            if (column == 3) readObject.RescheduleDays = worksheetDocuments.Cells[row, column].FirstOrDefault() is null ? 0 : Convert.ToInt32(worksheetDocuments.Cells[row, column].Value.ToString());
                         }
                         catch
                         {
                             readObject.RescheduleDays = null;
                         }
-                        if (column == 9) readObject.AsName = worksheet.Cells[row, column].FirstOrDefault() is null ? "" : worksheet.Cells[row, column].Value.ToString();
-                        if (column == 10) readObject.CompleteName = worksheet.Cells[row, column].FirstOrDefault() is null ? "" : worksheet.Cells[row, column].Value.ToString();
-                        if (column == 11) readObject.NextStatus = worksheet.Cells[row, column].FirstOrDefault() is null ? "" : worksheet.Cells[row, column].Value.ToString();
-                        if (column == 12) readObject.SuppressStep = worksheet.Cells[row, column].FirstOrDefault() is null ? "" : worksheet.Cells[row, column].Value.ToString();
-                        if (column == 13) readObject.UserMessage = worksheet.Cells[row, column].FirstOrDefault() is null ? "" : worksheet.Cells[row, column].Value.ToString();
-                        if (column == 14) readObject.PopupAlert = worksheet.Cells[row, column].FirstOrDefault() is null ? "" : worksheet.Cells[row, column].Value.ToString();
-                        if (column == 15) readObject.DeveloperNotes = worksheet.Cells[row, column].FirstOrDefault() is null ? "" : worksheet.Cells[row, column].Value.ToString();
-                        if (column == 16) readObject.StoryNotes = worksheet.Cells[row, column].FirstOrDefault() is null ? "" : worksheet.Cells[row, column].Value.ToString();
+                        if (column == 4) readObject.AsName = worksheetDocuments.Cells[row, column].FirstOrDefault() is null ? "" : worksheetDocuments.Cells[row, column].Value.ToString();
+                        if (column == 5) readObject.CompleteName = worksheetDocuments.Cells[row, column].FirstOrDefault() is null ? "" : worksheetDocuments.Cells[row, column].Value.ToString();
+                        if (column == 6) readObject.NextStatus = worksheetDocuments.Cells[row, column].FirstOrDefault() is null ? "" : worksheetDocuments.Cells[row, column].Value.ToString();
+                        if (column == 7) readObject.SuppressStep = worksheetDocuments.Cells[row, column].FirstOrDefault() is null ? "" : worksheetDocuments.Cells[row, column].Value.ToString();
+                        if (column == 8) readObject.UserMessage = worksheetDocuments.Cells[row, column].FirstOrDefault() is null ? "" : worksheetDocuments.Cells[row, column].Value.ToString();
+                        if (column == 9) readObject.PopupAlert = worksheetDocuments.Cells[row, column].FirstOrDefault() is null ? "" : worksheetDocuments.Cells[row, column].Value.ToString();
+                        if (column == 10) readObject.DeveloperNotes = worksheetDocuments.Cells[row, column].FirstOrDefault() is null ? "" : worksheetDocuments.Cells[row, column].Value.ToString();
                     }
 
-                    readChapters.Add(readObject);
+                    readChapters.ChapterItems.Add(readObject);
                 }
             }
 

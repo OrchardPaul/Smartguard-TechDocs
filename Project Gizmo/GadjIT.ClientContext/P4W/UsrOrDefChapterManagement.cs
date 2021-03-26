@@ -50,6 +50,7 @@ namespace GadjIT.ClientContext.P4W
         [StringLength(100)]
         public string NextStatus { get; set; }
         public string ChapterData { get; set; }
+
         [NotMapped]
         public string UserMessage { get; set; }
         [NotMapped]

@@ -386,7 +386,7 @@
 }
 
 @media (max-width: 768px) {
-    .modal-chapter-item,.modal-chapter-doc, .modal-chapter-fees {
+    .modal-chapter-item, .modal-chapter-doc, .modal-chapter-fees, .modal-chapter-comparison {
         width: calc(100% - 20px);
     }
 

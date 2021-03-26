@@ -20,8 +20,8 @@ namespace Gizmo_V1_02.Pages.Chapters
         void WriteChapterToFile(string JSON, string fileName);
         string readJson(string path);
         IList<string> ValidateChapterJSON(string JSON);
-        Task<string> WriteChapterDataToExcel(VmChapter selectedChapter);
-        List<UsrOrDefChapterManagement> readChapterItemsFromExcel(string path);
+        Task<string> WriteChapterDataToExcel(VmChapter selectedChapter, List<DmDocuments> documents);
+        VmChapter readChapterItemsFromExcel(string path);
         byte[] ReadFileToByteArray(string path);
         string DeleteFile(string path);
         List<string> ValidateChapterExcel(string filePath);

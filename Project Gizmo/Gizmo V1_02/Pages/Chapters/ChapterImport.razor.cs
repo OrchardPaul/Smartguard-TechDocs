@@ -56,7 +56,7 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         private string ImportedJSON { get; set; }
 
-        private List<UsrOrDefChapterManagement> ChapterItems { get; set; }
+        private VmChapter ChapterItems { get; set; }
 
         [Parameter]
         public List<VmDataViews> OriginalDataViews { get; set; }
@@ -128,12 +128,11 @@ namespace Gizmo_V1_02.Pages.Chapters
                     ChapterItems = ChapterFileUpload.readChapterItemsFromExcel(ListFileDescriptions.Where(F => F.FileName == fileName).FirstOrDefault().FilePath);
                     CopyOptions = new List<CopyOption>
                                                 {
-                                                    new CopyOption { Option = "Agenda", Selected = false, OptionCount = ChapterItems.Where(C => C.Type == "Agenda").ToList().Count() },
-                                                    new CopyOption { Option = "Status", Selected = false, OptionCount = ChapterItems.Where(C => C.Type == "Status").ToList().Count() },
-                                                    new CopyOption { Option = "Documents/Steps", Selected = false, OptionCount = ChapterItems.Where(C => lstDocTypes.Contains(C.Type)).ToList().Count() },
-                                                    new CopyOption { Option = "Fees", Selected = false, OptionCount = ChapterItems.Where(C => C.Type == "Fee").ToList().Count() },
+                                                    new CopyOption { Option = "Agenda", Selected = false, OptionCount = ChapterItems.ChapterItems.Where(C => C.Type == "Agenda").ToList().Count() },
+                                                    new CopyOption { Option = "Status", Selected = false, OptionCount = ChapterItems.ChapterItems.Where(C => C.Type == "Status").ToList().Count() },
+                                                    new CopyOption { Option = "Documents/Steps", Selected = false, OptionCount = ChapterItems.ChapterItems.Where(C => lstDocTypes.Contains(C.Type)).ToList().Count() },
+                                                    new CopyOption { Option = "Fees", Selected = false, OptionCount = ChapterItems.Fees.Count() },
                                                 };
-
 
                     StateHasChanged();
                 }
@@ -153,7 +152,7 @@ namespace Gizmo_V1_02.Pages.Chapters
         private async void HandleValidSubmit()
         {
             var originalJson = new string(TaskObject.ChapterData);
-            var SelectedCopyItems = new VmChapter { ChapterItems = new List<UsrOrDefChapterManagement>() };
+            var SelectedCopyItems = new VmChapter { ChapterItems = new List<UsrOrDefChapterManagement>(), Fees = new List<Fee>() };
 
             ToggleSuccess = false;
 
@@ -170,7 +169,7 @@ namespace Gizmo_V1_02.Pages.Chapters
                     SelectedCopyItems.ChapterItems.Remove(item);
                 }
 
-                SelectedCopyItems.ChapterItems.AddRange(ChapterItems.Where(C => C.Type == "Agenda").ToList());
+                SelectedCopyItems.ChapterItems.AddRange(ChapterItems.ChapterItems.Where(C => C.Type == "Agenda").ToList());
             }
 
             if (CopyOptions.Where(C => C.Option == "Status").Select(C => C.Selected).FirstOrDefault())
@@ -180,7 +179,7 @@ namespace Gizmo_V1_02.Pages.Chapters
                     SelectedCopyItems.ChapterItems.Remove(item);
                 }
 
-                SelectedCopyItems.ChapterItems.AddRange(ChapterItems.Where(C => C.Type == "Status").ToList());
+                SelectedCopyItems.ChapterItems.AddRange(ChapterItems.ChapterItems.Where(C => C.Type == "Status").ToList());
             }
 
             if (CopyOptions.Where(C => C.Option == "Documents/Steps").Select(C => C.Selected).FirstOrDefault())
@@ -190,17 +189,17 @@ namespace Gizmo_V1_02.Pages.Chapters
                     SelectedCopyItems.ChapterItems.Remove(item);
                 }
 
-                SelectedCopyItems.ChapterItems.AddRange(ChapterItems.Where(C => lstDocTypes.Contains(C.Type)).ToList());
+                SelectedCopyItems.ChapterItems.AddRange(ChapterItems.ChapterItems.Where(C => lstDocTypes.Contains(C.Type)).ToList());
             }
 
             if (CopyOptions.Where(C => C.Option == "Fees").Select(C => C.Selected).FirstOrDefault())
             {
-                foreach (var item in SelectedCopyItems.ChapterItems.Where(C => C.Type == "Fee").ToList())
+                foreach (var item in SelectedCopyItems.Fees.ToList())
                 {
-                    SelectedCopyItems.ChapterItems.Remove(item);
+                    SelectedCopyItems.Fees.Remove(item);
                 }
 
-                SelectedCopyItems.ChapterItems.AddRange(ChapterItems.Where(C => C.Type == "Fee").ToList());
+                SelectedCopyItems.Fees.AddRange(ChapterItems.Fees);
             }
 
 
@@ -211,6 +210,7 @@ namespace Gizmo_V1_02.Pages.Chapters
                 Name = TaskObject.Name,
                 SeqNo = TaskObject.SeqNo.GetValueOrDefault(),
                 ChapterItems = SelectedCopyItems.ChapterItems,
+                Fees = SelectedCopyItems.Fees,
                 DataViews = OriginalDataViews.Select(D => D.DataView).ToList()
             });
 
