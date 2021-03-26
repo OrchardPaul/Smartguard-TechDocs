@@ -52,7 +52,7 @@ namespace GadjIT.ClientAPI.Controllers
         public async Task<ActionResult> GetAllChapters()
         {
 
-                return Ok(await chapterRepository.GetAllChapters());
+            return Ok(await chapterRepository.GetAllChapters());
 
         }
 
@@ -61,7 +61,7 @@ namespace GadjIT.ClientAPI.Controllers
         {
             try
             {
-                return Ok(await chapterRepository.GetFeeDefs(caseTypeGroup,caseType));
+                return Ok(await chapterRepository.GetFeeDefs(caseTypeGroup, caseType));
             }
             catch (Exception)
             {
@@ -287,7 +287,7 @@ namespace GadjIT.ClientAPI.Controllers
 
 
 
-        [HttpPost]
+        [HttpGet("{JSON}")]
         public async Task<ActionResult<bool>> CreateStep(string JSON)
         {
             try

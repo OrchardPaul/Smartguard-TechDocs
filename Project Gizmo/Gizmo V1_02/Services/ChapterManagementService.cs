@@ -152,7 +152,9 @@ namespace Gizmo_V1_02.Services
 
         public Task<bool> CreateStep(string JSON)
         {
-            return httpClient.PostJsonAsync<bool>($"{userSession.baseUri}api/ChapterManagement/CreateStep", JSON);
+            var test = $"{userSession.baseUri}api/ChapterManagement/CreateStep/{JSON}";
+
+            return httpClient.GetJsonAsync<bool>($"{userSession.baseUri}api/ChapterManagement/CreateStep/{JSON}");
         }
 
     }

@@ -56,7 +56,7 @@ namespace GadjIT.ClientAPI.Repository.Chapters
 
         public async Task<List<UsrOrDefChapterManagement>> GetAllChapters()
         {
-
+            
 
             return await _context.UsrOrDefChapterManagement.Where(C => C.ParentId == 0).ToListAsync();
         }
@@ -351,8 +351,8 @@ namespace GadjIT.ClientAPI.Repository.Chapters
         {
             try
             {
-                await _context.Database.ExecuteSqlRawAsync($"EXEC up_ORSF_CreateSmartflowStep '{JSON}'");
 
+                await _context.Database.ExecuteSqlRawAsync("EXEC up_ORSF_CreateSmartflowStep {0}",JSON);
                 return true;
 
             }
