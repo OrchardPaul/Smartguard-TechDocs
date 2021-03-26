@@ -349,7 +349,7 @@
 }
 
 .nav-row-1 .data-item, .nav-row-2 .data-item {
-    background-color: rgba(0, 0, 0, 0.7);
+    background-color: rgba(0, 0, 0, 1);
     color: #FFF;
     margin: 0 !important;
     /*box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.5);*/
