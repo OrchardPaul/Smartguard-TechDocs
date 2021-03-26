@@ -19,7 +19,7 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Interface
         List<FileDesc> GetFileList();
         string MoveFile(string oldPath, string newPath);
         string MoveFolder(string oldPath, string newPath);
-        List<UsrOrDefChapterManagement> ReadChapterDataFromExcel(string FilePath);
+        VmChapter ReadChapterDataFromExcel(string FilePath);
         string ReadFileIntoString(string path);
         string RenameFile(string path, string oldName, string newName);
         string RenameFolder(string path, string oldName, string newName);
@@ -28,6 +28,6 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Interface
         byte[] ReadFileIntoByteArray(string path);
         void Write(List<string> output, string fileName);
 
-        Task<string> WriteChapterDataToExcel(VmChapter selectedChapter);
+        Task<string> WriteChapterDataToExcel(VmChapter selectedChapter, List<DmDocuments> documents);
     }
 }

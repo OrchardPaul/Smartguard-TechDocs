@@ -1250,24 +1250,6 @@ namespace Gizmo_V1_02.Pages.Chapters
             Modal.Show<ChapterAddOrEdit>("Smartflow", parameters, options);
         }
 
-
-
-        private void ShowUpdateJSON()
-        {
-            updateJSON = SelectedChapterObject.ChapterData;
-
-            alertMsgJSOM = "";
-
-            showJSON = !showJSON;
-
-            StateHasChanged();
-        }
-
-        
-
-
-        
-
         protected void ShowCaseTypeEditModal()
         {
             Action Action = RefreshChapters;
@@ -1290,6 +1272,23 @@ namespace Gizmo_V1_02.Pages.Chapters
             };
 
             Modal.Show<ChapterCaseTypeEdit>("Smartflow", parameters, options);
+        }
+
+
+        protected void ShowChapterDetailViewModal(VmUsrOrDefChapterManagement selectedObject, string type)
+        {
+            selectedList = type;
+
+            var parameters = new ModalParameters();
+            parameters.Add("Object", selectedObject);
+            parameters.Add("SelectedList", selectedList);
+
+            var options = new ModalOptions()
+            {
+                Class = "blazored-custom-modal modal-chapter-comparison"
+            };
+
+            Modal.Show<ChapterDetailView>(selectedList, parameters, options);
         }
 
 
@@ -1462,6 +1461,19 @@ namespace Gizmo_V1_02.Pages.Chapters
             Modal.Show<ChapterFees>("Fees", parameters, options);
         }
 
+        protected void ShowChapterFeeViewModal(VmFee selectedObject)
+        {
+            var parameters = new ModalParameters();
+            parameters.Add("Object", selectedObject);
+
+            var options = new ModalOptions()
+            {
+                Class = "blazored-custom-modal modal-chapter-comparison"
+            };
+
+            Modal.Show<ChapterFeeView>("Fee", parameters, options);
+        }
+
 
         protected void PrepareChapterDetailDelete(VmUsrOrDefChapterManagement selectedChapterItem)
         {
@@ -1520,6 +1532,20 @@ namespace Gizmo_V1_02.Pages.Chapters
 
             Modal.Show<ModalDelete>("Delete?", parameters, options);
         }
+
+        protected void ShowDataViewDisplayModal(VmDataViews selectedObject)
+        {
+            var parameters = new ModalParameters();
+            parameters.Add("Object", selectedObject);
+
+            var options = new ModalOptions()
+            {
+                Class = "blazored-custom-modal modal-chapter-comparison"
+            };
+
+            Modal.Show<DataViewDisplay>("Data View", parameters, options);
+        }
+
 
         protected void PrepareChapterDelete(VmUsrOrDefChapterManagement selectedChapterItem)
         {
@@ -2100,6 +2126,7 @@ namespace Gizmo_V1_02.Pages.Chapters
                 var chapterData = JsonConvert.DeserializeObject<VmChapter>(Json);
                 selectedChapter.ChapterItems = chapterData.ChapterItems;
                 selectedChapter.DataViews = chapterData.DataViews;
+                selectedChapter.Fees = chapterData.Fees;
                 SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(selectedChapter);
 
                 await chapterManagementService.Update(SelectedChapterObject);
@@ -2174,6 +2201,7 @@ namespace Gizmo_V1_02.Pages.Chapters
             var parameters = new ModalParameters();
             parameters.Add("ChapterFileUpload", ChapterFileUpload);
             parameters.Add("SelectedChapter", selectedChapter);
+            parameters.Add("Documents", dropDownChapterList);
 
             var options = new ModalOptions()
             {
