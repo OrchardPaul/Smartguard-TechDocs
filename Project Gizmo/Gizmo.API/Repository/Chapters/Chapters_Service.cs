@@ -1,6 +1,7 @@
 ﻿using GadjIT.ClientContext.P4W;
 using GadjIT.ClientContext.P4W.Custom;
 using GadjIT.ClientContext.P4W.Functions;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -34,6 +35,7 @@ namespace GadjIT.ClientAPI.Repository.Chapters
         Task<List<UsrOrDefChapterManagement>> UpdateCaseType(string newCaseType, string originalCaseType, string caseTypeGroup);
         Task<List<UsrOrDefChapterManagement>> UpdateCaseTypeGroups(string newCaseTypeGroup, string originalCaseTypeGroup);
         Task<List<VmChapterFee>> UpdateChapterFees(int ChapterId, List<VmChapterFee> vmChapterFees);
+        Task<bool> CreateStep(string JSON);
     }
 
     public class Chapters_Service : IChapters_Service
@@ -50,8 +52,12 @@ namespace GadjIT.ClientAPI.Repository.Chapters
             return await _context.fnORCHAGetFeeDefinitions(caseTypeGroup, caseType).ToListAsync();
         }
 
+
+
         public async Task<List<UsrOrDefChapterManagement>> GetAllChapters()
         {
+
+
             return await _context.UsrOrDefChapterManagement.Where(C => C.ParentId == 0).ToListAsync();
         }
 
@@ -338,5 +344,23 @@ namespace GadjIT.ClientAPI.Repository.Chapters
                             .ToListAsync();
 
         }
+
+
+
+        public async Task<bool> CreateStep(string JSON)
+        {
+            try
+            {
+                await _context.Database.ExecuteSqlRawAsync($"EXEC up_ORSF_CreateSmartflowStep '{JSON}'");
+
+                return true;
+
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
     }
 }
