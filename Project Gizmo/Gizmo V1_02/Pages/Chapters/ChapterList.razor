@@ -365,25 +365,31 @@ else
                                                         }
                                     </InputSelect>
                                 </div>
-                                <div class="form-group">
-                                    <label for="SelectedStep">Selected Step</label>
-                                    <InputSelect class="form-control form-control-xxl"
-                                                 @bind-Value="selectedChapter.SelectedStep">
-                                        <option value="">Select</option>
-                                        @foreach (var step in dropDownChapterList.Where(D => D.DocumentType == 6).ToList())
-                                                        {
-                                            <option value="@step.Name">
-                                                @step.Name
-                                            </option>
-                                                        }
-                                    </InputSelect>
-                                </div>
-                                <div class="form-group">
-                                    <label>Step Name</label>
-                                    <InputText @bind-Value="selectedChapter.StepName" class="form-control form-control-xxl" />
-                                </div>
-                                <button @onclick='(() => CreateP4WSmartflowStep())' class="btn btn-main btn-shadow" title="Create Step"><span>Create</span></button>
-
+                                @if (!(selectedChapter.SelectedStep is null) && selectedChapter.SelectedStep != "Create New")
+                                {
+                                    <div class="form-group">
+                                        <label for="SelectedStep">Selected Step</label>
+                                        <InputSelect class="form-control form-control-xxl"
+                                                     @bind-Value="selectedChapter.SelectedStep">
+                                            <option value="">Select</option>
+                                            <option value="Create New">--- Create New ---</option>
+                                            @foreach (var step in dropDownChapterList.Where(D => D.DocumentType == 6).Where(D => D.Notes.Contains("Smartflow:")).ToList())
+                                            {
+                                                <option value="@step.Name">
+                                                    @step.Name
+                                                </option>
+                                            }
+                                        </InputSelect>
+                                    </div>
+                                }
+                                else{
+                                    <div class="form-group">
+                                        <label>Step Name</label>
+                                        <InputText @bind-Value="selectedChapter.StepName" class="form-control form-control-xxl" />
+                                    </div>
+                                    <button @onclick='(() => CreateP4WSmartflowStep())' class="btn btn-main btn-shadow" title="Create Step"><span>Create</span></button>
+                                    <button @onclick='(() => CancelCreateP4WStep())' class="btn btn-main btn-shadow" title="Cancel"><span>Cancel</span></button>
+                                }
 
 
                                 <div class="form-group">

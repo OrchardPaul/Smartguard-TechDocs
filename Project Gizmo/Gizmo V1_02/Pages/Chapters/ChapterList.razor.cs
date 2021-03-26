@@ -195,6 +195,7 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         }
 
+        public bool showNewStep { get; set; } = false;
 
         protected override async Task OnInitializedAsync()
         {
@@ -2209,6 +2210,11 @@ namespace Gizmo_V1_02.Pages.Chapters
             };
 
             Modal.Show<ChapterExportExcel>("Smartflow Export", parameters, options);
+        }
+
+        public void CancelCreateP4WStep()
+        {
+            selectedChapter.StepName = "";
         }
 
         protected async void CreateP4WSmartflowStep()
