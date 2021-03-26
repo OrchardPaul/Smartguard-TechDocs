@@ -30,6 +30,8 @@ namespace Gizmo_V1_02.Services
         Task<List<UsrOrDefChapterManagement>> UpdateCaseTypeGroups(string newCaseTypeGroupName, string originalCaseTypeGroupName);
         Task<List<fnORCHAGetFeeDefinitions>> GetFeeDefs(string caseTypeGroup, string caseType);
         Task<List<VmChapterFee>> UpdateChapterFees(int ChapterId, List<VmChapterFee> vmChapterFees);
+
+        Task<bool> CreateStep(string JSON);
     }
 
     public class ChapterManagementService : IChapterManagementService
@@ -45,7 +47,6 @@ namespace Gizmo_V1_02.Services
 
         public Task<UsrOrDefChapterManagement> Add(UsrOrDefChapterManagement item)
         {
-            
             return httpClient.PostJsonAsync<UsrOrDefChapterManagement>($"{userSession.baseUri}api/ChapterManagement/Add", item);
         }
 
@@ -147,5 +148,12 @@ namespace Gizmo_V1_02.Services
         {
             return httpClient.GetJsonAsync<List<UsrOrDefChapterManagement>>($"{userSession.baseUri}api/ChapterManagement/GetDocListByChapterAndDocType/{caseType}/{chapter}/{docType}");
         }
+
+
+        public Task<bool> CreateStep(string JSON)
+        {
+            return httpClient.PostJsonAsync<bool>($"{userSession.baseUri}api/ChapterManagement/CreateStep", JSON);
+        }
+
     }
 }

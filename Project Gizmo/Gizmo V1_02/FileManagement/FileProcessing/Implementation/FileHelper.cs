@@ -753,6 +753,7 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
                     }
 
                     readObject.Type = "Agenda";
+                    readObject.SeqNo = row - 2;
 
                     readChapters.ChapterItems.Add(readObject);
                 }
@@ -772,6 +773,7 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
                     }
 
                     readObject.Type = "Status";
+                    readObject.SeqNo = row - 2;
 
                     readChapters.ChapterItems.Add(readObject);
                 }
@@ -835,6 +837,8 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
                         if (column == 9) readObject.PopupAlert = worksheetDocuments.Cells[row, column].FirstOrDefault() is null ? "" : worksheetDocuments.Cells[row, column].Value.ToString();
                         if (column == 10) readObject.DeveloperNotes = worksheetDocuments.Cells[row, column].FirstOrDefault() is null ? "" : worksheetDocuments.Cells[row, column].Value.ToString();
                     }
+
+                    readObject.SeqNo = row - 2;
 
                     readChapters.ChapterItems.Add(readObject);
                 }

@@ -287,5 +287,31 @@ namespace GadjIT.ClientAPI.Controllers
 
 
 
+        [HttpPost]
+        public async Task<ActionResult<bool>> CreateStep(string JSON)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(JSON))
+                {
+                    return BadRequest("JSON Empty");
+                }
+
+                var success = await chapterRepository.CreateStep(JSON);
+
+                if (!success)
+                {
+                    return BadRequest($"Step Creation Failed");
+                }
+
+                return success;
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error Updating Data");
+            }
+        }
+
+
     }
 }
