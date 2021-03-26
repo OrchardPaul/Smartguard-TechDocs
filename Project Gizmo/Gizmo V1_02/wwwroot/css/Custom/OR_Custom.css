@@ -906,7 +906,7 @@ app {
     min-height: 400px;
 }
 
-.grid-chapter-docs, .grid-chapter-fees {
+.grid-chapter-docs, .grid-chapter-fees, .grid-chapter-chapter {
     width: 100%;
     min-height: 400px;
 }
