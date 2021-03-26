@@ -2211,7 +2211,7 @@ namespace Gizmo_V1_02.Pages.Chapters
             Modal.Show<ChapterExportExcel>("Smartflow Export", parameters, options);
         }
 
-        protected void CreateP4WSmartflowStep()
+        protected async void CreateP4WSmartflowStep()
         {
             if (!string.IsNullOrEmpty(selectedChapter.StepName))
             {
@@ -2248,6 +2248,10 @@ namespace Gizmo_V1_02.Pages.Chapters
                 };
 
                 string stepJSON = JsonConvert.SerializeObject(ChapterP4WStep);
+
+                bool creationSuccess;
+
+                creationSuccess = await chapterManagementService.CreateStep(stepJSON);
             }
         }
     }
