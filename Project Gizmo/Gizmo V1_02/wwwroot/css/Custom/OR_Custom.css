@@ -121,7 +121,7 @@ app {
         /* Full height */
         height: calc(100% - 10px);
         /* The image used */
-        background: #FFFFFF;
+        background: #FFFFFF !important;
     }
 
     .page-footer {
@@ -1164,6 +1164,7 @@ app {
 .card-footer {
     border-top: none;
     background-color: #FFFFFF;
+    color: #000;
     border: 0;
     border-radius: 0 0 20px 0 !important;
     width: 100%;
@@ -1175,7 +1176,62 @@ app {
     margin: auto;
 }
 
+/****************************************/
+/*     ADVERTS                          */
+/****************************************/
 
+.advert-list .card {
+    box-shadow: 0 8px 12px 0 rgba(0, 0, 0, 0.7); /* this adds the "card" effect */
+    margin: 30px;
+    border-radius: 0px !important;
+}
+
+.advert-list .card-header {
+    border-radius: 0px !important;
+    height: 35px;
+    background-color: #000 !important;
+    color: #fff;
+}
+
+.advert-list .card-body {
+    border-radius: 0px !important;
+    background-color: #FFFFFF;
+    font-size: 1rem;
+    color: #000;
+    height: auto;
+    padding: 10px;
+    margin: 0;
+}
+
+.advert-list .card-body-reveal{
+    height: 0px;
+    visibility: hidden;
+}
+
+
+.advert-list a:hover .card-body-reveal {
+    height: auto;
+}
+
+.advert-list a:hover .card-body-reveal {
+    height: auto;
+    visibility: visible;
+    transition-duration: 0.5s;
+    transition-property: height;
+}
+
+.advert-list .card .card-footer {
+    font-size: 0.9rem !important;
+}
+
+
+.advert-list .card a:hover .card-footer {
+    background-color: #ddd !important;
+    color: #000;
+    font-size: 0.9rem !important;
+    transition-duration: 0.5s;
+    transition-property: background-color, color;
+}
 
 /* Responsive columns - one column layout (vertical) on small screens */
 @media (max-width: 1800px) {
@@ -1259,6 +1315,7 @@ app {
     border-right: 0.5em solid transparent;
     border-top: 0.8em solid;
 }
+
 
 
 
