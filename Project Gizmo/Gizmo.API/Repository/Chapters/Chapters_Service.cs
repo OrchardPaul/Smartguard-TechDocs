@@ -349,17 +349,10 @@ namespace GadjIT.ClientAPI.Repository.Chapters
 
         public async Task<bool> CreateStep(string JSON)
         {
-            try
-            {
 
                 await _context.Database.ExecuteSqlRawAsync("EXEC up_ORSF_CreateSmartflowStep {0}",JSON);
                 return true;
 
-            }
-            catch
-            {
-                return false;
-            }
         }
 
     }

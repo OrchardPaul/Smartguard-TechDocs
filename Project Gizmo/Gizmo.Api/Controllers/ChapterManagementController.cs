@@ -287,17 +287,17 @@ namespace GadjIT.ClientAPI.Controllers
 
 
 
-        [HttpGet("{JSON}")]
-        public async Task<ActionResult<bool>> CreateStep(string JSON)
+        [HttpPut()]
+        public async Task<ActionResult<bool>> CreateStep(VmChapterP4WStepSchemaJSONObject schemaJSONObject)
         {
             try
             {
-                if (string.IsNullOrEmpty(JSON))
+                if (schemaJSONObject is null || string.IsNullOrEmpty(schemaJSONObject.StepSchemaJSON))
                 {
                     return BadRequest("JSON Empty");
                 }
 
-                var success = await chapterRepository.CreateStep(JSON);
+                var success = await chapterRepository.CreateStep(schemaJSONObject.StepSchemaJSON);
 
                 if (!success)
                 {
