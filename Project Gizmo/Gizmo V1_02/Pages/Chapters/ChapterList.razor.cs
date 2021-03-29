@@ -2199,27 +2199,17 @@ namespace Gizmo_V1_02.Pages.Chapters
         }
 
 
-        protected void ShowChapterExportExcelModel()
-        {
-            var parameters = new ModalParameters();
-            parameters.Add("ChapterFileUpload", ChapterFileUpload);
-            parameters.Add("SelectedChapter", selectedChapter);
-            parameters.Add("Documents", dropDownChapterList);
-
-            var options = new ModalOptions()
-            {
-                Class = "blazored-custom-modal modal-chapter-export"
-            };
-
-            Modal.Show<ChapterExportExcel>("Smartflow Export", parameters, options);
-        }
-
         public void CancelCreateP4WStep()
         {
             selectedChapter.StepName = "";
             selectedChapter.SelectedStep = "";
             selectedChapter.StepName = $"SF {selectedChapter.Name} Smartflow";
             StateHasChanged();
+        }
+
+        private async void ExportSmartflowToExcel()
+        {
+            await ChapterFileUpload.WriteChapterDataToExcel(selectedChapter, dropDownChapterList);
         }
 
         protected async void CreateP4WSmartflowStep()

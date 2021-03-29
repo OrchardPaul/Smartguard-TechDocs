@@ -317,7 +317,7 @@ else
                     <div class="grid-actions">
 
                         <div class="btn-group">
-                            <button @onclick='(() => ShowChapterExportExcelModel())' class="btn btn-main btn-shadow" title="Export Smartflow Details"><i class="fa fa-file-export"></i><span>Export</span></button>
+                            <button @onclick='(() => ExportSmartflowToExcel())' class="btn btn-main btn-shadow" title="Export Smartflow Details"><i class="fa fa-file-export"></i><span>Export</span></button>
                         </div>
                         @if ((sessionState.isAdminUser))
                         {
