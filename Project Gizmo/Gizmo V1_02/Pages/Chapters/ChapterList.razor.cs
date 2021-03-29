@@ -2252,7 +2252,9 @@ namespace Gizmo_V1_02.Pages.Chapters
 
                 bool creationSuccess;
 
-                creationSuccess = await chapterManagementService.CreateStep(stepJSON);
+
+
+                creationSuccess = await chapterManagementService.CreateStep(new VmChapterP4WStepSchemaJSONObject { StepSchemaJSON = stepJSON});
             }
         }
     }

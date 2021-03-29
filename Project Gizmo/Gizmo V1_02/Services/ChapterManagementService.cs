@@ -31,7 +31,7 @@ namespace Gizmo_V1_02.Services
         Task<List<fnORCHAGetFeeDefinitions>> GetFeeDefs(string caseTypeGroup, string caseType);
         Task<List<VmChapterFee>> UpdateChapterFees(int ChapterId, List<VmChapterFee> vmChapterFees);
 
-        Task<bool> CreateStep(string JSON);
+        Task<bool> CreateStep(VmChapterP4WStepSchemaJSONObject stepSchemaJSONObject);
     }
 
     public class ChapterManagementService : IChapterManagementService
@@ -150,11 +150,11 @@ namespace Gizmo_V1_02.Services
         }
 
 
-        public Task<bool> CreateStep(string JSON)
+        public Task<bool> CreateStep(VmChapterP4WStepSchemaJSONObject stepSchemaJSONObject)
         {
-            var test = $"{userSession.baseUri}api/ChapterManagement/CreateStep/{JSON}";
+            var test = $"{userSession.baseUri}api/ChapterManagement/CreateStep";
 
-            return httpClient.GetJsonAsync<bool>($"{userSession.baseUri}api/ChapterManagement/CreateStep/{JSON}");
+            return httpClient.PutJsonAsync<bool>($"{userSession.baseUri}api/ChapterManagement/CreateStep", stepSchemaJSONObject);
         }
 
     }
