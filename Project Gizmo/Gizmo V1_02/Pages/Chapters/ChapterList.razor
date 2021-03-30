@@ -359,7 +359,7 @@ else
                                             <InputSelect class="form-control form-control-xxl"
                                                          @bind-Value="selectedChapter.SelectedView">
                                                 <option value="">Select</option>
-                                                @foreach (var view in ListP4WViews)
+                                                @foreach (var view in ListP4WViews.Where(V => !(V.InternalNote is null) && (V.InternalNote.Contains("Smartflow"))).ToList())
                                                                 {
                                                     <option value="@view.Name">
                                                         @view.Name

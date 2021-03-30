@@ -924,23 +924,59 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
                     for (int column = 1; column <= totalColumns; column++)
                     {
                         
-                        if (column == 1) readObject.Name = worksheetDocuments.Cells[row, column].FirstOrDefault() is null ? "" : worksheetDocuments.Cells[row, column].Value.ToString();
-                        if (column == 2) readObject.AltDisplayName = worksheetDocuments.Cells[row, column].FirstOrDefault() is null ? "" : worksheetDocuments.Cells[row, column].Value.ToString();
+                        if (column == 1) readObject.Name = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
+                                            ? ""
+                                            : worksheetDocuments.Cells[row, column].Value is null
+                                            ? ""
+                                            : worksheetDocuments.Cells[row, column].Value.ToString();
+                        if (column == 2) readObject.AltDisplayName = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
+                                            ? ""
+                                            : worksheetDocuments.Cells[row, column].Value is null
+                                            ? ""
+                                            : worksheetDocuments.Cells[row, column].Value.ToString();
                         try
                         {
-                            if (column == 3) readObject.RescheduleDays = worksheetDocuments.Cells[row, column].FirstOrDefault() is null ? 0 : Convert.ToInt32(worksheetDocuments.Cells[row, column].Value.ToString());
+                            if (column == 3) readObject.RescheduleDays = worksheetDocuments.Cells[row, column].FirstOrDefault() is null 
+                                                                            ? 0 
+                                                                            : worksheetDocuments.Cells[row, column].Value is null
+                                                                            ? 0
+                                                                            : Convert.ToInt32(worksheetDocuments.Cells[row, column].Value.ToString());
                         }
                         catch
                         {
                             readObject.RescheduleDays = null;
                         }
-                        if (column == 4) readObject.AsName = worksheetDocuments.Cells[row, column].FirstOrDefault() is null ? "" : worksheetDocuments.Cells[row, column].Value.ToString();
-                        if (column == 5) readObject.CompleteName = worksheetDocuments.Cells[row, column].FirstOrDefault() is null ? "" : worksheetDocuments.Cells[row, column].Value.ToString();
-                        if (column == 6) readObject.NextStatus = worksheetDocuments.Cells[row, column].FirstOrDefault() is null ? "" : worksheetDocuments.Cells[row, column].Value.ToString();
+                        if (column == 4) readObject.AsName = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
+                                            ? ""
+                                            : worksheetDocuments.Cells[row, column].Value is null
+                                            ? ""
+                                            : worksheetDocuments.Cells[row, column].Value.ToString();
+                        if (column == 5) readObject.CompleteName = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
+                                            ? ""
+                                            : worksheetDocuments.Cells[row, column].Value is null
+                                            ? ""
+                                            : worksheetDocuments.Cells[row, column].Value.ToString();
+                        if (column == 6) readObject.NextStatus = worksheetDocuments.Cells[row, column].FirstOrDefault() is null 
+                                            ? "" 
+                                            : worksheetDocuments.Cells[row, column].Value is null
+                                            ? ""
+                                            : worksheetDocuments.Cells[row, column].Value.ToString();
                         
-                        if (column == 7) readObject.UserMessage = worksheetDocuments.Cells[row, column].FirstOrDefault() is null ? "" : worksheetDocuments.Cells[row, column].Value.ToString();
-                        if (column == 8) readObject.PopupAlert = worksheetDocuments.Cells[row, column].FirstOrDefault() is null ? "" : worksheetDocuments.Cells[row, column].Value.ToString();
-                        if (column == 9) readObject.DeveloperNotes = worksheetDocuments.Cells[row, column].FirstOrDefault() is null ? "" : worksheetDocuments.Cells[row, column].Value.ToString();
+                        if (column == 7) readObject.UserMessage = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
+                                            ? ""
+                                            : worksheetDocuments.Cells[row, column].Value is null
+                                            ? ""
+                                            : worksheetDocuments.Cells[row, column].Value.ToString();
+                        if (column == 8) readObject.PopupAlert = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
+                                            ? ""
+                                            : worksheetDocuments.Cells[row, column].Value is null
+                                            ? ""
+                                            : worksheetDocuments.Cells[row, column].Value.ToString();
+                        if (column == 9) readObject.DeveloperNotes = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
+                                            ? ""
+                                            : worksheetDocuments.Cells[row, column].Value is null
+                                            ? ""
+                                            : worksheetDocuments.Cells[row, column].Value.ToString();
                     }
 
                     readObject.Type = documents.Where(D => D.Name == readObject.Name).Select(D => D.Type).SingleOrDefault();
