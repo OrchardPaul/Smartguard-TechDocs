@@ -420,6 +420,19 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
                         isExcelValid.Add("Missing Documents Worksheet");
                     }
 
+                    try
+                    {
+                        ExcelWorksheet worksheetAttachments = excelPackage.Workbook.Worksheets.Where(W => W.Name == "Attachments").SingleOrDefault();
+                        if (worksheetAttachments is null)
+                        {
+                            isExcelValid.Add("Missing Attachments Worksheet");
+                        }
+                    }
+                    catch
+                    {
+                        isExcelValid.Add("Missing Documents Worksheet");
+                    }
+
                 }
 
             }
@@ -939,6 +952,48 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
                     readChapters.ChapterItems.Add(readObject);
                 }
 
+
+                ExcelWorksheet worksheetAttachments = excelPackage.Workbook.Worksheets.Where(W => W.Name == "Attachments").SingleOrDefault();
+                totalColumns = worksheetAttachments.Dimension.End.Column;
+                totalRows = worksheetAttachments.Dimension.End.Row;
+
+                string documentName = "";
+
+                for (int row = 3; row <= totalRows; row++)
+                {
+                    readObject = null;
+                    FollowUpDoc newAttachment = new FollowUpDoc();
+
+                    for (int column = 1; column <= totalColumns; column++)
+                    {
+                        if (column == 1)
+                        {
+                            documentName = worksheetAttachments.Cells[row, column].FirstOrDefault() is null ? "" : worksheetAttachments.Cells[row, column].Value.ToString();
+                            readObject = readChapters.ChapterItems.Where(C => C.Name == documentName).SingleOrDefault();
+                        }
+
+                        if(!(readObject is null))
+                        {
+                            if (column == 2) newAttachment.DocName = worksheetAttachments.Cells[row, column].FirstOrDefault() is null ? "" : worksheetAttachments.Cells[row, column].Value.ToString();
+                            if (column == 3) newAttachment.DocAsName = worksheetAttachments.Cells[row, column].FirstOrDefault() is null ? "" : worksheetAttachments.Cells[row, column].Value.ToString();
+                            if (column == 4) newAttachment.Action = worksheetAttachments.Cells[row, column].FirstOrDefault() is null ? "" : worksheetAttachments.Cells[row, column].Value.ToString();
+                            try
+                            {
+                                if (column == 5) newAttachment.ScheduleDays = worksheetAttachments.Cells[row, column].FirstOrDefault() is null ? 0 : Convert.ToInt32(worksheetAttachments.Cells[row, column].Value.ToString());
+                            }
+                            catch
+                            {
+                                newAttachment.ScheduleDays = null;
+                            }
+                        }
+                    }
+
+                    if (readObject.FollowUpDocs is null)
+                    {
+                        readObject.FollowUpDocs = new List<FollowUpDoc>();
+                    }
+                    readObject.FollowUpDocs.Add(newAttachment);
+                }
 
             }
 

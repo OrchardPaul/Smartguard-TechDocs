@@ -589,6 +589,7 @@ else
                                                 case "Doc":
 
                                                     @if (!string.IsNullOrEmpty(doc.DocDisplayName)
+                                                              && (doc.DocDisplayName.Length > 9)
                                                               && (doc.DocDisplayName.Substring(0, 9).ToUpper().Contains("LTR")))
                                                     {
                                                         <span class="font-100"><span class="fa fa-file-alt mr-2"></span></span>
@@ -1032,7 +1033,7 @@ else
                             <div class="data-item-sub font-85 pl-3">@fee.FeeObject.PostingType</div>
                         </div>
                         <div class="data-item">
-                            <div class="data-item-sub text-right font-85 pl-3">@string.Format("{0:C}", fee.FeeObject.Amount)</div>
+                            <div class="data-item-sub text-right font-85 pl-3">£@string.Format("{0:N2}", fee.FeeObject.Amount)</div>
                         </div>
                     </div>
 
