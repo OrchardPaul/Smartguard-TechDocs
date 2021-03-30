@@ -89,8 +89,6 @@ namespace Gizmo_V1_02.Pages.Chapters
                                                                                 "Disbursement"
                                                                                 ,"Additional Fee"
                                                                                 ,"Our Fee"
-                                                                                ,"Search Fee"
-                                                                                ,"Referral Fee"
                                                                                 ,"Other"
                                                                             };
 

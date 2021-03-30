@@ -8,6 +8,7 @@
         <div class="form-group">
             <label for="FeeName">Fee Name</label>
             <InputText class="form-control form-control-xl" @bind-Value="@CopyObject.FeeName" />
+            <ValidationMessage For="@(() => CopyObject.FeeName)" />
         </div>
         <div class="form-group">
             <label for="FeeNCategory">Fee Category</label>
