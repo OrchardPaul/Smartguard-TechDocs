@@ -2198,6 +2198,10 @@ namespace Gizmo_V1_02.Pages.Chapters
             Modal.Show<ChapterImport>("Excel Import", parameters, options);
         }
 
+        private async void ExportSmartflowToExcel()
+        {
+            await ChapterFileUpload.WriteChapterDataToExcel(selectedChapter, dropDownChapterList);
+        }
 
         public void CancelCreateP4WStep()
         {
@@ -2207,10 +2211,7 @@ namespace Gizmo_V1_02.Pages.Chapters
             StateHasChanged();
         }
 
-        private async void ExportSmartflowToExcel()
-        {
-            await ChapterFileUpload.WriteChapterDataToExcel(selectedChapter, dropDownChapterList);
-        }
+        
 
         protected async void CreateP4WSmartflowStep()
         {
@@ -2255,6 +2256,15 @@ namespace Gizmo_V1_02.Pages.Chapters
 
 
                 creationSuccess = await chapterManagementService.CreateStep(new VmChapterP4WStepSchemaJSONObject { StepSchemaJSON = stepJSON});
+
+                if (creationSuccess)
+                {
+                    dropDownChapterList = await chapterManagementService.GetDocumentList(selectedChapter.CaseType);
+
+                    selectedChapter.SelectedStep = selectedChapter.StepName;
+
+                    StateHasChanged();
+                }
             }
         }
     }
