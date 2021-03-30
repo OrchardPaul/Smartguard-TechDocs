@@ -31,6 +31,12 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
             public string TransactionDescription { get; set; }
         }
 
+        public class Document
+        {
+            public string Name { get; set; }
+            public string Type { get; set; }
+        }
+
         private readonly IWebHostEnvironment webHostEnvironment;
         private readonly IJSRuntime jsRuntime;
 
@@ -345,9 +351,75 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
                 ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
                 using (ExcelPackage excelPackage = new ExcelPackage(fileInfo))
                 {
-                    ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets.FirstOrDefault();
-                    int totalColumns = worksheet.Dimension.End.Column;
-                    int totalRows = worksheet.Dimension.End.Row;
+
+                    try
+                    {
+                        ExcelWorksheet worksheetLookups = excelPackage.Workbook.Worksheets.Where(W => W.Name == "Lookups").SingleOrDefault();
+                        if (worksheetLookups is null)
+                        {
+                            isExcelValid.Add("Missing Lookups Worksheet");
+                        }
+                    }
+                    catch
+                    {
+                        isExcelValid.Add("Missing Lookups Worksheet");
+                    }
+
+
+                    try
+                    {
+                        ExcelWorksheet worksheetAgenda = excelPackage.Workbook.Worksheets.Where(W => W.Name == "Agenda").SingleOrDefault();
+                        if (worksheetAgenda is null)
+                        {
+                            isExcelValid.Add("Missing Agenda Worksheet");
+                        }
+                    }
+                    catch
+                    {
+                        isExcelValid.Add("Missing Agenda Worksheet");
+                    }
+
+
+                    try
+                    {
+                        ExcelWorksheet worksheetStatus = excelPackage.Workbook.Worksheets.Where(W => W.Name == "Status").SingleOrDefault();
+                        if (worksheetStatus is null)
+                        {
+                            isExcelValid.Add("Missing Status Worksheet");
+                        }
+                    }
+                    catch
+                    {
+                        isExcelValid.Add("Missing Status Worksheet");
+                    }
+
+
+                    try
+                    {
+                        ExcelWorksheet worksheetFees = excelPackage.Workbook.Worksheets.Where(W => W.Name == "Fees").SingleOrDefault();
+                        if (worksheetFees is null)
+                        {
+                            isExcelValid.Add("Missing Fees Worksheet");
+                        }
+                    }
+                    catch
+                    {
+                        isExcelValid.Add("Missing Fees Worksheet");
+                    }
+
+                    try
+                    {
+                        ExcelWorksheet worksheetDocuments = excelPackage.Workbook.Worksheets.Where(W => W.Name == "Documents").FirstOrDefault();
+                        if(worksheetDocuments is null)
+                        {
+                            isExcelValid.Add("Missing Documents Worksheet");
+                        }
+                    }
+                    catch
+                    {
+                        isExcelValid.Add("Missing Documents Worksheet");
+                    }
+
                 }
 
             }
@@ -730,8 +802,10 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
 
         public VmChapter ReadChapterDataFromExcel(string FilePath)
         {
+            List<Document> documents = new List<Document>();
             VmChapter readChapters = new VmChapter { ChapterItems = new List<UsrOrDefChapterManagement>(), Fees = new List<Fee>()};
             UsrOrDefChapterManagement readObject;
+            Document readDocument;
             Fee feeObject;
 
             FileInfo fileInfo = new FileInfo(FilePath);
@@ -739,9 +813,27 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             using (ExcelPackage excelPackage = new ExcelPackage(fileInfo))
             {
+                ExcelWorksheet worksheetLookups = excelPackage.Workbook.Worksheets.Where(W => W.Name == "Lookups").SingleOrDefault();
+                int totalColumns = worksheetLookups.Dimension.End.Column;
+                int totalRows = worksheetLookups.Dimension.End.Row;
+
+                for (int row = 3; row <= totalRows; row++)
+                {
+                    readDocument = new Document();
+
+                    for (int column = 1; column <= totalColumns; column++)
+                    {
+                        if (column == 1) readDocument.Type = worksheetLookups.Cells[row, column].FirstOrDefault() is null ? "" : worksheetLookups.Cells[row, column].Value.ToString();
+                        if (column == 2) readDocument.Name = worksheetLookups.Cells[row, column].FirstOrDefault() is null ? "" : worksheetLookups.Cells[row, column].Value.ToString();
+                    }
+
+
+                    documents.Add(readDocument);
+                }
+
                 ExcelWorksheet worksheetAgenda = excelPackage.Workbook.Worksheets.Where(W => W.Name == "Agenda").SingleOrDefault();
-                int totalColumns = worksheetAgenda.Dimension.End.Column;
-                int totalRows = worksheetAgenda.Dimension.End.Row;
+                totalColumns = worksheetAgenda.Dimension.End.Column;
+                totalRows = worksheetAgenda.Dimension.End.Row;
 
                 for (int row = 3; row <= totalRows; row++)
                 {
@@ -749,7 +841,7 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
 
                     for (int column = 1; column <= totalColumns; column++)
                     {
-                        if (column == 1) readObject.CaseTypeGroup = worksheetAgenda.Cells[row, column].FirstOrDefault() is null ? "" : worksheetAgenda.Cells[row, column].Value.ToString();
+                        if (column == 1) readObject.Name = worksheetAgenda.Cells[row, column].FirstOrDefault() is null ? "" : worksheetAgenda.Cells[row, column].Value.ToString();
                     }
 
                     readObject.Type = "Agenda";
@@ -768,8 +860,8 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
 
                     for (int column = 1; column <= totalColumns; column++)
                     {
-                        if (column == 1) readObject.CaseTypeGroup = worksheetStatus.Cells[row, column].FirstOrDefault() is null ? "" : worksheetStatus.Cells[row, column].Value.ToString();
-                        if (column == 2) readObject.CaseTypeGroup = worksheetStatus.Cells[row, column].FirstOrDefault() is null ? "" : worksheetStatus.Cells[row, column].Value.ToString();
+                        if (column == 1) readObject.Name = worksheetStatus.Cells[row, column].FirstOrDefault() is null ? "" : worksheetStatus.Cells[row, column].Value.ToString();
+                        if (column == 2) readObject.SuppressStep = worksheetStatus.Cells[row, column].FirstOrDefault() is null ? "" : worksheetStatus.Cells[row, column].Value.ToString();
                     }
 
                     readObject.Type = "Status";
@@ -792,7 +884,7 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
                         if (column == 2) feeObject.FeeCategory = worksheetFees.Cells[row, column].FirstOrDefault() is null ? "" : worksheetFees.Cells[row, column].Value.ToString();
                         try
                         {
-                            if (column == 3) feeObject.Amount = worksheetFees.Cells[row, column].FirstOrDefault() is null ? 0 : Convert.ToInt32(worksheetFees.Cells[row, column].Value.ToString());
+                            if (column == 3) feeObject.Amount = worksheetFees.Cells[row, column].FirstOrDefault() is null ? 0 : Convert.ToDecimal(worksheetFees.Cells[row, column].Value.ToString());
                         }
                         catch
                         {
@@ -808,7 +900,7 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
                 }
 
 
-                ExcelWorksheet worksheetDocuments = excelPackage.Workbook.Worksheets.FirstOrDefault();
+                ExcelWorksheet worksheetDocuments = excelPackage.Workbook.Worksheets.Where(W => W.Name == "Documents").FirstOrDefault();
                 totalColumns = worksheetDocuments.Dimension.End.Column;
                 totalRows = worksheetDocuments.Dimension.End.Row;
 
@@ -816,7 +908,7 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
                 {
                     readObject = new UsrOrDefChapterManagement();
 
-                    for (int column = 3; column <= totalColumns; column++)
+                    for (int column = 1; column <= totalColumns; column++)
                     {
                         
                         if (column == 1) readObject.Name = worksheetDocuments.Cells[row, column].FirstOrDefault() is null ? "" : worksheetDocuments.Cells[row, column].Value.ToString();
@@ -832,16 +924,22 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
                         if (column == 4) readObject.AsName = worksheetDocuments.Cells[row, column].FirstOrDefault() is null ? "" : worksheetDocuments.Cells[row, column].Value.ToString();
                         if (column == 5) readObject.CompleteName = worksheetDocuments.Cells[row, column].FirstOrDefault() is null ? "" : worksheetDocuments.Cells[row, column].Value.ToString();
                         if (column == 6) readObject.NextStatus = worksheetDocuments.Cells[row, column].FirstOrDefault() is null ? "" : worksheetDocuments.Cells[row, column].Value.ToString();
-                        if (column == 7) readObject.SuppressStep = worksheetDocuments.Cells[row, column].FirstOrDefault() is null ? "" : worksheetDocuments.Cells[row, column].Value.ToString();
-                        if (column == 8) readObject.UserMessage = worksheetDocuments.Cells[row, column].FirstOrDefault() is null ? "" : worksheetDocuments.Cells[row, column].Value.ToString();
-                        if (column == 9) readObject.PopupAlert = worksheetDocuments.Cells[row, column].FirstOrDefault() is null ? "" : worksheetDocuments.Cells[row, column].Value.ToString();
-                        if (column == 10) readObject.DeveloperNotes = worksheetDocuments.Cells[row, column].FirstOrDefault() is null ? "" : worksheetDocuments.Cells[row, column].Value.ToString();
+                        
+                        if (column == 7) readObject.UserMessage = worksheetDocuments.Cells[row, column].FirstOrDefault() is null ? "" : worksheetDocuments.Cells[row, column].Value.ToString();
+                        if (column == 8) readObject.PopupAlert = worksheetDocuments.Cells[row, column].FirstOrDefault() is null ? "" : worksheetDocuments.Cells[row, column].Value.ToString();
+                        if (column == 9) readObject.DeveloperNotes = worksheetDocuments.Cells[row, column].FirstOrDefault() is null ? "" : worksheetDocuments.Cells[row, column].Value.ToString();
                     }
+
+                    readObject.Type = documents.Where(D => D.Name == readObject.Name).Select(D => D.Type).SingleOrDefault();
+
+                    readObject.Type = readObject.Type is null ? "Doc" : readObject.Type;
 
                     readObject.SeqNo = row - 2;
 
                     readChapters.ChapterItems.Add(readObject);
                 }
+
+
             }
 
 
