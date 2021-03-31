@@ -96,6 +96,14 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         public List<string> documentList;
 
+        protected override void OnInitialized()
+        {
+            if (!(string.IsNullOrEmpty(SelectedChapter.P4WCaseTypeGroup)) && (SelectedChapter.P4WCaseTypeGroup != "Select"))
+            {
+                selectedCaseTypeGroup = CaseTypeGroups.Where(CT => CT.Name == SelectedChapter.P4WCaseTypeGroup).Select(CT => CT.Id).FirstOrDefault();
+            }
+        }
+
         private async void Close()
         {
             TaskObject = new UsrOrDefChapterManagement();
