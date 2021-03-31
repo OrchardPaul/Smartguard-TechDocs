@@ -25,7 +25,7 @@
             
             <tr>
                 <td>
-                    @SelectedList Name:
+                    @(SelectedList == "Steps and Documents" ? "Document" : @SelectedList) Name:
                 </td>
                 <td>
                     <input type="text" class="read-only" readonly value="@Object.ChapterObject.Name" />
@@ -36,7 +36,7 @@
             {
                 <tr>
                     <td>
-                        @SelectedList Display Name:
+                        Display Name:
                     </td>
                     <td>
                         <input type="text" class="read-only" readonly value="@Object.ChapterObject.AltDisplayName" />

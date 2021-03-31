@@ -307,13 +307,13 @@ app {
     color: #FFF;
 }
 
-.grid-chapter-docs .grid-actions {
-    max-width: 800px;
-}
-
 .grid-actions {
     margin-bottom: 10px !important;
     display: flex;
+}
+
+.grid-chapter .grid-actions {
+    max-width: 800px;
 }
 
 .grid-actions .btn-group {

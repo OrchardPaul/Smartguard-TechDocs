@@ -342,7 +342,7 @@ else
                                 <div class="row">
                                     <div class="col-12 col-xl-6">
                                         <div class="form-group">
-                                            <label for="P4WCTG">Case Type Group</label>
+                                            <label for="P4WCTG">P4W Case Type Group</label>
                                             <InputSelect class="form-control form-control-xxl"
                                                          @bind-Value="selectedChapter.P4WCaseTypeGroup">
                                                 <option value="">Select</option>
@@ -355,7 +355,7 @@ else
                                             </InputSelect>
                                         </div>
                                         <div class="form-group">
-                                            <label for="SelectedView">Selected View</label>
+                                            <label for="SelectedView">Smartflow View</label>
                                             <InputSelect class="form-control form-control-xxl"
                                                          @bind-Value="selectedChapter.SelectedView">
                                                 <option value="">Select</option>
@@ -370,7 +370,7 @@ else
                                         @if (!(selectedChapter.SelectedStep is null) && selectedChapter.SelectedStep != "Create New")
                                         {
                                             <div class="form-group">
-                                                <label for="SelectedStep">Selected Step</label>
+                                                <label for="SelectedStep">Smartflow Step</label>
                                                 <InputSelect class="form-control form-control-xxl"
                                                              @bind-Value="selectedChapter.SelectedStep">
                                                     <option value="">Select</option>
@@ -387,7 +387,7 @@ else
                                         else
                                         {
                                             <div class="form-group">
-                                                <label>Step Name</label>
+                                                <label>Enter Smartflow Step Name</label>
                                                 <InputText @bind-Value="selectedChapter.StepName" class="form-control form-control-xxl" />
                                             </div>
                                             <button @onclick='(() => CreateP4WSmartflowStep())' class="btn btn-main btn-shadow" title="Create Step"><span>Create</span></button>
