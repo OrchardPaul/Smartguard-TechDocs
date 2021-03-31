@@ -152,7 +152,7 @@ namespace Gizmo_V1_02.Pages.Chapters
         private async void HandleValidSubmit()
         {
             var originalJson = new string(TaskObject.ChapterData);
-            var SelectedCopyItems = new VmChapter { ChapterItems = new List<UsrOrDefChapterManagement>(), Fees = new List<Fee>() };
+            var SelectedCopyItems = new VmChapter { ChapterItems = new List<UsrOrDefChapterManagement>(), Fees = new List<Fee>(), DataViews = new List<DataViews>() };
 
             ToggleSuccess = false;
 
@@ -194,6 +194,11 @@ namespace Gizmo_V1_02.Pages.Chapters
 
             if (CopyOptions.Where(C => C.Option == "Fees").Select(C => C.Selected).FirstOrDefault())
             {
+                if(SelectedCopyItems.Fees is null)
+                {
+                    SelectedCopyItems.Fees = new List<Fee>();
+                }
+
                 foreach (var item in SelectedCopyItems.Fees.ToList())
                 {
                     SelectedCopyItems.Fees.Remove(item);

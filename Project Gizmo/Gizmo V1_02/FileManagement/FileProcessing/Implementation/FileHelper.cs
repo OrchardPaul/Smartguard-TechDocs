@@ -836,8 +836,16 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
 
                     for (int column = 1; column <= totalColumns; column++)
                     {
-                        if (column == 1) readDocument.Type = worksheetLookups.Cells[row, column].FirstOrDefault() is null ? "" : worksheetLookups.Cells[row, column].Value.ToString();
-                        if (column == 2) readDocument.Name = worksheetLookups.Cells[row, column].FirstOrDefault() is null ? "" : worksheetLookups.Cells[row, column].Value.ToString();
+                        if (column == 1) readDocument.Type = worksheetLookups.Cells[row, column].FirstOrDefault() is null
+                                            ? ""
+                                            : worksheetLookups.Cells[row, column].Value is null
+                                            ? ""
+                                            : worksheetLookups.Cells[row, column].Value.ToString();
+                        if (column == 2) readDocument.Name = worksheetLookups.Cells[row, column].FirstOrDefault() is null
+                                            ? ""
+                                            : worksheetLookups.Cells[row, column].Value is null
+                                            ? ""
+                                            : worksheetLookups.Cells[row, column].Value.ToString();
                     }
 
 
@@ -854,7 +862,11 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
 
                     for (int column = 1; column <= totalColumns; column++)
                     {
-                        if (column == 1) readObject.Name = worksheetAgenda.Cells[row, column].FirstOrDefault() is null ? "" : worksheetAgenda.Cells[row, column].Value.ToString();
+                        if (column == 1) readObject.Name = worksheetAgenda.Cells[row, column].FirstOrDefault() is null
+                                            ? ""
+                                            : worksheetAgenda.Cells[row, column].Value is null
+                                            ? ""
+                                            : worksheetAgenda.Cells[row, column].Value.ToString();
                     }
 
                     readObject.Type = "Agenda";
@@ -873,8 +885,16 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
 
                     for (int column = 1; column <= totalColumns; column++)
                     {
-                        if (column == 1) readObject.Name = worksheetStatus.Cells[row, column].FirstOrDefault() is null ? "" : worksheetStatus.Cells[row, column].Value.ToString();
-                        if (column == 2) readObject.SuppressStep = worksheetStatus.Cells[row, column].FirstOrDefault() is null ? "" : worksheetStatus.Cells[row, column].Value.ToString();
+                        if (column == 1) readObject.Name = worksheetStatus.Cells[row, column].FirstOrDefault() is null
+                                            ? ""
+                                            : worksheetStatus.Cells[row, column].Value is null
+                                            ? ""
+                                            : worksheetStatus.Cells[row, column].Value.ToString();
+                        if (column == 2) readObject.SuppressStep = worksheetStatus.Cells[row, column].FirstOrDefault() is null
+                                            ? ""
+                                            : worksheetStatus.Cells[row, column].Value is null
+                                            ? ""
+                                            : worksheetStatus.Cells[row, column].Value.ToString();
                     }
 
                     readObject.Type = "Status";
@@ -893,18 +913,38 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
 
                     for (int column = 1; column <= totalColumns; column++)
                     {
-                        if (column == 1) feeObject.FeeName = worksheetFees.Cells[row, column].FirstOrDefault() is null ? "" : worksheetFees.Cells[row, column].Value.ToString();
-                        if (column == 2) feeObject.FeeCategory = worksheetFees.Cells[row, column].FirstOrDefault() is null ? "" : worksheetFees.Cells[row, column].Value.ToString();
+                        if (column == 1) feeObject.FeeName = worksheetFees.Cells[row, column].FirstOrDefault() is null
+                                            ? ""
+                                            : worksheetFees.Cells[row, column].Value is null
+                                            ? ""
+                                            : worksheetFees.Cells[row, column].Value.ToString();
+                        if (column == 2) feeObject.FeeCategory = worksheetFees.Cells[row, column].FirstOrDefault() is null
+                                            ? ""
+                                            : worksheetFees.Cells[row, column].Value is null
+                                            ? ""
+                                            : worksheetFees.Cells[row, column].Value.ToString();
                         try
                         {
-                            if (column == 3) feeObject.Amount = worksheetFees.Cells[row, column].FirstOrDefault() is null ? 0 : Convert.ToDecimal(worksheetFees.Cells[row, column].Value.ToString());
+                            if (column == 3) feeObject.Amount = worksheetFees.Cells[row, column].FirstOrDefault() is null 
+                                                                        ? 0 
+                                                                        : worksheetFees.Cells[row, column].Value is null
+                                                                        ? 0
+                                                                        : Convert.ToDecimal(worksheetFees.Cells[row, column].Value.ToString());
                         }
                         catch
                         {
                             feeObject.Amount = 0;
                         }
-                        if (column == 4) feeObject.VATable = worksheetFees.Cells[row, column].FirstOrDefault() is null ? "" : worksheetFees.Cells[row, column].Value.ToString();
-                        if (column == 5) feeObject.PostingType = worksheetFees.Cells[row, column].FirstOrDefault() is null ? "" : worksheetFees.Cells[row, column].Value.ToString();
+                        if (column == 4) feeObject.VATable = worksheetFees.Cells[row, column].FirstOrDefault() is null
+                                            ? ""
+                                            : worksheetFees.Cells[row, column].Value is null
+                                            ? ""
+                                            : worksheetFees.Cells[row, column].Value.ToString();
+                        if (column == 5) feeObject.PostingType = worksheetFees.Cells[row, column].FirstOrDefault() is null
+                                            ? ""
+                                            : worksheetFees.Cells[row, column].Value is null
+                                            ? ""
+                                            : worksheetFees.Cells[row, column].Value.ToString();
                     }
 
                     feeObject.SeqNo = row - 2;
@@ -1004,18 +1044,38 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
                     {
                         if (column == 1)
                         {
-                            documentName = worksheetAttachments.Cells[row, column].FirstOrDefault() is null ? "" : worksheetAttachments.Cells[row, column].Value.ToString();
+                            documentName = worksheetAttachments.Cells[row, column].FirstOrDefault() is null
+                                            ? ""
+                                            : worksheetAttachments.Cells[row, column].Value is null
+                                            ? ""
+                                            : worksheetAttachments.Cells[row, column].Value.ToString();
                             readObject = readChapters.ChapterItems.Where(C => C.Name == documentName).SingleOrDefault();
                         }
 
                         if(!(readObject is null))
                         {
-                            if (column == 2) newAttachment.DocName = worksheetAttachments.Cells[row, column].FirstOrDefault() is null ? "" : worksheetAttachments.Cells[row, column].Value.ToString();
-                            if (column == 3) newAttachment.DocAsName = worksheetAttachments.Cells[row, column].FirstOrDefault() is null ? "" : worksheetAttachments.Cells[row, column].Value.ToString();
-                            if (column == 4) newAttachment.Action = worksheetAttachments.Cells[row, column].FirstOrDefault() is null ? "" : worksheetAttachments.Cells[row, column].Value.ToString();
+                            if (column == 2) newAttachment.DocName = worksheetAttachments.Cells[row, column].FirstOrDefault() is null
+                                            ? ""
+                                            : worksheetAttachments.Cells[row, column].Value is null
+                                            ? ""
+                                            : worksheetAttachments.Cells[row, column].Value.ToString();
+                            if (column == 3) newAttachment.DocAsName = worksheetAttachments.Cells[row, column].FirstOrDefault() is null
+                                            ? ""
+                                            : worksheetAttachments.Cells[row, column].Value is null
+                                            ? ""
+                                            : worksheetAttachments.Cells[row, column].Value.ToString();
+                            if (column == 4) newAttachment.Action = worksheetAttachments.Cells[row, column].FirstOrDefault() is null
+                                            ? ""
+                                            : worksheetAttachments.Cells[row, column].Value is null
+                                            ? ""
+                                            : worksheetAttachments.Cells[row, column].Value.ToString();
                             try
                             {
-                                if (column == 5) newAttachment.ScheduleDays = worksheetAttachments.Cells[row, column].FirstOrDefault() is null ? 0 : Convert.ToInt32(worksheetAttachments.Cells[row, column].Value.ToString());
+                                if (column == 5) newAttachment.ScheduleDays = worksheetAttachments.Cells[row, column].FirstOrDefault() is null 
+                                                ? 0 
+                                                : worksheetAttachments.Cells[row, column].Value is null
+                                                ? 0
+                                                : Convert.ToInt32(worksheetAttachments.Cells[row, column].Value.ToString());
                             }
                             catch
                             {
