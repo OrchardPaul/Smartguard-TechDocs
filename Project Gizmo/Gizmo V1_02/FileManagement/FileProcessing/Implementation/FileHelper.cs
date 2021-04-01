@@ -499,7 +499,7 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
 
             workSheetAgenda.Row(1).Height = 32;
             workSheetAgenda.Row(1).Style.Font.Size = 8;
-            workSheetAgenda.Row(1).Style.Font.Color.SetColor(System.Drawing.Color.LightGray);
+            workSheetAgenda.Row(1).Style.Font.Color.SetColor(System.Drawing.Color.DarkGray);
             workSheetAgenda.Cells[1, 1].Style.WrapText = true;
             workSheetAgenda.Cells[1, 1].Value = "Progess File names. Correspondence saved in these Progress Files will be made avalible in the history tab.";
 
@@ -537,7 +537,7 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
             //Header of table
             workSheetStatus.Row(1).Height = 32;
             workSheetStatus.Row(1).Style.Font.Size = 8;
-            workSheetStatus.Row(1).Style.Font.Color.SetColor(System.Drawing.Color.LightGray);
+            workSheetStatus.Row(1).Style.Font.Color.SetColor(System.Drawing.Color.DarkGray);
             workSheetStatus.Cells[1, 2].Style.WrapText = true;
             workSheetStatus.Cells[1, 2].Value = "The Smartflow will no longer reschedule when this status has been reached.";
 
@@ -577,7 +577,7 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
             //Header of table
             workSheetFees.Row(1).Height = 30;
             workSheetFees.Row(1).Style.Font.Size = 8;
-            workSheetFees.Row(1).Style.Font.Color.SetColor(System.Drawing.Color.LightGray);
+            workSheetFees.Row(1).Style.Font.Color.SetColor(System.Drawing.Color.DarkGray);
             workSheetFees.Cells[1, 2].Style.WrapText = true;
             workSheetFees.Cells[1, 2].Value = "e.g. Disbursement, Our Fee or Additional Fee.";
 
@@ -724,9 +724,6 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
 
                     recordIndex++;
                 }
-
-
-                
             }
 
             workSheetAttachments.Column(1).Width = 31;
