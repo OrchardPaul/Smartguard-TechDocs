@@ -1503,10 +1503,11 @@ namespace Gizmo_V1_02.Pages.Chapters
 
             Action SelectedDeleteAction = HandleChapterFeeDelete;
             var parameters = new ModalParameters();
-            parameters.Add("InfoHeader", "Delete?");
+            parameters.Add("InfoHeader", "fee");
             parameters.Add("ModalHeight", "300px");
             parameters.Add("ModalWidth", "500px");
             parameters.Add("DeleteAction", SelectedDeleteAction);
+            parameters.Add("InfoText", "");
 
             var options = new ModalOptions()
             {
@@ -1521,9 +1522,11 @@ namespace Gizmo_V1_02.Pages.Chapters
         {
             EditDataViewObject = selectedDataView;
 
+            string viewName = (string.IsNullOrEmpty(selectedDataView.DataView.DisplayName) ? selectedDataView.DataView.ViewName : selectedDataView.DataView.DisplayName);
+
             Action SelectedDeleteAction = HandleDataViewDelete;
             var parameters = new ModalParameters();
-            parameters.Add("InfoHeader", "Delete?");
+            parameters.Add("ItemName", viewName);
             parameters.Add("ModalHeight", "300px");
             parameters.Add("ModalWidth", "500px");
             parameters.Add("DeleteAction", SelectedDeleteAction);

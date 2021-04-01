@@ -19,6 +19,9 @@ namespace Gizmo_V1_02.Pages.Shared.Modals
 
         [Parameter]
         public string InfoHeader { get; set; }
+        
+        [Parameter]
+        public string ItemName { get; set; }
 
         [Parameter]
         public string InfoText { get; set; }
