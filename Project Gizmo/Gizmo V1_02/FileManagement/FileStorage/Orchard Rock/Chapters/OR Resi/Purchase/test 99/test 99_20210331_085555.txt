@@ -1,0 +1,1 @@
+{"CaseTypeGroup":"OR Resi","CaseType":"Purchase","P4WCaseTypeGroup":null,"StepName":"","Name":"test 99","SeqNo":16,"BackgroundColour":null,"BackgroundColourName":null,"ShowPartnerNotes":null,"GeneralNotes":null,"DeveloperNotes":null,"SelectedView":null,"SelectedStep":null,"ChapterItems":[],"DataViews":[],"Fees":[]}
