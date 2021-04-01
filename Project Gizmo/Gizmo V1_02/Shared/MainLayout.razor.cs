@@ -37,6 +37,8 @@ namespace Gizmo_V1_02.Shared
         {
             await sessionState.SetSessionState();
 
+            sessionState.RefreshHome = Refresh;
+
             currentUser = sessionState.User;
 
             if(currentUser is null)
@@ -80,6 +82,12 @@ namespace Gizmo_V1_02.Shared
              */
 
             NavigationManager.NavigateTo("/Identity/Account/LogOutOnGet", true);
+        }
+
+
+        public void Refresh()
+        {
+            StateHasChanged();
         }
 
 

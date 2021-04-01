@@ -24,6 +24,7 @@ using Gizmo_V1_02.FileManagement.FileClassObjects.FileOptions;
 using Gizmo_V1_02.FileManagement.FileClassObjects;
 using System.Net;
 using Microsoft.JSInterop;
+using Gizmo_V1_02.FileManagement.FileProcessing.Interface;
 
 namespace Gizmo_V1_02.Pages.Chapters
 {
@@ -60,6 +61,8 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         private List<FileDesc> ListFileDescriptions { get; set; }
 
+        private List<FileDesc> ListFileImages { get; set; }
+
         private FileDesc SelectedFileDescription { get; set; }
 
         private List<VmUsrOrDefChapterManagement> lstChapters { get; set; } = new List<VmUsrOrDefChapterManagement>();
@@ -94,7 +97,15 @@ namespace Gizmo_V1_02.Pages.Chapters
             set 
             { 
                 selectedChapter.BackgroundColour = ListChapterColours.Where(C => C.ColourName == value).Select(C => C.ColourCode).FirstOrDefault(); 
-                selectedChapter.BackgroundColourName = value; 
+                selectedChapter.BackgroundColourName = value;
+
+                if(ListFileImages.Select(I => I.FileName.Replace(".jpg", "")).ToList().Contains(value))
+                {
+                    sessionState.SetTempBackground(ListFileImages.Where(I => I.FileName.Replace(".jpg", "") == value).Select(F => F.FileDirectory.Replace("\\", "/").Replace("wwwroot/", "") + "/" + F.FileName).SingleOrDefault(), NavigationManager.Uri);
+                    sessionState.RefreshHome?.Invoke();
+                }
+
+                
             } 
         }
 
@@ -164,38 +175,40 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         public ChapterP4WStepSchema ChapterP4WStep { get; set; }
 
-        private List<ChapterColour> ListChapterColours { get; set; } = new List<ChapterColour>
-                                                            {
-                                                                new ChapterColour { ColourName = "Grey", ColourCode = "#3F000000"},
-                                                                new ChapterColour { ColourName = "Blue", ColourCode = "#3F0074FF"},
-                                                                new ChapterColour { ColourName = "Pink", ColourCode = "#3FFD64EF"},
-                                                                new ChapterColour { ColourName = "Peach", ColourCode = "#3FEA9C66"},
-                                                                new ChapterColour { ColourName = "Yellow", ColourCode = "#3FFFFF00"},
-                                                                new ChapterColour { ColourName = "Beige", ColourCode = "#3F957625"},
-                                                                new ChapterColour { ColourName = "Lilac", ColourCode = "#3F6E6FDB"},
-                                                                new ChapterColour { ColourName = "Green", ColourCode = "#3F32EC29"},
-                                                                new ChapterColour { ColourName = "Aqua", ColourCode = "#3F5BDCD0"}
-                                                            };
-
-
-        public bool PartnerShowNotes
-        {
-            get { return (selectedChapter.ShowPartnerNotes == "Y" ? true : false); }
-            set
-            {
-                if (value)
-                {
-                    selectedChapter.ShowPartnerNotes = "Y";
-                }
-                else
-                {
-                    selectedChapter.ShowPartnerNotes = "N";
-                }
-            }
-
-        }
-
         public bool showNewStep { get; set; } = false;
+
+        [Inject]
+        public IFileHelper FileHelper { get; set; }
+        private List<ChapterColour> ListChapterColours { 
+            get
+            {
+                List<ChapterColour> listChapterColours = new List<ChapterColour>
+                {
+                    new ChapterColour { ColourName = "Grey", ColourCode = "#3F000000"},
+                    new ChapterColour { ColourName = "Blue", ColourCode = "#3F0074FF"},
+                    new ChapterColour { ColourName = "Pink", ColourCode = "#3FFD64EF"},
+                    new ChapterColour { ColourName = "Peach", ColourCode = "#3FEA9C66"},
+                    new ChapterColour { ColourName = "Yellow", ColourCode = "#3FFFFF00"},
+                    new ChapterColour { ColourName = "Beige", ColourCode = "#3F957625"},
+                    new ChapterColour { ColourName = "Lilac", ColourCode = "#3F6E6FDB"},
+                    new ChapterColour { ColourName = "Green", ColourCode = "#3F32EC29"},
+                    new ChapterColour { ColourName = "Aqua", ColourCode = "#3F5BDCD0"}
+                };
+
+
+
+                foreach ( FileDesc bgImage in ListFileImages)
+                {
+                    string imgName = bgImage.FileName;
+                    string imgPath = @"\Images\" + imgName;
+                    imgName = imgName.Replace(".jpg", "");
+                    listChapterColours.Add(new ChapterColour { ColourName = imgName, ColourCode = imgPath });
+                }
+                return listChapterColours;
+            }
+        } 
+
+        
 
         protected override async Task OnInitializedAsync()
         {
@@ -219,6 +232,7 @@ namespace Gizmo_V1_02.Pages.Chapters
                 RefreshChapters();
                 partnerCaseTypeGroups = await partnerAccessService.GetPartnerCaseTypeGroups();
                 ListP4WViews = await partnerAccessService.GetPartnerViews();
+                
             }
             catch (Exception)
             {
@@ -230,6 +244,27 @@ namespace Gizmo_V1_02.Pages.Chapters
 
 
 
+        public bool PartnerShowNotes
+        {
+            get { return (selectedChapter.ShowPartnerNotes == "Y" ? true : false); }
+            set
+            {
+                if (value)
+                {
+                    selectedChapter.ShowPartnerNotes = "Y";
+                }
+                else
+                {
+                    selectedChapter.ShowPartnerNotes = "N";
+                }
+            }
+
+        }
+
+        
+
+        
+
         public void DirectToLogin()
         {
             string returnUrl = HttpUtility.UrlEncode($"/");
@@ -238,6 +273,7 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         void SelectHome()
         {
+            NavigationManager.NavigateTo($"Smartflow/{selectedChapter.CaseTypeGroup}/{selectedChapter.CaseType}");
             selectedChapter.Name = "";
             rowChanged = 0;
         }
@@ -253,7 +289,12 @@ namespace Gizmo_V1_02.Pages.Chapters
         {
             selectedChapter.CaseType = (selectedChapter.CaseType == caseType) ? "" : caseType;
             selectedChapter.Name = "";
-            PrepChapterList();
+            
+        }
+
+        private void NavigateToChapter(UsrOrDefChapterManagement chapter)
+        {
+            NavigationManager.NavigateTo($"Smartflow/{chapter.CaseTypeGroup}/{chapter.CaseType}/{chapter.Name}",true);
         }
 
         private async void SelectChapter(UsrOrDefChapterManagement chapter)
@@ -296,12 +337,30 @@ namespace Gizmo_V1_02.Pages.Chapters
                 Chapter = selectedChapter.Name
             };
 
+            dropDownChapterList = await chapterManagementService.GetDocumentList(selectedChapter.CaseType);
+
             ChapterFileUpload.SetChapterOptions(ChapterFileOption);
 
             await RefreshChapterItems("All");
+            
             GetSeletedChapterFileList();
 
+            FileHelper.CustomPath = $"wwwroot/images/BackgroundImages";
+            ListFileImages = FileHelper.GetFileList();
+
+            if (!string.IsNullOrEmpty(selectedChapter.BackgroundColourName))
+            {
+                if (ListFileImages.Select(I => I.FileName.Replace(".jpg", "")).ToList().Contains(selectedChapter.BackgroundColourName))
+                {
+                    sessionState.SetTempBackground(ListFileImages.Where(I => I.FileName.Replace(".jpg", "") == selectedChapter.BackgroundColourName).Select(F => F.FileDirectory.Replace("\\", "/").Replace("wwwroot/", "") + "/" + F.FileName).SingleOrDefault(), NavigationManager.Uri);
+                    sessionState.RefreshHome?.Invoke();
+                }
+            }
+
+
             StateHasChanged();
+
+
         }
 
         private async void SaveChapterDetails()
@@ -330,6 +389,9 @@ namespace Gizmo_V1_02.Pages.Chapters
 
             if (!(selectedChapter.Name is null) & selectedChapter.Name != "")
             {
+                partnerCaseTypeGroups = await partnerAccessService.GetPartnerCaseTypeGroups();
+                ListP4WViews = await partnerAccessService.GetPartnerViews();
+
                 SelectChapter(lstChapters
                                     .Where(C => C.ChapterObject.CaseTypeGroup == selectedChapter.CaseTypeGroup)
                                     .Where(C => C.ChapterObject.CaseType == selectedChapter.CaseType)
@@ -2300,5 +2362,9 @@ namespace Gizmo_V1_02.Pages.Chapters
                 ShowErrorModal("Step Creation", "Step creation could not be completed:", Errors);
             }
         }
+
+
+ 
+
     }
 }
