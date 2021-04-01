@@ -79,7 +79,7 @@ app {
 
 .topbar {
     z-index: 99999;
-    background-color: #FFFFFF !important;
+    background-color: #ddd !important;
     box-shadow: 0 6px 6px 0px rgba(0, 0, 0, 0.4);
 }
 
@@ -1183,13 +1183,13 @@ app {
 .advert-list .card {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.7); /* this adds the "card" effect */
     margin: 30px;
-    border-radius: 5px !important;
+    border-radius: 15px !important;
 }
 
 .advert-list .card-header {
-    border-radius: 5px 5px 0 0 !important;
+    border-radius: 15px 15px 0 0 !important;
     height: 35px;
-    background-color: #000 !important;
+    background-color: #AAA !important;
     color: #fff;
 }
 
@@ -1222,7 +1222,7 @@ app {
 
 .advert-list .card .card-footer {
     font-size: 0.9rem !important;
-    border-radius: 0 0 5px 5px  !important;
+    border-radius: 0 0 15px 15px  !important;
     height: auto !important;
 }
 
