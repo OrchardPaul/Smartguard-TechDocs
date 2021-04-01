@@ -1544,38 +1544,45 @@ namespace Gizmo_V1_02.Pages.Chapters
         {
             editObject = selectedChapterItem;
 
+            string itemName = (string.IsNullOrEmpty(selectedChapterItem.ChapterObject.AltDisplayName) ? selectedChapterItem.ChapterObject.Name : selectedChapterItem.ChapterObject.AltDisplayName);
+            string itemType = selectedChapterItem.ChapterObject.Type;
+
             Action SelectedDeleteAction = HandleChapterDetailDelete;
             var parameters = new ModalParameters();
-            parameters.Add("InfoHeader", "Delete?");
+            parameters.Add("ItemName", itemName);
             parameters.Add("ModalHeight", "300px");
             parameters.Add("ModalWidth", "500px");
             parameters.Add("DeleteAction", SelectedDeleteAction);
+            parameters.Add("InfoText", $"Are you sure you wish to delete the '{itemName}' {itemType.ToLower()}? ");
 
             var options = new ModalOptions()
             {
                 Class = "blazored-custom-modal"
             };
 
-            Modal.Show<ModalDelete>("Delete?", parameters, options);
+            Modal.Show<ModalDelete>($"Delete {itemType}", parameters, options);
         }
 
         protected void PrepareChapterFeeDelete(VmFee selectedChapterItem)
         {
             editFeeObject = selectedChapterItem;
 
+            string itemName = selectedChapterItem.FeeObject.FeeName;
+
             Action SelectedDeleteAction = HandleChapterFeeDelete;
             var parameters = new ModalParameters();
-            parameters.Add("InfoHeader", "Delete?");
+            parameters.Add("ItemName", itemName);
             parameters.Add("ModalHeight", "300px");
             parameters.Add("ModalWidth", "500px");
             parameters.Add("DeleteAction", SelectedDeleteAction);
+            parameters.Add("InfoText", $"Are you sure you wish to delete the '{itemName}' fee?");
 
             var options = new ModalOptions()
             {
                 Class = "blazored-custom-modal"
             };
 
-            Modal.Show<ModalDelete>("Delete?", parameters, options);
+            Modal.Show<ModalDelete>("Delete Fee", parameters, options);
         }
 
 
@@ -1583,19 +1590,22 @@ namespace Gizmo_V1_02.Pages.Chapters
         {
             EditDataViewObject = selectedDataView;
 
+            string itemName = (string.IsNullOrEmpty(selectedDataView.DataView.DisplayName) ? selectedDataView.DataView.ViewName : selectedDataView.DataView.DisplayName);
+
             Action SelectedDeleteAction = HandleDataViewDelete;
             var parameters = new ModalParameters();
-            parameters.Add("InfoHeader", "Delete?");
+            parameters.Add("ItemName", itemName);
             parameters.Add("ModalHeight", "300px");
             parameters.Add("ModalWidth", "500px");
             parameters.Add("DeleteAction", SelectedDeleteAction);
+            parameters.Add("InfoText", $"Are you sure you wish to delete the '{itemName}' data view?");
 
             var options = new ModalOptions()
             {
                 Class = "blazored-custom-modal"
             };
 
-            Modal.Show<ModalDelete>("Delete?", parameters, options);
+            Modal.Show<ModalDelete>($"Delete Data View", parameters, options);
         }
 
         protected void ShowDataViewDisplayModal(VmDataViews selectedObject)
@@ -1616,12 +1626,15 @@ namespace Gizmo_V1_02.Pages.Chapters
         {
             editObject = selectedChapterItem;
 
+            string itemName = selectedChapterItem.ChapterObject.Name;
+
             Action SelectedDeleteAction = HandleChapterDelete;
             var parameters = new ModalParameters();
-            parameters.Add("InfoHeader", "Delete?");
+            parameters.Add("ItemName", itemName);
             parameters.Add("ModalHeight", "300px");
             parameters.Add("ModalWidth", "500px");
             parameters.Add("DeleteAction", SelectedDeleteAction);
+            parameters.Add("InfoText", $"Are you sure you wish to delete the '{itemName}' chapter?");
 
 
             var options = new ModalOptions()
@@ -1629,7 +1642,7 @@ namespace Gizmo_V1_02.Pages.Chapters
                 Class = "blazored-custom-modal"
             };
 
-            Modal.Show<ModalDelete>("Delete?", parameters, options);
+            Modal.Show<ModalDelete>("Delete Chapter", parameters, options);
         }
 
 
@@ -1637,19 +1650,22 @@ namespace Gizmo_V1_02.Pages.Chapters
         {
             SelectedFileDescription = selectedFile;
 
+            string itemName = selectedFile.FileName;
+
             Action SelectedDeleteAction = HandleDeleteFile;
             var parameters = new ModalParameters();
-            parameters.Add("InfoHeader", "Delete?");
+            parameters.Add("ItemName", itemName);
             parameters.Add("ModalHeight", "300px");
             parameters.Add("ModalWidth", "500px");
             parameters.Add("DeleteAction", SelectedDeleteAction);
+            parameters.Add("InfoText", $"Are you sure you wish to delete the '{itemName}' backup file?");
 
             var options = new ModalOptions()
             {
                 Class = "blazored-custom-modal"
             };
 
-            Modal.Show<ModalDelete>("Delete?", parameters, options);
+            Modal.Show<ModalDelete>("Delete Backup File", parameters, options);
         }
 
         private void PrepareForComparison(VmUsrOrDefChapterManagement selectedItem)
