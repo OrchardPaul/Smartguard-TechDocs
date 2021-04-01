@@ -1,5 +1,6 @@
 ﻿using GadjIT.GadjitContext.GadjIT_App;
 using Gizmo_V1_02.Data.Admin;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using System;
 using System.Collections.Generic;
@@ -28,7 +29,7 @@ namespace Gizmo_V1_02.Services.SessionState
         SpinLock IdentityLock { get; set; }
         bool Lock { get; set; }
         string selectedSystem { get; }
-
+        string TempBackGroundImage { get; }
         event Action OnChange;
 
         Claim getCompanyClaim();
@@ -45,6 +46,11 @@ namespace Gizmo_V1_02.Services.SessionState
         Task<string> ResetSelectedSystem();
         Task<AppCompanyDetails> switchSelectedCompany();
         Task<string> SetSessionState();
+        Action RefreshHome { get; set; }
+
+        string GetBackgroundImage();
+
+        void SetTempBackground(string image, string Uri);
 
     }
 
@@ -53,6 +59,7 @@ namespace Gizmo_V1_02.Services.SessionState
         private readonly AuthenticationStateProvider authenticationStateProvider;
         private readonly IIdentityUserAccess userAccess;
         private readonly ICompanyDbAccess companyDbAccess;
+        private readonly NavigationManager navigationManager;
 
         public AspNetUsers User { get; protected set; }
 
@@ -67,6 +74,8 @@ namespace Gizmo_V1_02.Services.SessionState
         public string CompCol3 { get; set; }
 
         public string CompCol4 { get; set; }
+
+        public Action RefreshHome { get; set; }
 
         public AppCompanyDetails Company { get; protected set; }
 
@@ -90,15 +99,42 @@ namespace Gizmo_V1_02.Services.SessionState
 
         private string sessionStateSet;
 
+        public string TempBackGroundImage { get; protected set; }
+
+        public string TempBackGroundImageAppliedUri { get; protected set; }
+
+        public string SelectedChapter { get; protected set; }
 
         public UserSessionState(AuthenticationStateProvider authenticationStateProvider
                                 , IIdentityUserAccess userAccess
-                                , ICompanyDbAccess companyDbAccess)
+                                , ICompanyDbAccess companyDbAccess
+                                , NavigationManager navigationManager)
         {
             this.authenticationStateProvider = authenticationStateProvider;
             this.userAccess = userAccess;
             this.companyDbAccess = companyDbAccess;
+            this.navigationManager = navigationManager;
         }
+
+        public string GetBackgroundImage()
+        {
+            if(!string.IsNullOrEmpty(TempBackGroundImage) && !string.IsNullOrEmpty(TempBackGroundImageAppliedUri))
+            {
+                if(TempBackGroundImageAppliedUri == navigationManager.Uri)
+                {
+                    return TempBackGroundImage;
+                }
+            }
+
+            return User.MainBackgroundImage;
+        }
+
+        public void SetTempBackground(string image, string Uri)
+        {
+            TempBackGroundImage = image;
+            TempBackGroundImageAppliedUri = Uri;
+        }
+
 
         public void SetUserProfileReturnURI(string returnURI)
         {

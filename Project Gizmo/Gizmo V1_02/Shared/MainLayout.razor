@@ -27,7 +27,12 @@
     }
     @{
         string parallax = "";
-        if (!(sessionState.User is null) && !string.IsNullOrEmpty(sessionState.User.MainBackgroundImage)) {
+        if (!string.IsNullOrEmpty(sessionState.TempBackGroundImage))
+        {
+            parallax = ".parallax { background-image: url('" + sessionState.GetBackgroundImage() + "') }";
+        }
+        else if (!(sessionState.User is null) && !string.IsNullOrEmpty(sessionState.User.MainBackgroundImage)) 
+        {
             parallax = ".parallax { background-image: url('" + sessionState.User.MainBackgroundImage + "') }";
         }
         else

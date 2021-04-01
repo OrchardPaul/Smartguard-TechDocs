@@ -1,5 +1,7 @@
-﻿@page "/Smartflow"
+﻿@page "/Smartflows"
+@page "/Smartflow"
 @page "/Smartflow/{UrlCaseTypeGroup}/{UrlCaseType}/{UrlChapter}"
+@page "/Smartflow/{UrlCaseTypeGroup}/{UrlCaseType}"
 
 @inject IJSRuntime jsRuntime
 @using Gizmo_V1_02.Pages.Shared.Modals
@@ -18,7 +20,7 @@ else
             <h3>Smartflow</h3>
             <p class="hidden-md-down">Create and maintain Smartflows for all case types. <em>Note: please make sure you are pointing to the appropriate system.</em></p>
         </div>
-       
+
         <div class="mb-4 grid-tran grid-chapter-nav">
             <div class="tran-block rounded">
                 @if (sessionState.isAdminUser)
@@ -53,10 +55,10 @@ else
 
                     <!-- SHOW ALL GROUPS -->
                     @foreach (var caseTypeGroup in lstChapters.Where(C => C.ChapterObject.ParentId == 0)
-  .Where(C => !(C.ChapterObject.CaseTypeGroup is null))
-  .Select(C => C.ChapterObject.CaseTypeGroup)
-  .Distinct()
-  .ToList())
+.Where(C => !(C.ChapterObject.CaseTypeGroup is null))
+.Select(C => C.ChapterObject.CaseTypeGroup)
+.Distinct()
+.ToList())
                     {
 
                         <div class="grid-row-lg mt-3 nav-row-1">
@@ -93,11 +95,11 @@ else
                         {
 
                             @foreach (var caseType in lstChapters.Where(C => C.ChapterObject.ParentId == 0)
-    .Where(C => !(C.ChapterObject.CaseType is null))
-    .Where(C => C.ChapterObject.CaseTypeGroup == selectedChapter.CaseTypeGroup)
-    .Select(C => C.ChapterObject.CaseType)
-    .Distinct()
-    .ToList())
+  .Where(C => !(C.ChapterObject.CaseType is null))
+  .Where(C => C.ChapterObject.CaseTypeGroup == selectedChapter.CaseTypeGroup)
+  .Select(C => C.ChapterObject.CaseType)
+  .Distinct()
+  .ToList())
                             {
 
                                 <div class="grid-row-md nav-row-2">
@@ -143,11 +145,11 @@ else
                                 {
                                     <div class="grid-nav">
                                         @foreach (var Chapter in lstChapters
-                                                       .Where(C => C.ChapterObject.CaseType == selectedChapter.CaseType)
-                                                       .Where(C => C.ChapterObject.CaseTypeGroup == selectedChapter.CaseTypeGroup)
-                                                       .Where(C => C.ChapterObject.Type == "Chapter")
-                                                       .OrderBy(C => C.ChapterObject.SeqNo)
-                                                       .ToList())
+                                                     .Where(C => C.ChapterObject.CaseType == selectedChapter.CaseType)
+                                                     .Where(C => C.ChapterObject.CaseTypeGroup == selectedChapter.CaseTypeGroup)
+                                                     .Where(C => C.ChapterObject.Type == "Chapter")
+                                                     .OrderBy(C => C.ChapterObject.SeqNo)
+                                                     .ToList())
                                         {
                                             <div class="grid-row-md nav-row-3 no-border  @(rowChanged == Chapter.ChapterObject.SeqNo ? ToggleRowChangedClass() : "" )">
                                                 <div class="data-item @(Chapter.ChapterObject.Name.Length > 6 && Chapter.ChapterObject.Name.Substring(0,6) == "GROUP " ? "data-item-group" : "")">
@@ -164,7 +166,7 @@ else
                                                                             <span class="fa fa-font mr-2"></span>
                                                                             <span>Rename</span>
                                                                         </li>
-                                                                        <li class="col-main" @onclick="() => SelectChapter(Chapter.ChapterObject)" title="">
+                                                                        <li class="col-main" @onclick="() => NavigateToChapter(Chapter.ChapterObject)" title="">
                                                                             <span class="fa fa-pencil-alt mr-2"></span>
                                                                             <span>Edit</span>
                                                                         </li>
@@ -210,7 +212,7 @@ else
                                                             <div @onclick='() => MoveSeq(Chapter.ChapterObject, "Chapters", "Down")'><span class="fa fa-angle-down"></span></div>
                                                         </div>
                                                     }
-                                                    <div title="Chapter: click to configure @Chapter.ChapterObject.Name" class="data-item-right link-direction" @onclick="() => SelectChapter(Chapter.ChapterObject)">
+                                                    <div title="Chapter: click to configure @Chapter.ChapterObject.Name" class="data-item-right link-direction" @onclick="() => NavigateToChapter(Chapter.ChapterObject)">
                                                         <div class="fa fa-chevron-circle-right"></div>
                                                     </div>
                                                 </div>
@@ -338,100 +340,104 @@ else
                             @if ((sessionState.isAdminUser))
                             {
 
-                            <EditForm Model="selectedChapter" OnValidSubmit="SaveChapterDetails">
-                                <div class="row">
-                                    <div class="col-12 col-xl-6">
-                                        <div class="form-group">
-                                            <label for="P4WCTG">P4W Case Type Group</label>
-                                            <InputSelect class="form-control form-control-xxl"
-                                                         @bind-Value="selectedChapter.P4WCaseTypeGroup">
-                                                <option value="">Select</option>
-                                                @foreach (var group in partnerCaseTypeGroups)
-                                                                {
-                                                    <option value="@group.Name">
-                                                        @group.Name
-                                                    </option>
-                                                                }
-                                            </InputSelect>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="SelectedView">Smartflow View</label>
-                                            <InputSelect class="form-control form-control-xxl"
-                                                         @bind-Value="selectedChapter.SelectedView">
-                                                <option value="">Select</option>
-                                                @foreach (var view in ListP4WViews.Where(V => !(V.InternalNote is null) && (V.InternalNote.Contains("Smartflow"))).ToList())
-                                                                {
-                                                    <option value="@view.Name">
-                                                        @view.Name
-                                                    </option>
-                                                                }
-                                            </InputSelect>
-                                        </div>
-                                        @if (!(selectedChapter.SelectedStep is null) && selectedChapter.SelectedStep != "Create New")
-                                        {
+                                <EditForm Model="selectedChapter" OnValidSubmit="SaveChapterDetails">
+                                    <div class="row">
+                                        <div class="col-12 col-xl-6">
                                             <div class="form-group">
-                                                <label for="SelectedStep">Smartflow Step</label>
+                                                <label for="P4WCTG">P4W Case Type Group</label>
                                                 <InputSelect class="form-control form-control-xxl"
-                                                             @bind-Value="selectedChapter.SelectedStep">
+                                                             @bind-Value="selectedChapter.P4WCaseTypeGroup">
                                                     <option value="">Select</option>
-                                                    <option value="Create New">--- Create New ---</option>
-                                                    @foreach (var step in dropDownChapterList.Where(D => D.DocumentType == 6).Where(D => D.Notes.Contains("Smartflow:")).ToList())
-                                                                        {
-                                                        <option value="@step.Name">
-                                                            @step.Name
+                                                    @foreach (var group in partnerCaseTypeGroups)
+                                                                    {
+                                                        <option value="@group.Name">
+                                                            @group.Name
                                                         </option>
-                                                                        }
+                                                                    }
                                                 </InputSelect>
                                             </div>
-                                        }
-                                        else
-                                        {
                                             <div class="form-group">
-                                                <label>Enter Smartflow Step Name</label>
-                                                <InputText @bind-Value="selectedChapter.StepName" class="form-control form-control-xxl" />
+                                                <label for="SelectedView">Smartflow View</label>
+                                                <InputSelect class="form-control form-control-xxl"
+                                                             @bind-Value="selectedChapter.SelectedView">
+                                                    <option value="">Select</option>
+                                                    @foreach (var view in ListP4WViews.Where(V => !(V.InternalNote is null) && (V.InternalNote.Contains("Smartflow"))).ToList())
+                                                                    {
+                                                        <option value="@view.Name">
+                                                            @view.Name
+                                                        </option>
+                                                                    }
+                                                </InputSelect>
                                             </div>
-                                            <button @onclick='(() => CreateP4WSmartflowStep())' class="btn btn-main btn-shadow" title="Create Step"><span>Create</span></button>
-                                            <button @onclick='(() => CancelCreateP4WStep())' class="btn btn-main btn-shadow" title="Cancel"><span>Cancel</span></button>
-                                        }
+                                            @if (!(selectedChapter.SelectedStep is null) && selectedChapter.SelectedStep != "Create New")
+                                            {
+                                                <div class="form-group">
+                                                    <label for="SelectedStep">Smartflow Step</label>
+                                                    <InputSelect class="form-control form-control-xxl"
+                                                                 @bind-Value="selectedChapter.SelectedStep">
+                                                        <option value="">Select</option>
+                                                        <option value="Create New">--- Create New ---</option>
+                                                        @foreach (var step in dropDownChapterList.Where(D => D.DocumentType == 6).Where(D => D.Notes.Contains("Smartflow:")).ToList())
+                                                                            {
+                                                            <option value="@step.Name">
+                                                                @step.Name
+                                                            </option>
+                                                                            }
+                                                    </InputSelect>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="form-group">
+                                                    <label>Enter Smartflow Step Name</label>
+                                                    <InputText @bind-Value="selectedChapter.StepName" class="form-control form-control-xxl" />
+                                                </div>
+                                                <button @onclick='(() => CreateP4WSmartflowStep())' class="btn btn-main btn-shadow" title="Create Step"><span>Create</span></button>
+                                                <button @onclick='(() => CancelCreateP4WStep())' class="btn btn-main btn-shadow" title="Cancel"><span>Cancel</span></button>
+                                            }
+
+                                        </div>
+                                        <div class="col-12 col-xl-6">
+                                            <div class="form-group">
+                                                <label for="BgColour">Background Colour</label>
+                                                <select @bind="selectColour" style="background-color: @getHTMLColourFromAndroid(ListChapterColours.Where(C => C.ColourName == selectColour).Select(C => C.ColourCode).FirstOrDefault())" class="form-control form-control-lg">
+                                                    @foreach (var colour in ListChapterColours)
+                                                    {
+                                                        <option style="background-color: @getHTMLColourFromAndroid(colour.ColourCode)" value="@colour.ColourName">
+                                                            @colour.ColourName
+                                                        </option>
+                                                    }
+                                                </select>
+
+
+
+
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label>Show Notes</label>
+                                                <InputCheckbox class="form-control" @bind-Value="PartnerShowNotes" />
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label>Ticker Message</label>
+                                                <InputTextArea @bind-Value="selectedChapter.GeneralNotes" class="form-control form-control-xxl" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!--
+                                    <div class="form-group">
+                                        <label>Developer Notes</label>
+                                        <InputTextArea @bind-Value="selectedChapter.DeveloperNotes" class="form-control form-control-lg" />
+                                    </div>
+                                    -->
+
+                                    <div class="button-container">
+                                        <button type="submit" class="btn btn-main">Save Changes</button>
 
                                     </div>
-                                    <div class="col-12 col-xl-6">
-                                        <div class="form-group">
-                                            <label for="BgColour">Background Colour</label>
-                                            <select @bind="selectColour" style="background-color: @getHTMLColourFromAndroid(ListChapterColours.Where(C => C.ColourName == selectColour).Select(C => C.ColourCode).FirstOrDefault())" class="form-control form-control-lg">
-                                                @foreach (var colour in ListChapterColours)
-                                                {
-                                                    <option style="background-color: @getHTMLColourFromAndroid(colour.ColourCode)" value="@colour.ColourName">
-                                                        @colour.ColourName
-                                                    </option>
-                                                }
-                                            </select>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label>Show Notes</label>
-                                            <InputCheckbox class="form-control" @bind-Value="PartnerShowNotes" />
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label>General Notes</label>
-                                            <InputTextArea @bind-Value="selectedChapter.GeneralNotes" class="form-control form-control-xxl" />
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!--
-    <div class="form-group">
-        <label>Developer Notes</label>
-        <InputTextArea @bind-Value="selectedChapter.DeveloperNotes" class="form-control form-control-lg" />
-    </div>
-    -->
-
-                                <div class="button-container">
-                                    <button type="submit" class="btn btn-main">Save Changes</button>
-
-                                </div>
-                            </EditForm>
+                                </EditForm>
 
 
                             }
@@ -590,8 +596,8 @@ else
                                                 case "Doc":
 
                                                     @if (!string.IsNullOrEmpty(doc.DocDisplayName)
-                                                              && (doc.DocDisplayName.Length > 9)
-                                                              && (doc.DocDisplayName.Substring(0, 9).ToUpper().Contains("LTR")))
+                                                            && (doc.DocDisplayName.Length > 9)
+                                                            && (doc.DocDisplayName.Substring(0, 9).ToUpper().Contains("LTR")))
                                                     {
                                                         <span class="font-100"><span class="fa fa-file-alt mr-2"></span></span>
                                                     }
@@ -908,135 +914,135 @@ else
                         </div>
                         @foreach (var fee in lstFees.OrderBy(F => F.FeeObject.SeqNo).ToList())
                         {
-                    <div class="row grid-row grid-row-lg @(rowChanged == fee.FeeObject.SeqNo ? "row-changed" : "" )">
-                        <div class="data-item">
-                            @if (sessionState.isAdminUser)
-                            {
-                                @if (!compareSystems)
-                                {
-                                    <div class="btn-ellipses float-left">
-                                        <span class="fa fa-ellipsis-v"></span>
-                                        <div class="ellipsis-menu">
-                                            <ul>
-                                                <li class="col-main" @onclick='(() => ShowChapterFeesModal("Edit", fee.FeeObject))'>
-                                                    <span class="fa fa-pencil-alt mr-2"></span>
-                                                    <span>Edit</span>
-                                                </li>
-                                                <li class="col-main" @onclick='(() => ShowChapterFeeViewModal(fee))'>
-                                                    <span class="fa fa-binoculars mr-2"></span>
-                                                    <span>View</span>
-                                                </li>
-                                                <li class="col-red" @onclick="() => PrepareChapterFeeDelete(fee)">
-                                                    <span class="fa fa-trash-alt mr-2"></span>
-                                                    <span>Delete</span>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <div class="data-item-sub">
-                                        <span class="fa fa-pound-sign mr-2"></span> @fee.FeeObject.FeeName
-                                    </div>
-
-                                    @if (fee.FeeObject.VATable == "Y")
+                            <div class="row grid-row grid-row-lg @(rowChanged == fee.FeeObject.SeqNo ? "row-changed" : "" )">
+                                <div class="data-item">
+                                    @if (sessionState.isAdminUser)
                                     {
-                                        <div class="data-item-right mr-2 font-100 hidden-md-down">
-                                            <ModalTooltip Direction="top" Text=@("VAT Included") Class="w-3">
-                                                <span class="fa fa-coins"></span>
-                                            </ModalTooltip>
-                                        </div>
-                                    }
-
-                                    <div class="data-item-right mr-2 seq-change">
-                                        <div @onclick='() => MoveFeeSeqNo(fee.FeeObject,"Fees", "Up")'><span class="fa fa-angle-up"></span></div>
-                                        <div class="seq-no">@fee.FeeObject.SeqNo</div>
-                                        <div @onclick='() => MoveFeeSeqNo(fee.FeeObject,"Fees", "Down")'><span class="fa fa-angle-down"></span></div>
-                                    </div>
-
-
-
-
-                                }
-                                else
-                                {
-
-                                    <div class="btn-ellipses float-left">
-                                        @if (!(fee.ComparisonIcon is null))
+                                        @if (!compareSystems)
                                         {
-                                            @if (!(fee.ComparisonResult == "Exact match"))
+                                            <div class="btn-ellipses float-left">
+                                                <span class="fa fa-ellipsis-v"></span>
+                                                <div class="ellipsis-menu">
+                                                    <ul>
+                                                        <li class="col-main" @onclick='(() => ShowChapterFeesModal("Edit", fee.FeeObject))'>
+                                                            <span class="fa fa-pencil-alt mr-2"></span>
+                                                            <span>Edit</span>
+                                                        </li>
+                                                        <li class="col-main" @onclick='(() => ShowChapterFeeViewModal(fee))'>
+                                                            <span class="fa fa-binoculars mr-2"></span>
+                                                            <span>View</span>
+                                                        </li>
+                                                        <li class="col-red" @onclick="() => PrepareChapterFeeDelete(fee)">
+                                                            <span class="fa fa-trash-alt mr-2"></span>
+                                                            <span>Delete</span>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <div class="data-item-sub">
+                                                <span class="fa fa-pound-sign mr-2"></span> @fee.FeeObject.FeeName
+                                            </div>
+
+                                            @if (fee.FeeObject.VATable == "Y")
                                             {
-                                                <div class="btn-dashed" @onclick="() => PrepareFeeForComparison(fee)"><span class="fa fa-@fee.ComparisonIcon"></span></div>
+                                                <div class="data-item-right mr-2 font-100 hidden-md-down">
+                                                    <ModalTooltip Direction="top" Text=@("VAT Included") Class="w-3">
+                                                        <span class="fa fa-coins"></span>
+                                                    </ModalTooltip>
+                                                </div>
                                             }
-                                            else
-                                            {
-                                                <span class="fa fa-@fee.ComparisonIcon"></span>
-                                            }
+
+                                            <div class="data-item-right mr-2 seq-change">
+                                                <div @onclick='() => MoveFeeSeqNo(fee.FeeObject,"Fees", "Up")'><span class="fa fa-angle-up"></span></div>
+                                                <div class="seq-no">@fee.FeeObject.SeqNo</div>
+                                                <div @onclick='() => MoveFeeSeqNo(fee.FeeObject,"Fees", "Down")'><span class="fa fa-angle-down"></span></div>
+                                            </div>
+
+
+
+
                                         }
                                         else
                                         {
-                                            <div class="spinner"></div>
+
+                                            <div class="btn-ellipses float-left">
+                                                @if (!(fee.ComparisonIcon is null))
+                                                {
+                                                    @if (!(fee.ComparisonResult == "Exact match"))
+                                                    {
+                                                        <div class="btn-dashed" @onclick="() => PrepareFeeForComparison(fee)"><span class="fa fa-@fee.ComparisonIcon"></span></div>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="fa fa-@fee.ComparisonIcon"></span>
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <div class="spinner"></div>
+                                                }
+
+                                            </div>
+
+
+                                            <div class="data-item-sub">
+                                                <span class="fa fa-pound-sign mr-2"></span> @fee.FeeObject.FeeName
+                                            </div>
+                                            @if (fee.FeeObject.VATable == "Y")
+                                            {
+                                                <div class="data-item-right mr-2 font-100 hidden-md-down">
+                                                    <ModalTooltip Direction="top" Text=@("VAT Included") Class="w-3">
+                                                        <span class="fa fa-coins"></span>
+                                                    </ModalTooltip>
+                                                </div>
+                                            }
+                                            <div class="data-item-right mr-2">
+                                                <div class="seq-no">@fee.FeeObject.SeqNo</div>
+                                            </div>
                                         }
-
-                                    </div>
-
-
-                                    <div class="data-item-sub">
-                                        <span class="fa fa-pound-sign mr-2"></span> @fee.FeeObject.FeeName
-                                    </div>
-                                    @if (fee.FeeObject.VATable == "Y")
+                                    }
+                                    else
                                     {
-                                        <div class="data-item-right mr-2 font-100 hidden-md-down">
-                                            <ModalTooltip Direction="top" Text=@("VAT Included") Class="w-3">
-                                                <span class="fa fa-coins"></span>
-                                            </ModalTooltip>
+
+                                        <div class="btn-ellipses float-left">
+                                            <span class="fa fa-ellipsis-v"></span>
+                                            <div class="ellipsis-menu">
+                                                <ul>
+                                                    <li class="col-main" @onclick='(() => ShowChapterFeeViewModal(fee))'>
+                                                        <span class="fa fa-binoculars mr-2"></span>
+                                                        <span>View</span>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+
+                                        <div class="data-item-sub">
+                                            <span class="fa fa-pound-sign mr-2"></span> @fee.FeeObject.FeeName
+                                        </div>
+                                        @if (fee.FeeObject.VATable == "Y")
+                                        {
+                                            <div class="data-item-right mr-2 font-100 hidden-md-down">
+                                                <ModalTooltip Direction="top" Text=@("VAT Included") Class="w-3">
+                                                    <span class="fa fa-coins"></span>
+                                                </ModalTooltip>
+                                            </div>
+                                        }
+                                        <div class="data-item-right mr-2">
+                                            <div class="seq-no">@fee.FeeObject.SeqNo</div>
                                         </div>
                                     }
-                                    <div class="data-item-right mr-2">
-                                        <div class="seq-no">@fee.FeeObject.SeqNo</div>
-                                    </div>
-                                }
-                            }
-                            else
-                            {
 
-                                <div class="btn-ellipses float-left">
-                                    <span class="fa fa-ellipsis-v"></span>
-                                    <div class="ellipsis-menu">
-                                        <ul>
-                                            <li class="col-main" @onclick='(() => ShowChapterFeeViewModal(fee))'>
-                                                <span class="fa fa-binoculars mr-2"></span>
-                                                <span>View</span>
-                                            </li>
-                                        </ul>
-                                    </div>
                                 </div>
-
-                                <div class="data-item-sub">
-                                    <span class="fa fa-pound-sign mr-2"></span> @fee.FeeObject.FeeName
+                                <div class="hidden-md-down data-item ">
+                                    <div class="data-item-sub font-85 pl-3">@fee.FeeObject.FeeCategory</div>
                                 </div>
-                                @if (fee.FeeObject.VATable == "Y")
-                                {
-                                    <div class="data-item-right mr-2 font-100 hidden-md-down">
-                                        <ModalTooltip Direction="top" Text=@("VAT Included") Class="w-3">
-                                            <span class="fa fa-coins"></span>
-                                        </ModalTooltip>
-                                    </div>
-                                }
-                                <div class="data-item-right mr-2">
-                                    <div class="seq-no">@fee.FeeObject.SeqNo</div>
+                                <div class="hidden-md-down data-item ">
+                                    <div class="data-item-sub font-85 pl-3">@fee.FeeObject.PostingType</div>
                                 </div>
-                            }
-
-                        </div>
-                        <div class="hidden-md-down data-item ">
-                            <div class="data-item-sub font-85 pl-3">@fee.FeeObject.FeeCategory</div>
-                        </div>
-                        <div class="hidden-md-down data-item ">
-                            <div class="data-item-sub font-85 pl-3">@fee.FeeObject.PostingType</div>
-                        </div>
-                        <div class="data-item">
-                            <div class="data-item-sub text-right font-85 pl-3">£@string.Format("{0:N2}", fee.FeeObject.Amount)</div>
-                        </div>
-                    </div>
+                                <div class="data-item">
+                                    <div class="data-item-sub text-right font-85 pl-3">£@string.Format("{0:N2}", fee.FeeObject.Amount)</div>
+                                </div>
+                            </div>
 
                         }
                     </div>
