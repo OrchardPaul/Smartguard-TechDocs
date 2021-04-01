@@ -99,9 +99,9 @@ namespace Gizmo_V1_02.Pages.Chapters
                 selectedChapter.BackgroundColour = ListChapterColours.Where(C => C.ColourName == value).Select(C => C.ColourCode).FirstOrDefault(); 
                 selectedChapter.BackgroundColourName = value;
 
-                if(ListFileImages.Select(I => I.FileName.Replace(".jpg", "")).ToList().Contains(value))
+                if(ListFileImages.Select(I => I.FileName).ToList().Contains(value))
                 {
-                    sessionState.SetTempBackground(ListFileImages.Where(I => I.FileName.Replace(".jpg", "") == value).Select(F => F.FileDirectory.Replace("\\", "/").Replace("wwwroot/", "") + "/" + F.FileName).SingleOrDefault(), NavigationManager.Uri);
+                    sessionState.SetTempBackground(ListFileImages.Where(I => I.FileName == value).Select(F => F.FileDirectory.Replace("\\", "/").Replace("wwwroot/", "") + "/" + F.FileName).SingleOrDefault(), NavigationManager.Uri);
                     sessionState.RefreshHome?.Invoke();
                 }
 
@@ -200,8 +200,8 @@ namespace Gizmo_V1_02.Pages.Chapters
                 foreach ( FileDesc bgImage in ListFileImages)
                 {
                     string imgName = bgImage.FileName;
-                    string imgPath = @"\Images\" + imgName;
-                    imgName = imgName.Replace(".jpg", "");
+                    string imgPath = @"/images/backgroundimages/" + imgName;
+                    //imgName = imgName.Replace(".jpg", "");
                     listChapterColours.Add(new ChapterColour { ColourName = imgName, ColourCode = imgPath });
                 }
                 return listChapterColours;
@@ -350,9 +350,9 @@ namespace Gizmo_V1_02.Pages.Chapters
 
             if (!string.IsNullOrEmpty(selectedChapter.BackgroundColourName))
             {
-                if (ListFileImages.Select(I => I.FileName.Replace(".jpg", "")).ToList().Contains(selectedChapter.BackgroundColourName))
+                if (ListFileImages.Select(I => I.FileName).ToList().Contains(selectedChapter.BackgroundColourName))
                 {
-                    sessionState.SetTempBackground(ListFileImages.Where(I => I.FileName.Replace(".jpg", "") == selectedChapter.BackgroundColourName).Select(F => F.FileDirectory.Replace("\\", "/").Replace("wwwroot/", "") + "/" + F.FileName).SingleOrDefault(), NavigationManager.Uri);
+                    sessionState.SetTempBackground(ListFileImages.Where(I => I.FileName == selectedChapter.BackgroundColourName).Select(F => F.FileDirectory.Replace("\\", "/").Replace("wwwroot/", "") + "/" + F.FileName).SingleOrDefault(), NavigationManager.Uri);
                     sessionState.RefreshHome?.Invoke();
                 }
             }
