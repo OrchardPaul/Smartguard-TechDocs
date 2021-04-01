@@ -24,6 +24,7 @@ using Gizmo_V1_02.FileManagement.FileClassObjects.FileOptions;
 using Gizmo_V1_02.FileManagement.FileClassObjects;
 using System.Net;
 using Microsoft.JSInterop;
+using Gizmo_V1_02.FileManagement.FileProcessing.Interface;
 
 namespace Gizmo_V1_02.Pages.Chapters
 {
@@ -164,38 +165,42 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         public ChapterP4WStepSchema ChapterP4WStep { get; set; }
 
-        private List<ChapterColour> ListChapterColours { get; set; } = new List<ChapterColour>
-                                                            {
-                                                                new ChapterColour { ColourName = "Grey", ColourCode = "#3F000000"},
-                                                                new ChapterColour { ColourName = "Blue", ColourCode = "#3F0074FF"},
-                                                                new ChapterColour { ColourName = "Pink", ColourCode = "#3FFD64EF"},
-                                                                new ChapterColour { ColourName = "Peach", ColourCode = "#3FEA9C66"},
-                                                                new ChapterColour { ColourName = "Yellow", ColourCode = "#3FFFFF00"},
-                                                                new ChapterColour { ColourName = "Beige", ColourCode = "#3F957625"},
-                                                                new ChapterColour { ColourName = "Lilac", ColourCode = "#3F6E6FDB"},
-                                                                new ChapterColour { ColourName = "Green", ColourCode = "#3F32EC29"},
-                                                                new ChapterColour { ColourName = "Aqua", ColourCode = "#3F5BDCD0"}
-                                                            };
-
-
-        public bool PartnerShowNotes
-        {
-            get { return (selectedChapter.ShowPartnerNotes == "Y" ? true : false); }
-            set
-            {
-                if (value)
-                {
-                    selectedChapter.ShowPartnerNotes = "Y";
-                }
-                else
-                {
-                    selectedChapter.ShowPartnerNotes = "N";
-                }
-            }
-
-        }
-
         public bool showNewStep { get; set; } = false;
+
+        [Inject]
+        public IFileHelper FileHelper { get; set; }
+        private List<ChapterColour> ListChapterColours { 
+            get
+            {
+                List<ChapterColour> listChapterColours = new List<ChapterColour>
+                {
+                    new ChapterColour { ColourName = "Grey", ColourCode = "#3F000000"},
+                    new ChapterColour { ColourName = "Blue", ColourCode = "#3F0074FF"},
+                    new ChapterColour { ColourName = "Pink", ColourCode = "#3FFD64EF"},
+                    new ChapterColour { ColourName = "Peach", ColourCode = "#3FEA9C66"},
+                    new ChapterColour { ColourName = "Yellow", ColourCode = "#3FFFFF00"},
+                    new ChapterColour { ColourName = "Beige", ColourCode = "#3F957625"},
+                    new ChapterColour { ColourName = "Lilac", ColourCode = "#3F6E6FDB"},
+                    new ChapterColour { ColourName = "Green", ColourCode = "#3F32EC29"},
+                    new ChapterColour { ColourName = "Aqua", ColourCode = "#3F5BDCD0"}
+                };
+
+                FileHelper.CustomPath = $"wwwroot/images/BackgroundImages";
+
+                ListFileDescriptions = FileHelper.GetFileList();
+
+                foreach ( FileDesc bgImage in ListFileDescriptions)
+                {
+                    string imgName = bgImage.FileName;
+                    string imgPath = @"\Images\" + imgName;
+                    imgName = imgName.Replace(".jpg", "");
+                    listChapterColours.Add(new ChapterColour { ColourName = imgName, ColourCode = imgPath });
+                }
+                return listChapterColours;
+            }
+        } 
+
+        
 
         protected override async Task OnInitializedAsync()
         {
@@ -229,6 +234,27 @@ namespace Gizmo_V1_02.Pages.Chapters
         }
 
 
+
+        public bool PartnerShowNotes
+        {
+            get { return (selectedChapter.ShowPartnerNotes == "Y" ? true : false); }
+            set
+            {
+                if (value)
+                {
+                    selectedChapter.ShowPartnerNotes = "Y";
+                }
+                else
+                {
+                    selectedChapter.ShowPartnerNotes = "N";
+                }
+            }
+
+        }
+
+        
+
+        
 
         public void DirectToLogin()
         {
