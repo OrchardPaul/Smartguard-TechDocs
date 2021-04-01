@@ -158,7 +158,10 @@
                                     </div>
                                     <InputSelect class="form-control form-control-lg"
                                                  @bind-Value="TaskObject.MainBackgroundImage">
-                                        <option value="">Change Background</option>
+                                        <option value="">Select</option>
+                                        <option value="#FFFFFF">Light</option>
+                                        <option value="#444444">Dark</option>
+
                                         @if (!(ListFileDescriptions is null))
                                         {
                                             @foreach (var fileDesc in ListFileDescriptions.ToList().OrderByDescending(F => F.FileName))
