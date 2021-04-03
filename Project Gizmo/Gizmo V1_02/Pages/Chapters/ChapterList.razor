@@ -81,7 +81,7 @@ else
 
                                 <div class="data-item-nav" @onclick='() => SelectCaseTypeGroup(caseTypeGroup)'>
                                     <div class="data-item-sub"><span class="fa fa-boxes mr-2"></span>@caseTypeGroup</div>
-                                    <div class="data-item-right col-alt"><div class="link-direction @(caseTypeGroup == selectedChapter.CaseTypeGroup ? "triangle-up col-grey" : "triangle-down")"></div></div>
+                                    <div class="data-item-right col-alt"><div class="link-direction @(caseTypeGroup == selectedChapter.CaseTypeGroup ? "triangle-up " : "triangle-down")"></div></div>
                                 </div>
                             </div>
 
@@ -136,7 +136,7 @@ else
                                             }
 
 
-                                            <div class="data-item-right col-alt "><div class="link-direction @(caseType == selectedChapter.CaseType ? "triangle-up col-grey" : "triangle-down")"></div></div>
+                                            <div class="data-item-right col-alt "><div class="link-direction @(caseType == selectedChapter.CaseType ? "triangle-up " : "triangle-down")"></div></div>
                                         </div>
                                     </div>
 
