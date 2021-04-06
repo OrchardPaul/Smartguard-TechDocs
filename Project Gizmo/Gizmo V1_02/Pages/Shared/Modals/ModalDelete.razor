@@ -1,7 +1,7 @@
 ﻿
     <div class="modal-body">
         <div class="alert alert-danger" style="margin: 40px 0 40px 0" role="alert">
-            Are you sure you wish to delete
+            @(string.IsNullOrEmpty(InfoText) ? string.IsNullOrEmpty(ItemName) ? "Are you sure you wish to delete?" : $"Are you sure you wish to delete {ItemName}?" : InfoText )
         </div>
 
         <div class="modal-footer">

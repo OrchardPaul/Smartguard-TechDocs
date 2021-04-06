@@ -49,6 +49,9 @@ app {
 .inner-content {
     overflow-y: auto !important;
     height: calc(100% - 50px);
+    /*background-image: url("../images/Textures/binding-dark.png");*/
+    background-image: url("../images/Textures/brick-wall-dark.png");
+    background-repeat: repeat;
 }
 
 @media (max-width: 1199px) {
@@ -79,7 +82,7 @@ app {
 
 .topbar {
     z-index: 99999;
-    background-color: #FFFFFF !important;
+    background-color: #ddd !important;
     box-shadow: 0 6px 6px 0px rgba(0, 0, 0, 0.4);
 }
 
@@ -122,6 +125,12 @@ app {
         height: calc(100% - 10px);
         /* The image used */
         background: #FFFFFF !important;
+       
+    }
+
+    .inner-content {
+        background-image: none !important;
+        background-repeat: no-repeat;
     }
 
     .page-footer {
@@ -1183,14 +1192,17 @@ app {
 .advert-list .card {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.7); /* this adds the "card" effect */
     margin: 30px;
-    border-radius: 5px !important;
+    border-radius: 0px !important;
 }
 
 .advert-list .card-header {
-    border-radius: 5px 5px 0 0 !important;
+    border-radius: 0 !important;
     height: 35px;
-    background-color: #000 !important;
-    color: #fff;
+}
+
+.advert-list a:hover .card-header {
+    transition-duration: 0.25s;
+    transition-property: background-color, color;
 }
 
 .advert-list .card-body {
@@ -1216,13 +1228,13 @@ app {
 .advert-list a:hover .card-body-reveal {
     height: auto;
     visibility: visible;
-    transition-duration: 0.5s;
+    transition-duration: 0.25s;
     transition-property: height;
 }
 
 .advert-list .card .card-footer {
     font-size: 0.9rem !important;
-    border-radius: 0 0 5px 5px  !important;
+    border-radius: 0  !important;
     height: auto !important;
 }
 

@@ -433,6 +433,19 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
                         isExcelValid.Add("Missing Documents Worksheet");
                     }
 
+                    try
+                    {
+                        ExcelWorksheet worksheetDataViews = excelPackage.Workbook.Worksheets.Where(W => W.Name == "Data Views").SingleOrDefault();
+                        if (worksheetDataViews is null)
+                        {
+                            isExcelValid.Add("Missing Data Views Worksheet");
+                        }
+                    }
+                    catch
+                    {
+                        isExcelValid.Add("Missing Data Views Worksheet");
+                    }
+
                 }
 
             }
@@ -733,8 +746,47 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
             workSheetAttachments.Column(5).Width = 22;
 
             /*
+           * 
+           * Status
+           * 
+           * 
+           */
+
+            var workSheetDataViews = excel.Workbook.Worksheets.Add("Data Views");
+
+            workSheetDataViews.TabColor = System.Drawing.Color.Black;
+            workSheetDataViews.DefaultRowHeight = 12;
+
+            //Header of table
+            workSheetDataViews.Row(1).Height = 32;
+            workSheetDataViews.Row(1).Style.Font.Size = 8;
+            workSheetDataViews.Row(1).Style.Font.Color.SetColor(System.Drawing.Color.DarkGray);
+            workSheetDataViews.Cells[1, 1].Style.WrapText = true;
+            workSheetDataViews.Cells[1, 1].Value = "The view name is the internal P4W name.";
+
+            workSheetDataViews.Row(2).Height = 14;
+            workSheetDataViews.Row(2).Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+            workSheetDataViews.Row(2).Style.Font.Bold = true;
+            workSheetDataViews.Cells[2, 1].Value = "View Name";
+            workSheetDataViews.Cells[2, 2].Value = "Display Name";
+
+
+            //Body of table
+            recordIndex = 3;
+            foreach (var viewItem in selectedChapter.DataViews.OrderBy(C => C.BlockNo).ToList())
+            {
+                workSheetDataViews.Cells[recordIndex, 1].Value = string.IsNullOrEmpty(viewItem.ViewName) ? "" : viewItem.ViewName;
+                workSheetDataViews.Cells[recordIndex, 2].Value = string.IsNullOrEmpty(viewItem.DisplayName) ? "" : viewItem.DisplayName;
+
+                recordIndex++;
+            }
+
+            workSheetDataViews.Column(1).Width = 50;
+            workSheetDataViews.Column(2).Width = 50;
+
+            /*
              * 
-             * Fee
+             * Lookups
              * 
              * 
              */
@@ -817,6 +869,7 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
             UsrOrDefChapterManagement readObject;
             Document readDocument;
             Fee feeObject;
+            DataViews readView;
 
             FileInfo fileInfo = new FileInfo(FilePath);
 
@@ -1086,6 +1139,33 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
                         readObject.FollowUpDocs = new List<FollowUpDoc>();
                     }
                     readObject.FollowUpDocs.Add(newAttachment);
+                }
+
+                ExcelWorksheet worksheetDataViews = excelPackage.Workbook.Worksheets.Where(W => W.Name == "Data Views").SingleOrDefault();
+                totalColumns = worksheetDataViews.Dimension.End.Column;
+                totalRows = worksheetDataViews.Dimension.End.Row;
+
+                for (int row = 3; row <= totalRows; row++)
+                {
+                    readView = new DataViews();
+
+                    for (int column = 1; column <= totalColumns; column++)
+                    {
+                        if (column == 1) readView.ViewName = worksheetDataViews.Cells[row, column].FirstOrDefault() is null
+                                            ? ""
+                                            : worksheetDataViews.Cells[row, column].Value is null
+                                            ? ""
+                                            : worksheetDataViews.Cells[row, column].Value.ToString();
+                        if (column == 2) readView.DisplayName = worksheetDataViews.Cells[row, column].FirstOrDefault() is null
+                                            ? ""
+                                            : worksheetDataViews.Cells[row, column].Value is null
+                                            ? ""
+                                            : worksheetDataViews.Cells[row, column].Value.ToString();
+                    }
+
+                    readView.BlockNo = row - 2;
+
+                    readChapters.DataViews.Add(readView);
                 }
 
             }

@@ -132,6 +132,7 @@ namespace Gizmo_V1_02.Pages.Chapters
                                                     new CopyOption { Option = "Status", Selected = false, OptionCount = ChapterItems.ChapterItems.Where(C => C.Type == "Status").ToList().Count() },
                                                     new CopyOption { Option = "Documents/Steps", Selected = false, OptionCount = ChapterItems.ChapterItems.Where(C => lstDocTypes.Contains(C.Type)).ToList().Count() },
                                                     new CopyOption { Option = "Fees", Selected = false, OptionCount = ChapterItems.Fees.Count() },
+                                                    new CopyOption { Option = "Data Views", Selected = false, OptionCount = ChapterItems.DataViews.Count() },
                                                 };
 
                     StateHasChanged();
@@ -207,6 +208,20 @@ namespace Gizmo_V1_02.Pages.Chapters
                 SelectedCopyItems.Fees.AddRange(ChapterItems.Fees);
             }
 
+            if (CopyOptions.Where(C => C.Option == "Data Views").Select(C => C.Selected).FirstOrDefault())
+            {
+                if (SelectedCopyItems.DataViews is null)
+                {
+                    SelectedCopyItems.DataViews = new List<DataViews>();
+                }
+
+                foreach (var item in SelectedCopyItems.DataViews.ToList())
+                {
+                    SelectedCopyItems.DataViews.Remove(item);
+                }
+
+                SelectedCopyItems.DataViews.AddRange(ChapterItems.DataViews);
+            }
 
             ImportedJSON = JsonConvert.SerializeObject(new VmChapter
             {
@@ -216,7 +231,7 @@ namespace Gizmo_V1_02.Pages.Chapters
                 SeqNo = TaskObject.SeqNo.GetValueOrDefault(),
                 ChapterItems = SelectedCopyItems.ChapterItems,
                 Fees = SelectedCopyItems.Fees,
-                DataViews = OriginalDataViews.Select(D => D.DataView).ToList()
+                DataViews = SelectedCopyItems.DataViews
             });
 
 
