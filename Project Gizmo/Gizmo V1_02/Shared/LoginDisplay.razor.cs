@@ -34,12 +34,36 @@ namespace Gizmo_V1_02.Shared
         public string ModalHeight { get; set; }
         public string ModalWidth { get; set; }
 
+        public string SessionCompany { get; set; }
+
         public void NavigateToUserProfile()
         {
             //set Return URI
             userSession.SetUserProfileReturnURI(navigationManager.Uri);
             navigationManager.NavigateTo("/userprofile");
         }
+
+
+        protected override async Task OnInitializedAsync()
+        {
+            bool gotLock = userSession.Lock;
+            while (gotLock)
+            {
+                await Task.Yield();
+                gotLock = userSession.Lock;
+            }
+
+            StateHasChanged();
+        }
+
+        protected override void OnAfterRender(bool firstRender)
+        {
+            if (firstRender)
+            {
+                StateHasChanged();
+            }
+        }
+
 
         protected void ShowSystemSelectModel()
         {
@@ -55,16 +79,6 @@ namespace Gizmo_V1_02.Shared
             Modal.Show<ModalSystemSelect>("System Select", parameters, options);
         }
 
-
-
-        private void PrepareModalDelete(string modalHeader
-                                        , string modalHeight
-                                        , string modalWidth)
-        {
-            ModalInfoHeader = modalHeader;
-            ModalHeight = modalHeight;
-            ModalWidth = modalWidth;
-        }
 
     }
 }

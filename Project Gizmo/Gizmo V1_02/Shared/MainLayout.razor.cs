@@ -32,14 +32,24 @@ namespace Gizmo_V1_02.Shared
         public bool hideTopbar { get; set; } = false;
         public bool hideSidebar { get; set; } = false;
 
+        public string parallax { get; set; } = "";
 
         protected override async Task OnInitializedAsync()
         {
-            await sessionState.SetSessionState();
+            bool gotLock = sessionState.Lock;
+            while (gotLock)
+            {
+                await Task.Yield();
+                gotLock = sessionState.Lock;
+            }
 
+            if (sessionState.User is null)
+            {
+                await sessionState.SetSessionState();
+                currentUser = sessionState.User;
+            }
+   
             sessionState.RefreshHome = Refresh;
-
-            currentUser = sessionState.User;
 
             if(currentUser is null)
             {
@@ -70,6 +80,51 @@ namespace Gizmo_V1_02.Shared
             StateHasChanged();
         }
 
+        protected override void OnAfterRender(bool firstRender)
+        {
+            if (firstRender)
+            {
+                setParallax();
+            }
+        }
+
+        public void setParallax()
+        {
+            if (!(sessionState.User is null))
+            {
+                if (!string.IsNullOrEmpty(sessionState.TempBackGroundImage) && sessionState.User.DisplaySmartflowPreviewImage)
+                {
+                    if (sessionState.TempBackGroundImage.Contains("#"))
+                    {
+                        parallax = ".parallax {  background-color: " + sessionState.TempBackGroundImage + " }";
+                    }
+
+                    else
+                    {
+                        parallax = ".parallax { background-image: url('" + sessionState.GetBackgroundImage() + "');  } .inner-content{ background-image: none;}";
+                    }
+                }
+                else if (!(sessionState.User is null) && !string.IsNullOrEmpty(sessionState.User.MainBackgroundImage))
+                {
+                    if (sessionState.User.MainBackgroundImage.Contains("#"))
+                    {
+                        parallax = ".parallax {  background-color: " + sessionState.User.MainBackgroundImage + " }";
+                    }
+
+                    else
+                    {
+                        parallax = ".parallax { background-image: url('" + sessionState.User.MainBackgroundImage + "');  } .inner-content{ background-image: none;}";
+                    }
+                }
+                else
+                {
+                    parallax = ".parallax {  background-color: #666666 }";
+                }
+                StateHasChanged();
+            }
+        }
+
+
         private void ToggleCompany(int companyId)
         {
             currentUser.SelectedCompanyId = companyId;
@@ -87,7 +142,7 @@ namespace Gizmo_V1_02.Shared
 
         public void Refresh()
         {
-            StateHasChanged();
+            setParallax();
         }
 
 

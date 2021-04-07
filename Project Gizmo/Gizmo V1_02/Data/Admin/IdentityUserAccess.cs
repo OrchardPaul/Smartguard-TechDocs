@@ -340,6 +340,7 @@ namespace Gizmo_V1_02.Data.Admin
                 .SingleAsync();
         }
 
+
         public async Task<AspNetUsers> SubmitChanges(AspNetUsers item, List<RoleItem> selectedRoles)
         {
             selectedUser = await userManager.FindByIdAsync(item.Id);
@@ -357,7 +358,8 @@ namespace Gizmo_V1_02.Data.Admin
                     EmailConfirmed = true,
                     SelectedUri = item.SelectedUri,
                     SelectedCompanyId = item.SelectedCompanyId,
-                    MainBackgroundImage = item.MainBackgroundImage
+                    MainBackgroundImage = item.MainBackgroundImage,
+                    DisplaySmartflowPreviewImage = item.DisplaySmartflowPreviewImage
                 };
 
                 var CreateResult = await userManager.CreateAsync(NewUser, item.PasswordHash);
@@ -411,6 +413,7 @@ namespace Gizmo_V1_02.Data.Admin
                 selectedUser.SelectedUri = item.SelectedUri;
                 selectedUser.SelectedCompanyId = item.SelectedCompanyId;
                 selectedUser.MainBackgroundImage = item.MainBackgroundImage;
+                selectedUser.DisplaySmartflowPreviewImage = item.DisplaySmartflowPreviewImage;
                 
 
                 await userManager.UpdateAsync(selectedUser);

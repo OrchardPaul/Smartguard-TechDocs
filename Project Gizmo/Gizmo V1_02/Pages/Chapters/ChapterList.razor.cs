@@ -102,9 +102,13 @@ namespace Gizmo_V1_02.Pages.Chapters
                 if(ListFileImages.Select(I => I.FileName).ToList().Contains(value))
                 {
                     sessionState.SetTempBackground(ListFileImages.Where(I => I.FileName == value).Select(F => F.FileDirectory.Replace("\\", "/").Replace("wwwroot/", "") + "/" + F.FileName).SingleOrDefault(), NavigationManager.Uri);
-                    sessionState.RefreshHome?.Invoke();
+                }
+                else
+                {
+                    sessionState.SetTempBackground(selectedChapter.BackgroundColour, NavigationManager.Uri);
                 }
 
+                sessionState.RefreshHome?.Invoke();
                 
             } 
         }
@@ -244,6 +248,40 @@ namespace Gizmo_V1_02.Pages.Chapters
 
 
 
+        public bool PreviewChapterImage
+        {
+            get 
+            {
+                return sessionState.User.DisplaySmartflowPreviewImage; 
+            }
+            set
+            {
+                if (value)
+                {
+                    if (ListFileImages.Select(I => I.FileName).ToList().Contains(selectColour))
+                    {
+                        sessionState.SetTempBackground(ListFileImages.Where(I => I.FileName == selectColour).Select(F => F.FileDirectory.Replace("\\", "/").Replace("wwwroot/", "") + "/" + F.FileName).SingleOrDefault(), NavigationManager.Uri);
+                    }
+                    else
+                    {
+                        sessionState.SetTempBackground(selectedChapter.BackgroundColour, NavigationManager.Uri);
+                    }
+                }
+                else
+                {
+                    sessionState.TempBackGroundImage = "";
+                }
+
+                sessionState.User.DisplaySmartflowPreviewImage = value;
+                sessionState.RefreshHome?.Invoke();
+            }
+
+        }
+
+
+
+
+
         public bool PartnerShowNotes
         {
             get { return (selectedChapter.ShowPartnerNotes == "Y" ? true : false); }
@@ -273,7 +311,12 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         void SelectHome()
         {
-            NavigationManager.NavigateTo($"Smartflow/{selectedChapter.CaseTypeGroup}/{selectedChapter.CaseType}");
+            //NavigationManager.NavigateTo($"Smartflow/{selectedChapter.CaseTypeGroup}/{selectedChapter.CaseType}",true);
+            if (!string.IsNullOrEmpty(sessionState.TempBackGroundImage))
+            {
+                sessionState.TempBackGroundImage = "";
+                sessionState.RefreshHome?.Invoke();
+            }
             selectedChapter.Name = "";
             rowChanged = 0;
         }

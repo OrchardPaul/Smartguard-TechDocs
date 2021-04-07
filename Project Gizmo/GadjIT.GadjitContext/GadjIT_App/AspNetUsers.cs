@@ -44,7 +44,7 @@ namespace GadjIT.GadjitContext.GadjIT_App
         public string SelectedUri { get; set; }
         public int SelectedCompanyId { get; set; }
         public string MainBackgroundImage { get; set; }
-
+        public bool DisplaySmartflowPreviewImage { get; set; }
 
         [InverseProperty("User")]
         public virtual ICollection<AspNetUserClaims> AspNetUserClaims { get; set; }
@@ -54,5 +54,6 @@ namespace GadjIT.GadjitContext.GadjIT_App
         public virtual ICollection<AspNetUserRoles> AspNetUserRoles { get; set; }
         [InverseProperty("User")]
         public virtual ICollection<AspNetUserTokens> AspNetUserTokens { get; set; }
+
     }
 }
