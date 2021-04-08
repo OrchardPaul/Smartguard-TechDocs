@@ -865,7 +865,7 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
         public VmChapter ReadChapterDataFromExcel(string FilePath)
         {
             List<Document> documents = new List<Document>();
-            VmChapter readChapters = new VmChapter { ChapterItems = new List<UsrOrDefChapterManagement>(), Fees = new List<Fee>()};
+            VmChapter readChapters = new VmChapter { ChapterItems = new List<UsrOrDefChapterManagement>(), Fees = new List<Fee>(), DataViews = new List<DataViews>()};
             UsrOrDefChapterManagement readObject;
             Document readDocument;
             Fee feeObject;

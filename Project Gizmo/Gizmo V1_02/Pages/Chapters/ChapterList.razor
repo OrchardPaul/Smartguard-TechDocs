@@ -399,7 +399,7 @@ else
                                         </div>
                                         <div class="col-12 col-xl-6">
                                             <div class="form-group">
-                                                <label for="BgColour">Background Colour</label>
+                                                <label for="BgColour">Select Background</label>
                                                 <select @bind="selectColour" style="background-color: @getHTMLColourFromAndroid(ListChapterColours.Where(C => C.ColourName == selectColour).Select(C => C.ColourCode).FirstOrDefault())" class="form-control form-control-lg">
                                                     @foreach (var colour in ListChapterColours)
                                                     {

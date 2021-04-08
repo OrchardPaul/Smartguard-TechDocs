@@ -38,9 +38,22 @@ namespace Gizmo_V1_02.Shared
 
         public void NavigateToUserProfile()
         {
+            RefreshBackGround();
             //set Return URI
             userSession.SetUserProfileReturnURI(navigationManager.Uri);
             navigationManager.NavigateTo("/userprofile");
+        }
+
+
+
+        private void RefreshBackGround()
+        {
+            if (!string.IsNullOrEmpty(userSession.TempBackGroundImage))
+            {
+                userSession.TempBackGroundImage = "";
+                userSession.RefreshHome?.Invoke();
+            }
+
         }
 
 

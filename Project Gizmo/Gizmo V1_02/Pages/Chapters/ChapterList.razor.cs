@@ -372,21 +372,13 @@ namespace Gizmo_V1_02.Pages.Chapters
 
             feeDefinitions = await chapterManagementService.GetFeeDefs(selectedChapter.CaseTypeGroup, selectedChapter.CaseType);
 
-            ChapterFileOption = new ChapterFileOptions
-            {
-                Company = sessionState.Company.CompanyName,
-                CaseTypeGroup = selectedChapter.CaseTypeGroup,
-                CaseType = selectedChapter.CaseType,
-                Chapter = selectedChapter.Name
-            };
+            
 
             dropDownChapterList = await chapterManagementService.GetDocumentList(selectedChapter.CaseType);
 
-            ChapterFileUpload.SetChapterOptions(ChapterFileOption);
-
             await RefreshChapterItems("All");
             
-            GetSeletedChapterFileList();
+            
 
             FileHelper.CustomPath = $"wwwroot/images/BackgroundImages";
             ListFileImages = FileHelper.GetFileList();
@@ -400,10 +392,25 @@ namespace Gizmo_V1_02.Pages.Chapters
                 }
             }
 
+            SetSmartflowFilePath();
+            GetSeletedChapterFileList();
 
             StateHasChanged();
 
 
+        }
+
+        private void SetSmartflowFilePath()
+        {
+            ChapterFileOption = new ChapterFileOptions
+            {
+                Company = sessionState.Company.CompanyName,
+                CaseTypeGroup = selectedChapter.CaseTypeGroup,
+                CaseType = selectedChapter.CaseType,
+                Chapter = selectedChapter.Name
+            };
+
+            ChapterFileUpload.SetChapterOptions(ChapterFileOption);
         }
 
         private async void SaveChapterDetails()
@@ -1691,6 +1698,8 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         protected void PrepareBackUpForDelete(FileDesc selectedFile)
         {
+            SetSmartflowFilePath();
+
             SelectedFileDescription = selectedFile;
 
             string itemName = selectedFile.FileName;
@@ -1926,6 +1935,8 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         public void WriteChapterJSONToFile()
         {
+            SetSmartflowFilePath();
+
             var fileName = selectedChapter.Name + "_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".txt";
 
             ChapterFileUpload.WriteChapterToFile(SelectedChapterObject.ChapterData, fileName);
@@ -1936,6 +1947,7 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         private async void HandleFileSelection(IFileListEntry[] entryFiles)
         {
+            SetSmartflowFilePath();
             var files = new List<IFileListEntry>();
             IList<string> fileErrorDescs = new List<string>();
 
@@ -2293,6 +2305,7 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         protected void ShowChapterImportModel()
         {
+            SetSmartflowFilePath();
 
             while (!(ListFileDescriptions.Where(F => F.FilePath.Contains(".xlsx")).FirstOrDefault() is null))
             {

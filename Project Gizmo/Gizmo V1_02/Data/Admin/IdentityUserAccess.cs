@@ -27,6 +27,7 @@ namespace Gizmo_V1_02.Data.Admin
         Task<List<UserDataCollectionItem>> GetUsersWithCompanyInfo();
         Task<AspNetUsers> SubmitChanges(AspNetUsers item, List<RoleItem> selectedRoles);
         Task<AspNetUsers> SubmitCompanyCliams(List<CompanyItem> companies, AspNetUsers user);
+        Task<AspNetUsers> UpdateUserDetails(AspNetUsers user);
     }
 
     public class IdentityUserAccess : IIdentityUserAccess
@@ -338,6 +339,37 @@ namespace Gizmo_V1_02.Data.Admin
                 .Where(U => U.UserName == userName)
                 .Select(U => mapper.Map(U, new AspNetUsers()))
                 .SingleAsync();
+        }
+
+        public async Task<AspNetUsers> UpdateUserDetails(AspNetUsers user)
+        {
+            selectedUser = await userManager.FindByIdAsync(user.Id);
+
+            selectedUser.UserName = user.UserName;
+            selectedUser.NormalizedUserName = user.NormalizedUserName;
+            selectedUser.FullName = user.FullName;
+            selectedUser.Email = user.UserName;
+            selectedUser.NormalizedEmail = user.NormalizedEmail;
+            selectedUser.EmailConfirmed = user.EmailConfirmed;
+            selectedUser.SecurityStamp = user.SecurityStamp;
+            selectedUser.ConcurrencyStamp = user.ConcurrencyStamp;
+            selectedUser.PhoneNumber = user.PhoneNumber;
+            selectedUser.PhoneNumberConfirmed = user.PhoneNumberConfirmed;
+            selectedUser.TwoFactorEnabled = user.TwoFactorEnabled;
+            selectedUser.LockoutEnd = user.LockoutEnd;
+            selectedUser.LockoutEnabled = user.LockoutEnabled;
+            selectedUser.AccessFailedCount = user.AccessFailedCount;
+            selectedUser.SelectedUri = user.SelectedUri;
+            selectedUser.SelectedCompanyId = user.SelectedCompanyId;
+            selectedUser.MainBackgroundImage = user.MainBackgroundImage;
+            selectedUser.DisplaySmartflowPreviewImage = user.DisplaySmartflowPreviewImage;
+
+            await userManager.UpdateAsync(selectedUser);
+
+            mapper.Map(selectedUser, user);
+            
+            return user;
+
         }
 
 

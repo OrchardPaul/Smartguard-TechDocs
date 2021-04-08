@@ -53,7 +53,6 @@ namespace Gizmo_V1_02.Shared
 
             if(currentUser is null)
             {
-
                 string returnUrl = HttpUtility.UrlEncode("/" + HttpUtility.UrlDecode(NavigationManager.Uri.Replace(NavigationManager.BaseUri, "")));
                 NavigationManager.NavigateTo($"Identity/Account/Login?returnUrl={returnUrl}", true);
             }
@@ -94,15 +93,7 @@ namespace Gizmo_V1_02.Shared
             {
                 if (!string.IsNullOrEmpty(sessionState.TempBackGroundImage) && sessionState.User.DisplaySmartflowPreviewImage)
                 {
-                    if (sessionState.TempBackGroundImage.Contains("#"))
-                    {
-                        parallax = ".parallax {  background-color: " + sessionState.TempBackGroundImage + " }";
-                    }
-
-                    else
-                    {
-                        parallax = ".parallax { background-image: url('" + sessionState.GetBackgroundImage() + "');  } .inner-content{ background-image: none;}";
-                    }
+                    parallax = ".parallax { background-image: url('" + sessionState.GetBackgroundImage() + "');  } .inner-content{ background-image: none;}";
                 }
                 else if (!(sessionState.User is null) && !string.IsNullOrEmpty(sessionState.User.MainBackgroundImage))
                 {
