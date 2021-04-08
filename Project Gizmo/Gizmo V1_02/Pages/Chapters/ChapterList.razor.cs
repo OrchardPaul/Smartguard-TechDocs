@@ -25,6 +25,7 @@ using Gizmo_V1_02.FileManagement.FileClassObjects;
 using System.Net;
 using Microsoft.JSInterop;
 using Gizmo_V1_02.FileManagement.FileProcessing.Interface;
+using Gizmo_V1_02.Data.Admin;
 
 namespace Gizmo_V1_02.Pages.Chapters
 {
@@ -56,6 +57,9 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         [Inject]
         private IChapterFileUpload ChapterFileUpload { get; set; }
+
+        [Inject]
+        private IIdentityUserAccess UserAccess { get; set; }
 
         private ChapterFileOptions ChapterFileOption { get; set; }
 
@@ -95,22 +99,31 @@ namespace Gizmo_V1_02.Pages.Chapters
                 return selectedChapter.BackgroundColourName; 
             } 
             set 
-            { 
-                selectedChapter.BackgroundColour = ListChapterColours.Where(C => C.ColourName == value).Select(C => C.ColourCode).FirstOrDefault(); 
-                selectedChapter.BackgroundColourName = value;
-
-                if(ListFileImages.Select(I => I.FileName).ToList().Contains(value))
-                {
-                    sessionState.SetTempBackground(ListFileImages.Where(I => I.FileName == value).Select(F => F.FileDirectory.Replace("\\", "/").Replace("wwwroot/", "") + "/" + F.FileName).SingleOrDefault(), NavigationManager.Uri);
-                }
-                else
-                {
-                    sessionState.SetTempBackground(selectedChapter.BackgroundColour, NavigationManager.Uri);
-                }
-
-                sessionState.RefreshHome?.Invoke();
-                
+            {
+                SaveSelectedBackgroundColour(value);
             } 
+        }
+
+        private async void SaveSelectedBackgroundColour(string colour)
+        {
+            selectedChapter.BackgroundColour = ListChapterColours.Where(C => C.ColourName == colour).Select(C => C.ColourCode).FirstOrDefault();
+            selectedChapter.BackgroundColourName = colour;
+
+            
+            if (ListFileImages.Select(I => I.FileName).ToList().Contains(selectedChapter.BackgroundColourName))
+            {
+                sessionState.SetTempBackground(ListFileImages.Where(I => I.FileName == selectedChapter.BackgroundColourName).Select(F => F.FileDirectory.Replace("\\", "/").Replace("wwwroot/", "") + "/" + F.FileName).SingleOrDefault(), NavigationManager.Uri);
+            }
+            else
+            {
+                sessionState.SetTempBackground(selectedChapter.BackgroundColour, NavigationManager.Uri);
+            }
+
+            sessionState.RefreshHome?.Invoke();
+
+            SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(selectedChapter);
+
+            await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
         }
 
         public UsrOrDefChapterManagement editChapter { get; set; }
@@ -274,12 +287,16 @@ namespace Gizmo_V1_02.Pages.Chapters
 
                 sessionState.User.DisplaySmartflowPreviewImage = value;
                 sessionState.RefreshHome?.Invoke();
+                SavePreviewChapterImage();
             }
 
         }
 
 
-
+        private async void SavePreviewChapterImage()
+        {
+            await UserAccess.UpdateUserDetails(sessionState.User).ConfigureAwait(false);
+        }
 
 
         public bool PartnerShowNotes
@@ -295,13 +312,21 @@ namespace Gizmo_V1_02.Pages.Chapters
                 {
                     selectedChapter.ShowPartnerNotes = "N";
                 }
+                
+                SaveShowPartnerNotes();
             }
 
         }
 
-        
+        private async void SaveShowPartnerNotes()
+        {
+            SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(selectedChapter);
 
-        
+            await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
+        }
+
+
+
 
         public void DirectToLogin()
         {
@@ -1684,7 +1709,7 @@ namespace Gizmo_V1_02.Pages.Chapters
             parameters.Add("ModalHeight", "300px");
             parameters.Add("ModalWidth", "500px");
             parameters.Add("DeleteAction", SelectedDeleteAction);
-            parameters.Add("InfoText", $"Are you sure you wish to delete the '{itemName}' chapter?");
+            parameters.Add("InfoText", $"Are you sure you wish to delete the '{itemName}' smartflow?");
 
 
             var options = new ModalOptions()
@@ -1692,7 +1717,7 @@ namespace Gizmo_V1_02.Pages.Chapters
                 Class = "blazored-custom-modal"
             };
 
-            Modal.Show<ModalDelete>("Delete Chapter", parameters, options);
+            Modal.Show<ModalDelete>("Delete Smartflow", parameters, options);
         }
 
 
@@ -2432,8 +2457,33 @@ namespace Gizmo_V1_02.Pages.Chapters
             }
         }
 
+        private async void SaveP4WCaseTypeGroup(string caseTypeGroup)
+        {
+            selectedChapter.P4WCaseTypeGroup = caseTypeGroup;
 
- 
+            SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(selectedChapter);
+
+            await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
+        }
+
+        private async void SaveSelectedView(string view)
+        {
+            selectedChapter.SelectedView = view;
+
+            SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(selectedChapter);
+
+            await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
+        }
+        
+        private async void SaveSelectedStep(string step)
+        {
+            selectedChapter.SelectedStep = step;
+
+            SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(selectedChapter);
+
+            await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
+        }
+
 
     }
 }
