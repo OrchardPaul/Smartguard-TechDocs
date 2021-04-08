@@ -101,11 +101,12 @@ namespace Gizmo_V1_02.Pages.UserProfile
             selectedRoles = lstRoles
                 .Select(L => new RoleItem
                 {
-                    IsSubscribed = (editObjectRoles.Contains(L.Name)) ? true : false,
+                    IsSubscribed = (editObjectRoles.Contains(L.Name)) ? true : L.Name == "Super User" && sessionState.isSuperUser ? true : false,
                     RoleName = L.Name,
                     RoleId = L.Id
                 })
                 .ToList();
+
 
             GetBackgroundFileList();
 

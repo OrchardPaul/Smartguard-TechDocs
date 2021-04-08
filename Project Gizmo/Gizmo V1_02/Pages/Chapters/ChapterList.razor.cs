@@ -25,6 +25,7 @@ using Gizmo_V1_02.FileManagement.FileClassObjects;
 using System.Net;
 using Microsoft.JSInterop;
 using Gizmo_V1_02.FileManagement.FileProcessing.Interface;
+using Gizmo_V1_02.Data.Admin;
 
 namespace Gizmo_V1_02.Pages.Chapters
 {
@@ -56,6 +57,9 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         [Inject]
         private IChapterFileUpload ChapterFileUpload { get; set; }
+
+        [Inject]
+        private IIdentityUserAccess UserAccess { get; set; }
 
         private ChapterFileOptions ChapterFileOption { get; set; }
 
@@ -109,9 +113,11 @@ namespace Gizmo_V1_02.Pages.Chapters
                     sessionState.SetTempBackground(selectedChapter.BackgroundColour, NavigationManager.Uri);
                 }
 
-                sessionState.RefreshHome?.Invoke();
-                
-            } 
+            sessionState.RefreshHome?.Invoke();
+
+            SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(selectedChapter);
+
+            await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
         }
 
         public UsrOrDefChapterManagement editChapter { get; set; }
@@ -277,12 +283,16 @@ namespace Gizmo_V1_02.Pages.Chapters
 
                 sessionState.User.DisplaySmartflowPreviewImage = value;
                 sessionState.RefreshHome?.Invoke();
+                SavePreviewChapterImage();
             }
 
         }
 
 
-
+        private async void SavePreviewChapterImage()
+        {
+            await UserAccess.UpdateUserDetails(sessionState.User).ConfigureAwait(false);
+        }
 
 
         public bool PartnerShowNotes
@@ -298,13 +308,21 @@ namespace Gizmo_V1_02.Pages.Chapters
                 {
                     selectedChapter.ShowPartnerNotes = "N";
                 }
+                
+                SaveShowPartnerNotes();
             }
 
         }
 
-        
+        private async void SaveShowPartnerNotes()
+        {
+            SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(selectedChapter);
 
-        
+            await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
+        }
+
+
+
 
         public void DirectToLogin()
         {
@@ -2436,8 +2454,33 @@ namespace Gizmo_V1_02.Pages.Chapters
             }
         }
 
+        private async void SaveP4WCaseTypeGroup(string caseTypeGroup)
+        {
+            selectedChapter.P4WCaseTypeGroup = caseTypeGroup;
 
- 
+            SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(selectedChapter);
+
+            await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
+        }
+
+        private async void SaveSelectedView(string view)
+        {
+            selectedChapter.SelectedView = view;
+
+            SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(selectedChapter);
+
+            await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
+        }
+        
+        private async void SaveSelectedStep(string step)
+        {
+            selectedChapter.SelectedStep = step;
+
+            SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(selectedChapter);
+
+            await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
+        }
+
 
     }
 }
