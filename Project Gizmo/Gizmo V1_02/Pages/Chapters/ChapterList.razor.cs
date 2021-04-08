@@ -92,16 +92,17 @@ namespace Gizmo_V1_02.Pages.Chapters
         public string selectColour { 
             get 
             { 
-                return selectedChapter.BackgroundColourName; 
+                return (selectedChapter.BackgroundColourName.Contains(".") ? selectedChapter.BackgroundColour : selectedChapter.BackgroundColourName); 
             } 
             set 
-            { 
-                selectedChapter.BackgroundColour = ListChapterColours.Where(C => C.ColourName == value).Select(C => C.ColourCode).FirstOrDefault(); 
-                selectedChapter.BackgroundColourName = value;
+            {
+                string imgName = Path.GetFileName(value);
+                selectedChapter.BackgroundColour = ListChapterColours.Where(C => C.ColourName == imgName).Select(C => C.ColourCode).FirstOrDefault(); 
+                selectedChapter.BackgroundColourName = imgName;
 
-                if(ListFileImages.Select(I => I.FileName).ToList().Contains(value))
+                if(ListFileImages.Select(I => I.FileName).ToList().Contains(imgName))
                 {
-                    sessionState.SetTempBackground(ListFileImages.Where(I => I.FileName == value).Select(F => F.FileDirectory.Replace("\\", "/").Replace("wwwroot/", "") + "/" + F.FileName).SingleOrDefault(), NavigationManager.Uri);
+                    sessionState.SetTempBackground(ListFileImages.Where(I => I.FileName == imgName).Select(F => F.FileDirectory.Replace("\\", "/").Replace("wwwroot/", "") + "/" + F.FileName).SingleOrDefault(), NavigationManager.Uri);
                 }
                 else
                 {
@@ -167,6 +168,7 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         public bool displaySpinner = true;
 
+       
         public bool ListChapterLoaded = false;
 
         public string alertMsgJSOM { get; set; }
@@ -258,9 +260,10 @@ namespace Gizmo_V1_02.Pages.Chapters
             {
                 if (value)
                 {
-                    if (ListFileImages.Select(I => I.FileName).ToList().Contains(selectColour))
+                    string imgName = Path.GetFileName(selectColour);
+                    if (ListFileImages.Select(I => I.FileName).ToList().Contains(imgName))
                     {
-                        sessionState.SetTempBackground(ListFileImages.Where(I => I.FileName == selectColour).Select(F => F.FileDirectory.Replace("\\", "/").Replace("wwwroot/", "") + "/" + F.FileName).SingleOrDefault(), NavigationManager.Uri);
+                        sessionState.SetTempBackground(ListFileImages.Where(I => I.FileName == imgName).Select(F => F.FileDirectory.Replace("\\", "/").Replace("wwwroot/", "") + "/" + F.FileName).SingleOrDefault(), NavigationManager.Uri);
                     }
                     else
                     {
@@ -385,9 +388,10 @@ namespace Gizmo_V1_02.Pages.Chapters
 
             if (!string.IsNullOrEmpty(selectedChapter.BackgroundColourName))
             {
-                if (ListFileImages.Select(I => I.FileName).ToList().Contains(selectedChapter.BackgroundColourName))
+                string imgName = Path.GetFileName(selectedChapter.BackgroundColourName);
+                if (ListFileImages.Select(I => I.FileName).ToList().Contains(Path.GetFileName(selectedChapter.BackgroundColourName)))
                 {
-                    sessionState.SetTempBackground(ListFileImages.Where(I => I.FileName == selectedChapter.BackgroundColourName).Select(F => F.FileDirectory.Replace("\\", "/").Replace("wwwroot/", "") + "/" + F.FileName).SingleOrDefault(), NavigationManager.Uri);
+                    sessionState.SetTempBackground(ListFileImages.Where(I => I.FileName == imgName).Select(F => F.FileDirectory.Replace("\\", "/").Replace("wwwroot/", "") + "/" + F.FileName).SingleOrDefault(), NavigationManager.Uri);
                     sessionState.RefreshHome?.Invoke();
                 }
             }

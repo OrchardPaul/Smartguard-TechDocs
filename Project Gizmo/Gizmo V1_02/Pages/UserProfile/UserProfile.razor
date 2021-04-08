@@ -134,8 +134,8 @@
                                             {
                                                 <ul class="ul-simple">
                                                     @foreach (var role in selectedRoles
-                                                           .Where(R => R.RoleName != "Super User")
-                                                           .ToList())
+                                                          .Where(R => R.RoleName != "Super User")
+                                                          .ToList())
                                                     {
 
                                                         <li><InputCheckbox class="mr-2" @bind-Value="role.IsSubscribed"></InputCheckbox><label>@role.RoleName</label></li>
@@ -151,40 +151,46 @@
                         <h5>Preferences</h5>
                         <div class="detail-group-box">
                             <div class="form-group">
-                                <label>Preview Image</label>
-                                <label class="switch">
-                                    <input type="checkbox" @bind="sessionState.User.DisplaySmartflowPreviewImage">
-                                    <span class="slider round"></span>
-                                </label>
-                            </div>
-                            <div class="form-group">
                                 <div class="container-fluid">
                                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-6 p-2">
-                                        <label>Background</label>
-                                        <div class="thumbnails">
-                                            <img src="@TaskObject.MainBackgroundImage" alt="" class="img-thumbnail" />
-                                        </div>
+                                        <label>Main Background Style</label>
+                                        @*<div class="thumbnails">
+                            <img src="@TaskObject.MainBackgroundImage" alt="" class="img-thumbnail" />
+                        </div>*@
                                         <InputSelect class="form-control form-control-lg"
                                                      @bind-Value="TaskObject.MainBackgroundImage">
                                             <option value="">Select</option>
                                             <option value="#DDDDDD">Light</option>
                                             <option value="#555555">Dark</option>
 
-                                            @if (!(ListFileDescriptions is null))
-                                                {
-                                                @foreach (var fileDesc in ListFileDescriptions.ToList().OrderByDescending(F => F.FileName))
-                                                    {
-                                                    <option value="@(fileDesc.FileDirectory.Replace("\\","/").Replace("wwwroot/","") + "/" + fileDesc.FileName)">
-                                                        @fileDesc.FileName
-                                                    </option>
-                                                    }
-                                                }
+                                            @*@if (!(ListFileDescriptions is null))
+                            {
+                            @foreach (var fileDesc in ListFileDescriptions.ToList().OrderByDescending(F => F.FileName))
+                                {
+                                <option value="@(fileDesc.FileDirectory.Replace("\\","/").Replace("wwwroot/","") + "/" + fileDesc.FileName)">
+                                    @fileDesc.FileName
+                                </option>
+                                }
+                            }*@
                                         </InputSelect>
 
                                     </div>
                                 </div>
                             </div>
                         </div>
+
+                        <h5>Smartflow</h5>
+                        <div class="detail-group-box">
+                            <div class="form-group">
+                                <label>Preview Smartflow Image</label>
+                                <label class="switch">
+                                    <input type="checkbox" @bind="sessionState.User.DisplaySmartflowPreviewImage">
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+                           
+                        </div>
+
                     </div>
 
                 </div>

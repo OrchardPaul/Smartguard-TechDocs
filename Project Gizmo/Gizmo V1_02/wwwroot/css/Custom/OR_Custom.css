@@ -139,15 +139,15 @@ app {
     }
 }
 
+.img-thumbnail{
+    width: 100px;
+}
 /*--------------------------------------------------*/
 /*  Same as hidden but taking up no space           */
 /*--------------------------------------------------*/
-
 /* Breakpoint XS */
 @media (max-width: 575px) {
-    .invisible-xs-down, .invisible-sm-down, .invisible-md-down, .invisible-lg-down, .invisible-xl-down,
-    .invisible-xs-up,
-    .invisible-unless-sm, .invisible-unless-md, .invisible-unless-lg, .invisible-unless-xl {
+    .invisible-xs-down, .invisible-sm-down, .invisible-md-down, .invisible-lg-down, .invisible-xl-down, .invisible-xs-up, .invisible-unless-sm, .invisible-unless-md, .invisible-unless-lg, .invisible-unless-xl {
         display: none !important;
         position: absolute;
         left: -99999px;
@@ -543,13 +543,13 @@ app {
     padding-left: 10px !important;
     padding-right: 10px !important;
     padding-top: 0px !important;
-    width: 100%;
+    width: auto;
     min-width: 0;
     float: left;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis !important;
-    align-items: center;
+    margin-right: auto;
 }
 
 .data-item-sm {
@@ -657,12 +657,11 @@ app {
 
 .data-item-right {
     display: block;
-    margin-left: auto;
+    margin-left: 0px;
     margin-right: 0px;
     margin-top: 0;
     margin-bottom: 0;
     padding: 0 5px 0 5px;
-    float: right;
 }
 
 .data-item-wrap {
@@ -1017,9 +1016,7 @@ app {
 
 /*   SEQUENCE CHANGE OPTIONS             */
 
-
-
-.grid-row-lg .seq-change {
+.seq-change {
     padding-bottom: 3px;
     padding-left: 8px;
     padding-right: 8px;
@@ -1027,17 +1024,18 @@ app {
     text-align: center;
 }
 
+.grid-row-lg .seq-change {
+    width: 40px;
+}
+
 .grid-row-md .seq-change {
-    padding-bottom: 3px;
-    padding-left: 8px;
-    width: 20px;
-    text-align: center;
+    width: 30px;
 }
 
 
-.grid-row-md .seq-change .seq-no {
+.seq-change .seq-no {
     height: 13px;
-    font-size: 0.85em;
+    font-size: 0.85em !important;
 }
 
 .grid-row-lg .seq-change div:first-of-type {
