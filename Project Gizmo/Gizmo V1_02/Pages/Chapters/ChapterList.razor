@@ -346,7 +346,10 @@ else
                                             <div class="form-group">
                                                 <label for="P4WCTG">P4W Case Type Group</label>
                                                 <InputSelect class="form-control form-control-xxl"
-                                                             @bind-Value="selectedChapter.P4WCaseTypeGroup">
+                                                            ValueExpression="@(() => selectedChapter.P4WCaseTypeGroup)"
+                                                            Value="@selectedChapter.P4WCaseTypeGroup"
+                                                            ValueChanged="@((string value) => SaveP4WCaseTypeGroup(value))"
+                                                             >
                                                     <option value="">Select</option>
                                                     @foreach (var group in partnerCaseTypeGroups)
                                                                     {
@@ -359,7 +362,9 @@ else
                                             <div class="form-group">
                                                 <label for="SelectedView">Smartflow View</label>
                                                 <InputSelect class="form-control form-control-xxl"
-                                                             @bind-Value="selectedChapter.SelectedView">
+                                                            ValueExpression="@(() => selectedChapter.SelectedView)"
+                                                            Value="@selectedChapter.SelectedView"
+                                                            ValueChanged="@((string value) => SaveSelectedView(value))">
                                                     <option value="">Select</option>
                                                     @foreach (var view in ListP4WViews.Where(V => !(V.InternalNote is null) && (V.InternalNote.Contains("Smartflow"))).ToList())
                                                                     {
@@ -374,7 +379,9 @@ else
                                                 <div class="form-group">
                                                     <label for="SelectedStep">Smartflow Step</label>
                                                     <InputSelect class="form-control form-control-xxl"
-                                                                 @bind-Value="selectedChapter.SelectedStep">
+                                                                 ValueExpression="@(() => selectedChapter.SelectedStep)"
+                                                                 Value="@selectedChapter.SelectedStep"
+                                                                 ValueChanged="@((string value) => SaveSelectedStep(value))">
                                                         <option value="">Select</option>
                                                         <option value="Create New">--- Create New ---</option>
                                                         @foreach (var step in dropDownChapterList.Where(D => D.DocumentType == 6).Where(D => D.Notes.Contains("Smartflow:")).ToList())
@@ -400,11 +407,14 @@ else
                                         <div class="col-12 col-xl-6">
                                             <div class="form-group">
                                                 <label for="BgColour">Select Background</label>
-                                                <select @bind="selectColour" style="background-color: @getHTMLColourFromAndroid(ListChapterColours.Where(C => C.ColourName == selectColour).Select(C => C.ColourCode).FirstOrDefault())" class="form-control form-control-lg">
+                                                <select @bind="selectColour" 
+                                                        style="background-color: @getHTMLColourFromAndroid(ListChapterColours.Where(C => C.ColourName == selectColour).Select(C => C.ColourCode).FirstOrDefault())" 
+                                                        class="form-control form-control-lg">
                                                     @foreach (var colour in ListChapterColours)
                                                     {
                                                         <option style="background-color: @getHTMLColourFromAndroid(colour.ColourCode)" value="@colour.ColourName">
                                                             @colour.ColourName
+                                                            
                                                         </option>
                                                     }
                                                 </select>
