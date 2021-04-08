@@ -61,9 +61,7 @@ namespace Gizmo_V1_02.Data.Admin
             selectedUser.SelectedCompanyId = user.SelectedCompanyId;
             selectedUser.SelectedUri = user.SelectedUri;
 
-            await userManager.UpdateAsync(selectedUser);
-
-            if(!signedInUserState.User.IsInRole("Super User"))
+            if (!signedInUserState.User.IsInRole("Super User"))
             {
                 var selectedCompanyUserRoles = await context.AppCompanyUserRoles
                                                     .Where(A => A.UserId == selectedUser.Id
@@ -91,6 +89,11 @@ namespace Gizmo_V1_02.Data.Admin
                 }
 
             }
+
+ 
+
+
+            await userManager.UpdateAsync(selectedUser);
 
 
 
