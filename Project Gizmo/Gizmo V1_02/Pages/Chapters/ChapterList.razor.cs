@@ -1634,7 +1634,7 @@ namespace Gizmo_V1_02.Pages.Chapters
             parameters.Add("ModalHeight", "300px");
             parameters.Add("ModalWidth", "500px");
             parameters.Add("DeleteAction", SelectedDeleteAction);
-            parameters.Add("InfoText", $"Are you sure you wish to delete the '{itemName}' chapter?");
+            parameters.Add("InfoText", $"Are you sure you wish to delete the '{itemName}' smartflow?");
 
 
             var options = new ModalOptions()
@@ -1642,7 +1642,7 @@ namespace Gizmo_V1_02.Pages.Chapters
                 Class = "blazored-custom-modal"
             };
 
-            Modal.Show<ModalDelete>("Delete Chapter", parameters, options);
+            Modal.Show<ModalDelete>("Delete Smartflow", parameters, options);
         }
 
 
