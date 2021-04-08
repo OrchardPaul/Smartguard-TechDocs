@@ -36,15 +36,16 @@ namespace Gizmo_V1_02.Shared
         }
 
 
-        private void PrepareModalDelete(string modalHeader
-                                        , string modalHeight
-                                        , string modalWidth)
-        {
-            ModalInfoHeader = modalHeader;
-            ModalHeight = modalHeight;
-            ModalWidth = modalWidth;
-        }
 
+        private void refreshBackGround()
+        {
+            if (!string.IsNullOrEmpty(userSession.TempBackGroundImage))
+            {
+                userSession.TempBackGroundImage = "";
+                userSession.RefreshHome?.Invoke();
+            }
+            
+        }
 
         protected void ShowSystemSelectModel()
         {
@@ -63,6 +64,7 @@ namespace Gizmo_V1_02.Shared
 
         public void NavigateToUserProfile()
         {
+            refreshBackGround();
             //set Return URI
             userSession.SetUserProfileReturnURI(navigationManager.Uri);
             navigationManager.NavigateTo("/userprofile");

@@ -28,6 +28,7 @@ using Blazored.Modal;
 using Gizmo_V1_02.Pages.Chapters;
 using Gizmo_V1_02.FileManagement.FileProcessing.Interface;
 using Gizmo_V1_02.FileManagement.FileProcessing.Implementation;
+using Syncfusion.Blazor;
 
 namespace Gizmo_V1_02
 {
@@ -71,6 +72,7 @@ namespace Gizmo_V1_02
             services.AddTransient<IEmailSender, EmailSender>();
             services.Configure<AuthMessageSenderOptions>(Configuration);
 
+            services.AddSyncfusionBlazor();
             services.AddScoped<IUserSessionState, UserSessionState>();
             services.AddScoped<IMappingSessionState, MappingSessionState>();
             services.AddScoped<IPageAuthorisationState, PageAuthorisationState>();

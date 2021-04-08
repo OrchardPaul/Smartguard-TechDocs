@@ -102,9 +102,13 @@ namespace Gizmo_V1_02.Pages.Chapters
                 if(ListFileImages.Select(I => I.FileName).ToList().Contains(value))
                 {
                     sessionState.SetTempBackground(ListFileImages.Where(I => I.FileName == value).Select(F => F.FileDirectory.Replace("\\", "/").Replace("wwwroot/", "") + "/" + F.FileName).SingleOrDefault(), NavigationManager.Uri);
-                    sessionState.RefreshHome?.Invoke();
+                }
+                else
+                {
+                    sessionState.SetTempBackground(selectedChapter.BackgroundColour, NavigationManager.Uri);
                 }
 
+                sessionState.RefreshHome?.Invoke();
                 
             } 
         }
@@ -244,6 +248,40 @@ namespace Gizmo_V1_02.Pages.Chapters
 
 
 
+        public bool PreviewChapterImage
+        {
+            get 
+            {
+                return sessionState.User.DisplaySmartflowPreviewImage; 
+            }
+            set
+            {
+                if (value)
+                {
+                    if (ListFileImages.Select(I => I.FileName).ToList().Contains(selectColour))
+                    {
+                        sessionState.SetTempBackground(ListFileImages.Where(I => I.FileName == selectColour).Select(F => F.FileDirectory.Replace("\\", "/").Replace("wwwroot/", "") + "/" + F.FileName).SingleOrDefault(), NavigationManager.Uri);
+                    }
+                    else
+                    {
+                        sessionState.SetTempBackground(selectedChapter.BackgroundColour, NavigationManager.Uri);
+                    }
+                }
+                else
+                {
+                    sessionState.TempBackGroundImage = "";
+                }
+
+                sessionState.User.DisplaySmartflowPreviewImage = value;
+                sessionState.RefreshHome?.Invoke();
+            }
+
+        }
+
+
+
+
+
         public bool PartnerShowNotes
         {
             get { return (selectedChapter.ShowPartnerNotes == "Y" ? true : false); }
@@ -273,7 +311,12 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         void SelectHome()
         {
-            NavigationManager.NavigateTo($"Smartflow/{selectedChapter.CaseTypeGroup}/{selectedChapter.CaseType}");
+            //NavigationManager.NavigateTo($"Smartflow/{selectedChapter.CaseTypeGroup}/{selectedChapter.CaseType}",true);
+            if (!string.IsNullOrEmpty(sessionState.TempBackGroundImage))
+            {
+                sessionState.TempBackGroundImage = "";
+                sessionState.RefreshHome?.Invoke();
+            }
             selectedChapter.Name = "";
             rowChanged = 0;
         }
@@ -329,21 +372,13 @@ namespace Gizmo_V1_02.Pages.Chapters
 
             feeDefinitions = await chapterManagementService.GetFeeDefs(selectedChapter.CaseTypeGroup, selectedChapter.CaseType);
 
-            ChapterFileOption = new ChapterFileOptions
-            {
-                Company = sessionState.Company.CompanyName,
-                CaseTypeGroup = selectedChapter.CaseTypeGroup,
-                CaseType = selectedChapter.CaseType,
-                Chapter = selectedChapter.Name
-            };
+            
 
             dropDownChapterList = await chapterManagementService.GetDocumentList(selectedChapter.CaseType);
 
-            ChapterFileUpload.SetChapterOptions(ChapterFileOption);
-
             await RefreshChapterItems("All");
             
-            GetSeletedChapterFileList();
+            
 
             FileHelper.CustomPath = $"wwwroot/images/BackgroundImages";
             ListFileImages = FileHelper.GetFileList();
@@ -357,10 +392,25 @@ namespace Gizmo_V1_02.Pages.Chapters
                 }
             }
 
+            SetSmartflowFilePath();
+            GetSeletedChapterFileList();
 
             StateHasChanged();
 
 
+        }
+
+        private void SetSmartflowFilePath()
+        {
+            ChapterFileOption = new ChapterFileOptions
+            {
+                Company = sessionState.Company.CompanyName,
+                CaseTypeGroup = selectedChapter.CaseTypeGroup,
+                CaseType = selectedChapter.CaseType,
+                Chapter = selectedChapter.Name
+            };
+
+            ChapterFileUpload.SetChapterOptions(ChapterFileOption);
         }
 
         private async void SaveChapterDetails()
@@ -1648,6 +1698,8 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         protected void PrepareBackUpForDelete(FileDesc selectedFile)
         {
+            SetSmartflowFilePath();
+
             SelectedFileDescription = selectedFile;
 
             string itemName = selectedFile.FileName;
@@ -1883,6 +1935,8 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         public void WriteChapterJSONToFile()
         {
+            SetSmartflowFilePath();
+
             var fileName = selectedChapter.Name + "_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".txt";
 
             ChapterFileUpload.WriteChapterToFile(SelectedChapterObject.ChapterData, fileName);
@@ -1893,6 +1947,7 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         private async void HandleFileSelection(IFileListEntry[] entryFiles)
         {
+            SetSmartflowFilePath();
             var files = new List<IFileListEntry>();
             IList<string> fileErrorDescs = new List<string>();
 
@@ -2250,6 +2305,7 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         protected void ShowChapterImportModel()
         {
+            SetSmartflowFilePath();
 
             while (!(ListFileDescriptions.Where(F => F.FilePath.Contains(".xlsx")).FirstOrDefault() is null))
             {

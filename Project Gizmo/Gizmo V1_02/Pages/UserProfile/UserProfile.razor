@@ -3,190 +3,198 @@
 
 @using Gizmo_V1_02.Data.CustomFormObjects
 
+@if (!(sessionState is null) && !(sessionState.User is null))
+{
 
-<div class="tran-block page-header-block ">
-    <div class="page-header-title">
-        
-        <h3>Profile Details</h3>
+    <div class="tran-block page-header-block ">
+        <div class="page-header-title">
+            <h3>Profile Details</h3>
+        </div>
+        @if (!(sessionState.User.FullName is null))
+        {
+            <p>@sessionState.User.FullName</p>
+        }
     </div>
-    @if (!(sessionState.User.FullName is null))
-    {
-        <p>@sessionState.User.FullName</p>
-    }
-</div>
 
-<EditForm Model="@TaskObject" OnValidSubmit="@HandleValidSubmit">
-    <DataAnnotationsValidator />
-    <ValidationSummary />
-    <div class="tran-block ">
-        <div class="container-fluid">
-            <div class="row">
+    <EditForm Model="@TaskObject" OnValidSubmit="@HandleValidSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        <div class="tran-block ">
+            <div class="container-fluid">
+                <div class="row">
 
-                <div class="col-6 detail-box ">
-                    <h5>Personal Details</h5>
-                    <div class="detail-group-box">
-                        <div class="form-group">
-                            <label for="@TaskObject.UserName">User Name (Email)</label>
-                            <InputText class="form-control" style="width: 350px;" @bind-Value="TaskObject.UserName"></InputText>
-                        </div>
+                    <div class="col-6 detail-box ">
+                        <h5>Personal Details</h5>
+                        <div class="detail-group-box">
+                            <div class="form-group">
+                                <label for="@TaskObject.UserName">User Name (Email)</label>
+                                <InputText class="form-control" style="width: 350px;" @bind-Value="TaskObject.UserName"></InputText>
+                            </div>
 
-                        <div class="form-group">
-                            <label for="@TaskObject.FullName">Name (Alias)</label>
-                            <InputText class="form-control" style="width: 350px;" @bind-Value="TaskObject.FullName"></InputText>
-                        </div>
+                            <div class="form-group">
+                                <label for="@TaskObject.FullName">Name (Alias)</label>
+                                <InputText class="form-control" style="width: 350px;" @bind-Value="TaskObject.FullName"></InputText>
+                            </div>
 
-                        <div class="form-group">
-                            <label for="@TaskObject.PhoneNumber">Phone Number</label>
-                            <InputText class="form-control" style="width: 150px;" @bind-Value="TaskObject.PhoneNumber"></InputText>
-                        </div>
-                        <div class="form-group">
-                            <label for="@TaskObject.PasswordHash">Password</label>
+                            <div class="form-group">
+                                <label for="@TaskObject.PhoneNumber">Phone Number</label>
+                                <InputText class="form-control" style="width: 150px;" @bind-Value="TaskObject.PhoneNumber"></InputText>
+                            </div>
+                            <div class="form-group">
+                                <label for="@TaskObject.PasswordHash">Password</label>
 
-                            @if (enablePasswordSet)
-                            {
-                                <InputText class="form-control" style="display: inline; width: 250px;" @bind-Value="@TaskObject.PasswordHash" type="password"></InputText>
-                            }
-                            else
-                            {
-                                <input type="password" disabled="disabled" class="form-control" style="display: inline; width: 250px;" value="PasswordNotChanged115592!" />
-                                <button class="btn btn-edit" style="display: inline; height:auto;" @onclick="() => TogglePasswordSet()" value=""><i class="fa fa-pencil-alt"></i></button>
-                            }
+                                @if (enablePasswordSet)
+                                {
+                                    <InputText class="form-control" style="display: inline; width: 250px;" @bind-Value="@TaskObject.PasswordHash" type="password"></InputText>
+                                }
+                                else
+                                {
+                                    <input type="password" disabled="disabled" class="form-control" style="display: inline; width: 250px;" value="PasswordNotChanged115592!" />
+                                    <button class="btn btn-edit" style="display: inline; height:auto;" @onclick="() => TogglePasswordSet()" value=""><i class="fa fa-pencil-alt"></i></button>
+                                }
 
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-6 detail-box">
-                    <h5>Company Details</h5>
-                    <div class="detail-group-box">
-                        @if (sessionState.Company.CompanyName == "Orchard Rock")
-                        {
-                            @if (!(companyItems is null))
+                    <div class="col-6 detail-box">
+                        <h5>Company Details</h5>
+                        <div class="detail-group-box">
+                            @if (sessionState.Company.CompanyName == "Orchard Rock")
                             {
-                                <div class="form-group">
-                                    <label for="@TaskObject.SelectedUri">Selected Company</label>
-                                    <InputSelectInteger class="form-control" style="width: 300px;" ValueExpression="@(() => TaskObject.SelectedCompanyId)"
-                                                        Value="@TaskObject.SelectedCompanyId"
-                                                        ValueChanged="@((int value) => ToggleCompany(value))">
-                                        @if (companyItems.Where(C => C.IsSubscribed).Count() > 0)
-                                        {
-                                            @foreach (var company in companyItems.Where(C => C.IsSubscribed))
-                                            {
-                                                <option value="@company.Company.Id">
-                                                    @company.Company.CompanyName
-                                                </option>
-                                            }
-
-                                        }
-                                    </InputSelectInteger>
-                                </div>
-                            }
-                        }
-
-
-                        <div class="form-group">
-                            @if (companyItems is null)
-                            {
-                                <div class="spinner"></div>
-                            }
-                            else
-                            {
-                                @if (!(companyItems.Where(C => C.IsSubscribed) is null))
+                                @if (!(companyItems is null))
                                 {
+                                    <div class="form-group">
+                                        <label for="@TaskObject.SelectedUri">Selected Company</label>
+                                        <InputSelectInteger class="form-control" style="width: 300px;" ValueExpression="@(() => TaskObject.SelectedCompanyId)"
+                                                            Value="@TaskObject.SelectedCompanyId"
+                                                            ValueChanged="@((int value) => ToggleCompany(value))">
+                                            @if (companyItems.Where(C => C.IsSubscribed).Count() > 0)
+                                            {
+                                                @foreach (var company in companyItems.Where(C => C.IsSubscribed))
+                                                {
+                                                    <option value="@company.Company.Id">
+                                                        @company.Company.CompanyName
+                                                    </option>
+                                                }
 
-                                    <label for="@TaskObject.SelectedUri">System</label>
-                                    <InputSelect class="form-control" style="width: 200px;" @bind-Value="TaskObject.SelectedUri">
-                                        <option selected value="Live">
-                                            Live
-                                        </option>
-                                        <option value="Dev">
-                                            Dev
-                                        </option>
-                                    </InputSelect>
+                                            }
+                                        </InputSelectInteger>
+                                    </div>
                                 }
                             }
-                        </div>
-                    </div>
-                    <h5>Roles</h5>
-                    <div class="detail-group-box">
-                        <div class="form-group">
-                            <div class="container-fluid">
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-6 p-2">
-                                    @if (selectedRoles is null)
+
+
+                            <div class="form-group">
+                                @if (companyItems is null)
+                                {
+                                    <div class="spinner"></div>
+                                }
+                                else
+                                {
+                                    @if (!(companyItems.Where(C => C.IsSubscribed) is null))
                                     {
-                                        <div class="spinner"></div>
+
+                                        <label for="@TaskObject.SelectedUri">System</label>
+                                        <InputSelect class="form-control" style="width: 200px;" @bind-Value="TaskObject.SelectedUri">
+                                            <option selected value="Live">
+                                                Live
+                                            </option>
+                                            <option value="Dev">
+                                                Dev
+                                            </option>
+                                        </InputSelect>
                                     }
-                                    else
-                                    {
-                                        @if (sessionState.Company.CompanyName == "Orchard Rock")
+                                }
+                            </div>
+                        </div>
+                        <h5>Roles</h5>
+                        <div class="detail-group-box">
+                            <div class="form-group">
+                                <div class="container-fluid">
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-6 p-2">
+                                        @if (selectedRoles is null)
                                         {
-                                            @if (sessionState.isSuperUser)
+                                            <div class="spinner"></div>
+                                        }
+                                        else
+                                        {
+                                            @if (sessionState.Company.CompanyName == "Orchard Rock")
+                                            {
+                                                @if (sessionState.isSuperUser)
+                                                {
+                                                    <ul class="ul-simple">
+                                                        @foreach (var role in selectedRoles)
+                                                        {
+                                                            <li><InputCheckbox class="mr-2" @bind-Value="role.IsSubscribed"></InputCheckbox><label>@role.RoleName</label></li>
+                                                        }
+                                                    </ul>
+                                                }
+                                            }
+                                            else
                                             {
                                                 <ul class="ul-simple">
-                                                    @foreach (var role in selectedRoles)
+                                                    @foreach (var role in selectedRoles
+                                                           .Where(R => R.RoleName != "Super User")
+                                                           .ToList())
                                                     {
+
                                                         <li><InputCheckbox class="mr-2" @bind-Value="role.IsSubscribed"></InputCheckbox><label>@role.RoleName</label></li>
                                                     }
                                                 </ul>
                                             }
-                                        }
-                                        else
-                                        {
-                                            <ul class="ul-simple">
-                                                @foreach (var role in selectedRoles
-                                                         .Where(R => R.RoleName != "Super User")
-                                                         .ToList())
-                                                {
 
-                                                    <li><InputCheckbox class="mr-2" @bind-Value="role.IsSubscribed"></InputCheckbox><label>@role.RoleName</label></li>
-                                                }
-                                            </ul>
                                         }
-
-                                    }
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <h5>Preferences</h5>
-                    <div class="detail-group-box">
-                        <div class="form-group">
-                            <div class="container-fluid">
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-6 p-2">
-                                    <label>Background</label>
-                                    <div class="thumbnails">
-                                        <img src="@TaskObject.MainBackgroundImage" alt="" class="img-thumbnail" />
                                     </div>
-                                    <InputSelect class="form-control form-control-lg"
-                                                 @bind-Value="TaskObject.MainBackgroundImage">
-                                        <option value="">Select</option>
-                                        <option value="#DDDDDD">Light</option>
-                                        <option value="#555555">Dark</option>
+                                </div>
+                            </div>
+                        </div>
+                        <h5>Preferences</h5>
+                        <div class="detail-group-box">
+                            <div class="form-group">
+                                <label>Preview Image</label>
+                                <label class="switch">
+                                    <input type="checkbox" @bind="sessionState.User.DisplaySmartflowPreviewImage">
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <div class="container-fluid">
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-6 p-2">
+                                        <label>Background</label>
+                                        <div class="thumbnails">
+                                            <img src="@TaskObject.MainBackgroundImage" alt="" class="img-thumbnail" />
+                                        </div>
+                                        <InputSelect class="form-control form-control-lg"
+                                                     @bind-Value="TaskObject.MainBackgroundImage">
+                                            <option value="">Select</option>
+                                            <option value="#DDDDDD">Light</option>
+                                            <option value="#555555">Dark</option>
 
-                                        @if (!(ListFileDescriptions is null))
-                                        {
-                                            @foreach (var fileDesc in ListFileDescriptions.ToList().OrderByDescending(F => F.FileName))
-                                            {
-                                                <option value="@(fileDesc.FileDirectory.Replace("\\","/").Replace("wwwroot/","") + "/" + fileDesc.FileName)">
-                                                    @fileDesc.FileName
-                                                </option>
-                                            }
-                                        }
+                                            @if (!(ListFileDescriptions is null))
+                                                {
+                                                @foreach (var fileDesc in ListFileDescriptions.ToList().OrderByDescending(F => F.FileName))
+                                                    {
+                                                    <option value="@(fileDesc.FileDirectory.Replace("\\","/").Replace("wwwroot/","") + "/" + fileDesc.FileName)">
+                                                        @fileDesc.FileName
+                                                    </option>
+                                                    }
+                                                }
+                                        </InputSelect>
 
-                                    </InputSelect>
-                                    
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+
                 </div>
 
-            </div>
-
-            <div class="button-container">
-                <button type="submit" class="float-left btn btn-alt">Save Changes</button>
-                <button type="button" class="float-left ml-2 btn btn-secondary" @onclick="NavigateBack">Cancel</button>
+                <div class="button-container">
+                    <button type="submit" class="float-left btn btn-alt">Save Changes</button>
+                    <button type="button" class="float-left ml-2 btn btn-secondary" @onclick="NavigateBack">Cancel</button>
+                </div>
             </div>
         </div>
-    </div>
 
-</EditForm>
+    </EditForm>
+}

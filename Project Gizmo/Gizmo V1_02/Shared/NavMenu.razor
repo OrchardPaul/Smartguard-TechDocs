@@ -36,13 +36,13 @@
 <div class="sidebar-menu @NavMenuCssClass" @onclick="ToggleNavMenu">
     <ul class="nav flex-column">
         <li class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+            <NavLink class="nav-link" @onclick="refreshBackGround" href="" Match="NavLinkMatch.All">
                 <span class="fa fa-home" aria-hidden="true"></span>Home
             </NavLink>
         </li>
 
         <li class="nav-item px-3">
-            <NavLink class="nav-link" href="smartflows">
+            <NavLink class="nav-link" @onclick="refreshBackGround" href="smartflow">
                 <span class="fa fa-sitemap" aria-hidden="true"></span>Smartflow
             </NavLink>
         </li>
@@ -50,7 +50,7 @@
         <AuthorizeView Roles="Site Admin, Super User">
             <Authorized>
                 <li class="nav-item px-3">
-                    <NavLink class="nav-link" href="admin">
+                    <NavLink class="nav-link" @onclick="refreshBackGround" href="admin">
                         <span class="fa fa-cogs" aria-hidden="true"></span>Site Admin
                     </NavLink>
                 </li>
@@ -60,7 +60,7 @@
         <AuthorizeView Roles="Super User">
             <Authorized>
                 <li class="nav-item px-3">
-                    <NavLink class="nav-link" href="system">
+                    <NavLink class="nav-link" @onclick="refreshBackGround" href="system">
                         <span class="fa fa-wrench" aria-hidden="true"></span>System Settings
                     </NavLink>
                 </li>

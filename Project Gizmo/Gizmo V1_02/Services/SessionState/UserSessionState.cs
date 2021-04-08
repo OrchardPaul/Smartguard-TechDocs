@@ -29,7 +29,7 @@ namespace Gizmo_V1_02.Services.SessionState
         SpinLock IdentityLock { get; set; }
         bool Lock { get; set; }
         string selectedSystem { get; }
-        string TempBackGroundImage { get; }
+        string TempBackGroundImage { get; set; }
         event Action OnChange;
 
         Claim getCompanyClaim();
@@ -99,7 +99,7 @@ namespace Gizmo_V1_02.Services.SessionState
 
         private string sessionStateSet;
 
-        public string TempBackGroundImage { get; protected set; }
+        public string TempBackGroundImage { get; set; }
 
         public string TempBackGroundImageAppliedUri { get; protected set; }
 

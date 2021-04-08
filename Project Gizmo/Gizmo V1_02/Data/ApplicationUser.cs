@@ -18,5 +18,7 @@ namespace Gizmo_V1_02.Data
 
         [StringLength(500)]
         public string MainBackgroundImage { get; set; }
+
+        public bool DisplaySmartflowPreviewImage { get; set; }
     }
 }

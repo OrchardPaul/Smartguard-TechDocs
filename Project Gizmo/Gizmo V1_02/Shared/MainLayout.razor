@@ -26,29 +26,10 @@
 
     }
     @{
-        string parallax = "";
-        if (!string.IsNullOrEmpty(sessionState.TempBackGroundImage))
-        {
-            parallax = ".parallax { background-image: url('" + sessionState.GetBackgroundImage() + "');  } .inner-content{ background-image: none;}";
-        }
-        else if (!(sessionState.User is null) && !string.IsNullOrEmpty(sessionState.User.MainBackgroundImage))
-        {
 
-            if (sessionState.User.MainBackgroundImage.Contains("#"))
-            {
-                parallax = ".parallax {  background-color: " + sessionState.User.MainBackgroundImage + " }";
-            }
 
-        else
-        {
-            parallax = ".parallax { background-image: url('" + sessionState.User.MainBackgroundImage + "');  } .inner-content{ background-image: none;}";
-        }
-                    }
-                    else
-                    {
-                        parallax = ".parallax {  background-color: #666666 }";
-                    }
-                }
+
+    }
 
                 @parallax
                 .cookie-link a {color: @colAlt;}

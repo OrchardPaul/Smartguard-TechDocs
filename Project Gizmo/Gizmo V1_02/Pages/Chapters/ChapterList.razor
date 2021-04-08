@@ -166,7 +166,7 @@ else
                                                                             <span class="fa fa-font mr-2"></span>
                                                                             <span>Rename</span>
                                                                         </li>
-                                                                        <li class="col-main" @onclick="() => NavigateToChapter(Chapter.ChapterObject)" title="">
+                                                                        <li class="col-main" @onclick="() => SelectChapter(Chapter.ChapterObject)" title="">
                                                                             <span class="fa fa-pencil-alt mr-2"></span>
                                                                             <span>Edit</span>
                                                                         </li>
@@ -212,7 +212,7 @@ else
                                                             <div @onclick='() => MoveSeq(Chapter.ChapterObject, "Chapters", "Down")'><span class="fa fa-angle-down"></span></div>
                                                         </div>
                                                     }
-                                                    <div title="Chapter: click to configure @Chapter.ChapterObject.Name" class="data-item-right link-direction" @onclick="() => NavigateToChapter(Chapter.ChapterObject)">
+                                                    <div title="Chapter: click to configure @Chapter.ChapterObject.Name" class="data-item-right link-direction" @onclick="() => SelectChapter(Chapter.ChapterObject)">
                                                         <div class="fa fa-chevron-circle-right"></div>
                                                     </div>
                                                 </div>
@@ -399,7 +399,7 @@ else
                                         </div>
                                         <div class="col-12 col-xl-6">
                                             <div class="form-group">
-                                                <label for="BgColour">Background Colour</label>
+                                                <label for="BgColour">Select Background</label>
                                                 <select @bind="selectColour" style="background-color: @getHTMLColourFromAndroid(ListChapterColours.Where(C => C.ColourName == selectColour).Select(C => C.ColourCode).FirstOrDefault())" class="form-control form-control-lg">
                                                     @foreach (var colour in ListChapterColours)
                                                     {
@@ -408,15 +408,22 @@ else
                                                         </option>
                                                     }
                                                 </select>
+                                            </div>
 
-
-
-
+                                            <div class="form-group">
+                                                <label>Preview Image</label>
+                                                <label class="switch">
+                                                    <input type="checkbox" @bind="PreviewChapterImage">
+                                                    <span class="slider round"></span>
+                                                </label>
                                             </div>
 
                                             <div class="form-group">
                                                 <label>Show Notes</label>
-                                                <InputCheckbox class="form-control" @bind-Value="PartnerShowNotes" />
+                                                <label class="switch">
+                                                    <input type="checkbox" @bind="PartnerShowNotes">
+                                                    <span class="slider round"></span>
+                                                </label>
                                             </div>
 
                                             <div class="form-group">
