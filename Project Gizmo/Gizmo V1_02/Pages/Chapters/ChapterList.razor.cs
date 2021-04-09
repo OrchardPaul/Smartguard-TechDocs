@@ -1013,7 +1013,7 @@ namespace Gizmo_V1_02.Pages.Chapters
             {
 
                 EditTickerMessageObject.Message.SeqNo = ListVmTickerMessages
-                                                       .OrderByDescending(D => D.Message.SeqNo)
+                                                       .OrderBy(D => D.Message.SeqNo)
                                                        .Select(D => D.Message.SeqNo)
                                                        .FirstOrDefault() + 1;
             }

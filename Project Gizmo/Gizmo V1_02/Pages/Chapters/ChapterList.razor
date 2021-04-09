@@ -443,25 +443,25 @@ else
                                                 }
                                                 else
                                                 {
-                                                    <div @onclick='() => ShowNav("Background")' class="nav-link" style="height: 35px; width: 150px; margin-left: 15px; border: 1pt solid #ccc; padding-left: 10px; padding-right: 10px">
+                                                    <div @onclick='() => ShowNav("Background")' class="nav-link" style="height: 35px; width: 240px; margin-left: 10px; border: 1pt solid #ccc; padding-left: 10px; padding-right: 10px">
 
                                                         <label class="col-grey ml-2">No background colour selected</label>
 
                                                     </div>
                                                 }
-                                                <div class="mt-3 nav-link" style="height: 100px" @onclick='() => ShowNav("Background")'>
+                                                <div class="mt-3 link-item" style="height: 100px; margin: 0; padding: 0;" @onclick='() => ShowNav("Background")'>
 
                                                     @if (!string.IsNullOrEmpty(selectedChapter.BackgroundImageName))
                                                     {
 
-                                                        <label class="d-block">Selected Background Image:</label>
+                                                        <label class="d-block">Selected Background Image</label>
                                                         <img src="@selectedChapter.BackgroundImage" alt="" class="img-thumbnail ml-2" />
 
 
                                                     }
                                                     else
                                                     {
-                                                        <label class="d-block">No background image selected:</label>
+                                                        <label class="d-block">No background image selected</label>
                                                         <img src="/images/BackgroundImages/NoImage.jpg" alt="" class="img-thumbnail ml-2" />
 
                                                     }
@@ -485,10 +485,10 @@ else
                                                 </label>
                                             </div>
 
-                                            <div class="form-group">
+                                            @*<div class="form-group">
                                                 <label>Ticker Message</label>
                                                 <InputTextArea @bind-Value="selectedChapter.GeneralNotes" class="form-control form-control-xxl" />
-                                            </div>
+                                            </div>*@
                                         </div>
                                     </div>
 
@@ -499,10 +499,7 @@ else
                                 </div>
                                 -->
 
-                                    <div class="button-container">
-                                        <button type="submit" class="btn btn-main">Save Changes</button>
-
-                                    </div>
+                                    
                                 </EditForm>
 
 
@@ -1466,9 +1463,9 @@ else
                                     {
 
                                         <div class="data-item-right seq-change">
-                                            <div @onclick='() => MoveMessageSeqNo(vmtickerMessages.Message, "Message", "Up")'><span class="fa fa-angle-up"></span></div>
+                                            <div @onclick='() => MoveMessageSeqNo(vmtickerMessages.Message, "TickerMessages", "Up")'><span class="fa fa-angle-up"></span></div>
                                             <div class="seq-no">@vmtickerMessages.Message.SeqNo</div>
-                                            <div @onclick='() => MoveMessageSeqNo(vmtickerMessages.Message, "Message", "Down")'><span class="fa fa-angle-down"></span></div>
+                                            <div @onclick='() => MoveMessageSeqNo(vmtickerMessages.Message, "TickerMessages", "Down")'><span class="fa fa-angle-down"></span></div>
                                         </div>
                                     }
                                     else
@@ -1510,6 +1507,92 @@ else
                     </div>
                 </div>
 
+
+            }
+
+            @if (navDisplay == "Background")
+            {
+                <div class="grid-chapter grid-chapter-background">
+
+                    <div class="detail-group-box">
+                        <div id="selected-bg-items">
+                            <div id="selected-image">
+                                <div class="selected-thumbnail ">
+                                    @if (!string.IsNullOrEmpty(selectedChapter.BackgroundImageName))
+                                    {
+                                        <div>Selected Image: <span class="font-85">@selectedChapter.BackgroundImageName</span></div>
+                                        <img src="@selectedChapter.BackgroundImage" alt="" class="img-thumbnail ml-2" />
+                                    }
+                                    else
+                                    {
+                                        <label class="d-block col-grey">No Image Selected</label>
+                                        <img src="/images/BackgroundImages/NoImage.jpg" alt="" class="img-thumbnail ml-2" />
+
+                                    }
+                                </div>
+                                <div class="hidden-lg-down form-group-inline" >
+                                    <label style="margin-right: 10px">Preview Image</label>
+                                    <label class="switch">
+                                        <input type="checkbox" @bind="PreviewChapterImage">
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div style="margin-left: 50px">
+                                <label>Background Colour</label>
+                                <select @bind="selectColour"
+                                        style="background-color: @getHTMLColourFromAndroid(ListChapterColours.Where(C => C.ColourName == selectColour).Select(C => C.ColourCode).FirstOrDefault())"
+                                        class="form-control form-control-lg">
+                                    @foreach (var colour in ListChapterColours)
+                                    {
+                                        <option style="background-color: @getHTMLColourFromAndroid(colour.ColourCode)" value="@(colour.ColourCode.Contains("#") ? colour.ColourName : colour.ColourCode)">
+                                            @colour.ColourName
+
+                                        </option>
+                                    }
+                                </select>
+
+
+                            </div>
+                        </div>
+
+                        <div class="custom-file">
+                            <InputFile multiple OnChange="HandleBgImageFileSelection" class="custom-file-input" id="customFileInput"></InputFile>
+                            <label class="custom-file-label" for="customInput">Upload images</label>
+                        </div>
+
+
+
+                        <div class="grid-can-edit chapter-scroll-list">
+                            <div class="thumbnail-list">
+                                @foreach (var fileDesc in ListFilesForBgImages.ToList().OrderBy(F => F.FileName))
+                                {
+
+                                    <div class="thumbnail-item @(!string.IsNullOrEmpty(selectedChapter.BackgroundImageName) && fileDesc.FileName == selectedChapter.BackgroundImageName ? "active" : "")">
+                                        <img src="@fileDesc.FileURL" alt="" class="img-thumbnail" />
+                                        <label>@fileDesc.FileName</label>
+                                        <div class="thumbnail-options">
+                                            <button @onclick='(() => PrepareBgImageForDelete(fileDesc))' class="btn col-grey" title="Delete this image"><i class="fa fa-trash"></i></button>
+                                            @if (!string.IsNullOrEmpty(selectedChapter.BackgroundImageName) && fileDesc.FileName == selectedChapter.BackgroundImageName)
+                                            {
+                                                <button @onclick='() => SelectBgImage(new FileManagement.FileClassObjects.FileDesc { FileName = "", FileURL = "" })' class="btn " title="Deselect this image"><i class="fa fa-times"></i></button>
+                                            }
+                                            else
+                                            {
+                                                <button @onclick='() => SelectBgImage(fileDesc)' class="btn " title="Use this image"><i class="fa fa-check"></i></button>
+                                            }
+                                        </div>
+                                    </div>
+
+                                }
+                            </div>
+                        </div>
+
+
+
+                    </div>
+                </div>
 
             }
 
@@ -1577,86 +1660,7 @@ else
             }
 
 
-            @if (navDisplay == "Background")
-            {
-                <div class="grid-chapter grid-chapter-background">
-
-                    <div class="detail-group-box">
-                        <div class="form-group">
-                            <label>Background Colour</label>
-                            <select @bind="selectColour"
-                                    style="background-color: @getHTMLColourFromAndroid(ListChapterColours.Where(C => C.ColourName == selectColour).Select(C => C.ColourCode).FirstOrDefault())"
-                                    class="form-control form-control-lg">
-                                @foreach (var colour in ListChapterColours)
-                                {
-                                    <option style="background-color: @getHTMLColourFromAndroid(colour.ColourCode)" value="@(colour.ColourCode.Contains("#") ? colour.ColourName : colour.ColourCode)">
-                                        @colour.ColourName
-
-                                    </option>
-                                }
-                            </select>
-
-
-                        </div>
-
-                        <div class="selected-thumbnail form-group">
-                            @if (!string.IsNullOrEmpty(selectedChapter.BackgroundImageName))
-                            {
-                                <label class="d-block">Selected Image: @selectedChapter.BackgroundImageName</label>
-                                <img src="@selectedChapter.BackgroundImage" alt="" class="img-thumbnail ml-2" />
-                            }
-                            else
-                            {
-                                <label class="d-block col-grey">No Image Selected</label>
-                                <img src="/images/BackgroundImages/NoImage.jpg" alt="" class="img-thumbnail ml-2" />
-
-                            }
-                        </div>
-                        <div class="form-group hidden-lg-down">
-                            <label style="display: inline-block; width: 150px">Preview Image</label>
-                            <label class="switch">
-                                <input type="checkbox" @bind="PreviewChapterImage">
-                                <span class="slider round"></span>
-                            </label>
-                        </div>
-                        <div class="custom-file">
-                            <InputFile multiple OnChange="HandleBgImageFileSelection" class="custom-file-input" id="customFileInput"></InputFile>
-                            <label class="custom-file-label" for="customInput">Upload images</label>
-                        </div>
-
-
-
-                        <div class="chapter-scroll-list">
-                            <div class="thumbnail-list">
-                                @foreach (var fileDesc in ListFilesForBgImages.ToList().OrderBy(F => F.FileName))
-                                {
-
-                                    <div class="thumbnail-item @(!string.IsNullOrEmpty(selectedChapter.BackgroundImageName) && fileDesc.FileName == selectedChapter.BackgroundImageName ? "active" : "")">
-                                        <img src="@fileDesc.FileURL" alt="" class="img-thumbnail" />
-                                        <label>@fileDesc.FileName</label>
-                                        <div class="thumbnail-options">
-                                            <button @onclick='(() => PrepareBgImageForDelete(fileDesc))' class="btn col-grey" title="Delete this image"><i class="fa fa-trash"></i></button>
-                                            @if (!string.IsNullOrEmpty(selectedChapter.BackgroundImageName) && fileDesc.FileName == selectedChapter.BackgroundImageName)
-                                            {
-                                                <button @onclick='() => SelectBgImage(new FileManagement.FileClassObjects.FileDesc { FileName = "", FileURL = "" })' class="btn " title="Deselect this image"><i class="fa fa-times"></i></button>
-                                            }
-                                            else
-                                            {
-                                                <button @onclick='() => SelectBgImage(fileDesc)' class="btn " title="Use this image"><i class="fa fa-check"></i></button>
-                                            }
-                                        </div>
-                                    </div>
-
-                                }
-                            </div>
-                        </div>
-
-
-
-                    </div>
-                </div>
-
-            }
+        
 
 
         }

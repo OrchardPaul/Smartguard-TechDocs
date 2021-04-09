@@ -481,6 +481,8 @@
     align-items: center;
     justify-content: center;
     position: relative;
+    min-width: 0;
+    flex-shrink: 0;
 }
 
 .grid-can-edit .btn-ellipses {

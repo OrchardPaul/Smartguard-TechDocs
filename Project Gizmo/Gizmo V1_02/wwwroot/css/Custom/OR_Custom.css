@@ -154,7 +154,7 @@ app {
 }
 
 .thumbnail-item {
-    background-color: rgba(255, 255, 255, 0.5);
+    background-color: rgba(255, 255, 255, 0.6);
     width: 150px;
     height: 160px;
     margin: 10px;
@@ -302,7 +302,7 @@ app {
 .custom-file-input[disabled] ~ .custom-file-label,
 .custom-file-input:disabled ~ .custom-file-label, 
 .custom-file-label {
-    background-color: #eee !important;
+    background-color: #fff !important;
 }
 
 .custom-file-input:lang(en) ~ .custom-file-label::after {
@@ -587,9 +587,9 @@ app {
     padding-left: 10px !important;
     padding-right: 10px !important;
     padding-top: 0px !important;
-    width: auto;
     min-width: 0;
     float: left;
+    max-width: 100%;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis !important;
@@ -706,6 +706,7 @@ app {
     margin-top: 0;
     margin-bottom: 0;
     padding: 0 5px 0 5px;
+    flex-shrink: 0;
 }
 
 .data-item-wrap {
@@ -1449,8 +1450,23 @@ input:checked + .slider:before {
         border-radius: 50%;
     }
 
+#selected-bg-items{
+    display: flex;
+    flex-flow: row;
+}
 
+#selected-bg-items #selected-image {
+    width: 300px;
+}
 
+#selected-bg-items .form-group-inline {
+    display: flex;
+    flex-direction: row;
+}
+
+#selected-bg-items .form-group-inline .switch{
+    margin-top: 4px;
+}
 /******************/
 /*   TESTING ONLY */
 #agendaWrapper, #statusWrapper {
