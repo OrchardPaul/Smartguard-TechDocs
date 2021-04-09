@@ -5,6 +5,7 @@
 
 @inject IJSRuntime jsRuntime
 @using Gizmo_V1_02.Pages.Shared.Modals
+@using System.Globalization;
 
 
 @if (ListChapterLoaded == false)
@@ -95,11 +96,11 @@ else
                         {
 
                             @foreach (var caseType in lstChapters.Where(C => C.ChapterObject.ParentId == 0)
-  .Where(C => !(C.ChapterObject.CaseType is null))
-  .Where(C => C.ChapterObject.CaseTypeGroup == selectedChapter.CaseTypeGroup)
-  .Select(C => C.ChapterObject.CaseType)
-  .Distinct()
-  .ToList())
+.Where(C => !(C.ChapterObject.CaseType is null))
+.Where(C => C.ChapterObject.CaseTypeGroup == selectedChapter.CaseTypeGroup)
+.Select(C => C.ChapterObject.CaseType)
+.Distinct()
+.ToList())
                             {
 
                                 <div class="grid-row-md nav-row-2">
@@ -145,11 +146,11 @@ else
                                 {
                                     <div class="grid-nav">
                                         @foreach (var Chapter in lstChapters
-                                                     .Where(C => C.ChapterObject.CaseType == selectedChapter.CaseType)
-                                                     .Where(C => C.ChapterObject.CaseTypeGroup == selectedChapter.CaseTypeGroup)
-                                                     .Where(C => C.ChapterObject.Type == "Chapter")
-                                                     .OrderBy(C => C.ChapterObject.SeqNo)
-                                                     .ToList())
+                                                   .Where(C => C.ChapterObject.CaseType == selectedChapter.CaseType)
+                                                   .Where(C => C.ChapterObject.CaseTypeGroup == selectedChapter.CaseTypeGroup)
+                                                   .Where(C => C.ChapterObject.Type == "Chapter")
+                                                   .OrderBy(C => C.ChapterObject.SeqNo)
+                                                   .ToList())
                                         {
                                             <div class="grid-row-md nav-row-3 no-border  @(rowChanged == Chapter.ChapterObject.SeqNo ? ToggleRowChangedClass() : "" )">
                                                 <div class="data-item @(Chapter.ChapterObject.Name.Length > 6 && Chapter.ChapterObject.Name.Substring(0,6) == "GROUP " ? "data-item-group" : "")">
@@ -267,7 +268,9 @@ else
                     <li class="nav-item @(navDisplay == "DataViews" ? "active" : "")" @onclick='() => ShowNav("DataViews")'>
                         <span>Data Views</span>
                     </li>
-
+                    <li class="nav-item @(navDisplay == "TickerMessages" ? "active" : "")" @onclick='() => ShowNav("TickerMessages")'>
+                        <span>Messages</span>
+                    </li>
                     @if ((sessionState.isAdminUser))
                     {
                         <li class="nav-item @(navDisplay == "Backups" ? "active" : "")" @onclick='() => ShowNav("Backups")'>
@@ -300,7 +303,9 @@ else
                 <li class="nav-item @(navDisplay == "DataViews" ? "active" : "")" @onclick='() => ShowNav("DataViews")'>
                     <span>Data Views</span>
                 </li>
-
+                <li class="nav-item @(navDisplay == "TickerMessages" ? "active" : "")" @onclick='() => ShowNav("TickerMessages")'>
+                    <span>Messages</span>
+                </li>
             </ul>
 
         </div>
@@ -346,32 +351,31 @@ else
                                             <div class="form-group">
                                                 <label for="P4WCTG">P4W Case Type Group</label>
                                                 <InputSelect class="form-control form-control-xxl"
-                                                            ValueExpression="@(() => selectedChapter.P4WCaseTypeGroup)"
-                                                            Value="@selectedChapter.P4WCaseTypeGroup"
-                                                            ValueChanged="@((string value) => SaveP4WCaseTypeGroup(value))"
-                                                             >
+                                                             ValueExpression="@(() => selectedChapter.P4WCaseTypeGroup)"
+                                                             Value="@selectedChapter.P4WCaseTypeGroup"
+                                                             ValueChanged="@((string value) => SaveP4WCaseTypeGroup(value))">
                                                     <option value="">Select</option>
                                                     @foreach (var group in partnerCaseTypeGroups)
-                                                                    {
+                                                    {
                                                         <option value="@group.Name">
                                                             @group.Name
                                                         </option>
-                                                                    }
+                                                    }
                                                 </InputSelect>
                                             </div>
                                             <div class="form-group">
                                                 <label for="SelectedView">Smartflow View</label>
                                                 <InputSelect class="form-control form-control-xxl"
-                                                            ValueExpression="@(() => selectedChapter.SelectedView)"
-                                                            Value="@selectedChapter.SelectedView"
-                                                            ValueChanged="@((string value) => SaveSelectedView(value))">
+                                                             ValueExpression="@(() => selectedChapter.SelectedView)"
+                                                             Value="@selectedChapter.SelectedView"
+                                                             ValueChanged="@((string value) => SaveSelectedView(value))">
                                                     <option value="">Select</option>
                                                     @foreach (var view in ListP4WViews.Where(V => !(V.InternalNote is null) && (V.InternalNote.Contains("Smartflow"))).ToList())
-                                                                    {
+                                                    {
                                                         <option value="@view.Name">
                                                             @view.Name
                                                         </option>
-                                                                    }
+                                                    }
                                                 </InputSelect>
                                             </div>
                                             @if (!(selectedChapter.SelectedStep is null) && selectedChapter.SelectedStep != "Create New")
@@ -385,11 +389,11 @@ else
                                                         <option value="">Select</option>
                                                         <option value="Create New">--- Create New ---</option>
                                                         @foreach (var step in dropDownChapterList.Where(D => D.DocumentType == 6).Where(D => D.Notes.Contains("Smartflow:")).ToList())
-                                                                            {
+                                                        {
                                                             <option value="@step.Name">
                                                                 @step.Name
                                                             </option>
-                                                                            }
+                                                        }
                                                     </InputSelect>
                                                 </div>
                                             }
@@ -407,14 +411,14 @@ else
                                         <div class="col-12 col-xl-6">
                                             <div class="form-group">
                                                 <label for="BgColour">Select Background</label>
-                                                <select @bind="selectColour" 
-                                                        style="background-color: @getHTMLColourFromAndroid(ListChapterColours.Where(C => C.ColourName == selectColour).Select(C => C.ColourCode).FirstOrDefault())" 
+                                                <select @bind="selectColour"
+                                                        style="background-color: @getHTMLColourFromAndroid(ListChapterColours.Where(C => C.ColourName == selectColour).Select(C => C.ColourCode).FirstOrDefault())"
                                                         class="form-control form-control-lg">
                                                     @foreach (var colour in ListChapterColours)
                                                     {
                                                         <option style="background-color: @getHTMLColourFromAndroid(colour.ColourCode)" value="@colour.ColourName">
                                                             @colour.ColourName
-                                                            
+
                                                         </option>
                                                     }
                                                 </select>
@@ -613,8 +617,8 @@ else
                                                 case "Doc":
 
                                                     @if (!string.IsNullOrEmpty(doc.DocDisplayName)
-                                                            && (doc.DocDisplayName.Length > 9)
-                                                            && (doc.DocDisplayName.Substring(0, 9).ToUpper().Contains("LTR")))
+                                                         && (doc.DocDisplayName.Length > 9)
+                                                         && (doc.DocDisplayName.Substring(0, 9).ToUpper().Contains("LTR")))
                                                     {
                                                         <span class="font-100"><span class="fa fa-file-alt mr-2"></span></span>
                                                     }
@@ -752,7 +756,6 @@ else
                 </div>
 
             }
-
 
             @if (navDisplay == "Agenda")
             {
@@ -975,9 +978,6 @@ else
                                                 <div @onclick='() => MoveFeeSeqNo(fee.FeeObject,"Fees", "Down")'><span class="fa fa-angle-down"></span></div>
                                             </div>
 
-
-
-
                                         }
                                         else
                                         {
@@ -1066,8 +1066,6 @@ else
                 </div>
 
             }
-
-
 
             @if (navDisplay == "Status")
             {
@@ -1325,6 +1323,149 @@ else
 
             }
 
+            @if (navDisplay == "TickerMessages")
+            {
+
+                <div class="grid-chapter grid-chapter-messages">
+
+                    <div class="grid-actions">
+
+                        @if (!compareSystems)
+                        {
+                            @if (sessionState.isAdminUser)
+                            {
+                                <div class="btn-group">
+                                    @if (ListVmTickerMessages.Count() < 3)
+                                    {
+                                        <button @onclick='() => PrepareTickerMessageForInsert(navDisplay)' class="btn btn-main btn-shadow" title="Add new ticker message"><i class="fa fa-plus"></i><span>New</span></button>
+                                    }
+                                    else
+                                    {
+                                        <button class="btn btn-main btn-shadow" title="Cannot add new ticker message - Max number of messages reached" disabled><i class="fa fa-plus"></i><span>New</span></button>
+                                    }
+                                    <button @onclick='() => CondenseBlockNo("TickerMessages")' class="btn btn-main btn-shadow @(BlockNoIsValid() ? "invisible" : "")" title="Re-order Sequence Numbers"><i class="fa fa-sort-numeric-down"></i></button>
+                                </div>
+                            }
+                        }
+
+                        <ModalTooltip Direction="top" Text="Ticker Message to be made visible on the smartflow screen!">
+                            <span class="info-icon">
+                                <span class=" fa fa-info-circle fa-2x "></span>
+                            </span>
+                        </ModalTooltip>
+                    </div>
+
+                    <div class="@(sessionState.isAdminUser ? "grid-can-edit" : "") ">
+                        <div class="row grid-header invisible-md-down">
+                            <div class="data-item ">
+                                <div class="data-item-sub">
+                                    Message
+                                </div>
+                            </div>
+                            <div class="data-item ">
+                                <div class="data-item-sub">
+                                    From Date
+                                </div>
+                            </div>
+                            <div class="data-item ">
+                                <div class="data-item-sub">
+                                    To Date
+                                </div>
+                            </div>
+                        </div>
+                        @foreach (var vmtickerMessages in ListVmTickerMessages)
+                        {
+
+                            <div class="row grid-row @(rowChanged == vmtickerMessages.Message.SeqNo? "row-changed" : "" )">
+                                <div class="data-item">
+                                    @if (sessionState.isAdminUser)
+                                    {
+
+                                        <div class="btn-ellipses float-left">
+                                            <span class="fa fa-ellipsis-v"></span>
+                                            <div class="ellipsis-menu">
+                                                <ul>
+                                                    <li class="col-main" @onclick='() => PrepareTickerMessageForEdit(vmtickerMessages, navDisplay)'>
+                                                        <span class="fa fa-pencil-alt mr-2"></span>
+                                                        <span>Edit</span>
+                                                    </li>
+                                                    <li class="col-red" @onclick='() => PrepareTickerMessageDelete(vmtickerMessages)'>
+                                                        <span class="fa fa-trash-alt mr-2"></span>
+                                                        <span>Delete</span>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+
+                                    }
+                                    else
+                                    {
+                                        <div class="btn-ellipses float-left">
+                                            <span class="fa fa-ellipsis-v"></span>
+                                            <div class="ellipsis-menu">
+                                                <ul>
+                                                    <li class="col-main" @onclick='() => ShowTickerMessageDisplayModal(vmtickerMessages)'>
+                                                        <span class="fa fa-binoculars mr-2"></span>
+                                                        <span>View</span>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    }
+
+                                    <div class="data-item-sub " title="@vmtickerMessages.Message.Message">
+                                        @vmtickerMessages.Message.Message
+                                    </div>
+                                    @if (sessionState.isAdminUser && !compareSystems)
+                                    {
+
+                                        <div class="data-item-right seq-change">
+                                            <div @onclick='() => MoveMessageSeqNo(vmtickerMessages.Message,"Message","Up")'><span class="fa fa-angle-up"></span></div>
+                                            <div class="seq-no">@vmtickerMessages.Message.SeqNo</div>
+                                            <div @onclick='() => MoveMessageSeqNo(vmtickerMessages.Message,"Message","Down")'><span class="fa fa-angle-down"></span></div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="data-item-right">
+                                            <div class="seq-no">@vmtickerMessages.Message.SeqNo</div>
+                                        </div>
+                                    }
+
+                                </div>
+                                    @if (!string.IsNullOrEmpty(vmtickerMessages.Message.FromDate))
+                                    {
+                                        <div class="hidden-md-down data-item ">
+                                            <div class="data-item-sub">@(DateTime.ParseExact(vmtickerMessages.Message.FromDate, "yyyyMMdd", CultureInfo.InvariantCulture).ToString("dd/MM/yyyy"))</div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="hidden-md-down data-item ">
+                                            <div class="data-item-sub">
+                                            </div>
+                                        </div>
+                                    }
+                                    @if (!string.IsNullOrEmpty(vmtickerMessages.Message.ToDate))
+                                    {
+                                        <div class="hidden-md-down data-item ">
+                                            <div class="data-item-sub font-85 pl-3">@(DateTime.ParseExact(vmtickerMessages.Message.ToDate, "yyyyMMdd", CultureInfo.InvariantCulture).ToString("dd/MM/yyyy"))</div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="hidden-md-down data-item ">
+                                            <div class="data-item-sub">
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                        }
+                    </div>
+                </div>
+
+
+            }
 
             @if (navDisplay == "Backups")
             {

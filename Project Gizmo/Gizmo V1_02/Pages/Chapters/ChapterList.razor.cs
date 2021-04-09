@@ -26,6 +26,7 @@ using System.Net;
 using Microsoft.JSInterop;
 using Gizmo_V1_02.FileManagement.FileProcessing.Interface;
 using Gizmo_V1_02.Data.Admin;
+using System.Globalization;
 
 namespace Gizmo_V1_02.Pages.Chapters
 {
@@ -84,6 +85,7 @@ namespace Gizmo_V1_02.Pages.Chapters
         private List<VmUsrOrDefChapterManagement> lstStatus { get; set; } = new List<VmUsrOrDefChapterManagement>();
 
         private List<VmDataViews> ListVmDataViews { get; set; } = new List<VmDataViews>();
+        private List<VmTickerMessages> ListVmTickerMessages { get; set; } = new List<VmTickerMessages>();
 
         public List<MpSysViews> ListP4WViews;
         public List<DmDocuments> dropDownChapterList;
@@ -130,6 +132,7 @@ namespace Gizmo_V1_02.Pages.Chapters
         public string isCaseTypeOrGroup { get; set; } = "";
 
         public VmDataViews EditDataViewObject = new VmDataViews { DataView = new DataViews() };
+        public VmTickerMessages EditTickerMessageObject = new VmTickerMessages { Message = new TickerMessages() };
         public VmUsrOrDefChapterManagement editObject = new VmUsrOrDefChapterManagement { ChapterObject = new UsrOrDefChapterManagement() };
         public VmFee editFeeObject = new VmFee { FeeObject = new Fee() };
         public VmUsrOrDefChapterManagement editChapterObject = new VmUsrOrDefChapterManagement { ChapterObject = new UsrOrDefChapterManagement() };
@@ -582,6 +585,16 @@ namespace Gizmo_V1_02.Pages.Chapters
                                                             .OrderBy(D => D.DataView.BlockNo)
                                                             .ToList();
                 }
+                if (listType == "TickerMessages" | listType == "All")
+                {
+                    ListVmTickerMessages = (selectedChapter.TickerMessages is null)
+                                                    ? new List<VmTickerMessages>()
+                                                    : selectedChapter
+                                                            .TickerMessages
+                                                            .Select(D => new VmTickerMessages { Message = D })
+                                                            .OrderBy(D => D.Message.SeqNo)
+                                                            .ToList();
+                }
             }
 
             displaySpinner = false;
@@ -907,6 +920,13 @@ namespace Gizmo_V1_02.Pages.Chapters
             ShowDataViewDetailModal("Edit");
         }
 
+        private void PrepareTickerMessageForEdit(VmTickerMessages item, string header)
+        {
+            selectedList = header;
+            EditTickerMessageObject = item;
+
+            ShowTickerMessageDetailModal("Edit");
+        }
 
         private void PrepareAttachmentForEdit(VmUsrOrDefChapterManagement item, string header)
         {
@@ -984,7 +1004,30 @@ namespace Gizmo_V1_02.Pages.Chapters
             ShowDataViewDetailModal("Insert");
         }
 
+        private void PrepareTickerMessageForInsert(string header)
+        {
+            selectedList = header;
+            EditTickerMessageObject = new VmTickerMessages { Message = new TickerMessages() };
 
+            EditTickerMessageObject.Message.FromDate = DateTime.Now.ToString("yyyyMMdd");
+            EditTickerMessageObject.Message.ToDate = DateTime.Now.ToString("yyyyMMdd");
+
+            if (ListVmTickerMessages.Count > 0)
+            {
+
+                EditTickerMessageObject.Message.SeqNo = ListVmTickerMessages
+                                                       .OrderByDescending(D => D.Message.SeqNo)
+                                                       .Select(D => D.Message.SeqNo)
+                                                       .FirstOrDefault() + 1;
+            }
+            else
+            {
+                EditTickerMessageObject.Message.SeqNo = 1;
+            }
+
+
+            ShowTickerMessageDetailModal("Insert");
+        }
 
 
         private void PrepNewChapter()
@@ -1170,6 +1213,38 @@ namespace Gizmo_V1_02.Pages.Chapters
             {
                 selectobject.BlockNo += incrementBy;
                 swapItem.DataView.BlockNo = swapItem.DataView.BlockNo + (incrementBy * -1);
+
+                SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(selectedChapter);
+                await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
+
+            }
+
+            await RefreshChapterItems(listType);
+            await InvokeAsync(() =>
+            {
+                StateHasChanged();
+            });
+
+
+            seqMoving = false;
+
+        }
+
+        protected async void MoveMessageSeqNo(TickerMessages selectobject, string listType, string direction)
+        {
+            seqMoving = true; //prevents changes to the form whilst process of changing seq is carried out
+
+            int incrementBy;
+
+            incrementBy = (direction.ToLower() == "up" ? -1 : 1);
+
+            rowChanged = (int)(selectobject.SeqNo + incrementBy);
+
+            var swapItem = ListVmTickerMessages.Where(D => D.Message.SeqNo == (selectobject.SeqNo + incrementBy)).SingleOrDefault();
+            if (!(swapItem is null))
+            {
+                selectobject.SeqNo += incrementBy;
+                swapItem.Message.SeqNo = swapItem.Message.SeqNo + (incrementBy * -1);
 
                 SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(selectedChapter);
                 await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
@@ -1506,7 +1581,33 @@ namespace Gizmo_V1_02.Pages.Chapters
             Modal.Show<DataViewDetail>("Data View", parameters, options);
         }
 
+        protected void ShowTickerMessageDetailModal(string option)
+        {
+            Action action = RefreshSelectedList;
 
+            var copyObject = new TickerMessages
+            {
+                SeqNo = EditTickerMessageObject.Message.SeqNo,
+                Message = EditTickerMessageObject.Message.Message,
+                FromDate = EditTickerMessageObject.Message.FromDate,
+                ToDate = EditTickerMessageObject.Message.ToDate
+            };
+
+            var parameters = new ModalParameters();
+            parameters.Add("TaskObject", EditTickerMessageObject.Message);
+            parameters.Add("CopyObject", copyObject);
+            parameters.Add("DataChanged", action);
+            parameters.Add("SelectedChapter", selectedChapter);
+            parameters.Add("SelectedChapterObject", SelectedChapterObject);
+            parameters.Add("Option", option);
+
+            var options = new ModalOptions()
+            {
+                Class = "blazored-custom-modal modal-chapter-item"
+            };
+
+            Modal.Show<TickerMessageDisplay>("Ticker Messages", parameters, options);
+        }
 
         protected void ShowChapterAttachmentModal()
         {
@@ -1683,6 +1784,28 @@ namespace Gizmo_V1_02.Pages.Chapters
             Modal.Show<ModalDelete>($"Delete Data View", parameters, options);
         }
 
+        protected void PrepareTickerMessageDelete(VmTickerMessages selectedTickerMessage)
+        {
+            EditTickerMessageObject = selectedTickerMessage;
+            
+            string itemName = selectedTickerMessage.Message.Message;
+
+            Action SelectedDeleteAction = HandleTickerMessageDelete;
+            var parameters = new ModalParameters();
+            parameters.Add("ItemName", itemName);
+            parameters.Add("ModalHeight", "300px");
+            parameters.Add("ModalWidth", "500px");
+            parameters.Add("DeleteAction", SelectedDeleteAction);
+            parameters.Add("InfoText", $"Are you sure you wish to delete the message?");
+
+            var options = new ModalOptions()
+            {
+                Class = "blazored-custom-modal"
+            };
+
+            Modal.Show<ModalDelete>($"Delete Message", parameters, options);
+        }
+
         protected void ShowDataViewDisplayModal(VmDataViews selectedObject)
         {
             var parameters = new ModalParameters();
@@ -1696,6 +1819,18 @@ namespace Gizmo_V1_02.Pages.Chapters
             Modal.Show<DataViewDisplay>("Data View", parameters, options);
         }
 
+        protected void ShowTickerMessageDisplayModal(VmTickerMessages selectedObject)
+        {
+            var parameters = new ModalParameters();
+            parameters.Add("Object", selectedObject);
+
+            var options = new ModalOptions()
+            {
+                Class = "blazored-custom-modal modal-chapter-comparison"
+            };
+
+            Modal.Show<TickerMessageDisplay>("Ticker Message", parameters, options);
+        }
 
         protected void PrepareChapterDelete(VmUsrOrDefChapterManagement selectedChapterItem)
         {
@@ -1830,6 +1965,16 @@ namespace Gizmo_V1_02.Pages.Chapters
         private async void HandleDataViewDelete()
         {
             selectedChapter.DataViews.Remove(EditDataViewObject.DataView);
+            SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(selectedChapter);
+            await chapterManagementService.Update(SelectedChapterObject);
+
+            await RefreshChapterItems(navDisplay);
+            StateHasChanged();
+        }
+
+        private async void HandleTickerMessageDelete()
+        {
+            selectedChapter.TickerMessages.Remove(EditTickerMessageObject.Message);
             SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(selectedChapter);
             await chapterManagementService.Update(SelectedChapterObject);
 

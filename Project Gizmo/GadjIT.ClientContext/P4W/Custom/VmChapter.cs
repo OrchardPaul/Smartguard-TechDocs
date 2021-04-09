@@ -21,6 +21,7 @@ namespace GadjIT.ClientContext.P4W.Custom
         public string SelectedStep { get; set; }
         public List<UsrOrDefChapterManagement> ChapterItems { get; set; }
         public List<DataViews> DataViews { get; set; }
+        public List<TickerMessages> TickerMessages { get; set; }
         public List<Fee> Fees { get; set; }
     }
 }
