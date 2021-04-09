@@ -87,13 +87,14 @@ namespace Gizmo_V1_02.Shared
             }
         }
 
-        public void setParallax()
+        public async void setParallax()
         {
             if (!(sessionState.User is null))
             {
                 if (!string.IsNullOrEmpty(sessionState.TempBackGroundImage) && sessionState.User.DisplaySmartflowPreviewImage)
                 {
-                    parallax = ".parallax { background-image: url('" + sessionState.GetBackgroundImage() + "');  } .inner-content{ background-image: none;}";
+                    //if normal bg is to be overridden with a temp image i.e. Smartflow preview image
+                    parallax = ".parallax { background-image: url('" + sessionState.TempBackGroundImage + "');  } .inner-content{ background-image: none;}";
                 }
                 else if (!(sessionState.User is null) && !string.IsNullOrEmpty(sessionState.User.MainBackgroundImage))
                 {
@@ -111,7 +112,10 @@ namespace Gizmo_V1_02.Shared
                 {
                     parallax = ".parallax {  background-color: #666666 }";
                 }
-                StateHasChanged();
+                await InvokeAsync(() =>
+                {
+                    StateHasChanged();
+                });
             }
         }
 

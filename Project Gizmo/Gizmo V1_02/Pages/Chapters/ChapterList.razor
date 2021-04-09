@@ -278,6 +278,10 @@ else
                         <span class="font-120"><span class="fa fa-comment" Title="Messages - create ticker messages to inform users of updates or pending changes"></span></span>
                         <div class="subtitle">Messages</div>
                     </li>
+                    <li class="nav-item @(navDisplay == "Background" ? "active" : "")" @onclick='() => ShowNav("Background")'>
+                        <span class="font-120"><span class="fa fa-image" Title="Background - set background colour or image"></span></span>
+                        <div class="subtitle">Background</div>
+                    </li>
                     @if ((sessionState.isAdminUser))
                     {
                         <li class="nav-item @(navDisplay == "Backups" ? "active" : "")" @onclick='() => ShowNav("Backups")'>
@@ -367,32 +371,31 @@ else
                                             <div class="form-group">
                                                 <label for="P4WCTG">P4W Case Type Group</label>
                                                 <InputSelect class="form-control form-control-xxl"
-                                                            ValueExpression="@(() => selectedChapter.P4WCaseTypeGroup)"
-                                                            Value="@selectedChapter.P4WCaseTypeGroup"
-                                                            ValueChanged="@((string value) => SaveP4WCaseTypeGroup(value))"
-                                                             >
+                                                             ValueExpression="@(() => selectedChapter.P4WCaseTypeGroup)"
+                                                             Value="@selectedChapter.P4WCaseTypeGroup"
+                                                             ValueChanged="@((string value) => SaveP4WCaseTypeGroup(value))">
                                                     <option value="">Select</option>
                                                     @foreach (var group in partnerCaseTypeGroups)
-                                                                    {
+                                                    {
                                                         <option value="@group.Name">
                                                             @group.Name
                                                         </option>
-                                                                    }
+                                                    }
                                                 </InputSelect>
                                             </div>
                                             <div class="form-group">
                                                 <label for="SelectedView">Smartflow View</label>
                                                 <InputSelect class="form-control form-control-xxl"
-                                                            ValueExpression="@(() => selectedChapter.SelectedView)"
-                                                            Value="@selectedChapter.SelectedView"
-                                                            ValueChanged="@((string value) => SaveSelectedView(value))">
+                                                             ValueExpression="@(() => selectedChapter.SelectedView)"
+                                                             Value="@selectedChapter.SelectedView"
+                                                             ValueChanged="@((string value) => SaveSelectedView(value))">
                                                     <option value="">Select</option>
                                                     @foreach (var view in ListP4WViews.Where(V => !(V.InternalNote is null) && (V.InternalNote.Contains("Smartflow"))).ToList())
-                                                                    {
+                                                    {
                                                         <option value="@view.Name">
                                                             @view.Name
                                                         </option>
-                                                                    }
+                                                    }
                                                 </InputSelect>
                                             </div>
                                             @if (!(selectedChapter.SelectedStep is null) && selectedChapter.SelectedStep != "Create New")
@@ -406,11 +409,11 @@ else
                                                         <option value="">Select</option>
                                                         <option value="Create New">--- Create New ---</option>
                                                         @foreach (var step in dropDownChapterList.Where(D => D.DocumentType == 6).Where(D => D.Notes.Contains("Smartflow:")).ToList())
-                                                                            {
+                                                        {
                                                             <option value="@step.Name">
                                                                 @step.Name
                                                             </option>
-                                                                            }
+                                                        }
                                                     </InputSelect>
                                                 </div>
                                             }
@@ -427,24 +430,41 @@ else
                                         </div>
                                         <div class="col-12 col-xl-6">
                                             <div class="form-group">
-                                                <label for="BgColour">Select Background</label>
-                                                <select @bind="selectColour" 
-                                                        style="background-color: @getHTMLColourFromAndroid(ListChapterColours.Where(C => C.ColourName == selectColour).Select(C => C.ColourCode).FirstOrDefault())" 
-                                                        class="form-control form-control-lg">
-                                                    @foreach (var colour in ListChapterColours)
-                                                    {
-                                                        <option style="background-color: @getHTMLColourFromAndroid(colour.ColourCode)" value="@(colour.ColourCode.Contains("#") ? colour.ColourName : colour.ColourCode)">
-                                                            @colour.ColourName
-                                                            
-                                                        </option>
-                                                    }
-                                                </select>
-                                                @if (!(string.IsNullOrEmpty(selectColour)) && selectColour.Contains("."))
+                                                <label>Background Colour</label>
+
+                                                @if (!string.IsNullOrEmpty(selectedChapter.BackgroundColourName))
                                                 {
-                                                    <div class="mt-2 hidden-lg-down">
-                                                        <img src="@selectColour" alt="" class="img-thumbnail" />
+                                                    <div @onclick='() => ShowNav("Background")' class="thumbnail-item rounded nav-link" style="height: 35px; background-color: @getHTMLColourFromAndroid(selectedChapter.BackgroundColour)">
+                                                        @selectedChapter.BackgroundColourName
+                                                    </div>
+                                                    
+
+                                                }
+                                                else
+                                                {
+                                                    <div @onclick='() => ShowNav("Background")' class="nav-link" style="height: 35px; width: 150px; margin-left: 15px; border: 1pt solid #ccc; padding-left: 10px; padding-right: 10px">
+
+                                                        <label class="col-grey ml-2">No background colour selected</label>
+                                                        
                                                     </div>
                                                 }
+                                            <div class="mt-3 nav-link" style="height: 100px" @onclick='() => ShowNav("Background")'>
+                                                
+                                                @if (!string.IsNullOrEmpty(selectedChapter.BackgroundImageName))
+                                                {
+
+                                                    <label class="d-block">Selected Background Image:</label>
+                                                    <img src="@selectedChapter.BackgroundImage" alt="" class="img-thumbnail ml-2" />
+
+
+                                                }
+                                                else
+                                                {
+                                                    <label class="d-block">No background image selected:</label>
+                                                    <img src="/images/BackgroundImages/NoImage.jpg" alt="" class="img-thumbnail ml-2" />
+
+                                                }
+                                            </div>
 
                                             </div>
 
@@ -472,11 +492,11 @@ else
                                     </div>
 
                                     <!--
-                                    <div class="form-group">
-                                        <label>Developer Notes</label>
-                                        <InputTextArea @bind-Value="selectedChapter.DeveloperNotes" class="form-control form-control-lg" />
-                                    </div>
-                                    -->
+                                <div class="form-group">
+                                    <label>Developer Notes</label>
+                                    <InputTextArea @bind-Value="selectedChapter.DeveloperNotes" class="form-control form-control-lg" />
+                                </div>
+                                -->
 
                                     <div class="button-container">
                                         <button type="submit" class="btn btn-main">Save Changes</button>
@@ -634,43 +654,43 @@ else
                                             </div>
                                         }
 
-                                    <div class="data-item-sub " title="@doc.DocDisplayName">
-                                        <span class="font-100">
-                                            <!--"Doc", "Letter", "Form", "Email", "Step"-->
-                                            @switch (doc.DocType)
-                                            {
-                                                case "Doc":
+                                        <div class="data-item-sub " title="@doc.DocDisplayName">
+                                            <span class="font-100">
+                                                <!--"Doc", "Letter", "Form", "Email", "Step"-->
+                                                @switch (doc.DocType)
+                                                {
+                                                    case "Doc":
 
-                                                    @if (!string.IsNullOrEmpty(doc.DocDisplayName)
-                                                          && (doc.DocDisplayName.Length > 9)
-                                                          && (doc.DocDisplayName.Substring(0, 9).ToUpper().Contains("LTR")))
-                                                    {
+                                                        @if (!string.IsNullOrEmpty(doc.DocDisplayName)
+                                                             && (doc.DocDisplayName.Length > 9)
+                                                             && (doc.DocDisplayName.Substring(0, 9).ToUpper().Contains("LTR")))
+                                                        {
+                                                            <span class="fa fa-file-alt mr-2"></span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span class="fa fa-file mr-2"></span>
+                                                        }
+                                                        break;
+                                                    case "Letter":
                                                         <span class="fa fa-file-alt mr-2"></span>
-                                                    }
-                                                    else
-                                                    {
-                                                        <span class="fa fa-file mr-2"></span>
-                                                    }
-                                                    break;
-                                                case "Letter":
-                                                    <span class="fa fa-file-alt mr-2"></span>
-                                                    break;
-                                                case "Form":
-                                                    <span class="fa fa-file-pdf mr-2"></span>
-                                                    break;
-                                                case "Email":
-                                                    <span class="fa fa-envelope mr-2"></span>
-                                                    break;
-                                                case "Step":
-                                                    <span class="fa fa-list-ol mr-2"></span>
-                                                    break;
-                                                default:
-                                                    <span class="fa fa-times mr-2"></span>
-                                                    break;
-                                            }
-                                        </span>
+                                                        break;
+                                                    case "Form":
+                                                        <span class="fa fa-file-pdf mr-2"></span>
+                                                        break;
+                                                    case "Email":
+                                                        <span class="fa fa-envelope mr-2"></span>
+                                                        break;
+                                                    case "Step":
+                                                        <span class="fa fa-list-ol mr-2"></span>
+                                                        break;
+                                                    default:
+                                                        <span class="fa fa-times mr-2"></span>
+                                                        break;
+                                                }
+                                            </span>
                                             @doc.DocDisplayName
-                                    </div>
+                                        </div>
 
                                         @if (doc.DocOrigName != "")
                                         {
@@ -1353,6 +1373,86 @@ else
 
             }
 
+            @if (navDisplay == "Background")
+            {
+                <div class="grid-chapter grid-chapter-background">
+                    
+                    <div class="detail-group-box">
+                        <div class="form-group">
+                            <label >Background Colour</label>
+                            <select @bind="selectColour"
+                                    style="background-color: @getHTMLColourFromAndroid(ListChapterColours.Where(C => C.ColourName == selectColour).Select(C => C.ColourCode).FirstOrDefault())"
+                                    class="form-control form-control-lg">
+                                @foreach (var colour in ListChapterColours)
+                                {
+                                    <option style="background-color: @getHTMLColourFromAndroid(colour.ColourCode)" value="@(colour.ColourCode.Contains("#") ? colour.ColourName : colour.ColourCode)">
+                                        @colour.ColourName
+
+                                    </option>
+                                }
+                            </select>
+                            
+
+                        </div>
+
+                        <div class="selected-thumbnail form-group">
+                            @if (!string.IsNullOrEmpty(selectedChapter.BackgroundImageName))
+                            {
+                                <label class="d-block">Selected Image: @selectedChapter.BackgroundImageName</label>
+                                <img src="@selectedChapter.BackgroundImage" alt="" class="img-thumbnail ml-2" />
+                            }
+                            else
+                            {
+                                <label class="d-block col-grey">No Image Selected</label>
+                                <img src="/images/BackgroundImages/NoImage.jpg" alt="" class="img-thumbnail ml-2" />
+
+                            }
+                        </div>
+                        <div class="form-group hidden-lg-down">
+                            <label style="display: inline-block; width: 150px">Preview Image</label>
+                            <label class="switch">
+                                <input type="checkbox" @bind="PreviewChapterImage">
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                        <div class="custom-file">
+                            <InputFile multiple OnChange="HandleBgImageFileSelection" class="custom-file-input" id="customFileInput"></InputFile>
+                            <label class="custom-file-label" for="customInput">Upload images</label>
+                        </div>
+
+
+
+                        <div class="chapter-scroll-list">
+                            <div class="thumbnail-list">
+                                @foreach (var fileDesc in ListFilesForBgImages.ToList().OrderBy(F => F.FileName))
+                                {
+
+                                    <div class="thumbnail-item @(!string.IsNullOrEmpty(selectedChapter.BackgroundImageName) && fileDesc.FileName == selectedChapter.BackgroundImageName ? "active" : "")">
+                                        <img src="@fileDesc.FileURL" alt="" class="img-thumbnail" />
+                                        <label>@fileDesc.FileName</label>
+                                        <div class="thumbnail-options">
+                                            <button @onclick='(() => PrepareBgImageForDelete(fileDesc))' class="btn col-grey" title="Delete this image"><i class="fa fa-trash"></i></button>
+                                            @if (!string.IsNullOrEmpty(selectedChapter.BackgroundImageName) && fileDesc.FileName == selectedChapter.BackgroundImageName)
+                                            {
+                                                <button @onclick='() => SelectBgImage(new FileManagement.FileClassObjects.FileDesc { FileName = "", FileURL = "" })' class="btn " title="Deselect this image"><i class="fa fa-times"></i></button>
+                                            }
+                                            else
+                                            {
+                                                <button @onclick='() => SelectBgImage(fileDesc)' class="btn " title="Use this image"><i class="fa fa-check"></i></button>
+                                            }
+                                        </div>
+                                    </div>
+
+                                }
+                            </div>
+                        </div>
+
+
+
+                    </div>
+                </div>
+
+            }
 
             @if (navDisplay == "Backups")
             {
@@ -1365,14 +1465,14 @@ else
                         <div class="alert alert-danger mt-3 @(string.IsNullOrEmpty(alertMsgJSOM) ? "hidden" : "")">@alertMsgJSOM</div>
 
                         <div class="custom-file">
-                            <InputFile multiple OnChange="HandleFileSelection" class="custom-file-input" id="customFileInput"></InputFile>
+                            <InputFile multiple OnChange="HandleBackupFileSelection" class="custom-file-input" id="customFileInput"></InputFile>
                             <label class="custom-file-label" for="customInput">Upload backup files</label>
                         </div>
 
 
 
                         <div class="grid-can-edit chapter-scroll-list">
-                            @foreach (var fileDesc in ListFileDescriptions.Where(F => F.FilePath.Contains(".txt") || F.FilePath.Contains(".JSON")).ToList().OrderByDescending(F => F.FileDate))
+                            @foreach (var fileDesc in ListFilesForBackups.Where(F => F.FilePath.Contains(".txt") || F.FilePath.Contains(".JSON")).ToList().OrderByDescending(F => F.FileDate))
                             {
                                 <div class="row grid-row grid-row-sm">
                                     <div class="data-item">

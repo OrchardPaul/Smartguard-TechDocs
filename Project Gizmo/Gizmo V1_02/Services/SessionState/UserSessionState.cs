@@ -48,7 +48,6 @@ namespace Gizmo_V1_02.Services.SessionState
         Task<string> SetSessionState();
         Action RefreshHome { get; set; }
 
-        string GetBackgroundImage();
 
         void SetTempBackground(string image, string Uri);
 
@@ -116,18 +115,7 @@ namespace Gizmo_V1_02.Services.SessionState
             this.navigationManager = navigationManager;
         }
 
-        public string GetBackgroundImage()
-        {
-            if(!string.IsNullOrEmpty(TempBackGroundImage) && !string.IsNullOrEmpty(TempBackGroundImageAppliedUri))
-            {
-                if(TempBackGroundImageAppliedUri == navigationManager.Uri)
-                {
-                    return TempBackGroundImage;
-                }
-            }
-
-            return User.MainBackgroundImage;
-        }
+        
 
         public void SetTempBackground(string image, string Uri)
         {
