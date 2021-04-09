@@ -132,6 +132,7 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
                     .Select(F => new FileDesc 
                     { FileName = Path.GetFileName(F)
                     , FilePath = Path.GetFullPath(F)
+                    , FileURL = '/' + CustomPath + '/' + Path.GetFileName(F)
                     , FileDirectory = Path.GetDirectoryName(F)
                     , FileDate = File.GetCreationTime(F)}).ToList());
 
