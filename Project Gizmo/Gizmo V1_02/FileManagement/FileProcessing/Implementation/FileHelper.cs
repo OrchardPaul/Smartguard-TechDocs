@@ -510,11 +510,11 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
             workSheetAgenda.TabColor = System.Drawing.Color.Black;
             workSheetAgenda.DefaultRowHeight = 12;
 
-            workSheetAgenda.Row(1).Height = 32;
+            workSheetAgenda.Row(1).Height = 30;
             workSheetAgenda.Row(1).Style.Font.Size = 8;
             workSheetAgenda.Row(1).Style.Font.Color.SetColor(System.Drawing.Color.DarkGray);
             workSheetAgenda.Cells[1, 1].Style.WrapText = true;
-            workSheetAgenda.Cells[1, 1].Value = "Progess File names. Correspondence saved in these Progress Files will be made avalible in the history tab.";
+            workSheetAgenda.Cells[1, 1].Value = "I would like and Agenda folder (Progress File) where  I can store outgoing and incoming correspondence. The folder should be called:";
 
             //Header of table
             workSheetAgenda.Row(2).Height = 14;
@@ -548,9 +548,11 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
             workSheetStatus.DefaultRowHeight = 12;
 
             //Header of table
-            workSheetStatus.Row(1).Height = 32;
+            workSheetStatus.Row(1).Height = 21;
             workSheetStatus.Row(1).Style.Font.Size = 8;
             workSheetStatus.Row(1).Style.Font.Color.SetColor(System.Drawing.Color.DarkGray);
+            workSheetStatus.Cells[1, 1].Style.WrapText = true;
+            workSheetStatus.Cells[1, 1].Value = "I would like the following Statuses to be available in the Smartflow:";
             workSheetStatus.Cells[1, 2].Style.WrapText = true;
             workSheetStatus.Cells[1, 2].Value = "The Smartflow will no longer reschedule when this status has been reached.";
 
@@ -591,8 +593,14 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
             workSheetFees.Row(1).Height = 30;
             workSheetFees.Row(1).Style.Font.Size = 8;
             workSheetFees.Row(1).Style.Font.Color.SetColor(System.Drawing.Color.DarkGray);
+            workSheetFees.Cells[1, 1].Style.WrapText = true;
+            workSheetFees.Cells[1, 1].Value = "I would like to be able to automatically create a posting slip for the following fees/costs from the Smartflow screen";
             workSheetFees.Cells[1, 2].Style.WrapText = true;
             workSheetFees.Cells[1, 2].Value = "e.g. Disbursement, Our Fee or Additional Fee.";
+            workSheetFees.Cells[1, 4].Style.WrapText = true;
+            workSheetFees.Cells[1, 4].Value = "Is the fee/cost vateable?";
+            workSheetFees.Cells[1, 5].Style.WrapText = true;
+            workSheetFees.Cells[1, 5].Value = "(if unsure please see the Lookup sheet)\r\nThe posting type is:";
 
             workSheetFees.Row(2).Height = 14;
             workSheetFees.Row(2).Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
@@ -638,6 +646,29 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
 
             workSheetDocument.TabColor = System.Drawing.Color.Black;
             workSheetDocument.DefaultRowHeight = 12;
+            workSheetDocument.Row(1).Style.Font.Size = 8;
+            workSheetDocument.Row(1).Style.Font.Color.SetColor(System.Drawing.Color.DarkGray);
+            workSheetDocument.Row(1).Height = 62;
+            workSheetDocument.Cells[1, 1].Style.WrapText = true;
+            workSheetDocument.Cells[1, 1].Value = "Mandatory: \r\nI would like the following documents available from the Smartflow screen: ";
+            workSheetDocument.Cells[1, 2].Style.WrapText = true;
+            workSheetDocument.Cells[1, 2].Value = "Optional: \r\nI would like the documents to be displayed using the following name: ";
+            workSheetDocument.Cells[1, 3].Style.WrapText = true;
+            workSheetDocument.Cells[1, 3].Value = "Optional: \r\nI would like the next item to be scheduled for this many days:";
+            workSheetDocument.Cells[1, 4].Style.WrapText = true;
+            workSheetDocument.Cells[1, 4].Value = "Optional: \r\nThe item schedule in the Case Agenda should be named:";
+            workSheetDocument.Cells[1, 5].Style.WrapText = true;
+            workSheetDocument.Cells[1, 5].Value = "Optional: \r\nOn running the document I would also like a history item created called: ";
+            workSheetDocument.Cells[1, 6].Style.WrapText = true;
+            workSheetDocument.Cells[1, 6].Value = "Optional: \r\nWhen the document is selected the Smartflow Status should be changed to:";
+            workSheetDocument.Cells[1, 7].Style.WrapText = true;
+            workSheetDocument.Cells[1, 7].Value = "Optional: \r\nWhen the document is selected the following user message should appear: ";
+            workSheetDocument.Cells[1, 8].Style.WrapText = true;
+            workSheetDocument.Cells[1, 8].Value = "Optional: \r\nWhen the document is selected the following pop up alert should appear:";
+            workSheetDocument.Cells[1, 9].Style.WrapText = true;
+            workSheetDocument.Cells[1, 9].Value = "Optional: \r\nWhen the document is processed the following field should be updated: ";
+
+
 
             //Header of table
             workSheetDocument.Row(2).Height = 30;
@@ -693,6 +724,19 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
 
             workSheetAttachments.TabColor = System.Drawing.Color.DarkGray;
             workSheetAttachments.DefaultRowHeight = 12;
+            workSheetAttachments.Row(1).Style.Font.Size = 8;
+            workSheetAttachments.Row(1).Style.Font.Color.SetColor(System.Drawing.Color.DarkGray);
+            workSheetAttachments.Row(1).Height = 42;
+            workSheetAttachments.Cells[1, 1].Style.WrapText = true;
+            workSheetAttachments.Cells[1, 1].Value = "When the following document is selected:";
+            workSheetAttachments.Cells[1, 2].Style.WrapText = true;
+            workSheetAttachments.Cells[1, 2].Value = "I would also like the following document to be automatically inserted into the case agenda:";
+            workSheetAttachments.Cells[1, 3].Style.WrapText = true;
+            workSheetAttachments.Cells[1, 3].Value = "With the following alternative name:";
+            workSheetAttachments.Cells[1, 4].Style.WrapText = true;
+            workSheetAttachments.Cells[1, 4].Value = "I would like it to be: (Insert or Take)";
+            workSheetAttachments.Cells[1, 5].Style.WrapText = true;
+            workSheetAttachments.Cells[1, 5].Value = "If I have selected insert then schedule for this many days:";
 
             //Header of table
             workSheetAttachments.Row(1).Height = 30;
@@ -762,7 +806,9 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
             workSheetDataViews.Row(1).Style.Font.Size = 8;
             workSheetDataViews.Row(1).Style.Font.Color.SetColor(System.Drawing.Color.DarkGray);
             workSheetDataViews.Cells[1, 1].Style.WrapText = true;
-            workSheetDataViews.Cells[1, 1].Value = "The view name is the internal P4W name.";
+            workSheetDataViews.Cells[1, 1].Value = "I would like the following P4W View(s) to be available in the Smartflow Screen:";
+            workSheetDataViews.Cells[1, 2].Style.WrapText = true;
+            workSheetDataViews.Cells[1, 2].Value = "Please name the view:";
 
             workSheetDataViews.Row(2).Height = 14;
             workSheetDataViews.Row(2).Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
