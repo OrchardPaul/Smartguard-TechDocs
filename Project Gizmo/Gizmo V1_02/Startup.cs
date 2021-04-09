@@ -29,6 +29,8 @@ using Gizmo_V1_02.Pages.Chapters;
 using Gizmo_V1_02.FileManagement.FileProcessing.Interface;
 using Gizmo_V1_02.FileManagement.FileProcessing.Implementation;
 using Syncfusion.Blazor;
+using Microsoft.Extensions.FileProviders;
+using System.IO;
 
 namespace Gizmo_V1_02
 {
@@ -99,8 +101,7 @@ namespace Gizmo_V1_02
             }
 
             app.UseHttpsRedirection();
-            app.UseStaticFiles();
-
+            
             app.UseRouting();
 
             app.UseAuthentication();
@@ -114,6 +115,14 @@ namespace Gizmo_V1_02
             });
 
 
+            app.UseStaticFiles();
+
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+                Path.Combine(Directory.GetCurrentDirectory(), "FileManagement")),
+                RequestPath = "/FileManagement"
+            });
         }
     }
 }

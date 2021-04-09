@@ -26,6 +26,7 @@ using System.Net;
 using Microsoft.JSInterop;
 using Gizmo_V1_02.FileManagement.FileProcessing.Interface;
 using Gizmo_V1_02.Data.Admin;
+using System.Globalization;
 
 namespace Gizmo_V1_02.Pages.Chapters
 {
@@ -63,9 +64,9 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         private ChapterFileOptions ChapterFileOption { get; set; }
 
-        private List<FileDesc> ListFileDescriptions { get; set; }
+        private List<FileDesc> ListFilesForBackups { get; set; }
 
-        private List<FileDesc> ListFileImages { get; set; }
+        private List<FileDesc> ListFilesForBgImages { get; set; }
 
         private FileDesc SelectedFileDescription { get; set; }
 
@@ -84,6 +85,7 @@ namespace Gizmo_V1_02.Pages.Chapters
         private List<VmUsrOrDefChapterManagement> lstStatus { get; set; } = new List<VmUsrOrDefChapterManagement>();
 
         private List<VmDataViews> ListVmDataViews { get; set; } = new List<VmDataViews>();
+        private List<VmTickerMessages> ListVmTickerMessages { get; set; } = new List<VmTickerMessages>();
 
         public List<MpSysViews> ListP4WViews;
         public List<DmDocuments> dropDownChapterList;
@@ -97,39 +99,38 @@ namespace Gizmo_V1_02.Pages.Chapters
             get 
             { 
                 return selectedChapter.BackgroundColourName; 
-            } 
-            set 
+            }
+            set
             {
                 SaveSelectedBackgroundColour(value);
-            } 
+            }
         }
 
-        private async void SaveSelectedBackgroundColour(string colour)
+        public async void SaveSelectedBackgroundColour (string colour)
         {
             selectedChapter.BackgroundColour = ListChapterColours.Where(C => C.ColourName == colour).Select(C => C.ColourCode).FirstOrDefault();
             selectedChapter.BackgroundColourName = colour;
 
-            
-            if (ListFileImages.Select(I => I.FileName).ToList().Contains(selectedChapter.BackgroundColourName))
-            {
-                sessionState.SetTempBackground(ListFileImages.Where(I => I.FileName == selectedChapter.BackgroundColourName).Select(F => F.FileDirectory.Replace("\\", "/").Replace("wwwroot/", "") + "/" + F.FileName).SingleOrDefault(), NavigationManager.Uri);
-            }
-            else
-            {
-                sessionState.SetTempBackground(selectedChapter.BackgroundColour, NavigationManager.Uri);
-            }
-
-            sessionState.RefreshHome?.Invoke();
+            //if (ListFileImages.Select(I => I.FileName).ToList().Contains(colour))
+            //{
+            //    sessionState.SetTempBackground(ListFileImages.Where(I => I.FileName == colour).Select(F => F.FileDirectory.Replace("\\", "/").Replace("wwwroot/", "") + "/" + F.FileName).SingleOrDefault(), NavigationManager.Uri);
+            //}
+            //else
+            //{
+            //    sessionState.SetTempBackground(selectedChapter.BackgroundColour, NavigationManager.Uri);
+            //}
 
             SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(selectedChapter);
 
             await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
+
         }
 
         public UsrOrDefChapterManagement editChapter { get; set; }
         public string isCaseTypeOrGroup { get; set; } = "";
 
         public VmDataViews EditDataViewObject = new VmDataViews { DataView = new DataViews() };
+        public VmTickerMessages EditTickerMessageObject = new VmTickerMessages { Message = new TickerMessages() };
         public VmUsrOrDefChapterManagement editObject = new VmUsrOrDefChapterManagement { ChapterObject = new UsrOrDefChapterManagement() };
         public VmFee editFeeObject = new VmFee { FeeObject = new Fee() };
         public VmUsrOrDefChapterManagement editChapterObject = new VmUsrOrDefChapterManagement { ChapterObject = new UsrOrDefChapterManagement() };
@@ -180,6 +181,7 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         public bool displaySpinner = true;
 
+       
         public bool ListChapterLoaded = false;
 
         public string alertMsgJSOM { get; set; }
@@ -201,6 +203,7 @@ namespace Gizmo_V1_02.Pages.Chapters
             {
                 List<ChapterColour> listChapterColours = new List<ChapterColour>
                 {
+                    new ChapterColour { ColourName = "", ColourCode = ""},
                     new ChapterColour { ColourName = "Grey", ColourCode = "#3F000000"},
                     new ChapterColour { ColourName = "Blue", ColourCode = "#3F0074FF"},
                     new ChapterColour { ColourName = "Pink", ColourCode = "#3FFD64EF"},
@@ -214,13 +217,13 @@ namespace Gizmo_V1_02.Pages.Chapters
 
 
 
-                foreach ( FileDesc bgImage in ListFileImages)
-                {
-                    string imgName = bgImage.FileName;
-                    string imgPath = @"/images/backgroundimages/" + imgName;
-                    //imgName = imgName.Replace(".jpg", "");
-                    listChapterColours.Add(new ChapterColour { ColourName = imgName, ColourCode = imgPath });
-                }
+                //foreach ( FileDesc bgImage in ListFileImages)
+                //{
+                //    string imgName = bgImage.FileName;
+                //    string imgPath = @"/images/backgroundimages/" + imgName;
+                //    //imgName = imgName.Replace(".jpg", "");
+                //    listChapterColours.Add(new ChapterColour { ColourName = imgName, ColourCode = imgPath });
+                //}
                 return listChapterColours;
             }
         } 
@@ -271,13 +274,13 @@ namespace Gizmo_V1_02.Pages.Chapters
             {
                 if (value)
                 {
-                    if (ListFileImages.Select(I => I.FileName).ToList().Contains(selectColour))
+                    if(!string.IsNullOrEmpty(selectedChapter.BackgroundImageName))
                     {
-                        sessionState.SetTempBackground(ListFileImages.Where(I => I.FileName == selectColour).Select(F => F.FileDirectory.Replace("\\", "/").Replace("wwwroot/", "") + "/" + F.FileName).SingleOrDefault(), NavigationManager.Uri);
+                        sessionState.SetTempBackground(selectedChapter.BackgroundImage, NavigationManager.Uri);
                     }
                     else
                     {
-                        sessionState.SetTempBackground(selectedChapter.BackgroundColour, NavigationManager.Uri);
+                        sessionState.SetTempBackground("", NavigationManager.Uri);
                     }
                 }
                 else
@@ -404,17 +407,14 @@ namespace Gizmo_V1_02.Pages.Chapters
             await RefreshChapterItems("All");
             
             
+            //set path to point to the BackgroundImage path for the current company
+            FileHelper.CustomPath = $"FileManagement/FileStorage/{sessionState.Company.CompanyName}/BackgroundImages";
+            ListFilesForBgImages = FileHelper.GetFileList();
 
-            FileHelper.CustomPath = $"wwwroot/images/BackgroundImages";
-            ListFileImages = FileHelper.GetFileList();
-
-            if (!string.IsNullOrEmpty(selectedChapter.BackgroundColourName))
+            if (!string.IsNullOrEmpty(selectedChapter.BackgroundImage))
             {
-                if (ListFileImages.Select(I => I.FileName).ToList().Contains(selectedChapter.BackgroundColourName))
-                {
-                    sessionState.SetTempBackground(ListFileImages.Where(I => I.FileName == selectedChapter.BackgroundColourName).Select(F => F.FileDirectory.Replace("\\", "/").Replace("wwwroot/", "") + "/" + F.FileName).SingleOrDefault(), NavigationManager.Uri);
-                    sessionState.RefreshHome?.Invoke();
-                }
+                sessionState.SetTempBackground(selectedChapter.BackgroundImage, NavigationManager.Uri);
+                sessionState.RefreshHome?.Invoke();
             }
 
             SetSmartflowFilePath();
@@ -580,6 +580,16 @@ namespace Gizmo_V1_02.Pages.Chapters
                                                             .DataViews
                                                             .Select(D => new VmDataViews { DataView = D })
                                                             .OrderBy(D => D.DataView.BlockNo)
+                                                            .ToList();
+                }
+                if (listType == "TickerMessages" | listType == "All")
+                {
+                    ListVmTickerMessages = (selectedChapter.TickerMessages is null)
+                                                    ? new List<VmTickerMessages>()
+                                                    : selectedChapter
+                                                            .TickerMessages
+                                                            .Select(D => new VmTickerMessages { Message = D })
+                                                            .OrderBy(D => D.Message.SeqNo)
                                                             .ToList();
                 }
             }
@@ -907,6 +917,13 @@ namespace Gizmo_V1_02.Pages.Chapters
             ShowDataViewDetailModal("Edit");
         }
 
+        private void PrepareTickerMessageForEdit(VmTickerMessages item, string header)
+        {
+            selectedList = header;
+            EditTickerMessageObject = item;
+
+            ShowTickerMessageDetailModal("Edit");
+        }
 
         private void PrepareAttachmentForEdit(VmUsrOrDefChapterManagement item, string header)
         {
@@ -984,7 +1001,30 @@ namespace Gizmo_V1_02.Pages.Chapters
             ShowDataViewDetailModal("Insert");
         }
 
+        private void PrepareTickerMessageForInsert(string header)
+        {
+            selectedList = header;
+            EditTickerMessageObject = new VmTickerMessages { Message = new TickerMessages() };
 
+            EditTickerMessageObject.Message.FromDate = DateTime.Now.ToString("yyyyMMdd");
+            EditTickerMessageObject.Message.ToDate = DateTime.Now.ToString("yyyyMMdd");
+
+            if (ListVmTickerMessages.Count > 0)
+            {
+
+                EditTickerMessageObject.Message.SeqNo = ListVmTickerMessages
+                                                       .OrderByDescending(D => D.Message.SeqNo)
+                                                       .Select(D => D.Message.SeqNo)
+                                                       .FirstOrDefault() + 1;
+            }
+            else
+            {
+                EditTickerMessageObject.Message.SeqNo = 1;
+            }
+
+
+            ShowTickerMessageDetailModal("Insert");
+        }
 
 
         private void PrepNewChapter()
@@ -1170,6 +1210,38 @@ namespace Gizmo_V1_02.Pages.Chapters
             {
                 selectobject.BlockNo += incrementBy;
                 swapItem.DataView.BlockNo = swapItem.DataView.BlockNo + (incrementBy * -1);
+
+                SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(selectedChapter);
+                await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
+
+            }
+
+            await RefreshChapterItems(listType);
+            await InvokeAsync(() =>
+            {
+                StateHasChanged();
+            });
+
+
+            seqMoving = false;
+
+        }
+
+        protected async void MoveMessageSeqNo(TickerMessages selectobject, string listType, string direction)
+        {
+            seqMoving = true; //prevents changes to the form whilst process of changing seq is carried out
+
+            int incrementBy;
+
+            incrementBy = (direction.ToLower() == "up" ? -1 : 1);
+
+            rowChanged = (int)(selectobject.SeqNo + incrementBy);
+
+            var swapItem = ListVmTickerMessages.Where(D => D.Message.SeqNo == (selectobject.SeqNo + incrementBy)).SingleOrDefault();
+            if (!(swapItem is null))
+            {
+                selectobject.SeqNo += incrementBy;
+                swapItem.Message.SeqNo = swapItem.Message.SeqNo + (incrementBy * -1);
 
                 SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(selectedChapter);
                 await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
@@ -1506,7 +1578,33 @@ namespace Gizmo_V1_02.Pages.Chapters
             Modal.Show<DataViewDetail>("Data View", parameters, options);
         }
 
+        protected void ShowTickerMessageDetailModal(string option)
+        {
+            Action action = RefreshSelectedList;
 
+            var copyObject = new TickerMessages
+            {
+                SeqNo = EditTickerMessageObject.Message.SeqNo,
+                Message = EditTickerMessageObject.Message.Message,
+                FromDate = EditTickerMessageObject.Message.FromDate,
+                ToDate = EditTickerMessageObject.Message.ToDate
+            };
+
+            var parameters = new ModalParameters();
+            parameters.Add("TaskObject", EditTickerMessageObject.Message);
+            parameters.Add("CopyObject", copyObject);
+            parameters.Add("DataChanged", action);
+            parameters.Add("SelectedChapter", selectedChapter);
+            parameters.Add("SelectedChapterObject", SelectedChapterObject);
+            parameters.Add("Option", option);
+
+            var options = new ModalOptions()
+            {
+                Class = "blazored-custom-modal modal-chapter-item"
+            };
+
+            Modal.Show<TickerMessageDisplay>("Ticker Messages", parameters, options);
+        }
 
         protected void ShowChapterAttachmentModal()
         {
@@ -1683,6 +1781,28 @@ namespace Gizmo_V1_02.Pages.Chapters
             Modal.Show<ModalDelete>($"Delete Data View", parameters, options);
         }
 
+        protected void PrepareTickerMessageDelete(VmTickerMessages selectedTickerMessage)
+        {
+            EditTickerMessageObject = selectedTickerMessage;
+            
+            string itemName = selectedTickerMessage.Message.Message;
+
+            Action SelectedDeleteAction = HandleTickerMessageDelete;
+            var parameters = new ModalParameters();
+            parameters.Add("ItemName", itemName);
+            parameters.Add("ModalHeight", "300px");
+            parameters.Add("ModalWidth", "500px");
+            parameters.Add("DeleteAction", SelectedDeleteAction);
+            parameters.Add("InfoText", $"Are you sure you wish to delete the message?");
+
+            var options = new ModalOptions()
+            {
+                Class = "blazored-custom-modal"
+            };
+
+            Modal.Show<ModalDelete>($"Delete Message", parameters, options);
+        }
+
         protected void ShowDataViewDisplayModal(VmDataViews selectedObject)
         {
             var parameters = new ModalParameters();
@@ -1696,6 +1816,18 @@ namespace Gizmo_V1_02.Pages.Chapters
             Modal.Show<DataViewDisplay>("Data View", parameters, options);
         }
 
+        protected void ShowTickerMessageDisplayModal(VmTickerMessages selectedObject)
+        {
+            var parameters = new ModalParameters();
+            parameters.Add("Object", selectedObject);
+
+            var options = new ModalOptions()
+            {
+                Class = "blazored-custom-modal modal-chapter-comparison"
+            };
+
+            Modal.Show<TickerMessageDisplay>("Ticker Message", parameters, options);
+        }
 
         protected void PrepareChapterDelete(VmUsrOrDefChapterManagement selectedChapterItem)
         {
@@ -1720,6 +1852,113 @@ namespace Gizmo_V1_02.Pages.Chapters
             Modal.Show<ModalDelete>("Delete Smartflow", parameters, options);
         }
 
+        private async void HandleBgImageFileSelection(IFileListEntry[] entryFiles)
+        {
+            FileHelper.CustomPath = $"FileManagement/FileStorage/{sessionState.Company.CompanyName}/BackgroundImages";
+            ListFilesForBgImages = FileHelper.GetFileList();
+
+            var files = new List<IFileListEntry>();
+            IList<string> fileErrorDescs = new List<string>();
+
+            foreach (var file in entryFiles)
+            {
+                if (file != null)
+                {
+                    if (!(file.Name.Contains(".jpg") || file.Name.Contains(".png")))
+                    {
+                        fileErrorDescs.Add($"The file: {file.Name} is not a valid image. Image files must be either .jpg or .png");
+                    }
+                    else
+                    {
+                        if (ListFilesForBgImages.Where(F => F.FileName == file.Name).FirstOrDefault() is null)
+                        {
+                            await ChapterFileUpload.UploadChapterFiles(file);
+                            files.Add(file);
+                        }
+                        else
+                        {
+                            fileErrorDescs.Add($"The file: {file.Name} already exists on the system");
+                        }
+
+
+                    }
+
+                }
+
+            }
+            if (files != null && files.Count > 0)
+            {
+                StateHasChanged();
+            }
+
+            if (fileErrorDescs.Count > 0)
+            {
+                ShowErrorModal("File Upload Error", "The following errors occured during the upload:", fileErrorDescs);
+            }
+
+            ListFilesForBgImages = FileHelper.GetFileList();
+
+            StateHasChanged();
+        }
+
+        protected void PrepareBgImageForDelete(FileDesc selectedFile)
+        {
+            FileHelper.CustomPath = $"FileManagement/FileStorage/{sessionState.Company.CompanyName}/BackgroundImages";
+
+            SelectedFileDescription = selectedFile;
+
+            string itemName = selectedFile.FileName;
+
+            Action SelectedDeleteAction = HandleDeleteBgImageFile;
+            var parameters = new ModalParameters();
+            parameters.Add("ItemName", itemName);
+            parameters.Add("ModalHeight", "300px");
+            parameters.Add("ModalWidth", "500px");
+            parameters.Add("DeleteAction", SelectedDeleteAction);
+            parameters.Add("InfoText", $"Are you sure you wish to delete the '{itemName}' ?");
+
+            var options = new ModalOptions()
+            {
+                Class = "blazored-custom-modal"
+            };
+
+            Modal.Show<ModalDelete>("Delete Backup File", parameters, options);
+        }
+
+        private void HandleDeleteBgImageFile()
+        {
+            DeleteBgImageFile(SelectedFileDescription);
+        }
+
+        private async void SelectBgImage(FileDesc fileDesc)
+        {
+            selectedChapter.BackgroundImage = fileDesc.FileURL;
+            selectedChapter.BackgroundImageName = fileDesc.FileName;
+
+            SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(selectedChapter);
+
+            await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
+
+            sessionState.SetTempBackground(selectedChapter.BackgroundImage, NavigationManager.Uri);
+            sessionState.RefreshHome?.Invoke();
+
+            await InvokeAsync(() =>
+            {
+                StateHasChanged();
+            });
+        }
+
+        
+
+        private void DeleteBgImageFile(FileDesc file)
+        {
+            FileHelper.CustomPath = $"FileManagement/FileStorage/{sessionState.Company.CompanyName}/BackgroundImages";
+
+            ChapterFileUpload.DeleteFile(file.FilePath);
+
+            ListFilesForBgImages = FileHelper.GetFileList();
+            StateHasChanged();
+        }
 
         protected void PrepareBackUpForDelete(FileDesc selectedFile)
         {
@@ -1729,7 +1968,7 @@ namespace Gizmo_V1_02.Pages.Chapters
 
             string itemName = selectedFile.FileName;
 
-            Action SelectedDeleteAction = HandleDeleteFile;
+            Action SelectedDeleteAction = HandleDeleteBackupFile;
             var parameters = new ModalParameters();
             parameters.Add("ItemName", itemName);
             parameters.Add("ModalHeight", "300px");
@@ -1830,6 +2069,16 @@ namespace Gizmo_V1_02.Pages.Chapters
         private async void HandleDataViewDelete()
         {
             selectedChapter.DataViews.Remove(EditDataViewObject.DataView);
+            SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(selectedChapter);
+            await chapterManagementService.Update(SelectedChapterObject);
+
+            await RefreshChapterItems(navDisplay);
+            StateHasChanged();
+        }
+
+        private async void HandleTickerMessageDelete()
+        {
+            selectedChapter.TickerMessages.Remove(EditTickerMessageObject.Message);
             SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(selectedChapter);
             await chapterManagementService.Update(SelectedChapterObject);
 
@@ -1970,7 +2219,10 @@ namespace Gizmo_V1_02.Pages.Chapters
             StateHasChanged();
         }
 
-        private async void HandleFileSelection(IFileListEntry[] entryFiles)
+        
+
+
+        private async void HandleBackupFileSelection(IFileListEntry[] entryFiles)
         {
             SetSmartflowFilePath();
             var files = new List<IFileListEntry>();
@@ -1986,7 +2238,7 @@ namespace Gizmo_V1_02.Pages.Chapters
                     }
                     else
                     {
-                        if(ListFileDescriptions.Where(F => F.FileName == file.Name).FirstOrDefault() is null)
+                        if(ListFilesForBackups.Where(F => F.FileName == file.Name).FirstOrDefault() is null)
                         {
                             await ChapterFileUpload.UploadChapterFiles(file);
                             files.Add(file);
@@ -2020,7 +2272,7 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         private void GetSeletedChapterFileList()
         {
-            ListFileDescriptions = ChapterFileUpload.GetFileListForChapter();
+            ListFilesForBackups = ChapterFileUpload.GetFileListForChapter();
         }
 
 
@@ -2246,6 +2498,8 @@ namespace Gizmo_V1_02.Pages.Chapters
             StateHasChanged();
         }
 
+        
+
         private void ReadBackUpFile(string filePath)
         {
             var readJSON = ChapterFileUpload.readJson(filePath);
@@ -2264,12 +2518,12 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         }
 
-        private void HandleDeleteFile()
+        private void HandleDeleteBackupFile()
         {
-            DeleteFile(SelectedFileDescription);
+            DeleteBackupFile(SelectedFileDescription);
         }
 
-        private void DeleteFile(FileDesc file)
+        private void DeleteBackupFile(FileDesc file)
         {
             ChapterFileUpload.DeleteFile(file.FilePath);
             GetSeletedChapterFileList();
@@ -2332,9 +2586,9 @@ namespace Gizmo_V1_02.Pages.Chapters
         {
             SetSmartflowFilePath();
 
-            while (!(ListFileDescriptions.Where(F => F.FilePath.Contains(".xlsx")).FirstOrDefault() is null))
+            while (!(ListFilesForBackups.Where(F => F.FilePath.Contains(".xlsx")).FirstOrDefault() is null))
             {
-                ChapterFileUpload.DeleteFile(ListFileDescriptions.Where(F => F.FilePath.Contains(".xlsx")).FirstOrDefault().FilePath);
+                ChapterFileUpload.DeleteFile(ListFilesForBackups.Where(F => F.FilePath.Contains(".xlsx")).FirstOrDefault().FilePath);
                 GetSeletedChapterFileList();
             }
 
@@ -2344,7 +2598,7 @@ namespace Gizmo_V1_02.Pages.Chapters
             Action SelectedAction = RefreshJson;
             var parameters = new ModalParameters();
             parameters.Add("TaskObject", SelectedChapterObject);
-            parameters.Add("ListFileDescriptions", ListFileDescriptions);
+            parameters.Add("ListFilesForBackups", ListFilesForBackups);
             parameters.Add("DataChanged", SelectedAction);
             parameters.Add("WriteBackUp", WriteBackUp);
             parameters.Add("OriginalDataViews", ListVmDataViews);

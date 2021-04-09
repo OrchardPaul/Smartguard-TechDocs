@@ -14,6 +14,8 @@ namespace GadjIT.ClientContext.P4W.Custom
         public int SeqNo { get; set; }
         public string BackgroundColour { get; set; }
         public string BackgroundColourName { get; set; }
+        public string BackgroundImage { get; set; }
+        public string BackgroundImageName { get; set; }
         public string ShowPartnerNotes { get; set; }
         public string GeneralNotes { get; set; }
         public string DeveloperNotes { get; set; }
@@ -21,6 +23,7 @@ namespace GadjIT.ClientContext.P4W.Custom
         public string SelectedStep { get; set; }
         public List<UsrOrDefChapterManagement> ChapterItems { get; set; }
         public List<DataViews> DataViews { get; set; }
+        public List<TickerMessages> TickerMessages { get; set; }
         public List<Fee> Fees { get; set; }
     }
 }
