@@ -6,6 +6,7 @@ namespace GadjIT.ClientContext.P4W.Custom
 {
     public partial class VmUsrOrDefChapterManagement
     {
+
         public UsrOrDefChapterManagement ChapterObject { get; set; }
 
         public UsrOrDefChapterManagement AltObject { get; set; }

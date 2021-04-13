@@ -1,0 +1,120 @@
+﻿
+    <div class="modal-body" tabindex="0">
+        <table class="table-basic table-top-header table-left-header table-borderless">
+            <thead>
+
+                <tr>
+                    <td style="width: 150px">
+                    </td>
+                    <td style="width: 250px">
+                        <div class=" d-flex justify-content-center">
+                            @(sessionState.selectedSystem == "Dev" ? "Dev" : "Live")
+                        </div>
+                    </td>
+                    <td style="width: 250px">
+                        <div class=" d-flex justify-content-center">
+                            @(sessionState.selectedSystem == "Dev" ? "Live" : "Dev")
+                        </div>
+                    </td>
+                    <td style="width: 30px">
+                    </td>
+                    <td></td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        Case Type Group
+                    </td>
+                    <td>
+                        @Object.CurrentChapter.CaseTypeGroup
+                    </td>
+                    <td>
+                        @Object.AltChapter.CaseTypeGroup
+                    </td>
+                    <td>
+                        <span class="fa fa-@(Object.CurrentChapter.CaseTypeGroup == @Object.AltChapter.CaseTypeGroup ? "check" : "exclamation")"></span>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>
+                        Case Type
+                    </td>
+                    <td>
+                        @Object.CurrentChapter.CaseType
+                    </td>
+                    <td>
+                        @Object.AltChapter.CaseType
+                    </td>
+                    <td>
+                        <span class="fa fa-@(Object.CurrentChapter.CaseType == @Object.AltChapter.CaseType ? "check" : "exclamation")"></span>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>
+                        Step Name
+                    </td>
+                    <td>
+                        @Object.CurrentChapter.StepName
+                    </td>
+                    <td>
+                        @Object.AltChapter.StepName
+                    </td>
+                    <td>
+                        <span class="fa fa-@(Object.CurrentChapter.StepName == @Object.AltChapter.StepName ? "check" : "exclamation")"></span>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>
+                        Background Colour
+                    </td>
+                    <td>
+                        @Object.CurrentChapter.BackgroundColour
+                    </td>
+                    <td>
+                        @Object.AltChapter.BackgroundColour
+                    </td>
+                    <td>
+                        <span class="fa fa-@(Object.CurrentChapter.BackgroundColour == @Object.AltChapter.BackgroundColour ? "check" : "exclamation")"></span>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>
+                        Background Image
+                    </td>
+                    <td>
+                        @Object.CurrentChapter.BackgroundImageName
+                    </td>
+                    <td>
+                        @Object.AltChapter.BackgroundImageName
+                    </td>
+                    <td>
+                        <span class="fa fa-@(Object.CurrentChapter.BackgroundImage == @Object.AltChapter.BackgroundImage ? "check" : "exclamation")"></span>
+                    </td>
+                    <td></td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td>
+                    </td>
+                    <td>
+                        <div class=" d-flex justify-content-center">
+                            <button type="submit" autofocus class="btn btn-main" @onclick="() => HandleValidSubmit(false)">@(sessionState.selectedSystem == "Dev" ? ">> Live" : ">> Dev")</button>
+                        </div>
+                    </td>
+                    <td>
+                        <div class=" d-flex justify-content-center">
+                            <button type="submit" autofocus class="btn btn-main" @onclick="() => HandleValidSubmit(true)">@(sessionState.selectedSystem == "Dev" ? "Dev <<" : "Live <<")</button>
+                        </div>
+                    </td>
+                    <td>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>

@@ -131,6 +131,9 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         public VmDataViews EditDataViewObject = new VmDataViews { DataView = new DataViews() };
         public VmTickerMessages EditTickerMessageObject = new VmTickerMessages { Message = new TickerMessages() };
+        
+        public VmChapterComparison editChapterComparison = new VmChapterComparison();
+
         public VmUsrOrDefChapterManagement editObject = new VmUsrOrDefChapterManagement { ChapterObject = new UsrOrDefChapterManagement() };
         public VmFee editFeeObject = new VmFee { FeeObject = new Fee() };
         public VmUsrOrDefChapterManagement editChapterObject = new VmUsrOrDefChapterManagement { ChapterObject = new UsrOrDefChapterManagement() };
@@ -649,56 +652,62 @@ namespace Gizmo_V1_02.Pages.Chapters
         private async Task<bool> CompareSelectedChapterToAltSystem()
         {
 
-            if (compareSystems)
+            var test = await RefreshChapterItems(navDisplay);
+
+            await RefreshAltSystemChaptersList();
+
+            AltChapterObject = lstAltSystemChapters
+                                    .Where(A => A.ChapterObject.Name == SelectedChapterObject.Name)
+                                    .Where(A => A.ChapterObject.CaseType == SelectedChapterObject.CaseType)
+                                    .Where(A => A.ChapterObject.CaseTypeGroup == SelectedChapterObject.CaseTypeGroup)
+                                    .Select(C => C.ChapterObject)
+                                    .SingleOrDefault();
+
+            if (!(AltChapterObject is null))
             {
-                var test = await RefreshChapterItems(navDisplay);
+                altChapter = JsonConvert.DeserializeObject<VmChapter>(AltChapterObject.ChapterData);
 
-                await RefreshAltSystemChaptersList();
+                var cItems = altChapter.ChapterItems;
 
-                AltChapterObject = lstAltSystemChapters
-                                        .Where(A => A.ChapterObject.Name == SelectedChapterObject.Name)
-                                        .Where(A => A.ChapterObject.CaseType == SelectedChapterObject.CaseType)
-                                        .Where(A => A.ChapterObject.CaseTypeGroup == SelectedChapterObject.CaseTypeGroup)
-                                        .Select(C => C.ChapterObject)
-                                        .SingleOrDefault();
 
-                if (!(AltChapterObject is null))
+                lstAltSystemChapterItems = cItems.Select(T => new VmUsrOrDefChapterManagement { ChapterObject = T }).ToList();
+
+                //Compare header items
+                CompareChapterToAltSytem();
+
+                foreach (var item in lstAgendas)
                 {
-                    altChapter = JsonConvert.DeserializeObject<VmChapter>(AltChapterObject.ChapterData);
+                    CompareChapterItemsToAltSytem(item);
+                }
 
-                    var temp = altChapter.ChapterItems;
+                foreach (var item in lstStatus)
+                {
+                    CompareChapterItemsToAltSytem(item);
+                }
 
+                foreach (var item in lstDocs)
+                {
+                    CompareChapterItemsToAltSytem(item);
+                }
 
-                    lstAltSystemChapterItems = temp.Select(T => new VmUsrOrDefChapterManagement { ChapterObject = T }).ToList();
+                var fItems = altChapter.Fees is null ? new List<Fee>() : altChapter.Fees;
 
-                    foreach (var item in lstDocs)
-                    {
-                        CompareChapterItemsToAltSytem(item);
-                    }
+                lstAltSystemFeeItems = fItems.Select(T => new VmFee { FeeObject = T }).ToList();
 
-                    foreach (var item in lstAgendas)
-                    {
-                        CompareChapterItemsToAltSytem(item);
-                    }
-
-                    //foreach (var item in lstFees)
-                    //{
-                    //    CompareChapterItemsToAltSytem(item);
-                    //}
-
-                    foreach (var item in lstStatus)
-                    {
-                        CompareChapterItemsToAltSytem(item);
-                    }
-
-                    await InvokeAsync(() =>
-                    {
-                        StateHasChanged();
-                    });
+                foreach (var item in lstFees)
+                {
+                    CompareFeeItemsToAltSytem(item);
                 }
 
 
+                await InvokeAsync(() =>
+                {
+                    StateHasChanged();
+                });
             }
+
+
+            
 
             return true;
         }
@@ -817,6 +826,36 @@ namespace Gizmo_V1_02.Pages.Chapters
             return true;
         }
 
+        private VmChapterComparison CompareChapterToAltSytem()
+        {
+            editChapterComparison = new VmChapterComparison { CurrentChapter = selectedChapter };
+
+            if (altChapter is null)
+            {
+                editChapterComparison.ComparisonResult = "No match";
+                editChapterComparison.ComparisonIcon = "times";
+            }
+            else
+            {
+                if (editChapterComparison.IsChapterMatch(altChapter))
+                {
+                    editChapterComparison.ComparisonResult = "Exact match";
+                    editChapterComparison.ComparisonIcon = "check";
+
+                }
+                else
+                {
+                    editChapterComparison.ComparisonResult = "Partial match";
+                    editChapterComparison.ComparisonIcon = "exclamation";
+
+                }
+
+            }
+
+            return editChapterComparison;
+        }
+
+
         private VmUsrOrDefChapterManagement CompareChapterItemsToAltSytem(VmUsrOrDefChapterManagement chapterItem)
         {
             var altObject = lstAltSystemChapterItems
@@ -884,10 +923,6 @@ namespace Gizmo_V1_02.Pages.Chapters
             await CompareSelectedChapterToAltSystem();
         }
 
-        public async void CompareFeeItemsToAltSytemAction()
-        {
-            await CompareSelectedFeeToAltSystem();
-        }
 
         private void PrepareForExport(List<VmUsrOrDefChapterManagement> items, string header)
         {
@@ -1991,6 +2026,34 @@ namespace Gizmo_V1_02.Pages.Chapters
             Modal.Show<ModalDelete>("Delete Backup File", parameters, options);
         }
 
+        private async void PrepareHeaderForComparison()
+        {
+            await CompareSelectedChapterToAltSystem();
+            
+            ShowHeaderComparisonModal();
+        }
+
+        protected void ShowHeaderComparisonModal()
+        {
+            
+            var parameters = new ModalParameters();
+            parameters.Add("Object", editChapterComparison);
+            parameters.Add("sessionState", sessionState);
+            parameters.Add("CurrentSysParentId", selectedChapterId);
+            parameters.Add("AlternateSysParentId", altSysSelectedChapterId);
+            parameters.Add("CurrentChapter", selectedChapter);
+            parameters.Add("AltChapter", altChapter);
+            parameters.Add("CurrentChapterRow", SelectedChapterObject);
+            parameters.Add("AltChapterRow", AltChapterObject);
+
+            var options = new ModalOptions()
+            {
+                Class = "blazored-custom-modal modal-chapter-comparison"
+            };
+
+            Modal.Show<ChapterHeaderComparison>("Synchronise Smartflow Item", parameters, options);
+        }
+
         private void PrepareForComparison(VmUsrOrDefChapterManagement selectedItem)
         {
             editObject = selectedItem;
@@ -2030,7 +2093,7 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         protected void ShowFeeComparisonModal()
         {
-            Action Compare = CompareFeeItemsToAltSytemAction;
+            Action Compare = CompareChapterItemsToAltSytemAction;
 
             var parameters = new ModalParameters();
             parameters.Add("Object", editFeeObject);
