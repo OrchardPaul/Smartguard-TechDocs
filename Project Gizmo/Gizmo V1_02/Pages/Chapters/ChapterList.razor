@@ -455,7 +455,7 @@ else
                                                     {
 
                                                         <label class="d-block">Selected Background Image</label>
-                                                        <img src="@selectedChapter.BackgroundImage" alt="" class="img-thumbnail ml-2" />
+                                                        <img src="@selectedChapter.BackgroundImage.Replace("/wwwroot","")" alt="" class="img-thumbnail ml-2" />
 
 
                                                     }
@@ -1521,7 +1521,7 @@ else
                                     @if (!string.IsNullOrEmpty(selectedChapter.BackgroundImageName))
                                     {
                                         <div>Selected Image: <span class="font-85">@selectedChapter.BackgroundImageName</span></div>
-                                        <img src="@selectedChapter.BackgroundImage" alt="" class="img-thumbnail ml-2" />
+                                        <img src="@selectedChapter.BackgroundImage.Replace("/wwwroot","")" alt="" class="img-thumbnail ml-2" />
                                     }
                                     else
                                     {
@@ -1570,7 +1570,7 @@ else
                                 {
 
                                     <div class="thumbnail-item @(!string.IsNullOrEmpty(selectedChapter.BackgroundImageName) && fileDesc.FileName == selectedChapter.BackgroundImageName ? "active" : "")">
-                                        <img src="@fileDesc.FileURL" alt="" class="img-thumbnail" />
+                                        <img src="@fileDesc.FileURL.Replace("/wwwroot","")" alt="" class="img-thumbnail" />
                                         <label>@fileDesc.FileName</label>
                                         <div class="thumbnail-options">
                                             <button @onclick='(() => PrepareBgImageForDelete(fileDesc))' class="btn col-grey" title="Delete this image"><i class="fa fa-trash"></i></button>

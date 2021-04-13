@@ -28,7 +28,6 @@ using Blazored.Modal;
 using Gizmo_V1_02.Pages.Chapters;
 using Gizmo_V1_02.FileManagement.FileProcessing.Interface;
 using Gizmo_V1_02.FileManagement.FileProcessing.Implementation;
-using Syncfusion.Blazor;
 using Microsoft.Extensions.FileProviders;
 using System.IO;
 
@@ -74,7 +73,6 @@ namespace Gizmo_V1_02
             services.AddTransient<IEmailSender, EmailSender>();
             services.Configure<AuthMessageSenderOptions>(Configuration);
 
-            services.AddSyncfusionBlazor();
             services.AddScoped<IUserSessionState, UserSessionState>();
             services.AddScoped<IMappingSessionState, MappingSessionState>();
             services.AddScoped<IPageAuthorisationState, PageAuthorisationState>();
@@ -115,14 +113,16 @@ namespace Gizmo_V1_02
             });
 
 
+
+            //app.UseStaticFiles(new StaticFileOptions
+            //{
+            //    FileProvider = new PhysicalFileProvider(
+            //    Path.Combine(Directory.GetCurrentDirectory(), "FileManagement")),
+            //    RequestPath = "/FileManagement"
+            //});
+
             app.UseStaticFiles();
 
-            app.UseStaticFiles(new StaticFileOptions
-            {
-                FileProvider = new PhysicalFileProvider(
-                Path.Combine(Directory.GetCurrentDirectory(), "FileManagement")),
-                RequestPath = "/FileManagement"
-            });
         }
     }
 }

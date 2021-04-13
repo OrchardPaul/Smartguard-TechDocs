@@ -28,6 +28,8 @@ namespace Gizmo_V1_02.Data.Admin
         Task<AspNetUsers> SubmitChanges(AspNetUsers item, List<RoleItem> selectedRoles);
         Task<AspNetUsers> SubmitCompanyCliams(List<CompanyItem> companies, AspNetUsers user);
         Task<AspNetUsers> UpdateUserDetails(AspNetUsers user);
+
+        bool Lock { get; set; }
     }
 
     public class IdentityUserAccess : IIdentityUserAccess
@@ -39,6 +41,9 @@ namespace Gizmo_V1_02.Data.Admin
         private readonly IMapper mapper;
 
         private ApplicationUser selectedUser { get; set; }
+
+
+        public bool Lock { get; set; } = false;
 
         public IdentityUserAccess(UserManager<ApplicationUser> userManager
             , RoleManager<ApplicationRole> roleManager
@@ -346,31 +351,40 @@ namespace Gizmo_V1_02.Data.Admin
 
         public async Task<AspNetUsers> UpdateUserDetails(AspNetUsers user)
         {
-            selectedUser = await userManager.FindByIdAsync(user.Id);
+            Lock = true;
 
-            selectedUser.UserName = user.UserName;
-            selectedUser.NormalizedUserName = user.NormalizedUserName;
-            selectedUser.FullName = user.FullName;
-            selectedUser.Email = user.UserName;
-            selectedUser.NormalizedEmail = user.NormalizedEmail;
-            selectedUser.EmailConfirmed = user.EmailConfirmed;
-            selectedUser.SecurityStamp = user.SecurityStamp;
-            selectedUser.ConcurrencyStamp = user.ConcurrencyStamp;
-            selectedUser.PhoneNumber = user.PhoneNumber;
-            selectedUser.PhoneNumberConfirmed = user.PhoneNumberConfirmed;
-            selectedUser.TwoFactorEnabled = user.TwoFactorEnabled;
-            selectedUser.LockoutEnd = user.LockoutEnd;
-            selectedUser.LockoutEnabled = user.LockoutEnabled;
-            selectedUser.AccessFailedCount = user.AccessFailedCount;
-            selectedUser.SelectedUri = user.SelectedUri;
-            selectedUser.SelectedCompanyId = user.SelectedCompanyId;
-            selectedUser.MainBackgroundImage = user.MainBackgroundImage;
-            selectedUser.DisplaySmartflowPreviewImage = user.DisplaySmartflowPreviewImage;
+            try
+            {
+                selectedUser = await userManager.FindByIdAsync(user.Id);
 
-            await userManager.UpdateAsync(selectedUser);
+                selectedUser.UserName = user.UserName;
+                selectedUser.NormalizedUserName = user.NormalizedUserName;
+                selectedUser.FullName = user.FullName;
+                selectedUser.Email = user.UserName;
+                selectedUser.NormalizedEmail = user.NormalizedEmail;
+                selectedUser.EmailConfirmed = user.EmailConfirmed;
+                selectedUser.SecurityStamp = user.SecurityStamp;
+                selectedUser.ConcurrencyStamp = user.ConcurrencyStamp;
+                selectedUser.PhoneNumber = user.PhoneNumber;
+                selectedUser.PhoneNumberConfirmed = user.PhoneNumberConfirmed;
+                selectedUser.TwoFactorEnabled = user.TwoFactorEnabled;
+                selectedUser.LockoutEnd = user.LockoutEnd;
+                selectedUser.LockoutEnabled = user.LockoutEnabled;
+                selectedUser.AccessFailedCount = user.AccessFailedCount;
+                selectedUser.SelectedUri = user.SelectedUri;
+                selectedUser.SelectedCompanyId = user.SelectedCompanyId;
+                selectedUser.MainBackgroundImage = user.MainBackgroundImage;
+                selectedUser.DisplaySmartflowPreviewImage = user.DisplaySmartflowPreviewImage;
 
-            mapper.Map(selectedUser, user);
-            
+                await userManager.UpdateAsync(selectedUser);
+
+                mapper.Map(selectedUser, user);
+            }
+            finally
+            {
+                Lock = false;
+            }
+
             return user;
 
         }

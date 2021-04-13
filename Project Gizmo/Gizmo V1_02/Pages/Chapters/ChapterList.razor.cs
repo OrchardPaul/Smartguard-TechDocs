@@ -276,7 +276,7 @@ namespace Gizmo_V1_02.Pages.Chapters
                 {
                     if(!string.IsNullOrEmpty(selectedChapter.BackgroundImageName))
                     {
-                        sessionState.SetTempBackground(selectedChapter.BackgroundImage, NavigationManager.Uri);
+                        sessionState.SetTempBackground(selectedChapter.BackgroundImage.Replace("/wwwroot",""), NavigationManager.Uri);
                     }
                     else
                     {
@@ -298,6 +298,13 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         private async void SavePreviewChapterImage()
         {
+            bool gotLock = UserAccess.Lock;
+            while (gotLock)
+            {
+                await Task.Yield();
+                gotLock = UserAccess.Lock;
+            }
+
             await UserAccess.UpdateUserDetails(sessionState.User).ConfigureAwait(false);
         }
 
@@ -408,12 +415,12 @@ namespace Gizmo_V1_02.Pages.Chapters
             
             
             //set path to point to the BackgroundImage path for the current company
-            FileHelper.CustomPath = $"FileManagement/FileStorage/{sessionState.Company.CompanyName}/BackgroundImages";
+            FileHelper.CustomPath = $"wwwroot/images/Companies/{sessionState.Company.CompanyName}/BackgroundImages";
             ListFilesForBgImages = FileHelper.GetFileList();
 
             if (!string.IsNullOrEmpty(selectedChapter.BackgroundImage))
             {
-                sessionState.SetTempBackground(selectedChapter.BackgroundImage, NavigationManager.Uri);
+                sessionState.SetTempBackground(selectedChapter.BackgroundImage.Replace("/wwwroot", ""), NavigationManager.Uri);
                 sessionState.RefreshHome?.Invoke();
             }
 
@@ -1854,7 +1861,7 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         private async void HandleBgImageFileSelection(IFileListEntry[] entryFiles)
         {
-            FileHelper.CustomPath = $"FileManagement/FileStorage/{sessionState.Company.CompanyName}/BackgroundImages";
+            FileHelper.CustomPath = $"wwwroot/images/Companies/{sessionState.Company.CompanyName}/BackgroundImages";
             ListFilesForBgImages = FileHelper.GetFileList();
 
             var files = new List<IFileListEntry>();
@@ -1903,7 +1910,7 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         protected void PrepareBgImageForDelete(FileDesc selectedFile)
         {
-            FileHelper.CustomPath = $"FileManagement/FileStorage/{sessionState.Company.CompanyName}/BackgroundImages";
+            FileHelper.CustomPath = $"wwwroot/images/Companies/{sessionState.Company.CompanyName}/BackgroundImages";
 
             SelectedFileDescription = selectedFile;
 
@@ -1932,14 +1939,14 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         private async void SelectBgImage(FileDesc fileDesc)
         {
-            selectedChapter.BackgroundImage = fileDesc.FileURL;
+            selectedChapter.BackgroundImage = fileDesc.FileURL.Replace("/wwwroot", "");
             selectedChapter.BackgroundImageName = fileDesc.FileName;
 
             SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(selectedChapter);
 
             await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
 
-            sessionState.SetTempBackground(selectedChapter.BackgroundImage, NavigationManager.Uri);
+            sessionState.SetTempBackground(selectedChapter.BackgroundImage.Replace("/wwwroot", ""), NavigationManager.Uri);
             sessionState.RefreshHome?.Invoke();
 
             await InvokeAsync(() =>
@@ -1952,7 +1959,7 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         private void DeleteBgImageFile(FileDesc file)
         {
-            FileHelper.CustomPath = $"FileManagement/FileStorage/{sessionState.Company.CompanyName}/BackgroundImages";
+            FileHelper.CustomPath = $"wwwroot/images/Companies/{sessionState.Company.CompanyName}/BackgroundImages";
 
             ChapterFileUpload.DeleteFile(file.FilePath);
 
@@ -2598,7 +2605,7 @@ namespace Gizmo_V1_02.Pages.Chapters
             Action SelectedAction = RefreshJson;
             var parameters = new ModalParameters();
             parameters.Add("TaskObject", SelectedChapterObject);
-            parameters.Add("ListFilesForBackups", ListFilesForBackups);
+            parameters.Add("ListFileDescriptions", ListFilesForBackups);
             parameters.Add("DataChanged", SelectedAction);
             parameters.Add("WriteBackUp", WriteBackUp);
             parameters.Add("OriginalDataViews", ListVmDataViews);
