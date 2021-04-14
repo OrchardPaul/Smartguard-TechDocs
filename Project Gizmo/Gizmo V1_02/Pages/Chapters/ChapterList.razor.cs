@@ -193,9 +193,10 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         public IList<string> JSONErrors { get; set; }
 
-        public List<string> lstDocTypes { get; set; } = new List<string> { "Doc", "Letter", "Form", "Email", "Step" };
+        public List<string> lstDocTypes { get; set; } = new List<string> { "Doc", "Form", "Step", "Date", "Email", "Letter" };
+        
 
-        public ChapterP4WStepSchema ChapterP4WStep { get; set; }
+public ChapterP4WStepSchema ChapterP4WStep { get; set; }
 
         public bool showNewStep { get; set; } = false;
 
@@ -2781,6 +2782,7 @@ namespace Gizmo_V1_02.Pages.Chapters
             }
         }
 
+        
         private async void SaveP4WCaseTypeGroup(string caseTypeGroup)
         {
             selectedChapter.P4WCaseTypeGroup = caseTypeGroup;

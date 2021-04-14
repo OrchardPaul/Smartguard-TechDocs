@@ -226,7 +226,7 @@ namespace GadjIT.ClientAPI.Repository.Chapters
 
         public async Task<List<UsrOrDefChapterManagement>> GetDocListByChapter(string caseType, string chapter)
         {
-            List<string> Doctype = new List<string>() { "Doc", "Letter", "Form", "Step" };
+            List<string> Doctype = new List<string>() { "Doc", "Form", "Step", "Date", "Email", "Letter" };
 
             var idRecord = _context.UsrOrDefChapterManagement
                 .Where(C => C.Name == chapter)

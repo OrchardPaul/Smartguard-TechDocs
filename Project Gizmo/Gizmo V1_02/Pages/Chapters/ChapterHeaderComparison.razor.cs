@@ -45,12 +45,28 @@ namespace Gizmo_V1_02.Pages.Chapters
         [Parameter]
         public int? AlternateSysParentId { get; set; }
 
+        public bool syncCaseTypeGroup { get; set; }
+        public bool syncView { get; set; }
+        public bool syncStepName { get; set; }
+        public bool syncBgColour { get; set; }
+        public bool syncBgImage { get; set; } 
+
+
+        protected override void OnInitialized()
+        {
+            syncCaseTypeGroup = CurrentChapter.P4WCaseTypeGroup == AltChapter.P4WCaseTypeGroup ? false : true;
+            syncView  = CurrentChapter.SelectedView == AltChapter.SelectedView ? false : true; 
+            syncStepName  = CurrentChapter.StepName == AltChapter.StepName ? false : true;
+            syncBgColour  = CurrentChapter.BackgroundColour == AltChapter.BackgroundColour ? false : true;
+            syncBgImage  = CurrentChapter.BackgroundImage == AltChapter.BackgroundImage ? false : true;
+        }
 
         private async void Close()
         {
             await ModalInstance.CloseAsync();
         }
 
+        
         private async void HandleValidSubmit(bool TakeAlternate)
         {
             VmChapter toObject; //= new VmChapter();
@@ -67,13 +83,28 @@ namespace Gizmo_V1_02.Pages.Chapters
                 fromObject = CurrentChapter;
 
             }
-            toObject.CaseTypeGroup = fromObject.CaseTypeGroup;
-            toObject.CaseType = fromObject.CaseType;
-            toObject.StepName = fromObject.StepName;
-            toObject.BackgroundColour = fromObject.BackgroundColour;
-            toObject.BackgroundColourName = fromObject.BackgroundColourName;
-            toObject.BackgroundImage = fromObject.BackgroundImage;
-            toObject.BackgroundImageName = fromObject.BackgroundImageName;
+            if (syncCaseTypeGroup)
+            {
+                toObject.P4WCaseTypeGroup = fromObject.P4WCaseTypeGroup;
+            }
+            if (syncView)
+            {
+                toObject.SelectedView = fromObject.SelectedView;
+            }
+            if (syncStepName)
+            {
+                toObject.StepName = fromObject.StepName;
+            }
+            if (syncBgColour)
+            {
+                toObject.BackgroundColour = fromObject.BackgroundColour;
+                toObject.BackgroundColourName = fromObject.BackgroundColourName;
+            }
+            if (syncBgImage)
+            {
+                toObject.BackgroundImage = fromObject.BackgroundImage;
+                toObject.BackgroundImageName = fromObject.BackgroundImageName;
+            }
 
             if (TakeAlternate)
             {
