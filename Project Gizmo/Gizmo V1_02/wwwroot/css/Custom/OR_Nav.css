@@ -301,7 +301,7 @@
 .tran-navbar .navbar li:hover {
     text-decoration: none;
     background-color: rgba(220, 220, 220, 1);
-    border-bottom: 3pt solid;
+    border-bottom: 1pt solid;
     transition-duration: 0.5s;
     transition-property: background-color, color;
 }

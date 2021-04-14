@@ -1,6 +1,6 @@
 ﻿
     <div class="modal-body" tabindex="0">
-        <table class="table-basic table-top-header table-left-header table-borderless">
+        <table class="table-basic table-left-header table-borderless">
             <thead>
 
                 <tr>
@@ -27,30 +27,40 @@
                         Case Type Group
                     </td>
                     <td>
-                        @Object.CurrentChapter.CaseTypeGroup
+                        @Object.CurrentChapter.P4WCaseTypeGroup
                     </td>
                     <td>
-                        @Object.AltChapter.CaseTypeGroup
+                        @Object.AltChapter.P4WCaseTypeGroup
                     </td>
                     <td>
-                        <span class="fa fa-@(Object.CurrentChapter.CaseTypeGroup == @Object.AltChapter.CaseTypeGroup ? "check" : "exclamation")"></span>
+                        <span class="fa fa-@(Object.CurrentChapter.P4WCaseTypeGroup == @Object.AltChapter.P4WCaseTypeGroup ? "check" : "exclamation")"></span>
                     </td>
-                    <td></td>
+                    <td>
+                        @if(Object.CurrentChapter.P4WCaseTypeGroup != @Object.AltChapter.P4WCaseTypeGroup) 
+                        { 
+                        <input type="checkbox" class="ml-1 mt-1" @bind="@syncCaseTypeGroup" />
+                        }
+                    </td>
                 </tr>
                 <tr>
                     <td>
-                        Case Type
+                        Smartflow View
                     </td>
                     <td>
-                        @Object.CurrentChapter.CaseType
+                        @Object.CurrentChapter.SelectedView
                     </td>
                     <td>
-                        @Object.AltChapter.CaseType
+                        @Object.AltChapter.SelectedView
                     </td>
                     <td>
-                        <span class="fa fa-@(Object.CurrentChapter.CaseType == @Object.AltChapter.CaseType ? "check" : "exclamation")"></span>
+                        <span class="fa fa-@(Object.CurrentChapter.SelectedView == @Object.AltChapter.SelectedView ? "check" : "exclamation")"></span>
                     </td>
-                    <td></td>
+                    <td>
+                        @if (Object.CurrentChapter.SelectedView != @Object.AltChapter.SelectedView)
+                        {
+                            <input type="checkbox" class="ml-1 mt-1" @bind="@syncView" />
+                        }
+                    </td>
                 </tr>
                 <tr>
                     <td>
@@ -65,7 +75,12 @@
                     <td>
                         <span class="fa fa-@(Object.CurrentChapter.StepName == @Object.AltChapter.StepName ? "check" : "exclamation")"></span>
                     </td>
-                    <td></td>
+                    <td>
+                        @if (Object.CurrentChapter.StepName != @Object.AltChapter.StepName)
+                        {
+                            <input type="checkbox" class="ml-1 mt-1" @bind="@syncStepName" />
+                        }
+                    </td>
                 </tr>
                 <tr>
                     <td>
@@ -80,7 +95,12 @@
                     <td>
                         <span class="fa fa-@(Object.CurrentChapter.BackgroundColour == @Object.AltChapter.BackgroundColour ? "check" : "exclamation")"></span>
                     </td>
-                    <td></td>
+                    <td>
+                        @if (Object.CurrentChapter.BackgroundColour != @Object.AltChapter.BackgroundColour)
+                        {
+                            <input type="checkbox" class="ml-1 mt-1" @bind="@syncBgColour" />
+                        }
+                    </td>
                 </tr>
                 <tr>
                     <td>
@@ -95,7 +115,13 @@
                     <td>
                         <span class="fa fa-@(Object.CurrentChapter.BackgroundImage == @Object.AltChapter.BackgroundImage ? "check" : "exclamation")"></span>
                     </td>
-                    <td></td>
+                    <td>
+                        @if (Object.CurrentChapter.BackgroundImage != @Object.AltChapter.BackgroundImage)
+                        {
+                            <input type="checkbox" class="ml-1 mt-1" @bind="@syncBgImage" />
+                        }
+                        
+                    </td>
                 </tr>
             </tbody>
             <tfoot>
@@ -111,6 +137,8 @@
                         <div class=" d-flex justify-content-center">
                             <button type="submit" autofocus class="btn btn-main" @onclick="() => HandleValidSubmit(true)">@(sessionState.selectedSystem == "Dev" ? "Dev <<" : "Live <<")</button>
                         </div>
+                    </td>
+                    <td>
                     </td>
                     <td>
                     </td>

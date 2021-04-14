@@ -197,9 +197,10 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         public IList<string> JSONErrors { get; set; }
 
-        public List<string> lstDocTypes { get; set; } = new List<string> { "Doc", "Letter", "Form", "Email", "Step" };
+        public List<string> lstDocTypes { get; set; } = new List<string> { "Doc", "Form", "Step", "Date", "Email", "Letter" };
+        
 
-        public ChapterP4WStepSchema ChapterP4WStep { get; set; }
+public ChapterP4WStepSchema ChapterP4WStep { get; set; }
 
         public bool showNewStep { get; set; } = false;
 
@@ -1076,7 +1077,7 @@ namespace Gizmo_V1_02.Pages.Chapters
 
             ShowDataViewDetailModal("Insert");
         }
-
+        //TODO: Change display to reflect the top 3 items and from-to dates
         private void PrepareTickerMessageForInsert(string header)
         {
             selectedList = header;
@@ -1089,7 +1090,7 @@ namespace Gizmo_V1_02.Pages.Chapters
             {
 
                 EditTickerMessageObject.Message.SeqNo = ListVmTickerMessages
-                                                       .OrderBy(D => D.Message.SeqNo)
+                                                       .OrderByDescending(D => D.Message.SeqNo)
                                                        .Select(D => D.Message.SeqNo)
                                                        .FirstOrDefault() + 1;
             }
@@ -1441,6 +1442,29 @@ namespace Gizmo_V1_02.Pages.Chapters
             {
                 seqNo += 1;
                 item.DataView.BlockNo = seqNo;
+            }
+
+            SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(selectedChapter);
+            await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
+
+            await RefreshChapterItems(ListType);
+
+            await InvokeAsync(() =>
+            {
+                StateHasChanged();
+            });
+        }
+
+        protected async void CondenseMessageSeqNo(string ListType)
+        {
+            await RefreshChapterItems(ListType);
+
+            int seqNo = 0;
+
+            foreach (var item in ListVmTickerMessages.OrderBy(A => A.Message.SeqNo))
+            {
+                seqNo += 1;
+                item.Message.SeqNo = seqNo;
             }
 
             SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(selectedChapter);
@@ -2540,6 +2564,29 @@ namespace Gizmo_V1_02.Pages.Chapters
             }
         }
 
+        private bool MessagesSeqNoIsValid()
+        {
+            if (seqMoving == false | compareSystems == true)
+            {
+
+                bool isValid = true;
+
+                for (int i = 0; i < ListVmTickerMessages.Count; i++)
+                {
+                    if (ListVmTickerMessages[i].Message.SeqNo != i + 1)
+                    {
+                        isValid = false;
+                    }
+
+                }
+
+                return isValid;
+            }
+            else
+            {
+                return true;
+            }
+        }
         /// <summary>
         /// moves the AA (transparancy) element of an android hex color to the end of the string
         /// XAML Forms use Hex color but in format #aarrggbb
@@ -2881,6 +2928,7 @@ namespace Gizmo_V1_02.Pages.Chapters
             }
         }
 
+        
         private async void SaveP4WCaseTypeGroup(string caseTypeGroup)
         {
             selectedChapter.P4WCaseTypeGroup = caseTypeGroup;

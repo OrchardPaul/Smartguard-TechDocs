@@ -539,7 +539,7 @@ else
                             }
 
                         }
-                        <ModalTooltip Direction="top shift-right" Text="Documents and steps to be made available in the chapter for inserting into the case agenda!">
+                        <ModalTooltip Direction="top shift-right" Text="Documents and steps to be made available in the Smartflow for inserting into the case agenda.">
                             <span class="info-icon">
                                 <span class=" fa fa-info-circle fa-2x "></span>
                             </span>
@@ -1114,7 +1114,7 @@ else
                             }
 
                         }
-                        <ModalTooltip Direction="top" Text="Status options to assist with the flow of the Smartflow and to indicate when the Smartflow is complete">
+                        <ModalTooltip Direction="top" Text="Status options to assist with the flow of the Smartflow and to indicate when the Smartflow is complete.">
                             <span class="info-icon">
                                 <span class=" fa fa-info-circle fa-2x "></span>
                             </span>
@@ -1251,14 +1251,21 @@ else
                         {
                             @if (sessionState.isAdminUser)
                             {
-                                <div class="btn-group">
-                                    <button @onclick='() => PrepareDataViewForInsert(navDisplay)' class="btn btn-main btn-shadow" title="Add new data view"><i class="fa fa-plus"></i><span>New</span></button>
-                                    <button @onclick='() => CondenseBlockNo("DataViews")' class="btn btn-main btn-shadow @(BlockNoIsValid() ? "invisible" : "")" title="Re-order Sequence Numbers"><i class="fa fa-sort-numeric-down"></i></button>
-                                </div>
+                        <div class="btn-group">
+                            @if (ListVmDataViews.Count() < 6)
+                            {
+                                <button @onclick='() => PrepareDataViewForInsert(navDisplay)' class="btn btn-main btn-shadow" title="Add new data view"><i class="fa fa-plus"></i><span>New</span></button>
+                            }
+                            else
+                            {
+                                <button class="btn btn-main btn-shadow" title="Cannot add new data view - Max number of views reached" disabled><i class="fa fa-plus"></i><span>New</span></button>
+                            }
+                            <button @onclick='() => CondenseBlockNo("DataViews")' class="btn btn-main btn-shadow @(BlockNoIsValid() ? "invisible" : "")" title="Re-order Sequence Numbers"><i class="fa fa-sort-numeric-down"></i></button>
+                        </div>
                             }
                         }
 
-                        <ModalTooltip Direction="top" Text="Data Views to be made available in the chapter!">
+                        <ModalTooltip Direction="top" Text="Data Views to be made available in the Smartflow.">
                             <span class="info-icon">
                                 <span class=" fa fa-info-circle fa-2x "></span>
                             </span>
@@ -1384,7 +1391,6 @@ else
 
             }
 
-
             @if (navDisplay == "TickerMessages")
             {
 
@@ -1396,21 +1402,15 @@ else
                         {
                             @if (sessionState.isAdminUser)
                             {
-                                <div class="btn-group">
-                                    @if (ListVmTickerMessages.Count() < 3)
-                                    {
-                                        <button @onclick='() => PrepareTickerMessageForInsert(navDisplay)' class="btn btn-main btn-shadow" title="Add new ticker message"><i class="fa fa-plus"></i><span>New</span></button>
-                                    }
-                                    else
-                                    {
-                                        <button class="btn btn-main btn-shadow" title="Cannot add new ticker message - Max number of messages reached" disabled><i class="fa fa-plus"></i><span>New</span></button>
-                                    }
-                                    <button @onclick='() => CondenseBlockNo("TickerMessages")' class="btn btn-main btn-shadow @(BlockNoIsValid() ? "invisible" : "")" title="Re-order Sequence Numbers"><i class="fa fa-sort-numeric-down"></i></button>
-                                </div>
+                        <div class="btn-group">
+                            @*ListVmTickerMessages.Count() < 3*@
+                            <button @onclick='() => PrepareTickerMessageForInsert(navDisplay)' class="btn btn-main btn-shadow" title="Add new ticker message"><i class="fa fa-plus"></i><span>New</span></button>
+                            <button @onclick='() => CondenseMessageSeqNo("TickerMessages")' class="btn btn-main btn-shadow @(MessagesSeqNoIsValid() ? "invisible" : "")" title="Re-order Sequence Numbers"><i class="fa fa-sort-numeric-down"></i></button>
+                        </div>
                             }
                         }
 
-                        <ModalTooltip Direction="top" Text="Ticker Message to be made visible on the smartflow screen!">
+                        <ModalTooltip Direction="top" Text="Ticker Message to be made visible on the Smartflow screen.">
                             <span class="info-icon">
                                 <span class=" fa fa-info-circle fa-2x "></span>
                             </span>
