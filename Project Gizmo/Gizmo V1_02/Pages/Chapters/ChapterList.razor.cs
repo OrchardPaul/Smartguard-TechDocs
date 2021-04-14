@@ -78,6 +78,10 @@ namespace Gizmo_V1_02.Pages.Chapters
         private List<VmUsrOrDefChapterManagement> lstAltSystemChapterItems { get; set; } = new List<VmUsrOrDefChapterManagement>();
         private List<VmFee> lstAltSystemFeeItems { get; set; } = new List<VmFee>();
 
+        private List<VmDataViews> lstAltSystemDataViews { get; set; } = new List<VmDataViews>();
+
+        private List<VmTickerMessages> lstAltSystemTickerMessages { get; set; } = new List<VmTickerMessages>();
+
         private List<VmUsrOrDefChapterManagement> lstAgendas { get; set; } = new List<VmUsrOrDefChapterManagement>();
         private List<VmFee> lstFees { get; set; } = new List<VmFee>();
         private List<VmChapterFee> lstVmFeeModalItems { get; set; } = new List<VmChapterFee>();
@@ -355,6 +359,7 @@ namespace Gizmo_V1_02.Pages.Chapters
                 sessionState.TempBackGroundImage = "";
                 sessionState.RefreshHome?.Invoke();
             }
+            compareSystems = false;
             selectedChapter.Name = "";
             rowChanged = 0;
         }
@@ -619,15 +624,6 @@ namespace Gizmo_V1_02.Pages.Chapters
             }
         }
 
-        private async void ToggleFeeComparison()
-        {
-            compareSystems = !compareSystems;
-
-            if (compareSystems)
-            {
-                await CompareSelectedFeeToAltSystem();
-            }
-        }
 
         private async Task<bool> RefreshAltSystemChaptersList()
         {
@@ -699,6 +695,23 @@ namespace Gizmo_V1_02.Pages.Chapters
                     CompareFeeItemsToAltSytem(item);
                 }
 
+                var dItems = altChapter.DataViews is null ? new List<DataViews>() : altChapter.DataViews;
+
+                lstAltSystemDataViews = dItems.Select(T => new VmDataViews { DataView = T }).ToList();
+
+                foreach (var item in ListVmDataViews)
+                {
+                    CompareDataViewsToAltSytem(item);
+                }
+
+                var tItems = altChapter.TickerMessages is null ? new List<TickerMessages>() : altChapter.TickerMessages;
+
+                lstAltSystemTickerMessages = tItems.Select(T => new VmTickerMessages { Message = T }).ToList();
+
+                foreach (var item in ListVmTickerMessages)
+                {
+                    CompareTickerMessagesToAltSytem(item);
+                }
 
                 await InvokeAsync(() =>
                 {
@@ -708,44 +721,6 @@ namespace Gizmo_V1_02.Pages.Chapters
 
 
             
-
-            return true;
-        }
-
-        private async Task<bool> CompareSelectedFeeToAltSystem()
-        {
-            if (compareSystems)
-            {
-                var test = await RefreshChapterItems(navDisplay);
-
-                await RefreshAltSystemChaptersList();
-
-                AltChapterObject = lstAltSystemChapters
-                                        .Where(A => A.ChapterObject.Name == SelectedChapterObject.Name)
-                                        .Where(A => A.ChapterObject.CaseType == SelectedChapterObject.CaseType)
-                                        .Where(A => A.ChapterObject.CaseTypeGroup == SelectedChapterObject.CaseTypeGroup)
-                                        .Select(C => C.ChapterObject)
-                                        .SingleOrDefault();
-
-                if (!(AltChapterObject is null))
-                {
-                    altChapter = JsonConvert.DeserializeObject<VmChapter>(AltChapterObject.ChapterData);
-
-                    var temp = altChapter.Fees is null ? new List<Fee>() : altChapter.Fees;
-
-                    lstAltSystemFeeItems = temp.Select(T => new VmFee { FeeObject = T }).ToList();
-
-                    foreach (var item in lstFees)
-                    {
-                        CompareFeeItemsToAltSytem(item);
-                    }
-
-                    await InvokeAsync(() =>
-                    {
-                        StateHasChanged();
-                    });
-                }
-            }
 
             return true;
         }
@@ -886,6 +861,65 @@ namespace Gizmo_V1_02.Pages.Chapters
 
             return chapterItem;
         }
+
+        private VmDataViews CompareDataViewsToAltSytem(VmDataViews dataView)
+        {
+            var altObject = lstAltSystemDataViews
+                                .Where(A => A.DataView.ViewName == dataView.DataView.ViewName)
+                                .SingleOrDefault();
+
+            if (altObject is null)
+            {
+                dataView.ComparisonResult = "No match";
+                dataView.ComparisonIcon = "times";
+            }
+            else
+            {
+                if (dataView.IsDataViewMatch(altObject.DataView))
+                {
+                    dataView.ComparisonResult = "Exact match";
+                    dataView.ComparisonIcon = "check";
+                }
+                else
+                {
+                    dataView.ComparisonResult = "Partial match";
+                    dataView.ComparisonIcon = "exclamation";
+                }
+
+            }
+
+            return dataView;
+        }
+
+        private VmTickerMessages CompareTickerMessagesToAltSytem(VmTickerMessages tickerMessage)
+        {
+            var altObject = lstAltSystemTickerMessages
+                                .Where(A => A.Message.Message == tickerMessage.Message.Message)
+                                .FirstOrDefault();
+
+            if (altObject is null)
+            {
+                tickerMessage.ComparisonResult = "No match";
+                tickerMessage.ComparisonIcon = "times";
+            }
+            else
+            {
+                if (tickerMessage.IsTickerMessageMatch(altObject))
+                {
+                    tickerMessage.ComparisonResult = "Exact match";
+                    tickerMessage.ComparisonIcon = "check";
+                }
+                else
+                {
+                    tickerMessage.ComparisonResult = "Partial match";
+                    tickerMessage.ComparisonIcon = "exclamation";
+                }
+
+            }
+
+            return tickerMessage;
+        }
+
 
         private VmFee CompareFeeItemsToAltSytem(VmFee chapterItem)
         {
@@ -1645,7 +1679,7 @@ namespace Gizmo_V1_02.Pages.Chapters
                 Class = "blazored-custom-modal modal-chapter-item"
             };
 
-            Modal.Show<TickerMessageDisplay>("Ticker Messages", parameters, options);
+            Modal.Show<TickerMessageDetail>("Ticker Messages", parameters, options);
         }
 
         protected void ShowChapterAttachmentModal()
@@ -1868,7 +1902,7 @@ namespace Gizmo_V1_02.Pages.Chapters
                 Class = "blazored-custom-modal modal-chapter-comparison"
             };
 
-            Modal.Show<TickerMessageDisplay>("Ticker Message", parameters, options);
+            Modal.Show<TickerMessageDetail>("Ticker Message", parameters, options);
         }
 
         protected void PrepareChapterDelete(VmUsrOrDefChapterManagement selectedChapterItem)
@@ -2113,6 +2147,67 @@ namespace Gizmo_V1_02.Pages.Chapters
 
             Modal.Show<ChapterFeeComparison>("Synchronise Smartflow Item", parameters, options);
         }
+
+        private void PrepareDataViewForComparison(VmDataViews selectedItem)
+        {
+            EditDataViewObject = selectedItem;
+
+            ShowDataViewComparisonModal();
+        }
+
+        private void PrepareTickerMessageForComparison(VmTickerMessages selectedItem)
+        {
+            EditTickerMessageObject = selectedItem;
+
+            ShowTickerMessageComparisonModal();
+        }
+
+        protected void ShowDataViewComparisonModal()
+        {
+            Action Compare = CompareChapterItemsToAltSytemAction;
+
+            var parameters = new ModalParameters();
+            parameters.Add("Object", EditDataViewObject);
+            parameters.Add("ComparisonRefresh", Compare);
+            parameters.Add("sessionState", sessionState);
+            parameters.Add("CurrentSysParentId", selectedChapterId);
+            parameters.Add("AlternateSysParentId", altSysSelectedChapterId);
+            parameters.Add("CurrentChapter", selectedChapter);
+            parameters.Add("AltChapter", altChapter);
+            parameters.Add("CurrentChapterRow", SelectedChapterObject);
+            parameters.Add("AltChapterRow", AltChapterObject);
+
+            var options = new ModalOptions()
+            {
+                Class = "blazored-custom-modal modal-chapter-comparison"
+            };
+
+            Modal.Show<ChapterDataViewComparison>("Synchronise Smartflow Item", parameters, options);
+        }
+
+        protected void ShowTickerMessageComparisonModal()
+        {
+            Action Compare = CompareChapterItemsToAltSytemAction;
+
+            var parameters = new ModalParameters();
+            parameters.Add("Object", EditTickerMessageObject);
+            parameters.Add("ComparisonRefresh", Compare);
+            parameters.Add("sessionState", sessionState);
+            parameters.Add("CurrentSysParentId", selectedChapterId);
+            parameters.Add("AlternateSysParentId", altSysSelectedChapterId);
+            parameters.Add("CurrentChapter", selectedChapter);
+            parameters.Add("AltChapter", altChapter);
+            parameters.Add("CurrentChapterRow", SelectedChapterObject);
+            parameters.Add("AltChapterRow", AltChapterObject);
+
+            var options = new ModalOptions()
+            {
+                Class = "blazored-custom-modal modal-chapter-comparison"
+            };
+
+            Modal.Show<TickerMessageComparison>("Synchronise Smartflow Item", parameters, options);
+        }
+
 
         private async void HandleChapterDetailDelete()
         {
@@ -2612,6 +2707,11 @@ namespace Gizmo_V1_02.Pages.Chapters
                 selectedChapter.ChapterItems = chapterData.ChapterItems;
                 selectedChapter.DataViews = chapterData.DataViews;
                 selectedChapter.Fees = chapterData.Fees;
+                selectedChapter.TickerMessages = chapterData.TickerMessages;
+                selectedChapter.P4WCaseTypeGroup = chapterData.P4WCaseTypeGroup;
+                selectedChapter.SelectedStep = chapterData.SelectedStep;
+                selectedChapter.SelectedView = chapterData.SelectedView;
+                selectedChapter.ShowPartnerNotes = chapterData.ShowPartnerNotes;
                 SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(selectedChapter);
 
                 await chapterManagementService.Update(SelectedChapterObject);

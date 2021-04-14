@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace Gizmo_V1_02.Pages.Chapters
 {
-    public partial class TickerMessageDisplay
+    public partial class TickerMessageDetail
     {
 
         [CascadingParameter]

@@ -139,8 +139,6 @@ namespace Gizmo_V1_02.Pages.Chapters
             TaskObject.PopupAlert = CopyObject.PopupAlert;
             TaskObject.NextStatus = CopyObject.NextStatus;
 
-            TaskObject.FollowUpDocs = null;
-
             if (Option == "Insert")
             {
                 SelectedChapter.ChapterItems.Add(TaskObject);

@@ -484,11 +484,6 @@ else
                                                     <span class="slider round"></span>
                                                 </label>
                                             </div>
-
-                                            @*<div class="form-group">
-                                                <label>Ticker Message</label>
-                                                <InputTextArea @bind-Value="selectedChapter.GeneralNotes" class="form-control form-control-xxl" />
-                                            </div>*@
                                         </div>
                                     </div>
 
@@ -658,17 +653,7 @@ else
                                                 @switch (doc.DocType)
                                                 {
                                                     case "Doc":
-
-                                                        @if (!string.IsNullOrEmpty(doc.DocDisplayName)
-                                && (doc.DocDisplayName.Length > 9)
-                                && (doc.DocDisplayName.Substring(0, 9).ToUpper().Contains("LTR")))
-                                                        {
-                                                            <span class="fa fa-file-alt mr-2"></span>
-                                                        }
-                                                        else
-                                                        {
-                                                            <span class="fa fa-file mr-2"></span>
-                                                        }
+                                                        <span class="fa fa-file mr-2"></span>
                                                         break;
                                                     case "Letter":
                                                         <span class="fa fa-file-alt mr-2"></span>
@@ -946,7 +931,7 @@ else
                         {
                             <div class="btn-group sync-group invisible-md-down">
                                 <button type="button" @onclick="() => PrepareChapterSync()" class="btn btn-main btn-shadow @(!compareSystems ? "hidden" : "")" title="Sync To @(sessionState.selectedSystem == "Dev" ? "Live" : "Dev")"><i class="fa fa-sync"></i><span>Sync</span></button>
-                                <input type="checkbox" class="ml-1 mt-1" @onchange="() => ToggleFeeComparison()" /><span class="ml-2 font-75 ">Compare to @(sessionState.selectedSystem == "Dev" ? "Live" : "Dev") </span>
+                                <input type="checkbox" class="ml-1 mt-1" @onchange="() => ToggleComparison()" /><span class="ml-2 font-75 ">Compare to @(sessionState.selectedSystem == "Dev" ? "Live" : "Dev") </span>
                             </div>
                         }
                     </div>
@@ -974,75 +959,107 @@ else
                                 </div>
                             </div>
                         </div>
-                        @foreach (var fee in lstFees.OrderBy(F => F.FeeObject.SeqNo).ToList())
-                        {
-                            <div class="row grid-row grid-row-lg @(rowChanged == fee.FeeObject.SeqNo ? "row-changed" : "" )">
-                                <div class="data-item">
-                                    @if (sessionState.isAdminUser)
-                                    {
-                                        @if (!compareSystems)
+                        <div class="grid-data">
+                            @foreach (var fee in lstFees.OrderBy(F => F.FeeObject.SeqNo).ToList())
+                            {
+                                <div class="row grid-row grid-row-lg @(rowChanged == fee.FeeObject.SeqNo ? "row-changed" : "" )">
+                                    <div class="data-item">
+                                        @if (sessionState.isAdminUser)
                                         {
-                                            <div class="btn-ellipses float-left">
-                                                <span class="fa fa-ellipsis-v"></span>
-                                                <div class="ellipsis-menu">
-                                                    <ul>
-                                                        <li class="col-main" @onclick='(() => ShowChapterFeesModal("Edit", fee.FeeObject))'>
-                                                            <span class="fa fa-pencil-alt mr-2"></span>
-                                                            <span>Edit</span>
-                                                        </li>
-                                                        <li class="col-main" @onclick='(() => ShowChapterFeeViewModal(fee))'>
-                                                            <span class="fa fa-binoculars mr-2"></span>
-                                                            <span>View</span>
-                                                        </li>
-                                                        <li class="col-red" @onclick="() => PrepareChapterFeeDelete(fee)">
-                                                            <span class="fa fa-trash-alt mr-2"></span>
-                                                            <span>Delete</span>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div class="data-item-sub">
-                                                <span class="fa fa-pound-sign mr-2"></span> @fee.FeeObject.FeeName
-                                            </div>
-
-                                            @if (fee.FeeObject.VATable == "Y")
+                                            @if (!compareSystems)
                                             {
-                                                <div class="data-item-right hidden-md-down">
-                                                    <ModalTooltip Direction="top" Text=@("VAT Included") Class="w-3">
-                                                        <span class="fa fa-coins"></span>
-                                                    </ModalTooltip>
+                                                <div class="btn-ellipses float-left">
+                                                    <span class="fa fa-ellipsis-v"></span>
+                                                    <div class="ellipsis-menu">
+                                                        <ul>
+                                                            <li class="col-main" @onclick='(() => ShowChapterFeesModal("Edit", fee.FeeObject))'>
+                                                                <span class="fa fa-pencil-alt mr-2"></span>
+                                                                <span>Edit</span>
+                                                            </li>
+                                                            <li class="col-main" @onclick='(() => ShowChapterFeeViewModal(fee))'>
+                                                                <span class="fa fa-binoculars mr-2"></span>
+                                                                <span>View</span>
+                                                            </li>
+                                                            <li class="col-red" @onclick="() => PrepareChapterFeeDelete(fee)">
+                                                                <span class="fa fa-trash-alt mr-2"></span>
+                                                                <span>Delete</span>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <div class="data-item-sub">
+                                                    <span class="fa fa-pound-sign mr-2"></span> @fee.FeeObject.FeeName
+                                                </div>
+
+                                                @if (fee.FeeObject.VATable == "Y")
+                                                {
+                                                    <div class="data-item-right hidden-md-down">
+                                                        <ModalTooltip Direction="top" Text=@("VAT Included") Class="w-3">
+                                                            <span class="fa fa-coins"></span>
+                                                        </ModalTooltip>
+                                                    </div>
+                                                }
+
+                                                <div class="data-item-right seq-change">
+                                                    <div @onclick='() => MoveFeeSeqNo(fee.FeeObject, "Fees", "Up")'><span class="fa fa-angle-up"></span></div>
+                                                    <div class="seq-no">@fee.FeeObject.SeqNo</div>
+                                                    <div @onclick='() => MoveFeeSeqNo(fee.FeeObject, "Fees", "Down")'><span class="fa fa-angle-down"></span></div>
+                                                </div>
+
+                                            }
+                                            else
+                                            {
+
+                                                <div class="btn-ellipses float-left">
+                                                    @if (!(fee.ComparisonIcon is null))
+                                                    {
+                                                        @if (!(fee.ComparisonResult == "Exact match"))
+                                                        {
+                                                            <div class="btn-dashed" @onclick="() => PrepareFeeForComparison(fee)"><span class="fa fa-@fee.ComparisonIcon"></span></div>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span class="fa fa-@fee.ComparisonIcon"></span>
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="spinner"></div>
+                                                    }
+
+                                                </div>
+
+
+                                                <div class="data-item-sub">
+                                                    <span class="fa fa-pound-sign mr-2"></span> @fee.FeeObject.FeeName
+                                                </div>
+                                                @if (fee.FeeObject.VATable == "Y")
+                                                {
+                                                    <div class="data-item-right hidden-md-down">
+                                                        <ModalTooltip Direction="top" Text=@("VAT Included") Class="w-3">
+                                                            <span class="fa fa-coins"></span>
+                                                        </ModalTooltip>
+                                                    </div>
+                                                }
+                                                <div class="data-item-right seq-change">
+                                                    <div class="seq-no">@fee.FeeObject.SeqNo</div>
                                                 </div>
                                             }
-
-                                            <div class="data-item-right seq-change">
-                                                <div @onclick='() => MoveFeeSeqNo(fee.FeeObject, "Fees", "Up")'><span class="fa fa-angle-up"></span></div>
-                                                <div class="seq-no">@fee.FeeObject.SeqNo</div>
-                                                <div @onclick='() => MoveFeeSeqNo(fee.FeeObject, "Fees", "Down")'><span class="fa fa-angle-down"></span></div>
-                                            </div>
-
                                         }
                                         else
                                         {
 
                                             <div class="btn-ellipses float-left">
-                                                @if (!(fee.ComparisonIcon is null))
-                                                {
-                                                    @if (!(fee.ComparisonResult == "Exact match"))
-                                                    {
-                                                        <div class="btn-dashed" @onclick="() => PrepareFeeForComparison(fee)"><span class="fa fa-@fee.ComparisonIcon"></span></div>
-                                                    }
-                                                    else
-                                                    {
-                                                        <span class="fa fa-@fee.ComparisonIcon"></span>
-                                                    }
-                                                }
-                                                else
-                                                {
-                                                    <div class="spinner"></div>
-                                                }
-
+                                                <span class="fa fa-ellipsis-v"></span>
+                                                <div class="ellipsis-menu">
+                                                    <ul>
+                                                        <li class="col-main" @onclick='(() => ShowChapterFeeViewModal(fee))'>
+                                                            <span class="fa fa-binoculars mr-2"></span>
+                                                            <span>View</span>
+                                                        </li>
+                                                    </ul>
+                                                </div>
                                             </div>
-
 
                                             <div class="data-item-sub">
                                                 <span class="fa fa-pound-sign mr-2"></span> @fee.FeeObject.FeeName
@@ -1059,51 +1076,22 @@ else
                                                 <div class="seq-no">@fee.FeeObject.SeqNo</div>
                                             </div>
                                         }
-                                    }
-                                    else
-                                    {
 
-                                        <div class="btn-ellipses float-left">
-                                            <span class="fa fa-ellipsis-v"></span>
-                                            <div class="ellipsis-menu">
-                                                <ul>
-                                                    <li class="col-main" @onclick='(() => ShowChapterFeeViewModal(fee))'>
-                                                        <span class="fa fa-binoculars mr-2"></span>
-                                                        <span>View</span>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
+                                    </div>
+                                    <div class="hidden-md-down data-item ">
+                                        <div class="data-item-sub font-85 pl-3">@fee.FeeObject.FeeCategory</div>
+                                    </div>
+                                    <div class="hidden-md-down data-item ">
+                                        <div class="data-item-sub font-85 pl-3">@fee.FeeObject.PostingType</div>
+                                    </div>
+                                    <div class="data-item">
+                                        <div class="data-item-sub text-right font-85 pl-3">£@string.Format("{0:N2}", fee.FeeObject.Amount)</div>
+                                    </div>
+                                </div>
 
-                                        <div class="data-item-sub">
-                                            <span class="fa fa-pound-sign mr-2"></span> @fee.FeeObject.FeeName
-                                        </div>
-                                        @if (fee.FeeObject.VATable == "Y")
-                                        {
-                                            <div class="data-item-right hidden-md-down">
-                                                <ModalTooltip Direction="top" Text=@("VAT Included") Class="w-3">
-                                                    <span class="fa fa-coins"></span>
-                                                </ModalTooltip>
-                                            </div>
-                                        }
-                                        <div class="data-item-right seq-change">
-                                            <div class="seq-no">@fee.FeeObject.SeqNo</div>
-                                        </div>
-                                    }
-
-                                </div>
-                                <div class="hidden-md-down data-item ">
-                                    <div class="data-item-sub font-85 pl-3">@fee.FeeObject.FeeCategory</div>
-                                </div>
-                                <div class="hidden-md-down data-item ">
-                                    <div class="data-item-sub font-85 pl-3">@fee.FeeObject.PostingType</div>
-                                </div>
-                                <div class="data-item">
-                                    <div class="data-item-sub text-right font-85 pl-3">£@string.Format("{0:N2}", fee.FeeObject.Amount)</div>
-                                </div>
-                            </div>
-
-                        }
+                            }
+                        </div>
+                        
                     </div>
                 </div>
 
@@ -1275,6 +1263,16 @@ else
                                 <span class=" fa fa-info-circle fa-2x "></span>
                             </span>
                         </ModalTooltip>
+
+                        <div class="spacer">
+                        </div>
+                        @if (sessionState.isAdminUser)
+                        {
+                            <div class="btn-group sync-group invisible-md-down">
+                                <button type="button" @onclick="() => PrepareChapterSync()" class="btn btn-main btn-shadow @(!compareSystems ? "hidden" : "")" title="Sync To @(sessionState.selectedSystem == "Dev" ? "Live" : "Dev")"><i class="fa fa-sync"></i><span>Sync</span></button>
+                                <input type="checkbox" class="ml-1 mt-1" @onchange="() => ToggleComparison()" /><span class="ml-2 font-75 ">Compare to @(sessionState.selectedSystem == "Dev" ? "Live" : "Dev") </span>
+                            </div>
+                        }
                     </div>
 
                     <div class="@(sessionState.isAdminUser ? "grid-can-edit" : "") ">
@@ -1284,7 +1282,7 @@ else
 
                             <div class="row grid-row @(rowChanged == vmdataView.DataView.BlockNo ? "row-changed" : "" )">
                                 <div class="col-12 data-item">
-                                    @if (sessionState.isAdminUser)
+                                    @if (sessionState.isAdminUser && !compareSystems)
                                     {
 
                                         <div class="btn-ellipses float-left">
@@ -1307,6 +1305,27 @@ else
                                             </div>
                                         </div>
 
+                                    }
+                                    else if (sessionState.isAdminUser && compareSystems)
+                                    {
+                                        <div class="btn-ellipses float-left">
+                                            @if (!(vmdataView.ComparisonIcon is null))
+                                            {
+                                                @if (!(vmdataView.ComparisonResult == "Exact match"))
+                                                {
+                                                    <div class="btn-dashed" @onclick="() => PrepareDataViewForComparison(vmdataView)"><span class="fa fa-@vmdataView.ComparisonIcon"></span></div>
+                                                }
+                                                else
+                                                {
+                                                    <span class="fa fa-@vmdataView.ComparisonIcon"></span>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <div class="spinner"></div>
+                                            }
+
+                                        </div>
                                     }
                                     else
                                     {
@@ -1396,6 +1415,16 @@ else
                                 <span class=" fa fa-info-circle fa-2x "></span>
                             </span>
                         </ModalTooltip>
+
+                        <div class="spacer">
+                        </div>
+                        @if (sessionState.isAdminUser)
+                        {
+                            <div class="btn-group sync-group invisible-md-down">
+                                <button type="button" @onclick="() => PrepareChapterSync()" class="btn btn-main btn-shadow @(!compareSystems ? "hidden" : "")" title="Sync To @(sessionState.selectedSystem == "Dev" ? "Live" : "Dev")"><i class="fa fa-sync"></i><span>Sync</span></button>
+                                <input type="checkbox" class="ml-1 mt-1" @onchange="() => ToggleComparison()" /><span class="ml-2 font-75 ">Compare to @(sessionState.selectedSystem == "Dev" ? "Live" : "Dev") </span>
+                            </div>
+                        }
                     </div>
 
                     <div class="@(sessionState.isAdminUser ? "grid-can-edit" : "") ">
@@ -1416,94 +1445,118 @@ else
                                 </div>
                             </div>
                         </div>
-                        @foreach (var vmtickerMessages in ListVmTickerMessages)
-                        {
+                        <div class="grid-data">
+                            @foreach (var vmtickerMessages in ListVmTickerMessages)
+                            {
 
-                            <div class="row grid-row @(rowChanged == vmtickerMessages.Message.SeqNo ? "row-changed" : "" )">
-                                <div class="data-item">
-                                    @if (sessionState.isAdminUser)
-                                    {
+                                <div class="row grid-row @(rowChanged == vmtickerMessages.Message.SeqNo ? "row-changed" : "" )">
+                                    <div class="data-item">
+                                        @if (sessionState.isAdminUser && !compareSystems)
+                                        {
 
-                                        <div class="btn-ellipses float-left">
-                                            <span class="fa fa-ellipsis-v"></span>
-                                            <div class="ellipsis-menu">
-                                                <ul>
-                                                    <li class="col-main" @onclick='() => PrepareTickerMessageForEdit(vmtickerMessages, navDisplay)'>
-                                                        <span class="fa fa-pencil-alt mr-2"></span>
-                                                        <span>Edit</span>
-                                                    </li>
-                                                    <li class="col-red" @onclick='() => PrepareTickerMessageDelete(vmtickerMessages)'>
-                                                        <span class="fa fa-trash-alt mr-2"></span>
-                                                        <span>Delete</span>
-                                                    </li>
-                                                </ul>
+                                            <div class="btn-ellipses float-left">
+                                                <span class="fa fa-ellipsis-v"></span>
+                                                <div class="ellipsis-menu">
+                                                    <ul>
+                                                        <li class="col-main" @onclick='() => PrepareTickerMessageForEdit(vmtickerMessages, navDisplay)'>
+                                                            <span class="fa fa-pencil-alt mr-2"></span>
+                                                            <span>Edit</span>
+                                                        </li>
+                                                        <li class="col-red" @onclick='() => PrepareTickerMessageDelete(vmtickerMessages)'>
+                                                            <span class="fa fa-trash-alt mr-2"></span>
+                                                            <span>Delete</span>
+                                                        </li>
+                                                    </ul>
+                                                </div>
                                             </div>
-                                        </div>
 
-                                    }
-                                    else
-                                    {
-                                        <div class="btn-ellipses float-left">
-                                            <span class="fa fa-ellipsis-v"></span>
-                                            <div class="ellipsis-menu">
-                                                <ul>
-                                                    <li class="col-main" @onclick='() => ShowTickerMessageDisplayModal(vmtickerMessages)'>
-                                                        <span class="fa fa-binoculars mr-2"></span>
-                                                        <span>View</span>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    }
+                                        }
+                                        else if (sessionState.isAdminUser && compareSystems)
+                                        {
+                                    <div class="btn-ellipses float-left">
+                                        @if (!(vmtickerMessages.ComparisonIcon is null))
+                                        {
+                                            @if (!(vmtickerMessages.ComparisonResult == "Exact match"))
+                                            {
+                                                <div class="btn-dashed" @onclick="() => PrepareTickerMessageForComparison(vmtickerMessages)"><span class="fa fa-@vmtickerMessages.ComparisonIcon"></span></div>
+                                            }
+                                            else
+                                            {
+                                                <span class="fa fa-@vmtickerMessages.ComparisonIcon"></span>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <div class="spinner"></div>
+                                        }
 
-                                    <div class="data-item-sub " title="@vmtickerMessages.Message.Message">
-                                        @vmtickerMessages.Message.Message
                                     </div>
-                                    @if (sessionState.isAdminUser && !compareSystems)
-                                    {
+                                        }
+                                        else
+                                        {
+                                            <div class="btn-ellipses float-left">
+                                                <span class="fa fa-ellipsis-v"></span>
+                                                <div class="ellipsis-menu">
+                                                    <ul>
+                                                        <li class="col-main" @onclick='() => ShowTickerMessageDisplayModal(vmtickerMessages)'>
+                                                            <span class="fa fa-binoculars mr-2"></span>
+                                                            <span>View</span>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        }
 
-                                        <div class="data-item-right seq-change">
-                                            <div @onclick='() => MoveMessageSeqNo(vmtickerMessages.Message, "TickerMessages", "Up")'><span class="fa fa-angle-up"></span></div>
-                                            <div class="seq-no">@vmtickerMessages.Message.SeqNo</div>
-                                            <div @onclick='() => MoveMessageSeqNo(vmtickerMessages.Message, "TickerMessages", "Down")'><span class="fa fa-angle-down"></span></div>
+                                        <div class="data-item-sub " title="@vmtickerMessages.Message.Message">
+                                            @vmtickerMessages.Message.Message
+                                        </div>
+                                        @if (sessionState.isAdminUser && !compareSystems)
+                                        {
+
+                                            <div class="data-item-right seq-change">
+                                                <div @onclick='() => MoveMessageSeqNo(vmtickerMessages.Message, "TickerMessages", "Up")'><span class="fa fa-angle-up"></span></div>
+                                                <div class="seq-no">@vmtickerMessages.Message.SeqNo</div>
+                                                <div @onclick='() => MoveMessageSeqNo(vmtickerMessages.Message, "TickerMessages", "Down")'><span class="fa fa-angle-down"></span></div>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="data-item-right">
+                                                <div class="seq-no">@vmtickerMessages.Message.SeqNo</div>
+                                            </div>
+                                        }
+
+                                    </div>
+                                    @if (!string.IsNullOrEmpty(vmtickerMessages.Message.FromDate))
+                                    {
+                                        <div class="hidden-md-down data-item ">
+                                            <div class="data-item-sub">@(DateTime.ParseExact(vmtickerMessages.Message.FromDate, "yyyyMMdd", CultureInfo.InvariantCulture).ToString("dd/MM/yyyy"))</div>
                                         </div>
                                     }
                                     else
                                     {
-                                        <div class="data-item-right">
-                                            <div class="seq-no">@vmtickerMessages.Message.SeqNo</div>
+                                        <div class="hidden-md-down data-item ">
+                                            <div class="data-item-sub">
+                                            </div>
                                         </div>
                                     }
-
+                                    @if (!string.IsNullOrEmpty(vmtickerMessages.Message.ToDate))
+                                    {
+                                        <div class="hidden-md-down data-item ">
+                                            <div class="data-item-sub font-85 pl-3">@(DateTime.ParseExact(vmtickerMessages.Message.ToDate, "yyyyMMdd", CultureInfo.InvariantCulture).ToString("dd/MM/yyyy"))</div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="hidden-md-down data-item ">
+                                            <div class="data-item-sub">
+                                            </div>
+                                        </div>
+                                    }
                                 </div>
-                                @if (!string.IsNullOrEmpty(vmtickerMessages.Message.FromDate))
-                                {
-                                    <div class="hidden-md-down data-item ">
-                                        <div class="data-item-sub">@(DateTime.ParseExact(vmtickerMessages.Message.FromDate, "yyyyMMdd", CultureInfo.InvariantCulture).ToString("dd/MM/yyyy"))</div>
-                                    </div>
-                                }
-                                else
-                                {
-                                    <div class="hidden-md-down data-item ">
-                                        <div class="data-item-sub">
-                                        </div>
-                                    </div>
-                                }
-                                @if (!string.IsNullOrEmpty(vmtickerMessages.Message.ToDate))
-                                {
-                                    <div class="hidden-md-down data-item ">
-                                        <div class="data-item-sub font-85 pl-3">@(DateTime.ParseExact(vmtickerMessages.Message.ToDate, "yyyyMMdd", CultureInfo.InvariantCulture).ToString("dd/MM/yyyy"))</div>
-                                    </div>
-                                }
-                                else
-                                {
-                                    <div class="hidden-md-down data-item ">
-                                        <div class="data-item-sub">
-                                        </div>
-                                    </div>
-                                }
-                            </div>
-                        }
+                            }
+                        </div>
+                        
                     </div>
                 </div>
 

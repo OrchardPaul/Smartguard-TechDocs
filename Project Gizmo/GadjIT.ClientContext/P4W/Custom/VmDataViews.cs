@@ -8,6 +8,12 @@ namespace GadjIT.ClientContext.P4W.Custom
     {
         public DataViews DataView { get; set; }
 
+        public DataViews AltDataView { get; set; }
+
+        public string ComparisonResult { get; set; }
+        public string ComparisonIcon { get; set; }
+        public List<string> ComparisonList { get; set; } = new List<string>();
+
         public string DataViewDisplayName
         {
             get
@@ -22,6 +28,33 @@ namespace GadjIT.ClientContext.P4W.Custom
                 }
             }
         }
+
+        public bool IsDataViewMatch(DataViews dataItem)
+        {
+            AltDataView = dataItem;
+
+            ComparisonList = new List<string>();
+            bool isSame = true;
+
+            if (DataView.BlockNo != AltDataView.BlockNo)
+            {
+                isSame = false;
+                ComparisonList.Add("BlockNo");
+            }
+            if (DataView.DisplayName != AltDataView.DisplayName)
+            {
+                isSame = false;
+                ComparisonList.Add("DisplayName");
+            }
+            if (DataView.ViewName != AltDataView.ViewName)
+            {
+                isSame = false;
+                ComparisonList.Add("ViewName");
+            }
+
+            return isSame;
+        }
+
 
     }
 }
