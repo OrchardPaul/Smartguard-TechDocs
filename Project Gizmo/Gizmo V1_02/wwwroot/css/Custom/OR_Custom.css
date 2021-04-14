@@ -959,7 +959,7 @@ app {
     min-height: 400px;
 }
 
-.grid-chapter-docs, .grid-chapter-fees, .grid-chapter-chapter, .grid-chapter-background {
+.grid-chapter-docs, .grid-chapter-fees, .grid-chapter-chapter, .grid-chapter-messages, .grid-chapter-background {
     width: 100%;
     min-height: 400px;
 }
@@ -1010,7 +1010,7 @@ app {
         width: 100%;
     }
 
-    .grid-chapter-docs .row .data-item:nth-of-type(1) {
+    .grid-chapter-docs .row .data-item:nth-of-type(1), .grid-chapter-messages .row .data-item:nth-of-type(1) {
         width: 100%;
     }
 
