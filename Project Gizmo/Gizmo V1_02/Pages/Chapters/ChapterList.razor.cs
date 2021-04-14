@@ -1043,7 +1043,7 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
 
             ShowDataViewDetailModal("Insert");
         }
-
+        //TODO: Change display to reflect the top 3 items and from-to dates
         private void PrepareTickerMessageForInsert(string header)
         {
             selectedList = header;
@@ -1056,7 +1056,7 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
             {
 
                 EditTickerMessageObject.Message.SeqNo = ListVmTickerMessages
-                                                       .OrderBy(D => D.Message.SeqNo)
+                                                       .OrderByDescending(D => D.Message.SeqNo)
                                                        .Select(D => D.Message.SeqNo)
                                                        .FirstOrDefault() + 1;
             }
@@ -1408,6 +1408,29 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
             {
                 seqNo += 1;
                 item.DataView.BlockNo = seqNo;
+            }
+
+            SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(selectedChapter);
+            await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
+
+            await RefreshChapterItems(ListType);
+
+            await InvokeAsync(() =>
+            {
+                StateHasChanged();
+            });
+        }
+
+        protected async void CondenseMessageSeqNo(string ListType)
+        {
+            await RefreshChapterItems(ListType);
+
+            int seqNo = 0;
+
+            foreach (var item in ListVmTickerMessages.OrderBy(A => A.Message.SeqNo))
+            {
+                seqNo += 1;
+                item.Message.SeqNo = seqNo;
             }
 
             SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(selectedChapter);
@@ -2446,6 +2469,29 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
             }
         }
 
+        private bool MessagesSeqNoIsValid()
+        {
+            if (seqMoving == false | compareSystems == true)
+            {
+
+                bool isValid = true;
+
+                for (int i = 0; i < ListVmTickerMessages.Count; i++)
+                {
+                    if (ListVmTickerMessages[i].Message.SeqNo != i + 1)
+                    {
+                        isValid = false;
+                    }
+
+                }
+
+                return isValid;
+            }
+            else
+            {
+                return true;
+            }
+        }
         /// <summary>
         /// moves the AA (transparancy) element of an android hex color to the end of the string
         /// XAML Forms use Hex color but in format #aarrggbb
