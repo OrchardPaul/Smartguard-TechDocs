@@ -92,8 +92,7 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         private int selectedCaseTypeGroup { get; set; } = -1;
 
-        List<string> DocTypeList = new List<string>() { "Doc", "Form", "Step", "Date", "Email", "Letter" };
-
+        
         public List<string> documentList;
 
         protected override void OnInitialized()
@@ -114,13 +113,10 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         private async void HandleValidSubmit()
         {
-            Dictionary<int?, string> docTypes = new Dictionary<int?, string> { { 1, "Doc" }, { 4, "Form" }, { 6, "Step" }, { 8, "Date" }, { 9, "Email" }, { 11, "Doc" }, { 12, "Email" } };
-
             if(!(new string[] { "Agenda", "Status" }.Any(s => TaskObject.Type.ToString().Contains(s))))
             {
-                TaskObject.Type = dropDownChapterList.Where(D => D.Name.ToUpper() == CopyObject.Name.ToUpper())
-                                                    .Select(D => string.IsNullOrEmpty(docTypes[D.DocumentType]) ? "Doc" : docTypes[D.DocumentType])
-                                                    .FirstOrDefault();
+                //clears lagacy value of "Letter" and revert it back to "Doc"
+                TaskObject.Type = "Doc";
             }
             else
             {

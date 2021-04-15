@@ -963,7 +963,7 @@ app {
     min-height: 400px;
 }
 
-.grid-chapter-docs, .grid-chapter-fees, .grid-chapter-chapter, .grid-chapter-messages, .grid-chapter-background {
+.grid-chapter-docs, .grid-chapter-fees, .grid-chapter-chapter, .grid-chapter-messages, .grid-chapter-backups, .grid-chapter-background {
     width: 100%;
     min-height: 400px;
 }
@@ -1027,17 +1027,12 @@ app {
     }
 }
 
-.grid-chapter-background .chapter-scroll-list {
+.grid-chapter-background .chapter-scroll-list, .grid-chapter-backups .chapter-scroll-list {
     height: 400px;
     overflow-y: scroll;
     width: 100%;
 }
 
-.grid-chapter-backups .chapter-scroll-list {
-    height: 400px;
-    overflow-y: scroll;
-    width: 100%;
-}
 
 .grid-chapter-backups .row .data-item:nth-of-type(1) {
     width: 70%;
