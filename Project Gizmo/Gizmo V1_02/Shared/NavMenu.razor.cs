@@ -35,7 +35,18 @@ namespace Gizmo_V1_02.Shared
             collapseNavMenu = !collapseNavMenu;
         }
 
+        private void refreshSmartFlowScreen()
+        {
+            if (navigationManager.Uri.Contains("smartflow"))
+            {
+                if(!(userSession.HomeActionSmartflow is null))
+                {
+                    userSession.HomeActionSmartflow?.Invoke();
+                }
+            }
 
+            refreshBackGround();
+        }
 
         private void refreshBackGround()
         {

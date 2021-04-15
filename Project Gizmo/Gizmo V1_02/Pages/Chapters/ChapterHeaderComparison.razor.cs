@@ -31,6 +31,9 @@ namespace Gizmo_V1_02.Pages.Chapters
         public VmChapter CurrentChapter { get; set; }
 
         [Parameter]
+        public Action ComparisonRefresh { get; set; }
+
+        [Parameter]
         public VmChapter AltChapter { get; set; }
 
         [Parameter]
@@ -119,6 +122,7 @@ namespace Gizmo_V1_02.Pages.Chapters
                 await sessionState.ResetSelectedSystem();
             }
 
+            ComparisonRefresh?.Invoke();
             Close();
 
         }

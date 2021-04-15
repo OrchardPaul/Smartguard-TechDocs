@@ -1294,7 +1294,9 @@ else
                                                 </ul>
                                             </div>
                                         </div>
-
+                                        <div class="data-item-sub">
+                                            <span class="fa fa-database mr-2"></span> @vmdataView.DataViewDisplayName
+                                        </div>
                                     }
                                     else if (sessionState.isAdminUser && compareSystems)
                                     {
@@ -1316,6 +1318,9 @@ else
                                             }
 
                                         </div>
+                                        <div class="data-item-sub">
+                                            <span class="fa fa-database mr-2"></span> @vmdataView.DataViewDisplayName
+                                        </div>
                                     }
                                     else
                                     {
@@ -1330,12 +1335,10 @@ else
                                                 </ul>
                                             </div>
                                         </div>
+                                        <div class="data-item-sub">
+                                            <span class="fa fa-database mr-2"></span> @vmdataView.DataViewDisplayName
+                                        </div>
                                     }
-
-                                    <div class="data-item-sub " title="@vmdataView.DataViewDisplayName.">
-                                        @vmdataView.DataViewDisplayName
-                                    </div>
-
 
                                     @if (!string.IsNullOrEmpty(vmdataView.DataView.DisplayName))
                                     {
@@ -1386,7 +1389,6 @@ else
                             @if (sessionState.isAdminUser)
                             {
                         <div class="btn-group">
-                            @*ListVmTickerMessages.Count() < 3*@
                             <button @onclick='() => PrepareTickerMessageForInsert(navDisplay)' class="btn btn-main btn-shadow" title="Add new ticker message"><i class="fa fa-plus"></i><span>New</span></button>
                             <button @onclick='() => CondenseMessageSeqNo("TickerMessages")' class="btn btn-main btn-shadow @(MessagesSeqNoIsValid() ? "invisible" : "")" title="Re-order Sequence Numbers"><i class="fa fa-sort-numeric-down"></i></button>
                         </div>
@@ -1431,112 +1433,128 @@ else
                         <div class="grid-data">
                             @foreach (var vmtickerMessages in ListVmTickerMessages)
                             {
+                            <div class="row grid-row @(rowChanged == vmtickerMessages.Message.SeqNo ? "row-changed" : "" )">
+                                <div class="data-item">
+                                    @if (sessionState.isAdminUser && !compareSystems)
+                                    {
 
-                                <div class="row grid-row @(rowChanged == vmtickerMessages.Message.SeqNo ? "row-changed" : "" )">
-                                    <div class="data-item">
-                                        @if (sessionState.isAdminUser && !compareSystems)
-                                        {
-
-                                            <div class="btn-ellipses float-left">
-                                                <span class="fa fa-ellipsis-v"></span>
-                                                <div class="ellipsis-menu">
-                                                    <ul>
-                                                        <li class="col-main" @onclick='() => PrepareTickerMessageForEdit(vmtickerMessages, navDisplay)'>
-                                                            <span class="fa fa-pencil-alt mr-2"></span>
-                                                            <span>Edit</span>
-                                                        </li>
-                                                        <li class="col-red" @onclick='() => PrepareTickerMessageDelete(vmtickerMessages)'>
-                                                            <span class="fa fa-trash-alt mr-2"></span>
-                                                            <span>Delete</span>
-                                                        </li>
-                                                    </ul>
-                                                </div>
+                                        <div class="btn-ellipses float-left">
+                                            <span class="fa fa-ellipsis-v"></span>
+                                            <div class="ellipsis-menu">
+                                                <ul>
+                                                    <li class="col-main" @onclick='() => PrepareTickerMessageForEdit(vmtickerMessages, navDisplay)'>
+                                                        <span class="fa fa-pencil-alt mr-2"></span>
+                                                        <span>Edit</span>
+                                                    </li>
+                                                    <li class="col-main" @onclick='() => ShowTickerMessageDisplayModal(vmtickerMessages)'>
+                                                        <span class="fa fa-binoculars mr-2"></span>
+                                                        <span>View</span>
+                                                    </li>
+                                                    <li class="col-red" @onclick='() => PrepareTickerMessageDelete(vmtickerMessages)'>
+                                                        <span class="fa fa-trash-alt mr-2"></span>
+                                                        <span>Delete</span>
+                                                    </li>
+                                                </ul>
                                             </div>
-
-                                        }
-                                        else if (sessionState.isAdminUser && compareSystems)
-                                        {
-                                    <div class="btn-ellipses float-left">
-                                        @if (!(vmtickerMessages.ComparisonIcon is null))
-                                        {
-                                            @if (!(vmtickerMessages.ComparisonResult == "Exact match"))
+                                        </div>
+                                        <div class="data-item-right">
+                                            <ModalTooltip Direction="top" Text="@vmtickerMessages.msgTooltip">
+                                            <span class="@(vmtickerMessages.msgValidation == "Exceeded" ? "" : "invisible")"><span class="fa fa-comment mr-2 font-grey "></span></span>
+                                            <span class="@(vmtickerMessages.msgValidation == "Expired" ? "" : "invisible")"><span class="fa fa-comment mr-2 font-red "></span></span>
+                                            <span class="@(vmtickerMessages.msgValidation == "Future" ? "" : "invisible")"><span class="fa fa-comment mr-2 font-green "></span></span>
+                                            <span class="@(vmtickerMessages.msgValidation == "Invalid" ? "" : "invisible")"><span class="fa fa-exclamation-triangle mr-2 font-red "></span></span>
+                                            <span class="@(vmtickerMessages.msgValidation == "Valid" ? "" : "invisible")"><span class="fa fa-comment mr-2 font-blue "></span></span>
+        </ModalTooltip>
+                                        </div>
+                                        <div class="data-item-sub">
+                                            @vmtickerMessages.Message.Message
+                                        </div>
+                                    }
+                                    else if (sessionState.isAdminUser && compareSystems)
+                                    {
+                                        <div class="btn-ellipses float-left">
+                                            @if (!(vmtickerMessages.ComparisonIcon is null))
                                             {
-                                                <div class="btn-dashed" @onclick="() => PrepareTickerMessageForComparison(vmtickerMessages)"><span class="fa fa-@vmtickerMessages.ComparisonIcon"></span></div>
+                                                @if (!(vmtickerMessages.ComparisonResult == "Exact match"))
+                                                {
+                                                    <div class="btn-dashed" @onclick="() => PrepareTickerMessageForComparison(vmtickerMessages)"><span class="fa fa-@vmtickerMessages.ComparisonIcon"></span></div>
+                                                }
+                                                else
+                                                {
+                                                    <span class="fa fa-@vmtickerMessages.ComparisonIcon"></span>
+                                                }
                                             }
                                             else
                                             {
-                                                <span class="fa fa-@vmtickerMessages.ComparisonIcon"></span>
+                                                <div class="spinner"></div>
                                             }
-                                        }
-                                        else
-                                        {
-                                            <div class="spinner"></div>
-                                        }
+                                            <div class="data-item-sub">
+                                                <span class="fa fa-comment mr-2 tickericon"></span> @vmtickerMessages.Message.Message
+                                            </div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="btn-ellipses float-left">
+                                            <span class="fa fa-ellipsis-v"></span>
+                                            <div class="ellipsis-menu">
+                                                <ul>
+                                                    <li class="col-main" @onclick='() => ShowTickerMessageDisplayModal(vmtickerMessages)'>
+                                                        <span class="fa fa-binoculars mr-2"></span>
+                                                        <span>View</span>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="data-item-sub">
+                                            <span class="fa fa-comment mr-2 tickericon"></span> @vmtickerMessages.Message.Message
+                                        </div>
+                                    }
 
-                                    </div>
+                                    @if (sessionState.isAdminUser && !compareSystems)
+                                    {
+
+                                        <div class="data-item-right seq-change">
+                                            <div @onclick='() => MoveMessageSeqNo(vmtickerMessages.Message, "TickerMessages", "Up")'><span class="fa fa-angle-up"></span></div>
+                                            <div class="seq-no">@vmtickerMessages.Message.SeqNo</div>
+                                            <div @onclick='() => MoveMessageSeqNo(vmtickerMessages.Message, "TickerMessages", "Down")'><span class="fa fa-angle-down"></span></div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="data-item-right">
+                                            <div class="seq-no">@vmtickerMessages.Message.SeqNo</div>
+                                        </div>
+                                    }
+
+                                </div>
+                                        @if (!string.IsNullOrEmpty(vmtickerMessages.Message.FromDate))
+                                        {
+                                            <div class="hidden-md-down data-item ">
+                                                <div class="data-item-sub">@(DateTime.ParseExact(vmtickerMessages.Message.FromDate, "yyyyMMdd", CultureInfo.InvariantCulture).ToString("dd/MM/yyyy"))</div>
+                                            </div>
                                         }
                                         else
                                         {
-                                            <div class="btn-ellipses float-left">
-                                                <span class="fa fa-ellipsis-v"></span>
-                                                <div class="ellipsis-menu">
-                                                    <ul>
-                                                        <li class="col-main" @onclick='() => ShowTickerMessageDisplayModal(vmtickerMessages)'>
-                                                            <span class="fa fa-binoculars mr-2"></span>
-                                                            <span>View</span>
-                                                        </li>
-                                                    </ul>
+                                            <div class="hidden-md-down data-item ">
+                                                <div class="data-item-sub">
                                                 </div>
                                             </div>
                                         }
-
-                                        <div class="data-item-sub " title="@vmtickerMessages.Message.Message">
-                                            @vmtickerMessages.Message.Message
-                                        </div>
-                                        @if (sessionState.isAdminUser && !compareSystems)
+                                        @if (!string.IsNullOrEmpty(vmtickerMessages.Message.ToDate))
                                         {
-
-                                            <div class="data-item-right seq-change">
-                                                <div @onclick='() => MoveMessageSeqNo(vmtickerMessages.Message, "TickerMessages", "Up")'><span class="fa fa-angle-up"></span></div>
-                                                <div class="seq-no">@vmtickerMessages.Message.SeqNo</div>
-                                                <div @onclick='() => MoveMessageSeqNo(vmtickerMessages.Message, "TickerMessages", "Down")'><span class="fa fa-angle-down"></span></div>
+                                            <div class="hidden-md-down data-item ">
+                                                <div class="data-item-sub font-85 pl-3">@(DateTime.ParseExact(vmtickerMessages.Message.ToDate, "yyyyMMdd", CultureInfo.InvariantCulture).ToString("dd/MM/yyyy"))</div>
                                             </div>
                                         }
                                         else
                                         {
-                                            <div class="data-item-right">
-                                                <div class="seq-no">@vmtickerMessages.Message.SeqNo</div>
+                                            <div class="hidden-md-down data-item ">
+                                                <div class="data-item-sub">
+                                                </div>
                                             </div>
                                         }
-
                                     </div>
-                                    @if (!string.IsNullOrEmpty(vmtickerMessages.Message.FromDate))
-                                    {
-                                        <div class="hidden-md-down data-item ">
-                                            <div class="data-item-sub">@(DateTime.ParseExact(vmtickerMessages.Message.FromDate, "yyyyMMdd", CultureInfo.InvariantCulture).ToString("dd/MM/yyyy"))</div>
-                                        </div>
-                                    }
-                                    else
-                                    {
-                                        <div class="hidden-md-down data-item ">
-                                            <div class="data-item-sub">
-                                            </div>
-                                        </div>
-                                    }
-                                    @if (!string.IsNullOrEmpty(vmtickerMessages.Message.ToDate))
-                                    {
-                                        <div class="hidden-md-down data-item ">
-                                            <div class="data-item-sub font-85 pl-3">@(DateTime.ParseExact(vmtickerMessages.Message.ToDate, "yyyyMMdd", CultureInfo.InvariantCulture).ToString("dd/MM/yyyy"))</div>
-                                        </div>
-                                    }
-                                    else
-                                    {
-                                        <div class="hidden-md-down data-item ">
-                                            <div class="data-item-sub">
-                                            </div>
-                                        </div>
-                                    }
-                                </div>
                             }
                         </div>
                         

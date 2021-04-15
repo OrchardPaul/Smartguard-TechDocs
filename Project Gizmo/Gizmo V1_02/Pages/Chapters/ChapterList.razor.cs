@@ -70,6 +70,8 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         private FileDesc SelectedFileDescription { get; set; }
 
+        private int ValidTicketMessageCount { get; set; } 
+
         private List<VmUsrOrDefChapterManagement> lstChapters { get; set; } = new List<VmUsrOrDefChapterManagement>();
 
         private List<VmUsrOrDefChapterManagement> lstAltSystemChapters { get; set; } = new List<VmUsrOrDefChapterManagement>();
@@ -259,7 +261,7 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
                 RefreshChapters();
                 partnerCaseTypeGroups = await partnerAccessService.GetPartnerCaseTypeGroups();
                 ListP4WViews = await partnerAccessService.GetPartnerViews();
-                
+                sessionState.HomeActionSmartflow = SelectHome;
             }
             catch (Exception)
             {
@@ -362,6 +364,8 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
             compareSystems = false;
             selectedChapter.Name = "";
             rowChanged = 0;
+
+            StateHasChanged();
         }
 
         void SelectCaseTypeGroup(string caseTypeGroup)
@@ -580,6 +584,8 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
                                                             .Select(D => new VmTickerMessages { Message = D })
                                                             .OrderBy(D => D.Message.SeqNo)
                                                             .ToList();
+                    TickerValidation();
+                    
                 }
             }
 
@@ -1899,7 +1905,7 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
                 Class = "blazored-custom-modal modal-chapter-comparison"
             };
 
-            Modal.Show<TickerMessageDetail>("Ticker Message", parameters, options);
+            Modal.Show<TickerMessageDisplay>("Ticker Message", parameters, options);
         }
 
         protected void PrepareChapterDelete(VmUsrOrDefChapterManagement selectedChapterItem)
@@ -2066,9 +2072,11 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
 
         protected void ShowHeaderComparisonModal()
         {
-            
+            Action Compare = CompareChapterItemsToAltSytemAction;
+
             var parameters = new ModalParameters();
             parameters.Add("Object", editChapterComparison);
+            parameters.Add("ComparisonRefresh", Compare);
             parameters.Add("sessionState", sessionState);
             parameters.Add("CurrentSysParentId", selectedChapterId);
             parameters.Add("AlternateSysParentId", altSysSelectedChapterId);
@@ -2927,6 +2935,44 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
             SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(selectedChapter);
 
             await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
+        }
+
+        private void TickerValidation()
+        {
+            var currentDate = DateTime.Now;
+
+            ValidTicketMessageCount = 1;
+            foreach (VmTickerMessages msg in ListVmTickerMessages)
+            {
+
+                if (DateTime.ParseExact(msg.Message.ToDate, "yyyyMMdd", CultureInfo.InvariantCulture) < DateTime.ParseExact(msg.Message.FromDate, "yyyyMMdd", CultureInfo.InvariantCulture))
+                {
+                    msg.msgValidation = "Invalid";
+                    msg.msgTooltip = "Invalid date range.";
+                }
+                else if (DateTime.ParseExact(msg.Message.FromDate, "yyyyMMdd", CultureInfo.InvariantCulture) > currentDate)
+                {
+                    msg.msgValidation = "Future";
+                    msg.msgTooltip = "Message set for future date.";
+                }
+                else if (DateTime.ParseExact(msg.Message.ToDate, "yyyyMMdd", CultureInfo.InvariantCulture) < currentDate)
+                {
+                    msg.msgValidation = "Expired";
+                    msg.msgTooltip = "Message expired.";
+                }
+                else if (ValidTicketMessageCount > 3)
+                {
+                    msg.msgValidation = "Exceeded";
+                    msg.msgTooltip = "The maximum number of valid ticker messages are three.";
+                }
+                else
+                {
+                    ValidTicketMessageCount += 1;
+                    msg.msgValidation = "Valid";
+                    msg.msgTooltip = "Message will be shown on the Smarflow screen.";
+                }
+            }
+
         }
 
 
