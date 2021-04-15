@@ -1,0 +1,54 @@
+﻿@using System.Globalization;
+
+<div class="modal-body" tabindex="0">
+    <table class="table-basic table-top-header table-left-header table-borderless">
+        <thead>
+
+            <tr>
+                <td style="width: 150px">
+                </td>
+                <td style="width: 500px">
+                </td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    Seq Number
+                </td>
+                <td>
+                    @Object.Message.SeqNo
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Message:
+                </td>
+                <td>
+                    <textarea type="text" class="read-only" readonly rows="5" >@Object.Message.Message</textarea>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    From Date:
+                </td>
+                <td>
+                    <input type="text" class="read-only" readonly value="@DateTime.ParseExact(Object.Message.FromDate, "yyyyMMdd", CultureInfo.InvariantCulture).ToString("dd/MM/yyyy")" />
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    To Date
+                </td>
+                <td>
+                    <input type="text" class="read-only" readonly value="@DateTime.ParseExact(Object.Message.ToDate, "yyyyMMdd", CultureInfo.InvariantCulture).ToString("dd/MM/yyyy")" />
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="button-container">
+    <button type="button" class="btn btn-secondary" @onclick="() => Close()">Close</button>
+</div>

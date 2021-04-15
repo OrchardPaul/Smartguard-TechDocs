@@ -196,6 +196,11 @@
 .form-control-xl {
     width: 350px;
 }
+
+.modal-body.form-control-xxl, .modal-body .form-control-xl {
+    width: 100%;
+}
+
 .form-control-md {
     width: 250px;
 }
@@ -324,6 +329,12 @@
 
 .modal-body table tr td input[type="text"].read-only:focus {
     outline: none !important;
+}
+
+.modal-body table tr td textarea.read-only {
+    width: 100%;
+    border: 1pt dashed #fff;
+    background-color: transparent;
 }
 
 .modal-body table.table-left-heading tr td:first-of-type{
