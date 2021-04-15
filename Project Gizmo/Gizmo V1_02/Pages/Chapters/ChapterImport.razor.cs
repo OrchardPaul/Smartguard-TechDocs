@@ -229,6 +229,13 @@ namespace Gizmo_V1_02.Pages.Chapters
                 CaseType = TaskObject.CaseType,
                 Name = TaskObject.Name,
                 SeqNo = TaskObject.SeqNo.GetValueOrDefault(),
+                P4WCaseTypeGroup = SelectedCopyItems.P4WCaseTypeGroup,
+                SelectedStep = SelectedCopyItems.SelectedStep,
+                SelectedView = SelectedCopyItems.SelectedView,
+                BackgroundColour = SelectedCopyItems.BackgroundColour,
+                BackgroundColourName = SelectedCopyItems.BackgroundColourName,
+                BackgroundImage = SelectedCopyItems.BackgroundImage,
+                BackgroundImageName = SelectedCopyItems.BackgroundImageName,
                 ChapterItems = SelectedCopyItems.ChapterItems,
                 Fees = SelectedCopyItems.Fees,
                 DataViews = SelectedCopyItems.DataViews

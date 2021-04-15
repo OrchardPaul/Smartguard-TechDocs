@@ -24,6 +24,8 @@ namespace Gizmo_V1_02.Pages.Chapters
         [Parameter]
         public IUserSessionState sessionState { get; set; }
 
+
+
         [Parameter]
         public VmFee Object { get; set; }
 
@@ -79,8 +81,6 @@ namespace Gizmo_V1_02.Pages.Chapters
                 taskObject.Amount = Object.FeeObject.Amount;
                 taskObject.VATable = Object.FeeObject.VATable;
                 taskObject.PostingType = Object.FeeObject.PostingType;
-
-
 
                 await sessionState.SwitchSelectedSystem();
                 AltChapterRow.ChapterData = JsonConvert.SerializeObject(AltChapter);

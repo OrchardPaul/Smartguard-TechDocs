@@ -48,6 +48,7 @@ namespace Gizmo_V1_02.Services.SessionState
         Task<string> SetSessionState();
         Action RefreshHome { get; set; }
 
+        Action HomeActionSmartflow { get; set; }
 
         void SetTempBackground(string image, string Uri);
 
@@ -103,6 +104,9 @@ namespace Gizmo_V1_02.Services.SessionState
         public string TempBackGroundImageAppliedUri { get; protected set; }
 
         public string SelectedChapter { get; protected set; }
+
+
+        public Action HomeActionSmartflow { get; set; }
 
         public UserSessionState(AuthenticationStateProvider authenticationStateProvider
                                 , IIdentityUserAccess userAccess

@@ -199,7 +199,6 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         public IList<string> JSONErrors { get; set; }
 
-        public List<string> lstDocTypes { get; set; } = new List<string> { "Doc", "Form", "Step", "Date", "Email", "Letter" };
         
 
 public ChapterP4WStepSchema ChapterP4WStep { get; set; }
@@ -262,7 +261,7 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
                 RefreshChapters();
                 partnerCaseTypeGroups = await partnerAccessService.GetPartnerCaseTypeGroups();
                 ListP4WViews = await partnerAccessService.GetPartnerViews();
-                
+                sessionState.HomeActionSmartflow = SelectHome;
             }
             catch (Exception)
             {
@@ -365,6 +364,8 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
             compareSystems = false;
             selectedChapter.Name = "";
             rowChanged = 0;
+
+            StateHasChanged();
         }
 
         void SelectCaseTypeGroup(string caseTypeGroup)
@@ -541,7 +542,7 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
                 {
                     lstDocs = lstAll    
                                         .OrderBy(A => A.ChapterObject.SeqNo)
-                                        .Where(A => lstDocTypes.Contains(A.ChapterObject.Type))
+                                        .Where(A => A.ChapterObject.Type == "Doc")
                                         .Select(A => {
                                             A.DocType = dropDownChapterList.Where(D => D.Name.ToUpper() == A.ChapterObject.Name.ToUpper())
                                                                                         .Select(D => string.IsNullOrEmpty(docTypes[D.DocumentType]) ? "Doc" : docTypes[D.DocumentType])
@@ -555,32 +556,6 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
                 {
                     lstFees = selectedChapter.Fees.Select(F => new VmFee { FeeObject = F }).ToList();
 
-                    lstVmFeeModalItems = feeDefinitions
-                                            .Select(FD => new VmChapterFee
-                                            {
-                                                FeeItem = lstFees
-                                                                .Where(F => FD.FeeDesc == F.FeeObject.FeeName)
-                                                                .SingleOrDefault() is null
-                                                                ? new Fee
-                                                                {
-                                                                    FeeName = FD.FeeDesc,
-                                                                    SeqNo = 1000,
-                                                                    FeeCategory = FD.Category,
-                                                                    Amount = 0,
-                                                                    VATable = "N",
-                                                                    PostingType = ""
-                                                                }
-                                                                : lstFees
-                                                                    .Where(F => FD.FeeDesc == F.FeeObject.FeeName)
-                                                                    .Select(F => F.FeeObject)
-                                                                    .SingleOrDefault(),
-                                                feeDefinition = FD,
-                                                selected = lstFees
-                                                                .Where(F => FD.FeeDesc == F.FeeObject.FeeName)
-                                                                .SingleOrDefault() is null
-                                                                ? false : true
-                                            })
-                                            .ToList();
 
                 }
                 if (listType == "Status" | listType == "All")
@@ -2097,9 +2072,11 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
 
         protected void ShowHeaderComparisonModal()
         {
-            
+            Action Compare = CompareChapterItemsToAltSytemAction;
+
             var parameters = new ModalParameters();
             parameters.Add("Object", editChapterComparison);
+            parameters.Add("ComparisonRefresh", Compare);
             parameters.Add("sessionState", sessionState);
             parameters.Add("CurrentSysParentId", selectedChapterId);
             parameters.Add("AlternateSysParentId", altSysSelectedChapterId);
@@ -2668,12 +2645,12 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
 
             if (option == "Docs" | option == "All")
             {
-                foreach (var item in selectedCopyItems.ChapterItems.Where(C => lstDocTypes.Contains(C.Type)).ToList())
+                foreach (var item in selectedCopyItems.ChapterItems.Where(C => C.Type == "Doc").ToList())
                 {
                     selectedCopyItems.ChapterItems.Remove(item);
                 }
 
-                selectedCopyItems.ChapterItems.AddRange(selectedChapter.ChapterItems.Where(C => lstDocTypes.Contains(C.Type)).ToList());
+                selectedCopyItems.ChapterItems.AddRange(selectedChapter.ChapterItems.Where(C => C.Type == "Doc").ToList());
             }
 
 

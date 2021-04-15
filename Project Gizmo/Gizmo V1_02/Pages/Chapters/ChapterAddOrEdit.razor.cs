@@ -65,6 +65,7 @@ namespace Gizmo_V1_02.Pages.Chapters
                                                                                             Name = TaskObject.ChapterObject.Name,
                                                                                             SeqNo = TaskObject.ChapterObject.SeqNo.GetValueOrDefault(),
                                                                                             StepName = "",
+                                                                                            ShowPartnerNotes = "N",
                                                                                             ChapterItems = new List<UsrOrDefChapterManagement>(),
                                                                                             Fees = new List<Fee>(),
                                                                                             DataViews = new List<DataViews>()

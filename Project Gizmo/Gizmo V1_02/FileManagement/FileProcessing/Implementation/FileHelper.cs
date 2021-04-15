@@ -911,10 +911,8 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
 
         public VmChapter ReadChapterDataFromExcel(string FilePath)
         {
-            List<Document> documents = new List<Document>();
             VmChapter readChapters = new VmChapter { ChapterItems = new List<UsrOrDefChapterManagement>(), Fees = new List<Fee>(), DataViews = new List<DataViews>()};
             UsrOrDefChapterManagement readObject;
-            Document readDocument;
             Fee feeObject;
             DataViews readView;
 
@@ -923,35 +921,10 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             using (ExcelPackage excelPackage = new ExcelPackage(fileInfo))
             {
-                ExcelWorksheet worksheetLookups = excelPackage.Workbook.Worksheets.Where(W => W.Name == "Lookups").SingleOrDefault();
-                int totalColumns = worksheetLookups.Dimension.End.Column;
-                int totalRows = worksheetLookups.Dimension.End.Row;
-
-                for (int row = 3; row <= totalRows; row++)
-                {
-                    readDocument = new Document();
-
-                    for (int column = 1; column <= totalColumns; column++)
-                    {
-                        if (column == 1) readDocument.Type = worksheetLookups.Cells[row, column].FirstOrDefault() is null
-                                            ? ""
-                                            : worksheetLookups.Cells[row, column].Value is null
-                                            ? ""
-                                            : worksheetLookups.Cells[row, column].Value.ToString();
-                        if (column == 2) readDocument.Name = worksheetLookups.Cells[row, column].FirstOrDefault() is null
-                                            ? ""
-                                            : worksheetLookups.Cells[row, column].Value is null
-                                            ? ""
-                                            : worksheetLookups.Cells[row, column].Value.ToString();
-                    }
-
-
-                    documents.Add(readDocument);
-                }
-
+                
                 ExcelWorksheet worksheetAgenda = excelPackage.Workbook.Worksheets.Where(W => W.Name == "Agenda").SingleOrDefault();
-                totalColumns = worksheetAgenda.Dimension.End.Column;
-                totalRows = worksheetAgenda.Dimension.End.Row;
+                int totalColumns = worksheetAgenda.Dimension.End.Column;
+                int totalRows = worksheetAgenda.Dimension.End.Row;
 
                 for (int row = 3; row <= totalRows; row++)
                 {
@@ -1116,9 +1089,8 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
                                             : worksheetDocuments.Cells[row, column].Value.ToString();
                     }
 
-                    readObject.Type = documents.Where(D => D.Name == readObject.Name).Select(D => D.Type).SingleOrDefault();
-
-                    readObject.Type = readObject.Type is null ? "Doc" : readObject.Type;
+                    
+                    readObject.Type = "Doc";
 
                     readObject.SeqNo = row - 2;
 
