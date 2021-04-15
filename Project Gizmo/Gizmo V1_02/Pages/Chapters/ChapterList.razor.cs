@@ -260,7 +260,7 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
                 RefreshChapters();
                 partnerCaseTypeGroups = await partnerAccessService.GetPartnerCaseTypeGroups();
                 ListP4WViews = await partnerAccessService.GetPartnerViews();
-                
+                sessionState.HomeActionSmartflow = SelectHome;
             }
             catch (Exception)
             {
@@ -363,6 +363,8 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
             compareSystems = false;
             selectedChapter.Name = "";
             rowChanged = 0;
+
+            StateHasChanged();
         }
 
         void SelectCaseTypeGroup(string caseTypeGroup)
@@ -2093,9 +2095,11 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
 
         protected void ShowHeaderComparisonModal()
         {
-            
+            Action Compare = CompareChapterItemsToAltSytemAction;
+
             var parameters = new ModalParameters();
             parameters.Add("Object", editChapterComparison);
+            parameters.Add("ComparisonRefresh", Compare);
             parameters.Add("sessionState", sessionState);
             parameters.Add("CurrentSysParentId", selectedChapterId);
             parameters.Add("AlternateSysParentId", altSysSelectedChapterId);

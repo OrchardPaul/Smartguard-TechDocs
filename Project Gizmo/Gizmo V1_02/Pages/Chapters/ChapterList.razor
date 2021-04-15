@@ -650,27 +650,25 @@ else
                                         <div class="data-item-sub " title="@doc.DocDisplayName">
                                             <span class="font-100">
                                                 <!--"Doc", "Letter", "Form", "Email", "Step"-->
-                                                @switch (doc.DocType)
-                                                {
-                                                    case "Doc":
-                                                        <span class="fa fa-file mr-2"></span>
-                                                        break;
-                                                    case "Letter":
-                                                        <span class="fa fa-file-alt mr-2"></span>
-                                                        break;
-                                                    case "Form":
-                                                        <span class="fa fa-file-pdf mr-2"></span>
-                                                        break;
-                                                    case "Email":
-                                                        <span class="fa fa-envelope mr-2"></span>
-                                                        break;
-                                                    case "Step":
-                                                        <span class="fa fa-list-ol mr-2"></span>
-                                                        break;
-                                                    default:
-                                                        <span class="fa fa-times mr-2"></span>
-                                                        break;
-                                                }
+                                                @*@switch (doc.DocType)
+        {
+            case "Doc":
+                <span class="fa fa-file mr-2"></span>
+                break;
+            case "Form":
+                <span class="fa fa-file-pdf mr-2"></span>
+                break;
+            case "Email":
+                <span class="fa fa-envelope mr-2"></span>
+                break;
+            case "Step":
+                <span class="fa fa-list-ol mr-2"></span>
+                break;
+            default:
+                <span class="fa fa-times mr-2"></span>
+                break;
+        }*@
+                                                <span class="fa fa-file mr-2"></span>
                                             </span>
                                             @doc.DocDisplayName
                                         </div>

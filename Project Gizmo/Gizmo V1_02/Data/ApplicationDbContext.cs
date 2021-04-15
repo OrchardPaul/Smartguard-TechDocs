@@ -22,7 +22,7 @@ namespace Gizmo_V1_02.Data
         public virtual DbSet<AppWorkTypeGroupsTypeAssignments> AppWorkTypeGroupsTypeAssignments { get; set; }
         public virtual DbSet<AppWorkTypes> AppWorkTypes { get; set; }
         public virtual DbSet<AppCompanyWorkTypeMapping> AppCompanyWorkTypeMapping { get; set; }
-        
+        public virtual DbSet<SmartflowRecords> SmartflowRecords { get; set; }
 
     }
 }
