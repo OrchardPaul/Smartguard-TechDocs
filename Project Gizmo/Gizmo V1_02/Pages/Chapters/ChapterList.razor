@@ -1642,7 +1642,7 @@ else
 
                                     <div class="thumbnail-item @(!string.IsNullOrEmpty(selectedChapter.BackgroundImageName) && fileDesc.FileName == selectedChapter.BackgroundImageName ? "active" : "")">
                                         <img src="@fileDesc.FileURL.Replace("/wwwroot","")" alt="" class="img-thumbnail" />
-                                        <label>@fileDesc.FileName</label>
+                                        <label title="@fileDesc.FileName">@fileDesc.FileName</label>
                                         <div class="thumbnail-options">
                                             <button @onclick='(() => PrepareBgImageForDelete(fileDesc))' class="btn col-grey" title="Delete this image"><i class="fa fa-trash"></i></button>
                                             @if (!string.IsNullOrEmpty(selectedChapter.BackgroundImageName) && fileDesc.FileName == selectedChapter.BackgroundImageName)
