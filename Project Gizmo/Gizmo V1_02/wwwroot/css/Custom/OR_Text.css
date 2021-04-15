@@ -53,7 +53,13 @@ h5{
     color: #cc0000 !important;
 }
 
+.col-green, .font-green {
+    color: #009933 !important;
+}
 
+.col-blue, .font-blue {
+    color: #0026ff !important;
+}
 
 .cookie-link a:hover {
     color: #000;

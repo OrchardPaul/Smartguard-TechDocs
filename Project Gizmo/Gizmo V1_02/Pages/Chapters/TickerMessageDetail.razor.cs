@@ -58,7 +58,7 @@ namespace Gizmo_V1_02.Pages.Chapters
         {
             get
             {
-                return CopyObject.FromDate is null ? DateTime.Now : DateTime.ParseExact(CopyObject.ToDate, "yyyyMMdd", CultureInfo.InvariantCulture);
+                return CopyObject.ToDate is null ? DateTime.Now : DateTime.ParseExact(CopyObject.ToDate, "yyyyMMdd", CultureInfo.InvariantCulture);
             }
             set
             {

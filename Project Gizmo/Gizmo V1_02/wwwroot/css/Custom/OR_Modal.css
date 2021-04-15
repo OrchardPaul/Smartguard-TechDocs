@@ -326,6 +326,12 @@
     outline: none !important;
 }
 
+.modal-body table tr td textarea.read-only {
+    width: 100%;
+    border: 1pt dashed #fff;
+    background-color: transparent;
+}
+
 .modal-body table.table-left-heading tr td:first-of-type{
     font-weight: bold;
     padding-right: 15px;
