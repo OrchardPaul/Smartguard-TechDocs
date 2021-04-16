@@ -124,7 +124,7 @@ namespace Gizmo_V1_02.Pages.Chapters
                     UserMessage = Object.AltObject.UserMessage,
                     PopupAlert = Object.AltObject.PopupAlert,
                     NextStatus = Object.AltObject.NextStatus,
-                    NextStatus = Object.AltObject.Action
+                    Action = Object.AltObject.Action
                 };
 
                 CurrentChapter.ChapterItems.Add(AltObject);
@@ -151,7 +151,7 @@ namespace Gizmo_V1_02.Pages.Chapters
                     UserMessage = Object.ChapterObject.UserMessage,
                     PopupAlert = Object.ChapterObject.PopupAlert,
                     NextStatus = Object.ChapterObject.NextStatus,
-                    NextStatus = Object.ChapterObject.Action
+                    Action = Object.ChapterObject.Action
                 };
 
                 AltChapter.ChapterItems.Add(PushObject);

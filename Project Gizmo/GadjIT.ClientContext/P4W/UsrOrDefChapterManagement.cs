@@ -49,6 +49,7 @@ namespace GadjIT.ClientContext.P4W
         [Column("Next_Status")]
         [StringLength(100)]
         public string NextStatus { get; set; }
+
         [NotMapped]
         public string Action { get; set; }
 

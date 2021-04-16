@@ -948,25 +948,6 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
         }
 
 
-        private void PrepareForExport(List<VmUsrOrDefChapterManagement> items, string header)
-        {
-            var parameters = new ModalParameters();
-
-            if (items is null)
-            {
-                items = new List<VmUsrOrDefChapterManagement> ();
-            }
-
-            parameters.Add("lstChapterItems", items);
-
-            var options = new ModalOptions()
-            {
-                Class = "blazored-custom-modal modal-chapter-export"
-            };
-
-            Modal.Show<ChapterExport>("Smartflow Export", parameters, options);
-        }
-
         private void PrepareForEdit(VmUsrOrDefChapterManagement item, string header)
         {
             selectedList = header;

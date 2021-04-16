@@ -92,7 +92,7 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         private int selectedCaseTypeGroup { get; set; } = -1;
 
-        List<string> Actions = new List<string>() { "Take", "Insert" };
+        List<string> Actions = new List<string>() { "TAKE", "INSERT" };
 
         public List<string> documentList;
 
