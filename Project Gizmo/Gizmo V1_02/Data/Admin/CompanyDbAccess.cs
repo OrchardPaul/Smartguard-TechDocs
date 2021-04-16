@@ -44,7 +44,9 @@ namespace Gizmo_V1_02.Data.Admin
         Task<AppCompanyDetails> DeleteCompany(AppCompanyDetails company);
         Task<AppCompanyDetails> AssignWorkTypeGroupToCompany(AppCompanyDetails company, AppWorkTypeGroups workTypeGroup);
         Task<AppCompanyDetails> RemoveWorkTypeGroupFromCompany(AppCompanyDetails company, AppWorkTypeGroups workTypeGroup);
-        Task<SmartflowRecords> SaveSmartFlowRecord(UsrOrDefChapterManagement chapter);
+        Task<SmartflowRecords> SaveSmartFlowRecord(UsrOrDefChapterManagement chapter, int companyId);
+
+        Task<List<SmartflowRecords>> SyncAdminSysToClient(List<UsrOrDefChapterManagement> clientObjects, int companyId);
     }
 
     public class CompanyDbAccess : ICompanyDbAccess
@@ -600,13 +602,59 @@ namespace Gizmo_V1_02.Data.Admin
         }
 
 
-        public async Task<SmartflowRecords> SaveSmartFlowRecord(UsrOrDefChapterManagement chapter)
+        public async Task<List<SmartflowRecords>> SyncAdminSysToClient(List<UsrOrDefChapterManagement> clientObjects, int companyId)
         {
-            SmartflowRecords record = new SmartflowRecords();
+            var currentRecords = await context
+                                            .SmartflowRecords
+                                            .Where(R => R.CompanyId == companyId)
+                                            .Where(R => clientObjects
+                                                            .Select(C => C.Id)
+                                                            .ToList()
+                                                            .Contains(R.RowId))
+                                            .ToListAsync();
+
+
+            //loop though each object contained in the list
+            foreach(var clientRow in clientObjects
+                                        .Where(O => currentRecords
+                                                        .Select(R => R.RowId)
+                                                        .ToList()
+                                                        .Contains(O.Id))
+                                        .ToList())
+            {
+                var record = currentRecords.Where(R => R.RowId == clientRow.Id).SingleOrDefault();
+                mapper.Map(clientRow, record);
+                await context.SaveChangesAsync();
+            }
+
+            foreach (var clientRow in clientObjects
+                                        .Where(O => !currentRecords
+                                                        .Select(R => R.RowId)
+                                                        .ToList()
+                                                        .Contains(O.Id))
+                                        .ToList())
+            {
+                var record = new SmartflowRecords { CompanyId = companyId };
+                mapper.Map(clientRow, record);
+                
+                context.SmartflowRecords.Add(record);
+
+                await context.SaveChangesAsync();
+            }
+
+            return currentRecords;
+        }
+
+
+        public async Task<SmartflowRecords> SaveSmartFlowRecord(UsrOrDefChapterManagement chapter, int companyId)
+        {
+            SmartflowRecords record = new SmartflowRecords { CompanyId = companyId };
 
             mapper.Map(chapter, record);
 
-            var existingRecord = await context.SmartflowRecords.Where(R => R.RowId == record.RowId).SingleOrDefaultAsync();
+            var existingRecord = await context.SmartflowRecords
+                                                .Where(R => R.RowId == record.RowId && R.CompanyId == companyId)
+                                                .SingleOrDefaultAsync();
 
             if(existingRecord is null)
             {
@@ -626,6 +674,7 @@ namespace Gizmo_V1_02.Data.Admin
                 existingRecord.NextStatus = record.NextStatus;
                 existingRecord.SeqNo = record.SeqNo;
                 existingRecord.Type = record.Type;
+                existingRecord.CompanyId = record.CompanyId;
             }
 
             await context.SaveChangesAsync();

@@ -2968,11 +2968,10 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
 
         }
 
-        public async void SaveSmartFlowRecord(UsrOrDefChapterManagement selectChapter)
+        public async void SyncSmartFlowSystems()
         {
-            SmartflowRecords record = new SmartflowRecords();
+            await CompanyDbAccess.SyncAdminSysToClient(lstChapters.Select(C => C.ChapterObject).ToList(), sessionState.Company.Id);
 
-            mapper.Map(selectChapter, record);
         }
     }
 }
