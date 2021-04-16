@@ -437,6 +437,57 @@
     }
 }
 
+/*Groups*/
+.grid-nav .row-changed-nav3 .data-item-group, .grid-nav .row-changed-nav3xx .data-item-group {
+    animation-name: rowChangednav3Group;
+    animation-duration: 2s;
+    animation-iteration-count: 1;
+    animation-direction: normal;
+    animation-fill-mode: forwards; /* or: backwards, both, none */
+}
+
+.grid-nav .row-changed-nav3x .data-item-group {
+    animation-name: rowChangednav3xGroup;
+    animation-duration: 2s;
+    animation-iteration-count: 1;
+    animation-direction: normal;
+    animation-fill-mode: forwards; /* or: backwards, both, none */
+}
+
+@keyframes rowChangednav3Group {
+    0% {
+        background-color: rgba(180, 180, 180, 0.8);
+        color: #000;
+    }
+
+    40% {
+        background-color: rgba(0, 0, 0, 0.5);
+        color: #fff;
+    }
+
+    100% {
+        background-color: rgba(180, 180, 180, 0.8);
+        color: #000;
+    }
+}
+
+@keyframes rowChangednav3xGroup {
+    0% {
+        background-color: rgba(180, 180, 180, 0.8);
+        color: #000;
+    }
+
+    40% {
+        background-color: rgba(0, 0, 0, 0.5);
+        color: #fff;
+    }
+
+    100% {
+        background-color: rgba(180, 180, 180, 0.8);
+        color: #000;
+    }
+}
+
 .link-item {
     cursor: pointer;
 }
