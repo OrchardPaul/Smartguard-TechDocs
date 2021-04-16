@@ -10,6 +10,9 @@ namespace GadjIT.GadjitContext.GadjIT_App
         [Key]
         [Column("ID")]
         public int Id { get; set; }
+        public int CompanyId { get; set; }
+        public int RowId { get; set; }
+
         [Column("ParentID")]
         public int? ParentId { get; set; }
         [StringLength(100)]

@@ -27,6 +27,8 @@ using Microsoft.JSInterop;
 using Gizmo_V1_02.FileManagement.FileProcessing.Interface;
 using Gizmo_V1_02.Data.Admin;
 using System.Globalization;
+using GadjIT.GadjitContext.GadjIT_App;
+using AutoMapper;
 
 namespace Gizmo_V1_02.Pages.Chapters
 {
@@ -40,6 +42,9 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         [Inject]
         IModalService Modal { get; set; }
+
+        [Inject]
+        public IMapper mapper { get; set; }
 
         [Inject]
         private IChapterManagementService chapterManagementService { get; set; }
@@ -61,6 +66,9 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         [Inject]
         private IIdentityUserAccess UserAccess { get; set; }
+
+        [Inject]
+        private ICompanyDbAccess CompanyDbAccess { get; set; }
 
         private ChapterFileOptions ChapterFileOption { get; set; }
 
@@ -160,6 +168,8 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         [Parameter]
         public VmChapter selectedChapter { get; set; } = new VmChapter { ChapterItems = new List<UsrOrDefChapterManagement>() };
+
+        
 
         public VmChapter altChapter { get; set; } = new VmChapter();
 
@@ -998,7 +1008,8 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
             editObject.ChapterObject.CaseType = "";
             editObject.ChapterObject.Type = (type == "Steps and Documents") ? "Doc" : type;
             editObject.ChapterObject.CaseTypeGroup = "";
-
+            editObject.ChapterObject.Action = "Insert";
+            
             if (type == "Steps and Documents")
             {
                 editObject.ChapterObject.SeqNo = lstDocs
@@ -1600,7 +1611,8 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
                 AltDisplayName = editObject.ChapterObject.AltDisplayName,
                 UserMessage = editObject.ChapterObject.UserMessage,
                 PopupAlert = editObject.ChapterObject.PopupAlert,
-                NextStatus = editObject.ChapterObject.NextStatus
+                NextStatus = editObject.ChapterObject.NextStatus,
+                Action = editObject.ChapterObject.Action
             };
 
             var parameters = new ModalParameters();
@@ -2975,6 +2987,11 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
 
         }
 
+        public async void SaveSmartFlowRecord(UsrOrDefChapterManagement selectChapter)
+        {
+            SmartflowRecords record = new SmartflowRecords();
 
+            mapper.Map(selectChapter, record);
+        }
     }
 }

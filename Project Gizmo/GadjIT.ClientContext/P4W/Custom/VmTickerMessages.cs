@@ -11,10 +11,12 @@ namespace GadjIT.ClientContext.P4W.Custom
 
         public string ComparisonResult { get; set; }
         public string ComparisonIcon { get; set; }
-        public List<string> ComparisonList { get; set; } = new List<string>();
+
+        public string msgValidation { get; set; }
 
         public string msgTooltip { get; set; }
-        public string msgValidation { get; set; }
+        public List<string> ComparisonList { get; set; } = new List<string>();
+
 
         public bool IsTickerMessageMatch(VmTickerMessages vmCompItem)
         {
