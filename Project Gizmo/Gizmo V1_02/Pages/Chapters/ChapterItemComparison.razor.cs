@@ -69,6 +69,7 @@ namespace Gizmo_V1_02.Pages.Chapters
                 taskObject.UserMessage = Object.AltObject.UserMessage;
                 taskObject.PopupAlert = Object.AltObject.PopupAlert;
                 taskObject.NextStatus = Object.AltObject.NextStatus;
+                taskObject.NextStatus = Object.AltObject.Action;
 
                 CurrentChapterRow.ChapterData = JsonConvert.SerializeObject(CurrentChapter);
                 await chapterManagementService.Update(CurrentChapterRow).ConfigureAwait(false);
@@ -87,6 +88,7 @@ namespace Gizmo_V1_02.Pages.Chapters
                 taskObject.UserMessage = Object.ChapterObject.UserMessage;
                 taskObject.PopupAlert = Object.ChapterObject.PopupAlert;
                 taskObject.NextStatus = Object.ChapterObject.NextStatus;
+                taskObject.NextStatus = Object.ChapterObject.Action;
 
 
                 await sessionState.SwitchSelectedSystem();
@@ -121,7 +123,8 @@ namespace Gizmo_V1_02.Pages.Chapters
                     AltDisplayName = Object.AltObject.AltDisplayName,
                     UserMessage = Object.AltObject.UserMessage,
                     PopupAlert = Object.AltObject.PopupAlert,
-                    NextStatus = Object.AltObject.NextStatus
+                    NextStatus = Object.AltObject.NextStatus,
+                    NextStatus = Object.AltObject.Action
                 };
 
                 CurrentChapter.ChapterItems.Add(AltObject);
@@ -147,7 +150,8 @@ namespace Gizmo_V1_02.Pages.Chapters
                     AltDisplayName = Object.ChapterObject.AltDisplayName,
                     UserMessage = Object.ChapterObject.UserMessage,
                     PopupAlert = Object.ChapterObject.PopupAlert,
-                    NextStatus = Object.ChapterObject.NextStatus
+                    NextStatus = Object.ChapterObject.NextStatus,
+                    NextStatus = Object.ChapterObject.Action
                 };
 
                 AltChapter.ChapterItems.Add(PushObject);

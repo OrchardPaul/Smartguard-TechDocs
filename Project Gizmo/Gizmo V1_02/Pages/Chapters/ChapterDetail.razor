@@ -100,16 +100,6 @@
             </div>
 
             <div class="form-group">
-                <label for="UserMessage">User Message</label>
-                <InputTextArea class="form-control form-control-xl" @bind-Value="@CopyObject.UserMessage" />
-            </div>
-
-            <div class="form-group">
-                <label for="PopupAlert">Pop Up Message(Alert)</label>
-                <InputTextArea class="form-control form-control-xl" @bind-Value="@CopyObject.PopupAlert" />
-            </div>
-
-            <div class="form-group">
                 <label for="NextStatus">Next Status</label>
                 <InputSelect class="form-control form-control-sm"
                              @bind-Value="CopyObject.NextStatus">
@@ -139,6 +129,18 @@
                 </InputSelect>
                 <ValidationMessage For="@(() => CopyObject.Action)" />
             </div>
+
+
+            <div class="form-group">
+                <label for="UserMessage">User Message</label>
+                <InputTextArea class="form-control form-control-xl" @bind-Value="@CopyObject.UserMessage" />
+            </div>
+
+            <div class="form-group">
+                <label for="PopupAlert">Pop Up Message(Alert)</label>
+                <InputTextArea class="form-control form-control-xl" @bind-Value="@CopyObject.PopupAlert" />
+            </div>
+
 
         }
         else if (selectedList == "Status")
