@@ -124,6 +124,22 @@
                 <ValidationMessage For="@(() => CopyObject.Type)" />
             </div>
 
+
+            <div class="form-group">
+                <label for="Action">Action</label>
+                <InputSelect class="form-control form-control-sm"
+                             @bind-Value="CopyObject.Action">
+                    <option value=""></option>
+                    @foreach (var a in Actions)
+                        {
+                        <option value="@a">
+                            @a
+                        </option>
+                        }
+                </InputSelect>
+                <ValidationMessage For="@(() => CopyObject.Action)" />
+            </div>
+
         }
         else if (selectedList == "Status")
         {

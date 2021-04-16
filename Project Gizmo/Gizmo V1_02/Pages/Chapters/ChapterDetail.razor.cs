@@ -92,6 +92,8 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         private int selectedCaseTypeGroup { get; set; } = -1;
 
+        List<string> Actions = new List<string>() { "Take", "Insert" };
+
         List<string> DocTypeList = new List<string>() { "Doc", "Form", "Step", "Date", "Email", "Letter" };
 
         public List<string> documentList;
@@ -138,6 +140,7 @@ namespace Gizmo_V1_02.Pages.Chapters
             TaskObject.UserMessage = CopyObject.UserMessage;
             TaskObject.PopupAlert = CopyObject.PopupAlert;
             TaskObject.NextStatus = CopyObject.NextStatus;
+            TaskObject.Action = CopyObject.Action;
 
             if (Option == "Insert")
             {
