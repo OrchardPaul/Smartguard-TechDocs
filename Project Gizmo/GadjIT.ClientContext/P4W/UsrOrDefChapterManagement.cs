@@ -52,6 +52,7 @@ namespace GadjIT.ClientContext.P4W
         [NotMapped]
         public string Action { get; set; }
 
+
         public string ChapterData { get; set; }
 
         [NotMapped]
