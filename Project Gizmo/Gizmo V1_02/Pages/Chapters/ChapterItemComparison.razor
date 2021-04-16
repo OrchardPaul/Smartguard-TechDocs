@@ -23,22 +23,22 @@
                 </tr>
             </thead>
             <tbody>
-                
-                    <tr>
-                        <td>
-                            Seq Number
-                        </td>
-                        <td>
-                            @Object.ChapterObject.SeqNo
-                        </td>
-                        <td>
-                            @Object.AltObject.SeqNo
-                        </td>
-                        <td>
-                            <span class="fa fa-@(Object.ChapterObject.SeqNo == @Object.AltObject.SeqNo ? "check" : "exclamation")"></span>
-                        </td>
-                    </tr>
-                
+
+                <tr>
+                    <td>
+                        Seq Number
+                    </td>
+                    <td>
+                        @Object.ChapterObject.SeqNo
+                    </td>
+                    <td>
+                        @Object.AltObject.SeqNo
+                    </td>
+                    <td>
+                        <span class="fa fa-@(Object.ChapterObject.SeqNo == @Object.AltObject.SeqNo ? "check" : "exclamation")"></span>
+                    </td>
+                </tr>
+
                 <tr>
                     <td>
                         @Object.ChapterObject.Type Name:
@@ -53,22 +53,22 @@
                         <span class="fa fa-@(Object.ChapterObject.Name == @Object.AltObject.Name ? "check" : "exclamation")"></span>
                     </td>
                 </tr>
-                
-                    <tr>
-                        <td>
-                            Display Name:
-                        </td>
-                        <td>
-                            <input type="text" class="read-only" readonly value="@Object.ChapterObject.AltDisplayName" />
-                        </td>
-                        <td>
-                            <input type="text" class="read-only" value="@Object.AltObject.AltDisplayName" />
-                        </td>
-                        <td>
-                            <span class="fa fa-@(Object.ChapterObject.AltDisplayName == @Object.AltObject.AltDisplayName ? "check" : "exclamation")"></span>
-                        </td>
-                    </tr>
-                
+
+                <tr>
+                    <td>
+                        Display Name:
+                    </td>
+                    <td>
+                        <input type="text" class="read-only" readonly value="@Object.ChapterObject.AltDisplayName" />
+                    </td>
+                    <td>
+                        <input type="text" class="read-only" value="@Object.AltObject.AltDisplayName" />
+                    </td>
+                    <td>
+                        <span class="fa fa-@(Object.ChapterObject.AltDisplayName == @Object.AltObject.AltDisplayName ? "check" : "exclamation")"></span>
+                    </td>
+                </tr>
+
                 @if (Object.ChapterObject.Type != "Status")
                 {
                     <tr>
@@ -111,6 +111,20 @@
                         </td>
                         <td>
                             <span class="fa fa-@(Object.ChapterObject.NextStatus == @Object.AltObject.NextStatus ? "check" : "exclamation")"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Action
+                        </td>
+                        <td>
+                            <input type="text" class="read-only" value="@Object.ChapterObject.Action" />
+                        </td>
+                        <td>
+                            <input type="text" class="read-only" value="@Object.AltObject.Action" />
+                        </td>
+                        <td>
+                            <span class="fa fa-@(Object.ChapterObject.Action == @Object.AltObject.Action ? "check" : "exclamation")"></span>
                         </td>
                     </tr>
                     <tr>

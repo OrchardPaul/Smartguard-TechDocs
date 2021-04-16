@@ -69,6 +69,7 @@ namespace Gizmo_V1_02
 
             services.AddBlazorDragDrop();
             services.AddAutoMapper(typeof(UserRoleProfile));
+            services.AddAutoMapper(typeof(SmartflowRecordProfile));
 
             services.AddTransient<IEmailSender, EmailSender>();
             services.Configure<AuthMessageSenderOptions>(Configuration);

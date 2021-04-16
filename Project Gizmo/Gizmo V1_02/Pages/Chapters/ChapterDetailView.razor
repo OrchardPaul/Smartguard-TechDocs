@@ -22,7 +22,7 @@
                     </td>
                 </tr>
             }
-            
+
             <tr>
                 <td>
                     @(SelectedList == "Steps and Documents" ? "Document" : @SelectedList) Name:
@@ -42,7 +42,14 @@
                         <input type="text" class="read-only" readonly value="@Object.ChapterObject.AltDisplayName" />
                     </td>
                 </tr>
-
+                <tr>
+                    <td>
+                        Reschedule Days
+                    </td>
+                    <td>
+                        @Object.ChapterObject.RescheduleDays
+                    </td>
+                </tr>
                 <tr>
                     <td>
                         Schedule As Name:
@@ -61,14 +68,6 @@
                 </tr>
                 <tr>
                     <td>
-                        User Message
-                    </td>
-                    <td>
-                        <input type="text" class="read-only" value="@Object.ChapterObject.UserMessage" />
-                    </td>
-                </tr>
-                <tr>
-                    <td>
                         Next Status
                     </td>
                     <td>
@@ -77,12 +76,29 @@
                 </tr>
                 <tr>
                     <td>
-                        Reschedule Days
+                        Action
                     </td>
                     <td>
-                        @Object.ChapterObject.RescheduleDays
+                        <input type="text" class="read-only" value="@Object.ChapterObject.Action" />
                     </td>
                 </tr>
+                <tr>
+                    <td>
+                        User Message
+                    </td>
+                    <td>
+                        <input type="text" class="read-only" value="@Object.ChapterObject.UserMessage" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Popup Alert
+                    </td>
+                    <td>
+                        <input type="text" class="read-only" value="@Object.ChapterObject.PopupAlert" />
+                    </td>
+                </tr>
+
             }
 
         </tbody>

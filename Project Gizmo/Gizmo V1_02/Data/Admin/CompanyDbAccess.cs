@@ -44,6 +44,7 @@ namespace Gizmo_V1_02.Data.Admin
         Task<AppCompanyDetails> DeleteCompany(AppCompanyDetails company);
         Task<AppCompanyDetails> AssignWorkTypeGroupToCompany(AppCompanyDetails company, AppWorkTypeGroups workTypeGroup);
         Task<AppCompanyDetails> RemoveWorkTypeGroupFromCompany(AppCompanyDetails company, AppWorkTypeGroups workTypeGroup);
+        Task<SmartflowRecords> SaveSmartFlowRecord(UsrOrDefChapterManagement chapter);
     }
 
     public class CompanyDbAccess : ICompanyDbAccess
@@ -598,6 +599,39 @@ namespace Gizmo_V1_02.Data.Admin
             return selectedCompany;
         }
 
+
+        public async Task<SmartflowRecords> SaveSmartFlowRecord(UsrOrDefChapterManagement chapter)
+        {
+            SmartflowRecords record = new SmartflowRecords();
+
+            mapper.Map(chapter, record);
+
+            var existingRecord = await context.SmartflowRecords.Where(R => R.RowId == record.RowId).SingleOrDefaultAsync();
+
+            if(existingRecord is null)
+            {
+                context.SmartflowRecords.Add(record);            }
+            else
+            {
+                existingRecord.ChapterData = record.ChapterData;
+                existingRecord.AltDisplayName = record.AltDisplayName;
+                existingRecord.AsName = record.AsName;
+                existingRecord.CaseType = record.CaseType;
+                existingRecord.CaseTypeGroup = record.CaseTypeGroup;
+                existingRecord.ChapterName = record.ChapterName;
+                existingRecord.CompanyId = record.CompanyId;
+                existingRecord.CompleteName = record.CompleteName;
+                existingRecord.EntityType = record.EntityType;
+                existingRecord.Name = record.Name;
+                existingRecord.NextStatus = record.NextStatus;
+                existingRecord.SeqNo = record.SeqNo;
+                existingRecord.Type = record.Type;
+            }
+
+            await context.SaveChangesAsync();
+            return record;
+
+        }
 
     }
 }

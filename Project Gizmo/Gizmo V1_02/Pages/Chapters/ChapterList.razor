@@ -38,9 +38,7 @@ else
                                 }
                             }
                         </div>
-                        <div class="btn-group">
-                            <button @onclick='(() => PrepareForExport(lstChapters, "Chapter Export"))' class="btn btn-main btn-shadow" title="Export data to Excel or CSV"><i class="fa fa-file-export"></i><span class="pl-2">Export</span></button>
-                        </div>
+                       
                         <div class="spacer"></div>
                         @if (sessionState.isAdminUser)
                         {
@@ -376,7 +374,7 @@ else
                                                              Value="@selectedChapter.P4WCaseTypeGroup"
                                                              ValueChanged="@((string value) => SaveP4WCaseTypeGroup(value))">
                                                     <option value="">Select</option>
-                                                    @foreach (var group in partnerCaseTypeGroups)
+                                                    @foreach (var group in partnerCaseTypeGroups.OrderBy(C => C.Name).ToList())
                                                     {
                                                         <option value="@group.Name">
                                                             @group.Name
@@ -391,7 +389,10 @@ else
                                                              Value="@selectedChapter.SelectedView"
                                                              ValueChanged="@((string value) => SaveSelectedView(value))">
                                                     <option value="">Select</option>
-                                                    @foreach (var view in ListP4WViews.Where(V => !(V.InternalNote is null) && (V.InternalNote.Contains("Smartflow"))).ToList())
+                                                    @foreach (var view in ListP4WViews
+                                                                    .Where(V => !(V.InternalNote is null) && (V.InternalNote.Contains("Smartflow")))
+                                                                    .OrderBy(V => V.Name)
+                                                                    .ToList())
                                                     {
                                                         <option value="@view.Name">
                                                             @view.Name
@@ -409,7 +410,17 @@ else
                                                                  ValueChanged="@((string value) => SaveSelectedStep(value))">
                                                         <option value="">Select</option>
                                                         <option value="Create New">--- Create New ---</option>
-                                                        @foreach (var step in dropDownChapterList.Where(D => D.DocumentType == 6).Where(D => D.Notes.Contains("Smartflow:")).ToList())
+                                                        @foreach (var step in dropDownChapterList
+                                                            .Where(D => D.DocumentType == 6)
+                                                            .Where(D => D.Notes.Contains("Smartflow:"))
+                                                            .Where(V => V.CaseTypeGroupRef == (string.IsNullOrEmpty(selectedChapter.P4WCaseTypeGroup) 
+                                                                                                ? 0 
+                                                                                                : partnerCaseTypeGroups
+                                                                                                    .Where(P => P.Name == selectedChapter.P4WCaseTypeGroup)
+                                                                                                    .Select(P => P.Id)
+                                                                                                    .FirstOrDefault()))
+                                                            .OrderBy(D => D.Name)
+                                                            .ToList())
                                                         {
                                                             <option value="@step.Name">
                                                                 @step.Name

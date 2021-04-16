@@ -92,7 +92,8 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         private int selectedCaseTypeGroup { get; set; } = -1;
 
-        
+        List<string> Actions = new List<string>() { "TAKE", "INSERT" };
+
         public List<string> documentList;
 
         protected override void OnInitialized()
@@ -134,6 +135,7 @@ namespace Gizmo_V1_02.Pages.Chapters
             TaskObject.UserMessage = CopyObject.UserMessage;
             TaskObject.PopupAlert = CopyObject.PopupAlert;
             TaskObject.NextStatus = CopyObject.NextStatus;
+            TaskObject.Action = CopyObject.Action;
 
             if (Option == "Insert")
             {

@@ -663,11 +663,13 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
             workSheetDocument.Cells[1, 6].Style.WrapText = true;
             workSheetDocument.Cells[1, 6].Value = "Optional: \r\nWhen the document is selected the Smartflow Status should be changed to:";
             workSheetDocument.Cells[1, 7].Style.WrapText = true;
-            workSheetDocument.Cells[1, 7].Value = "Optional: \r\nWhen the document is selected the following user message should appear: ";
+            workSheetDocument.Cells[1, 7].Value = "Optional: \r\nI would like the document to be inserted or taken automatically [INSERT or TAKE]:";
             workSheetDocument.Cells[1, 8].Style.WrapText = true;
-            workSheetDocument.Cells[1, 8].Value = "Optional: \r\nWhen the document is selected the following pop up alert should appear:";
+            workSheetDocument.Cells[1, 8].Value = "Optional: \r\nWhen the document is selected the following user message should appear: ";
             workSheetDocument.Cells[1, 9].Style.WrapText = true;
-            workSheetDocument.Cells[1, 9].Value = "Optional: \r\nWhen the document is processed the following field should be updated: ";
+            workSheetDocument.Cells[1, 9].Value = "Optional: \r\nWhen the document is selected the following pop up alert should appear:";
+            workSheetDocument.Cells[1, 10].Style.WrapText = true;
+            workSheetDocument.Cells[1, 10].Value = "Optional: \r\nWhen the document is processed the following field should be updated: ";
 
 
 
@@ -681,9 +683,10 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
             workSheetDocument.Cells[2, 4].Value = "Reschedule As Description";
             workSheetDocument.Cells[2, 5].Value = "Step History Description";
             workSheetDocument.Cells[2, 6].Value = "Status Change";
-            workSheetDocument.Cells[2, 7].Value = "Item User Message";
-            workSheetDocument.Cells[2, 8].Value = "Popup Alert";
-            workSheetDocument.Cells[2, 9].Value = "Notes to Developer";
+            workSheetDocument.Cells[2, 7].Value = "Action";
+            workSheetDocument.Cells[2, 8].Value = "Item User Message";
+            workSheetDocument.Cells[2, 9].Value = "Popup Alert";
+            workSheetDocument.Cells[2, 10].Value = "Notes to Developer";
 
             //Body of table
             recordIndex = 3;
@@ -695,9 +698,10 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
                 workSheetDocument.Cells[recordIndex, 4].Value = string.IsNullOrEmpty(chapterItem.AsName) ? "" : chapterItem.AsName;
                 workSheetDocument.Cells[recordIndex, 5].Value = string.IsNullOrEmpty(chapterItem.CompleteName) ? "" : chapterItem.CompleteName;
                 workSheetDocument.Cells[recordIndex, 6].Value = string.IsNullOrEmpty(chapterItem.NextStatus) ? "" : chapterItem.NextStatus;
-                workSheetDocument.Cells[recordIndex, 7].Value = string.IsNullOrEmpty(chapterItem.UserMessage) ? "" : chapterItem.UserMessage;
-                workSheetDocument.Cells[recordIndex, 8].Value = string.IsNullOrEmpty(chapterItem.PopupAlert) ? "" : chapterItem.PopupAlert;
-                workSheetDocument.Cells[recordIndex, 9].Value = string.IsNullOrEmpty(chapterItem.DeveloperNotes) ? "" : chapterItem.DeveloperNotes;
+                workSheetDocument.Cells[recordIndex, 7].Value = string.IsNullOrEmpty(chapterItem.Action) ? "" : chapterItem.Action;
+                workSheetDocument.Cells[recordIndex, 8].Value = string.IsNullOrEmpty(chapterItem.UserMessage) ? "" : chapterItem.UserMessage;
+                workSheetDocument.Cells[recordIndex, 9].Value = string.IsNullOrEmpty(chapterItem.PopupAlert) ? "" : chapterItem.PopupAlert;
+                workSheetDocument.Cells[recordIndex, 10].Value = string.IsNullOrEmpty(chapterItem.DeveloperNotes) ? "" : chapterItem.DeveloperNotes;
 
                 recordIndex++;
             }
@@ -711,6 +715,7 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
             workSheetDocument.Column(7).AutoFit();
             workSheetDocument.Column(8).AutoFit();
             workSheetDocument.Column(9).AutoFit();
+            workSheetDocument.Column(10).AutoFit();
 
 
 
@@ -1071,18 +1076,22 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
                                             : worksheetDocuments.Cells[row, column].Value is null
                                             ? ""
                                             : worksheetDocuments.Cells[row, column].Value.ToString();
-                        
-                        if (column == 7) readObject.UserMessage = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
+                        if (column == 7) readObject.Action = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
+                                            ? ""
+                                            : worksheetDocuments.Cells[row, column].Value is null
+                                            ? ""
+                                            : worksheetDocuments.Cells[row, column].Value.ToString().ToUpper();
+                        if (column == 8) readObject.UserMessage = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
                                             ? ""
                                             : worksheetDocuments.Cells[row, column].Value is null
                                             ? ""
                                             : worksheetDocuments.Cells[row, column].Value.ToString();
-                        if (column == 8) readObject.PopupAlert = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
+                        if (column == 9) readObject.PopupAlert = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
                                             ? ""
                                             : worksheetDocuments.Cells[row, column].Value is null
                                             ? ""
                                             : worksheetDocuments.Cells[row, column].Value.ToString();
-                        if (column == 9) readObject.DeveloperNotes = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
+                        if (column == 10) readObject.DeveloperNotes = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
                                             ? ""
                                             : worksheetDocuments.Cells[row, column].Value is null
                                             ? ""
