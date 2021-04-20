@@ -1524,6 +1524,8 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
             parameters.Add("TaskObject", editChapterObject);
             parameters.Add("DataChanged", Action);
             parameters.Add("AllObjects", lstChapters);
+            parameters.Add("CompanyDbAccess", CompanyDbAccess);
+            parameters.Add("sessionState", sessionState);
 
             var options = new ModalOptions()
             {
@@ -1548,6 +1550,8 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
             parameters.Add("isCaseTypeOrGroup", isCaseTypeOrGroup);
             parameters.Add("caseTypeGroupName", selectedChapter.CaseTypeGroup);
             parameters.Add("ListChapters", lstChapters);
+            parameters.Add("CompanyDbAccess", CompanyDbAccess);
+            parameters.Add("sessionState", sessionState);
 
             var options = new ModalOptions()
             {
@@ -1606,6 +1610,8 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
             parameters.Add("ListOfStatus", lstStatus);
             parameters.Add("SelectedChapter", selectedChapter);
             parameters.Add("SelectedChapterObject", SelectedChapterObject);
+            parameters.Add("CompanyDbAccess", CompanyDbAccess);
+            parameters.Add("sessionState", sessionState);
             parameters.Add("Option", option);
 
             string className = "modal-chapter-item";
@@ -2804,7 +2810,7 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
 
         private async void ExportSmartflowToExcel()
         {
-            await ChapterFileUpload.WriteChapterDataToExcel(selectedChapter, dropDownChapterList);
+            await ChapterFileUpload.WriteChapterDataToExcel(selectedChapter, dropDownChapterList, partnerCaseTypeGroups);
         }
 
         public void CancelCreateP4WStep()
@@ -2970,7 +2976,7 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
 
         public async void SyncSmartFlowSystems()
         {
-            await CompanyDbAccess.SyncAdminSysToClient(lstChapters.Select(C => C.ChapterObject).ToList(), sessionState.Company.Id);
+            await CompanyDbAccess.SyncAdminSysToClient(lstChapters.Select(C => C.ChapterObject).ToList(), sessionState);
 
         }
     }

@@ -13,6 +13,16 @@ namespace GadjIT.GadjitContext.GadjIT_App
         public int CompanyId { get; set; }
         public int RowId { get; set; }
 
+        public DateTime CreatedDate { get; set; }
+
+        public DateTime LastModifiedDate { get; set; }
+
+        public string CreatedByUserId { get; set; }
+
+        public string LastModifiedByUserId { get; set; }
+
+        public string System { get; set; }
+
         [Column("ParentID")]
         public int? ParentId { get; set; }
         [StringLength(100)]

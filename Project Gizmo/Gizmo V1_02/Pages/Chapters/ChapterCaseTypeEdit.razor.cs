@@ -1,7 +1,9 @@
 ﻿using Blazored.Modal;
 using GadjIT.ClientContext.P4W;
 using GadjIT.ClientContext.P4W.Custom;
+using Gizmo_V1_02.Data.Admin;
 using Gizmo_V1_02.Services;
+using Gizmo_V1_02.Services.SessionState;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using Newtonsoft.Json;
@@ -40,6 +42,13 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         [Parameter]
         public Action DataChanged { get; set; }
+
+        [Parameter]
+        public ICompanyDbAccess CompanyDbAccess { get; set; }
+
+        [Parameter]
+        public IUserSessionState sessionState { get; set; }
+
 
         private async void Close()
         {
@@ -81,6 +90,8 @@ namespace Gizmo_V1_02.Pages.Chapters
                 Chapter.ChapterData = JsonConvert.SerializeObject(updateJson);
                 await chapterManagementService.Update(Chapter).ConfigureAwait(false);
             }
+
+            await CompanyDbAccess.SaveSmartFlowRecord(Chapter, sessionState);
 
             DataChanged?.Invoke();
             Close();

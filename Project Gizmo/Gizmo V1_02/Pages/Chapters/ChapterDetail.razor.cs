@@ -1,7 +1,9 @@
 ﻿using Blazored.Modal;
 using GadjIT.ClientContext.P4W;
 using GadjIT.ClientContext.P4W.Custom;
+using Gizmo_V1_02.Data.Admin;
 using Gizmo_V1_02.Services;
+using Gizmo_V1_02.Services.SessionState;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using Newtonsoft.Json;
@@ -9,6 +11,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Gizmo_V1_02.Pages.Chapters
@@ -90,6 +93,12 @@ namespace Gizmo_V1_02.Pages.Chapters
         [Parameter]
         public List<VmUsrOrDefChapterManagement> ListOfStatus { get; set; }
 
+        [Parameter]
+        public ICompanyDbAccess CompanyDbAccess { get; set; }
+
+        [Parameter]
+        public IUserSessionState sessionState { get; set; }
+
         private int selectedCaseTypeGroup { get; set; } = -1;
 
         List<string> Actions = new List<string>() { "TAKE", "INSERT" };
@@ -121,17 +130,27 @@ namespace Gizmo_V1_02.Pages.Chapters
             }
             else
             {
+                
                 TaskObject.Type = CopyObject.Type;
             }
+
+            if (TaskObject.Type == "Agenda")
+            {
+                TaskObject.Name = CopyObject.Name;
+            }
+            else
+            {
+                TaskObject.Name = Regex.Replace(CopyObject.Name, "[^0-9a-zA-Z-_]+", "");
+            }
+
             
-            TaskObject.Name = CopyObject.Name;
             TaskObject.EntityType = CopyObject.EntityType;
             TaskObject.SeqNo = CopyObject.SeqNo;
             TaskObject.SuppressStep = CopyObject.SuppressStep;
             TaskObject.CompleteName = CopyObject.CompleteName;
-            TaskObject.AsName = CopyObject.AsName;
+            TaskObject.AsName = Regex.Replace(CopyObject.AsName, "[^0-9a-zA-Z-_]+", "");
             TaskObject.RescheduleDays = CopyObject.RescheduleDays;
-            TaskObject.AltDisplayName = CopyObject.AltDisplayName;
+            TaskObject.AltDisplayName = Regex.Replace(CopyObject.AltDisplayName, "[^0-9a-zA-Z-_]+", "");
             TaskObject.UserMessage = CopyObject.UserMessage;
             TaskObject.PopupAlert = CopyObject.PopupAlert;
             TaskObject.NextStatus = CopyObject.NextStatus;
@@ -144,6 +163,8 @@ namespace Gizmo_V1_02.Pages.Chapters
             
             SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(SelectedChapter);
             await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
+
+            await CompanyDbAccess.SaveSmartFlowRecord(SelectedChapterObject, sessionState);
 
             TaskObject = new UsrOrDefChapterManagement();
             filterText = "";

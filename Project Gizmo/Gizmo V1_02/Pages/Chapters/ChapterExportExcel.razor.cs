@@ -25,6 +25,9 @@ namespace Gizmo_V1_02.Pages.Chapters
         [Parameter]
         public List<DmDocuments> Documents { get; set; }
 
+        [Parameter]
+        public List<CaseTypeGroups> CaseTypeGroups { get; set; }
+
         private async void Close()
         {
             await ModalInstance.CloseAsync();
@@ -32,7 +35,7 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         private async void WriteToExcel()
         {
-            await ChapterFileUpload.WriteChapterDataToExcel(SelectedChapter, Documents);
+            await ChapterFileUpload.WriteChapterDataToExcel(SelectedChapter, Documents, CaseTypeGroups);
             Close();
         }
 
