@@ -16,6 +16,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -1054,17 +1055,17 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
                                             ? ""
                                             : worksheetDocuments.Cells[row, column].Value is null
                                             ? ""
-                                            : worksheetDocuments.Cells[row, column].Value.ToString();
+                                            : Regex.Replace(worksheetDocuments.Cells[row, column].Value.ToString(), "[^0-9a-zA-Z-_ ]+", "");
                         if (column == 2) readObject.AltDisplayName = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
                                             ? ""
                                             : worksheetDocuments.Cells[row, column].Value is null
                                             ? ""
-                                            : worksheetDocuments.Cells[row, column].Value.ToString();
+                                            : Regex.Replace(worksheetDocuments.Cells[row, column].Value.ToString(), "[^0-9a-zA-Z-_ ]+", "");
                         if (column == 3) readObject.AsName = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
                                             ? ""
                                             : worksheetDocuments.Cells[row, column].Value is null
                                             ? ""
-                                            : worksheetDocuments.Cells[row, column].Value.ToString();
+                                            : Regex.Replace(worksheetDocuments.Cells[row, column].Value.ToString(), "[^0-9a-zA-Z-_ ]+", "");
                         try
                         {
                             if (column == 4) readObject.RescheduleDays = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
@@ -1081,7 +1082,7 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
                                             ? ""
                                             : worksheetDocuments.Cells[row, column].Value is null
                                             ? ""
-                                            : worksheetDocuments.Cells[row, column].Value.ToString();
+                                            : Regex.Replace(worksheetDocuments.Cells[row, column].Value.ToString(), "[^0-9a-zA-Z-_ ]+", "");
                         if (column == 6) readObject.NextStatus = worksheetDocuments.Cells[row, column].FirstOrDefault() is null 
                                             ? "" 
                                             : worksheetDocuments.Cells[row, column].Value is null
@@ -1161,11 +1162,15 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
                         }
                     }
 
-                    if (readObject.FollowUpDocs is null)
+                    if (!(readObject is null))
                     {
-                        readObject.FollowUpDocs = new List<FollowUpDoc>();
+                        if (readObject.FollowUpDocs is null)
+                        {
+                            readObject.FollowUpDocs = new List<FollowUpDoc>();
+                        }
+                        readObject.FollowUpDocs.Add(newAttachment);
                     }
-                    readObject.FollowUpDocs.Add(newAttachment);
+
                 }
 
                 ExcelWorksheet worksheetDataViews = excelPackage.Workbook.Worksheets.Where(W => W.Name == "Data Views").SingleOrDefault();

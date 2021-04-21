@@ -56,9 +56,9 @@ namespace Gizmo_V1_02.Pages.Chapters
         {
             if (TaskObject.ChapterObject.Id == 0)
             {
-                var name = Regex.Replace(TaskObject.ChapterObject.Name, "[^0-9a-zA-Z-_]+", "");
-                var caseType = Regex.Replace(TaskObject.ChapterObject.CaseType, "[^0-9a-zA-Z-_]+", "");
-                var caseTypeGroup = Regex.Replace(TaskObject.ChapterObject.CaseTypeGroup, "[^0-9a-zA-Z-_]+", "");
+                var name = Regex.Replace(TaskObject.ChapterObject.Name, "[^0-9a-zA-Z-_ ]+", "");
+                var caseType = Regex.Replace(TaskObject.ChapterObject.CaseType, "[^0-9a-zA-Z-_ ]+", "");
+                var caseTypeGroup = Regex.Replace(TaskObject.ChapterObject.CaseTypeGroup, "[^0-9a-zA-Z-_ ]+", "");
 
                 TaskObject.ChapterObject.Name = name;
                 TaskObject.ChapterObject.CaseType = caseType;

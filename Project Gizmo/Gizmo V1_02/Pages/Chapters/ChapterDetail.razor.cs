@@ -140,17 +140,17 @@ namespace Gizmo_V1_02.Pages.Chapters
             }
             else
             {
-                TaskObject.Name = Regex.Replace(CopyObject.Name, "[^0-9a-zA-Z-_]+", "");
+                TaskObject.Name = Regex.Replace(CopyObject.Name, "[^0-9a-zA-Z-_ ]+", "");
             }
 
             
             TaskObject.EntityType = CopyObject.EntityType;
             TaskObject.SeqNo = CopyObject.SeqNo;
             TaskObject.SuppressStep = CopyObject.SuppressStep;
-            TaskObject.CompleteName = CopyObject.CompleteName;
-            TaskObject.AsName = Regex.Replace(CopyObject.AsName, "[^0-9a-zA-Z-_]+", "");
+            TaskObject.CompleteName = Regex.Replace(CopyObject.CompleteName, "[^0-9a-zA-Z-_ ]+", "");
+            TaskObject.AsName = Regex.Replace(CopyObject.AsName, "[^0-9a-zA-Z-_ ]+", "");
             TaskObject.RescheduleDays = CopyObject.RescheduleDays;
-            TaskObject.AltDisplayName = Regex.Replace(CopyObject.AltDisplayName, "[^0-9a-zA-Z-_]+", "");
+            TaskObject.AltDisplayName = Regex.Replace(CopyObject.AltDisplayName, "[^0-9a-zA-Z-_ ]+", "");
             TaskObject.UserMessage = CopyObject.UserMessage;
             TaskObject.PopupAlert = CopyObject.PopupAlert;
             TaskObject.NextStatus = CopyObject.NextStatus;
