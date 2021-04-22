@@ -54,10 +54,11 @@ namespace Gizmo_V1_02.Pages.Chapters
                                                                         new CopyOption { Option = "Status", Selected = false },
                                                                         new CopyOption { Option = "Documents/Steps", Selected = false },
                                                                         new CopyOption { Option = "Fees", Selected = false },
+                                                                        new CopyOption { Option = "Data Views", Selected = false },
+                                                                        new CopyOption { Option = "Messages", Selected = false }
                                                                     };
 
-        public List<string> lstDocTypes { get; set; } = new List<string> { "Doc", "Letter", "Form", "Email", "Step" };
-
+        
         private void SelectExistingChapter(int chapterId)
         {
             TaskObject = AllChapters.Where(C => C.ChapterObject.Id == chapterId).SingleOrDefault();
@@ -121,52 +122,83 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         private async void HandleValidSubmit()
         {
-            var selectedCopyItems = new VmChapter { ChapterItems = new List<UsrOrDefChapterManagement>() };
+            var copyToChapter = new VmChapter {
+                ChapterItems = new List<UsrOrDefChapterManagement>(),
+                Fees = new List<Fee>(),
+                DataViews = new List<DataViews>(),
+                TickerMessages = new List<TickerMessages>()
+            };
 
             if (!(TaskObject.ChapterObject.ChapterData is null))
             {
-                selectedCopyItems = JsonConvert.DeserializeObject<VmChapter>(TaskObject.ChapterObject.ChapterData);
+                copyToChapter = JsonConvert.DeserializeObject<VmChapter>(TaskObject.ChapterObject.ChapterData);
             }
 
 
             if(CopyOptions.Where(C => C.Option == "Agenda").Select(C => C.Selected).FirstOrDefault())
             {
-                foreach(var item in selectedCopyItems.ChapterItems.Where(C => C.Type == "Agenda").ToList())
+                foreach(var item in copyToChapter.ChapterItems.Where(C => C.Type == "Agenda").ToList())
                 {
-                    selectedCopyItems.ChapterItems.Remove(item);
+                    copyToChapter.ChapterItems.Remove(item);
                 }
 
-                selectedCopyItems.ChapterItems.AddRange(currentChapter.ChapterItems.Where(C => C.Type == "Agenda").ToList());
+                copyToChapter.ChapterItems.AddRange(currentChapter.ChapterItems.Where(C => C.Type == "Agenda").ToList());
             }
 
             if (CopyOptions.Where(C => C.Option == "Status").Select(C => C.Selected).FirstOrDefault())
             {
-                foreach (var item in selectedCopyItems.ChapterItems.Where(C => C.Type == "Status").ToList())
+                foreach (var item in copyToChapter.ChapterItems.Where(C => C.Type == "Status").ToList())
                 {
-                    selectedCopyItems.ChapterItems.Remove(item);
+                    copyToChapter.ChapterItems.Remove(item);
                 }
 
-                selectedCopyItems.ChapterItems.AddRange(currentChapter.ChapterItems.Where(C => C.Type == "Status").ToList());
+                copyToChapter.ChapterItems.AddRange(currentChapter.ChapterItems.Where(C => C.Type == "Status").ToList());
             }
 
             if (CopyOptions.Where(C => C.Option == "Documents/Steps").Select(C => C.Selected).FirstOrDefault())
             {
-                foreach (var item in selectedCopyItems.ChapterItems.Where(C => lstDocTypes.Contains(C.Type)).ToList())
+                foreach (var item in copyToChapter.ChapterItems.Where(C => C.Type == "Doc").ToList())
                 {
-                    selectedCopyItems.ChapterItems.Remove(item);
+                    copyToChapter.ChapterItems.Remove(item);
                 }
 
-                selectedCopyItems.ChapterItems.AddRange(currentChapter.ChapterItems.Where(C => lstDocTypes.Contains(C.Type)).ToList());
+                copyToChapter.ChapterItems.AddRange(currentChapter.ChapterItems.Where(C => C.Type == "Doc").ToList());
             }
 
             if (CopyOptions.Where(C => C.Option == "Fees").Select(C => C.Selected).FirstOrDefault())
             {
-                foreach (var item in selectedCopyItems.ChapterItems.Where(C => C.Type == "Fee").ToList())
+                foreach (var item in copyToChapter.Fees.ToList())
                 {
-                    selectedCopyItems.ChapterItems.Remove(item);
+                    copyToChapter.Fees.Remove(item);
                 }
 
-                selectedCopyItems.ChapterItems.AddRange(currentChapter.ChapterItems.Where(C => C.Type == "Fee").ToList());
+                copyToChapter.Fees.AddRange(currentChapter.Fees.ToList());
+            }
+
+            if (CopyOptions.Where(C => C.Option == "Data Views").Select(C => C.Selected).FirstOrDefault())
+            {
+                foreach (var item in copyToChapter.DataViews.ToList())
+                {
+                    copyToChapter.DataViews.Remove(item);
+                }
+
+                copyToChapter.DataViews.AddRange(currentChapter.DataViews.ToList());
+            }
+
+            if (CopyOptions.Where(C => C.Option == "Messages").Select(C => C.Selected).FirstOrDefault())
+            {
+                //Temp measure until all Smartflows have been Serialised: post 22/4/2021
+                if(copyToChapter.TickerMessages is null)
+                {
+                    copyToChapter.TickerMessages = new List<TickerMessages>();
+                }
+
+                foreach (var item in copyToChapter.TickerMessages.ToList())
+                {
+                    copyToChapter.TickerMessages.Remove(item);
+                }
+
+                copyToChapter.TickerMessages.AddRange(currentChapter.TickerMessages.ToList());
             }
 
             TaskObject.ChapterObject.ChapterData = JsonConvert.SerializeObject(new VmChapter
@@ -175,7 +207,18 @@ namespace Gizmo_V1_02.Pages.Chapters
                 CaseType = TaskObject.ChapterObject.CaseType,
                 Name = TaskObject.ChapterObject.Name,
                 SeqNo = TaskObject.ChapterObject.SeqNo.GetValueOrDefault(),
-                ChapterItems = selectedCopyItems.ChapterItems
+                P4WCaseTypeGroup = copyToChapter.P4WCaseTypeGroup,
+                SelectedView = copyToChapter.SelectedView,
+                SelectedStep = copyToChapter.SelectedStep,
+                BackgroundColour = copyToChapter.BackgroundColour,
+                BackgroundColourName = copyToChapter.BackgroundColourName,
+                BackgroundImage = copyToChapter.BackgroundImage,
+                BackgroundImageName = copyToChapter.BackgroundImageName,
+                ShowPartnerNotes = copyToChapter.ShowPartnerNotes,
+                ChapterItems = copyToChapter.ChapterItems,
+                Fees = copyToChapter.Fees,
+                DataViews = copyToChapter.DataViews,
+                TickerMessages = copyToChapter.TickerMessages
             });
 
             if (TaskObject.ChapterObject.Id == 0)

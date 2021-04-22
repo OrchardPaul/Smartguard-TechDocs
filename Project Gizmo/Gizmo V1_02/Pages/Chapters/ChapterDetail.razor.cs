@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -95,6 +96,11 @@ namespace Gizmo_V1_02.Pages.Chapters
         List<string> Actions = new List<string>() { "TAKE", "INSERT" };
 
         public List<string> documentList;
+
+        public bool useCustomItem { get; set; } = false;
+
+        [Required]
+        public string customItemName { get; set; } = "";
 
         protected override void OnInitialized()
         {

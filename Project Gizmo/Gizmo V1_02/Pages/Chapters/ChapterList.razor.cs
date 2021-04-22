@@ -1511,8 +1511,8 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
             {
                 Class = "blazored-custom-modal modal-chapter-chapter"
             };
-
-            Modal.Show<ChapterCopy>("Copy Smartflow", parameters, options);
+            string title = $"Copy {selectedChapter.Name} to...";
+            Modal.Show<ChapterCopy>(title, parameters, options);
         }
 
 
@@ -2932,7 +2932,7 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
 
         private void TickerValidation()
         {
-            var currentDate = DateTime.Now;
+            var currentDate = DateTime.Now.Date;
 
             ValidTicketMessageCount = 1;
             foreach (VmTickerMessages msg in ListVmTickerMessages)

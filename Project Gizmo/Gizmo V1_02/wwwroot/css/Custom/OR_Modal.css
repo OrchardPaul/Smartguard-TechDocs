@@ -178,6 +178,8 @@
     text-align: left;
     border-color: #aaa;
     font-size: 0.9em;
+    margin-left: 1px;
+    margin-right: 1px;
 }
 
 .form-control-value {
@@ -198,7 +200,7 @@
 }
 
 .modal-body.form-control-xxl, .modal-body .form-control-xl {
-    width: 100%;
+    width: 97%;
 }
 
 .form-control-md {
