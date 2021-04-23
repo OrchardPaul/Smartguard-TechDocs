@@ -28,7 +28,7 @@
 
                 <div class="form-group">
                     <label for="DocName">Document / Step</label>
-                    <div class="form-label-check" style="margin-right: 15px">
+                    <div class="form-label-check" style="margin-right: 13px">
                         <label>Custom Item</label><input type="checkbox" @bind-value="@useCustomItem" />
                     </div>
                     @if (selectedCaseTypeGroup == -1 & CopyObject.Name is null)
@@ -40,10 +40,8 @@
                         @if (!useCustomItem)
                         {
                             <div class="form-group">
-                                <div style="width: ">
-                                    <label for="AltDisplayName">Filter</label>
-                                    <InputText class="form-control form-control-md" @bind-Value="@filterText" />
-                                </div>
+                                <label for="AltDisplayName">Filter</label>
+                                <InputText class="form-control form-control-md" @bind-Value="@filterText" />
                             </div>
 
 

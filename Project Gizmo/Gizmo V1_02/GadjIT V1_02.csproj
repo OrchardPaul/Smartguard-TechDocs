@@ -7,9 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Archive\**" />
     <Compile Remove="FileStorage\**" />
+    <Content Remove="Archive\**" />
     <Content Remove="FileStorage\**" />
+    <EmbeddedResource Remove="Archive\**" />
     <EmbeddedResource Remove="FileStorage\**" />
+    <None Remove="Archive\**" />
     <None Remove="FileStorage\**" />
   </ItemGroup>
 

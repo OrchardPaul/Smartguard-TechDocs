@@ -986,10 +986,10 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
             selectedList = type;
 
             editObject = new VmUsrOrDefChapterManagement { ChapterObject = new UsrOrDefChapterManagement() };
+            editObject.ChapterObject.CaseTypeGroup = "";
             editObject.ChapterObject.CaseType = "";
             editObject.ChapterObject.Type = (type == "Steps and Documents") ? "Doc" : type;
-            editObject.ChapterObject.CaseTypeGroup = "";
-            editObject.ChapterObject.Action = "Insert";
+            editObject.ChapterObject.Action = "INSERT";
             
             if (type == "Steps and Documents")
             {
