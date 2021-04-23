@@ -634,8 +634,36 @@
     top: 8px;
 }
 
+.ellipsis-menu .menu-toggle {
+    position: absolute;
+    left: calc(100% - 10px);
+    top: 8px;
+    width: 35px;
+}
+
 .ellipsis-menu .menu-toggle ul{
-    padding-left: 15px;
+    margin-left: 15px;
+    margin-top: -20px;
+    width: 180px;
+    visibility: hidden;
+}
+
+.ellipsis-menu .menu-toggle:hover ul {
+    visibility: visible;
+    color: blue !important;
+}
+
+.ellipsis-menu .menu-toggle:hover ul li {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis !important;
+}
+
+.ellipsis-menu-divider {
+    display: block;
+    height: 1px;
+    border-bottom: 1px #777 solid;
+    margin: 4px 2px;
 }
 
 /*-----------------------------*/
