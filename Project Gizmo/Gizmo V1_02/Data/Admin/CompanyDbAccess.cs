@@ -47,7 +47,10 @@ namespace Gizmo_V1_02.Data.Admin
         Task<AppCompanyDetails> AssignWorkTypeGroupToCompany(AppCompanyDetails company, AppWorkTypeGroups workTypeGroup);
         Task<AppCompanyDetails> RemoveWorkTypeGroupFromCompany(AppCompanyDetails company, AppWorkTypeGroups workTypeGroup);
         Task<SmartflowRecords> SaveSmartFlowRecord(UsrOrDefChapterManagement chapter, IUserSessionState sessionState);
+        Task<SmartflowRecords> SaveSmartFlowRecordData(UsrOrDefChapterManagement chapter, IUserSessionState sessionState);
+        Task<SmartflowRecords> RemoveSmartFlowRecord(int id, IUserSessionState sessionState);
         Task<List<SmartflowRecords>> SyncAdminSysToClient(List<UsrOrDefChapterManagement> clientObjects, IUserSessionState sessionState);
+        Task<List<SmartflowRecords>> GetAllSmartflowRecords(IUserSessionState sessionState);
     }
 
     public class CompanyDbAccess : ICompanyDbAccess
@@ -658,6 +661,13 @@ namespace Gizmo_V1_02.Data.Admin
         }
 
 
+        public async Task<List<SmartflowRecords>> GetAllSmartflowRecords(IUserSessionState sessionState)
+        {
+            return await context.SmartflowRecords.Where(S => S.CompanyId == sessionState.Company.Id)
+                                            .Where(S => S.System == sessionState.selectedSystem)
+                                            .ToListAsync();
+        }
+
         public async Task<SmartflowRecords> SaveSmartFlowRecord(UsrOrDefChapterManagement chapter, IUserSessionState sessionState)
         {
             SmartflowRecords record = new SmartflowRecords { CompanyId = sessionState.Company.Id };
@@ -684,8 +694,8 @@ namespace Gizmo_V1_02.Data.Admin
             {
                 mapper.Map(chapter, existingRecord);
 
-                record.LastModifiedByUserId = sessionState.User.Id;
-                record.LastModifiedDate = DateTime.Now;
+                existingRecord.LastModifiedByUserId = sessionState.User.Id;
+                existingRecord.LastModifiedDate = DateTime.Now;
             }
 
             await context.SaveChangesAsync();
@@ -693,6 +703,58 @@ namespace Gizmo_V1_02.Data.Admin
 
         }
 
+        public async Task<SmartflowRecords> SaveSmartFlowRecordData(UsrOrDefChapterManagement chapter, IUserSessionState sessionState)
+        {
+            SmartflowRecords record = new SmartflowRecords { CompanyId = sessionState.Company.Id };
+
+
+            var existingRecord = await context.SmartflowRecords
+                                                .Where(R => R.RowId == chapter.Id && R.CompanyId == sessionState.Company.Id)
+                                                .Where(R => R.System == sessionState.selectedSystem)
+                                                .SingleOrDefaultAsync();
+
+            if (existingRecord is null)
+            {
+                record.ChapterData = chapter.ChapterData;
+
+                record.System = sessionState.selectedSystem;
+                record.CreatedByUserId = sessionState.User.Id;
+                record.CreatedDate = DateTime.Now;
+                record.LastModifiedByUserId = sessionState.User.Id;
+                record.LastModifiedDate = DateTime.Now;
+
+                context.SmartflowRecords.Add(record);
+            }
+            else
+            {
+                existingRecord.ChapterData = chapter.ChapterData;
+
+                existingRecord.LastModifiedByUserId = sessionState.User.Id;
+                existingRecord.LastModifiedDate = DateTime.Now;
+            }
+
+            await context.SaveChangesAsync();
+            return record;
+
+        }
+
+        public async Task<SmartflowRecords> RemoveSmartFlowRecord(int id, IUserSessionState sessionState)
+        {
+            var existingRecord = await context.SmartflowRecords
+                                                .Where(R => R.RowId == id && R.CompanyId == sessionState.Company.Id)
+                                                .Where(R => R.System == sessionState.selectedSystem)
+                                                .SingleOrDefaultAsync();
+
+            if (!(existingRecord is null))
+            {
+                context.SmartflowRecords.Remove(existingRecord);
+                await context.SaveChangesAsync();
+            }
+
+            
+            return existingRecord;
+
+        }
 
 
     }

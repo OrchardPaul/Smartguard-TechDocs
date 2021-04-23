@@ -71,8 +71,6 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         private int selectedCaseTypeGroup { get; set; } = -1;
 
-        List<string> DocTypeList = new List<string>() { "Letter", "Doc", "Email", "Form", "Step" };
-
         List<string> ActionList = new List<string>() { "TAKE", "INSERT" };
 
         public List<string> documentList;
@@ -125,6 +123,8 @@ namespace Gizmo_V1_02.Pages.Chapters
 
             SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(SelectedChapter);
             await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
+
+            await CompanyDbAccess.SaveSmartFlowRecord(SelectedChapterObject, sessionState);
 
             TaskObject = new UsrOrDefChapterManagement();
             filterText = "";

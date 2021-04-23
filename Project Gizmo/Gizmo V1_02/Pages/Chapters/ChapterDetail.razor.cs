@@ -93,12 +93,6 @@ namespace Gizmo_V1_02.Pages.Chapters
         [Parameter]
         public List<VmUsrOrDefChapterManagement> ListOfStatus { get; set; }
 
-        [Parameter]
-        public ICompanyDbAccess CompanyDbAccess { get; set; }
-
-        [Parameter]
-        public IUserSessionState sessionState { get; set; }
-
         private int selectedCaseTypeGroup { get; set; } = -1;
 
         List<string> Actions = new List<string>() { "TAKE", "INSERT" };
@@ -147,10 +141,10 @@ namespace Gizmo_V1_02.Pages.Chapters
             TaskObject.EntityType = CopyObject.EntityType;
             TaskObject.SeqNo = CopyObject.SeqNo;
             TaskObject.SuppressStep = CopyObject.SuppressStep;
-            TaskObject.CompleteName = Regex.Replace(CopyObject.CompleteName, "[^0-9a-zA-Z-_ ]+", "");
-            TaskObject.AsName = Regex.Replace(CopyObject.AsName, "[^0-9a-zA-Z-_ ]+", "");
+            TaskObject.CompleteName = CopyObject.CompleteName is null ? "" : Regex.Replace(CopyObject.CompleteName, "[^0-9a-zA-Z-_ ]+", "");
+            TaskObject.AsName = CopyObject.AsName is null ? "" : Regex.Replace(CopyObject.AsName, "[^0-9a-zA-Z-_ ]+", "");
             TaskObject.RescheduleDays = CopyObject.RescheduleDays;
-            TaskObject.AltDisplayName = Regex.Replace(CopyObject.AltDisplayName, "[^0-9a-zA-Z-_ ]+", "");
+            TaskObject.AltDisplayName = CopyObject.AltDisplayName is null ? "" : Regex.Replace(CopyObject.AltDisplayName, "[^0-9a-zA-Z-_ ]+", "");
             TaskObject.UserMessage = CopyObject.UserMessage;
             TaskObject.PopupAlert = CopyObject.PopupAlert;
             TaskObject.NextStatus = CopyObject.NextStatus;
@@ -163,8 +157,6 @@ namespace Gizmo_V1_02.Pages.Chapters
             
             SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(SelectedChapter);
             await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
-
-            await CompanyDbAccess.SaveSmartFlowRecord(SelectedChapterObject, sessionState);
 
             TaskObject = new UsrOrDefChapterManagement();
             filterText = "";

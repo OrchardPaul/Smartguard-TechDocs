@@ -13,7 +13,9 @@ namespace Gizmo_V1_02.Data.MapperProfiles
     {
         public SmartflowRecordProfile()
         {
-            CreateMap<SmartflowRecords, UsrOrDefChapterManagement>();
+            CreateMap<SmartflowRecords, UsrOrDefChapterManagement>()
+                .ForMember(dest => dest.Id, act => act.MapFrom(scr => scr.RowId));
+            
             CreateMap<UsrOrDefChapterManagement, SmartflowRecords>()
                 .ForMember(dest => dest.RowId, act => act.MapFrom(scr => scr.Id))
                 .ForMember(dest => dest.Id, act => act.Ignore());
@@ -22,4 +24,6 @@ namespace Gizmo_V1_02.Data.MapperProfiles
 
         }
     }
+
+
 }

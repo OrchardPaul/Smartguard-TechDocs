@@ -40,10 +40,11 @@ namespace Gizmo_V1_02.Pages.Chapters
         public bool addNewCaseTypeOption { get; set; } = false;
 
         [Parameter]
-        public ICompanyDbAccess CompanyDbAccess { get; set; }
+        public IUserSessionState sessionState { get; set; }
 
         [Parameter]
-        public IUserSessionState sessionState { get; set; }
+        public ICompanyDbAccess CompanyDbAccess { get; set; }
+
 
         private async void Close()
         {
@@ -73,18 +74,19 @@ namespace Gizmo_V1_02.Pages.Chapters
                                                                                             ShowPartnerNotes = "N",
                                                                                             ChapterItems = new List<UsrOrDefChapterManagement>(),
                                                                                             Fees = new List<Fee>(),
-                                                                                            DataViews = new List<DataViews>()
-                                                                                        }); 
+                                                                                            DataViews = new List<DataViews>(),
+                                                                                            TickerMessages = new List<TickerMessages>()
+                                                                                        });
 
 
-                await chapterManagementService.Add(TaskObject.ChapterObject);
+                var returnObject = await chapterManagementService.Add(TaskObject.ChapterObject);
+                TaskObject.ChapterObject.Id = returnObject.Id;
+                await CompanyDbAccess.SaveSmartFlowRecord(TaskObject.ChapterObject, sessionState);
             }
             else
             {
-                await chapterManagementService.Update(TaskObject.ChapterObject);
+                await chapterManagementService.UpdateMainItem(TaskObject.ChapterObject);
             }
-
-            await CompanyDbAccess.SaveSmartFlowRecord(TaskObject.ChapterObject, sessionState);
 
             DataChanged?.Invoke();
             Close();

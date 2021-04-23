@@ -976,7 +976,7 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
                                             ? ""
                                             : worksheetStatus.Cells[row, column].Value is null
                                             ? ""
-                                            : worksheetStatus.Cells[row, column].Value.ToString();
+                                            : Regex.Replace(worksheetStatus.Cells[row, column].Value.ToString(), "[^0-9a-zA-Z-_ ]+", "");
                         if (column == 2) readObject.SuppressStep = worksheetStatus.Cells[row, column].FirstOrDefault() is null
                                             ? ""
                                             : worksheetStatus.Cells[row, column].Value is null

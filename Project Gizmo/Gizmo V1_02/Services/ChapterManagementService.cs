@@ -1,6 +1,7 @@
 ﻿using GadjIT.ClientContext.P4W;
 using GadjIT.ClientContext.P4W.Custom;
 using GadjIT.ClientContext.P4W.Functions;
+using Gizmo_V1_02.Data.Admin;
 using Gizmo_V1_02.Services.SessionState;
 using Microsoft.AspNetCore.Components;
 using System;
@@ -14,8 +15,8 @@ namespace Gizmo_V1_02.Services
     public interface IChapterManagementService
     {
         Task<UsrOrDefChapterManagement> Add(UsrOrDefChapterManagement item);
-        Task Delete(int id);
-        Task DeleteChapter(int id);
+        Task<Task<HttpResponseMessage>> Delete(int id);
+        Task<Task<HttpResponseMessage>> DeleteChapter(int id);
         Task<List<UsrOrDefChapterManagement>> GetAllChapters();
         Task<List<string>> GetCaseTypeGroup();
         Task<List<string>> GetCaseTypes();
@@ -26,6 +27,7 @@ namespace Gizmo_V1_02.Services
         Task<List<UsrOrDefChapterManagement>> GetItemListByChapter(int chapterId);
         Task<List<UsrOrDefChapterManagement>> GetItemListByChapterName(string casetypegroup, string casetype, string chapterName);
         Task<UsrOrDefChapterManagement> Update(UsrOrDefChapterManagement item);
+        Task<UsrOrDefChapterManagement> UpdateMainItem(UsrOrDefChapterManagement item);
         Task<List<UsrOrDefChapterManagement>> UpdateCaseType(string newCaseTypeName, string originalCaseTypeName, string caseTypeGroup);
         Task<List<UsrOrDefChapterManagement>> UpdateCaseTypeGroups(string newCaseTypeGroupName, string originalCaseTypeGroupName);
         Task<List<fnORCHAGetFeeDefinitions>> GetFeeDefs(string caseTypeGroup, string caseType);
@@ -38,21 +40,32 @@ namespace Gizmo_V1_02.Services
     {
         private readonly HttpClient httpClient;
         private readonly IUserSessionState userSession;
+        private readonly ICompanyDbAccess companyDbAccess;
 
-        public ChapterManagementService(HttpClient httpClient, IUserSessionState userSession)
+        public ChapterManagementService(HttpClient httpClient, IUserSessionState userSession, ICompanyDbAccess companyDbAccess)
         {
             this.httpClient = httpClient;
             this.userSession = userSession;
+            this.companyDbAccess = companyDbAccess;
         }
 
-        public Task<UsrOrDefChapterManagement> Add(UsrOrDefChapterManagement item)
+        public async Task<UsrOrDefChapterManagement> Add(UsrOrDefChapterManagement item)
         {
-            return httpClient.PostJsonAsync<UsrOrDefChapterManagement>($"{userSession.baseUri}api/ChapterManagement/Add", item);
+            return await httpClient.PostJsonAsync<UsrOrDefChapterManagement>($"{userSession.baseUri}api/ChapterManagement/Add", item);
         }
 
-        public Task<UsrOrDefChapterManagement> Update(UsrOrDefChapterManagement item)
+        public async Task<UsrOrDefChapterManagement> Update(UsrOrDefChapterManagement item)
         {
-            return httpClient.PutJsonAsync<UsrOrDefChapterManagement>($"{userSession.baseUri}api/ChapterManagement/Update/{item.Id}", item);
+            await companyDbAccess.SaveSmartFlowRecordData(item, userSession);
+
+            return await httpClient.PutJsonAsync<UsrOrDefChapterManagement>($"{userSession.baseUri}api/ChapterManagement/Update/{item.Id}", item);
+        }
+
+        public async Task<UsrOrDefChapterManagement> UpdateMainItem(UsrOrDefChapterManagement item)
+        {
+            await companyDbAccess.SaveSmartFlowRecord(item, userSession);
+
+            return await httpClient.PutJsonAsync<UsrOrDefChapterManagement>($"{userSession.baseUri}api/ChapterManagement/Update/{item.Id}", item);
         }
 
         public Task<List<VmChapterFee>> UpdateChapterFees(int ChapterId, List<VmChapterFee> vmChapterFees)
@@ -74,13 +87,17 @@ namespace Gizmo_V1_02.Services
             return httpClient.PutJsonAsync<List<UsrOrDefChapterManagement>>($"{userSession.baseUri}api/ChapterManagement/UpdateCaseTypeGroups/{newCaseTypeGroupName}/{originalCaseTypeGroupName}", item);
         }
 
-        public Task Delete(int id)
+        public async Task<Task<HttpResponseMessage>> Delete(int id)
         {
+            await companyDbAccess.RemoveSmartFlowRecord(id, userSession);
+
             return httpClient.DeleteAsync($"{userSession.baseUri}api/ChapterManagement/Delete/{id}");
         }
 
-        public Task DeleteChapter(int id)
+        public async Task<Task<HttpResponseMessage>> DeleteChapter(int id)
         {
+            await companyDbAccess.RemoveSmartFlowRecord(id, userSession);
+
             return httpClient.DeleteAsync($"{userSession.baseUri}api/ChapterManagement/DeleteChapter/{id}");
         }
 

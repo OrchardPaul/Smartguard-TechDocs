@@ -67,7 +67,7 @@ namespace Gizmo_V1_02.Pages.Chapters
                     updateJson.CaseType = TaskObject;
                     chapter.ChapterObject.CaseType = TaskObject;
                     chapter.ChapterObject.ChapterData = JsonConvert.SerializeObject(updateJson);
-                    await chapterManagementService.Update(chapter.ChapterObject).ConfigureAwait(false);
+                    await chapterManagementService.UpdateMainItem(chapter.ChapterObject).ConfigureAwait(false);
                 }
             }
             else if (isCaseTypeOrGroup == "CaseTypeGroup")
@@ -80,7 +80,7 @@ namespace Gizmo_V1_02.Pages.Chapters
                     updateJson.CaseTypeGroup = TaskObject;
                     chapter.ChapterObject.CaseTypeGroup = TaskObject;
                     chapter.ChapterObject.ChapterData = JsonConvert.SerializeObject(updateJson);
-                    await chapterManagementService.Update(chapter.ChapterObject).ConfigureAwait(false);
+                    await chapterManagementService.UpdateMainItem(chapter.ChapterObject).ConfigureAwait(false);
                 }
             }
             else
@@ -88,10 +88,8 @@ namespace Gizmo_V1_02.Pages.Chapters
                 var updateJson = JsonConvert.DeserializeObject<VmChapter>(Chapter.ChapterData);
                 updateJson.Name = Chapter.Name;
                 Chapter.ChapterData = JsonConvert.SerializeObject(updateJson);
-                await chapterManagementService.Update(Chapter).ConfigureAwait(false);
+                await chapterManagementService.UpdateMainItem(Chapter).ConfigureAwait(false);
             }
-
-            await CompanyDbAccess.SaveSmartFlowRecord(Chapter, sessionState);
 
             DataChanged?.Invoke();
             Close();
