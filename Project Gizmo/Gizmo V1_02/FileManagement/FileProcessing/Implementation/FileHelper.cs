@@ -1139,7 +1139,7 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
                                             : worksheetAttachments.Cells[row, column].Value is null
                                             ? ""
                                             : worksheetAttachments.Cells[row, column].Value.ToString();
-                            readObject = readChapters.ChapterItems.Where(C => C.Name == documentName).SingleOrDefault();
+                            readObject = readChapters.ChapterItems.Where(C => C.Name == documentName).FirstOrDefault();
                         }
 
                         if(!(readObject is null))

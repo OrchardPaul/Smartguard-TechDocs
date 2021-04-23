@@ -51,6 +51,7 @@ namespace Gizmo_V1_02.Data.Admin
         Task<SmartflowRecords> RemoveSmartFlowRecord(int id, IUserSessionState sessionState);
         Task<List<SmartflowRecords>> SyncAdminSysToClient(List<UsrOrDefChapterManagement> clientObjects, IUserSessionState sessionState);
         Task<List<SmartflowRecords>> GetAllSmartflowRecords(IUserSessionState sessionState);
+        bool Lock { get; set; }
     }
 
     public class CompanyDbAccess : ICompanyDbAccess
@@ -73,6 +74,9 @@ namespace Gizmo_V1_02.Data.Admin
             this.identityUserAccess = identityUserAccess;
             this.mapper = mapper;
         }
+
+
+        public bool Lock { get; set; } = false;
 
         /*
          * 
@@ -663,9 +667,23 @@ namespace Gizmo_V1_02.Data.Admin
 
         public async Task<List<SmartflowRecords>> GetAllSmartflowRecords(IUserSessionState sessionState)
         {
-            return await context.SmartflowRecords.Where(S => S.CompanyId == sessionState.Company.Id)
-                                            .Where(S => S.System == sessionState.selectedSystem)
-                                            .ToListAsync();
+            var returnValues = new List<SmartflowRecords>();
+
+            try
+            {
+                Lock = true;
+
+                returnValues = await context.SmartflowRecords.Where(S => S.CompanyId == sessionState.Company.Id)
+                                .Where(S => S.System == sessionState.selectedSystem)
+                                .ToListAsync();
+
+            }
+            finally
+            {
+                Lock = false;
+            }
+
+            return returnValues;
         }
 
         public async Task<SmartflowRecords> SaveSmartFlowRecord(UsrOrDefChapterManagement chapter, IUserSessionState sessionState)

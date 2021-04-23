@@ -495,8 +495,22 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
             //var lstC = await chapterManagementService.GetAllChapters();
             //lstChapters = lstC.Select(A => new VmUsrOrDefChapterManagement { ChapterObject = A }).ToList();
 
-            var lsrSR = await CompanyDbAccess.GetAllSmartflowRecords(sessionState);
-            lstChapters = lsrSR.Select(A => new VmUsrOrDefChapterManagement { ChapterObject = mapper.Map(A, new UsrOrDefChapterManagement()) }).ToList();
+            bool gotLock = CompanyDbAccess.Lock;
+            while (gotLock)
+            {
+                await Task.Yield();
+                gotLock = CompanyDbAccess.Lock;
+            }
+
+            try
+            {
+                var lsrSR = await CompanyDbAccess.GetAllSmartflowRecords(sessionState);
+                lstChapters = lsrSR.Select(A => new VmUsrOrDefChapterManagement { ChapterObject = mapper.Map(A, new UsrOrDefChapterManagement()) }).ToList();
+            }
+            catch
+            {
+                Console.WriteLine("Error Caught");
+            }
 
 
             if (!(selectedChapter.Name is null) & selectedChapter.Name != "")
@@ -526,6 +540,14 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
             {
                 //var lstC = await chapterManagementService.GetAllChapters();
                 //lstChapters = lstC.Select(A => new VmUsrOrDefChapterManagement { ChapterObject = A }).ToList();
+
+                bool gotLock = CompanyDbAccess.Lock;
+                while (gotLock)
+                {
+                    await Task.Yield();
+                    gotLock = CompanyDbAccess.Lock;
+                }
+
                 var lsrSR = await CompanyDbAccess.GetAllSmartflowRecords(sessionState);
                 lstChapters = lsrSR.Select(A => new VmUsrOrDefChapterManagement { ChapterObject = mapper.Map(A, new UsrOrDefChapterManagement()) }).ToList();
 
@@ -633,6 +655,13 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
 
                 //var lstC = await chapterManagementService.GetAllChapters();
                 //lstAltSystemChapters = lstC.Select(A => new VmUsrOrDefChapterManagement { ChapterObject = A }).ToList();
+
+                bool gotLock = CompanyDbAccess.Lock;
+                while (gotLock)
+                {
+                    await Task.Yield();
+                    gotLock = CompanyDbAccess.Lock;
+                }
 
                 var lsrSR = await CompanyDbAccess.GetAllSmartflowRecords(sessionState);
                 lstAltSystemChapters = lsrSR.Select(A => new VmUsrOrDefChapterManagement { ChapterObject = mapper.Map(A, new UsrOrDefChapterManagement()) }).ToList();
