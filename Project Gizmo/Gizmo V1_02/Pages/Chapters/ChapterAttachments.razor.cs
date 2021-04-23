@@ -71,9 +71,19 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         private int selectedCaseTypeGroup { get; set; } = -1;
 
+        
         List<string> ActionList = new List<string>() { "TAKE", "INSERT" };
 
         public List<string> documentList;
+
+
+        protected override void OnInitialized()
+        {
+            if (!(string.IsNullOrEmpty(SelectedChapter.P4WCaseTypeGroup)) && (SelectedChapter.P4WCaseTypeGroup != "Select"))
+            {
+                selectedCaseTypeGroup = CaseTypeGroups.Where(CT => CT.Name == SelectedChapter.P4WCaseTypeGroup).Select(CT => CT.Id).FirstOrDefault();
+            }
+        }
 
         private async void Close()
         {

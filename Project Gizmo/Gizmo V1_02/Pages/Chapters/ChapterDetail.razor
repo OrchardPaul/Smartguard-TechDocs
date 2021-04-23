@@ -28,40 +28,51 @@
 
                 <div class="form-group">
                     <label for="DocName">Document / Step</label>
+                    <div class="form-label-check" style="margin-right: 13px">
+                        <label>Custom Item</label><input type="checkbox" @bind-value="@useCustomItem" />
+                    </div>
                     @if (selectedCaseTypeGroup == -1 & CopyObject.Name is null)
                     {
                         <select class="form-control form-control-xl" disabled />
                     }
                     else
                     {
-                        <div class="form-group">
-                            <label for="AltDisplayName">Filter</label>
-                            <InputText class="form-control form-control-md" @bind-Value="@filterText" />
-                        </div>
+                        @if (!useCustomItem)
+                        {
+                            <div class="form-group">
+                                <label for="AltDisplayName">Filter</label>
+                                <InputText class="form-control form-control-md" @bind-Value="@filterText" />
+                            </div>
 
 
-                        <InputSelect class="form-control form-control-xl" @bind-Value="CopyObject.Name">
-                            @if (CopyObject.Name is null)
-                                        {
-                                <option value="">Select</option>
-                                        }
-                                        else
-                                        {
-                                <option value="@CopyObject.Name">@CopyObject.Name</option>
-                                        }
+                            <InputSelect class="form-control form-control-xl" @bind-Value="CopyObject.Name">
+                                @if (CopyObject.Name is null)
+                                                {
+                                    <option value="">Select</option>
+                                                }
+                                                else
+                                                {
+                                    <option value="@CopyObject.Name">@CopyObject.Name</option>
+                                                }
 
 
-                            @foreach (var doc in dropDownChapterList.Where(D => D.CaseTypeGroupRef == selectedCaseTypeGroup).Where(C => C.Name.ToUpper().Contains(filterText.ToUpper())).OrderBy(D => D.Name).ToList())
-                                        {
-                                <option value="@doc.Name">
-                                    @doc.Name
-                                </option>
-                                        }
-                        </InputSelect>
+                                @foreach (var doc in dropDownChapterList.Where(D => D.CaseTypeGroupRef == selectedCaseTypeGroup).Where(C => C.Name.ToUpper().Contains(filterText.ToUpper())).OrderBy(D => D.Name).ToList())
+                                                {
+                                    <option value="@doc.Name">
+                                        @doc.Name
+                                    </option>
+                                                }
+                            </InputSelect>
+                        }
+                        else
+                        {
 
+                            <InputText class="form-control form-control-xl" @bind-Value="@CopyObject.Name"></InputText>
+                        }
+                        <ValidationMessage For="@(() => CopyObject.Name)" />
 
                     }
-                    <ValidationMessage For="@(() => CopyObject.Name)" />
+
                 </div>
             }
 
@@ -85,6 +96,22 @@
             </div>
 
             <div class="form-group">
+                <label for="Action">Action</label>
+                <InputSelect class="form-control form-control-sm"
+                             @bind-Value="CopyObject.Action">
+                    <option value=""></option>
+                    @foreach (var a in Actions)
+                        {
+                        <option value="@a">
+                            @a
+                        </option>
+                        }
+                </InputSelect>
+                <ValidationMessage For="@(() => CopyObject.Action)" />
+            </div>
+
+
+            <div class="form-group">
                 <label for="AsName">Schedule As Name</label>
                 <InputText class="form-control form-control-xl" @bind-Value="@CopyObject.AsName" />
             </div>
@@ -98,6 +125,7 @@
                 <label for="CompleteName">Complete As Name</label>
                 <InputText class="form-control form-control-xl" @bind-Value="@CopyObject.CompleteName" />
             </div>
+
 
 
             <div class="form-group">
@@ -115,20 +143,7 @@
                 <ValidationMessage For="@(() => CopyObject.Type)" />
             </div>
 
-            <div class="form-group">
-                <label for="Action">Action</label>
-                <InputSelect class="form-control form-control-sm"
-                             @bind-Value="CopyObject.Action">
-                    <option value=""></option>
-                    @foreach (var a in Actions)
-                        {
-                        <option value="@a">
-                            @a
-                        </option>
-                        }
-                </InputSelect>
-                <ValidationMessage For="@(() => CopyObject.Action)" />
-            </div>
+
 
 
             <div class="form-group">

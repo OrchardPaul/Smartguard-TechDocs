@@ -109,6 +109,7 @@ namespace Gizmo_V1_02.Pages.Chapters
         public string editCaseType { get; set; } = "";
         public string updateJSON { get; set; } = "";
 
+
         public string selectColour { 
             get 
             { 
@@ -149,7 +150,11 @@ namespace Gizmo_V1_02.Pages.Chapters
         public VmChapterComparison editChapterComparison = new VmChapterComparison();
 
         public VmUsrOrDefChapterManagement editObject = new VmUsrOrDefChapterManagement { ChapterObject = new UsrOrDefChapterManagement() };
+        
+        public FollowUpDoc attachObject = new FollowUpDoc();
+
         public VmFee editFeeObject = new VmFee { FeeObject = new Fee() };
+
         public VmUsrOrDefChapterManagement editChapterObject = new VmUsrOrDefChapterManagement { ChapterObject = new UsrOrDefChapterManagement() };
 
 
@@ -1016,24 +1021,16 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
             ShowTickerMessageDetailModal("Edit");
         }
 
-        private void PrepareAttachmentForEdit(VmUsrOrDefChapterManagement item, string header)
-        {
-            selectedList = header;
-            editObject = item;
-
-            ShowChapterAttachmentModal();
-        }
-
 
         private void PrepareForInsert(string header, string type)
         {
             selectedList = type;
 
             editObject = new VmUsrOrDefChapterManagement { ChapterObject = new UsrOrDefChapterManagement() };
+            editObject.ChapterObject.CaseTypeGroup = "";
             editObject.ChapterObject.CaseType = "";
             editObject.ChapterObject.Type = (type == "Steps and Documents") ? "Doc" : type;
-            editObject.ChapterObject.CaseTypeGroup = "";
-            editObject.ChapterObject.Action = "Insert";
+            editObject.ChapterObject.Action = "INSERT";
             
             if (type == "Steps and Documents")
             {
@@ -1555,8 +1552,8 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
             {
                 Class = "blazored-custom-modal modal-chapter-chapter"
             };
-
-            Modal.Show<ChapterCopy>("Copy Smartflow", parameters, options);
+            string title = $"Copy {selectedChapter.Name} to...";
+            Modal.Show<ChapterCopy>(title, parameters, options);
         }
 
 
@@ -1726,6 +1723,24 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
             Modal.Show<TickerMessageDetail>("Ticker Messages", parameters, options);
         }
 
+        private void PrepareAttachmentForAdd(VmUsrOrDefChapterManagement item)
+        {
+            selectedList = "New Attachement";
+            editObject = item;
+            attachObject = null;
+
+            ShowChapterAttachmentModal();
+        }
+
+        private void PrepareAttachmentForEdit(VmUsrOrDefChapterManagement item, FollowUpDoc followUpDoc)
+        {
+            selectedList = "Edit Attachement";
+            editObject = item;
+            attachObject = followUpDoc;
+
+            ShowChapterAttachmentModal();
+        }
+
         protected void ShowChapterAttachmentModal()
         {
             Action action = RefreshSelectedList;
@@ -1747,9 +1762,8 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
                 FollowUpDocs = editObject.ChapterObject.FollowUpDocs
             };
 
-            var attachment = copyObject.FollowUpDocs is null ? new FollowUpDoc() : copyObject.FollowUpDocs.FirstOrDefault();
-
-            attachment = attachment is null ? new FollowUpDoc() : attachment;
+           
+            var attachment = attachObject is null ? new FollowUpDoc() : attachObject;
 
             var parameters = new ModalParameters();
             parameters.Add("TaskObject", editObject.ChapterObject);
@@ -3008,7 +3022,7 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
 
         private void TickerValidation()
         {
-            var currentDate = DateTime.Now;
+            var currentDate = DateTime.Now.Date;
 
             ValidTicketMessageCount = 1;
             foreach (VmTickerMessages msg in ListVmTickerMessages)

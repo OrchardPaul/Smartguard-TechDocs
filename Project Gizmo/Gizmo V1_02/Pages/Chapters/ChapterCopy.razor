@@ -23,6 +23,7 @@
                                  ValueChanged="@((string value) => SelectExistingCaseTypeGroup(value))">
                         @foreach (var c in AllChapters.Where(C => C.ChapterObject.ParentId == 0)
                                       .Where(C => !(C.ChapterObject.CaseTypeGroup is null))
+                                      .OrderBy(C => C.ChapterObject.CaseTypeGroup)
                                       .Select(C => C.ChapterObject.CaseTypeGroup)
                                       .Distinct()
                                       .ToList())
@@ -63,6 +64,7 @@
                         @foreach (var c in AllChapters.Where(C => C.ChapterObject.ParentId == 0)
                                      .Where(C => C.ChapterObject.CaseTypeGroup == TaskObject.ChapterObject.CaseTypeGroup)
                                      .Where(C => !(C.ChapterObject.CaseType is null))
+                                      .OrderBy(C => C.ChapterObject.CaseType)
                                      .Select(C => C.ChapterObject.CaseType)
                                      .Distinct()
                                      .ToList())
@@ -104,6 +106,7 @@
                         @foreach (var c in AllChapters.Where(C => C.ChapterObject.ParentId == 0)
                                                   .Where(C => C.ChapterObject.CaseTypeGroup == TaskObject.ChapterObject.CaseTypeGroup)
                                                   .Where(C => C.ChapterObject.CaseType == TaskObject.ChapterObject.CaseType)
+                                                  .OrderBy(C => C.ChapterObject.SeqNo)
                                                   .ToList())
                         {
                             <option value="@c.ChapterObject.Id">
