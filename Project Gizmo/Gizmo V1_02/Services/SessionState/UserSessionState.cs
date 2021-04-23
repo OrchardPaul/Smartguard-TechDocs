@@ -213,6 +213,7 @@ namespace Gizmo_V1_02.Services.SessionState
             //Get new 
             var baseUri = await companyDbAccess.GetCompanyBaseUri(Company.Id, (User.SelectedUri == "Live") ? "Dev" : "Live");
             this.baseUri = baseUri;
+            selectedSystem = (User.SelectedUri == "Live") ? "Dev" : "Live";
 
             Lock = false;
             return baseUri;
@@ -224,6 +225,7 @@ namespace Gizmo_V1_02.Services.SessionState
             //Get new 
             var baseUri = await companyDbAccess.GetCompanyBaseUri(Company.Id, User.SelectedUri);
             this.baseUri = baseUri;
+            selectedSystem = User.SelectedUri;
 
             Lock = false;
             return baseUri;

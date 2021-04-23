@@ -1,7 +1,9 @@
 ﻿using Blazored.Modal;
 using GadjIT.ClientContext.P4W;
 using GadjIT.ClientContext.P4W.Custom;
+using Gizmo_V1_02.Data.Admin;
 using Gizmo_V1_02.Services;
+using Gizmo_V1_02.Services.SessionState;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using Newtonsoft.Json;
@@ -15,24 +17,6 @@ namespace Gizmo_V1_02.Pages.Chapters
 {
     public partial class ChapterAttachments
     {
-
-        public int? RescheduleDays
-        {
-            get { return Attachment.ScheduleDays; }
-            set
-            {
-                if (value < 0)
-                {
-                    Attachment.ScheduleDays = 0;
-                }
-                else
-                {
-                    Attachment.ScheduleDays = value;
-                }
-            }
-        }
-
-
         [CascadingParameter]
         BlazoredModalInstance ModalInstance { get; set; }
 
@@ -77,6 +61,13 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         [Parameter]
         public List<VmUsrOrDefChapterManagement> ListOfStatus { get; set; }
+
+
+        [Parameter]
+        public ICompanyDbAccess CompanyDbAccess { get; set; }
+
+        [Parameter]
+        public IUserSessionState sessionState { get; set; }
 
         private int selectedCaseTypeGroup { get; set; } = -1;
 
@@ -142,6 +133,8 @@ namespace Gizmo_V1_02.Pages.Chapters
 
             SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(SelectedChapter);
             await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
+
+            await CompanyDbAccess.SaveSmartFlowRecord(SelectedChapterObject, sessionState);
 
             TaskObject = new UsrOrDefChapterManagement();
             filterText = "";

@@ -28,6 +28,6 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Interface
         byte[] ReadFileIntoByteArray(string path);
         void Write(List<string> output, string fileName);
 
-        Task<string> WriteChapterDataToExcel(VmChapter selectedChapter, List<DmDocuments> documents);
+        Task<string> WriteChapterDataToExcel(VmChapter selectedChapter, List<DmDocuments> documents, List<CaseTypeGroups> caseTypeGroups);
     }
 }

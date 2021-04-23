@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using GadjIT.ClientContext.P4W;
+using GadjIT.ClientContext.P4W.Custom;
 using GadjIT.GadjitContext.GadjIT_App;
 using System;
 using System.Collections.Generic;
@@ -12,11 +13,17 @@ namespace Gizmo_V1_02.Data.MapperProfiles
     {
         public SmartflowRecordProfile()
         {
-            CreateMap<SmartflowRecords, UsrOrDefChapterManagement>();
+            CreateMap<SmartflowRecords, UsrOrDefChapterManagement>()
+                .ForMember(dest => dest.Id, act => act.MapFrom(scr => scr.RowId));
+            
             CreateMap<UsrOrDefChapterManagement, SmartflowRecords>()
                 .ForMember(dest => dest.RowId, act => act.MapFrom(scr => scr.Id))
                 .ForMember(dest => dest.Id, act => act.Ignore());
 
+            CreateMap<VmChapter, VmChapter>();
+
         }
     }
+
+
 }

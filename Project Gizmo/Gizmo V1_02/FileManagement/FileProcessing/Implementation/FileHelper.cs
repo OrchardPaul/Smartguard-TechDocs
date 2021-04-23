@@ -3,6 +3,7 @@ using GadjIT.ClientContext.P4W;
 using GadjIT.ClientContext.P4W.Custom;
 using Gizmo_V1_02.FileManagement.FileClassObjects;
 using Gizmo_V1_02.FileManagement.FileProcessing.Interface;
+using Gizmo_V1_02.Services.SessionState;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -15,6 +16,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -72,6 +74,7 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
         {
             webHostEnvironment = webHost;
             this.jsRuntime = jsRuntime;
+
         }
 
         public async Task<bool> Upload(IFileListEntry file)
@@ -459,7 +462,7 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
             return isExcelValid;
         }
 
-        public async Task<string> WriteChapterDataToExcel(VmChapter selectedChapter, List<DmDocuments> documents)
+        public async Task<string> WriteChapterDataToExcel(VmChapter selectedChapter, List<DmDocuments> documents, List<CaseTypeGroups> caseTypeGroups)
         {
             List<string> docTypes = new List<string> { "Doc", "Letter", "Form", "Step", "Date", "Email" };
             Dictionary<int?, string> docP4WTypes = new Dictionary<int?, string> { { 1, "Doc" }, { 4, "Form" }, { 6, "Step" }, { 8, "Date" }, { 9, "Email" }, { 11, "Doc" }, { 12, "Email" }, { 13, "Doc" }, { 19, "Doc" } };
@@ -490,7 +493,7 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
             workSheetHeader.Cells[3, 1].Value = "Case Type:";
             workSheetHeader.Cells[3, 2].Value = selectedChapter.CaseType;
 
-            workSheetHeader.Cells[4, 1].Value = "Case Type Group:";
+            workSheetHeader.Cells[4, 1].Value = "Smartflow Name:";
             workSheetHeader.Cells[4, 2].Value = selectedChapter.Name;
 
             workSheetHeader.Cells[6, 1].Value = "Colour:";
@@ -622,11 +625,12 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
                 workSheetFees.Cells[recordIndex, 4].Value = string.IsNullOrEmpty(feeItem.FeeName) ? "" : feeItem.VATable;
                 workSheetFees.Cells[recordIndex, 5].Value = string.IsNullOrEmpty(feeItem.FeeName) ? "" : feeItem.PostingType;
 
-
-                workSheetFees.Cells[recordIndex, 5].DataValidation.AddListDataValidation().Formula.ExcelFormula = $"= Lookups!$D$3:$D${FeeDefinitions.Count()}";
-
                 recordIndex++;
             }
+
+            var postingTypeValidation = workSheetFees.DataValidations.AddListValidation("E3:E300");
+            postingTypeValidation.Formula.ExcelFormula = $"= Lookups!$D$3:$D${FeeDefinitions.Count()}";
+
 
             workSheetFees.Column(1).AutoFit();
             workSheetFees.Column(2).AutoFit();
@@ -655,9 +659,9 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
             workSheetDocument.Cells[1, 2].Style.WrapText = true;
             workSheetDocument.Cells[1, 2].Value = "Optional: \r\nI would like the documents to be displayed using the following name: ";
             workSheetDocument.Cells[1, 3].Style.WrapText = true;
-            workSheetDocument.Cells[1, 3].Value = "Optional: \r\nI would like the next item to be scheduled for this many days:";
+            workSheetDocument.Cells[1, 3].Value = "Optional: \r\nThe item schedule in the Case Agenda should be named:";
             workSheetDocument.Cells[1, 4].Style.WrapText = true;
-            workSheetDocument.Cells[1, 4].Value = "Optional: \r\nThe item schedule in the Case Agenda should be named:";
+            workSheetDocument.Cells[1, 4].Value = "Optional: \r\nI would like the next item to be scheduled for this many days:";
             workSheetDocument.Cells[1, 5].Style.WrapText = true;
             workSheetDocument.Cells[1, 5].Value = "Optional: \r\nOn running the document I would also like a history item created called: ";
             workSheetDocument.Cells[1, 6].Style.WrapText = true;
@@ -679,8 +683,8 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
             workSheetDocument.Row(2).Style.Font.Bold = true;
             workSheetDocument.Cells[2, 1].Value = "Item Name";
             workSheetDocument.Cells[2, 2].Value = "Alternative Item Name";
-            workSheetDocument.Cells[2, 3].Value = "Reschedule Days";
-            workSheetDocument.Cells[2, 4].Value = "Reschedule As Description";
+            workSheetDocument.Cells[2, 3].Value = "Reschedule As Description";
+            workSheetDocument.Cells[2, 4].Value = "Reschedule Days";
             workSheetDocument.Cells[2, 5].Value = "Step History Description";
             workSheetDocument.Cells[2, 6].Value = "Status Change";
             workSheetDocument.Cells[2, 7].Value = "Action";
@@ -694,14 +698,16 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
             {
                 workSheetDocument.Cells[recordIndex, 1].Value = string.IsNullOrEmpty(chapterItem.Name) ? "" : chapterItem.Name;
                 workSheetDocument.Cells[recordIndex, 2].Value = string.IsNullOrEmpty(chapterItem.AltDisplayName) ? "" : chapterItem.AltDisplayName;
-                workSheetDocument.Cells[recordIndex, 3].Value = chapterItem.RescheduleDays is null ? "" : chapterItem.RescheduleDays.ToString();
-                workSheetDocument.Cells[recordIndex, 4].Value = string.IsNullOrEmpty(chapterItem.AsName) ? "" : chapterItem.AsName;
+                workSheetDocument.Cells[recordIndex, 3].Value = string.IsNullOrEmpty(chapterItem.AsName) ? "" : chapterItem.AsName;
+                workSheetDocument.Cells[recordIndex, 4].Value = chapterItem.RescheduleDays is null ? "" : chapterItem.RescheduleDays.ToString();
                 workSheetDocument.Cells[recordIndex, 5].Value = string.IsNullOrEmpty(chapterItem.CompleteName) ? "" : chapterItem.CompleteName;
                 workSheetDocument.Cells[recordIndex, 6].Value = string.IsNullOrEmpty(chapterItem.NextStatus) ? "" : chapterItem.NextStatus;
                 workSheetDocument.Cells[recordIndex, 7].Value = string.IsNullOrEmpty(chapterItem.Action) ? "" : chapterItem.Action;
                 workSheetDocument.Cells[recordIndex, 8].Value = string.IsNullOrEmpty(chapterItem.UserMessage) ? "" : chapterItem.UserMessage;
                 workSheetDocument.Cells[recordIndex, 9].Value = string.IsNullOrEmpty(chapterItem.PopupAlert) ? "" : chapterItem.PopupAlert;
                 workSheetDocument.Cells[recordIndex, 10].Value = string.IsNullOrEmpty(chapterItem.DeveloperNotes) ? "" : chapterItem.DeveloperNotes;
+
+                //workSheetDocument.Cells[recordIndex, 6].DataValidation.AddListDataValidation().Formula.ExcelFormula = $"= Status!A3:A{selectedChapter.ChapterItems.Where(C => C.Type == "Status").ToList().Count() + 3}";
 
                 recordIndex++;
             }
@@ -756,8 +762,6 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
             workSheetAttachments.Cells[1, 3].Value = "Alternative name to be shown in agenda.";
             workSheetAttachments.Cells[1, 4].Style.WrapText = true;
             workSheetAttachments.Cells[1, 4].Value = "TAKE or INSERT.";
-            workSheetAttachments.Cells[1, 5].Style.WrapText = true;
-            workSheetAttachments.Cells[1, 5].Value = "If INSERT then days to be scheduled from current date.";
 
 
             workSheetAttachments.Row(2).Height = 20;
@@ -767,7 +771,6 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
             workSheetAttachments.Cells[2, 2].Value = "Attachment Name";
             workSheetAttachments.Cells[2, 3].Value = "Attachment Display Name";
             workSheetAttachments.Cells[2, 4].Value = "Action";
-            workSheetAttachments.Cells[2, 5].Value = "Schedule Days";
 
             //Body of table
             recordIndex = 3;
@@ -783,7 +786,8 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
                     workSheetAttachments.Cells[recordIndex, 2].Value = string.IsNullOrEmpty(doc.DocName) ? "" : doc.DocName;
                     workSheetAttachments.Cells[recordIndex, 3].Value = string.IsNullOrEmpty(doc.DocAsName) ? "" : doc.DocAsName;
                     workSheetAttachments.Cells[recordIndex, 4].Value = string.IsNullOrEmpty(doc.Action) ? "" : doc.Action;
-                    workSheetAttachments.Cells[recordIndex, 5].Value = doc.ScheduleDays is null ? "" : doc.ScheduleDays.ToString();
+
+                    //workSheetAttachments.Cells[recordIndex, 1].DataValidation.AddListDataValidation().Formula.ExcelFormula = $"= Documents!A3:A{selectedChapter.ChapterItems.Where(C => docTypes.Contains(C.Type)).ToList().Count() + 3}";
 
                     recordIndex++;
                 }
@@ -876,7 +880,15 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
 
             //Body of table
             recordIndex = 3;
-            foreach (var doc in documents.OrderBy(D => D.Name).ToList())
+            foreach (var doc in documents
+                .Where(D => D.CaseTypeGroupRef == caseTypeGroups
+                                                    .Where(C => C.Name == selectedChapter.P4WCaseTypeGroup)
+                                                    .Select(C => C.Id)
+                                                    .SingleOrDefault()
+                                                    ||
+                            D.CaseTypeGroupRef == 0
+                                                    )
+                .OrderBy(D => D.Name).ToList())
             {
                 workSheetLookUp.Cells[recordIndex, 1].Value = doc.DocumentType is null ? "" : docP4WTypes.Where(D => D.Key == doc.DocumentType).Select(D => D.Value).SingleOrDefault();
                 workSheetLookUp.Cells[recordIndex, 2].Value = string.IsNullOrEmpty(doc.Name) ? "" : doc.Name;
@@ -964,7 +976,7 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
                                             ? ""
                                             : worksheetStatus.Cells[row, column].Value is null
                                             ? ""
-                                            : worksheetStatus.Cells[row, column].Value.ToString();
+                                            : Regex.Replace(worksheetStatus.Cells[row, column].Value.ToString(), "[^0-9a-zA-Z-_ ]+", "");
                         if (column == 2) readObject.SuppressStep = worksheetStatus.Cells[row, column].FirstOrDefault() is null
                                             ? ""
                                             : worksheetStatus.Cells[row, column].Value is null
@@ -1043,16 +1055,21 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
                                             ? ""
                                             : worksheetDocuments.Cells[row, column].Value is null
                                             ? ""
-                                            : worksheetDocuments.Cells[row, column].Value.ToString();
+                                            : Regex.Replace(worksheetDocuments.Cells[row, column].Value.ToString(), "[^0-9a-zA-Z-_ ]+", "");
                         if (column == 2) readObject.AltDisplayName = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
                                             ? ""
                                             : worksheetDocuments.Cells[row, column].Value is null
                                             ? ""
-                                            : worksheetDocuments.Cells[row, column].Value.ToString();
+                                            : Regex.Replace(worksheetDocuments.Cells[row, column].Value.ToString(), "[^0-9a-zA-Z-_ ]+", "");
+                        if (column == 3) readObject.AsName = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
+                                            ? ""
+                                            : worksheetDocuments.Cells[row, column].Value is null
+                                            ? ""
+                                            : Regex.Replace(worksheetDocuments.Cells[row, column].Value.ToString(), "[^0-9a-zA-Z-_ ]+", "");
                         try
                         {
-                            if (column == 3) readObject.RescheduleDays = worksheetDocuments.Cells[row, column].FirstOrDefault() is null 
-                                                                            ? 0 
+                            if (column == 4) readObject.RescheduleDays = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
+                                                                            ? 0
                                                                             : worksheetDocuments.Cells[row, column].Value is null
                                                                             ? 0
                                                                             : Convert.ToInt32(worksheetDocuments.Cells[row, column].Value.ToString());
@@ -1061,25 +1078,20 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
                         {
                             readObject.RescheduleDays = null;
                         }
-                        if (column == 4) readObject.AsName = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
-                                            ? ""
-                                            : worksheetDocuments.Cells[row, column].Value is null
-                                            ? ""
-                                            : worksheetDocuments.Cells[row, column].Value.ToString();
                         if (column == 5) readObject.CompleteName = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
                                             ? ""
                                             : worksheetDocuments.Cells[row, column].Value is null
                                             ? ""
-                                            : worksheetDocuments.Cells[row, column].Value.ToString();
+                                            : Regex.Replace(worksheetDocuments.Cells[row, column].Value.ToString(), "[^0-9a-zA-Z-_ ]+", "");
                         if (column == 6) readObject.NextStatus = worksheetDocuments.Cells[row, column].FirstOrDefault() is null 
                                             ? "" 
                                             : worksheetDocuments.Cells[row, column].Value is null
                                             ? ""
                                             : worksheetDocuments.Cells[row, column].Value.ToString();
                         if (column == 7) readObject.Action = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
-                                            ? ""
+                                            ? "INSERT"
                                             : worksheetDocuments.Cells[row, column].Value is null
-                                            ? ""
+                                            ? "INSERT"
                                             : worksheetDocuments.Cells[row, column].Value.ToString().ToUpper();
                         if (column == 8) readObject.UserMessage = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
                                             ? ""
@@ -1143,30 +1155,22 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
                                             ? ""
                                             : worksheetAttachments.Cells[row, column].Value.ToString();
                             if (column == 4) newAttachment.Action = worksheetAttachments.Cells[row, column].FirstOrDefault() is null
-                                            ? ""
+                                            ? "INSERT"
                                             : worksheetAttachments.Cells[row, column].Value is null
-                                            ? ""
-                                            : worksheetAttachments.Cells[row, column].Value.ToString();
-                            try
-                            {
-                                if (column == 5) newAttachment.ScheduleDays = worksheetAttachments.Cells[row, column].FirstOrDefault() is null 
-                                                ? 0 
-                                                : worksheetAttachments.Cells[row, column].Value is null
-                                                ? 0
-                                                : Convert.ToInt32(worksheetAttachments.Cells[row, column].Value.ToString());
-                            }
-                            catch
-                            {
-                                newAttachment.ScheduleDays = null;
-                            }
+                                            ? "INSERT"
+                                            : worksheetAttachments.Cells[row, column].Value.ToString().ToUpper();
                         }
                     }
 
-                    if (readObject.FollowUpDocs is null)
+                    if (!(readObject is null))
                     {
-                        readObject.FollowUpDocs = new List<FollowUpDoc>();
+                        if (readObject.FollowUpDocs is null)
+                        {
+                            readObject.FollowUpDocs = new List<FollowUpDoc>();
+                        }
+                        readObject.FollowUpDocs.Add(newAttachment);
                     }
-                    readObject.FollowUpDocs.Add(newAttachment);
+
                 }
 
                 ExcelWorksheet worksheetDataViews = excelPackage.Workbook.Worksheets.Where(W => W.Name == "Data Views").SingleOrDefault();

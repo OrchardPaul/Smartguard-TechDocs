@@ -1,6 +1,7 @@
 ﻿using Blazored.Modal;
 using GadjIT.ClientContext.P4W;
 using GadjIT.ClientContext.P4W.Custom;
+using Gizmo_V1_02.Data.Admin;
 using Gizmo_V1_02.Services;
 using Gizmo_V1_02.Services.SessionState;
 using Microsoft.AspNetCore.Components;
@@ -48,6 +49,9 @@ namespace Gizmo_V1_02.Pages.Chapters
         [Parameter]
         public Action ComparisonRefresh { get; set; }
 
+        [Parameter]
+        public ICompanyDbAccess CompanyDbAccess { get; set; }
+
         private async void Close()
         {
             await ModalInstance.CloseAsync();
@@ -57,7 +61,10 @@ namespace Gizmo_V1_02.Pages.Chapters
         {
             if (TakeAlternate)
             {
-                var taskObject = CurrentChapter.ChapterItems.Where(C => C.Name == Object.ChapterObject.Name).SingleOrDefault();
+                var taskObject = CurrentChapter.ChapterItems
+                                                .Where(C => C.Type == Object.ChapterObject.Type)
+                                                .Where(C => C.Name == Object.ChapterObject.Name)
+                                                .FirstOrDefault();
 
                 taskObject.SeqNo = Object.AltObject.SeqNo;
                 taskObject.SuppressStep = Object.AltObject.SuppressStep;
@@ -69,14 +76,17 @@ namespace Gizmo_V1_02.Pages.Chapters
                 taskObject.UserMessage = Object.AltObject.UserMessage;
                 taskObject.PopupAlert = Object.AltObject.PopupAlert;
                 taskObject.NextStatus = Object.AltObject.NextStatus;
-                taskObject.NextStatus = Object.AltObject.Action;
+                taskObject.Action = Object.AltObject.Action;
 
                 CurrentChapterRow.ChapterData = JsonConvert.SerializeObject(CurrentChapter);
                 await chapterManagementService.Update(CurrentChapterRow).ConfigureAwait(false);
             }
             else
             {
-                var taskObject = AltChapter.ChapterItems.Where(C => C.Name == Object.AltObject.Name).SingleOrDefault();
+                var taskObject = AltChapter.ChapterItems
+                                            .Where(C => C.Type == Object.AltObject.Type)
+                                            .Where(C => C.Name == Object.AltObject.Name)
+                                            .FirstOrDefault();
 
                 taskObject.SeqNo = Object.ChapterObject.SeqNo;
                 taskObject.SuppressStep = Object.ChapterObject.SuppressStep;
@@ -88,7 +98,7 @@ namespace Gizmo_V1_02.Pages.Chapters
                 taskObject.UserMessage = Object.ChapterObject.UserMessage;
                 taskObject.PopupAlert = Object.ChapterObject.PopupAlert;
                 taskObject.NextStatus = Object.ChapterObject.NextStatus;
-                taskObject.NextStatus = Object.ChapterObject.Action;
+                taskObject.Action = Object.ChapterObject.Action;
 
 
                 await sessionState.SwitchSelectedSystem();

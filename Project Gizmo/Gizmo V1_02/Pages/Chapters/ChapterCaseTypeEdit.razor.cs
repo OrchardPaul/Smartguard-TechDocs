@@ -1,7 +1,9 @@
 ﻿using Blazored.Modal;
 using GadjIT.ClientContext.P4W;
 using GadjIT.ClientContext.P4W.Custom;
+using Gizmo_V1_02.Data.Admin;
 using Gizmo_V1_02.Services;
+using Gizmo_V1_02.Services.SessionState;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using Newtonsoft.Json;
@@ -41,6 +43,13 @@ namespace Gizmo_V1_02.Pages.Chapters
         [Parameter]
         public Action DataChanged { get; set; }
 
+        [Parameter]
+        public ICompanyDbAccess CompanyDbAccess { get; set; }
+
+        [Parameter]
+        public IUserSessionState sessionState { get; set; }
+
+
         private async void Close()
         {
             await ModalInstance.CloseAsync();
@@ -58,7 +67,7 @@ namespace Gizmo_V1_02.Pages.Chapters
                     updateJson.CaseType = TaskObject;
                     chapter.ChapterObject.CaseType = TaskObject;
                     chapter.ChapterObject.ChapterData = JsonConvert.SerializeObject(updateJson);
-                    await chapterManagementService.Update(chapter.ChapterObject).ConfigureAwait(false);
+                    await chapterManagementService.UpdateMainItem(chapter.ChapterObject).ConfigureAwait(false);
                 }
             }
             else if (isCaseTypeOrGroup == "CaseTypeGroup")
@@ -71,7 +80,7 @@ namespace Gizmo_V1_02.Pages.Chapters
                     updateJson.CaseTypeGroup = TaskObject;
                     chapter.ChapterObject.CaseTypeGroup = TaskObject;
                     chapter.ChapterObject.ChapterData = JsonConvert.SerializeObject(updateJson);
-                    await chapterManagementService.Update(chapter.ChapterObject).ConfigureAwait(false);
+                    await chapterManagementService.UpdateMainItem(chapter.ChapterObject).ConfigureAwait(false);
                 }
             }
             else
@@ -79,7 +88,7 @@ namespace Gizmo_V1_02.Pages.Chapters
                 var updateJson = JsonConvert.DeserializeObject<VmChapter>(Chapter.ChapterData);
                 updateJson.Name = Chapter.Name;
                 Chapter.ChapterData = JsonConvert.SerializeObject(updateJson);
-                await chapterManagementService.Update(Chapter).ConfigureAwait(false);
+                await chapterManagementService.UpdateMainItem(Chapter).ConfigureAwait(false);
             }
 
             DataChanged?.Invoke();

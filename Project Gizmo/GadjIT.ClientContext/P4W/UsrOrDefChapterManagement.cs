@@ -75,7 +75,6 @@ namespace GadjIT.ClientContext.P4W
         public string DocName { get; set; }
         public string DocAsName { get; set; }
         public string Action { get; set; }
-        public int? ScheduleDays { get; set; }
 
     }
 

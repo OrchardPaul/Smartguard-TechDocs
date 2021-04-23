@@ -13,6 +13,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using GadjIT.ClientContext.P4W.Custom;
+using Newtonsoft.Json;
 
 namespace Gizmo_V1_02.Data.Admin
 {
@@ -44,9 +46,11 @@ namespace Gizmo_V1_02.Data.Admin
         Task<AppCompanyDetails> DeleteCompany(AppCompanyDetails company);
         Task<AppCompanyDetails> AssignWorkTypeGroupToCompany(AppCompanyDetails company, AppWorkTypeGroups workTypeGroup);
         Task<AppCompanyDetails> RemoveWorkTypeGroupFromCompany(AppCompanyDetails company, AppWorkTypeGroups workTypeGroup);
-        Task<SmartflowRecords> SaveSmartFlowRecord(UsrOrDefChapterManagement chapter, int companyId);
-
-        Task<List<SmartflowRecords>> SyncAdminSysToClient(List<UsrOrDefChapterManagement> clientObjects, int companyId);
+        Task<SmartflowRecords> SaveSmartFlowRecord(UsrOrDefChapterManagement chapter, IUserSessionState sessionState);
+        Task<SmartflowRecords> SaveSmartFlowRecordData(UsrOrDefChapterManagement chapter, IUserSessionState sessionState);
+        Task<SmartflowRecords> RemoveSmartFlowRecord(int id, IUserSessionState sessionState);
+        Task<List<SmartflowRecords>> SyncAdminSysToClient(List<UsrOrDefChapterManagement> clientObjects, IUserSessionState sessionState);
+        Task<List<SmartflowRecords>> GetAllSmartflowRecords(IUserSessionState sessionState);
     }
 
     public class CompanyDbAccess : ICompanyDbAccess
@@ -602,11 +606,12 @@ namespace Gizmo_V1_02.Data.Admin
         }
 
 
-        public async Task<List<SmartflowRecords>> SyncAdminSysToClient(List<UsrOrDefChapterManagement> clientObjects, int companyId)
+        public async Task<List<SmartflowRecords>> SyncAdminSysToClient(List<UsrOrDefChapterManagement> clientObjects, IUserSessionState sessionState)
         {
             var currentRecords = await context
                                             .SmartflowRecords
-                                            .Where(R => R.CompanyId == companyId)
+                                            .Where(R => R.CompanyId == sessionState.Company.Id)
+                                            .Where(R => R.System == sessionState.selectedSystem)
                                             .Where(R => clientObjects
                                                             .Select(C => C.Id)
                                                             .ToList()
@@ -624,6 +629,10 @@ namespace Gizmo_V1_02.Data.Admin
             {
                 var record = currentRecords.Where(R => R.RowId == clientRow.Id).SingleOrDefault();
                 mapper.Map(clientRow, record);
+
+                record.LastModifiedByUserId = sessionState.User.Id;
+                record.LastModifiedDate = DateTime.Now;                
+
                 await context.SaveChangesAsync();
             }
 
@@ -634,9 +643,15 @@ namespace Gizmo_V1_02.Data.Admin
                                                         .Contains(O.Id))
                                         .ToList())
             {
-                var record = new SmartflowRecords { CompanyId = companyId };
+                var record = new SmartflowRecords { CompanyId = sessionState.Company.Id };
                 mapper.Map(clientRow, record);
-                
+
+                record.System = sessionState.selectedSystem;
+                record.CreatedByUserId = sessionState.User.Id;
+                record.CreatedDate = DateTime.Now;
+                record.LastModifiedByUserId = sessionState.User.Id;
+                record.LastModifiedDate = DateTime.Now;
+
                 context.SmartflowRecords.Add(record);
 
                 await context.SaveChangesAsync();
@@ -646,41 +661,101 @@ namespace Gizmo_V1_02.Data.Admin
         }
 
 
-        public async Task<SmartflowRecords> SaveSmartFlowRecord(UsrOrDefChapterManagement chapter, int companyId)
+        public async Task<List<SmartflowRecords>> GetAllSmartflowRecords(IUserSessionState sessionState)
         {
-            SmartflowRecords record = new SmartflowRecords { CompanyId = companyId };
+            return await context.SmartflowRecords.Where(S => S.CompanyId == sessionState.Company.Id)
+                                            .Where(S => S.System == sessionState.selectedSystem)
+                                            .ToListAsync();
+        }
 
-            mapper.Map(chapter, record);
+        public async Task<SmartflowRecords> SaveSmartFlowRecord(UsrOrDefChapterManagement chapter, IUserSessionState sessionState)
+        {
+            SmartflowRecords record = new SmartflowRecords { CompanyId = sessionState.Company.Id };
 
+            
             var existingRecord = await context.SmartflowRecords
-                                                .Where(R => R.RowId == record.RowId && R.CompanyId == companyId)
+                                                .Where(R => R.RowId == chapter.Id && R.CompanyId == sessionState.Company.Id)
+                                                .Where(R => R.System == sessionState.selectedSystem)
                                                 .SingleOrDefaultAsync();
 
-            if(existingRecord is null)
+            if (existingRecord is null)
             {
-                context.SmartflowRecords.Add(record);            }
+                mapper.Map(chapter, record);
+
+                record.System = sessionState.selectedSystem;
+                record.CreatedByUserId = sessionState.User.Id;
+                record.CreatedDate = DateTime.Now;
+                record.LastModifiedByUserId = sessionState.User.Id;
+                record.LastModifiedDate = DateTime.Now;
+
+                context.SmartflowRecords.Add(record);            
+            }
             else
             {
-                existingRecord.ChapterData = record.ChapterData;
-                existingRecord.AltDisplayName = record.AltDisplayName;
-                existingRecord.AsName = record.AsName;
-                existingRecord.CaseType = record.CaseType;
-                existingRecord.CaseTypeGroup = record.CaseTypeGroup;
-                existingRecord.ChapterName = record.ChapterName;
-                existingRecord.CompanyId = record.CompanyId;
-                existingRecord.CompleteName = record.CompleteName;
-                existingRecord.EntityType = record.EntityType;
-                existingRecord.Name = record.Name;
-                existingRecord.NextStatus = record.NextStatus;
-                existingRecord.SeqNo = record.SeqNo;
-                existingRecord.Type = record.Type;
-                existingRecord.CompanyId = record.CompanyId;
+                mapper.Map(chapter, existingRecord);
+
+                existingRecord.LastModifiedByUserId = sessionState.User.Id;
+                existingRecord.LastModifiedDate = DateTime.Now;
             }
 
             await context.SaveChangesAsync();
             return record;
 
         }
+
+        public async Task<SmartflowRecords> SaveSmartFlowRecordData(UsrOrDefChapterManagement chapter, IUserSessionState sessionState)
+        {
+            SmartflowRecords record = new SmartflowRecords { CompanyId = sessionState.Company.Id };
+
+
+            var existingRecord = await context.SmartflowRecords
+                                                .Where(R => R.RowId == chapter.Id && R.CompanyId == sessionState.Company.Id)
+                                                .Where(R => R.System == sessionState.selectedSystem)
+                                                .SingleOrDefaultAsync();
+
+            if (existingRecord is null)
+            {
+                record.ChapterData = chapter.ChapterData;
+
+                record.System = sessionState.selectedSystem;
+                record.CreatedByUserId = sessionState.User.Id;
+                record.CreatedDate = DateTime.Now;
+                record.LastModifiedByUserId = sessionState.User.Id;
+                record.LastModifiedDate = DateTime.Now;
+
+                context.SmartflowRecords.Add(record);
+            }
+            else
+            {
+                existingRecord.ChapterData = chapter.ChapterData;
+
+                existingRecord.LastModifiedByUserId = sessionState.User.Id;
+                existingRecord.LastModifiedDate = DateTime.Now;
+            }
+
+            await context.SaveChangesAsync();
+            return record;
+
+        }
+
+        public async Task<SmartflowRecords> RemoveSmartFlowRecord(int id, IUserSessionState sessionState)
+        {
+            var existingRecord = await context.SmartflowRecords
+                                                .Where(R => R.RowId == id && R.CompanyId == sessionState.Company.Id)
+                                                .Where(R => R.System == sessionState.selectedSystem)
+                                                .SingleOrDefaultAsync();
+
+            if (!(existingRecord is null))
+            {
+                context.SmartflowRecords.Remove(existingRecord);
+                await context.SaveChangesAsync();
+            }
+
+            
+            return existingRecord;
+
+        }
+
 
     }
 }
