@@ -26,28 +26,32 @@ else
             <div class="tran-block rounded">
                 @if (sessionState.isAdminUser)
                 {
-                    <div class="grid-actions">
-                        <div class="btn-group">
-                            <button @onclick='PrepareChapterForInsert' class="btn btn-main btn-shadow" title="Add new Smartflow"><i class="fa fa-plus pr-1"></i><span>New Smartflow</span></button>
-                            @if (!(string.IsNullOrEmpty(selectedChapter.CaseType)))
-                            {
-                                @if (!(SequenceIsValid("Chapters")))
-                                {
-                                    <button @onclick='() => CondenseChapterSeq()' class="btn btn-main btn-shadow" title="Re-order Sequence Numbers"><i class="fa fa-sort-numeric-down"></i></button>
-
-                                }
-                            }
-                        </div>
-                        <button @onclick='SyncSmartFlowSystems' class="btn btn-main btn-shadow" title="Sync Systems"><i class="fa fa-sync pr-1"></i><span>Sync Systems</span></button>
-                        <div class="spacer"></div>
-                        @if (sessionState.isAdminUser)
+                <div class="grid-actions">
+                    <div class="btn-group">
+                        <button @onclick='PrepareChapterForInsert' class="btn btn-main btn-shadow" title="Add new Smartflow"><i class="fa fa-plus pr-1"></i><span>New Smartflow</span></button>
+                        @if (!(string.IsNullOrEmpty(selectedChapter.CaseType)))
                         {
-                            <div class="btn-group sync-group invisible-sm-down">
-                                <input type="checkbox" class="ml-1 mt-1" @onchange="() => CompareAllChapters()" /><span class="ml-2 font-75">Compare to @(sessionState.selectedSystem == "Dev" ? "Live" : "Dev") </span>
-                            </div>
+                            @if (!(SequenceIsValid("Chapters")))
+                            {
+                                <button @onclick='() => CondenseChapterSeq()' class="btn btn-main btn-shadow" title="Re-order Sequence Numbers"><i class="fa fa-sort-numeric-down"></i></button>
 
+                            }
                         }
                     </div>
+                    @if (sessionState.isSuperUser)
+                    {
+                        <button @onclick='SyncSmartFlowSystems' class="btn btn-main btn-shadow" title="Sync Systems"><i class="fa fa-sync pr-1"></i><span>Sync Systems</span></button>
+                    }
+
+                    <div class="spacer"></div>
+                    @if (sessionState.isAdminUser)
+                    {
+                        <div class="btn-group sync-group invisible-sm-down">
+                            <input type="checkbox" class="ml-1 mt-1" @onchange="() => CompareAllChapters()" /><span class="ml-2 font-75">Compare to @(sessionState.selectedSystem == "Dev" ? "Live" : "Dev") </span>
+                        </div>
+
+                    }
+                </div>
 
                 }
                 <div class="container-fluid">
