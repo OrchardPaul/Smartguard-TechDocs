@@ -46,11 +46,12 @@ namespace Gizmo_V1_02.Data.Admin
         Task<AppCompanyDetails> DeleteCompany(AppCompanyDetails company);
         Task<AppCompanyDetails> AssignWorkTypeGroupToCompany(AppCompanyDetails company, AppWorkTypeGroups workTypeGroup);
         Task<AppCompanyDetails> RemoveWorkTypeGroupFromCompany(AppCompanyDetails company, AppWorkTypeGroups workTypeGroup);
-        Task<SmartflowRecords> SaveSmartFlowRecord(UsrOrDefChapterManagement chapter, IUserSessionState sessionState);
-        Task<SmartflowRecords> SaveSmartFlowRecordData(UsrOrDefChapterManagement chapter, IUserSessionState sessionState);
+        Task<SmartflowRecords> SaveSmartFlowRecord(UsrOrsfSmartflows chapter, IUserSessionState sessionState);
+        Task<SmartflowRecords> SaveSmartFlowRecordData(UsrOrsfSmartflows chapter, IUserSessionState sessionState);
         Task<SmartflowRecords> RemoveSmartFlowRecord(int id, IUserSessionState sessionState);
-        Task<List<SmartflowRecords>> SyncAdminSysToClient(List<UsrOrDefChapterManagement> clientObjects, IUserSessionState sessionState);
+        Task<List<SmartflowRecords>> SyncAdminSysToClient(List<UsrOrsfSmartflows> clientObjects, IUserSessionState sessionState);
         Task<List<SmartflowRecords>> GetAllSmartflowRecords(IUserSessionState sessionState);
+        bool Lock { get; set; }
     }
 
     public class CompanyDbAccess : ICompanyDbAccess
@@ -73,6 +74,9 @@ namespace Gizmo_V1_02.Data.Admin
             this.identityUserAccess = identityUserAccess;
             this.mapper = mapper;
         }
+
+
+        public bool Lock { get; set; } = false;
 
         /*
          * 
@@ -606,7 +610,7 @@ namespace Gizmo_V1_02.Data.Admin
         }
 
 
-        public async Task<List<SmartflowRecords>> SyncAdminSysToClient(List<UsrOrDefChapterManagement> clientObjects, IUserSessionState sessionState)
+        public async Task<List<SmartflowRecords>> SyncAdminSysToClient(List<UsrOrsfSmartflows> clientObjects, IUserSessionState sessionState)
         {
             var currentRecords = await context
                                             .SmartflowRecords
@@ -663,12 +667,26 @@ namespace Gizmo_V1_02.Data.Admin
 
         public async Task<List<SmartflowRecords>> GetAllSmartflowRecords(IUserSessionState sessionState)
         {
-            return await context.SmartflowRecords.Where(S => S.CompanyId == sessionState.Company.Id)
-                                            .Where(S => S.System == sessionState.selectedSystem)
-                                            .ToListAsync();
+            var returnValues = new List<SmartflowRecords>();
+
+            try
+            {
+                Lock = true;
+
+                returnValues = await context.SmartflowRecords.Where(S => S.CompanyId == sessionState.Company.Id)
+                                .Where(S => S.System == sessionState.selectedSystem)
+                                .ToListAsync();
+
+            }
+            finally
+            {
+                Lock = false;
+            }
+
+            return returnValues;
         }
 
-        public async Task<SmartflowRecords> SaveSmartFlowRecord(UsrOrDefChapterManagement chapter, IUserSessionState sessionState)
+        public async Task<SmartflowRecords> SaveSmartFlowRecord(UsrOrsfSmartflows chapter, IUserSessionState sessionState)
         {
             SmartflowRecords record = new SmartflowRecords { CompanyId = sessionState.Company.Id };
 
@@ -703,7 +721,7 @@ namespace Gizmo_V1_02.Data.Admin
 
         }
 
-        public async Task<SmartflowRecords> SaveSmartFlowRecordData(UsrOrDefChapterManagement chapter, IUserSessionState sessionState)
+        public async Task<SmartflowRecords> SaveSmartFlowRecordData(UsrOrsfSmartflows chapter, IUserSessionState sessionState)
         {
             SmartflowRecords record = new SmartflowRecords { CompanyId = sessionState.Company.Id };
 
@@ -715,7 +733,7 @@ namespace Gizmo_V1_02.Data.Admin
 
             if (existingRecord is null)
             {
-                record.ChapterData = chapter.ChapterData;
+                record.SmartflowData = chapter.SmartflowData;
 
                 record.System = sessionState.selectedSystem;
                 record.CreatedByUserId = sessionState.User.Id;
@@ -727,7 +745,7 @@ namespace Gizmo_V1_02.Data.Admin
             }
             else
             {
-                existingRecord.ChapterData = chapter.ChapterData;
+                existingRecord.SmartflowData = chapter.SmartflowData;
 
                 existingRecord.LastModifiedByUserId = sessionState.User.Id;
                 existingRecord.LastModifiedDate = DateTime.Now;

@@ -70,16 +70,16 @@ namespace Gizmo_V1_02.Pages.Chapters
         public string Option { get; set; }
 
         [Parameter]
-        public UsrOrDefChapterManagement SelectedChapterObject { get; set; }
+        public UsrOrsfSmartflows SelectedChapterObject { get; set; }
 
         [Parameter]
         public VmChapter SelectedChapter { get; set; }
 
         [Parameter]
-        public UsrOrDefChapterManagement TaskObject { get; set; }
+        public GenSmartflowItem TaskObject { get; set; }
 
         [Parameter]
-        public UsrOrDefChapterManagement CopyObject { get; set; }
+        public GenSmartflowItem CopyObject { get; set; }
 
 
         [Parameter]
@@ -115,7 +115,7 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         private async void Close()
         {
-            TaskObject = new UsrOrDefChapterManagement();
+            TaskObject = new GenSmartflowItem();
             await ModalInstance.CloseAsync();
 
 
@@ -158,13 +158,13 @@ namespace Gizmo_V1_02.Pages.Chapters
 
             if (Option == "Insert")
             {
-                SelectedChapter.ChapterItems.Add(TaskObject);
+                SelectedChapter.Items.Add(TaskObject);
             }
             
-            SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(SelectedChapter);
+            SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(SelectedChapter);
             await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
 
-            TaskObject = new UsrOrDefChapterManagement();
+            TaskObject = new GenSmartflowItem();
             filterText = "";
 
             DataChanged?.Invoke();

@@ -3,26 +3,14 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace GadjIT.GadjitContext.GadjIT_App
+namespace GadjIT.ClientContext.P4W
 {
-    public class SmartflowRecords
+    [Table("Usr_ORSF_Smartflows")]
+    public partial class UsrOrsfSmartflows
     {
         [Key]
         [Column("ID")]
         public int Id { get; set; }
-        public int CompanyId { get; set; }
-        public int RowId { get; set; }
-
-        public DateTime CreatedDate { get; set; }
-
-        public DateTime LastModifiedDate { get; set; }
-
-        public string CreatedByUserId { get; set; }
-
-        public string LastModifiedByUserId { get; set; }
-
-        public string System { get; set; }
-
         [StringLength(100)]
         public string CaseTypeGroup { get; set; }
         [StringLength(100)]
@@ -35,5 +23,4 @@ namespace GadjIT.GadjitContext.GadjIT_App
         [StringLength(200)]
         public string VariantName { get; set; }
     }
-
 }

@@ -38,7 +38,6 @@
                         <InputText class="form-control form-control-xl" @bind-Value="@filterText" />
                     </div>
 
-
                     <InputSelect class="form-control form-control-xl" @bind-Value="Attachment.DocName">
                         @if (Attachment.DocName is null)
                                 {
@@ -57,7 +56,6 @@
                             </option>
                                 }
                     </InputSelect>
-
 
                 }
                 <ValidationMessage For="@(() => Attachment.DocName)" />
@@ -86,8 +84,11 @@
     </div>
 
     <div class="button-container">
-        <button type="submit" class="btn btn-main">Save</button>
-        <button type="button" class="btn btn-main" @onclick="RemoveAttachment">Remove</button>
+        @if (CopyObject.FollowUpDocs.Select(F => F.DocName).ToList().Contains(Attachment.DocName))
+        {
+            <button type="button" class="btn btn-secondary" title="Delete Attachment" @onclick="RemoveAttachment"><span class="fa fa-trash"></span></button>
+        }
+        <button type="submit" class="btn btn-main ml-auto"><span class="fa fa-save"></span> <span class="ml-2">Save</span></button>
         <button type="button" class="btn btn-secondary" @onclick="Close">Cancel</button>
     </div>
 </EditForm>

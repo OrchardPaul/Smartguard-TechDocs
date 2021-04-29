@@ -1,6 +1,7 @@
 ﻿using Blazored.Modal;
 using GadjIT.ClientContext.P4W;
 using GadjIT.ClientContext.P4W.Custom;
+using Gizmo_V1_02.Data.Admin;
 using Gizmo_V1_02.Services;
 using Gizmo_V1_02.Services.SessionState;
 using Microsoft.AspNetCore.Components;
@@ -30,10 +31,10 @@ namespace Gizmo_V1_02.Pages.Chapters
         public VmFee Object { get; set; }
 
         [Parameter]
-        public UsrOrDefChapterManagement CurrentChapterRow { get; set; }
+        public UsrOrsfSmartflows CurrentChapterRow { get; set; }
 
         [Parameter]
-        public UsrOrDefChapterManagement AltChapterRow { get; set; }
+        public UsrOrsfSmartflows AltChapterRow { get; set; }
 
         [Parameter]
         public VmChapter CurrentChapter { get; set; }
@@ -49,6 +50,12 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         [Parameter]
         public Action ComparisonRefresh { get; set; }
+
+        [Parameter]
+        public ICompanyDbAccess CompanyDbAccess { get; set; }
+
+        [Parameter]
+        public bool CreateNewSmartflow { get; set; }
 
         private async void Close()
         {
@@ -68,7 +75,7 @@ namespace Gizmo_V1_02.Pages.Chapters
                 taskObject.VATable = Object.AltObject.VATable;
                 taskObject.PostingType = Object.AltObject.PostingType;
 
-                CurrentChapterRow.ChapterData = JsonConvert.SerializeObject(CurrentChapter);
+                CurrentChapterRow.SmartflowData = JsonConvert.SerializeObject(CurrentChapter);
                 await chapterManagementService.Update(CurrentChapterRow).ConfigureAwait(false);
             }
             else
@@ -83,7 +90,7 @@ namespace Gizmo_V1_02.Pages.Chapters
                 taskObject.PostingType = Object.FeeObject.PostingType;
 
                 await sessionState.SwitchSelectedSystem();
-                AltChapterRow.ChapterData = JsonConvert.SerializeObject(AltChapter);
+                AltChapterRow.SmartflowData = JsonConvert.SerializeObject(AltChapter);
                 await chapterManagementService.Update(AltChapterRow);
                 await sessionState.ResetSelectedSystem();
             }
@@ -110,28 +117,40 @@ namespace Gizmo_V1_02.Pages.Chapters
 
                 CurrentChapter.Fees.Add(AltObject);
 
-                CurrentChapterRow.ChapterData = JsonConvert.SerializeObject(CurrentChapter);
+                CurrentChapterRow.SmartflowData = JsonConvert.SerializeObject(CurrentChapter);
                 await chapterManagementService.Update(CurrentChapterRow).ConfigureAwait(false);
             }
             else
             {
-                var PushObject = new Fee
+                if (!CreateNewSmartflow)
                 {
-                    SeqNo = Object.FeeObject.SeqNo,
-                    FeeName = Object.FeeObject.FeeName,
-                    FeeCategory = Object.FeeObject.FeeCategory,
-                    Amount = Object.FeeObject.Amount,
-                    VATable = Object.FeeObject.VATable,
-                    PostingType = Object.FeeObject.PostingType,
-                };
+                    var PushObject = new Fee
+                    {
+                        SeqNo = Object.FeeObject.SeqNo,
+                        FeeName = Object.FeeObject.FeeName,
+                        FeeCategory = Object.FeeObject.FeeCategory,
+                        Amount = Object.FeeObject.Amount,
+                        VATable = Object.FeeObject.VATable,
+                        PostingType = Object.FeeObject.PostingType,
+                    };
 
-                AltChapter.Fees = AltChapter.Fees is null ? new List<Fee>() : AltChapter.Fees;
-                AltChapter.Fees.Add(PushObject);
+                    AltChapter.Fees = AltChapter.Fees is null ? new List<Fee>() : AltChapter.Fees;
+                    AltChapter.Fees.Add(PushObject);
 
-                await sessionState.SwitchSelectedSystem();
-                AltChapterRow.ChapterData = JsonConvert.SerializeObject(AltChapter);
-                await chapterManagementService.Update(AltChapterRow);
-                await sessionState.ResetSelectedSystem();
+                    await sessionState.SwitchSelectedSystem();
+                    AltChapterRow.SmartflowData = JsonConvert.SerializeObject(AltChapter);
+                    await chapterManagementService.Update(AltChapterRow);
+                    await sessionState.ResetSelectedSystem();
+                }
+                else
+                {
+                    await sessionState.SwitchSelectedSystem();
+                    AltChapterRow = CurrentChapterRow;
+                    var returnObject = await chapterManagementService.Add(AltChapterRow);
+                    AltChapterRow.Id = returnObject.Id;
+                    await CompanyDbAccess.SaveSmartFlowRecord(AltChapterRow, sessionState);
+                    await sessionState.ResetSelectedSystem();
+                }
             }
 
             ComparisonRefresh?.Invoke();

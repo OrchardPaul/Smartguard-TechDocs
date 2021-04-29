@@ -14,24 +14,18 @@ namespace Gizmo_V1_02.Services
 {
     public interface IChapterManagementService
     {
-        Task<UsrOrDefChapterManagement> Add(UsrOrDefChapterManagement item);
+        Task<UsrOrsfSmartflows> Add(UsrOrsfSmartflows item);
         Task<Task<HttpResponseMessage>> Delete(int id);
         Task<Task<HttpResponseMessage>> DeleteChapter(int id);
-        Task<List<UsrOrDefChapterManagement>> GetAllChapters();
+        Task<List<UsrOrsfSmartflows>> GetAllChapters();
         Task<List<string>> GetCaseTypeGroup();
         Task<List<string>> GetCaseTypes();
-        Task<List<UsrOrDefChapterManagement>> GetChapterListByCaseType(string caseType);
-        Task<List<UsrOrDefChapterManagement>> GetDocListByChapter(string caseType, string chapter);
-        Task<List<UsrOrDefChapterManagement>> GetDocListByChapterAndDocType(string caseType, string chapter, string docType);
+        Task<List<UsrOrsfSmartflows>> GetChapterListByCaseType(string caseType);
         Task<List<DmDocuments>> GetDocumentList(string caseType);
-        Task<List<UsrOrDefChapterManagement>> GetItemListByChapter(int chapterId);
-        Task<List<UsrOrDefChapterManagement>> GetItemListByChapterName(string casetypegroup, string casetype, string chapterName);
-        Task<UsrOrDefChapterManagement> Update(UsrOrDefChapterManagement item);
-        Task<UsrOrDefChapterManagement> UpdateMainItem(UsrOrDefChapterManagement item);
-        Task<List<UsrOrDefChapterManagement>> UpdateCaseType(string newCaseTypeName, string originalCaseTypeName, string caseTypeGroup);
-        Task<List<UsrOrDefChapterManagement>> UpdateCaseTypeGroups(string newCaseTypeGroupName, string originalCaseTypeGroupName);
-        //Task<List<fnORCHAGetFeeDefinitions>> GetFeeDefs(string caseTypeGroup, string caseType);
-        Task<List<VmChapterFee>> UpdateChapterFees(int ChapterId, List<VmChapterFee> vmChapterFees);
+        Task<UsrOrsfSmartflows> Update(UsrOrsfSmartflows item);
+        Task<UsrOrsfSmartflows> UpdateMainItem(UsrOrsfSmartflows item);
+        Task<List<UsrOrsfSmartflows>> UpdateCaseType(string newCaseTypeName, string originalCaseTypeName, string caseTypeGroup);
+        Task<List<UsrOrsfSmartflows>> UpdateCaseTypeGroups(string newCaseTypeGroupName, string originalCaseTypeGroupName);
 
         Task<bool> CreateStep(VmChapterP4WStepSchemaJSONObject stepSchemaJSONObject);
     }
@@ -49,42 +43,38 @@ namespace Gizmo_V1_02.Services
             this.companyDbAccess = companyDbAccess;
         }
 
-        public async Task<UsrOrDefChapterManagement> Add(UsrOrDefChapterManagement item)
+        public async Task<UsrOrsfSmartflows> Add(UsrOrsfSmartflows item)
         {
-            return await httpClient.PostJsonAsync<UsrOrDefChapterManagement>($"{userSession.baseUri}api/ChapterManagement/Add", item);
+            return await httpClient.PostJsonAsync<UsrOrsfSmartflows>($"{userSession.baseUri}api/ChapterManagement/Add", item);
         }
 
-        public async Task<UsrOrDefChapterManagement> Update(UsrOrDefChapterManagement item)
+        public async Task<UsrOrsfSmartflows> Update(UsrOrsfSmartflows item)
         {
             await companyDbAccess.SaveSmartFlowRecordData(item, userSession);
 
-            return await httpClient.PutJsonAsync<UsrOrDefChapterManagement>($"{userSession.baseUri}api/ChapterManagement/Update/{item.Id}", item);
+            return await httpClient.PutJsonAsync<UsrOrsfSmartflows>($"{userSession.baseUri}api/ChapterManagement/Update/{item.Id}", item);
         }
 
-        public async Task<UsrOrDefChapterManagement> UpdateMainItem(UsrOrDefChapterManagement item)
+        public async Task<UsrOrsfSmartflows> UpdateMainItem(UsrOrsfSmartflows item)
         {
             await companyDbAccess.SaveSmartFlowRecord(item, userSession);
 
-            return await httpClient.PutJsonAsync<UsrOrDefChapterManagement>($"{userSession.baseUri}api/ChapterManagement/Update/{item.Id}", item);
-        }
-
-        public Task<List<VmChapterFee>> UpdateChapterFees(int ChapterId, List<VmChapterFee> vmChapterFees)
-        {
-            return httpClient.PutJsonAsync<List<VmChapterFee>>($"{userSession.baseUri}api/ChapterManagement/UpdateChapterFees/{ChapterId}",vmChapterFees);
+            return await httpClient.PutJsonAsync<UsrOrsfSmartflows>($"{userSession.baseUri}api/ChapterManagement/Update/{item.Id}", item);
         }
 
 
-        public Task<List<UsrOrDefChapterManagement>> UpdateCaseType(string newCaseTypeName, string originalCaseTypeName, string caseTypeGroup)
+
+        public Task<List<UsrOrsfSmartflows>> UpdateCaseType(string newCaseTypeName, string originalCaseTypeName, string caseTypeGroup)
         {
-            var item = new UsrOrDefChapterManagement();
-            return httpClient.PutJsonAsync<List<UsrOrDefChapterManagement>>($"{userSession.baseUri}api/ChapterManagement/UpdateCaseType/{newCaseTypeName}/{originalCaseTypeName}/{caseTypeGroup}", item);
+            var item = new UsrOrsfSmartflows();
+            return httpClient.PutJsonAsync<List<UsrOrsfSmartflows>>($"{userSession.baseUri}api/ChapterManagement/UpdateCaseType/{newCaseTypeName}/{originalCaseTypeName}/{caseTypeGroup}", item);
         }
 
 
-        public Task<List<UsrOrDefChapterManagement>> UpdateCaseTypeGroups(string newCaseTypeGroupName, string originalCaseTypeGroupName)
+        public Task<List<UsrOrsfSmartflows>> UpdateCaseTypeGroups(string newCaseTypeGroupName, string originalCaseTypeGroupName)
         {
-            var item = new UsrOrDefChapterManagement();
-            return httpClient.PutJsonAsync<List<UsrOrDefChapterManagement>>($"{userSession.baseUri}api/ChapterManagement/UpdateCaseTypeGroups/{newCaseTypeGroupName}/{originalCaseTypeGroupName}", item);
+            var item = new UsrOrsfSmartflows();
+            return httpClient.PutJsonAsync<List<UsrOrsfSmartflows>>($"{userSession.baseUri}api/ChapterManagement/UpdateCaseTypeGroups/{newCaseTypeGroupName}/{originalCaseTypeGroupName}", item);
         }
 
         public async Task<Task<HttpResponseMessage>> Delete(int id)
@@ -101,30 +91,15 @@ namespace Gizmo_V1_02.Services
             return httpClient.DeleteAsync($"{userSession.baseUri}api/ChapterManagement/DeleteChapter/{id}");
         }
 
-        public Task<List<UsrOrDefChapterManagement>> GetAllChapters()
+        public Task<List<UsrOrsfSmartflows>> GetAllChapters()
         {
-            return httpClient.GetJsonAsync<List<UsrOrDefChapterManagement>>($"{userSession.baseUri}api/ChapterManagement/GetAllChapters");
+            return httpClient.GetJsonAsync<List<UsrOrsfSmartflows>>($"{userSession.baseUri}api/ChapterManagement/GetAllChapters");
         }
 
         //public Task<List<fnORCHAGetFeeDefinitions>> GetFeeDefs(string caseTypeGroup, string caseType)
         //{
         //    return httpClient.GetJsonAsync<List<fnORCHAGetFeeDefinitions>>($"{userSession.baseUri}api/ChapterManagement/GetFeeDefs/{caseTypeGroup}/{caseType}");
         //}
-
-        public Task<List<UsrOrDefChapterManagement>> GetItemListByChapter(int chapterId)
-        {
-            return httpClient.GetJsonAsync<List<UsrOrDefChapterManagement>>($"{userSession.baseUri}api/ChapterManagement/GetItemListByChapter/{chapterId}");
-        }
-
-        public Task<List<UsrOrDefChapterManagement>> GetItemListByChapterName(string casetypegroup, string casetype, string chapterName)
-        {
-            return httpClient.GetJsonAsync<List<UsrOrDefChapterManagement>>($"{userSession.baseUri}api/ChapterManagement/GetItemListByChapterName/{casetypegroup}/{casetype}/{chapterName}");
-        }
-
-        public Task<List<UsrOrDefChapterManagement>> GetDocListByChapter(string caseType, string chapter)
-        {
-            return httpClient.GetJsonAsync<List<UsrOrDefChapterManagement>>($"{userSession.baseUri}api/ChapterManagement/GetDocListByChapter/{caseType}/{chapter}");
-        }
 
         public Task<List<DmDocuments>> GetDocumentList(string caseType)
         {
@@ -156,16 +131,10 @@ namespace Gizmo_V1_02.Services
         }
 
 
-        public Task<List<UsrOrDefChapterManagement>> GetChapterListByCaseType(string caseType)
+        public Task<List<UsrOrsfSmartflows>> GetChapterListByCaseType(string caseType)
         {
-            return httpClient.GetJsonAsync<List<UsrOrDefChapterManagement>>($"{userSession.baseUri}api/ChapterManagement/GetChapterListByCaseType/{caseType}");
+            return httpClient.GetJsonAsync<List<UsrOrsfSmartflows>>($"{userSession.baseUri}api/ChapterManagement/GetChapterListByCaseType/{caseType}");
         }
-
-        public Task<List<UsrOrDefChapterManagement>> GetDocListByChapterAndDocType(string caseType, string chapter, string docType)
-        {
-            return httpClient.GetJsonAsync<List<UsrOrDefChapterManagement>>($"{userSession.baseUri}api/ChapterManagement/GetDocListByChapterAndDocType/{caseType}/{chapter}/{docType}");
-        }
-
 
         public Task<bool> CreateStep(VmChapterP4WStepSchemaJSONObject stepSchemaJSONObject)
         {

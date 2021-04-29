@@ -81,7 +81,6 @@
         {
             <div class="form-group">
                 <label for="Name">@CustomHeader Name</label>
-                <input type="hidden" @bind-value="@CopyObject.Id" />
                 <InputText class="form-control" @bind-Value="@CopyObject.Name" />
             </div>
         }
@@ -165,14 +164,6 @@
                 <InputCheckbox class="form-control" @bind-Value="suppressStep" />
             </div>
         }
-
-        <input type="hidden" @bind-value="@CopyObject.CaseType" />
-        <input type="hidden" @bind-value="@CopyObject.CaseTypeGroup" />
-        <input type="hidden" @bind-value="@CopyObject.ParentId" />
-
-
-
-
     </div>
 
     <div class="button-container">

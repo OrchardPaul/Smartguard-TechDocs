@@ -18,13 +18,13 @@
                 }
                 else
                 {
-                    <InputSelect class="form-control" ValueExpression="@(() => TaskObject.ChapterObject.CaseTypeGroup)"
-                                 Value="@TaskObject.ChapterObject.CaseTypeGroup"
+                    <InputSelect class="form-control" ValueExpression="@(() => TaskObject.SmartflowObject.CaseTypeGroup)"
+                                 Value="@TaskObject.SmartflowObject.CaseTypeGroup"
                                  ValueChanged="@((string value) => SelectExistingCaseTypeGroup(value))">
-                        @foreach (var c in AllChapters.Where(C => C.ChapterObject.ParentId == 0)
-                                      .Where(C => !(C.ChapterObject.CaseTypeGroup is null))
-                                      .OrderBy(C => C.ChapterObject.CaseTypeGroup)
-                                      .Select(C => C.ChapterObject.CaseTypeGroup)
+                        @foreach (var c in AllChapters
+                                      .Where(C => !(C.SmartflowObject.CaseTypeGroup is null))
+                                      .OrderBy(C => C.SmartflowObject.CaseTypeGroup)
+                                      .Select(C => C.SmartflowObject.CaseTypeGroup)
                                       .Distinct()
                                       .ToList())
                         {
@@ -38,7 +38,7 @@
             else
             {
 
-                <InputText class="form-control" @bind-Value="TaskObject.ChapterObject.CaseTypeGroup"></InputText>
+                <InputText class="form-control" @bind-Value="TaskObject.SmartflowObject.CaseTypeGroup"></InputText>
             }
 
 
@@ -58,14 +58,14 @@
                 }
                 else
                 {
-                    <InputSelect class="form-control" ValueExpression="@(() => TaskObject.ChapterObject.CaseType)"
-                                 Value="@TaskObject.ChapterObject.CaseType"
+                    <InputSelect class="form-control" ValueExpression="@(() => TaskObject.SmartflowObject.CaseType)"
+                                 Value="@TaskObject.SmartflowObject.CaseType"
                                  ValueChanged="@((string value) => SelectExistingCaseType(value))">
-                        @foreach (var c in AllChapters.Where(C => C.ChapterObject.ParentId == 0)
-                                     .Where(C => C.ChapterObject.CaseTypeGroup == TaskObject.ChapterObject.CaseTypeGroup)
-                                     .Where(C => !(C.ChapterObject.CaseType is null))
-                                      .OrderBy(C => C.ChapterObject.CaseType)
-                                     .Select(C => C.ChapterObject.CaseType)
+                        @foreach (var c in AllChapters
+                                     .Where(C => C.SmartflowObject.CaseTypeGroup == TaskObject.SmartflowObject.CaseTypeGroup)
+                                     .Where(C => !(C.SmartflowObject.CaseType is null))
+                                     .OrderBy(C => C.SmartflowObject.CaseType)
+                                     .Select(C => C.SmartflowObject.CaseType)
                                      .Distinct()
                                      .ToList())
                         {
@@ -79,7 +79,7 @@
             }
             else
             {
-                <InputText class="form-control" @bind-Value="TaskObject.ChapterObject.CaseType"></InputText>
+                <InputText class="form-control" @bind-Value="TaskObject.SmartflowObject.CaseType"></InputText>
             }
 
 
@@ -99,18 +99,18 @@
                 }
                 else
                 {
-                    <InputSelectInteger class="form-control" ValueExpression="@(() => TaskObject.ChapterObject.Id)"
-                                        Value="@TaskObject.ChapterObject.Id"
+                    <InputSelectInteger class="form-control" ValueExpression="@(() => TaskObject.SmartflowObject.Id)"
+                                        Value="@TaskObject.SmartflowObject.Id"
                                         ValueChanged="@((int value) => SelectExistingChapter(value))"
                                         id="Summary">
-                        @foreach (var c in AllChapters.Where(C => C.ChapterObject.ParentId == 0)
-                                                  .Where(C => C.ChapterObject.CaseTypeGroup == TaskObject.ChapterObject.CaseTypeGroup)
-                                                  .Where(C => C.ChapterObject.CaseType == TaskObject.ChapterObject.CaseType)
-                                                  .OrderBy(C => C.ChapterObject.SeqNo)
+                        @foreach (var c in AllChapters
+                                                  .Where(C => C.SmartflowObject.CaseTypeGroup == TaskObject.SmartflowObject.CaseTypeGroup)
+                                                  .Where(C => C.SmartflowObject.CaseType == TaskObject.SmartflowObject.CaseType)
+                                                  .OrderBy(C => C.SmartflowObject.SeqNo)
                                                   .ToList())
                         {
-                            <option value="@c.ChapterObject.Id">
-                                @c.ChapterObject.Name
+                            <option value="@c.SmartflowObject.Id">
+                                @c.SmartflowObject.SmartflowName
                             </option>
                         }
                     </InputSelectInteger>
@@ -118,9 +118,9 @@
             }
             else
             {
-                <InputText class="form-control" @bind-Value="TaskObject.ChapterObject.Name"></InputText>
+                <InputText class="form-control" @bind-Value="TaskObject.SmartflowObject.SmartflowName"></InputText>
             }
-            <ValidationMessage For="@(() => TaskObject.ChapterObject.Name)" />
+            <ValidationMessage For="@(() => TaskObject.SmartflowObject.SmartflowName)" />
         </div>
 
         <div class="form-group">

@@ -80,9 +80,9 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         private int ValidTicketMessageCount { get; set; } 
 
-        private List<VmUsrOrDefChapterManagement> lstChapters { get; set; } = new List<VmUsrOrDefChapterManagement>();
+        private List<VmUsrOrsfSmartflows> lstChapters { get; set; } = new List<VmUsrOrsfSmartflows>();
 
-        private List<VmUsrOrDefChapterManagement> lstAltSystemChapters { get; set; } = new List<VmUsrOrDefChapterManagement>();
+        private List<VmUsrOrsfSmartflows> lstAltSystemChapters { get; set; } = new List<VmUsrOrsfSmartflows>();
 
         private List<VmUsrOrDefChapterManagement> lstAll { get; set; } = new List<VmUsrOrDefChapterManagement>();
         private List<VmUsrOrDefChapterManagement> lstAltSystemChapterItems { get; set; } = new List<VmUsrOrDefChapterManagement>();
@@ -94,7 +94,6 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         private List<VmUsrOrDefChapterManagement> lstAgendas { get; set; } = new List<VmUsrOrDefChapterManagement>();
         private List<VmFee> lstFees { get; set; } = new List<VmFee>();
-        private List<VmChapterFee> lstVmFeeModalItems { get; set; } = new List<VmChapterFee>();
         private List<VmUsrOrDefChapterManagement> lstDocs { get; set; } = new List<VmUsrOrDefChapterManagement>();
         private List<VmUsrOrDefChapterManagement> lstStatus { get; set; } = new List<VmUsrOrDefChapterManagement>();
 
@@ -104,11 +103,10 @@ namespace Gizmo_V1_02.Pages.Chapters
         public List<MpSysViews> ListP4WViews;
         public List<DmDocuments> dropDownChapterList;
         public List<CaseTypeGroups> partnerCaseTypeGroups;
-        public List<fnORCHAGetFeeDefinitions> feeDefinitions;
 
         public string editCaseType { get; set; } = "";
         public string updateJSON { get; set; } = "";
-
+        public bool CreateNewSmartflow { get; set; }
 
         public string selectColour { 
             get 
@@ -135,13 +133,13 @@ namespace Gizmo_V1_02.Pages.Chapters
             //    sessionState.SetTempBackground(selectedChapter.BackgroundColour, NavigationManager.Uri);
             //}
 
-            SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(selectedChapter);
+            SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(selectedChapter);
 
             await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
 
         }
 
-        public UsrOrDefChapterManagement editChapter { get; set; }
+        public UsrOrsfSmartflows editChapter { get; set; }
         public string isCaseTypeOrGroup { get; set; } = "";
 
         public VmDataViews EditDataViewObject = new VmDataViews { DataView = new DataViews() };
@@ -149,13 +147,13 @@ namespace Gizmo_V1_02.Pages.Chapters
         
         public VmChapterComparison editChapterComparison = new VmChapterComparison();
 
-        public VmUsrOrDefChapterManagement editObject = new VmUsrOrDefChapterManagement { ChapterObject = new UsrOrDefChapterManagement() };
-        
+        public VmUsrOrDefChapterManagement editObject = new VmUsrOrDefChapterManagement { ChapterObject = new GenSmartflowItem() };
+
         public FollowUpDoc attachObject = new FollowUpDoc();
 
         public VmFee editFeeObject = new VmFee { FeeObject = new Fee() };
 
-        public VmUsrOrDefChapterManagement editChapterObject = new VmUsrOrDefChapterManagement { ChapterObject = new UsrOrDefChapterManagement() };
+        public UsrOrsfSmartflows editChapterObject = new UsrOrsfSmartflows ();
 
 
         string selectedList = string.Empty;
@@ -172,15 +170,15 @@ namespace Gizmo_V1_02.Pages.Chapters
         public string UrlChapter { set { selectedChapter.Name = value; } }
 
         [Parameter]
-        public VmChapter selectedChapter { get; set; } = new VmChapter { ChapterItems = new List<UsrOrDefChapterManagement>() };
+        public VmChapter selectedChapter { get; set; } = new VmChapter { Items = new List<GenSmartflowItem>() };
 
         
 
         public VmChapter altChapter { get; set; } = new VmChapter();
 
-        public UsrOrDefChapterManagement SelectedChapterObject { get; set; } = new UsrOrDefChapterManagement();
+        public UsrOrsfSmartflows SelectedChapterObject { get; set; } = new UsrOrsfSmartflows();
 
-        public UsrOrDefChapterManagement AltChapterObject { get; set; } = new UsrOrDefChapterManagement();
+        public UsrOrsfSmartflows AltChapterObject { get; set; } = new UsrOrsfSmartflows();
 
         int rowChanged { get; set; } = 0;
 
@@ -355,7 +353,7 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
 
         private async void SaveShowPartnerNotes()
         {
-            SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(selectedChapter);
+            SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(selectedChapter);
 
             await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
         }
@@ -398,12 +396,12 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
             
         }
 
-        private void NavigateToChapter(UsrOrDefChapterManagement chapter)
+        private void NavigateToChapter(UsrOrsfSmartflows chapter)
         {
-            NavigationManager.NavigateTo($"Smartflow/{chapter.CaseTypeGroup}/{chapter.CaseType}/{chapter.Name}",true);
+            NavigationManager.NavigateTo($"Smartflow/{chapter.CaseTypeGroup}/{chapter.CaseType}/{chapter.SmartflowName}",true);
         }
 
-        private async void SelectChapter(UsrOrDefChapterManagement chapter)
+        private async void SelectChapter(UsrOrsfSmartflows chapter)
         {
             displaySpinner = true;
 
@@ -411,32 +409,33 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
 
             SelectedChapterObject = chapter;
 
-            if (!(chapter.ChapterData is null))
+            if (!(chapter.SmartflowData is null))
             {
-                selectedChapter = JsonConvert.DeserializeObject<VmChapter>(chapter.ChapterData);
+                selectedChapter = JsonConvert.DeserializeObject<VmChapter>(chapter.SmartflowData);
             }
             else
             {
                 //Initialise the VmChapter in case of null Json
-                selectedChapter = new VmChapter { ChapterItems = new List<UsrOrDefChapterManagement>()
+                selectedChapter = new VmChapter { Items = new List<GenSmartflowItem>()
                                                  , DataViews = new List<DataViews>()
                                                  , TickerMessages = new List<TickerMessages>()
                                                  , Fees = new List<Fee>()};
                 selectedChapter.CaseTypeGroup = chapter.CaseTypeGroup;
                 selectedChapter.CaseType = chapter.CaseType;
-                selectedChapter.Name = chapter.Name;
+                selectedChapter.Name = chapter.SmartflowName;
             }
 
-            selectedChapter.StepName = $"SF {chapter.Name} Smartflow";
+            selectedChapter.StepName = $"SF {chapter.SmartflowName} Smartflow";
             selectedChapter.SelectedStep = selectedChapter.SelectedStep is null || selectedChapter.SelectedStep == "Create New" ? "" : selectedChapter.SelectedStep;
             selectedChapter.Fees = selectedChapter.Fees is null ? new List<Fee>() : selectedChapter.Fees;
+            selectedChapter.Items = selectedChapter.Items is null ? new List<GenSmartflowItem>() : selectedChapter.Items;
             selectedChapterId = chapter.Id;
             compareSystems = false;
             rowChanged = 0;
             navDisplay = "Chapter";
             showJSON = false;
 
-           
+
 
             dropDownChapterList = await chapterManagementService.GetDocumentList(selectedChapter.CaseType);
 
@@ -476,9 +475,9 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
 
         private async void SaveChapterDetails()
         {
-            SelectedChapterObject.Name = selectedChapter.Name;
+            SelectedChapterObject.SmartflowName = selectedChapter.Name;
 
-            SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(selectedChapter);
+            SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(selectedChapter);
             await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
 
             await RefreshChapterItems("All");
@@ -498,8 +497,22 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
             //var lstC = await chapterManagementService.GetAllChapters();
             //lstChapters = lstC.Select(A => new VmUsrOrDefChapterManagement { ChapterObject = A }).ToList();
 
-            var lsrSR = await CompanyDbAccess.GetAllSmartflowRecords(sessionState);
-            lstChapters = lsrSR.Select(A => new VmUsrOrDefChapterManagement { ChapterObject = mapper.Map(A, new UsrOrDefChapterManagement()) }).ToList();
+            bool gotLock = CompanyDbAccess.Lock;
+            while (gotLock)
+            {
+                await Task.Yield();
+                gotLock = CompanyDbAccess.Lock;
+            }
+
+            try
+            {
+                var lsrSR = await CompanyDbAccess.GetAllSmartflowRecords(sessionState);
+                lstChapters = lsrSR.Select(A => new VmUsrOrsfSmartflows { SmartflowObject = mapper.Map(A, new UsrOrsfSmartflows()) }).ToList();
+            }
+            catch
+            {
+                Console.WriteLine("Error Caught");
+            }
 
 
             if (!(selectedChapter.Name is null) & selectedChapter.Name != "")
@@ -508,10 +521,10 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
                 ListP4WViews = await partnerAccessService.GetPartnerViews();
 
                 SelectChapter(lstChapters
-                                    .Where(C => C.ChapterObject.CaseTypeGroup == selectedChapter.CaseTypeGroup)
-                                    .Where(C => C.ChapterObject.CaseType == selectedChapter.CaseType)
-                                    .Where(C => C.ChapterObject.Name == selectedChapter.Name)
-                                    .Select(C => C.ChapterObject)
+                                    .Where(C => C.SmartflowObject.CaseTypeGroup == selectedChapter.CaseTypeGroup)
+                                    .Where(C => C.SmartflowObject.CaseType == selectedChapter.CaseType)
+                                    .Where(C => C.SmartflowObject.SmartflowName == selectedChapter.Name)
+                                    .Select(C => C.SmartflowObject)
                                     .SingleOrDefault());
             }
 
@@ -529,23 +542,24 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
             {
                 //var lstC = await chapterManagementService.GetAllChapters();
                 //lstChapters = lstC.Select(A => new VmUsrOrDefChapterManagement { ChapterObject = A }).ToList();
+
+                bool gotLock = CompanyDbAccess.Lock;
+                while (gotLock)
+                {
+                    await Task.Yield();
+                    gotLock = CompanyDbAccess.Lock;
+                }
+
                 var lsrSR = await CompanyDbAccess.GetAllSmartflowRecords(sessionState);
-                lstChapters = lsrSR.Select(A => new VmUsrOrDefChapterManagement { ChapterObject = mapper.Map(A, new UsrOrDefChapterManagement()) }).ToList();
+                lstChapters = lsrSR.Select(A => new VmUsrOrsfSmartflows { SmartflowObject = mapper.Map(A, new UsrOrsfSmartflows()) }).ToList();
 
             }
             else
             {
-                var lst = selectedChapter.ChapterItems;
+                var lst = selectedChapter.Items;
                 Dictionary<int?, string> docTypes = new Dictionary<int?, string> { { 1, "Doc" },{ 4, "Form" }, {6, "Step" }, { 8, "Date" }, { 9, "Email" }, {11,"Doc" } , { 12, "Email" } };
 
                 lstAll = lst.Select(L => new VmUsrOrDefChapterManagement { ChapterObject = L })
-                                .Select(L => {
-                                    L.ChapterObject.CaseTypeGroup = selectedChapter.CaseTypeGroup;
-                                    L.ChapterObject.CaseType = selectedChapter.CaseType;
-                                    L.ChapterObject.ChapterName = selectedChapter.Name;
-                                    
-                                    return L;
-                                })
                                 .ToList();
 
                 /*
@@ -634,11 +648,16 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
             {
                 await sessionState.SwitchSelectedSystem();
 
-                //var lstC = await chapterManagementService.GetAllChapters();
-                //lstAltSystemChapters = lstC.Select(A => new VmUsrOrDefChapterManagement { ChapterObject = A }).ToList();
+
+                bool gotLock = CompanyDbAccess.Lock;
+                while (gotLock)
+                {
+                    await Task.Yield();
+                    gotLock = CompanyDbAccess.Lock;
+                }
 
                 var lsrSR = await CompanyDbAccess.GetAllSmartflowRecords(sessionState);
-                lstAltSystemChapters = lsrSR.Select(A => new VmUsrOrDefChapterManagement { ChapterObject = mapper.Map(A, new UsrOrDefChapterManagement()) }).ToList();
+                lstAltSystemChapters = lsrSR.Select(A => new VmUsrOrsfSmartflows { SmartflowObject = mapper.Map(A, new UsrOrsfSmartflows()) } ).ToList();
 
 
                 await sessionState.ResetSelectedSystem();
@@ -660,17 +679,19 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
             await RefreshAltSystemChaptersList();
 
             AltChapterObject = lstAltSystemChapters
-                                    .Where(A => A.ChapterObject.Name == SelectedChapterObject.Name)
-                                    .Where(A => A.ChapterObject.CaseType == SelectedChapterObject.CaseType)
-                                    .Where(A => A.ChapterObject.CaseTypeGroup == SelectedChapterObject.CaseTypeGroup)
-                                    .Select(C => C.ChapterObject)
+                                    .Where(A => A.SmartflowObject.SmartflowName == SelectedChapterObject.SmartflowName)
+                                    .Where(A => A.SmartflowObject.CaseType == SelectedChapterObject.CaseType)
+                                    .Where(A => A.SmartflowObject.CaseTypeGroup == SelectedChapterObject.CaseTypeGroup)
+                                    .Select(A => A.SmartflowObject)
                                     .SingleOrDefault();
+
+            CreateNewSmartflow = false;
 
             if (!(AltChapterObject is null))
             {
-                altChapter = JsonConvert.DeserializeObject<VmChapter>(AltChapterObject.ChapterData);
+                altChapter = JsonConvert.DeserializeObject<VmChapter>(AltChapterObject.SmartflowData);
 
-                var cItems = altChapter.ChapterItems;
+                var cItems = altChapter.Items;
 
 
                 lstAltSystemChapterItems = cItems.Select(T => new VmUsrOrDefChapterManagement { ChapterObject = T }).ToList();
@@ -720,14 +741,25 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
                     CompareTickerMessagesToAltSytem(item);
                 }
 
-                await InvokeAsync(() =>
-                {
-                    StateHasChanged();
-                });
+            }
+            else
+            {
+                CreateNewSmartflow = true;
+
+                ListVmTickerMessages = ListVmTickerMessages.Select(T => { T.ComparisonIcon = "times"; T.ComparisonResult = "No match"; return T; }).ToList();
+                ListVmDataViews = ListVmDataViews.Select(T => { T.ComparisonIcon = "times"; T.ComparisonResult = "No match"; return T; }).ToList();
+                lstFees = lstFees.Select(T => { T.ComparisonIcon = "times"; T.ComparisonResult = "No match"; return T; }).ToList();
+                lstDocs = lstDocs.Select(T => { T.ComparisonIcon = "times"; T.ComparisonResult = "No match"; return T; }).ToList();
+                lstStatus = lstStatus.Select(T => { T.ComparisonIcon = "times"; T.ComparisonResult = "No match"; return T; }).ToList();
+                lstAgendas = lstAgendas.Select(T => { T.ComparisonIcon = "times"; T.ComparisonResult = "No match"; return T; }).ToList();
             }
 
 
-            
+            await InvokeAsync(() =>
+            {
+                StateHasChanged();
+            });
+
 
             return true;
         }
@@ -736,10 +768,10 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
         {
             lstChapters = lstChapters.Select(C => { C.ComparisonIcon = null; C.ComparisonResult = null; return C; }).ToList();
 
-            var test = new string(SelectedChapterObject.ChapterData);
+            var test = new string(SelectedChapterObject.SmartflowData);
 
-            lstAltSystemChapters = new List<VmUsrOrDefChapterManagement>();
-            AltChapterObject = new UsrOrDefChapterManagement();
+            lstAltSystemChapters = new List<VmUsrOrsfSmartflows>();
+            AltChapterObject = new UsrOrsfSmartflows();
             compareSystems = !compareSystems;
             await RefreshCompararisonAllChapters();
 
@@ -765,15 +797,15 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
                  */
                 foreach (var chapter in lstChapters)
                 {
-                    var chapterItems = JsonConvert.DeserializeObject<VmChapter>(chapter.ChapterObject.ChapterData);
+                    var chapterItems = JsonConvert.DeserializeObject<VmChapter>(chapter.SmartflowObject.SmartflowData);
 
-                    var vmChapterItems = chapterItems.ChapterItems.Select(C => new VmUsrOrDefChapterManagement { ChapterObject = C }).ToList();
+                    var vmChapterItems = chapterItems.Items.Select(C => new VmUsrOrDefChapterManagement { ChapterObject = C }).ToList();
 
                     AltChapterObject = lstAltSystemChapters
-                                        .Where(A => A.ChapterObject.Name == chapter.ChapterObject.Name)
-                                        .Where(A => A.ChapterObject.CaseType == chapter.ChapterObject.CaseType)
-                                        .Where(A => A.ChapterObject.CaseTypeGroup == chapter.ChapterObject.CaseTypeGroup)
-                                        .Select(C => C.ChapterObject)
+                                        .Where(A => A.SmartflowObject.SmartflowName == chapter.SmartflowObject.SmartflowName)
+                                        .Where(A => A.SmartflowObject.CaseType == chapter.SmartflowObject.CaseType)
+                                        .Where(A => A.SmartflowObject.CaseTypeGroup == chapter.SmartflowObject.CaseTypeGroup)
+                                        .Select(C => C.SmartflowObject)
                                         .SingleOrDefault();
 
                     if (AltChapterObject is null)
@@ -783,9 +815,9 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
                     }
                     else
                     {
-                        altChapter = JsonConvert.DeserializeObject<VmChapter>(AltChapterObject.ChapterData);
+                        altChapter = JsonConvert.DeserializeObject<VmChapter>(AltChapterObject.SmartflowData);
 
-                        lstAltSystemChapterItems = altChapter.ChapterItems.Select(T => new VmUsrOrDefChapterManagement { ChapterObject = T }).ToList();
+                        lstAltSystemChapterItems = altChapter.Items.Select(T => new VmUsrOrDefChapterManagement { ChapterObject = T }).ToList();
 
                         foreach (var item in vmChapterItems)
                         {
@@ -995,9 +1027,7 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
         {
             selectedList = type;
 
-            editObject = new VmUsrOrDefChapterManagement { ChapterObject = new UsrOrDefChapterManagement() };
-            editObject.ChapterObject.CaseTypeGroup = "";
-            editObject.ChapterObject.CaseType = "";
+            editObject = new VmUsrOrDefChapterManagement { ChapterObject = new GenSmartflowItem() };
             editObject.ChapterObject.Type = (type == "Steps and Documents") ? "Doc" : type;
             editObject.ChapterObject.Action = "INSERT";
             
@@ -1031,8 +1061,6 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
             editFeeObject.FeeObject.SeqNo = editFeeObject.FeeObject.SeqNo is null
                                                         ? 1
                                                         : editFeeObject.FeeObject.SeqNo;
-
-            editObject.ChapterObject.ParentId = selectedChapterId;
 
             ShowChapterDetailModal("Insert");
         }
@@ -1087,46 +1115,39 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
 
         private void PrepNewChapter()
         {
-            editChapterObject = new VmUsrOrDefChapterManagement { ChapterObject = new UsrOrDefChapterManagement() };
+            editChapterObject = new UsrOrsfSmartflows();
 
-            if (!(selectedChapter.CaseTypeGroup == ""))
+            if (!(SelectedChapterObject.CaseTypeGroup == ""))
             {
-                editChapterObject.ChapterObject.CaseTypeGroup = selectedChapter.CaseTypeGroup;
+                editChapterObject.CaseTypeGroup = SelectedChapterObject.CaseTypeGroup;
             }
             else
             {
-                editChapterObject.ChapterObject.CaseTypeGroup = "";
+                editChapterObject.CaseTypeGroup = "";
             }
 
-            if (!(selectedChapter.CaseType == ""))
+            if (!(SelectedChapterObject.CaseType == ""))
             {
-                editChapterObject.ChapterObject.CaseType = selectedChapter.CaseType;
+                editChapterObject.CaseType = SelectedChapterObject.CaseType;
             }
             else
             {
-                editChapterObject.ChapterObject.CaseType = "";
+                editChapterObject.CaseType = "";
             }
 
-            if (!string.IsNullOrWhiteSpace(selectedChapter.CaseTypeGroup) & !string.IsNullOrWhiteSpace(selectedChapter.CaseType))
+            if (!string.IsNullOrWhiteSpace(SelectedChapterObject.CaseTypeGroup) & !string.IsNullOrWhiteSpace(SelectedChapterObject.CaseType))
             {
-                editChapterObject.ChapterObject.SeqNo = lstChapters
-                                                            .Where(C => C.ChapterObject.ParentId == 0)
-                                                            .Where(C => C.ChapterObject.CaseType == selectedChapter.CaseType)
-                                                            .Where(C => C.ChapterObject.CaseTypeGroup == selectedChapter.CaseTypeGroup)
-                                                            .OrderByDescending(C => C.ChapterObject.SeqNo)
-                                                            .Select(C => C.ChapterObject.SeqNo)
-                                                            .FirstOrDefault() + 1;
+                editChapterObject.SeqNo = lstChapters
+                                                  .Where(C => C.SmartflowObject.CaseType == selectedChapter.CaseType)
+                                                  .Where(C => C.SmartflowObject.CaseTypeGroup == selectedChapter.CaseTypeGroup)
+                                                  .OrderByDescending(C => C.SmartflowObject.SeqNo)
+                                                  .Select(C => C.SmartflowObject.SeqNo)
+                                                  .FirstOrDefault() + 1;
             }
             else
             {
-                editChapterObject.ChapterObject.SeqNo = 1;
+                editChapterObject.SeqNo = 1;
             }
-
-            editChapterObject.ChapterObject.Type = "Chapter";
-            editChapterObject.ChapterObject.ParentId = 0;
-
-            editChapterObject.ChapterObject.SuppressStep = "";
-            editChapterObject.ChapterObject.EntityType = "";
         }
 
         private void PrepareChapterForInsert()
@@ -1137,8 +1158,6 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
 
         private void PrepareChapterForCopy()
         {
-            var test = Uri.EscapeDataString(SelectedChapterObject.ChapterData);
-
             PrepNewChapter();
             ShowChapterCopyModel();
         }
@@ -1151,7 +1170,7 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
             ShowCaseTypeEditModal();
         }
 
-        private void PrepareChapterForEdit(UsrOrDefChapterManagement chapter, string option)
+        private void PrepareChapterForEdit(UsrOrsfSmartflows chapter, string option)
         {
             editChapter = chapter;
             isCaseTypeOrGroup = option;
@@ -1163,7 +1182,7 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
         {
             if (!(selectedChapter.CaseType == ""))
             {
-                dropDownChapterList = await chapterManagementService.GetDocumentList(selectedChapter.CaseType);
+                dropDownChapterList = await chapterManagementService.GetDocumentList(SelectedChapterObject.CaseType);
                 StateHasChanged();
             }
         }
@@ -1179,7 +1198,7 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
 
 
         /// <summary>
-        /// Moves a sequecnce item up or down a list of type [UsrOrDefChapterManagement]
+        /// Moves a sequecnce item up or down a list of type [GenSmartflowItem]
         /// </summary>
         /// <remarks>
         /// <para>Up: swaps the item with the preceding item in the lest by reducing sequence number by 1 </para>
@@ -1189,7 +1208,7 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
         /// <param name="listType">: Docs or Fees</param>
         /// <param name="direction">: Up or Down</param>
         /// <returns>No return</returns>
-        protected async void MoveSeq(UsrOrDefChapterManagement selectobject, string listType, string direction)
+        protected async void MoveSeq(GenSmartflowItem selectobject, string listType, string direction)
         {
             seqMoving = true; //prevents changes to the form whilst process of changing seq is carried out
 
@@ -1212,13 +1231,13 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
                     lstItems = lstStatus;
                     break;
 
-                case "Chapters":
-                    lstItems = lstChapters
-                                        .Where(A => A.ChapterObject.CaseTypeGroup == selectedChapter.CaseTypeGroup)
-                                        .Where(A => A.ChapterObject.CaseType == selectedChapter.CaseType)
-                                        .OrderBy(A => A.ChapterObject.SeqNo)
-                                        .ToList();
-                    break;
+                //case "Chapters":
+                //    lstItems = lstChapters
+                //                        .Where(A => A.ChapterObject.CaseTypeGroup == selectedChapter.CaseTypeGroup)
+                //                        .Where(A => A.ChapterObject.CaseType == selectedChapter.CaseType)
+                //                        .OrderBy(A => A.ChapterObject.SeqNo)
+                //                        .ToList();
+                //    break;
             }
 
             var swapItem = lstItems.Where(D => D.ChapterObject.SeqNo == (selectobject.SeqNo + incrementBy)).SingleOrDefault();
@@ -1227,18 +1246,56 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
                 selectobject.SeqNo += incrementBy;
                 swapItem.ChapterObject.SeqNo = swapItem.ChapterObject.SeqNo + (incrementBy * -1);
 
-                if (listType == "Chapters")
-                {
-                    await chapterManagementService.UpdateMainItem(selectobject).ConfigureAwait(false);
-                    await chapterManagementService.UpdateMainItem(swapItem.ChapterObject).ConfigureAwait(false);
-                }
-                else
-                {
-                    SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(selectedChapter);
-                    await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
-                }
+                //if (listType == "Chapters")
+                //{
+                //    await chapterManagementService.UpdateMainItem(selectobject).ConfigureAwait(false);
+                //    await chapterManagementService.UpdateMainItem(swapItem.ChapterObject).ConfigureAwait(false);
+                //}
+
+                SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(selectedChapter);
+                await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
 
 
+
+            }
+
+            await RefreshChapterItems(listType);
+            await InvokeAsync(() =>
+            {
+                StateHasChanged();
+            });
+
+
+            seqMoving = false;
+
+        }
+
+        protected async void MoveSmartFlowSeq(UsrOrsfSmartflows selectobject, string listType, string direction)
+        {
+            seqMoving = true; //prevents changes to the form whilst process of changing seq is carried out
+
+            var lstItems = new List<VmUsrOrsfSmartflows>();
+            int incrementBy;
+
+            incrementBy = (direction.ToLower() == "up" ? -1 : 1);
+
+            rowChanged = (int)(selectobject.SeqNo + incrementBy);
+
+            lstItems = lstChapters
+                        .Where(A => A.SmartflowObject.CaseTypeGroup == SelectedChapterObject.CaseTypeGroup)
+                        .Where(A => A.SmartflowObject.CaseType == SelectedChapterObject.CaseType)
+                        .OrderBy(A => A.SmartflowObject.SeqNo)
+                        .ToList();
+
+
+            var swapItem = lstItems.Where(D => D.SmartflowObject.SeqNo == (selectobject.SeqNo + incrementBy)).SingleOrDefault();
+            if (!(swapItem is null))
+            {
+                selectobject.SeqNo += incrementBy;
+                swapItem.SmartflowObject.SeqNo = swapItem.SmartflowObject.SeqNo + (incrementBy * -1);
+
+                await chapterManagementService.UpdateMainItem(selectobject).ConfigureAwait(false);
+                await chapterManagementService.UpdateMainItem(swapItem.SmartflowObject).ConfigureAwait(false);
             }
 
             await RefreshChapterItems(listType);
@@ -1269,7 +1326,7 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
                 selectobject.BlockNo += incrementBy;
                 swapItem.DataView.BlockNo = swapItem.DataView.BlockNo + (incrementBy * -1);
 
-                SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(selectedChapter);
+                SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(selectedChapter);
                 await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
 
             }
@@ -1301,7 +1358,7 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
                 selectobject.SeqNo += incrementBy;
                 swapItem.Message.SeqNo = swapItem.Message.SeqNo + (incrementBy * -1);
 
-                SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(selectedChapter);
+                SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(selectedChapter);
                 await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
 
             }
@@ -1333,7 +1390,7 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
                 selectobject.SeqNo += incrementBy;
                 swapItem.FeeObject.SeqNo = swapItem.FeeObject.SeqNo + (incrementBy * -1);
 
-                SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(selectedChapter);
+                SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(selectedChapter);
                 await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
 
             }
@@ -1358,18 +1415,8 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
                 case "Docs":
                     listItems = lstDocs;
                     break;
-                //case "Fees":
-                //    listItems = lstFees;
-                //    break;
                 case "Status":
                     listItems = lstStatus;
-                    break;
-                case "Chapters":
-                    listItems = lstChapters
-                                        .Where(A => A.ChapterObject.CaseTypeGroup == selectedChapter.CaseTypeGroup)
-                                        .Where(A => A.ChapterObject.CaseType == selectedChapter.CaseType)
-                                        .OrderBy(A => A.ChapterObject.SeqNo)
-                                        .ToList();
                     break;
             }
 
@@ -1402,7 +1449,7 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
                 item.ChapterObject.SeqNo = seqNo;
             }
 
-            SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(selectedChapter);
+            SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(selectedChapter);
             await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
 
             await RefreshChapterItems(ListType);
@@ -1425,7 +1472,7 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
                 item.DataView.BlockNo = seqNo;
             }
 
-            SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(selectedChapter);
+            SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(selectedChapter);
             await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
 
             await RefreshChapterItems(ListType);
@@ -1448,7 +1495,7 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
                 item.Message.SeqNo = seqNo;
             }
 
-            SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(selectedChapter);
+            SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(selectedChapter);
             await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
 
             await RefreshChapterItems(ListType);
@@ -1473,7 +1520,7 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
                 item.FeeObject.SeqNo = seqNo;
             }
 
-            SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(selectedChapter);
+            SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(selectedChapter);
             await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
 
             await RefreshChapterItems(ListType);
@@ -1486,16 +1533,19 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
 
         protected async void CondenseChapterSeq()
         {
-            var ListItems = GetRelevantChapterList("Chapters");
+            var ListItems = lstChapters
+                                .Where(C => C.SmartflowObject.CaseTypeGroup == SelectedChapterObject.CaseTypeGroup)
+                                .Where(C => C.SmartflowObject.CaseType == SelectedChapterObject.CaseType)
+                                .ToList();
 
             int seqNo = 0;
 
-            foreach (VmUsrOrDefChapterManagement item in ListItems.OrderBy(A => A.ChapterObject.SeqNo))
+            foreach (VmUsrOrsfSmartflows item in ListItems.OrderBy(A => A.SmartflowObject.SeqNo))
             {
                 seqNo += 1;
-                item.ChapterObject.SeqNo = seqNo;
+                item.SmartflowObject.SeqNo = seqNo;
 
-                await chapterManagementService.UpdateMainItem(item.ChapterObject);
+                await chapterManagementService.UpdateMainItem(item.SmartflowObject);
             }
 
             RefreshChapters();
@@ -1550,8 +1600,8 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
             Action Action = RefreshChapters;
 
             var parameters = new ModalParameters();
-            parameters.Add("TaskObject", (isCaseTypeOrGroup == "Chapter") ? editChapter.Name : editCaseType);
-            parameters.Add("originalName", (isCaseTypeOrGroup == "Chapter") ? editChapter.Name : editCaseType);
+            parameters.Add("TaskObject", (isCaseTypeOrGroup == "Chapter") ? editChapter.SmartflowData : editCaseType);
+            parameters.Add("originalName", (isCaseTypeOrGroup == "Chapter") ? editChapter.SmartflowData : editCaseType);
             if (isCaseTypeOrGroup == "Chapter")
             {
                 parameters.Add("Chapter", editChapter);
@@ -1593,7 +1643,7 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
         {
             Action action = RefreshSelectedList;
 
-            var copyObject = new UsrOrDefChapterManagement
+            var copyObject = new GenSmartflowItem
             {
                 Type = editObject.ChapterObject.Type,
                 Name = editObject.ChapterObject.Name,
@@ -1714,7 +1764,7 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
         {
             Action action = RefreshSelectedList;
 
-            var copyObject = new UsrOrDefChapterManagement
+            var copyObject = new GenSmartflowItem
             {
                 Type = editObject.ChapterObject.Type,
                 Name = editObject.ChapterObject.Name,
@@ -1934,11 +1984,11 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
             Modal.Show<TickerMessageDisplay>("Ticker Message", parameters, options);
         }
 
-        protected void PrepareChapterDelete(VmUsrOrDefChapterManagement selectedChapterItem)
+        protected void PrepareChapterDelete(VmUsrOrsfSmartflows selectedChapterItem)
         {
-            editObject = selectedChapterItem;
+            editChapter = selectedChapterItem.SmartflowObject;
 
-            string itemName = selectedChapterItem.ChapterObject.Name;
+            string itemName = selectedChapterItem.SmartflowObject.SmartflowName;
 
             Action SelectedDeleteAction = HandleChapterDelete;
             var parameters = new ModalParameters();
@@ -2040,7 +2090,7 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
             selectedChapter.BackgroundImage = fileDesc.FileURL.Replace("/wwwroot", "");
             selectedChapter.BackgroundImageName = fileDesc.FileName;
 
-            SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(selectedChapter);
+            SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(selectedChapter);
 
             await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
 
@@ -2141,6 +2191,7 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
             parameters.Add("CurrentChapterRow", SelectedChapterObject);
             parameters.Add("AltChapterRow", AltChapterObject);
             parameters.Add("CompanyDbAccess", CompanyDbAccess);
+            parameters.Add("CreateNewSmartflow", CreateNewSmartflow);
 
             var options = new ModalOptions()
             {
@@ -2171,6 +2222,8 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
             parameters.Add("AltChapter", altChapter);
             parameters.Add("CurrentChapterRow", SelectedChapterObject);
             parameters.Add("AltChapterRow", AltChapterObject);
+            parameters.Add("CompanyDbAccess", CompanyDbAccess);
+            parameters.Add("CreateNewSmartflow", CreateNewSmartflow);
 
             var options = new ModalOptions()
             {
@@ -2208,6 +2261,8 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
             parameters.Add("AltChapter", altChapter);
             parameters.Add("CurrentChapterRow", SelectedChapterObject);
             parameters.Add("AltChapterRow", AltChapterObject);
+            parameters.Add("CompanyDbAccess", CompanyDbAccess);
+            parameters.Add("CreateNewSmartflow", CreateNewSmartflow);
 
             var options = new ModalOptions()
             {
@@ -2231,6 +2286,8 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
             parameters.Add("AltChapter", altChapter);
             parameters.Add("CurrentChapterRow", SelectedChapterObject);
             parameters.Add("AltChapterRow", AltChapterObject);
+            parameters.Add("CompanyDbAccess", CompanyDbAccess);
+            parameters.Add("CreateNewSmartflow",CreateNewSmartflow);
 
             var options = new ModalOptions()
             {
@@ -2244,8 +2301,8 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
         private async void HandleChapterDetailDelete()
         {
 
-            selectedChapter.ChapterItems.Remove(editObject.ChapterObject);
-            SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(selectedChapter);
+            selectedChapter.Items.Remove(editObject.ChapterObject);
+            SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(selectedChapter);
             await chapterManagementService.Update(SelectedChapterObject);
 
             await RefreshChapterItems(navDisplay);
@@ -2256,7 +2313,7 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
         {
 
             selectedChapter.Fees.Remove(editFeeObject.FeeObject);
-            SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(selectedChapter);
+            SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(selectedChapter);
             await chapterManagementService.Update(SelectedChapterObject);
 
             await RefreshChapterItems(navDisplay);
@@ -2266,7 +2323,7 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
         private async void HandleDataViewDelete()
         {
             selectedChapter.DataViews.Remove(EditDataViewObject.DataView);
-            SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(selectedChapter);
+            SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(selectedChapter);
             await chapterManagementService.Update(SelectedChapterObject);
 
             await RefreshChapterItems(navDisplay);
@@ -2276,7 +2333,7 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
         private async void HandleTickerMessageDelete()
         {
             selectedChapter.TickerMessages.Remove(EditTickerMessageObject.Message);
-            SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(selectedChapter);
+            SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(selectedChapter);
             await chapterManagementService.Update(SelectedChapterObject);
 
             await RefreshChapterItems(navDisplay);
@@ -2285,7 +2342,7 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
 
         private async void HandleChapterDelete()
         {
-            await chapterManagementService.Delete(editObject.ChapterObject.Id);
+            await chapterManagementService.Delete(editChapter.Id);
 
             RefreshChapters();
             StateHasChanged();
@@ -2325,23 +2382,23 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
             await sessionState.SwitchSelectedSystem();
 
             AltChapterObject = lstAltSystemChapters
-                                        .Where(A => A.ChapterObject.Name == SelectedChapterObject.Name)
-                                        .Where(A => A.ChapterObject.CaseType == SelectedChapterObject.CaseType)
-                                        .Where(A => A.ChapterObject.CaseTypeGroup == SelectedChapterObject.CaseTypeGroup)
-                                        .Select(C => C.ChapterObject)
+                                        .Where(A => A.SmartflowObject.SmartflowName == SelectedChapterObject.SmartflowName)
+                                        .Where(A => A.SmartflowObject.CaseType == SelectedChapterObject.CaseType)
+                                        .Where(A => A.SmartflowObject.CaseTypeGroup == SelectedChapterObject.CaseTypeGroup)
+                                        .Select(C => C.SmartflowObject)
                                         .SingleOrDefault();
 
             if (AltChapterObject is null)
             {
-                var newAltChapterObject = new UsrOrDefChapterManagement
+                var newAltChapterObject = new UsrOrsfSmartflows
                 {
                     SeqNo = SelectedChapterObject.SeqNo,
                     CaseTypeGroup = SelectedChapterObject.CaseTypeGroup,
                     CaseType = SelectedChapterObject.CaseType,
-                    Name = SelectedChapterObject.Name,
-                    ChapterData = SelectedChapterObject.ChapterData,
-                    ParentId = SelectedChapterObject.ParentId,
-                    Type = SelectedChapterObject.Type
+                    SmartflowName = SelectedChapterObject.SmartflowName,
+                    SmartflowData = SelectedChapterObject.SmartflowData,
+                    VariantName = SelectedChapterObject.VariantName,
+                    VariantNo = SelectedChapterObject.VariantNo
                 };
 
                 var returnObject = await chapterManagementService.Add(newAltChapterObject);
@@ -2350,7 +2407,7 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
             }
             else
             {
-                AltChapterObject.ChapterData = SelectedChapterObject.ChapterData;
+                AltChapterObject.SmartflowData = SelectedChapterObject.SmartflowData;
 
                 await chapterManagementService.Update(AltChapterObject);
             }
@@ -2368,7 +2425,7 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
         }
 
 
-        protected void PrepareChapterCreateOnAlt(UsrOrDefChapterManagement selectedChapter)
+        protected void PrepareChapterCreateOnAlt(UsrOrsfSmartflows selectedChapter)
         {
             SelectedChapterObject = selectedChapter;
 
@@ -2412,7 +2469,7 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
 
             var fileName = selectedChapter.Name + "_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".txt";
 
-            ChapterFileUpload.WriteChapterToFile(SelectedChapterObject.ChapterData, fileName);
+            ChapterFileUpload.WriteChapterToFile(SelectedChapterObject.SmartflowData, fileName);
 
             GetSeletedChapterFileList();
             StateHasChanged();
@@ -2633,53 +2690,56 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
 
         private async void SyncToAltSystem(string option)
         {
-            var selectedCopyItems = new VmChapter { ChapterItems = new List<UsrOrDefChapterManagement>() };
+            var selectedCopyItems = new VmChapter { Items = new List<GenSmartflowItem>()
+                                                    , Fees = new List<Fee>()
+                                                    , DataViews = new List<DataViews>()
+                                                    , TickerMessages = new List<TickerMessages>()};
 
             if (!(AltChapterObject is null))
             {
-                if (!string.IsNullOrEmpty(AltChapterObject.ChapterData))
+                if (!string.IsNullOrEmpty(AltChapterObject.SmartflowData))
                 {
-                    selectedCopyItems = JsonConvert.DeserializeObject<VmChapter>(AltChapterObject.ChapterData);
+                    selectedCopyItems = JsonConvert.DeserializeObject<VmChapter>(AltChapterObject.SmartflowData);
                 }
             }
             else
             {
-                AltChapterObject = new UsrOrDefChapterManagement();
+                AltChapterObject = new UsrOrsfSmartflows();
             }
 
 
             if (option == "Agenda" | option == "All")
             {
-                foreach (var item in selectedCopyItems.ChapterItems.Where(C => C.Type == "Agenda").ToList())
+                foreach (var item in selectedCopyItems.Items.Where(C => C.Type == "Agenda").ToList())
                 {
-                    selectedCopyItems.ChapterItems.Remove(item);
+                    selectedCopyItems.Items.Remove(item);
                 }
 
-                selectedCopyItems.ChapterItems.AddRange(selectedChapter.ChapterItems.Where(C => C.Type == "Agenda").ToList());
+                selectedCopyItems.Items.AddRange(selectedChapter.Items.Where(C => C.Type == "Agenda").ToList());
             }
 
 
 
             if (option == "Status" | option == "All")
             {
-                foreach (var item in selectedCopyItems.ChapterItems.Where(C => C.Type == "Status").ToList())
+                foreach (var item in selectedCopyItems.Items.Where(C => C.Type == "Status").ToList())
                 {
-                    selectedCopyItems.ChapterItems.Remove(item);
+                    selectedCopyItems.Items.Remove(item);
                 }
 
-                selectedCopyItems.ChapterItems.AddRange(selectedChapter.ChapterItems.Where(C => C.Type == "Status").ToList());
+                selectedCopyItems.Items.AddRange(selectedChapter.Items.Where(C => C.Type == "Status").ToList());
             }
 
 
 
             if (option == "Docs" | option == "All")
             {
-                foreach (var item in selectedCopyItems.ChapterItems.Where(C => C.Type == "Doc").ToList())
+                foreach (var item in selectedCopyItems.Items.Where(C => C.Type == "Doc").ToList())
                 {
-                    selectedCopyItems.ChapterItems.Remove(item);
+                    selectedCopyItems.Items.Remove(item);
                 }
 
-                selectedCopyItems.ChapterItems.AddRange(selectedChapter.ChapterItems.Where(C => C.Type == "Doc").ToList());
+                selectedCopyItems.Items.AddRange(selectedChapter.Items.Where(C => C.Type == "Doc").ToList());
             }
 
 
@@ -2714,14 +2774,16 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
                 selectedCopyItems.TickerMessages.AddRange(selectedChapter.TickerMessages.ToList());
             }
 
-            AltChapterObject.ChapterData = JsonConvert.SerializeObject(new VmChapter
+            AltChapterObject.SmartflowData = JsonConvert.SerializeObject(new VmChapter
             {
                 CaseTypeGroup = AltChapterObject.CaseTypeGroup,
                 CaseType = AltChapterObject.CaseType,
-                Name = AltChapterObject.Name,
+                Name = AltChapterObject.SmartflowName,
                 SeqNo = AltChapterObject.SeqNo.GetValueOrDefault(),
-                ChapterItems = selectedCopyItems.ChapterItems,
-                DataViews = selectedChapter.DataViews
+                Items = selectedCopyItems.Items,
+                DataViews = selectedChapter.DataViews,
+                Fees = selectedCopyItems.Fees,
+                TickerMessages = selectedCopyItems.TickerMessages
             });
 
             await sessionState.SwitchSelectedSystem();
@@ -2784,7 +2846,7 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
             if (JSONErrors.Count == 0)
             {
                 var chapterData = JsonConvert.DeserializeObject<VmChapter>(Json);
-                selectedChapter.ChapterItems = chapterData.ChapterItems;
+                selectedChapter.Items = chapterData.Items;
                 selectedChapter.DataViews = chapterData.DataViews;
                 selectedChapter.Fees = chapterData.Fees;
                 selectedChapter.TickerMessages = chapterData.TickerMessages;
@@ -2792,7 +2854,7 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
                 selectedChapter.SelectedStep = chapterData.SelectedStep;
                 selectedChapter.SelectedView = chapterData.SelectedView;
                 selectedChapter.ShowPartnerNotes = chapterData.ShowPartnerNotes;
-                SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(selectedChapter);
+                SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(selectedChapter);
 
                 await chapterManagementService.Update(SelectedChapterObject);
 
@@ -2828,7 +2890,7 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
 
         private void RefreshJson()
         {
-            SaveJson(SelectedChapterObject.ChapterData);
+            SaveJson(SelectedChapterObject.SmartflowData);
         }
 
 
@@ -2949,7 +3011,7 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
 
                     selectedChapter.SelectedStep = selectedChapter.StepName;
 
-                    SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(selectedChapter);
+                    SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(selectedChapter);
                     await chapterManagementService.Update(SelectedChapterObject);
 
                     StateHasChanged();
@@ -2966,7 +3028,7 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
         {
             selectedChapter.P4WCaseTypeGroup = caseTypeGroup;
 
-            SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(selectedChapter);
+            SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(selectedChapter);
 
             await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
         }
@@ -2975,7 +3037,7 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
         {
             selectedChapter.SelectedView = view;
 
-            SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(selectedChapter);
+            SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(selectedChapter);
 
             await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
         }
@@ -2984,7 +3046,7 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
         {
             selectedChapter.SelectedStep = step;
 
-            SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(selectedChapter);
+            SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(selectedChapter);
 
             await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
         }
@@ -3030,9 +3092,8 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
         public async void SyncSmartFlowSystems()
         {
             var lstC = await chapterManagementService.GetAllChapters();
-            var lstChaptersFromClient = lstC.Select(A => new VmUsrOrDefChapterManagement { ChapterObject = A }).ToList();
 
-            await CompanyDbAccess.SyncAdminSysToClient(lstChaptersFromClient.Select(C => C.ChapterObject).ToList(), sessionState);
+            await CompanyDbAccess.SyncAdminSysToClient(lstC, sessionState);
 
             RefreshChapters();
         }

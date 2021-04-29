@@ -25,13 +25,13 @@ namespace GadjIT.ClientContext.P4W
         public virtual DbSet<CaseTypes> CaseTypes { get; set; }
         public virtual DbSet<DmDocuments> DmDocuments { get; set; }
         public virtual DbSet<DmDocumentsPermissions> DmDocumentsPermissions { get; set; }
-        public virtual DbSet<UsrOrDefChapterManagement> UsrOrDefChapterManagement { get; set; }
         public virtual DbSet<MpSysViews> MpSysViews { get; set; }
+        public virtual DbSet<UsrOrsfSmartflows> UsrOrsfSmartflows { get; set; }
 
         //public IQueryable<fnORCHAGetFeeDefinitions> fnORCHAGetFeeDefinitions(string Group, string CaseType) =>
         //        Set<fnORCHAGetFeeDefinitions>().FromSqlInterpolated($"select * from fn_OR_CHA_GetFeeDefinitions({Group},{CaseType})");
-       
-  
+
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
@@ -268,36 +268,21 @@ namespace GadjIT.ClientContext.P4W
             });
 
 
-
-            modelBuilder.Entity<UsrOrDefChapterManagement>(entity =>
+            modelBuilder.Entity<UsrOrsfSmartflows>(entity =>
             {
                 entity.HasKey(e => e.Id)
                     .IsClustered(false);
-
-                entity.Property(e => e.AltDisplayName).IsUnicode(false);
-
-                entity.Property(e => e.AsName).IsUnicode(false);
 
                 entity.Property(e => e.CaseType).IsUnicode(false);
 
                 entity.Property(e => e.CaseTypeGroup).IsUnicode(false);
 
-                entity.Property(e => e.ChapterData).IsUnicode(false);
+                entity.Property(e => e.SmartflowData).IsUnicode(false);
 
-                entity.Property(e => e.CompleteName).IsUnicode(false);
+                entity.Property(e => e.SmartflowName).IsUnicode(false);
 
-                entity.Property(e => e.EntityType).IsUnicode(false);
-
-                entity.Property(e => e.Name).IsUnicode(false);
-
-                entity.Property(e => e.NextStatus).IsUnicode(false);
-
-                entity.Property(e => e.SuppressStep).IsUnicode(false);
-
-                entity.Property(e => e.Type).IsUnicode(false);
+                entity.Property(e => e.VariantName).IsUnicode(false);
             });
-
-           
 
             OnModelCreatingPartial(modelBuilder);
         }

@@ -25,13 +25,13 @@ namespace Gizmo_V1_02.Pages.Chapters
         IChapterManagementService chapterManagementService { get; set; }
 
         [Parameter]
-        public VmUsrOrDefChapterManagement TaskObject { get; set; }
+        public UsrOrsfSmartflows TaskObject { get; set; }
 
         [Parameter]
         public Action DataChanged { get; set; }
 
         [Parameter]
-        public List<VmUsrOrDefChapterManagement> AllObjects { get; set; }
+        public List<VmUsrOrsfSmartflows> AllObjects { get; set; }
 
         [Parameter]
         public bool addNewCaseTypeGroupOption { get; set; } = false;
@@ -55,37 +55,37 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         private async void HandleValidSubmit()
         {
-            if (TaskObject.ChapterObject.Id == 0)
+            if (TaskObject.Id == 0)
             {
-                var name = Regex.Replace(TaskObject.ChapterObject.Name, "[^0-9a-zA-Z-_ ]+", "");
-                var caseType = Regex.Replace(TaskObject.ChapterObject.CaseType, "[^0-9a-zA-Z-_ ]+", "");
-                var caseTypeGroup = Regex.Replace(TaskObject.ChapterObject.CaseTypeGroup, "[^0-9a-zA-Z-_ ]+", "");
+                var name = Regex.Replace(TaskObject.SmartflowName, "[^0-9a-zA-Z-_ ]+", "");
+                var caseType = Regex.Replace(TaskObject.CaseType, "[^0-9a-zA-Z-_ ]+", "");
+                var caseTypeGroup = Regex.Replace(TaskObject.CaseTypeGroup, "[^0-9a-zA-Z-_ ]+", "");
 
-                TaskObject.ChapterObject.Name = name;
-                TaskObject.ChapterObject.CaseType = caseType;
-                TaskObject.ChapterObject.CaseTypeGroup = caseTypeGroup;
-                TaskObject.ChapterObject.ChapterData = JsonConvert.SerializeObject(new VmChapter
+                TaskObject.SmartflowName = name;
+                TaskObject.CaseType = caseType;
+                TaskObject.CaseTypeGroup = caseTypeGroup;
+                TaskObject.SmartflowData = JsonConvert.SerializeObject(new VmChapter
                                                                                         {
                                                                                             CaseTypeGroup = caseTypeGroup,
                                                                                             CaseType = caseType,
                                                                                             Name = name,
-                                                                                            SeqNo = TaskObject.ChapterObject.SeqNo.GetValueOrDefault(),
+                                                                                            SeqNo = TaskObject.SeqNo.GetValueOrDefault(),
                                                                                             StepName = "",
                                                                                             ShowPartnerNotes = "N",
-                                                                                            ChapterItems = new List<UsrOrDefChapterManagement>(),
+                                                                                            Items = new List<GenSmartflowItem>(),
                                                                                             Fees = new List<Fee>(),
                                                                                             DataViews = new List<DataViews>(),
                                                                                             TickerMessages = new List<TickerMessages>()
                                                                                         });
 
 
-                var returnObject = await chapterManagementService.Add(TaskObject.ChapterObject);
-                TaskObject.ChapterObject.Id = returnObject.Id;
-                await CompanyDbAccess.SaveSmartFlowRecord(TaskObject.ChapterObject, sessionState);
+                var returnObject = await chapterManagementService.Add(TaskObject);
+                TaskObject.Id = returnObject.Id;
+                await CompanyDbAccess.SaveSmartFlowRecord(TaskObject, sessionState);
             }
             else
             {
-                await chapterManagementService.UpdateMainItem(TaskObject.ChapterObject);
+                await chapterManagementService.UpdateMainItem(TaskObject);
             }
 
             DataChanged?.Invoke();
@@ -94,7 +94,7 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         private async void HandleValidDelete()
         {
-            await chapterManagementService.DeleteChapter(TaskObject.ChapterObject.Id);
+            await chapterManagementService.DeleteChapter(TaskObject.Id);
 
             DataChanged?.Invoke();
             Close();

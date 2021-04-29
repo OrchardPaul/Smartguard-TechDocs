@@ -37,10 +37,10 @@ namespace Gizmo_V1_02.Pages.Chapters
         public VmChapter AltChapter { get; set; }
 
         [Parameter]
-        public UsrOrDefChapterManagement CurrentChapterRow { get; set; }
+        public UsrOrsfSmartflows CurrentChapterRow { get; set; }
 
         [Parameter]
-        public UsrOrDefChapterManagement AltChapterRow { get; set; }
+        public UsrOrsfSmartflows AltChapterRow { get; set; }
 
         [Parameter]
         public int CurrentSysParentId { get; set; }
@@ -111,13 +111,13 @@ namespace Gizmo_V1_02.Pages.Chapters
 
             if (TakeAlternate)
             {
-                CurrentChapterRow.ChapterData = JsonConvert.SerializeObject(CurrentChapter);
+                CurrentChapterRow.SmartflowData = JsonConvert.SerializeObject(CurrentChapter);
                 await chapterManagementService.Update(CurrentChapterRow).ConfigureAwait(false);
             }
             else
             {
                 await sessionState.SwitchSelectedSystem();
-                AltChapterRow.ChapterData = JsonConvert.SerializeObject(AltChapter);
+                AltChapterRow.SmartflowData = JsonConvert.SerializeObject(AltChapter);
                 await chapterManagementService.Update(AltChapterRow);
                 await sessionState.ResetSelectedSystem();
             }

@@ -36,47 +36,56 @@ namespace Gizmo_V1_02.Shared
 
         protected override async Task OnInitializedAsync()
         {
-            bool gotLock = sessionState.Lock;
-            while (gotLock)
+            try
             {
-                await Task.Yield();
-                gotLock = sessionState.Lock;
-            }
-
-            if (sessionState.User is null)
-            {
-                await sessionState.SetSessionState();
-                currentUser = sessionState.User;
-            }
-   
-            sessionState.RefreshHome = Refresh;
-
-            if(currentUser is null)
-            {
-                string returnUrl = HttpUtility.UrlEncode("/" + HttpUtility.UrlDecode(NavigationManager.Uri.Replace(NavigationManager.BaseUri, "")));
-                NavigationManager.NavigateTo($"Identity/Account/Login?returnUrl={returnUrl}", true);
-            }
-
-            //Check if sidebar and topbar is not required, i.e. when exporting data via DataTables
-
-            var dExport = "";
-
-            var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
-
-            if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("dxport", out var param))
-            {
-                dExport = param.FirstOrDefault();
-
-                if(dExport != null)
+                bool gotLock = sessionState.Lock;
+                while (gotLock)
                 {
-                    hideTopbar = true;
-                    hideSidebar = true;
+                    await Task.Yield();
+                    gotLock = sessionState.Lock;
                 }
+
+                if (sessionState.User is null)
+                {
+                    await sessionState.SetSessionState();
+                    currentUser = sessionState.User;
+                }
+
+                sessionState.RefreshHome = Refresh;
+
+                if (currentUser is null)
+                {
+                    string returnUrl = HttpUtility.UrlEncode("/" + HttpUtility.UrlDecode(NavigationManager.Uri.Replace(NavigationManager.BaseUri, "")));
+                    NavigationManager.NavigateTo($"Identity/Account/Login?returnUrl={returnUrl}", true);
+                }
+
+                //Check if sidebar and topbar is not required, i.e. when exporting data via DataTables
+
+                var dExport = "";
+
+                var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
+
+                if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("dxport", out var param))
+                {
+                    dExport = param.FirstOrDefault();
+
+                    if (dExport != null)
+                    {
+                        hideTopbar = true;
+                        hideSidebar = true;
+                    }
+                }
+
+
+
+                StateHasChanged();
+            }
+            catch
+            {
+                Console.WriteLine("Caught Error");
             }
 
 
-
-            StateHasChanged();
         }
 
         protected override void OnAfterRender(bool firstRender)

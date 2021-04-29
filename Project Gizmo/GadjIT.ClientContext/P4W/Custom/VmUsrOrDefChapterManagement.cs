@@ -7,9 +7,9 @@ namespace GadjIT.ClientContext.P4W.Custom
     public partial class VmUsrOrDefChapterManagement
     {
 
-        public UsrOrDefChapterManagement ChapterObject { get; set; }
+        public GenSmartflowItem ChapterObject { get; set; }
 
-        public UsrOrDefChapterManagement AltObject { get; set; }
+        public GenSmartflowItem AltObject { get; set; }
 
         public string DocType { get; set; }
 
@@ -55,7 +55,7 @@ namespace GadjIT.ClientContext.P4W.Custom
 
             ComparisonList = new List<string>();
             bool isSame = true;
-            UsrOrDefChapterManagement compItem = vmCompItem.ChapterObject;
+            GenSmartflowItem compItem = vmCompItem.ChapterObject;
 
             if (ChapterObject.SeqNo != compItem.SeqNo)
             {

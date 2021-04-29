@@ -31,7 +31,7 @@ namespace Gizmo_V1_02.Pages.Chapters
         public List<MpSysViews> ListPartnerViews { get; set; }
 
         [Parameter]
-        public UsrOrDefChapterManagement SelectedChapterObject { get; set; }
+        public UsrOrsfSmartflows SelectedChapterObject { get; set; }
 
         [Parameter]
         public VmChapter SelectedChapter { get; set; }
@@ -71,7 +71,7 @@ namespace Gizmo_V1_02.Pages.Chapters
                 SelectedChapter.DataViews.Add(TaskObject);
             }
 
-            SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(SelectedChapter);
+            SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(SelectedChapter);
             await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
 
             CopyObject = new DataViews();
