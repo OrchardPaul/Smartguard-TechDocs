@@ -29,13 +29,13 @@ namespace Gizmo_V1_02.Pages.Chapters
         IChapterManagementService chapterManagementService { get; set; }
 
         [Parameter]
-        public VmUsrOrDefChapterManagement TaskObject { get; set; }
+        public VmUsrOrsfSmartflows TaskObject { get; set; }
 
         [Parameter]
         public Action DataChanged { get; set; }
 
         [Parameter]
-        public List<VmUsrOrDefChapterManagement> AllChapters { get; set; }
+        public List<VmUsrOrsfSmartflows> AllChapters { get; set; }
 
         [Parameter]
         public VmChapter currentChapter { get; set; }
@@ -61,22 +61,22 @@ namespace Gizmo_V1_02.Pages.Chapters
         
         private void SelectExistingChapter(int chapterId)
         {
-            TaskObject = AllChapters.Where(C => C.ChapterObject.Id == chapterId).SingleOrDefault();
+            TaskObject = AllChapters.Where(C => C.SmartflowObject.Id == chapterId).SingleOrDefault();
 
             StateHasChanged();
         }
 
         private void SelectExistingCaseTypeGroup(string caseTypeGroup)
         {
-            TaskObject.ChapterObject.CaseTypeGroup = caseTypeGroup;
-            TaskObject.ChapterObject.CaseType = AllChapters
-                                                        .Where(C => C.ChapterObject.CaseTypeGroup == TaskObject.ChapterObject.CaseTypeGroup)
-                                                        .Select(C => C.ChapterObject.CaseType)
+            TaskObject.SmartflowObject.CaseTypeGroup = caseTypeGroup;
+            TaskObject.SmartflowObject.CaseType = AllChapters
+                                                        .Where(C => C.SmartflowObject.CaseTypeGroup == TaskObject.SmartflowObject.CaseTypeGroup)
+                                                        .Select(C => C.SmartflowObject.CaseType)
                                                         .FirstOrDefault();
-            TaskObject.ChapterObject = AllChapters
-                                                        .Where(C => C.ChapterObject.CaseTypeGroup == TaskObject.ChapterObject.CaseTypeGroup)
-                                                        .Where(C => C.ChapterObject.CaseType == TaskObject.ChapterObject.CaseType)
-                                                        .Select(C => C.ChapterObject)
+            TaskObject.SmartflowObject = AllChapters
+                                                        .Where(C => C.SmartflowObject.CaseTypeGroup == TaskObject.SmartflowObject.CaseTypeGroup)
+                                                        .Where(C => C.SmartflowObject.CaseType == TaskObject.SmartflowObject.CaseType)
+                                                        .Select(C => C.SmartflowObject)
                                                         .FirstOrDefault();
 
             StateHasChanged();
@@ -84,11 +84,11 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         private void SelectExistingCaseType(string caseType)
         {
-            TaskObject.ChapterObject.CaseType = caseType;
-            TaskObject.ChapterObject = AllChapters
-                                                .Where(C => C.ChapterObject.CaseTypeGroup == TaskObject.ChapterObject.CaseTypeGroup)
-                                                .Where(C => C.ChapterObject.CaseType == TaskObject.ChapterObject.CaseType)
-                                                .Select(C => C.ChapterObject)
+            TaskObject.SmartflowObject.CaseType = caseType;
+            TaskObject.SmartflowObject = AllChapters
+                                                .Where(C => C.SmartflowObject.CaseTypeGroup == TaskObject.SmartflowObject.CaseTypeGroup)
+                                                .Where(C => C.SmartflowObject.CaseType == TaskObject.SmartflowObject.CaseType)
+                                                .Select(C => C.SmartflowObject)
                                                 .FirstOrDefault();
 
             StateHasChanged();
@@ -100,15 +100,13 @@ namespace Gizmo_V1_02.Pages.Chapters
 
             if (!AddNewChapterOption)
             {
-                TaskObject = new VmUsrOrDefChapterManagement
+                TaskObject = new VmUsrOrsfSmartflows
                 {
-                    ChapterObject = new UsrOrDefChapterManagement
+                    SmartflowObject = new UsrOrsfSmartflows
                     {
-                        CaseType = TaskObject.ChapterObject.CaseType,
-                        CaseTypeGroup = TaskObject.ChapterObject.CaseTypeGroup,
-                        Type = TaskObject.ChapterObject.Type,
-                        ParentId = TaskObject.ChapterObject.ParentId,
-                        SeqNo = TaskObject.ChapterObject.SeqNo
+                        CaseType = TaskObject.SmartflowObject.CaseType,
+                        CaseTypeGroup = TaskObject.SmartflowObject.CaseTypeGroup,
+                        SeqNo = TaskObject.SmartflowObject.SeqNo
                     }
                 };
             }
@@ -123,46 +121,46 @@ namespace Gizmo_V1_02.Pages.Chapters
         private async void HandleValidSubmit()
         {
             var copyToChapter = new VmChapter {
-                ChapterItems = new List<UsrOrDefChapterManagement>(),
+                Items = new List<GenSmartflowItem>(),
                 Fees = new List<Fee>(),
                 DataViews = new List<DataViews>(),
                 TickerMessages = new List<TickerMessages>()
             };
 
-            if (!(TaskObject.ChapterObject.ChapterData is null))
+            if (!(TaskObject.SmartflowObject.SmartflowData is null))
             {
-                copyToChapter = JsonConvert.DeserializeObject<VmChapter>(TaskObject.ChapterObject.ChapterData);
+                copyToChapter = JsonConvert.DeserializeObject<VmChapter>(TaskObject.SmartflowObject.SmartflowData);
             }
 
 
             if(CopyOptions.Where(C => C.Option == "Agenda").Select(C => C.Selected).FirstOrDefault())
             {
-                foreach(var item in copyToChapter.ChapterItems.Where(C => C.Type == "Agenda").ToList())
+                foreach(var item in copyToChapter.Items.Where(C => C.Type == "Agenda").ToList())
                 {
-                    copyToChapter.ChapterItems.Remove(item);
+                    copyToChapter.Items.Remove(item);
                 }
 
-                copyToChapter.ChapterItems.AddRange(currentChapter.ChapterItems.Where(C => C.Type == "Agenda").ToList());
+                copyToChapter.Items.AddRange(currentChapter.Items.Where(C => C.Type == "Agenda").ToList());
             }
 
             if (CopyOptions.Where(C => C.Option == "Status").Select(C => C.Selected).FirstOrDefault())
             {
-                foreach (var item in copyToChapter.ChapterItems.Where(C => C.Type == "Status").ToList())
+                foreach (var item in copyToChapter.Items.Where(C => C.Type == "Status").ToList())
                 {
-                    copyToChapter.ChapterItems.Remove(item);
+                    copyToChapter.Items.Remove(item);
                 }
 
-                copyToChapter.ChapterItems.AddRange(currentChapter.ChapterItems.Where(C => C.Type == "Status").ToList());
+                copyToChapter.Items.AddRange(currentChapter.Items.Where(C => C.Type == "Status").ToList());
             }
 
             if (CopyOptions.Where(C => C.Option == "Documents/Steps").Select(C => C.Selected).FirstOrDefault())
             {
-                foreach (var item in copyToChapter.ChapterItems.Where(C => C.Type == "Doc").ToList())
+                foreach (var item in copyToChapter.Items.Where(C => C.Type == "Doc").ToList())
                 {
-                    copyToChapter.ChapterItems.Remove(item);
+                    copyToChapter.Items.Remove(item);
                 }
 
-                copyToChapter.ChapterItems.AddRange(currentChapter.ChapterItems.Where(C => C.Type == "Doc").ToList());
+                copyToChapter.Items.AddRange(currentChapter.Items.Where(C => C.Type == "Doc").ToList());
             }
 
             if (CopyOptions.Where(C => C.Option == "Fees").Select(C => C.Selected).FirstOrDefault())
@@ -201,12 +199,12 @@ namespace Gizmo_V1_02.Pages.Chapters
                 copyToChapter.TickerMessages.AddRange(currentChapter.TickerMessages.ToList());
             }
 
-            TaskObject.ChapterObject.ChapterData = JsonConvert.SerializeObject(new VmChapter
+            TaskObject.SmartflowObject.SmartflowData = JsonConvert.SerializeObject(new VmChapter
             {
-                CaseTypeGroup = TaskObject.ChapterObject.CaseTypeGroup,
-                CaseType = TaskObject.ChapterObject.CaseType,
-                Name = TaskObject.ChapterObject.Name,
-                SeqNo = TaskObject.ChapterObject.SeqNo.GetValueOrDefault(),
+                CaseTypeGroup = TaskObject.SmartflowObject.CaseTypeGroup,
+                CaseType = TaskObject.SmartflowObject.CaseType,
+                Name = TaskObject.SmartflowObject.SmartflowName,
+                SeqNo = TaskObject.SmartflowObject.SeqNo.GetValueOrDefault(),
                 P4WCaseTypeGroup = copyToChapter.P4WCaseTypeGroup,
                 SelectedView = copyToChapter.SelectedView,
                 SelectedStep = copyToChapter.SelectedStep,
@@ -215,19 +213,19 @@ namespace Gizmo_V1_02.Pages.Chapters
                 BackgroundImage = copyToChapter.BackgroundImage,
                 BackgroundImageName = copyToChapter.BackgroundImageName,
                 ShowPartnerNotes = copyToChapter.ShowPartnerNotes,
-                ChapterItems = copyToChapter.ChapterItems,
+                Items = copyToChapter.Items,
                 Fees = copyToChapter.Fees,
                 DataViews = copyToChapter.DataViews,
                 TickerMessages = copyToChapter.TickerMessages
             });
 
-            if (TaskObject.ChapterObject.Id == 0)
+            if (TaskObject.SmartflowObject.Id == 0)
             {
-                await chapterManagementService.Add(TaskObject.ChapterObject);
+                await chapterManagementService.Add(TaskObject.SmartflowObject);
             }
             else
             {
-                await chapterManagementService.Update(TaskObject.ChapterObject);
+                await chapterManagementService.Update(TaskObject.SmartflowObject);
             }
 
             DataChanged?.Invoke();

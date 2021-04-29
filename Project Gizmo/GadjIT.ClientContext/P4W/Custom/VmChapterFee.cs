@@ -9,7 +9,6 @@ namespace GadjIT.ClientContext.P4W.Custom
     {
         public Fee FeeItem { get; set; }
 
-        public fnORCHAGetFeeDefinitions feeDefinition { get; set; }
 
         public bool selected { get; set; }
     }

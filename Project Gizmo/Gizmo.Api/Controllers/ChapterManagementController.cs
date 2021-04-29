@@ -51,23 +51,22 @@ namespace GadjIT.ClientAPI.Controllers
         [HttpGet]
         public async Task<ActionResult> GetAllChapters()
         {
-
             return Ok(await chapterRepository.GetAllChapters());
 
         }
 
-        [HttpGet("{caseTypeGroup}/{caseType}")]
-        public async Task<ActionResult> GetFeeDefs(string caseTypeGroup, string caseType)
-        {
-            try
-            {
-                return Ok(await chapterRepository.GetFeeDefs(caseTypeGroup, caseType));
-            }
-            catch (Exception)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
-        }
+        //[HttpGet("{caseTypeGroup}/{caseType}")]
+        //public async Task<ActionResult> GetFeeDefs(string caseTypeGroup, string caseType)
+        //{
+        //    try
+        //    {
+        //        return Ok(await chapterRepository.GetFeeDefs(caseTypeGroup, caseType));
+        //    }
+        //    catch (Exception)
+        //    {
+        //        return StatusCode(StatusCodes.Status500InternalServerError);
+        //    }
+        //}
 
         [HttpGet("{caseType}")]
         public async Task<ActionResult> GetChapterListByCaseType(string caseType)
@@ -81,38 +80,12 @@ namespace GadjIT.ClientAPI.Controllers
             }
         }
 
-        [HttpGet("{caseType}/{chapter}")]
-        public async Task<ActionResult> GetDocListByChapter(string caseType, string chapter)
-        {
-            try
-            {
-                return Ok(await chapterRepository.GetDocListByChapter(caseType, chapter));
-            }
-            catch (Exception)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
-        }
-
         [HttpGet("{caseType}")]
         public async Task<ActionResult> GetDocumentList(string caseType)
         {
             try
             {
                 return Ok(await chapterRepository.GetDocumentList(caseType));
-            }
-            catch (Exception)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
-        }
-
-        [HttpGet("{chapterId:int}")]
-        public async Task<ActionResult> GetItemListByChapter(int chapterId)
-        {
-            try
-            {
-                return Ok(await chapterRepository.GetItemListByChapter(chapterId));
             }
             catch (Exception)
             {
@@ -133,36 +106,10 @@ namespace GadjIT.ClientAPI.Controllers
             }
         }
 
-        [HttpGet("{casetypegroup}/{casetype}/{chapterName}")]
-        public async Task<ActionResult> GetItemListByChapterName(string casetypegroup, string casetype, string chapterName)
-        {
-            try
-            {
-                return Ok(await chapterRepository.GetItemListByChapterName(casetypegroup, casetype, chapterName));
-            }
-            catch (Exception)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
-        }
-
-
-        [HttpGet("{caseType}/{chapter}/{docType}")]
-        public async Task<ActionResult> GetDocListByChapterAndDocType(string caseType, string chapter, string docType)
-        {
-            try
-            {
-                return Ok(await chapterRepository.GetDocListByChapterAndDocType(caseType, chapter, docType));
-            }
-            catch (Exception)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
-        }
-
         [HttpPost]
-        public async Task<ActionResult> Add(UsrOrDefChapterManagement item)
+        public async Task<ActionResult> Add(UsrOrsfSmartflows item)
         {
+
             try
             {
                 if (item is null)
@@ -174,14 +121,14 @@ namespace GadjIT.ClientAPI.Controllers
 
                 return CreatedAtAction(nameof(Add), new { id = newItem.Id });
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
 
         [HttpPut("{id:int}")]
-        public async Task<ActionResult<UsrOrDefChapterManagement>> Update(int Id, UsrOrDefChapterManagement item)
+        public async Task<ActionResult<UsrOrsfSmartflows>> Update(int Id, UsrOrsfSmartflows item)
         {
             try
             {
@@ -205,21 +152,9 @@ namespace GadjIT.ClientAPI.Controllers
             }
         }
 
-        [HttpPut("{ChapterId:int}")]
-        public async Task<ActionResult<List<VmChapterFee>>> UpdateChapterFees(int ChapterId, List<VmChapterFee> vmChapterFees)
-        {
-            try
-            {
-                return await chapterRepository.UpdateChapterFees(ChapterId,vmChapterFees);
-            }
-            catch (Exception)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Error Updating Data");
-            }
-        }
 
         [HttpPut("{newCaseType}/{originalCaseType}/{caseTypeGroup}")]
-        public async Task<ActionResult<List<UsrOrDefChapterManagement>>> UpdateCaseType(string newCaseType, string originalCaseType, string caseTypeGroup)
+        public async Task<ActionResult<List<UsrOrsfSmartflows>>> UpdateCaseType(string newCaseType, string originalCaseType, string caseTypeGroup)
         {
             try
             {
@@ -232,7 +167,7 @@ namespace GadjIT.ClientAPI.Controllers
         }
 
         [HttpPut("{newCaseTypeGroup}/{originalCaseTypeGroup}")]
-        public async Task<ActionResult<List<UsrOrDefChapterManagement>>> UpdateCaseTypeGroups(string newCaseTypeGroup, string originalCaseTypeGroup)
+        public async Task<ActionResult<List<UsrOrsfSmartflows>>> UpdateCaseTypeGroups(string newCaseTypeGroup, string originalCaseTypeGroup)
         {
             try
             {

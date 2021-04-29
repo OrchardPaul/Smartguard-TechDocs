@@ -38,16 +38,16 @@ namespace Gizmo_V1_02.Pages.Chapters
         public string Option { get; set; }
 
         [Parameter]
-        public UsrOrDefChapterManagement SelectedChapterObject { get; set; }
+        public UsrOrsfSmartflows SelectedChapterObject { get; set; }
 
         [Parameter]
         public VmChapter SelectedChapter { get; set; }
 
         [Parameter]
-        public UsrOrDefChapterManagement TaskObject { get; set; }
+        public GenSmartflowItem TaskObject { get; set; }
 
         [Parameter]
-        public UsrOrDefChapterManagement CopyObject { get; set; }
+        public GenSmartflowItem CopyObject { get; set; }
 
 
         [Parameter]
@@ -87,7 +87,7 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         private async void Close()
         {
-            TaskObject = new UsrOrDefChapterManagement();
+            TaskObject = new GenSmartflowItem();
             await ModalInstance.CloseAsync();
 
 
@@ -95,8 +95,27 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         private async void HandleValidSubmit()
         {
+            if(CopyObject.FollowUpDocs is null)
+            {
+                CopyObject.FollowUpDocs = new List<FollowUpDoc> { Attachment };
+            }
+            else
+            {
+                if (CopyObject.FollowUpDocs.Select(F => F.DocName).ToList().Contains(Attachment.DocName))
+                {
+                    var updateItem = CopyObject.FollowUpDocs.Where(F => F.DocName == Attachment.DocName).FirstOrDefault();
 
-            CopyObject.FollowUpDocs = new List<FollowUpDoc> { Attachment };
+                    updateItem.DocAsName = Attachment.DocAsName;
+                    updateItem.Action = Attachment.Action;
+                }
+                else
+                {
+                    CopyObject.FollowUpDocs.Add(Attachment);
+                }
+            }
+
+
+            
 
             TaskObject.Type = CopyObject.Type;
             TaskObject.Name = CopyObject.Name;
@@ -113,10 +132,10 @@ namespace Gizmo_V1_02.Pages.Chapters
 
             TaskObject.FollowUpDocs = CopyObject.FollowUpDocs;
 
-            SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(SelectedChapter);
+            SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(SelectedChapter);
             await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
 
-            TaskObject = new UsrOrDefChapterManagement();
+            TaskObject = new GenSmartflowItem();
             filterText = "";
 
             DataChanged?.Invoke();
@@ -126,17 +145,25 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         private async void RemoveAttachment()
         {
+            if (!(CopyObject.FollowUpDocs is null))
+            {
+                if (CopyObject.FollowUpDocs.Select(F => F.DocName).ToList().Contains(Attachment.DocName))
+                {
+                    var updateItem = CopyObject.FollowUpDocs.Where(F => F.DocName == Attachment.DocName).FirstOrDefault();
 
-            CopyObject.FollowUpDocs = null; 
+                    CopyObject.FollowUpDocs.Remove(updateItem);
+                }
+            }
+
 
             TaskObject.FollowUpDocs = CopyObject.FollowUpDocs;
 
-            SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(SelectedChapter);
+            SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(SelectedChapter);
             await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
 
             await CompanyDbAccess.SaveSmartFlowRecord(SelectedChapterObject, sessionState);
 
-            TaskObject = new UsrOrDefChapterManagement();
+            TaskObject = new GenSmartflowItem();
             filterText = "";
 
             DataChanged?.Invoke();

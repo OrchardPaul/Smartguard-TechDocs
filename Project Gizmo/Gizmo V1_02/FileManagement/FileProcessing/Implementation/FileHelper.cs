@@ -529,7 +529,7 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
             
             //Body of table
             int recordIndex = 3;
-            foreach (var chapterItem in selectedChapter.ChapterItems.Where(C => C.Type == "Agenda").OrderBy(C => C.SeqNo).ToList())
+            foreach (var chapterItem in selectedChapter.Items.Where(C => C.Type == "Agenda").OrderBy(C => C.SeqNo).ToList())
             {
                 workSheetAgenda.Cells[recordIndex, 1].Value = string.IsNullOrEmpty(chapterItem.Name) ? "" : chapterItem.Name;
 
@@ -569,7 +569,7 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
 
             //Body of table
             recordIndex = 3;
-            foreach (var chapterItem in selectedChapter.ChapterItems.Where(C => C.Type == "Status").OrderBy(C => C.SeqNo).ToList())
+            foreach (var chapterItem in selectedChapter.Items.Where(C => C.Type == "Status").OrderBy(C => C.SeqNo).ToList())
             {
                 workSheetStatus.Cells[recordIndex, 1].Value = string.IsNullOrEmpty(chapterItem.Name) ? "" : chapterItem.Name;
                 workSheetStatus.Cells[recordIndex, 2].Value = string.IsNullOrEmpty(chapterItem.SuppressStep) ? "" : chapterItem.SuppressStep;
@@ -694,7 +694,7 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
 
             //Body of table
             recordIndex = 3;
-            foreach (var chapterItem in selectedChapter.ChapterItems.Where(C => docTypes.Contains(C.Type)).OrderBy(C => C.SeqNo).ToList())
+            foreach (var chapterItem in selectedChapter.Items.Where(C => docTypes.Contains(C.Type)).OrderBy(C => C.SeqNo).ToList())
             {
                 workSheetDocument.Cells[recordIndex, 1].Value = string.IsNullOrEmpty(chapterItem.Name) ? "" : chapterItem.Name;
                 workSheetDocument.Cells[recordIndex, 2].Value = string.IsNullOrEmpty(chapterItem.AltDisplayName) ? "" : chapterItem.AltDisplayName;
@@ -707,7 +707,7 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
                 workSheetDocument.Cells[recordIndex, 9].Value = string.IsNullOrEmpty(chapterItem.PopupAlert) ? "" : chapterItem.PopupAlert;
                 workSheetDocument.Cells[recordIndex, 10].Value = string.IsNullOrEmpty(chapterItem.DeveloperNotes) ? "" : chapterItem.DeveloperNotes;
 
-                //workSheetDocument.Cells[recordIndex, 6].DataValidation.AddListDataValidation().Formula.ExcelFormula = $"= Status!A3:A{selectedChapter.ChapterItems.Where(C => C.Type == "Status").ToList().Count() + 3}";
+                //workSheetDocument.Cells[recordIndex, 6].DataValidation.AddListDataValidation().Formula.ExcelFormula = $"= Status!A3:A{selectedChapter.Items.Where(C => C.Type == "Status").ToList().Count() + 3}";
 
                 recordIndex++;
             }
@@ -775,7 +775,7 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
             //Body of table
             recordIndex = 3;
             foreach (var chapterItem in selectedChapter
-                                            .ChapterItems
+                                            .Items
                                             .Where(C => !(C.FollowUpDocs is null) && C.FollowUpDocs.Count() > 0)
                                             .OrderBy(C => C.SeqNo)
                                             .ToList())
@@ -787,7 +787,7 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
                     workSheetAttachments.Cells[recordIndex, 3].Value = string.IsNullOrEmpty(doc.DocAsName) ? "" : doc.DocAsName;
                     workSheetAttachments.Cells[recordIndex, 4].Value = string.IsNullOrEmpty(doc.Action) ? "" : doc.Action;
 
-                    //workSheetAttachments.Cells[recordIndex, 1].DataValidation.AddListDataValidation().Formula.ExcelFormula = $"= Documents!A3:A{selectedChapter.ChapterItems.Where(C => docTypes.Contains(C.Type)).ToList().Count() + 3}";
+                    //workSheetAttachments.Cells[recordIndex, 1].DataValidation.AddListDataValidation().Formula.ExcelFormula = $"= Documents!A3:A{selectedChapter.Items.Where(C => docTypes.Contains(C.Type)).ToList().Count() + 3}";
 
                     recordIndex++;
                 }
@@ -928,8 +928,8 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
 
         public VmChapter ReadChapterDataFromExcel(string FilePath)
         {
-            VmChapter readChapters = new VmChapter { ChapterItems = new List<UsrOrDefChapterManagement>(), Fees = new List<Fee>(), DataViews = new List<DataViews>()};
-            UsrOrDefChapterManagement readObject;
+            VmChapter readChapters = new VmChapter { Items = new List<GenSmartflowItem>(), Fees = new List<Fee>(), DataViews = new List<DataViews>()};
+            GenSmartflowItem readObject;
             Fee feeObject;
             DataViews readView;
 
@@ -945,7 +945,7 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
 
                 for (int row = 3; row <= totalRows; row++)
                 {
-                    readObject = new UsrOrDefChapterManagement();
+                    readObject = new GenSmartflowItem();
 
                     for (int column = 1; column <= totalColumns; column++)
                     {
@@ -959,7 +959,7 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
                     readObject.Type = "Agenda";
                     readObject.SeqNo = row - 2;
 
-                    readChapters.ChapterItems.Add(readObject);
+                    readChapters.Items.Add(readObject);
                 }
 
                 ExcelWorksheet worksheetStatus = excelPackage.Workbook.Worksheets.Where(W => W.Name == "Status").SingleOrDefault();
@@ -968,7 +968,7 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
 
                 for (int row = 3; row <= totalRows; row++)
                 {
-                    readObject = new UsrOrDefChapterManagement();
+                    readObject = new GenSmartflowItem();
 
                     for (int column = 1; column <= totalColumns; column++)
                     {
@@ -987,7 +987,7 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
                     readObject.Type = "Status";
                     readObject.SeqNo = row - 2;
 
-                    readChapters.ChapterItems.Add(readObject);
+                    readChapters.Items.Add(readObject);
                 }
 
                 ExcelWorksheet worksheetFees = excelPackage.Workbook.Worksheets.Where(W => W.Name == "Fees").SingleOrDefault();
@@ -1046,7 +1046,7 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
 
                 for (int row = 3; row <= totalRows; row++)
                 {
-                    readObject = new UsrOrDefChapterManagement();
+                    readObject = new GenSmartflowItem();
 
                     for (int column = 1; column <= totalColumns; column++)
                     {
@@ -1115,7 +1115,7 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
 
                     readObject.SeqNo = row - 2;
 
-                    readChapters.ChapterItems.Add(readObject);
+                    readChapters.Items.Add(readObject);
                 }
 
 
@@ -1139,7 +1139,7 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
                                             : worksheetAttachments.Cells[row, column].Value is null
                                             ? ""
                                             : worksheetAttachments.Cells[row, column].Value.ToString();
-                            readObject = readChapters.ChapterItems.Where(C => C.Name == documentName).FirstOrDefault();
+                            readObject = readChapters.Items.Where(C => C.Name == documentName).FirstOrDefault();
                         }
 
                         if(!(readObject is null))

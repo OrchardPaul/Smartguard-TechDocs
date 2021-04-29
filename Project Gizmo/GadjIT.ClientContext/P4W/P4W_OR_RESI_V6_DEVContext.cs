@@ -25,15 +25,13 @@ namespace GadjIT.ClientContext.P4W
         public virtual DbSet<CaseTypes> CaseTypes { get; set; }
         public virtual DbSet<DmDocuments> DmDocuments { get; set; }
         public virtual DbSet<DmDocumentsPermissions> DmDocumentsPermissions { get; set; }
-        public virtual DbSet<UsrOrDefChapterManagement> UsrOrDefChapterManagement { get; set; }
-        public virtual DbSet<UsrOrResiMtChapterControl> UsrOrResiMtChapterControl { get; set; }
-        public virtual DbSet<UsrOrResiMtFees> UsrOrResiMtFees { get; set; }
         public virtual DbSet<MpSysViews> MpSysViews { get; set; }
+        public virtual DbSet<UsrOrsfSmartflows> UsrOrsfSmartflows { get; set; }
 
-        public IQueryable<fnORCHAGetFeeDefinitions> fnORCHAGetFeeDefinitions(string Group, string CaseType) =>
-                Set<fnORCHAGetFeeDefinitions>().FromSqlInterpolated($"select * from fn_OR_CHA_GetFeeDefinitions({Group},{CaseType})");
-       
-  
+        //public IQueryable<fnORCHAGetFeeDefinitions> fnORCHAGetFeeDefinitions(string Group, string CaseType) =>
+        //        Set<fnORCHAGetFeeDefinitions>().FromSqlInterpolated($"select * from fn_OR_CHA_GetFeeDefinitions({Group},{CaseType})");
+
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
@@ -45,7 +43,7 @@ namespace GadjIT.ClientContext.P4W
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<fnORCHAGetFeeDefinitions>().HasNoKey().ToView(null);
+            //modelBuilder.Entity<fnORCHAGetFeeDefinitions>().HasNoKey().ToView(null);
 
             modelBuilder.Entity<CaseTypeGroups>(entity =>
             {
@@ -270,103 +268,20 @@ namespace GadjIT.ClientContext.P4W
             });
 
 
-
-            modelBuilder.Entity<UsrOrDefChapterManagement>(entity =>
+            modelBuilder.Entity<UsrOrsfSmartflows>(entity =>
             {
                 entity.HasKey(e => e.Id)
                     .IsClustered(false);
-
-                entity.Property(e => e.AltDisplayName).IsUnicode(false);
-
-                entity.Property(e => e.AsName).IsUnicode(false);
 
                 entity.Property(e => e.CaseType).IsUnicode(false);
 
                 entity.Property(e => e.CaseTypeGroup).IsUnicode(false);
 
-                entity.Property(e => e.ChapterData).IsUnicode(false);
+                entity.Property(e => e.SmartflowData).IsUnicode(false);
 
-                entity.Property(e => e.CompleteName).IsUnicode(false);
+                entity.Property(e => e.SmartflowName).IsUnicode(false);
 
-                entity.Property(e => e.EntityType).IsUnicode(false);
-
-                entity.Property(e => e.Name).IsUnicode(false);
-
-                entity.Property(e => e.NextStatus).IsUnicode(false);
-
-                entity.Property(e => e.SuppressStep).IsUnicode(false);
-
-                entity.Property(e => e.Type).IsUnicode(false);
-            });
-
-            modelBuilder.Entity<UsrOrResiMtChapterControl>(entity =>
-            {
-                entity.HasKey(e => e.Id)
-                    .IsClustered(false);
-
-                entity.HasIndex(e => new { e.EntityRef, e.MatterNo })
-                    .HasName("Usr_OR_RESI_MT_Chapter_Control_MPIndex");
-
-                entity.Property(e => e.CompleteAsName).IsUnicode(false);
-
-                entity.Property(e => e.CurrentChapter).IsUnicode(false);
-
-                entity.Property(e => e.DefaultStep).IsUnicode(false);
-
-                entity.Property(e => e.DefaultStepAsName).IsUnicode(false);
-
-                entity.Property(e => e.DoNotReschedule).IsUnicode(false);
-
-                entity.Property(e => e.EntityRef).IsUnicode(false);
-
-                entity.Property(e => e.ScheduleAsName).IsUnicode(false);
-
-                entity.Property(e => e.StepsToRun).IsUnicode(false);
-
-                entity.Property(e => e.SubViewName).IsUnicode(false);
-            });
-
-            modelBuilder.Entity<UsrOrResiMtFees>(entity =>
-            {
-                entity.HasKey(e => e.Id)
-                    .HasName("PK_Usr_OR_RESIFeeList")
-                    .IsClustered(false);
-
-                entity.Property(e => e.Account).IsUnicode(false);
-
-                entity.Property(e => e.Anticipated).IsUnicode(false);
-
-                entity.Property(e => e.Category).IsUnicode(false);
-
-                entity.Property(e => e.EntityRef).IsUnicode(false);
-
-                entity.Property(e => e.FeeDescription).IsUnicode(false);
-
-                entity.Property(e => e.FeeType).IsUnicode(false);
-
-                entity.Property(e => e.FeeTypeGroup).IsUnicode(false);
-
-                entity.Property(e => e.Funded).IsUnicode(false);
-
-                entity.Property(e => e.Payee).IsUnicode(false);
-
-                entity.Property(e => e.PayeePayer).IsUnicode(false);
-
-                entity.Property(e => e.PaymentMethod).IsUnicode(false);
-
-                entity.Property(e => e.PostingType).IsUnicode(false);
-
-                entity.Property(e => e.PrintSlipYn).IsUnicode(false);
-
-                entity.Property(e => e.ReconcileTable).IsUnicode(false);
-
-                entity.Property(e => e.SlipPrintStatus).IsUnicode(false);
-
-                entity.Property(e => e.Status).IsUnicode(false);
-
-                entity.Property(e => e.Suffix).IsUnicode(false);
-
-                entity.Property(e => e.TransactionType).IsUnicode(false);
+                entity.Property(e => e.VariantName).IsUnicode(false);
             });
 
             OnModelCreatingPartial(modelBuilder);

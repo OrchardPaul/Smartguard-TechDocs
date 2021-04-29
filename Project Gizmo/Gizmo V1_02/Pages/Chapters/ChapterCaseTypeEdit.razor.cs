@@ -23,13 +23,13 @@ namespace Gizmo_V1_02.Pages.Chapters
         IChapterManagementService chapterManagementService { get; set; }
 
         [Parameter]
-        public List<VmUsrOrDefChapterManagement> ListChapters { get; set; }
+        public List<VmUsrOrsfSmartflows> ListChapters { get; set; }
 
         [Parameter]
         public string TaskObject { get; set; }
 
         [Parameter]
-        public UsrOrDefChapterManagement Chapter { get; set; }
+        public UsrOrsfSmartflows Chapter { get; set; }
 
         [Parameter]
         public string originalName { get; set; }
@@ -59,35 +59,35 @@ namespace Gizmo_V1_02.Pages.Chapters
         {
             if (isCaseTypeOrGroup == "CaseType")
             {
-                var chapters = ListChapters.Where(C => C.ChapterObject.CaseType == originalName).ToList();
+                var chapters = ListChapters.Where(C => C.SmartflowObject.CaseType == originalName).ToList();
 
                 foreach (var chapter in chapters)
                 {
-                    var updateJson = JsonConvert.DeserializeObject<VmChapter>(chapter.ChapterObject.ChapterData);
+                    var updateJson = JsonConvert.DeserializeObject<VmChapter>(chapter.SmartflowObject.SmartflowData);
                     updateJson.CaseType = TaskObject;
-                    chapter.ChapterObject.CaseType = TaskObject;
-                    chapter.ChapterObject.ChapterData = JsonConvert.SerializeObject(updateJson);
-                    await chapterManagementService.UpdateMainItem(chapter.ChapterObject).ConfigureAwait(false);
+                    chapter.SmartflowObject.CaseType = TaskObject;
+                    chapter.SmartflowObject.SmartflowData = JsonConvert.SerializeObject(updateJson);
+                    await chapterManagementService.UpdateMainItem(chapter.SmartflowObject).ConfigureAwait(false);
                 }
             }
             else if (isCaseTypeOrGroup == "CaseTypeGroup")
             {
-                var chapters = ListChapters.Where(C => C.ChapterObject.CaseTypeGroup == originalName).ToList();
+                var chapters = ListChapters.Where(C => C.SmartflowObject.CaseTypeGroup == originalName).ToList();
 
                 foreach (var chapter in chapters)
                 {
-                    var updateJson = JsonConvert.DeserializeObject<VmChapter>(chapter.ChapterObject.ChapterData);
+                    var updateJson = JsonConvert.DeserializeObject<VmChapter>(chapter.SmartflowObject.SmartflowData);
                     updateJson.CaseTypeGroup = TaskObject;
-                    chapter.ChapterObject.CaseTypeGroup = TaskObject;
-                    chapter.ChapterObject.ChapterData = JsonConvert.SerializeObject(updateJson);
-                    await chapterManagementService.UpdateMainItem(chapter.ChapterObject).ConfigureAwait(false);
+                    chapter.SmartflowObject.CaseTypeGroup = TaskObject;
+                    chapter.SmartflowObject.SmartflowData = JsonConvert.SerializeObject(updateJson);
+                    await chapterManagementService.UpdateMainItem(chapter.SmartflowObject).ConfigureAwait(false);
                 }
             }
             else
             {
-                var updateJson = JsonConvert.DeserializeObject<VmChapter>(Chapter.ChapterData);
-                updateJson.Name = Chapter.Name;
-                Chapter.ChapterData = JsonConvert.SerializeObject(updateJson);
+                var updateJson = JsonConvert.DeserializeObject<VmChapter>(Chapter.SmartflowData);
+                updateJson.Name = Chapter.SmartflowName;
+                Chapter.SmartflowData = JsonConvert.SerializeObject(updateJson);
                 await chapterManagementService.UpdateMainItem(Chapter).ConfigureAwait(false);
             }
 

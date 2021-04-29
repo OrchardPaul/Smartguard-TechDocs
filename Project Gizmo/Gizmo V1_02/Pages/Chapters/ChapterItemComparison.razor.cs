@@ -29,10 +29,10 @@ namespace Gizmo_V1_02.Pages.Chapters
         public VmUsrOrDefChapterManagement Object { get; set; }
 
         [Parameter]
-        public UsrOrDefChapterManagement CurrentChapterRow { get; set; }
+        public UsrOrsfSmartflows CurrentChapterRow { get; set; }
 
         [Parameter]
-        public UsrOrDefChapterManagement AltChapterRow { get; set; }
+        public UsrOrsfSmartflows AltChapterRow { get; set; }
 
         [Parameter]
         public VmChapter CurrentChapter { get; set; }
@@ -52,6 +52,9 @@ namespace Gizmo_V1_02.Pages.Chapters
         [Parameter]
         public ICompanyDbAccess CompanyDbAccess { get; set; }
 
+        [Parameter]
+        public bool CreateNewSmartflow { get; set; }
+
         private async void Close()
         {
             await ModalInstance.CloseAsync();
@@ -61,7 +64,7 @@ namespace Gizmo_V1_02.Pages.Chapters
         {
             if (TakeAlternate)
             {
-                var taskObject = CurrentChapter.ChapterItems
+                var taskObject = CurrentChapter.Items
                                                 .Where(C => C.Type == Object.ChapterObject.Type)
                                                 .Where(C => C.Name == Object.ChapterObject.Name)
                                                 .FirstOrDefault();
@@ -78,12 +81,12 @@ namespace Gizmo_V1_02.Pages.Chapters
                 taskObject.NextStatus = Object.AltObject.NextStatus;
                 taskObject.Action = Object.AltObject.Action;
 
-                CurrentChapterRow.ChapterData = JsonConvert.SerializeObject(CurrentChapter);
+                CurrentChapterRow.SmartflowData = JsonConvert.SerializeObject(CurrentChapter);
                 await chapterManagementService.Update(CurrentChapterRow).ConfigureAwait(false);
             }
             else
             {
-                var taskObject = AltChapter.ChapterItems
+                var taskObject = AltChapter.Items
                                             .Where(C => C.Type == Object.AltObject.Type)
                                             .Where(C => C.Name == Object.AltObject.Name)
                                             .FirstOrDefault();
@@ -102,7 +105,7 @@ namespace Gizmo_V1_02.Pages.Chapters
 
 
                 await sessionState.SwitchSelectedSystem();
-                AltChapterRow.ChapterData = JsonConvert.SerializeObject(AltChapter);
+                AltChapterRow.SmartflowData = JsonConvert.SerializeObject(AltChapter);
                 await chapterManagementService.Update(AltChapterRow);
                 await sessionState.ResetSelectedSystem();
             }
@@ -117,11 +120,8 @@ namespace Gizmo_V1_02.Pages.Chapters
         {
             if (TakeAlternate)
             {
-                var AltObject = new UsrOrDefChapterManagement
+                var AltObject = new GenSmartflowItem
                 {
-                    ParentId = CurrentSysParentId,
-                    CaseType = Object.AltObject.CaseType,
-                    CaseTypeGroup = Object.AltObject.CaseTypeGroup,
                     Type = Object.AltObject.Type,
                     Name = Object.AltObject.Name,
                     EntityType = Object.AltObject.EntityType,
@@ -137,39 +137,49 @@ namespace Gizmo_V1_02.Pages.Chapters
                     Action = Object.AltObject.Action
                 };
 
-                CurrentChapter.ChapterItems.Add(AltObject);
+                CurrentChapter.Items.Add(AltObject);
 
-                CurrentChapterRow.ChapterData = JsonConvert.SerializeObject(CurrentChapter);
+                CurrentChapterRow.SmartflowData = JsonConvert.SerializeObject(CurrentChapter);
                 await chapterManagementService.Update(CurrentChapterRow).ConfigureAwait(false);
             }
             else
             {
-                var PushObject = new UsrOrDefChapterManagement
+                if (!CreateNewSmartflow)
                 {
-                    ParentId = AlternateSysParentId,
-                    CaseType = Object.ChapterObject.CaseType,
-                    CaseTypeGroup = Object.ChapterObject.CaseTypeGroup,
-                    Type = Object.ChapterObject.Type,
-                    Name = Object.ChapterObject.Name,
-                    EntityType = Object.ChapterObject.EntityType,
-                    SeqNo = Object.ChapterObject.SeqNo,
-                    SuppressStep = Object.ChapterObject.SuppressStep,
-                    CompleteName = Object.ChapterObject.CompleteName,
-                    AsName = Object.ChapterObject.AsName,
-                    RescheduleDays = Object.ChapterObject.RescheduleDays,
-                    AltDisplayName = Object.ChapterObject.AltDisplayName,
-                    UserMessage = Object.ChapterObject.UserMessage,
-                    PopupAlert = Object.ChapterObject.PopupAlert,
-                    NextStatus = Object.ChapterObject.NextStatus,
-                    Action = Object.ChapterObject.Action
-                };
+                    var PushObject = new GenSmartflowItem
+                    {
+                        Type = Object.ChapterObject.Type,
+                        Name = Object.ChapterObject.Name,
+                        EntityType = Object.ChapterObject.EntityType,
+                        SeqNo = Object.ChapterObject.SeqNo,
+                        SuppressStep = Object.ChapterObject.SuppressStep,
+                        CompleteName = Object.ChapterObject.CompleteName,
+                        AsName = Object.ChapterObject.AsName,
+                        RescheduleDays = Object.ChapterObject.RescheduleDays,
+                        AltDisplayName = Object.ChapterObject.AltDisplayName,
+                        UserMessage = Object.ChapterObject.UserMessage,
+                        PopupAlert = Object.ChapterObject.PopupAlert,
+                        NextStatus = Object.ChapterObject.NextStatus,
+                        Action = Object.ChapterObject.Action
+                    };
 
-                AltChapter.ChapterItems.Add(PushObject);
+                    AltChapter.Items.Add(PushObject);
 
-                await sessionState.SwitchSelectedSystem();
-                AltChapterRow.ChapterData = JsonConvert.SerializeObject(AltChapter);
-                await chapterManagementService.Update(AltChapterRow);
-                await sessionState.ResetSelectedSystem();
+                    await sessionState.SwitchSelectedSystem();
+                    AltChapterRow.SmartflowData = JsonConvert.SerializeObject(AltChapter);
+                    await chapterManagementService.Update(AltChapterRow);
+                    await sessionState.ResetSelectedSystem();
+                }
+                else
+                {
+                    await sessionState.SwitchSelectedSystem();
+                    AltChapterRow = CurrentChapterRow;
+                    var returnObject = await chapterManagementService.Add(AltChapterRow);
+                    AltChapterRow.Id = returnObject.Id;
+                    await CompanyDbAccess.SaveSmartFlowRecord(AltChapterRow, sessionState);
+                    await sessionState.ResetSelectedSystem();
+                }
+
             }
 
             ComparisonRefresh?.Invoke();

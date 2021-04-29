@@ -48,7 +48,7 @@ namespace Gizmo_V1_02.Pages.Chapters
         public string Option { get; set; }
 
         [Parameter]
-        public UsrOrDefChapterManagement SelectedChapterObject { get; set; }
+        public UsrOrsfSmartflows SelectedChapterObject { get; set; }
 
         [Parameter]
         public VmChapter SelectedChapter { get; set; }
@@ -114,7 +114,7 @@ namespace Gizmo_V1_02.Pages.Chapters
                 SelectedChapter.Fees.Add(TaskObject);
             }
 
-            SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(SelectedChapter);
+            SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(SelectedChapter);
             await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
 
             TaskObject = new Fee();
