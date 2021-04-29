@@ -659,11 +659,19 @@
     text-overflow: ellipsis !important;
 }
 
-.ellipsis-menu-divider {
+
+.btn-ellipses ul li.ellipsis-menu-divider {
     display: block;
-    height: 1px;
+    height: 1px !important;
     border-bottom: 1px #777 solid;
-    margin: 4px 2px;
+    margin: 0px !important;
+    border-radius: 0px;
+    cursor: default;
+}
+
+.btn-ellipses ul li.ellipsis-menu-divider:hover {
+    background-color: #fff;
+    color: #000;
 }
 
 /*-----------------------------*/

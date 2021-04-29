@@ -56,18 +56,7 @@ namespace GadjIT.ClientAPI.Controllers
 
         }
 
-        [HttpGet("{caseTypeGroup}/{caseType}")]
-        public async Task<ActionResult> GetFeeDefs(string caseTypeGroup, string caseType)
-        {
-            try
-            {
-                return Ok(await chapterRepository.GetFeeDefs(caseTypeGroup, caseType));
-            }
-            catch (Exception)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
-        }
+        
 
         [HttpGet("{caseType}")]
         public async Task<ActionResult> GetChapterListByCaseType(string caseType)

@@ -26,7 +26,6 @@ namespace GadjIT.ClientAPI.Repository.Chapters
         Task<List<UsrOrDefChapterManagement>> GetDocListByChapterAndDocType(string caseType, string chapter, string docType);
         Task<List<DmDocuments>> GetDocumentList(string caseType);
         Task<List<DmDocuments>> GetDocumentListByCaseTypeGroupRef(int caseTypeGroupRef);
-        Task<List<fnORCHAGetFeeDefinitions>> GetFeeDefs(string caseTypeGroup, string caseType);
         Task<List<UsrOrDefChapterManagement>> GetItemListByChapter(int chapterId);
         Task<List<UsrOrDefChapterManagement>> GetItemListByChapterName(string casetypegroup, string casetype, string chapterName);
         int? GetMaxSeqNum(int parentId);
@@ -47,10 +46,7 @@ namespace GadjIT.ClientAPI.Repository.Chapters
             _context = context;
         }
 
-        public async Task<List<fnORCHAGetFeeDefinitions>> GetFeeDefs(string caseTypeGroup, string caseType)
-        {
-            return await _context.fnORCHAGetFeeDefinitions(caseTypeGroup, caseType).ToListAsync();
-        }
+        
 
 
 

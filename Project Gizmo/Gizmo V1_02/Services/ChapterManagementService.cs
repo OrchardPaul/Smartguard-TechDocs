@@ -30,7 +30,7 @@ namespace Gizmo_V1_02.Services
         Task<UsrOrDefChapterManagement> UpdateMainItem(UsrOrDefChapterManagement item);
         Task<List<UsrOrDefChapterManagement>> UpdateCaseType(string newCaseTypeName, string originalCaseTypeName, string caseTypeGroup);
         Task<List<UsrOrDefChapterManagement>> UpdateCaseTypeGroups(string newCaseTypeGroupName, string originalCaseTypeGroupName);
-        Task<List<fnORCHAGetFeeDefinitions>> GetFeeDefs(string caseTypeGroup, string caseType);
+        //Task<List<fnORCHAGetFeeDefinitions>> GetFeeDefs(string caseTypeGroup, string caseType);
         Task<List<VmChapterFee>> UpdateChapterFees(int ChapterId, List<VmChapterFee> vmChapterFees);
 
         Task<bool> CreateStep(VmChapterP4WStepSchemaJSONObject stepSchemaJSONObject);
@@ -106,10 +106,10 @@ namespace Gizmo_V1_02.Services
             return httpClient.GetJsonAsync<List<UsrOrDefChapterManagement>>($"{userSession.baseUri}api/ChapterManagement/GetAllChapters");
         }
 
-        public Task<List<fnORCHAGetFeeDefinitions>> GetFeeDefs(string caseTypeGroup, string caseType)
-        {
-            return httpClient.GetJsonAsync<List<fnORCHAGetFeeDefinitions>>($"{userSession.baseUri}api/ChapterManagement/GetFeeDefs/{caseTypeGroup}/{caseType}");
-        }
+        //public Task<List<fnORCHAGetFeeDefinitions>> GetFeeDefs(string caseTypeGroup, string caseType)
+        //{
+        //    return httpClient.GetJsonAsync<List<fnORCHAGetFeeDefinitions>>($"{userSession.baseUri}api/ChapterManagement/GetFeeDefs/{caseTypeGroup}/{caseType}");
+        //}
 
         public Task<List<UsrOrDefChapterManagement>> GetItemListByChapter(int chapterId)
         {

@@ -620,7 +620,7 @@ else
                                                                         {
                                                                             <li class="font-85" @onclick='(() => PrepareAttachmentForEdit(doc, attach))'>@(string.IsNullOrEmpty(attach.DocAsName) ? attach.DocName : attach.DocAsName)</li>
                                                                         }
-                                                                        
+                                                                        <li class="ellipsis-menu-divider"></li>
                                                                     }
 
                                                                     <li class="font-85" @onclick='(() => PrepareAttachmentForAdd(doc))'><span><span class="fa fa-plus"></span></span><span class="ml-2">Add New</span></li>
@@ -1748,39 +1748,3 @@ else
     
 
 }
-
-<div style="height: 35px; width: 30px;">
-    <div class="btn-ellipses float-left">
-        <span class="fa fa-ellipsis-v"></span>
-
-        <div class="ellipsis-menu">
-            <ul>
-                <li class="col-main">
-                    <span class="fa fa-pencil-alt mr-2"></span>
-                    <span>Edit</span>
-                </li>
-                <li class="col-main">
-                    <span class="fa fa-binoculars mr-2"></span>
-                    <span>View</span>
-                </li>
-                <li class="col-main">
-                    <span class="fa fa-paperclip mr-2"></span>
-                    <span>Attachment</span>
-                    <div class="menu-toggle">
-                        <span class="fa fa-chevron-right"></span>
-                        <ul class="">
-                            <li>sub menu 1</li>
-                            <li>sub menu 2</li>
-                        </ul>
-                    </div>
-                    
-                </li>
-                <li class="col-red">
-                    <span class="fa fa-trash-alt mr-2"></span>
-                    <span>Delete</span>
-                </li>
-
-            </ul>
-        </div>
-    </div>
-</div>
