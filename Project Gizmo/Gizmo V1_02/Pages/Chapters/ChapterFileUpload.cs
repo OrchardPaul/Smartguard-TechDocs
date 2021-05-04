@@ -94,16 +94,12 @@ namespace Gizmo_V1_02.Pages.Chapters
         {
             IList<string> lstErrors = new List<string>();
 
-            JSchemaGenerator generator = new JSchemaGenerator();
             try
             {
-                JSchema schema = generator.Generate(typeof(VmChapter));
                 JObject jObject = JObject.Parse(JSON);
 
-                jObject.IsValid(schema, out lstErrors);
-
             }
-            catch
+            catch (Exception e)
             {
                 lstErrors.Add("Error parsing JSON");
             }

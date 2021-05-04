@@ -2873,27 +2873,36 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
 
             if (JSONErrors.Count == 0)
             {
-                var chapterData = JsonConvert.DeserializeObject<VmChapter>(Json);
-                selectedChapter.Items = chapterData.Items;
-                selectedChapter.DataViews = chapterData.DataViews;
-                selectedChapter.Fees = chapterData.Fees;
-                selectedChapter.TickerMessages = chapterData.TickerMessages;
-                selectedChapter.P4WCaseTypeGroup = chapterData.P4WCaseTypeGroup;
-                selectedChapter.SelectedStep = chapterData.SelectedStep;
-                selectedChapter.SelectedView = chapterData.SelectedView;
-                selectedChapter.ShowPartnerNotes = chapterData.ShowPartnerNotes;
-                SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(selectedChapter);
-
-                await chapterManagementService.Update(SelectedChapterObject);
-
-                SelectChapter(SelectedChapterObject);
-
-                showJSON = false;
-
-                await InvokeAsync(() =>
+                try
                 {
-                    StateHasChanged();
-                });
+                    var chapterData = JsonConvert.DeserializeObject<VmChapter>(Json);
+                    selectedChapter.Items = chapterData.Items;
+                    selectedChapter.DataViews = chapterData.DataViews;
+                    selectedChapter.Fees = chapterData.Fees;
+                    selectedChapter.TickerMessages = chapterData.TickerMessages;
+                    selectedChapter.P4WCaseTypeGroup = chapterData.P4WCaseTypeGroup;
+                    selectedChapter.SelectedStep = chapterData.SelectedStep;
+                    selectedChapter.SelectedView = chapterData.SelectedView;
+                    selectedChapter.ShowPartnerNotes = chapterData.ShowPartnerNotes;
+                    SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(selectedChapter);
+
+                    await chapterManagementService.Update(SelectedChapterObject);
+
+                    SelectChapter(SelectedChapterObject);
+
+                    showJSON = false;
+
+                    await InvokeAsync(() =>
+                    {
+                        StateHasChanged();
+                    });
+                }
+                catch(Exception e)
+                {
+                    JSONErrors.Add("Error processing data");
+                    ShowErrorModal("Backup Restore Error", "The following errors occured during the restore:", JSONErrors);
+                }
+
             }
             else
             {
