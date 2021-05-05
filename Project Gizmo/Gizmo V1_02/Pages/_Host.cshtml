@@ -97,11 +97,12 @@
 
     <div id="blazor-error-ui">
         <environment include="Staging,Production">
-            An error has occurred. This application may no longer respond until reloaded.
+            <span>This application is reloading or requires a reload.</span>
         </environment>
         <environment include="Development">
-            An unhandled exception has occurred. See browser dev tools for details.
+            <span>An unhandled exception has occurred. See browser dev tools for details.</span>
         </environment>
+
         <a href="" class="reload">Reload</a>
         <a class="dismiss">🗙</a>
     </div>
