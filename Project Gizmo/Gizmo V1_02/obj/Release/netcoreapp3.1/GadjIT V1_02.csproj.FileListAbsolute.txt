@@ -309,10 +309,8 @@ F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razo
 F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\BlazorInputFile.dll
 F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\Newtonsoft.Json.Schema.dll
 F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\RazorDeclaration\Pages\Chapters\ChapterCopy.razor.g.cs
-F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\RazorDeclaration\Pages\Chapters\ChapterExport.razor.g.cs
 F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\RazorDeclaration\Pages\Shared\Modals\ModalConfirm.razor.g.cs
 F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Pages\Chapters\ChapterCopy.razor.g.cs
-F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Pages\Chapters\ChapterExport.razor.g.cs
 F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Pages\Shared\Modals\ModalConfirm.razor.g.cs
 F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\EPPlus.dll
 F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\Microsoft.Extensions.Configuration.FileExtensions.dll
@@ -325,8 +323,6 @@ F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\Syst
 F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\runtimes\unix\lib\netcoreapp3.0\System.Drawing.Common.dll
 F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\runtimes\win\lib\netcoreapp3.0\System.Drawing.Common.dll
 F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\runtimes\win\lib\netcoreapp2.0\System.Text.Encoding.CodePages.dll
-F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\RazorDeclaration\Archive\ChapterFees.razor.g.cs
-F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\RazorDeclaration\Archive\ChapterList.razor.g.cs
 F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\RazorDeclaration\Pages\Chapters\ChapterAttachments.razor.g.cs
 F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\RazorDeclaration\Pages\Chapters\ChapterDetailView.razor.g.cs
 F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\RazorDeclaration\Pages\Chapters\ChapterExportExcel.razor.g.cs
@@ -336,8 +332,6 @@ F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razo
 F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\RazorDeclaration\Pages\Chapters\DataViewDetail.razor.g.cs
 F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\RazorDeclaration\Pages\Chapters\DataViewDisplay.razor.g.cs
 F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\RazorDeclaration\Pages\Shared\Modals\ModalErrorInfo.razor.g.cs
-F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Archive\ChapterFees.razor.g.cs
-F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Archive\ChapterList.razor.g.cs
 F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Pages\Chapters\ChapterAttachments.razor.g.cs
 F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Pages\Chapters\ChapterDetailView.razor.g.cs
 F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Pages\Chapters\ChapterExportExcel.razor.g.cs
@@ -347,3 +341,17 @@ F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razo
 F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Pages\Chapters\DataViewDetail.razor.g.cs
 F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Pages\Chapters\DataViewDisplay.razor.g.cs
 F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Pages\Shared\Modals\ModalErrorInfo.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\Syncfusion.Blazor.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\Syncfusion.ExcelExport.Net.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\Syncfusion.Licensing.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\bin\Release\netcoreapp3.1\Syncfusion.PdfExport.Net.dll
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\RazorDeclaration\Pages\Chapters\ChapterDataViewComparison.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\RazorDeclaration\Pages\Chapters\ChapterHeaderComparison.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\RazorDeclaration\Pages\Chapters\TickerMessageComparison.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\RazorDeclaration\Pages\Chapters\TickerMessageDetail.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\RazorDeclaration\Pages\Chapters\TickerMessageDisplay.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Pages\Chapters\ChapterDataViewComparison.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Pages\Chapters\ChapterHeaderComparison.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Pages\Chapters\TickerMessageComparison.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Pages\Chapters\TickerMessageDetail.razor.g.cs
+F:\WorkSpaces\JD\GadjIT\Project Gizmo\Gizmo V1_02\obj\Release\netcoreapp3.1\Razor\Pages\Chapters\TickerMessageDisplay.razor.g.cs

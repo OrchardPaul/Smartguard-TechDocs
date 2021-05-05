@@ -1,7 +1,7 @@
 ﻿<StaticWebAssets Version="1.0">
-  <ContentRoot BasePath="/Identity" Path="C:\Users\p_taylor\.nuget\packages\microsoft.aspnetcore.identity.ui\3.1.8\staticwebassets\V4\" />
-  <ContentRoot BasePath="_content/blazor-dragdrop" Path="C:\Users\p_taylor\.nuget\packages\blazor-dragdrop\2.1.0\build\..\staticwebassets\" />
-  <ContentRoot BasePath="_content/Blazored.Modal" Path="C:\Users\p_taylor\.nuget\packages\blazored.modal\6.0.0\build\..\staticwebassets\" />
-  <ContentRoot BasePath="_content/BlazorInputFile" Path="C:\Users\p_taylor\.nuget\packages\blazorinputfile\0.2.0\build\..\staticwebassets\" />
-  <ContentRoot BasePath="_content/Syncfusion.Blazor" Path="C:\Users\p_taylor\.nuget\packages\syncfusion.blazor\19.1.0.55\build\..\staticwebassets\" />
+  <ContentRoot BasePath="/Identity" Path="C:\Users\j_duggan\.nuget\packages\microsoft.aspnetcore.identity.ui\3.1.8\staticwebassets\V4\" />
+  <ContentRoot BasePath="_content/blazor-dragdrop" Path="C:\Users\j_duggan\.nuget\packages\blazor-dragdrop\2.1.0\build\..\staticwebassets\" />
+  <ContentRoot BasePath="_content/Blazored.Modal" Path="C:\Users\j_duggan\.nuget\packages\blazored.modal\6.0.0\build\..\staticwebassets\" />
+  <ContentRoot BasePath="_content/BlazorInputFile" Path="C:\Users\j_duggan\.nuget\packages\blazorinputfile\0.2.0\build\..\staticwebassets\" />
+  <ContentRoot BasePath="_content/Syncfusion.Blazor" Path="C:\Users\j_duggan\.nuget\packages\syncfusion.blazor\19.1.0.55\build\..\staticwebassets\" />
 </StaticWebAssets>

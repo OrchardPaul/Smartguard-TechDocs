@@ -3,4 +3,5 @@
   <ContentRoot BasePath="_content/blazor-dragdrop" Path="C:\Users\j_duggan\.nuget\packages\blazor-dragdrop\2.1.0\build\..\staticwebassets\" />
   <ContentRoot BasePath="_content/Blazored.Modal" Path="C:\Users\j_duggan\.nuget\packages\blazored.modal\6.0.0\build\..\staticwebassets\" />
   <ContentRoot BasePath="_content/BlazorInputFile" Path="C:\Users\j_duggan\.nuget\packages\blazorinputfile\0.2.0\build\..\staticwebassets\" />
+  <ContentRoot BasePath="_content/Syncfusion.Blazor" Path="C:\Users\j_duggan\.nuget\packages\syncfusion.blazor\19.1.0.55\build\..\staticwebassets\" />
 </StaticWebAssets>
