@@ -46,8 +46,7 @@ namespace Gizmo_V1_02.Pages.Chapters
         public List<FileDesc> ListFileDescriptions { get; set; }
 
         public List<CopyOption> CopyOptions { get; set; } 
-        public List<string> lstDocTypes { get; set; } = new List<string> { "Doc", "Letter", "Form", "Email", "Step" };
-
+        
         public List<string> ErrorList { get; set; } = new List<string>();
 
         public bool ToggleError { get; set; }
@@ -130,7 +129,7 @@ namespace Gizmo_V1_02.Pages.Chapters
                                                 {
                                                     new CopyOption { Option = "Agenda", Selected = false, OptionCount = ChapterItems.Items.Where(C => C.Type == "Agenda").ToList().Count() },
                                                     new CopyOption { Option = "Status", Selected = false, OptionCount = ChapterItems.Items.Where(C => C.Type == "Status").ToList().Count() },
-                                                    new CopyOption { Option = "Documents/Steps", Selected = false, OptionCount = ChapterItems.Items.Where(C => lstDocTypes.Contains(C.Type)).ToList().Count() },
+                                                    new CopyOption { Option = "Documents/Steps", Selected = false, OptionCount = ChapterItems.Items.Where(C => C.Type == "Doc").ToList().Count() },
                                                     new CopyOption { Option = "Fees", Selected = false, OptionCount = ChapterItems.Fees.Count() },
                                                     new CopyOption { Option = "Data Views", Selected = false, OptionCount = ChapterItems.DataViews.Count() },
                                                 };
@@ -185,12 +184,12 @@ namespace Gizmo_V1_02.Pages.Chapters
 
             if (CopyOptions.Where(C => C.Option == "Documents/Steps").Select(C => C.Selected).FirstOrDefault())
             {
-                foreach (var item in SelectedCopyItems.Items.Where(C => lstDocTypes.Contains(C.Type)).ToList())
+                foreach (var item in SelectedCopyItems.Items.Where(C => C.Type == "Doc").ToList())
                 {
                     SelectedCopyItems.Items.Remove(item);
                 }
 
-                SelectedCopyItems.Items.AddRange(ChapterItems.Items.Where(C => lstDocTypes.Contains(C.Type)).ToList());
+                SelectedCopyItems.Items.AddRange(ChapterItems.Items.Where(C => C.Type == "Doc").ToList());
             }
 
             if (CopyOptions.Where(C => C.Option == "Fees").Select(C => C.Selected).FirstOrDefault())
