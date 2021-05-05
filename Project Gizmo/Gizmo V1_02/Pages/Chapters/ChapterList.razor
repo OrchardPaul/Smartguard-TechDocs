@@ -387,21 +387,32 @@ else
                                             </div>
                                             <div class="form-group">
                                                 <label for="SelectedView">Smartflow View</label>
-                                                <InputSelect class="form-control form-control-xxl"
-                                                             ValueExpression="@(() => selectedChapter.SelectedView)"
-                                                             Value="@selectedChapter.SelectedView"
-                                                             ValueChanged="@((string value) => SaveSelectedView(value))">
-                                                    <option value="">Select</option>
-                                                    @foreach (var view in ListP4WViews
-                                                                   .Where(V => !(V.InternalNote is null) && (V.InternalNote.Contains("Smartflow")))
-                                                                   .OrderBy(V => V.Name)
-                                                                   .ToList())
-                                                    {
-                                                        <option value="@view.Name">
-                                                            @view.Name
-                                                        </option>
-                                                    }
-                                                </InputSelect>
+
+                                                @if (ListP4WViews is null || ListP4WViews.Where(V => !(V.InternalNote is null) && (V.InternalNote.Contains("Smartflow"))).ToList().Count == 0)
+                                                { 
+                                                    <div class="form-control form-control-lg">
+                                                        <label class="font-red">No Smartflow views available</label>
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <InputSelect class="form-control form-control-xxl"
+                                                                 ValueExpression="@(() => selectedChapter.SelectedView)"
+                                                                 Value="@selectedChapter.SelectedView"
+                                                                 ValueChanged="@((string value) => SaveSelectedView(value))">
+                                                        <option value="">Select</option>
+                                                        @foreach (var view in ListP4WViews
+                                                                      .Where(V => !(V.InternalNote is null) && (V.InternalNote.Contains("Smartflow")))
+                                                                      .OrderBy(V => V.Name)
+                                                                      .ToList())
+                                                        {
+                                                            <option value="@view.Name">
+                                                                @view.Name
+                                                            </option>
+                                                        }
+                                                    </InputSelect>
+                                                }
+
                                             </div>
                                             @if (!(selectedChapter.SelectedStep is null) && selectedChapter.SelectedStep != "Create New")
                                             {

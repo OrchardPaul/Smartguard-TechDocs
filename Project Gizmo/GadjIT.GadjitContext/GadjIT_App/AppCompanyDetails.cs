@@ -12,6 +12,10 @@ namespace GadjIT.GadjitContext.GadjIT_App
         [Required]
         [StringLength(256)]
         public string CompanyName { get; set; }
+
+        [StringLength(256)]
+        public string CompanyDesc { get; set; }
+        
         [StringLength(256)]
         public string DevUri { get; set; }
         [StringLength(256)]

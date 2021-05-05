@@ -42,7 +42,12 @@
                                         </ul>
                                     </div>
                                 </div>
-                                <div class="data-item-sub"><span class="fa fa-building mr-1"></span> @vmCompany.Company.CompanyName</div>
+                                <div class="data-item-sub"><span class="fa fa-building mr-1"></span> @vmCompany.Company.CompanyName
+                                @if (!string.IsNullOrEmpty(vmCompany.Company.CompanyDesc))
+                                {
+                                    <span class="font-85 font-grey ml-3">@vmCompany.Company.CompanyDesc</span>
+                                }
+                                </div>
                             </div>
                         </div>
 
