@@ -2105,7 +2105,7 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
 
             if (fileErrorDescs.Count > 0)
             {
-                ShowErrorModal("File Upload Error", "The following errors occured during the upload:", fileErrorDescs);
+                ShowErrorModal("File Upload", "The following errors occured during the upload:", fileErrorDescs);
             }
 
             ListFilesForBgImages = FileHelper.GetFileList();
