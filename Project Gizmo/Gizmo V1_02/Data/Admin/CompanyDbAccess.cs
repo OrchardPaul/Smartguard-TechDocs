@@ -723,6 +723,8 @@ namespace Gizmo_V1_02.Data.Admin
 
         public async Task<SmartflowRecords> SaveSmartFlowRecordData(UsrOrsfSmartflows chapter, IUserSessionState sessionState)
         {
+            Lock = true;
+
             SmartflowRecords record = new SmartflowRecords { CompanyId = sessionState.Company.Id };
 
 
@@ -752,6 +754,8 @@ namespace Gizmo_V1_02.Data.Admin
             }
 
             await context.SaveChangesAsync();
+
+            Lock = false;
             return record;
 
         }

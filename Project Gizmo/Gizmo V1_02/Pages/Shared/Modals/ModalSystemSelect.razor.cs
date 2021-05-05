@@ -47,8 +47,13 @@ namespace Gizmo_V1_02.Pages.Shared.Modals
         {
             try
             {
+                sessionState.SuppressChangeSystemError = true;
+
                 sessionState.SetCurrentUser(currentUser);
                 await sessionState.switchSelectedCompany();
+
+
+                NavigationManager.NavigateTo("/Identity/Account/LogOutOnGet", true);
             }
             catch
             {
@@ -56,7 +61,6 @@ namespace Gizmo_V1_02.Pages.Shared.Modals
             }
             
 
-            NavigationManager.NavigateTo("/Identity/Account/LogOutOnGet", true);
         }
 
 

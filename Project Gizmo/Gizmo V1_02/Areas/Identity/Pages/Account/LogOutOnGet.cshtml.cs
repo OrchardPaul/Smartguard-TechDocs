@@ -31,10 +31,17 @@ namespace Gizmo_V1_02.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnGet(string returnUrl = "~/")
         {
-            var signedInUser = await userManager.FindByNameAsync(User.Identity.Name);
+            try
+            {
+                var signedInUser = await userManager.FindByNameAsync(User.Identity.Name);
 
-            await _signInManager.RefreshSignInAsync(signedInUser);
-            _logger.LogInformation("User Switched Companies.");
+                await _signInManager.RefreshSignInAsync(signedInUser);
+            }
+            catch
+            {
+                Console.WriteLine("Error Caught");
+            }
+
             if (returnUrl != null)
             {
                 return LocalRedirect(returnUrl);
@@ -43,6 +50,7 @@ namespace Gizmo_V1_02.Areas.Identity.Pages.Account
             {
                 return RedirectToPage();
             }
+
         }
     }
 }

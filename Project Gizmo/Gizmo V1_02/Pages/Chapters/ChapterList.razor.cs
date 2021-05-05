@@ -277,7 +277,7 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
                 ListP4WViews = await partnerAccessService.GetPartnerViews();
                 sessionState.HomeActionSmartflow = SelectHome;
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 NavigationManager.NavigateTo($"/", true);
             }
@@ -657,7 +657,12 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
                 }
 
                 var lsrSR = await CompanyDbAccess.GetAllSmartflowRecords(sessionState);
-                lstAltSystemChapters = lsrSR.Select(A => new VmUsrOrsfSmartflows { SmartflowObject = mapper.Map(A, new UsrOrsfSmartflows()) } ).ToList();
+
+                if(!(lsrSR is null))
+                {
+                    lstAltSystemChapters = lsrSR.Select(A => new VmUsrOrsfSmartflows { SmartflowObject = mapper.Map(A, new UsrOrsfSmartflows()) }).ToList();
+                }
+                
 
 
                 await sessionState.ResetSelectedSystem();
@@ -795,47 +800,73 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
                  * 
                  * 
                  */
-                foreach (var chapter in lstChapters)
+                if(!(lstAltSystemChapters is null) && lstAltSystemChapters.Count > 0)
                 {
-                    var chapterItems = JsonConvert.DeserializeObject<VmChapter>(chapter.SmartflowObject.SmartflowData);
-
-                    var vmChapterItems = chapterItems.Items.Select(C => new VmUsrOrDefChapterManagement { ChapterObject = C }).ToList();
-
-                    AltChapterObject = lstAltSystemChapters
-                                        .Where(A => A.SmartflowObject.SmartflowName == chapter.SmartflowObject.SmartflowName)
-                                        .Where(A => A.SmartflowObject.CaseType == chapter.SmartflowObject.CaseType)
-                                        .Where(A => A.SmartflowObject.CaseTypeGroup == chapter.SmartflowObject.CaseTypeGroup)
-                                        .Select(C => C.SmartflowObject)
-                                        .SingleOrDefault();
-
-                    if (AltChapterObject is null)
+                    foreach (var chapter in lstChapters)
                     {
-                        chapter.ComparisonResult = "No match";
-                        chapter.ComparisonIcon = "times";
-                    }
-                    else
-                    {
-                        altChapter = JsonConvert.DeserializeObject<VmChapter>(AltChapterObject.SmartflowData);
+                        var chapterItems = JsonConvert.DeserializeObject<VmChapter>(chapter.SmartflowObject.SmartflowData);
 
-                        lstAltSystemChapterItems = altChapter.Items.Select(T => new VmUsrOrDefChapterManagement { ChapterObject = T }).ToList();
+                        AltChapterObject = lstAltSystemChapters
+                                            .Where(A => A.SmartflowObject.SmartflowName == chapter.SmartflowObject.SmartflowName)
+                                            .Where(A => A.SmartflowObject.CaseType == chapter.SmartflowObject.CaseType)
+                                            .Where(A => A.SmartflowObject.CaseTypeGroup == chapter.SmartflowObject.CaseTypeGroup)
+                                            .Select(C => C.SmartflowObject)
+                                            .SingleOrDefault();
 
-                        foreach (var item in vmChapterItems)
+                        if (AltChapterObject is null)
                         {
-                            CompareChapterItemsToAltSytem(item);
-                        }
-
-                        if (vmChapterItems.Where(C => C.ComparisonResult == "No match" | C.ComparisonResult == "Partial match").Count() > 0 | vmChapterItems.Count() != lstAltSystemChapterItems.Count())
-                        {
-                            chapter.ComparisonResult = "Partial match";
-                            chapter.ComparisonIcon = "exclamation";
+                            chapter.ComparisonResult = "No match";
+                            chapter.ComparisonIcon = "times";
                         }
                         else
                         {
-                            chapter.ComparisonResult = "Exact match";
-                            chapter.ComparisonIcon = "check";
+                            altChapter = JsonConvert.DeserializeObject<VmChapter>(AltChapterObject.SmartflowData);
+                            
+                            
+                            if (!(altChapter.Items is null)!)
+                            {
+                                lstAltSystemChapterItems = altChapter.Items.Select(T => new VmUsrOrDefChapterManagement { ChapterObject = T }).ToList();
+
+                                if (!(chapterItems.Items is null))
+                                {
+                                    var vmChapterItems = chapterItems.Items.Select(C => new VmUsrOrDefChapterManagement { ChapterObject = C }).ToList();
+
+                                    foreach (var item in vmChapterItems)
+                                    {
+                                        CompareChapterItemsToAltSytem(item);
+                                    }
+
+                                    if (vmChapterItems.Where(C => C.ComparisonResult == "No match" | C.ComparisonResult == "Partial match").Count() > 0 | vmChapterItems.Count() != lstAltSystemChapterItems.Count())
+                                    {
+                                        chapter.ComparisonResult = "Partial match";
+                                        chapter.ComparisonIcon = "exclamation";
+                                    }
+                                    else
+                                    {
+                                        chapter.ComparisonResult = "Exact match";
+                                        chapter.ComparisonIcon = "check";
+                                    }
+                                }
+
+                            }
+                            else
+                            {
+                                chapter.ComparisonResult = "Partial match";
+                                chapter.ComparisonIcon = "exclamation";
+                            }
+
+
+                            
+                            
                         }
                     }
                 }
+                else
+                {
+                    lstChapters = lstChapters.Select(T => { T.ComparisonIcon = "times"; T.ComparisonResult = "No match"; return T; }).ToList();
+                }
+
+               
             }
             return true;
         }
@@ -2441,7 +2472,7 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
             }
 
 
-
+            
             await sessionState.ResetSelectedSystem();
 
             await RefreshCompararisonAllChapters();
@@ -3049,6 +3080,14 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
                     selectedChapter.SelectedStep = selectedChapter.StepName;
 
                     SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(selectedChapter);
+
+                    bool gotLock = chapterManagementService.Lock;
+                    while (gotLock)
+                    {
+                        await Task.Yield();
+                        gotLock = chapterManagementService.Lock;
+                    }
+
                     await chapterManagementService.Update(SelectedChapterObject);
 
                     StateHasChanged();

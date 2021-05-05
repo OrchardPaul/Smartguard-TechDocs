@@ -5,6 +5,9 @@
     Layout = null;
 }
 
+@using Services.SessionState
+@inject IUserSessionState sessionState
+
 
 <script>
     function ShowModal(modalId) {
@@ -95,16 +98,20 @@
         <component type="typeof(App)" render-mode="ServerPrerendered" />
     </app>
 
-    <div id="blazor-error-ui">
-        <environment include="Staging,Production">
-            An error has occurred. This application may no longer respond until reloaded.
-        </environment>
-        <environment include="Development">
-            An unhandled exception has occurred. See browser dev tools for details.
-        </environment>
-        <a href="" class="reload">Reload</a>
-        <a class="dismiss">🗙</a>
-    </div>
+    @if (!sessionState.SuppressChangeSystemError)
+    {
+        <div id="blazor-error-ui">
+            <environment include="Staging,Production">
+                An error has occurred. This application may no longer respond until reloaded.
+            </environment>
+            <environment include="Development">
+                An unhandled exception has occurred. See browser dev tools for details.
+            </environment>
+            <a href="" class="reload">Reload</a>
+            <a class="dismiss">🗙</a>
+        </div>
+    }
+
 
     <script src="_framework/blazor.server.js"></script>
     <script src="_content/Blazored.Modal/blazored.modal.js"></script>
@@ -112,7 +119,7 @@
 
 
 
-    <script type="text/javascript">
+    @*<script type="text/javascript">
 
         function fncPrepDataTables() {
             //var table = $('#tbl_Export').DataTable({
@@ -140,7 +147,7 @@
 
 
 
-    </script>
+    </script>*@
 
 </body>
 </html>
