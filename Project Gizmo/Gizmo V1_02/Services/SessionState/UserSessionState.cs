@@ -52,6 +52,8 @@ namespace Gizmo_V1_02.Services.SessionState
 
         void SetTempBackground(string image, string Uri);
 
+        bool SuppressChangeSystemError { get; set; }
+
     }
 
     public class UserSessionState : IUserSessionState
@@ -88,6 +90,8 @@ namespace Gizmo_V1_02.Services.SessionState
         public string userProfileReturnURI { get; protected set; }
 
         public SpinLock IdentityLock { get; set; }
+
+        public bool SuppressChangeSystemError { get; set; } = false;
 
         public bool isSuperUser { get; protected set; } = false;
 

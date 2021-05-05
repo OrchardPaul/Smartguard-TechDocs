@@ -26,8 +26,9 @@ namespace Gizmo_V1_02.Services
         Task<UsrOrsfSmartflows> UpdateMainItem(UsrOrsfSmartflows item);
         Task<List<UsrOrsfSmartflows>> UpdateCaseType(string newCaseTypeName, string originalCaseTypeName, string caseTypeGroup);
         Task<List<UsrOrsfSmartflows>> UpdateCaseTypeGroups(string newCaseTypeGroupName, string originalCaseTypeGroupName);
-
         Task<bool> CreateStep(VmChapterP4WStepSchemaJSONObject stepSchemaJSONObject);
+        bool Lock { get; set; }
+
     }
 
     public class ChapterManagementService : IChapterManagementService
@@ -43,6 +44,9 @@ namespace Gizmo_V1_02.Services
             this.companyDbAccess = companyDbAccess;
         }
 
+        public bool Lock { get; set; } = false;
+
+
         public async Task<UsrOrsfSmartflows> Add(UsrOrsfSmartflows item)
         {
             return await httpClient.PostJsonAsync<UsrOrsfSmartflows>($"{userSession.baseUri}api/ChapterManagement/Add", item);
@@ -50,6 +54,14 @@ namespace Gizmo_V1_02.Services
 
         public async Task<UsrOrsfSmartflows> Update(UsrOrsfSmartflows item)
         {
+            bool gotLock = companyDbAccess.Lock;
+            while (gotLock)
+            {
+                await Task.Yield();
+                gotLock = companyDbAccess.Lock;
+            }
+
+
             await companyDbAccess.SaveSmartFlowRecordData(item, userSession);
 
             return await httpClient.PutJsonAsync<UsrOrsfSmartflows>($"{userSession.baseUri}api/ChapterManagement/Update/{item.Id}", item);
@@ -103,7 +115,11 @@ namespace Gizmo_V1_02.Services
 
         public Task<List<DmDocuments>> GetDocumentList(string caseType)
         {
-            return httpClient.GetJsonAsync<List<DmDocuments>>($"{userSession.baseUri}api/ChapterManagement/GetDocumentList/{caseType}");
+            Lock = true;
+            var returnValue = httpClient.GetJsonAsync<List<DmDocuments>>($"{userSession.baseUri}api/ChapterManagement/GetDocumentList/{caseType}");
+            Lock = false;
+
+            return returnValue;
         }
 
         public Task<List<DmDocuments>> GetDocumentListByCaseTypeGroup(int caseTypeGroupRef)
@@ -138,9 +154,11 @@ namespace Gizmo_V1_02.Services
 
         public Task<bool> CreateStep(VmChapterP4WStepSchemaJSONObject stepSchemaJSONObject)
         {
-            var test = $"{userSession.baseUri}api/ChapterManagement/CreateStep";
+            Lock = true;
+            var returnValue = httpClient.PutJsonAsync<bool>($"{userSession.baseUri}api/ChapterManagement/CreateStep", stepSchemaJSONObject);
+            Lock = false;
 
-            return httpClient.PutJsonAsync<bool>($"{userSession.baseUri}api/ChapterManagement/CreateStep", stepSchemaJSONObject);
+            return returnValue;
         }
 
     }

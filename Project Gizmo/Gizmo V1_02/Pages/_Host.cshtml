@@ -5,6 +5,9 @@
     Layout = null;
 }
 
+@using Services.SessionState
+@inject IUserSessionState sessionState
+
 
 <script>
     function ShowModal(modalId) {
@@ -113,7 +116,7 @@
 
 
 
-    <script type="text/javascript">
+    @*<script type="text/javascript">
 
         function fncPrepDataTables() {
             //var table = $('#tbl_Export').DataTable({
@@ -141,7 +144,7 @@
 
 
 
-    </script>
+    </script>*@
 
 </body>
 </html>

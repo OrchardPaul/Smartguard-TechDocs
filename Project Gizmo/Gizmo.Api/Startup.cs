@@ -34,7 +34,10 @@ namespace GadjIT.ClientAPI
             services.AddControllers();
             services.AddDbContext<P4W_Context>(options =>
                 options.UseSqlServer(
-                    Configuration.GetConnectionString("OR_RESI_LIVE")));
+                    Configuration.GetConnectionString("OR_RESI_LIVE")
+                    ,builder => {
+                        builder.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null);
+                    }));
 
             services.AddScoped<IChapters_Service, Chapters_Service>();
             services.AddScoped<IPartner_Access_Service, Partner_Access_Service>();

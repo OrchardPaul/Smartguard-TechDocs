@@ -30,7 +30,7 @@ namespace GadjIT.ClientAPI.Controllers
             {
                 return Ok(await partner_Access_Service.GetAllCaseTypes());
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
@@ -43,7 +43,7 @@ namespace GadjIT.ClientAPI.Controllers
             {
                 return Ok(await partner_Access_Service.GetAllCaseTypeGroups());
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
@@ -56,7 +56,7 @@ namespace GadjIT.ClientAPI.Controllers
             {
                 return Ok(await partner_Access_Service.GetAllP4WViews());
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
