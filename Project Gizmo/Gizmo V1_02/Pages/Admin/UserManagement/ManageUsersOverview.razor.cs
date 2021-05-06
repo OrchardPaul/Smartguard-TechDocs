@@ -133,7 +133,12 @@ namespace Gizmo_V1_02.Pages.Admin.UserManagement
             parameters.Add("ModalWidth", "500px");
             parameters.Add("DeleteAction", SelectedDeleteAction);
 
-            Modal.Show<ModalDelete>("Delete?", parameters);
+            var options = new ModalOptions()
+            {
+                Class = "blazored-custom-modal"
+            };
+
+            Modal.Show<ModalDelete>("Delete?", parameters, options);
         }
 
         private async void HandleValidDelete()

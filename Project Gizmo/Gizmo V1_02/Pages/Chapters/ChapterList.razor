@@ -182,23 +182,29 @@ else
                                 }
                                 else
                                 {
-                                    <div class="btn-ellipses float-left">
-                                        @if (!(Chapter.ComparisonIcon is null))
-                                        {
-                                            @if (!(Chapter.ComparisonResult == "Exact match"))
-                                            {
-                                                <div class="btn-dashed" @onclick="() => PrepareChapterCreateOnAlt(Chapter.SmartflowObject)"><span class="fa fa-@Chapter.ComparisonIcon"></span></div>
-                                            }
-                                            else
-                                            {
-                                                <span class="fa fa-@Chapter.ComparisonIcon"></span>
-                                            }
-                                        }
-                                        else
-                                        {
-                                            <div class="spinner"></div>
-                                        }
-                                    </div>
+                        <div class="btn-ellipses float-left">
+                            @if (!(Chapter.ComparisonIcon is null))
+                            {
+                                @if (!(Chapter.ComparisonResult == "Exact match"))
+                                {
+                                    <ModalTooltip Direction="right" Text=@(Chapter.ComparisonResult == "Partial match" ? "Differences found, click to sync" : "Does not exist, click to create") Class="w-2">
+                                        <div class="btn-dashed" @onclick="() => PrepareChapterCreateOnAlt(Chapter.SmartflowObject)"><span class="fa fa-@Chapter.ComparisonIcon"></span></div>
+                                    </ModalTooltip>
+
+                                }
+                                else
+                                {
+                                    <ModalTooltip Direction="right" Text="Exact Match" Class="w-1">
+                                        <span class="fa fa-@Chapter.ComparisonIcon"></span>
+                                    </ModalTooltip>
+                                    
+                                }
+                            }
+                            else
+                            {
+                                <div class="spinner"></div>
+                            }
+                        </div>
                                 }
 
                             }
@@ -214,7 +220,7 @@ else
                                     <div @onclick='() => MoveSmartFlowSeq(Chapter.SmartflowObject, "Chapters", "Down")'><span class="fa fa-angle-down"></span></div>
                                 </div>
                             }
-                            <div title="Chapter: click to configure @Chapter.SmartflowObject.SmartflowName" class="data-item-right link-direction" @onclick="() => SelectChapter(Chapter.SmartflowObject)">
+                            <div title="Click to edit @Chapter.SmartflowObject.SmartflowName" class="data-item-right link-direction" @onclick="() => SelectChapter(Chapter.SmartflowObject)">
                                 <div class="fa fa-chevron-circle-right"></div>
                             </div>
                         </div>
@@ -280,12 +286,13 @@ else
                         <span class="font-120"><span class="fa fa-comment" Title="Messages - create ticker messages to inform users of updates or pending changes"></span></span>
                         <div class="subtitle">Messages</div>
                     </li>
-                    <li class="nav-item @(navDisplay == "Background" ? "active" : "")" @onclick='() => ShowNav("Background")'>
-                        <span class="font-120"><span class="fa fa-image" Title="Background - set background colour or image"></span></span>
-                        <div class="subtitle">Background</div>
-                    </li>
                     @if ((sessionState.isAdminUser))
                     {
+                        <li class="nav-item @(navDisplay == "Background" ? "active" : "")" @onclick='() => ShowNav("Background")'>
+                            <span class="font-120"><span class="fa fa-image" Title="Background - set background colour or image"></span></span>
+                            <div class="subtitle">Background</div>
+                        </li>
+
                         <li class="nav-item @(navDisplay == "Backups" ? "active" : "")" @onclick='() => ShowNav("Backups")'>
                             <span class="font-120"><span class="fa fa-save" Title="Backups - save, download and restore"></span></span>
                             <div class="subtitle">Backups</div>
@@ -567,7 +574,7 @@ else
                             }
 
                         }
-                        <ModalTooltip Direction="top shift-right" Text="Documents and steps to be made available in the Smartflow for inserting into the case agenda.">
+                        <ModalTooltip Direction="top shift-right" Text="Documents and steps to be made available in the Smartflow for inserting into the case agenda." Class="w-2">
                             <span class="info-icon">
                                 <span class=" fa fa-info-circle fa-2x "></span>
                             </span>
@@ -655,24 +662,28 @@ else
                                         }
                                         else if (sessionState.isAdminUser && compareSystems)
                                         {
-                                            <div class="btn-ellipses float-left">
-                                                @if (!(doc.ComparisonIcon is null))
-                                                {
-                                                    @if (!(doc.ComparisonResult == "Exact match"))
-                                                    {
-                                                        <div class="btn-dashed" @onclick="() => PrepareForComparison(doc)"><span class="fa fa-@doc.ComparisonIcon"></span></div>
-                                                    }
-                                                    else
-                                                    {
-                                                        <span class="fa fa-@doc.ComparisonIcon"></span>
-                                                    }
-                                                }
-                                                else
-                                                {
-                                                    <div class="spinner"></div>
-                                                }
+                                    <div class="btn-ellipses float-left">
+                                        @if (!(doc.ComparisonIcon is null))
+                                        {
+                                            @if (!(doc.ComparisonResult == "Exact match"))
+                                            {
+                                                <ModalTooltip Direction="right" Text=@(doc.ComparisonResult == "Partial match" ? "Differences found, click to sync" : "Does not exist, click to create") Class="w-2">
+                                                    <div class="btn-dashed" @onclick="() => PrepareForComparison(doc)"><span class="fa fa-@doc.ComparisonIcon"></span></div>
+                                                </ModalTooltip>
+                                            }
+                                            else
+                                            {
+                                                <ModalTooltip Direction="right" Text="Exact Match" Class="w-1">
+                                                    <span class="fa fa-@doc.ComparisonIcon"></span>
+                                                </ModalTooltip>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <div class="spinner"></div>
+                                        }
 
-                                            </div>
+                                    </div>
                                         }
                                         else
                                         {
@@ -704,7 +715,7 @@ else
                                         @if (doc.DocOrigName != "")
                                         {
                                             <div class="data-item-right hidden-md-down">
-                                                <ModalTooltip Direction="left" Text=@("Template: " + doc.DocOrigName) Class="w-3">
+                                                <ModalTooltip Direction="left" Text=@("Template: " + doc.DocOrigName) Class="w-2">
                                                     <span class="fa fa-clone"></span>
                                                 </ModalTooltip>
                                             </div>
@@ -731,7 +742,7 @@ else
                                         @if (!(doc.ChapterObject.FollowUpDocs is null) && doc.ChapterObject.FollowUpDocs.Count > 0)
                                         {
                                             <div class="data-item-right hidden-md-down">
-                                                <ModalTooltip Direction="left" Text=@($"This item has attachments.")>
+                                                <ModalTooltip Direction="left" Text=@($"This item has attachments.") Class="w-2">
                                                     <span class="fa fa-paperclip"></span>
                                                 </ModalTooltip>
                                             </div>
@@ -758,7 +769,7 @@ else
                                         @if (doc.ChapterObject.RescheduleDays.HasValue & !(doc.ChapterObject.RescheduleDays == 0))
                                         {
                                             <div class="data-item-right schedule-days">
-                                                <ModalTooltip Direction="left" Text="@(string.IsNullOrEmpty(doc.ChapterObject.AsName) ? "" : "The step named " + doc.ChapterObject.AsName + " will be scheduled for " + doc.ChapterObject.RescheduleDays.ToString() + " days")">
+                                                <ModalTooltip Direction="left" Text="@(string.IsNullOrEmpty(doc.ChapterObject.AsName) ? "" : "The step named " + doc.ChapterObject.AsName + " will be scheduled for " + doc.ChapterObject.RescheduleDays.ToString() + " days")" Class="w-3">
                                                     <span class="badge rounded-square">@doc.ChapterObject.RescheduleDays.ToString()d</span>
                                                 </ModalTooltip>
                                             </div>
@@ -784,7 +795,7 @@ else
                                             @if (lstStatus.Where(S => S.ChapterObject.Name == doc.ChapterObject.NextStatus).Select(S => S.ChapterObject.SuppressStep).SingleOrDefault() == "Y")
                                             {
                                                 <div class="data-item-right suppress-step">
-                                                    <ModalTooltip Direction="left" Text="This document will end the Smartflow when taken.">
+                                                    <ModalTooltip Direction="left" Text="This document will end the Smartflow when taken." Class="w-2">
                                                         <span class="fa fa-flag-checkered"></span>
                                                     </ModalTooltip>
                                                 </div>
@@ -792,7 +803,7 @@ else
 
 
                                             <div class="data-item-right suppress-step">
-                                                <ModalTooltip Direction="left" Text=@("Status Change: " + doc.ChapterObject.NextStatus)>
+                                                <ModalTooltip Direction="left" Text=@("Status Change: " + doc.ChapterObject.NextStatus) Class="w-2">
                                                     <span class="fa fa-battery-half"></span>
                                                 </ModalTooltip>
                                             </div>
@@ -827,7 +838,7 @@ else
                                 }
                             </div>
                         }
-                        <ModalTooltip Direction="top" Text="Correspondence stored in these agendas will be made avalible on the History tab.">
+                        <ModalTooltip Direction="top" Text="Correspondence stored in these agendas will be made avalible on the History tab." Class="w-2">
                             <span class="info-icon">
                                 <span class=" fa fa-info-circle fa-2x "></span>
                             </span>
@@ -880,24 +891,28 @@ else
                                         else
                                         {
 
-                                            <div class="btn-ellipses float-left">
-                                                @if (!(agenda.ComparisonIcon is null))
-                                                {
-                                                    @if (!(agenda.ComparisonResult == "Exact match"))
-                                                    {
-                                                        <div class="btn-dashed" @onclick="() => PrepareForComparison(agenda)"><span class="fa fa-@agenda.ComparisonIcon"></span></div>
-                                                    }
-                                                    else
-                                                    {
-                                                        <span class="fa fa-@agenda.ComparisonIcon"></span>
-                                                    }
-                                                }
-                                                else
-                                                {
-                                                    <div class="spinner"></div>
-                                                }
+                                <div class="btn-ellipses float-left">
+                                    @if (!(agenda.ComparisonIcon is null))
+                                    {
+                                        @if (!(agenda.ComparisonResult == "Exact match"))
+                                        {
+                                            <ModalTooltip Direction="right" Text=@(agenda.ComparisonResult == "Partial match" ? "Differences found, click to sync" : "Does not exist, click to create") Class="w-2">
+                                                <div class="btn-dashed" @onclick="() => PrepareForComparison(agenda)"><span class="fa fa-@agenda.ComparisonIcon"></span></div>
+                                            </ModalTooltip>
+                                        }
+                                        else
+                                        {
+                                            <ModalTooltip Direction="right" Text="Exact Match" Class="w-1">
+                                                <span class="fa fa-@agenda.ComparisonIcon"></span>
+                                            </ModalTooltip>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <div class="spinner"></div>
+                                    }
 
-                                            </div>
+                                </div>
                                         }
 
                                     }
@@ -946,7 +961,7 @@ else
                             }
 
                         }
-                        <ModalTooltip Direction="top" Text="Fees to be made available in the Smartflow. Default values will be automatically calculated where possible.">
+                        <ModalTooltip Direction="top" Text="Fees to be made available in the Smartflow. Default values will be automatically calculated where possible." Class="w-2">
                             <span class="info-icon">
                                 <span class=" fa fa-info-circle fa-2x "></span>
                             </span>
@@ -1020,7 +1035,7 @@ else
                                                 @if (fee.FeeObject.VATable == "Y")
                                                 {
                                                     <div class="data-item-right hidden-md-down">
-                                                        <ModalTooltip Direction="top" Text=@("VAT Included") Class="w-3">
+                                                        <ModalTooltip Direction="top" Text=@("VAT Included") Class="w-1">
                                                             <span class="fa fa-coins"></span>
                                                         </ModalTooltip>
                                                     </div>
@@ -1036,24 +1051,29 @@ else
                                             else
                                             {
 
-                                                <div class="btn-ellipses float-left">
-                                                    @if (!(fee.ComparisonIcon is null))
-                                                    {
-                                                        @if (!(fee.ComparisonResult == "Exact match"))
-                                                        {
-                                                            <div class="btn-dashed" @onclick="() => PrepareFeeForComparison(fee)"><span class="fa fa-@fee.ComparisonIcon"></span></div>
-                                                        }
-                                                        else
-                                                        {
-                                                            <span class="fa fa-@fee.ComparisonIcon"></span>
-                                                        }
-                                                    }
-                                                    else
-                                                    {
-                                                        <div class="spinner"></div>
-                                                    }
+                                    <div class="btn-ellipses float-left">
+                                        @if (!(fee.ComparisonIcon is null))
+                                        {
+                                            @if (!(fee.ComparisonResult == "Exact match"))
+                                            {
+                                                <ModalTooltip Direction="right" Text=@(fee.ComparisonResult == "Partial match" ? "Differences found, click to sync" : "Does not exist, click to create") Class="w-2">
+                                                    <div class="btn-dashed" @onclick="() => PrepareFeeForComparison(fee)"><span class="fa fa-@fee.ComparisonIcon"></span></div>
+                                                </ModalTooltip>
 
-                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <ModalTooltip Direction="right" Text="Exact Match" Class="w-1">
+                                                    <span class="fa fa-@fee.ComparisonIcon"></span>
+                                                </ModalTooltip>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <div class="spinner"></div>
+                                        }
+
+                                    </div>
 
 
                                                 <div class="data-item-sub">
@@ -1062,7 +1082,7 @@ else
                                                 @if (fee.FeeObject.VATable == "Y")
                                                 {
                                                     <div class="data-item-right hidden-md-down">
-                                                        <ModalTooltip Direction="top" Text=@("VAT Included") Class="w-3">
+                                                        <ModalTooltip Direction="top" Text=@("VAT Included") Class="w-1">
                                                             <span class="fa fa-coins"></span>
                                                         </ModalTooltip>
                                                     </div>
@@ -1093,7 +1113,7 @@ else
                                             @if (fee.FeeObject.VATable == "Y")
                                             {
                                                 <div class="data-item-right hidden-md-down">
-                                                    <ModalTooltip Direction="top" Text=@("VAT Included") Class="w-3">
+                                                    <ModalTooltip Direction="top" Text=@("VAT Included") Class="w-1">
                                                         <span class="fa fa-coins"></span>
                                                     </ModalTooltip>
                                                 </div>
@@ -1140,7 +1160,7 @@ else
                             }
 
                         }
-                        <ModalTooltip Direction="top" Text="Status options to assist with the flow of the Smartflow and to indicate when the Smartflow is complete.">
+                        <ModalTooltip Direction="top" Text="Status options to assist with the flow of the Smartflow and to indicate when the Smartflow is complete." Class="w-3">
                             <span class="info-icon">
                                 <span class=" fa fa-info-circle fa-2x "></span>
                             </span>
@@ -1189,24 +1209,28 @@ else
                                         else
                                         {
 
-                                            <div class="btn-ellipses float-left">
-                                                @if (!(status.ComparisonIcon is null))
-                                                {
-                                                    @if (!(status.ComparisonResult == "Exact match"))
-                                                    {
-                                                        <div class="btn-dashed" @onclick="() => PrepareForComparison(status)"><span class="fa fa-@status.ComparisonIcon"></span></div>
-                                                    }
-                                                    else
-                                                    {
-                                                        <span class="fa fa-@status.ComparisonIcon"></span>
-                                                    }
-                                                }
-                                                else
-                                                {
-                                                    <div class="spinner"></div>
-                                                }
+                                <div class="btn-ellipses float-left">
+                                    @if (!(status.ComparisonIcon is null))
+                                    {
+                                        @if (!(status.ComparisonResult == "Exact match"))
+                                        {
+                                            <ModalTooltip Direction="right" Text=@(status.ComparisonResult == "Partial match" ? "Differences found, click to sync" : "Does not exist, click to create") Class="w-2">
+                                                <div class="btn-dashed" @onclick="() => PrepareForComparison(status)"><span class="fa fa-@status.ComparisonIcon"></span></div>
+                                            </ModalTooltip>
+                                        }
+                                        else
+                                        {
+                                            <ModalTooltip Direction="right" Text="Exact Match" Class="w-1">
+                                                <span class="fa fa-@status.ComparisonIcon"></span>
+                                            </ModalTooltip>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <div class="spinner"></div>
+                                    }
 
-                                            </div>
+                                </div>
 
 
                                         }
@@ -1233,7 +1257,7 @@ else
                                     @if (status.ChapterObject.SuppressStep == "Y")
                                     {
                                         <div class="data-item-right suppress-step">
-                                            <ModalTooltip Direction="left" Text="This status will end the Smartflow.">
+                                            <ModalTooltip Direction="left" Text="This status will end the Smartflow." Class="w-3">
                                                 <span class="fa fa-flag-checkered"></span>
                                             </ModalTooltip>
                                         </div>
@@ -1291,7 +1315,7 @@ else
                             }
                         }
 
-                        <ModalTooltip Direction="top" Text="Data Views to be made available in the Smartflow.">
+                        <ModalTooltip Direction="top" Text="Data Views to be made available in the Smartflow." Class="w-2">
                             <span class="info-icon">
                                 <span class=" fa fa-info-circle fa-2x "></span>
                             </span>
@@ -1343,24 +1367,28 @@ else
                                     }
                                     else if (sessionState.isAdminUser && compareSystems)
                                     {
-                                        <div class="btn-ellipses float-left">
-                                            @if (!(vmdataView.ComparisonIcon is null))
-                                            {
-                                                @if (!(vmdataView.ComparisonResult == "Exact match"))
-                                                {
-                                                    <div class="btn-dashed" @onclick="() => PrepareDataViewForComparison(vmdataView)"><span class="fa fa-@vmdataView.ComparisonIcon"></span></div>
-                                                }
-                                                else
-                                                {
-                                                    <span class="fa fa-@vmdataView.ComparisonIcon"></span>
-                                                }
-                                            }
-                                            else
-                                            {
-                                                <div class="spinner"></div>
-                                            }
+                                <div class="btn-ellipses float-left">
+                                    @if (!(vmdataView.ComparisonIcon is null))
+                                    {
+                                        @if (!(vmdataView.ComparisonResult == "Exact match"))
+                                        {
+                                            <ModalTooltip Direction="right" Text=@(vmdataView.ComparisonResult == "Partial match" ? "Differences found, click to sync" : "Does not exist, click to create") Class="w-2">
+                                                <div class="btn-dashed" @onclick="() => PrepareDataViewForComparison(vmdataView)"><span class="fa fa-@vmdataView.ComparisonIcon"></span></div>
+                                            </ModalTooltip>
+                                        }
+                                        else
+                                        {
+                                            <ModalTooltip Direction="right" Text="Exact Match" Class="w-1">
+                                                <span class="fa fa-@vmdataView.ComparisonIcon"></span>
+                                            </ModalTooltip>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <div class="spinner"></div>
+                                    }
 
-                                        </div>
+                                </div>
                                         <div class="data-item-sub">
                                             <span class="fa fa-database mr-2"></span> @vmdataView.DataViewDisplayName
                                         </div>
@@ -1438,7 +1466,7 @@ else
                             }
                         }
 
-                        <ModalTooltip Direction="top" Text="Ticker Message to be made visible on the Smartflow screen.">
+                        <ModalTooltip Direction="top" Text="Ticker Message to be made visible on the Smartflow screen."  Class="w-2">
                             <span class="info-icon">
                                 <span class=" fa fa-info-circle fa-2x "></span>
                             </span>
@@ -1501,7 +1529,7 @@ else
                                                 </div>
                                             </div>
                                             <div class="data-item-right">
-                                                <ModalTooltip Direction="top" Text="@vmtickerMessages.msgTooltip">
+                                                <ModalTooltip Direction="top" Text="@vmtickerMessages.msgTooltip"  Class="w-3">
                                                     <span class="@(vmtickerMessages.msgValidation == "Exceeded" ? "" : "invisible")"><span class="fa fa-comment mr-2 font-grey "></span></span>
                                                     <span class="@(vmtickerMessages.msgValidation == "Expired" ? "" : "invisible")"><span class="fa fa-comment mr-2 font-red "></span></span>
                                                     <span class="@(vmtickerMessages.msgValidation == "Future" ? "" : "invisible")"><span class="fa fa-comment mr-2 font-green "></span></span>
