@@ -699,7 +699,7 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
                 var cItems = altChapter.Items;
 
 
-                lstAltSystemChapterItems = cItems.Select(T => new VmUsrOrDefChapterManagement { ChapterObject = T }).ToList();
+                lstAltSystemChapterItems = cItems.Select(T => new VmUsrOrDefChapterManagement { ChapterObject = T, Compared = false }).ToList();
 
                 //Compare header items
                 CompareChapterToAltSytem();
@@ -906,6 +906,7 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
             var altObject = lstAltSystemChapterItems
                                 .Where(A => A.ChapterObject.Type == chapterItem.ChapterObject.Type)
                                 .Where(A => A.ChapterObject.Name == chapterItem.ChapterObject.Name)
+                                .Where(A => !A.Compared)
                                 .FirstOrDefault();
 
             if (altObject is null)
@@ -1835,7 +1836,7 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
                 UserMessage = editObject.ChapterObject.UserMessage,
                 PopupAlert = editObject.ChapterObject.PopupAlert,
                 NextStatus = editObject.ChapterObject.NextStatus,
-                FollowUpDocs = editObject.ChapterObject.FollowUpDocs
+                FollowUpDocs = editObject.ChapterObject.FollowUpDocs is null ? new List<FollowUpDoc>() : editObject.ChapterObject.FollowUpDocs
             };
 
            
@@ -3065,10 +3066,10 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
                                     ,new ChapterP4WStepQuestion {QNo = 9, QText= "HQ - Delete Step" }
                                     },
                         Answers = new List<ChapterP4WStepAnswer>{
-                                     new ChapterP4WStepAnswer {QNo = 1, GoToData= $"2 [SQL: EXEC up_ORSF_CreateMatterTableEntries '[matters.entityref]', -1] [SQL: UPDATE Usr_ORSF_ENT_Control SET Current_SF = '{selectedChapter.Name}', Current_Case_Type_Group = '{selectedChapter.CaseTypeGroup}', Current_Case_Type = '{selectedChapter.CaseType}', Default_Step = '{selectedChapter.StepName}', Date_Schedule_For = DATEADD(d, 7, getdate()), Steps_To_Run = '', Schedule_AsName = (SELECT CASE WHEN dbo.fn_ORSF_IsAllCap (Description) = 1 THEN '{selectedChapter.StepName}' ELSE Description END + '|' + CONVERT(VARCHAR(20),ISNULL(Date_Schedule_For,DATEADD(d, 7, getdate())),103) + '|' + '[matters.feeearnerref]' FROM Cm_CaseItems WHERE ItemID = [currentstep.stepid]), Complete_AsName = ''WHERE EntityRef = '[matters.entityref]'][SQL: UPDATE Usr_ORSF_ENT_Control SET Screen_Opened_Via_Step = 'Y' WHERE EntityRef='[matters.entityref]']" }
+                                     new ChapterP4WStepAnswer {QNo = 1, GoToData= $"2 [SQL: EXEC up_ORSF_CreateMatterTableEntries '[matters.entityref]', -1] [SQL: UPDATE Usr_ORSF_ENT_Control SET Current_SF = '{selectedChapter.Name}', Current_Case_Type_Group = '{selectedChapter.CaseTypeGroup}', Current_Case_Type = '{selectedChapter.CaseType}', Default_Step = '{selectedChapter.StepName}', Date_Schedule_For = DATEADD(d, 7, getdate()), Steps_To_Run = '', Schedule_AsName = (SELECT CASE WHEN dbo.fn_ORSF_IsAllCap (Description) = 1 THEN '{selectedChapter.StepName}' ELSE Description END + '|' + CONVERT(VARCHAR(20),ISNULL(Date_Schedule_For,DATEADD(d, 7, getdate())),103) + '|' + '[CurrentUser.Code]' FROM Cm_CaseItems WHERE ItemID = [currentstep.stepid]), Complete_AsName = ''WHERE EntityRef = '[Entity.Code]'][SQL: UPDATE Usr_ORSF_ENT_Control SET Screen_Opened_Via_Step = 'Y' WHERE EntityRef='[Entity.Code]']" }
                                     ,new ChapterP4WStepAnswer {QNo = 2, GoToData= $"3 [VIEW: '{selectedChapter.SelectedView}' UPDATE=Yes]" }
-                                    ,new ChapterP4WStepAnswer {QNo = 3, GoToData= $"4 [SQL: SELECT dbo.fn_ORSF_GetStepsFromList('[~Usr_ORSF_ENT_Control.Steps_To_Run]')] [SQL: UPDATE Usr_ORSF_ENT_Control SET Screen_Opened_Via_Step = null WHERE EntityRef='[matters.entityref]']" }
-                                    ,new ChapterP4WStepAnswer {QNo = 4, GoToData= $"[SQL: SELECT CASE WHEN '[!Usr_ORSF_ENT_Control.Do_Not_Reschedule]' <> 'Y' THEN 5 ELSE 8 END] [SQL: UPDATE Usr_ORSF_ENT_Control SET Date_Schedule_For = isnull(Date_Schedule_For, Cast(getdate() as Date)) WHERE EntityRef = '[matters.entityref]']" }
+                                    ,new ChapterP4WStepAnswer {QNo = 3, GoToData= $"4 [SQL: SELECT dbo.fn_ORSF_GetStepsFromList('[~Usr_ORSF_ENT_Control.Steps_To_Run]')] [SQL: UPDATE Usr_ORSF_ENT_Control SET Screen_Opened_Via_Step = null WHERE EntityRef='[Entity.Code]']" }
+                                    ,new ChapterP4WStepAnswer {QNo = 4, GoToData= $"[SQL: SELECT CASE WHEN '[!Usr_ORSF_ENT_Control.Do_Not_Reschedule]' <> 'Y' THEN 5 ELSE 8 END] [SQL: UPDATE Usr_ORSF_ENT_Control SET Date_Schedule_For = isnull(Date_Schedule_For, Cast(getdate() as Date)) WHERE EntityRef = '[Entity.Code]']" }
                                     ,new ChapterP4WStepAnswer {QNo = 5, GoToData= $"8 [SQL: SELECT ScheduleCommand FROM fn_ORSF_GetScheduleItems(NULL, '[Usr_ORSF_ENT_Control.Schedule_AsName]' , '{selectedChapter.StepName}') ]" }
                                     ,new ChapterP4WStepAnswer {QNo = 6, GoToData= $"[SQL: UPDATE cm_caseitems set CompletionDate = GETDATE(), description = UPPER('[!Usr_ORSF_ENT_Control.Complete_AsName]') where itemid = [currentstep.stepid]]" }
                                     ,new ChapterP4WStepAnswer {QNo = 7, GoToData= $"8 [SQL: exec up_ORSF_DeleteDueStep '', [currentstep.stepid], '{selectedChapter.StepName}']" }

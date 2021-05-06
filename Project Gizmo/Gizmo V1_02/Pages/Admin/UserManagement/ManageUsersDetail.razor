@@ -30,15 +30,6 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="@TaskObject.FullName">Name (Alias)</label>
-                                <InputText class="form-control" style="width: 350px;" @bind-Value="TaskObject.FullName"></InputText>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="@TaskObject.PhoneNumber">Phone Number</label>
-                                <InputText class="form-control" style="width: 150px;" @bind-Value="TaskObject.PhoneNumber"></InputText>
-                            </div>
-                            <div class="form-group">
 
                                 <label for="@TaskObject.PasswordHash">Password</label>
 
@@ -55,6 +46,17 @@
 
 
                             </div>
+
+                            <div class="form-group">
+                                <label for="@TaskObject.FullName">Name (Alias)</label>
+                                <InputText class="form-control" style="width: 350px;" @bind-Value="TaskObject.FullName"></InputText>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="@TaskObject.PhoneNumber">Phone Number</label>
+                                <InputText class="form-control" style="width: 150px;" @bind-Value="TaskObject.PhoneNumber"></InputText>
+                            </div>
+
                         </div>
                     </div>
                     <div class="col-6 detail-box">
