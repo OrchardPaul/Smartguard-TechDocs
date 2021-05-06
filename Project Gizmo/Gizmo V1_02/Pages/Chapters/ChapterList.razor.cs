@@ -1836,7 +1836,7 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
                 UserMessage = editObject.ChapterObject.UserMessage,
                 PopupAlert = editObject.ChapterObject.PopupAlert,
                 NextStatus = editObject.ChapterObject.NextStatus,
-                FollowUpDocs = editObject.ChapterObject.FollowUpDocs
+                FollowUpDocs = editObject.ChapterObject.FollowUpDocs is null ? new List<FollowUpDoc>() : editObject.ChapterObject.FollowUpDocs
             };
 
            
