@@ -383,6 +383,7 @@ else
                                                             @group.Name
                                                         </option>
                                                     }
+                                                    <option value="Entity Documents">Entity Documents</option>
                                                 </InputSelect>
                                             </div>
                                             <div class="form-group">
@@ -429,6 +430,8 @@ else
                                                            .Where(D => D.Notes.Contains("Smartflow:"))
                                                            .Where(V => V.CaseTypeGroupRef == (string.IsNullOrEmpty(selectedChapter.P4WCaseTypeGroup)
                                                                                                ? 0
+                                                                                               : selectedChapter.P4WCaseTypeGroup == "Entity Documents"
+                                                                                               ? -1
                                                                                                : partnerCaseTypeGroups
                                                                                                    .Where(P => P.Name == selectedChapter.P4WCaseTypeGroup)
                                                                                                    .Select(P => P.Id)

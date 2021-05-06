@@ -49,6 +49,9 @@ app {
 .inner-content {
     overflow-y: auto !important;
     height: calc(100% - 50px);
+    /*background-image: url("../images/Textures/binding-dark.png");*/
+    background-image: url("../images/Textures/brick-wall-dark.png");
+    background-repeat: repeat;
 }
 
 @media (max-width: 1199px) {
@@ -79,7 +82,7 @@ app {
 
 .topbar {
     z-index: 99999;
-    background-color: #FFFFFF !important;
+    background-color: #ddd !important;
     box-shadow: 0 6px 6px 0px rgba(0, 0, 0, 0.4);
 }
 
@@ -122,6 +125,12 @@ app {
         height: calc(100% - 10px);
         /* The image used */
         background: #FFFFFF !important;
+       
+    }
+
+    .inner-content {
+        background-image: none !important;
+        background-repeat: no-repeat;
     }
 
     .page-footer {
@@ -131,14 +140,62 @@ app {
 }
 
 /*--------------------------------------------------*/
-/*  Same as hidden but taking up no space           */
+/*  Thumbnails and Thumbnail Gallery                */
 /*--------------------------------------------------*/
 
+.selected-thumbnail{
+    height: 130px;
+}
+
+.thumbnail-list{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.thumbnail-item {
+    background-color: rgba(255, 255, 255, 0.6);
+    width: 150px;
+    height: 160px;
+    margin: 10px;
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    align-items: center;
+    padding-top: 5px;
+}
+
+.thumbnail-list .active {
+    background-color: rgba(0, 0, 0, 0.25);
+}
+
+.thumbnail-item label {
+    font-size: 7pt;
+    width: 96%;
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis !important;
+    padding-top: 3px;
+    text-align: center;
+}
+
+.img-thumbnail {
+    height: 80px;
+}
+
+.thumbnail-item button{
+    background: none;
+    border: none !important;
+}
+
+
+/*--------------------------------------------------*/
+/*  Same as hidden but taking up no space           */
+/*--------------------------------------------------*/
 /* Breakpoint XS */
 @media (max-width: 575px) {
-    .invisible-xs-down, .invisible-sm-down, .invisible-md-down, .invisible-lg-down, .invisible-xl-down,
-    .invisible-xs-up,
-    .invisible-unless-sm, .invisible-unless-md, .invisible-unless-lg, .invisible-unless-xl {
+    .invisible-xs-down, .invisible-sm-down, .invisible-md-down, .invisible-lg-down, .invisible-xl-down, .invisible-xs-up, .invisible-unless-sm, .invisible-unless-md, .invisible-unless-lg, .invisible-unless-xl {
         display: none !important;
         position: absolute;
         left: -99999px;
@@ -249,7 +306,7 @@ app {
 .custom-file-input[disabled] ~ .custom-file-label,
 .custom-file-input:disabled ~ .custom-file-label, 
 .custom-file-label {
-    background-color: #eee !important;
+    background-color: #fff !important;
 }
 
 .custom-file-input:lang(en) ~ .custom-file-label::after {
@@ -534,13 +591,13 @@ app {
     padding-left: 10px !important;
     padding-right: 10px !important;
     padding-top: 0px !important;
-    width: 100%;
     min-width: 0;
     float: left;
+    max-width: 100%;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis !important;
-    align-items: center;
+    margin-right: auto;
 }
 
 .data-item-sm {
@@ -648,12 +705,12 @@ app {
 
 .data-item-right {
     display: block;
-    margin-left: auto;
+    margin-left: 0px;
     margin-right: 0px;
     margin-top: 0;
     margin-bottom: 0;
     padding: 0 5px 0 5px;
-    float: right;
+    flex-shrink: 0;
 }
 
 .data-item-wrap {
@@ -906,7 +963,7 @@ app {
     min-height: 400px;
 }
 
-.grid-chapter-docs, .grid-chapter-fees, .grid-chapter-chapter {
+.grid-chapter-docs, .grid-chapter-fees, .grid-chapter-chapter, .grid-chapter-messages, .grid-chapter-backups, .grid-chapter-background {
     width: 100%;
     min-height: 400px;
 }
@@ -944,12 +1001,20 @@ app {
     width: 20%;
 }
 
+.grid-chapter-messages .row .data-item:nth-of-type(1) {
+    width: 70%;
+}
+
+.grid-chapter-messages .row .data-item:nth-of-type(2), .grid-chapter-messages .row .data-item:nth-of-type(3) {
+    width: 15%;
+}
+
 @media (max-width: 991px) {
     .grid-chapter {
         width: 100%;
     }
 
-    .grid-chapter-docs .row .data-item:nth-of-type(1) {
+    .grid-chapter-docs .row .data-item:nth-of-type(1), .grid-chapter-messages .row .data-item:nth-of-type(1) {
         width: 100%;
     }
 
@@ -962,12 +1027,17 @@ app {
     }
 }
 
-.grid-chapter-backups .chapter-scroll-list {
+.grid-chapter-background .chapter-scroll-list {
     height: 400px;
     overflow-y: scroll;
     width: 100%;
 }
 
+.grid-chapter-backups .chapter-scroll-list {
+    width: 800px; 
+    height: 400px;
+    overflow-y: scroll;
+}
 
 .grid-chapter-backups .row .data-item:nth-of-type(1) {
     width: 70%;
@@ -1008,9 +1078,7 @@ app {
 
 /*   SEQUENCE CHANGE OPTIONS             */
 
-
-
-.grid-row-lg .seq-change {
+.seq-change {
     padding-bottom: 3px;
     padding-left: 8px;
     padding-right: 8px;
@@ -1018,17 +1086,18 @@ app {
     text-align: center;
 }
 
+.grid-row-lg .seq-change {
+    width: 40px;
+}
+
 .grid-row-md .seq-change {
-    padding-bottom: 3px;
-    padding-left: 8px;
-    width: 20px;
-    text-align: center;
+    width: 30px;
 }
 
 
-.grid-row-md .seq-change .seq-no {
+.seq-change .seq-no {
     height: 13px;
-    font-size: 0.85em;
+    font-size: 0.85em !important;
 }
 
 .grid-row-lg .seq-change div:first-of-type {
@@ -1073,7 +1142,7 @@ app {
     animation-duration: 2s;
     animation-iteration-count: 1;
     animation-direction: normal;
-    animation-fill-mode: forwards; /* or: backwards, both, none */
+    animation-fill-mode: forwards;*/ /* or: backwards, both, none */
 }
 
 @keyframes rowChanged {
@@ -1183,14 +1252,17 @@ app {
 .advert-list .card {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.7); /* this adds the "card" effect */
     margin: 30px;
-    border-radius: 5px !important;
+    border-radius: 0px !important;
 }
 
 .advert-list .card-header {
-    border-radius: 5px 5px 0 0 !important;
+    border-radius: 0 !important;
     height: 35px;
-    background-color: #000 !important;
-    color: #fff;
+}
+
+.advert-list a:hover .card-header {
+    transition-duration: 0.25s;
+    transition-property: background-color, color;
 }
 
 .advert-list .card-body {
@@ -1216,13 +1288,13 @@ app {
 .advert-list a:hover .card-body-reveal {
     height: auto;
     visibility: visible;
-    transition-duration: 0.5s;
+    transition-duration: 0.25s;
     transition-property: height;
 }
 
 .advert-list .card .card-footer {
     font-size: 0.9rem !important;
-    border-radius: 0 0 5px 5px  !important;
+    border-radius: 0  !important;
     height: auto !important;
 }
 
@@ -1318,9 +1390,87 @@ app {
     border-top: 0.8em solid;
 }
 
+/*---------------------------------------*/
+/*   TOGGLE                              */
+/*---------------------------------------*/
 
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 30px;
+    height: 17px;
+}
 
+    .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
 
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: 13px;
+        width: 13px;
+        left: 2px;
+        bottom: 2px;
+        background-color: white;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+
+input:checked + .slider {
+    background-color: #2196F3;
+}
+
+input:focus + .slider {
+    box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+    -webkit-transform: translateX(13px);
+    -ms-transform: translateX(13px);
+    transform: translateX(13px);
+}
+
+/* Rounded sliders */
+.slider.round {
+    border-radius: 17px;
+}
+
+    .slider.round:before {
+        border-radius: 50%;
+    }
+
+#selected-bg-items{
+    display: flex;
+    flex-flow: row;
+}
+
+#selected-bg-items #selected-image {
+    width: 300px;
+}
+
+#selected-bg-items .form-group-inline {
+    display: flex;
+    flex-direction: row;
+}
+
+#selected-bg-items .form-group-inline .switch{
+    margin-top: 4px;
+}
 /******************/
 /*   TESTING ONLY */
 #agendaWrapper, #statusWrapper {
