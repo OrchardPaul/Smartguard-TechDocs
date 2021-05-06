@@ -16,13 +16,14 @@
                     <label for="DocType">P4W Case Type Group</label>
                     <InputSelectInteger class="form-control form-control-lg"
                                         @bind-Value="selectedCaseTypeGroup">
-                        <option value="-1">Select</option>
+                        <option value="-2">Select</option>
                         @foreach (var group in CaseTypeGroups)
                                 {
                             <option value="@group.Id">
                                 @group.Name
                             </option>
                                 }
+                        <option value="-1">Entity Documents</option>
                     </InputSelectInteger>
                 </div>
 
@@ -31,7 +32,7 @@
                     <div class="form-label-check" style="margin-right: 13px">
                         <label>Custom Item</label><input type="checkbox" @bind-value="@useCustomItem" />
                     </div>
-                    @if (selectedCaseTypeGroup == -1 & CopyObject.Name is null)
+                    @if (selectedCaseTypeGroup == -2 & CopyObject.Name is null)
                     {
                         <select class="form-control form-control-xl" disabled />
                     }

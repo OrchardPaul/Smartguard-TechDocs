@@ -94,7 +94,7 @@ namespace Gizmo_V1_02.Pages.Chapters
         [Parameter]
         public List<VmUsrOrDefChapterManagement> ListOfStatus { get; set; }
 
-        private int selectedCaseTypeGroup { get; set; } = -1;
+        private int selectedCaseTypeGroup { get; set; } = -2;
 
         List<string> Actions = new List<string>() { "TAKE", "INSERT" };
 
@@ -110,6 +110,11 @@ namespace Gizmo_V1_02.Pages.Chapters
             if (!(string.IsNullOrEmpty(SelectedChapter.P4WCaseTypeGroup)) && (SelectedChapter.P4WCaseTypeGroup != "Select"))
             {
                 selectedCaseTypeGroup = CaseTypeGroups.Where(CT => CT.Name == SelectedChapter.P4WCaseTypeGroup).Select(CT => CT.Id).FirstOrDefault();
+
+                if (SelectedChapter.P4WCaseTypeGroup == "Entity Documents")
+                {
+                    selectedCaseTypeGroup = -1;
+                }
             }
         }
 
