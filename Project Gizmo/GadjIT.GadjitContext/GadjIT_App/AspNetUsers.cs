@@ -30,6 +30,7 @@ namespace GadjIT.GadjitContext.GadjIT_App
         public string NormalizedEmail { get; set; }
         public bool EmailConfirmed { get; set; }
         [Required]
+        [RegularExpression(@"^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$", ErrorMessage = "Password must have at least eight characters, at least one uppercase letter, one lowercase letter, one number and one special character")]
         public string PasswordHash { get; set; }
         public string SecurityStamp { get; set; }
         public string ConcurrencyStamp { get; set; }

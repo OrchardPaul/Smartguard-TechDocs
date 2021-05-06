@@ -15,6 +15,9 @@ namespace GadjIT.ClientContext.P4W.Custom
 
         public string ComparisonResult { get; set; }
         public string ComparisonIcon { get; set; }
+
+        public bool Compared { get; set; }
+
         public List<string> ComparisonList { get; set; } = new List<string>();
 
         public string DocDisplayName
@@ -52,6 +55,7 @@ namespace GadjIT.ClientContext.P4W.Custom
         public bool IsChapterItemMatch(VmUsrOrDefChapterManagement vmCompItem)
         {
             AltObject = vmCompItem.ChapterObject;
+            vmCompItem.Compared = true;
 
             ComparisonList = new List<string>();
             bool isSame = true;

@@ -699,7 +699,7 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
                 var cItems = altChapter.Items;
 
 
-                lstAltSystemChapterItems = cItems.Select(T => new VmUsrOrDefChapterManagement { ChapterObject = T }).ToList();
+                lstAltSystemChapterItems = cItems.Select(T => new VmUsrOrDefChapterManagement { ChapterObject = T, Compared = false }).ToList();
 
                 //Compare header items
                 CompareChapterToAltSytem();
@@ -906,6 +906,7 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
             var altObject = lstAltSystemChapterItems
                                 .Where(A => A.ChapterObject.Type == chapterItem.ChapterObject.Type)
                                 .Where(A => A.ChapterObject.Name == chapterItem.ChapterObject.Name)
+                                .Where(A => !A.Compared)
                                 .FirstOrDefault();
 
             if (altObject is null)
