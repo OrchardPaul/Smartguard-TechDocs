@@ -11,23 +11,24 @@
         }
         else
         {
-            <div class="form-group">
-                <label for="DocType">Case Type Group</label>
-                <InputSelectInteger class="form-control form-control-lg"
-                                    @bind-Value="selectedCaseTypeGroup">
-                    <option value="-1">Select</option>
-                    @foreach (var group in CaseTypeGroups)
-                        {
-                        <option value="@group.Id">
-                            @group.Name
-                        </option>
-                        }
-                </InputSelectInteger>
-            </div>
+    <div class="form-group">
+        <label for="DocType">Case Type Group</label>
+        <InputSelectInteger class="form-control form-control-lg"
+                            @bind-Value="selectedCaseTypeGroup">
+            <option value="-2">Select</option>
+            <option value="-1">Entity Documents</option>
+            @foreach (var group in CaseTypeGroups)
+                {
+                <option value="@group.Id">
+                    @group.Name
+                </option>
+                }
+        </InputSelectInteger>
+    </div>
 
             <div class="form-group">
                 <label for="DocName">Document / Step</label>
-                @if (selectedCaseTypeGroup == -1 & Attachment.DocName is null)
+                @if (selectedCaseTypeGroup == -2 & Attachment.DocName is null)
                 {
                     <select class="form-control" disabled />
                 }
