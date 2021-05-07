@@ -631,7 +631,7 @@ else
                                                             <div class="menu-toggle">
                                                                 <span class="fa fa-chevron-right"></span>
                                                                 <ul style="width: 300px">
-                                                                    @if (!(doc.ChapterObject.FollowUpDocs is null))
+                                                                    @if (!(doc.ChapterObject.FollowUpDocs is null) && doc.ChapterObject.FollowUpDocs.Count > 0)
                                                                     {
                                                                         foreach (var attach in doc.ChapterObject.FollowUpDocs)
                                                                         {
