@@ -397,7 +397,7 @@ else
                                                 <label for="SelectedView">Smartflow View</label>
 
                                                 @if (ListP4WViews is null || ListP4WViews.Where(V => !(V.InternalNote is null) && (V.InternalNote.Contains("Smartflow"))).ToList().Count == 0)
-                                                { 
+                                                {
                                                     <div class="form-control form-control-lg">
                                                         <label class="font-red">No Smartflow views available</label>
                                                     </div>
@@ -410,9 +410,9 @@ else
                                                                  ValueChanged="@((string value) => SaveSelectedView(value))">
                                                         <option value="">Select</option>
                                                         @foreach (var view in ListP4WViews
-                                                                      .Where(V => !(V.InternalNote is null) && (V.InternalNote.Contains("Smartflow")))
-                                                                      .OrderBy(V => V.Name)
-                                                                      .ToList())
+                                                                    .Where(V => !(V.InternalNote is null) && (V.InternalNote.Contains("Smartflow")))
+                                                                    .OrderBy(V => V.Name)
+                                                                    .ToList())
                                                         {
                                                             <option value="@view.Name">
                                                                 @view.Name
@@ -433,18 +433,18 @@ else
                                                         <option value="">Select</option>
                                                         <option value="Create New">--- Create New ---</option>
                                                         @foreach (var step in dropDownChapterList
-                                                           .Where(D => D.DocumentType == 6)
-                                                           .Where(D => D.Notes.Contains("Smartflow:"))
-                                                           .Where(V => V.CaseTypeGroupRef == (string.IsNullOrEmpty(selectedChapter.P4WCaseTypeGroup)
-                                                                                               ? 0
-                                                                                               : selectedChapter.P4WCaseTypeGroup == "Entity Documents"
-                                                                                               ? -1
-                                                                                               : partnerCaseTypeGroups
-                                                                                                   .Where(P => P.Name == selectedChapter.P4WCaseTypeGroup)
-                                                                                                   .Select(P => P.Id)
-                                                                                                   .FirstOrDefault()))
-                                                           .OrderBy(D => D.Name)
-                                                           .ToList())
+                                                         .Where(D => D.DocumentType == 6)
+                                                         .Where(D => D.Notes.Contains("Smartflow:"))
+                                                         .Where(V => V.CaseTypeGroupRef == (string.IsNullOrEmpty(selectedChapter.P4WCaseTypeGroup)
+                                                                                             ? 0
+                                                                                             : selectedChapter.P4WCaseTypeGroup == "Entity Documents"
+                                                                                             ? -1
+                                                                                             : partnerCaseTypeGroups
+                                                                                                 .Where(P => P.Name == selectedChapter.P4WCaseTypeGroup)
+                                                                                                 .Select(P => P.Id)
+                                                                                                 .FirstOrDefault()))
+                                                         .OrderBy(D => D.Name)
+                                                         .ToList())
                                                         {
                                                             <option value="@step.Name">
                                                                 @step.Name
@@ -523,11 +523,11 @@ else
                                     </div>
 
                                     <!--
-                                    <div class="form-group">
-                                        <label>Developer Notes</label>
-                                        <InputTextArea @bind-Value="selectedChapter.DeveloperNotes" class="form-control form-control-lg" />
-                                    </div>
-                                    -->
+            <div class="form-group">
+                <label>Developer Notes</label>
+                <InputTextArea @bind-Value="selectedChapter.DeveloperNotes" class="form-control form-control-lg" />
+            </div>
+            -->
 
 
                                 </EditForm>
@@ -542,10 +542,31 @@ else
                                     <label class="form-control-value">@selectedChapter.Name</label>
                                 </div>
                                 <div class="form-group">
+                                    <label>Smartflow Step Name: </label>
+                                    <label class="form-control-value">@selectedChapter.StepName</label>
+                                </div>
+                                <div class="form-group">
                                     <label>Background Colour:</label>
-                                    <label class="form-control-value" style="background-color: @getHTMLColourFromAndroid(selectedChapter.BackgroundColour)">
+                                    <label class="thumbnail-item rounded" style="height: 35px; background-color: @getHTMLColourFromAndroid(selectedChapter.BackgroundColour)">
                                         @ListChapterColours.Where(C => C.ColourCode == @selectedChapter.BackgroundColour).Select(C => C.ColourName).SingleOrDefault()
                                     </label>
+                                </div>
+                                <div class="form-group" style="height: 100px; margin: 0; padding: 0;" >
+
+                                    @if (!string.IsNullOrEmpty(selectedChapter.BackgroundImageName))
+                                    {
+
+                                        <label class="d-block">Selected Background Image</label>
+                                        <img src="@selectedChapter.BackgroundImage.Replace("/wwwroot","")" alt="" class="img-thumbnail ml-2" />
+
+
+                                    }
+                                    else
+                                    {
+                                        <label class="d-block">No background image selected</label>
+                                        <img src="/images/BackgroundImages/NoImage.jpg" alt="" class="img-thumbnail ml-2" />
+
+                                    }
                                 </div>
 
                             }
