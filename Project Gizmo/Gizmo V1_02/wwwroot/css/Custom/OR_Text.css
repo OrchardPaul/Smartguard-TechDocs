@@ -167,17 +167,17 @@ ul.ul-simple {
     bottom: calc(100% + 10px);
     left: 50%;
     min-width: 140px;
+    min-height: 40px;
     margin-left: -70px;
     background-color: #000;
     color: #fff;
     text-align: center;
-    padding: 13px;
+    padding: 8px;
     border-radius: 5px;
     font-size: 0.75rem;
     z-index: 1;
     box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.7);
     transition: opacity 0.5s linear, visibility 0.5s linear;
-
 }
 
 .tooltip-wrapper span:first-child::after {
@@ -194,9 +194,7 @@ ul.ul-simple {
 .tooltip-left span:first-child {
     left: 0;
     bottom: 0;
-    width: 200px;
-    margin-left: -210px;
-    margin-bottom: -20px;
+    margin-bottom: -10px;
 }
 
 .tooltip-left span:first-child::after {
@@ -204,6 +202,20 @@ ul.ul-simple {
     left: 100%;
     border-color: transparent transparent transparent #000;
 }
+
+.tooltip-right span:first-child {
+    bottom: 0;
+    left: 15px;
+    margin-right: 20px;
+    margin-bottom: -10px;
+}
+
+.tooltip-right span:first-child::after {
+    top: calc(50% - 8px);
+    left: -20px;
+    border-color: transparent #000 transparent transparent;
+}
+
 
 .tooltip-wrapper:hover span:first-child {
     visibility: visible;
@@ -226,15 +238,32 @@ ul.ul-simple {
     margin-left: -150px !important;
 }
 
+
 .tooltip-left span:first-child.tooltip-w-1 {
-    min-width: 140px;
-    margin-left: -210px !important;
+    width: 140px !important;
+    margin-left: -150px !important;
 }
 .tooltip-left span:first-child.tooltip-w-2 {
-    min-width: 220px;
+    width: 220px !important;
     margin-left: -230px !important;
-}
+ }
 .tooltip-left span:first-child.tooltip-w-3 {
-    min-width: 300px;
+    width: 300px !important;
     margin-left: -310px !important;
+}
+
+
+.tooltip-right span:first-child.tooltip-w-1 {
+    width: 140px !important;
+    margin-left: 20px !important;
+}
+
+.tooltip-right span:first-child.tooltip-w-2 {
+    width: 220px !important;
+    margin-left: 20px !important;
+}
+
+.tooltip-right span:first-child.tooltip-w-3 {
+    width: 300px !important;
+    margin-left: 20px !important;
 }
