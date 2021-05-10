@@ -1840,7 +1840,8 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
             };
 
            
-            var attachment = attachObject is null ? new FollowUpDoc() : attachObject;
+            var attachment = attachObject is null ? new FollowUpDoc { Action = "INSERT"} : attachObject;
+
 
             var parameters = new ModalParameters();
             parameters.Add("TaskObject", editObject.ChapterObject);
