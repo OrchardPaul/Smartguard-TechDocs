@@ -721,7 +721,7 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
 
                 var fItems = altChapter.Fees is null ? new List<Fee>() : altChapter.Fees;
 
-                lstAltSystemFeeItems = fItems.Select(T => new VmFee { FeeObject = T }).ToList();
+                lstAltSystemFeeItems = fItems.Select(T => new VmFee { FeeObject = T, Compared = false }).ToList();
 
                 foreach (var item in lstFees)
                 {
@@ -730,7 +730,7 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
 
                 var dItems = altChapter.DataViews is null ? new List<DataViews>() : altChapter.DataViews;
 
-                lstAltSystemDataViews = dItems.Select(T => new VmDataViews { DataView = T }).ToList();
+                lstAltSystemDataViews = dItems.Select(T => new VmDataViews { DataView = T, Compared = false }).ToList();
 
                 foreach (var item in ListVmDataViews)
                 {
@@ -739,7 +739,7 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
 
                 var tItems = altChapter.TickerMessages is null ? new List<TickerMessages>() : altChapter.TickerMessages;
 
-                lstAltSystemTickerMessages = tItems.Select(T => new VmTickerMessages { Message = T }).ToList();
+                lstAltSystemTickerMessages = tItems.Select(T => new VmTickerMessages { Message = T, Compared = false }).ToList();
 
                 foreach (var item in ListVmTickerMessages)
                 {
@@ -827,25 +827,79 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
                             {
                                 lstAltSystemChapterItems = altChapter.Items.Select(T => new VmUsrOrDefChapterManagement { ChapterObject = T }).ToList();
 
-                                if (!(chapterItems.Items is null))
+                                var vmChapterItems = chapterItems.Items is null 
+                                                    ? new List<VmUsrOrDefChapterManagement>() 
+                                                    : chapterItems.Items.Select(C => new VmUsrOrDefChapterManagement { ChapterObject = C }).ToList();
+
+                                foreach (var item in vmChapterItems)
                                 {
-                                    var vmChapterItems = chapterItems.Items.Select(C => new VmUsrOrDefChapterManagement { ChapterObject = C }).ToList();
+                                    CompareChapterItemsToAltSytem(item);
+                                }
 
-                                    foreach (var item in vmChapterItems)
-                                    {
-                                        CompareChapterItemsToAltSytem(item);
-                                    }
 
-                                    if (vmChapterItems.Where(C => C.ComparisonResult == "No match" | C.ComparisonResult == "Partial match").Count() > 0 | vmChapterItems.Count() != lstAltSystemChapterItems.Count())
-                                    {
-                                        chapter.ComparisonResult = "Partial match";
-                                        chapter.ComparisonIcon = "exclamation";
-                                    }
-                                    else
-                                    {
-                                        chapter.ComparisonResult = "Exact match";
-                                        chapter.ComparisonIcon = "check";
-                                    }
+                                var fItems = altChapter.Fees is null ? new List<Fee>() : altChapter.Fees;
+
+                                lstAltSystemFeeItems = fItems.Select(T => new VmFee { FeeObject = T, Compared = false }).ToList();
+
+                                lstFees = chapterItems.Fees is null
+                                                    ? new List<VmFee>()
+                                                    : chapterItems.Fees.Select(C => new VmFee { FeeObject = C }).ToList();
+
+                                foreach (var item in lstFees)
+                                {
+                                    CompareFeeItemsToAltSytem(item);
+                                }
+
+                                var dItems = altChapter.DataViews is null ? new List<DataViews>() : altChapter.DataViews;
+
+                                lstAltSystemDataViews = dItems.Select(T => new VmDataViews { DataView = T, Compared = false }).ToList();
+
+                                ListVmDataViews = chapterItems.DataViews is null
+                                                    ? new List<VmDataViews>()
+                                                    : chapterItems.DataViews.Select(C => new VmDataViews { DataView = C }).ToList();
+
+                                foreach (var item in ListVmDataViews)
+                                {
+                                    CompareDataViewsToAltSytem(item);
+                                }
+
+                                var tItems = altChapter.TickerMessages is null ? new List<TickerMessages>() : altChapter.TickerMessages;
+
+                                lstAltSystemTickerMessages = tItems.Select(T => new VmTickerMessages { Message = T, Compared = false }).ToList();
+
+                                ListVmTickerMessages = chapterItems.TickerMessages is null
+                                                    ? new List<VmTickerMessages>()
+                                                    : chapterItems.TickerMessages.Select(C => new VmTickerMessages { Message = C }).ToList();
+
+                                foreach (var item in ListVmTickerMessages)
+                                {
+                                    CompareTickerMessagesToAltSytem(item);
+                                }
+
+                                if (vmChapterItems.Where(C => C.ComparisonResult == "No match" | C.ComparisonResult == "Partial match").Count() > 0 | vmChapterItems.Count() != lstAltSystemChapterItems.Count())
+                                {
+                                    chapter.ComparisonResult = "Partial match";
+                                    chapter.ComparisonIcon = "exclamation";
+                                }
+                                else if (lstFees.Where(C => C.ComparisonResult == "No match" | C.ComparisonResult == "Partial match").Count() > 0 | lstFees.Count() != lstAltSystemFeeItems.Count())
+                                {
+                                    chapter.ComparisonResult = "Partial match";
+                                    chapter.ComparisonIcon = "exclamation";
+                                }
+                                else if (ListVmDataViews.Where(C => C.ComparisonResult == "No match" | C.ComparisonResult == "Partial match").Count() > 0 | ListVmDataViews.Count() != lstAltSystemDataViews.Count())
+                                {
+                                    chapter.ComparisonResult = "Partial match";
+                                    chapter.ComparisonIcon = "exclamation";
+                                }
+                                else if (ListVmTickerMessages.Where(C => C.ComparisonResult == "No match" | C.ComparisonResult == "Partial match").Count() > 0 | ListVmTickerMessages.Count() != lstAltSystemTickerMessages.Count())
+                                {
+                                    chapter.ComparisonResult = "Partial match";
+                                    chapter.ComparisonIcon = "exclamation";
+                                }
+                                else
+                                {
+                                    chapter.ComparisonResult = "Exact match";
+                                    chapter.ComparisonIcon = "check";
                                 }
 
                             }
@@ -938,6 +992,7 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
         {
             var altObject = lstAltSystemDataViews
                                 .Where(A => A.DataView.ViewName == dataView.DataView.ViewName)
+                                .Where(A => !A.Compared)
                                 .SingleOrDefault();
 
             if (altObject is null)
@@ -947,7 +1002,7 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
             }
             else
             {
-                if (dataView.IsDataViewMatch(altObject.DataView))
+                if (dataView.IsDataViewMatch(altObject))
                 {
                     dataView.ComparisonResult = "Exact match";
                     dataView.ComparisonIcon = "check";
@@ -967,6 +1022,7 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
         {
             var altObject = lstAltSystemTickerMessages
                                 .Where(A => A.Message.Message == tickerMessage.Message.Message)
+                                .Where(A => !A.Compared)
                                 .FirstOrDefault();
 
             if (altObject is null)
@@ -997,6 +1053,7 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
         {
             var altObject = lstAltSystemFeeItems
                                 .Where(A => A.FeeObject.FeeName == chapterItem.FeeObject.FeeName)
+                                .Where(A => !A.Compared)
                                 .SingleOrDefault();
 
             if (altObject is null)

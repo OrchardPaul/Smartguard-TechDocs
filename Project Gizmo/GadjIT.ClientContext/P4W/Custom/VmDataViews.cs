@@ -12,6 +12,8 @@ namespace GadjIT.ClientContext.P4W.Custom
 
         public string ComparisonResult { get; set; }
         public string ComparisonIcon { get; set; }
+
+        public bool Compared { get; set; }
         public List<string> ComparisonList { get; set; } = new List<string>();
 
         public string DataViewDisplayName
@@ -29,9 +31,10 @@ namespace GadjIT.ClientContext.P4W.Custom
             }
         }
 
-        public bool IsDataViewMatch(DataViews dataItem)
+        public bool IsDataViewMatch(VmDataViews dataItem)
         {
-            AltDataView = dataItem;
+            AltDataView = dataItem.DataView;
+            dataItem.Compared = true;
 
             ComparisonList = new List<string>();
             bool isSame = true;
