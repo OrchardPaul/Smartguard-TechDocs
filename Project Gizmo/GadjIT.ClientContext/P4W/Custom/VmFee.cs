@@ -10,11 +10,14 @@ namespace GadjIT.ClientContext.P4W.Custom
         public Fee AltObject { get; set; }
         public string ComparisonResult { get; set; }
         public string ComparisonIcon { get; set; }
+
+        public bool Compared { get; set; }
         public List<string> ComparisonList { get; set; } = new List<string>();
 
         public bool IsChapterItemMatch(VmFee vmCompItem)
         {
             AltObject = vmCompItem.FeeObject;
+            vmCompItem.Compared = true;
 
             ComparisonList = new List<string>();
             bool isSame = true;

@@ -14,6 +14,8 @@ namespace GadjIT.ClientContext.P4W.Custom
 
         public string msgValidation { get; set; }
 
+        public bool Compared { get; set; }
+
         public string msgTooltip { get; set; }
         public List<string> ComparisonList { get; set; } = new List<string>();
 
@@ -21,6 +23,7 @@ namespace GadjIT.ClientContext.P4W.Custom
         public bool IsTickerMessageMatch(VmTickerMessages vmCompItem)
         {
             AltMessage = vmCompItem.Message;
+            vmCompItem.Compared = true;
 
             ComparisonList = new List<string>();
             bool isSame = true;

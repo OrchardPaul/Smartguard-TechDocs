@@ -121,6 +121,12 @@ namespace GadjIT.ClientContext.P4W.Custom
                 ComparisonList.Add("NextStatus");
             }
 
+            if (ChapterObject.Action != compItem.Action)
+            {
+                isSame = false;
+                ComparisonList.Add("Action");
+            }
+
             return isSame;
         }
     }
