@@ -59,6 +59,7 @@ else
                 <!-- SHOW ALL GROUPS -->
                 @foreach (var caseTypeGroup in lstChapters
                                                   .Where(C => !(C.SmartflowObject.CaseTypeGroup is null))
+                                                  .OrderBy(C => C.SmartflowObject.CaseTypeGroup)
                                                   .Select(C => C.SmartflowObject.CaseTypeGroup)
                                                   .Distinct()
                                                   .ToList())
@@ -100,6 +101,7 @@ else
                         @foreach (var caseType in lstChapters
                                                        .Where(C => !(C.SmartflowObject.CaseType is null))
                                                        .Where(C => C.SmartflowObject.CaseTypeGroup == selectedChapter.CaseTypeGroup)
+                                                       .OrderBy(C => C.SmartflowObject.CaseType)
                                                        .Select(C => C.SmartflowObject.CaseType)
                                                        .Distinct()
                                                        .ToList())
