@@ -2285,6 +2285,43 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
             Modal.Show<ChapterHeaderComparison>("Synchronise Smartflow Item", parameters, options);
         }
 
+
+
+        protected void PrepareDeleteAltObject(VmUsrOrDefChapterManagement selectedItem)
+        {
+            editObject = selectedItem;
+
+            Action SelectedDeleteAction = HandleAltDetailDelete;
+            var parameters = new ModalParameters();
+            parameters.Add("ItemName", editObject.ChapterObject.Name);
+            parameters.Add("ModalHeight", "300px");
+            parameters.Add("ModalWidth", "500px");
+            parameters.Add("DeleteAction", SelectedDeleteAction);
+            parameters.Add("InfoText", $"Are you sure you wish to delete the '{editObject.ChapterObject.Name}' {editObject.ChapterObject.Type}?");
+
+            var options = new ModalOptions()
+            {
+                Class = "blazored-custom-modal"
+            };
+
+            Modal.Show<ModalDelete>($"Delete {editObject.ChapterObject.Type}", parameters, options);
+        }
+
+        private async void HandleAltDetailDelete()
+        {
+            await sessionState.SwitchSelectedSystem();
+            altChapter.Items.Remove(editObject.ChapterObject);
+            AltChapterObject.SmartflowData = JsonConvert.SerializeObject(altChapter);
+            await chapterManagementService.Update(AltChapterObject);
+
+            await sessionState.ResetSelectedSystem();
+
+            await CompareSelectedChapterToAltSystem();
+        }
+
+
+
+
         private void PrepareForComparison(VmUsrOrDefChapterManagement selectedItem)
         {
             editObject = selectedItem;

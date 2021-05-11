@@ -653,7 +653,7 @@ else
                                                             <span class="fa fa-binoculars mr-2"></span>
                                                             <span>View</span>
                                                         </li>
-                                                        <li class="col-main" >
+                                                        <li class="col-main">
                                                             <span class="fa fa-paperclip mr-2"></span>
                                                             <span>Attachments</span>
                                                             <div class="menu-toggle">
@@ -683,28 +683,28 @@ else
                                         }
                                         else if (sessionState.isAdminUser && compareSystems)
                                         {
-                                    <div class="btn-ellipses float-left">
-                                        @if (!(doc.ComparisonIcon is null))
-                                        {
-                                            @if (!(doc.ComparisonResult == "Exact match"))
-                                            {
-                                                <ModalTooltip Direction="right" Text=@(doc.ComparisonResult == "Partial match" ? "Differences found, click to sync" : "Does not exist, click to create") Class="w-2">
-                                                    <div class="btn-dashed" @onclick="() => PrepareForComparison(doc)"><span class="fa fa-@doc.ComparisonIcon"></span></div>
-                                                </ModalTooltip>
-                                            }
-                                            else
-                                            {
-                                                <ModalTooltip Direction="right" Text="Exact Match" Class="w-1">
-                                                    <span class="fa fa-@doc.ComparisonIcon"></span>
-                                                </ModalTooltip>
-                                            }
-                                        }
-                                        else
-                                        {
-                                            <div class="spinner"></div>
-                                        }
+                                            <div class="btn-ellipses float-left">
+                                                @if (!(doc.ComparisonIcon is null))
+                                                {
+                                                    @if (!(doc.ComparisonResult == "Exact match"))
+                                                    {
+                                                        <ModalTooltip Direction="right" Text=@(doc.ComparisonResult == "Partial match" ? "Differences found, click to sync" : "Does not exist, click to create") Class="w-2">
+                                                            <div class="btn-dashed" @onclick="() => PrepareForComparison(doc)"><span class="fa fa-@doc.ComparisonIcon"></span></div>
+                                                        </ModalTooltip>
+                                                    }
+                                                    else
+                                                    {
+                                                        <ModalTooltip Direction="right" Text="Exact Match" Class="w-1">
+                                                            <span class="fa fa-@doc.ComparisonIcon"></span>
+                                                        </ModalTooltip>
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <div class="spinner"></div>
+                                                }
 
-                                    </div>
+                                            </div>
                                         }
                                         else
                                         {
@@ -836,6 +836,132 @@ else
                                 </div>
 
                             }
+
+                            @*@if (compareSystems && !(lstAltSystemChapterItems is null))
+                            {
+                                @foreach (var doc in lstAltSystemChapterItems.Where(D => D.ChapterObject.Type == "Doc").Where(D => !D.Compared).ToList())
+                                {
+
+                                    <div class="row grid-row grid-row-lg @(rowChanged == doc.ChapterObject.SeqNo ? "row-changed" : "" )">
+                                        <div class="data-item ">
+
+                                            <div class="btn-ellipses float-left">
+
+                                                <ModalTooltip Direction="right" Text=@("Exists on alternate system, Do you wish to delete?") Class="w-2">
+                                                    <div class="btn-dashed" @onclick="() => PrepareDeleteAltObject(doc)"><span class="fa fa-times"></span></div>
+                                                </ModalTooltip>
+
+
+                                            </div>
+
+                                            <div class="data-item-sub " title="@doc.DocDisplayName">
+                                                <span class="font-100">
+                                                    <span class="@(doc.DocType == "Doc" ? "" : "invisible")"><span class="fa fa-file mr-2"></span></span>
+                                                    <span class="@(doc.DocType == "Form" ? "" : "invisible")"><span class=" fa fa-file-pdf mr-2"></span></span>
+                                                    <span class="@(doc.DocType == "Email" ? "" : "invisible")"><span class="fa fa-envelope mr-2"></span></span>
+                                                    <span class="@(doc.DocType == "Step" ? "" : "invisible")"><span class=" fa fa-list-ol mr-2"></span></span>
+                                                    <span class="@(doc.DocType == "Date" ? "" : "invisible")"><span class="fa fa-calendar mr-2"></span></span>
+                                                </span>
+                                                @doc.DocDisplayName
+                                            </div>
+
+                                            @if (doc.DocOrigName != "")
+                                            {
+                                                <div class="data-item-right hidden-md-down">
+                                                    <ModalTooltip Direction="left" Text=@("Template: " + doc.DocOrigName) Class="w-2">
+                                                        <span class="fa fa-clone"></span>
+                                                    </ModalTooltip>
+                                                </div>
+                                            }
+
+                                            @if (!string.IsNullOrEmpty(doc.ChapterObject.PopupAlert))
+                                            {
+                                                <div class="data-item-right hidden-md-down">
+                                                    <ModalTooltip Direction="left" Text=@("POPUP: " + doc.ChapterObject.PopupAlert) Class="w-3">
+                                                        <span class="fa fa-exclamation-triangle"></span>
+                                                    </ModalTooltip>
+                                                </div>
+                                            }
+
+                                            @if (!string.IsNullOrEmpty(doc.ChapterObject.UserMessage))
+                                            {
+                                                <div class="data-item-right hidden-md-down">
+                                                    <ModalTooltip Direction="left" Text=@("NOTES: " + doc.ChapterObject.UserMessage) Class="w-3">
+                                                        <span class="fa fa-comment"></span>
+                                                    </ModalTooltip>
+                                                </div>
+                                            }
+
+                                            @if (!(doc.ChapterObject.FollowUpDocs is null) && doc.ChapterObject.FollowUpDocs.Count > 0)
+                                            {
+                                                <div class="data-item-right hidden-md-down">
+                                                    <ModalTooltip Direction="left" Text=@($"This item has attachments.") Class="w-2">
+                                                        <span class="fa fa-paperclip"></span>
+                                                    </ModalTooltip>
+                                                </div>
+                                            }
+
+                                            
+                                            <div class="data-item-right mr-2 ">
+                                                <div class="seq-no">@doc.ChapterObject.SeqNo</div>
+                                            </div>
+                                            
+                                        </div>
+                                        <div class="hidden-md-down data-item ">
+                                            <div class="data-item-sub font-85 pl-3" title="@(string.IsNullOrEmpty(doc.ChapterObject.AsName) ? "" : doc.ChapterObject.AsName)">@(string.IsNullOrEmpty(doc.ChapterObject.AsName) ? "" : doc.ChapterObject.AsName)</div>
+
+                                            @if (doc.ChapterObject.RescheduleDays.HasValue & !(doc.ChapterObject.RescheduleDays == 0))
+                                            {
+                                                <div class="data-item-right schedule-days">
+                                                    <ModalTooltip Direction="left" Text="@(string.IsNullOrEmpty(doc.ChapterObject.AsName) ? "" : "The step named " + doc.ChapterObject.AsName + " will be scheduled for " + doc.ChapterObject.RescheduleDays.ToString() + " days")" Class="w-3">
+                                                        <span class="badge rounded-square">@doc.ChapterObject.RescheduleDays.ToString()d</span>
+                                                    </ModalTooltip>
+                                                </div>
+                                            }
+
+                                        </div>
+                                        <div class="hidden-md-down data-item ">
+                                            @if (!(string.IsNullOrEmpty(doc.ChapterObject.CompleteName)))
+                                            {
+                                                <div class="data-item-sub font-85 pl-3" title="This document will be saved in the agenda as @doc.ChapterObject.CompleteName.">
+                                                    @doc.ChapterObject.CompleteName
+                                                </div>
+
+                                            }
+                                            else
+                                            {
+                                                <div class="data-item-sub">
+                                                </div>
+                                            }
+
+                                            @if (!(string.IsNullOrEmpty(doc.ChapterObject.NextStatus)))
+                                            {
+                                                @if (lstStatus.Where(S => S.ChapterObject.Name == doc.ChapterObject.NextStatus).Select(S => S.ChapterObject.SuppressStep).SingleOrDefault() == "Y")
+                                                {
+                                                    <div class="data-item-right suppress-step">
+                                                        <ModalTooltip Direction="left" Text="This document will end the Smartflow when taken." Class="w-2">
+                                                            <span class="fa fa-flag-checkered"></span>
+                                                        </ModalTooltip>
+                                                    </div>
+                                                }
+
+
+                                                <div class="data-item-right suppress-step">
+                                                    <ModalTooltip Direction="left" Text=@("Status Change: " + doc.ChapterObject.NextStatus) Class="w-2">
+                                                        <span class="fa fa-battery-half"></span>
+                                                    </ModalTooltip>
+                                                </div>
+                                            }
+
+
+                                        </div>
+
+                                    </div>
+
+                                }
+                            }*@
+
+
                         </div>
                     </div>
                 </div>
