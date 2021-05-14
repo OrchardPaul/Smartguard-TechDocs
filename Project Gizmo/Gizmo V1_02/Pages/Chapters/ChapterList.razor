@@ -524,14 +524,6 @@ else
                                         </div>
                                     </div>
 
-                                    <!--
-            <div class="form-group">
-                <label>Developer Notes</label>
-                <InputTextArea @bind-Value="selectedChapter.DeveloperNotes" class="form-control form-control-lg" />
-            </div>
-            -->
-
-
                                 </EditForm>
 
 
@@ -839,7 +831,7 @@ else
 
                             }
 
-                            @*@if (compareSystems && !(lstAltSystemChapterItems is null))
+                            @if (compareSystems && !(lstAltSystemChapterItems is null))
                             {
                                 @foreach (var doc in lstAltSystemChapterItems.Where(D => D.ChapterObject.Type == "Doc").Where(D => !D.Compared).ToList())
                                 {
@@ -850,7 +842,7 @@ else
                                             <div class="btn-ellipses float-left">
 
                                                 <ModalTooltip Direction="right" Text=@("Exists on alternate system, Do you wish to delete?") Class="w-2">
-                                                    <div class="btn-dashed" @onclick="() => PrepareDeleteAltObject(doc)"><span class="fa fa-times"></span></div>
+                                                    <div class="btn-dashed" @onclick="() => PrepareDeleteAltObject(doc)"><span class="fa fa-trash"></span></div>
                                                 </ModalTooltip>
 
 
@@ -961,7 +953,7 @@ else
                                     </div>
 
                                 }
-                            }*@
+                            }
 
 
                         </div>
@@ -1040,28 +1032,29 @@ else
                                         else
                                         {
 
-                                <div class="btn-ellipses float-left">
-                                    @if (!(agenda.ComparisonIcon is null))
-                                    {
-                                        @if (!(agenda.ComparisonResult == "Exact match"))
-                                        {
-                                            <ModalTooltip Direction="right" Text=@(agenda.ComparisonResult == "Partial match" ? "Differences found, click to sync" : "Does not exist, click to create") Class="w-2">
-                                                <div class="btn-dashed" @onclick="() => PrepareForComparison(agenda)"><span class="fa fa-@agenda.ComparisonIcon"></span></div>
-                                            </ModalTooltip>
-                                        }
-                                        else
-                                        {
-                                            <ModalTooltip Direction="right" Text="Exact Match" Class="w-1">
-                                                <span class="fa fa-@agenda.ComparisonIcon"></span>
-                                            </ModalTooltip>
-                                        }
-                                    }
-                                    else
-                                    {
-                                        <div class="spinner"></div>
-                                    }
+                                            <div class="btn-ellipses float-left">
+                                                @if (!(agenda.ComparisonIcon is null))
+                                                {
+                                                    @if (!(agenda.ComparisonResult == "Exact match"))
+                                                    {
+                                                        <ModalTooltip Direction="right" Text=@(agenda.ComparisonResult == "Partial match" ? "Differences found, click to sync" : "Does not exist, click to create") Class="w-2">
+                                                            <div class="btn-dashed" @onclick="() => PrepareForComparison(agenda)"><span class="fa fa-@agenda.ComparisonIcon"></span></div>
+                                                        </ModalTooltip>
 
-                                </div>
+                                                    }
+                                                    else
+                                                    {
+                                                        <ModalTooltip Direction="right" Text="Exact Match" Class="w-1">
+                                                            <span class="fa fa-@agenda.ComparisonIcon"></span>
+                                                        </ModalTooltip>
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <div class="spinner"></div>
+                                                }
+
+                                            </div>
                                         }
 
                                     }
@@ -1086,6 +1079,33 @@ else
 
                             </div>
 
+                        }
+
+                        @if (compareSystems && !(lstAltSystemChapterItems is null))
+                        {
+                            @foreach (var agenda in lstAltSystemChapterItems.Where(D => D.ChapterObject.Type == "Agenda").Where(D => !D.Compared).ToList())
+                            {
+
+                                <div class="row grid-row">
+                                    <div class="col-12 data-item">
+
+                                        <div class="btn-ellipses float-left">
+
+                                            <ModalTooltip Direction="right" Text=@("Exists on alternate system, Do you wish to delete?") Class="w-2">
+                                                <div class="btn-dashed" @onclick="() => PrepareDeleteAltObject(agenda)"><span class="fa fa-trash"></span></div>
+                                            </ModalTooltip>
+
+                                        </div>
+
+
+                                        <div class="data-item-sub">
+                                            <span class="font-100"><span class="fa fa-folder-open mr-2"></span></span>@agenda.ChapterObject.Name
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            }
                         }
                     </div>
                 </div>
@@ -1200,29 +1220,29 @@ else
                                             else
                                             {
 
-                                    <div class="btn-ellipses float-left">
-                                        @if (!(fee.ComparisonIcon is null))
-                                        {
-                                            @if (!(fee.ComparisonResult == "Exact match"))
-                                            {
-                                                <ModalTooltip Direction="right" Text=@(fee.ComparisonResult == "Partial match" ? "Differences found, click to sync" : "Does not exist, click to create") Class="w-2">
-                                                    <div class="btn-dashed" @onclick="() => PrepareFeeForComparison(fee)"><span class="fa fa-@fee.ComparisonIcon"></span></div>
-                                                </ModalTooltip>
+                                                <div class="btn-ellipses float-left">
+                                                    @if (!(fee.ComparisonIcon is null))
+                                                    {
+                                                        @if (!(fee.ComparisonResult == "Exact match"))
+                                                        {
+                                                            <ModalTooltip Direction="right" Text=@(fee.ComparisonResult == "Partial match" ? "Differences found, click to sync" : "Does not exist, click to create") Class="w-2">
+                                                                <div class="btn-dashed" @onclick="() => PrepareFeeForComparison(fee)"><span class="fa fa-@fee.ComparisonIcon"></span></div>
+                                                            </ModalTooltip>
 
-                                            }
-                                            else
-                                            {
-                                                <ModalTooltip Direction="right" Text="Exact Match" Class="w-1">
-                                                    <span class="fa fa-@fee.ComparisonIcon"></span>
-                                                </ModalTooltip>
-                                            }
-                                        }
-                                        else
-                                        {
-                                            <div class="spinner"></div>
-                                        }
+                                                        }
+                                                        else
+                                                        {
+                                                            <ModalTooltip Direction="right" Text="Exact Match" Class="w-1">
+                                                                <span class="fa fa-@fee.ComparisonIcon"></span>
+                                                            </ModalTooltip>
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="spinner"></div>
+                                                    }
 
-                                    </div>
+                                                </div>
 
 
                                                 <div class="data-item-sub">
@@ -1285,6 +1305,57 @@ else
                                 </div>
 
                             }
+
+
+                            @if (compareSystems && !(lstAltSystemFeeItems is null))
+                            {
+                                @foreach (var fee in lstAltSystemFeeItems.Where(F => !F.Compared).ToList())
+                                {
+
+                                    <div class="row grid-row grid-row-lg @(rowChanged == fee.FeeObject.SeqNo ? "row-changed" : "" )">
+                                        <div class="data-item">
+
+                                         
+                                            <div class="btn-ellipses float-left">
+                                                <ModalTooltip Direction="right" Text=@("Exists on alternate system, Do you wish to delete?") Class="w-2">
+                                                    <div class="btn-dashed" @onclick="() => PrepareDeleteAltFee(fee)"><span class="fa fa-trash"></span></div>
+                                                </ModalTooltip>
+
+                                            </div>
+
+
+                                            <div class="data-item-sub">
+                                                <span class="fa fa-pound-sign mr-2"></span> @fee.FeeObject.FeeName
+                                            </div>
+                                            @if (fee.FeeObject.VATable == "Y")
+                                            {
+                                                <div class="data-item-right hidden-md-down">
+                                                    <ModalTooltip Direction="top" Text=@("VAT Included") Class="w-1">
+                                                        <span class="fa fa-coins"></span>
+                                                    </ModalTooltip>
+                                                </div>
+                                            }
+                                            <div class="data-item-right seq-change">
+                                                <div class="seq-no">@fee.FeeObject.SeqNo</div>
+                                            </div>
+                                      
+                                           
+
+                                        </div>
+                                        <div class="hidden-md-down data-item ">
+                                            <div class="data-item-sub font-85 pl-3">@fee.FeeObject.FeeCategory</div>
+                                        </div>
+                                        <div class="hidden-md-down data-item ">
+                                            <div class="data-item-sub font-85 pl-3">@fee.FeeObject.PostingType</div>
+                                        </div>
+                                        <div class="data-item">
+                                            <div class="data-item-sub text-right font-85 pl-3">£@string.Format("{0:N2}", fee.FeeObject.Amount)</div>
+                                        </div>
+                                    </div>
+                                }
+                            }
+
+
                         </div>
 
                     </div>
@@ -1358,28 +1429,28 @@ else
                                         else
                                         {
 
-                                <div class="btn-ellipses float-left">
-                                    @if (!(status.ComparisonIcon is null))
-                                    {
-                                        @if (!(status.ComparisonResult == "Exact match"))
-                                        {
-                                            <ModalTooltip Direction="right" Text=@(status.ComparisonResult == "Partial match" ? "Differences found, click to sync" : "Does not exist, click to create") Class="w-2">
-                                                <div class="btn-dashed" @onclick="() => PrepareForComparison(status)"><span class="fa fa-@status.ComparisonIcon"></span></div>
-                                            </ModalTooltip>
-                                        }
-                                        else
-                                        {
-                                            <ModalTooltip Direction="right" Text="Exact Match" Class="w-1">
-                                                <span class="fa fa-@status.ComparisonIcon"></span>
-                                            </ModalTooltip>
-                                        }
-                                    }
-                                    else
-                                    {
-                                        <div class="spinner"></div>
-                                    }
+                                            <div class="btn-ellipses float-left">
+                                                @if (!(status.ComparisonIcon is null))
+                                                {
+                                                    @if (!(status.ComparisonResult == "Exact match"))
+                                                    {
+                                                        <ModalTooltip Direction="right" Text=@(status.ComparisonResult == "Partial match" ? "Differences found, click to sync" : "Does not exist, click to create") Class="w-2">
+                                                            <div class="btn-dashed" @onclick="() => PrepareForComparison(status)"><span class="fa fa-@status.ComparisonIcon"></span></div>
+                                                        </ModalTooltip>
+                                                    }
+                                                    else
+                                                    {
+                                                        <ModalTooltip Direction="right" Text="Exact Match" Class="w-1">
+                                                            <span class="fa fa-@status.ComparisonIcon"></span>
+                                                        </ModalTooltip>
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <div class="spinner"></div>
+                                                }
 
-                                </div>
+                                            </div>
 
 
                                         }
@@ -1433,6 +1504,42 @@ else
 
                             </div>
 
+                        }
+
+                        @if (compareSystems && !(lstAltSystemChapterItems is null))
+                        {
+                            @foreach (var status in lstAltSystemChapterItems.Where(D => D.ChapterObject.Type == "Status").Where(D => !D.Compared).ToList())
+                            {
+                                <div class="row grid-row @(rowChanged == status.ChapterObject.SeqNo ? "row-changed" : "" )">
+                                    <div class="col-12 data-item">
+                                        <div class="btn-ellipses float-left">
+                                            <ModalTooltip Direction="right" Text=@("Exists on alternate system, Do you wish to delete?") Class="w-2">
+                                                <div class="btn-dashed" @onclick="() => PrepareDeleteAltObject(status)"><span class="fa fa-trash"></span></div>
+                                            </ModalTooltip>
+                                        </div>
+
+
+                                        <div class="data-item-sub">
+                                            <span class="font-100"><span class="fa fa-battery-half mr-2"></span></span>@status.ChapterObject.Name
+                                        </div>
+
+                                        @if (status.ChapterObject.SuppressStep == "Y")
+                                        {
+                                            <div class="data-item-right suppress-step">
+                                                <ModalTooltip Direction="left" Text="This status will end the Smartflow." Class="w-3">
+                                                    <span class="fa fa-flag-checkered"></span>
+                                                </ModalTooltip>
+                                            </div>
+                                        }
+
+                                        <div class="data-item-right seq-change">
+                                            <div class="seq-no">@status.ChapterObject.SeqNo</div>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            }
                         }
                     </div>
                 </div>
@@ -1516,28 +1623,28 @@ else
                                     }
                                     else if (sessionState.isAdminUser && compareSystems)
                                     {
-                                <div class="btn-ellipses float-left">
-                                    @if (!(vmdataView.ComparisonIcon is null))
-                                    {
-                                        @if (!(vmdataView.ComparisonResult == "Exact match"))
-                                        {
-                                            <ModalTooltip Direction="right" Text=@(vmdataView.ComparisonResult == "Partial match" ? "Differences found, click to sync" : "Does not exist, click to create") Class="w-2">
-                                                <div class="btn-dashed" @onclick="() => PrepareDataViewForComparison(vmdataView)"><span class="fa fa-@vmdataView.ComparisonIcon"></span></div>
-                                            </ModalTooltip>
-                                        }
-                                        else
-                                        {
-                                            <ModalTooltip Direction="right" Text="Exact Match" Class="w-1">
-                                                <span class="fa fa-@vmdataView.ComparisonIcon"></span>
-                                            </ModalTooltip>
-                                        }
-                                    }
-                                    else
-                                    {
-                                        <div class="spinner"></div>
-                                    }
+                                        <div class="btn-ellipses float-left">
+                                            @if (!(vmdataView.ComparisonIcon is null))
+                                            {
+                                                @if (!(vmdataView.ComparisonResult == "Exact match"))
+                                                {
+                                                    <ModalTooltip Direction="right" Text=@(vmdataView.ComparisonResult == "Partial match" ? "Differences found, click to sync" : "Does not exist, click to create") Class="w-2">
+                                                        <div class="btn-dashed" @onclick="() => PrepareDataViewForComparison(vmdataView)"><span class="fa fa-@vmdataView.ComparisonIcon"></span></div>
+                                                    </ModalTooltip>
+                                                }
+                                                else
+                                                {
+                                                    <ModalTooltip Direction="right" Text="Exact Match" Class="w-1">
+                                                        <span class="fa fa-@vmdataView.ComparisonIcon"></span>
+                                                    </ModalTooltip>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <div class="spinner"></div>
+                                            }
 
-                                </div>
+                                        </div>
                                         <div class="data-item-sub">
                                             <span class="fa fa-database mr-2"></span> @vmdataView.DataViewDisplayName
                                         </div>
@@ -1590,6 +1697,46 @@ else
 
                             </div>
 
+                        }
+
+                        @if (compareSystems && !(lstAltSystemDataViews is null))
+                        {
+                            @foreach (var vmdataView in lstAltSystemDataViews.Where(F => !F.Compared).ToList())
+                            {
+                                <div class="row grid-row @(rowChanged == vmdataView.DataView.BlockNo ? "row-changed" : "" )">
+                                    <div class="col-12 data-item">
+ 
+                                        <div class="btn-ellipses float-left">
+                                            <ModalTooltip Direction="right" Text=@("Exists on alternate system, Do you wish to delete?") Class="w-2">
+                                                <div class="btn-dashed" @onclick="() => PrepareDeleteAltDataView(vmdataView)"><span class="fa fa-trash"></span></div>
+                                            </ModalTooltip>
+                                        </div>
+
+                                        <div class="data-item-sub">
+                                            <span class="fa fa-database mr-2"></span> @vmdataView.DataViewDisplayName
+                                        </div>
+                                        
+
+
+                                        @if (!string.IsNullOrEmpty(vmdataView.DataView.DisplayName))
+                                        {
+                                            <div class="data-item-right hidden-md-down">
+                                                <ModalTooltip Direction="top" Text=@("Template: " + vmdataView.DataView.ViewName) Class="w-3">
+                                                    <span class="fa fa-clone"></span>
+                                                </ModalTooltip>
+                                            </div>
+                                        }
+
+                                        <div class="data-item-right seq-change">
+                                            <div class="seq-no">@vmdataView.DataView.BlockNo</div>
+                                        </div>
+
+
+
+                                    </div>
+
+                                </div>
+                            }
                         }
                     </div>
                 </div>
@@ -1678,7 +1825,7 @@ else
                                                 </div>
                                             </div>
                                             <div class="data-item-right">
-                                                <ModalTooltip Direction="top" Text="@vmtickerMessages.msgTooltip"  Class="w-3">
+                                                <ModalTooltip Direction="top" Text="@vmtickerMessages.msgTooltip" Class="w-3">
                                                     <span class="@(vmtickerMessages.msgValidation == "Exceeded" ? "" : "invisible")"><span class="fa fa-comment mr-2 font-grey "></span></span>
                                                     <span class="@(vmtickerMessages.msgValidation == "Expired" ? "" : "invisible")"><span class="fa fa-comment mr-2 font-red "></span></span>
                                                     <span class="@(vmtickerMessages.msgValidation == "Future" ? "" : "invisible")"><span class="fa fa-comment mr-2 font-green "></span></span>
@@ -1708,9 +1855,11 @@ else
                                                 {
                                                     <div class="spinner"></div>
                                                 }
-                                                <div class="data-item-sub">
-                                                    <span class="fa fa-comment mr-2 tickericon"></span> @vmtickerMessages.Message.Message
-                                                </div>
+
+                                            </div>
+
+                                            <div class="data-item-sub">
+                                                <span class="fa fa-comment mr-2 tickericon"></span> @vmtickerMessages.Message.Message
                                             </div>
                                         }
                                         else
@@ -1775,6 +1924,58 @@ else
                                         </div>
                                     }
                                 </div>
+                            }
+
+
+                            @if (compareSystems && !(lstAltSystemTickerMessages is null))
+                            {
+                                @foreach (var vmtickerMessages in lstAltSystemTickerMessages.Where(F => !F.Compared).ToList())
+                                {
+                                    <div class="row grid-row @(rowChanged == vmtickerMessages.Message.SeqNo ? "row-changed" : "" )">
+                                        <div class="data-item">
+
+                                            <div class="btn-ellipses float-left">
+                                                <ModalTooltip Direction="right" Text=@("Exists on alternate system, Do you wish to delete?") Class="w-2">
+                                                    <div class="btn-dashed" @onclick="() => PrepareDeleteAltMessage(vmtickerMessages)"><span class="fa fa-trash"></span></div>
+                                                </ModalTooltip>
+                                                <div class="data-item-sub">
+                                                    <span class="fa fa-comment mr-2 tickericon"></span> @vmtickerMessages.Message.Message
+                                                </div>
+                                            </div>
+
+                                                <div class="data-item-right">
+                                                    <div class="seq-no">@vmtickerMessages.Message.SeqNo</div>
+                                                </div>
+
+                                        </div>
+                                        @if (!string.IsNullOrEmpty(vmtickerMessages.Message.FromDate))
+                                        {
+                                            <div class="hidden-md-down data-item ">
+                                                <div class="data-item-sub">@(DateTime.ParseExact(vmtickerMessages.Message.FromDate, "yyyyMMdd", CultureInfo.InvariantCulture).ToString("dd/MM/yyyy"))</div>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="hidden-md-down data-item ">
+                                                <div class="data-item-sub">
+                                                </div>
+                                            </div>
+                                        }
+                                        @if (!string.IsNullOrEmpty(vmtickerMessages.Message.ToDate))
+                                        {
+                                            <div class="hidden-md-down data-item ">
+                                                <div class="data-item-sub font-85 pl-3">@(DateTime.ParseExact(vmtickerMessages.Message.ToDate, "yyyyMMdd", CultureInfo.InvariantCulture).ToString("dd/MM/yyyy"))</div>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="hidden-md-down data-item ">
+                                                <div class="data-item-sub">
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+                                }
                             }
                         </div>
 

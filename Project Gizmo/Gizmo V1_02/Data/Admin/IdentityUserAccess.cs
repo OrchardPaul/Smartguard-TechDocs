@@ -199,7 +199,6 @@ namespace Gizmo_V1_02.Data.Admin
             return claimsReturn;
         }
 
-
         public async Task<IList<string>> GetSelectedUserRoles(AspNetUsers item)
         {
             selectedUser = new ApplicationUser();

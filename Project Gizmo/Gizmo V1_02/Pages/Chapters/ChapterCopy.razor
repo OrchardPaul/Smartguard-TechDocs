@@ -18,8 +18,8 @@
                 }
                 else
                 {
-                    <InputSelect class="form-control" ValueExpression="@(() => TaskObject.SmartflowObject.CaseTypeGroup)"
-                                 Value="@TaskObject.SmartflowObject.CaseTypeGroup"
+                    <InputSelect class="form-control" ValueExpression="@(() => TaskObject.CaseTypeGroup)"
+                                 Value="@TaskObject.CaseTypeGroup"
                                  ValueChanged="@((string value) => SelectExistingCaseTypeGroup(value))">
                         @foreach (var c in AllChapters
                                       .Where(C => !(C.SmartflowObject.CaseTypeGroup is null))
@@ -38,7 +38,7 @@
             else
             {
 
-                <InputText class="form-control" @bind-Value="TaskObject.SmartflowObject.CaseTypeGroup"></InputText>
+                <InputText class="form-control" @bind-Value="TaskObject.CaseTypeGroup"></InputText>
             }
 
 
@@ -58,11 +58,11 @@
                 }
                 else
                 {
-                    <InputSelect class="form-control" ValueExpression="@(() => TaskObject.SmartflowObject.CaseType)"
-                                 Value="@TaskObject.SmartflowObject.CaseType"
+                    <InputSelect class="form-control" ValueExpression="@(() => TaskObject.CaseType)"
+                                 Value="@TaskObject.CaseType"
                                  ValueChanged="@((string value) => SelectExistingCaseType(value))">
                         @foreach (var c in AllChapters
-                                     .Where(C => C.SmartflowObject.CaseTypeGroup == TaskObject.SmartflowObject.CaseTypeGroup)
+                                     .Where(C => C.SmartflowObject.CaseTypeGroup == TaskObject.CaseTypeGroup)
                                      .Where(C => !(C.SmartflowObject.CaseType is null))
                                      .OrderBy(C => C.SmartflowObject.CaseType)
                                      .Select(C => C.SmartflowObject.CaseType)
@@ -79,7 +79,7 @@
             }
             else
             {
-                <InputText class="form-control" @bind-Value="TaskObject.SmartflowObject.CaseType"></InputText>
+                <InputText class="form-control" @bind-Value="TaskObject.CaseType"></InputText>
             }
 
 
@@ -99,13 +99,13 @@
                 }
                 else
                 {
-                    <InputSelectInteger class="form-control" ValueExpression="@(() => TaskObject.SmartflowObject.Id)"
-                                        Value="@TaskObject.SmartflowObject.Id"
+                    <InputSelectInteger class="form-control" ValueExpression="@(() => TaskObject.Id)"
+                                        Value="@TaskObject.Id"
                                         ValueChanged="@((int value) => SelectExistingChapter(value))"
                                         id="Summary">
                         @foreach (var c in AllChapters
-                                                  .Where(C => C.SmartflowObject.CaseTypeGroup == TaskObject.SmartflowObject.CaseTypeGroup)
-                                                  .Where(C => C.SmartflowObject.CaseType == TaskObject.SmartflowObject.CaseType)
+                                                  .Where(C => C.SmartflowObject.CaseTypeGroup == TaskObject.CaseTypeGroup)
+                                                  .Where(C => C.SmartflowObject.CaseType == TaskObject.CaseType)
                                                   .OrderBy(C => C.SmartflowObject.SeqNo)
                                                   .ToList())
                         {
@@ -118,9 +118,9 @@
             }
             else
             {
-                <InputText class="form-control" @bind-Value="TaskObject.SmartflowObject.SmartflowName"></InputText>
+                <InputText class="form-control" @bind-Value="TaskObject.SmartflowName"></InputText>
             }
-            <ValidationMessage For="@(() => TaskObject.SmartflowObject.SmartflowName)" />
+            <ValidationMessage For="@(() => TaskObject.SmartflowName)" />
         </div>
 
         <div class="form-group">

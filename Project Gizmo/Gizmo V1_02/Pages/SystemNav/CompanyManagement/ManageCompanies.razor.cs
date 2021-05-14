@@ -9,12 +9,33 @@ using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Gizmo_V1_02.Pages.SystemNav.CompanyManagement
 {
     public partial class ManageCompanies
     {
+        public class companyInfo
+        {
+            public VmCompanyDetails Company { get; set; }
+
+            public List<AspNetUsers> Users { get; set; }
+
+            public List<SmartflowRecords> SmartflowsDev { get; set; }
+
+            public List<SmartflowRecords> SmartflowsLive { get; set; }
+
+            public string LastUpdated { get; set; }
+        }
+
+        public class userInfo
+        {
+            public AspNetUsers user { get; set; }
+
+            public IList<Claim> claims { get; set; }
+        }
+
         [Inject]
         IModalService Modal { get; set; }
 
@@ -22,11 +43,26 @@ namespace Gizmo_V1_02.Pages.SystemNav.CompanyManagement
         ICompanyDbAccess companyDbAccess { get; set; }
 
         [Inject]
+        IIdentityUserAccess userAccess { get; set; }
+
+
+        [Inject]
         IUserSessionState sessionState { get; set; }
 
         private List<VmCompanyDetails> lstCompanyDetails;
 
+        private List<companyInfo> AllCompanies { get; set; }
+
+        private List<AspNetUsers> AllUsers { get; set; }
+
+        private List<userInfo> AllUserinfo { get; set; }
+
+        private List<SmartflowRecords> AllSmartflows { get; set; }
+
         public AppCompanyDetails editCompany = new AppCompanyDetails();
+
+
+        private string LastUpdated { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
@@ -41,6 +77,102 @@ namespace Gizmo_V1_02.Pages.SystemNav.CompanyManagement
             lstCompanyDetails = lstAppCompanyDetails
                                             .Select(A => new VmCompanyDetails { Company = A, OnHover = false })
                                             .ToList();
+
+
+            AllUsers = await userAccess.GetUsers();
+            AllUserinfo = AllUsers.Select(U => new userInfo
+                                            { 
+                                                user = U
+                                            })
+                                    .ToList();
+
+            foreach (var user in AllUserinfo)
+            {
+                var claims = await userAccess.GetCompanyClaims(user.user);
+
+                user.claims = claims;
+            }
+            
+
+
+
+            AllSmartflows = await companyDbAccess.GetAllSmartflowRecordsForAllCompanies();
+
+
+
+            AllCompanies = lstCompanyDetails
+                                    .Select(C => new companyInfo
+                                            {
+                                                Company = C,
+                                                SmartflowsDev = AllSmartflows
+                                                                    .Where(S => S.CompanyId == C.Company.Id)
+                                                                    .Where(S => S.System == "Dev")
+                                                                    .ToList(),
+                                                SmartflowsLive = AllSmartflows
+                                                                    .Where(S => S.CompanyId == C.Company.Id)
+                                                                    .Where(S => S.System == "Live")
+                                                                    .ToList(),
+                                                Users = AllUserinfo.Where(U => U
+                                                                                .claims
+                                                                                .Select(C => C.Value)
+                                                                                .ToList()
+                                                                                .Contains(C.Company.Id.ToString()))
+                                                                    .Select(U => U.user)
+                                                                    .ToList()
+                                                
+                                                
+
+                                    })
+                                    .ToList();
+
+
+            foreach (var company in AllCompanies)
+            {
+                var lastDevDate = DateTime.Now;
+                bool isDevDate = true;
+
+                if (!(company.SmartflowsDev is null) && company.SmartflowsDev.Count() > 0)
+                {
+                    lastDevDate = company.SmartflowsDev.OrderBy(S => S.LastModifiedDate).Select(S => S.LastModifiedDate).FirstOrDefault();
+                }
+                else
+                {
+                    isDevDate = false;
+                }
+
+                var lastLiveDate = DateTime.Now;
+                bool isLiveDate = true;
+
+                if (!(company.SmartflowsLive is null) && company.SmartflowsLive.Count() > 0)
+                {
+                    lastLiveDate = company.SmartflowsDev.OrderBy(S => S.LastModifiedDate).Select(S => S.LastModifiedDate).FirstOrDefault();
+                }
+                else
+                {
+                    isLiveDate = false;
+                }
+
+                if(isDevDate && isLiveDate)
+                {
+                    company.LastUpdated = lastDevDate > lastLiveDate ? lastDevDate.ToString("dd MMM yyyy") : lastLiveDate.ToString("dd MMM yyyy");
+                }
+                else if(isDevDate && !isLiveDate)
+                {
+                    company.LastUpdated = lastDevDate.ToString("dd MMM yyyy");
+                }
+                else if (!isDevDate && isLiveDate)
+                {
+                    company.LastUpdated = lastLiveDate.ToString("dd MMM yyyy");
+                }
+                else
+                {
+                    company.LastUpdated = "Not Used";
+                }
+
+
+
+
+            }
 
         }
 

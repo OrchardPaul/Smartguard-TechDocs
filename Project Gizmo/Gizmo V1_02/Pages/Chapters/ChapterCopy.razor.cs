@@ -1,7 +1,9 @@
 ﻿using Blazored.Modal;
 using GadjIT.ClientContext.P4W;
 using GadjIT.ClientContext.P4W.Custom;
+using Gizmo_V1_02.Data.Admin;
 using Gizmo_V1_02.Services;
+using Gizmo_V1_02.Services.SessionState;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using Newtonsoft.Json;
@@ -29,7 +31,7 @@ namespace Gizmo_V1_02.Pages.Chapters
         IChapterManagementService chapterManagementService { get; set; }
 
         [Parameter]
-        public VmUsrOrsfSmartflows TaskObject { get; set; }
+        public UsrOrsfSmartflows TaskObject { get; set; }
 
         [Parameter]
         public Action DataChanged { get; set; }
@@ -46,6 +48,13 @@ namespace Gizmo_V1_02.Pages.Chapters
         [Parameter]
         public bool addNewCaseTypeOption { get; set; } = false;
 
+        [Parameter]
+        public ICompanyDbAccess CompanyDbAccess { get; set; }
+
+
+        [Parameter]
+        public IUserSessionState sessionState { get; set; }
+
         public bool AddNewChapterOption { get; set; }
 
         public List<CopyOption> CopyOptions { get; set; } = new List<CopyOption>
@@ -61,21 +70,21 @@ namespace Gizmo_V1_02.Pages.Chapters
         
         private void SelectExistingChapter(int chapterId)
         {
-            TaskObject = AllChapters.Where(C => C.SmartflowObject.Id == chapterId).SingleOrDefault();
+            TaskObject = AllChapters.Where(C => C.SmartflowObject.Id == chapterId).Select(C => C.SmartflowObject).SingleOrDefault();
 
             StateHasChanged();
         }
 
         private void SelectExistingCaseTypeGroup(string caseTypeGroup)
         {
-            TaskObject.SmartflowObject.CaseTypeGroup = caseTypeGroup;
-            TaskObject.SmartflowObject.CaseType = AllChapters
-                                                        .Where(C => C.SmartflowObject.CaseTypeGroup == TaskObject.SmartflowObject.CaseTypeGroup)
+            TaskObject.CaseTypeGroup = caseTypeGroup;
+            TaskObject.CaseType = AllChapters
+                                                        .Where(C => C.SmartflowObject.CaseTypeGroup == TaskObject.CaseTypeGroup)
                                                         .Select(C => C.SmartflowObject.CaseType)
                                                         .FirstOrDefault();
-            TaskObject.SmartflowObject = AllChapters
-                                                        .Where(C => C.SmartflowObject.CaseTypeGroup == TaskObject.SmartflowObject.CaseTypeGroup)
-                                                        .Where(C => C.SmartflowObject.CaseType == TaskObject.SmartflowObject.CaseType)
+            TaskObject = AllChapters
+                                                        .Where(C => C.SmartflowObject.CaseTypeGroup == TaskObject.CaseTypeGroup)
+                                                        .Where(C => C.SmartflowObject.CaseType == TaskObject.CaseType)
                                                         .Select(C => C.SmartflowObject)
                                                         .FirstOrDefault();
 
@@ -84,10 +93,10 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         private void SelectExistingCaseType(string caseType)
         {
-            TaskObject.SmartflowObject.CaseType = caseType;
-            TaskObject.SmartflowObject = AllChapters
-                                                .Where(C => C.SmartflowObject.CaseTypeGroup == TaskObject.SmartflowObject.CaseTypeGroup)
-                                                .Where(C => C.SmartflowObject.CaseType == TaskObject.SmartflowObject.CaseType)
+            TaskObject.CaseType = caseType;
+            TaskObject = AllChapters
+                                                .Where(C => C.SmartflowObject.CaseTypeGroup == TaskObject.CaseTypeGroup)
+                                                .Where(C => C.SmartflowObject.CaseType == TaskObject.CaseType)
                                                 .Select(C => C.SmartflowObject)
                                                 .FirstOrDefault();
 
@@ -100,14 +109,11 @@ namespace Gizmo_V1_02.Pages.Chapters
 
             if (!AddNewChapterOption)
             {
-                TaskObject = new VmUsrOrsfSmartflows
+                TaskObject = new UsrOrsfSmartflows
                 {
-                    SmartflowObject = new UsrOrsfSmartflows
-                    {
-                        CaseType = TaskObject.SmartflowObject.CaseType,
-                        CaseTypeGroup = TaskObject.SmartflowObject.CaseTypeGroup,
-                        SeqNo = TaskObject.SmartflowObject.SeqNo
-                    }
+                    CaseType = TaskObject.CaseType,
+                    CaseTypeGroup = TaskObject.CaseTypeGroup,
+                    SeqNo = TaskObject.SeqNo
                 };
             }
         }
@@ -127,9 +133,9 @@ namespace Gizmo_V1_02.Pages.Chapters
                 TickerMessages = new List<TickerMessages>()
             };
 
-            if (!(TaskObject.SmartflowObject.SmartflowData is null))
+            if (!(TaskObject.SmartflowData is null))
             {
-                copyToChapter = JsonConvert.DeserializeObject<VmChapter>(TaskObject.SmartflowObject.SmartflowData);
+                copyToChapter = JsonConvert.DeserializeObject<VmChapter>(TaskObject.SmartflowData);
             }
 
 
@@ -199,12 +205,12 @@ namespace Gizmo_V1_02.Pages.Chapters
                 copyToChapter.TickerMessages.AddRange(currentChapter.TickerMessages.ToList());
             }
 
-            TaskObject.SmartflowObject.SmartflowData = JsonConvert.SerializeObject(new VmChapter
+            TaskObject.SmartflowData = JsonConvert.SerializeObject(new VmChapter
             {
-                CaseTypeGroup = TaskObject.SmartflowObject.CaseTypeGroup,
-                CaseType = TaskObject.SmartflowObject.CaseType,
-                Name = TaskObject.SmartflowObject.SmartflowName,
-                SeqNo = TaskObject.SmartflowObject.SeqNo.GetValueOrDefault(),
+                CaseTypeGroup = TaskObject.CaseTypeGroup,
+                CaseType = TaskObject.CaseType,
+                Name = TaskObject.SmartflowName,
+                SeqNo = TaskObject.SeqNo.GetValueOrDefault(),
                 P4WCaseTypeGroup = copyToChapter.P4WCaseTypeGroup,
                 SelectedView = copyToChapter.SelectedView,
                 SelectedStep = copyToChapter.SelectedStep,
@@ -219,13 +225,15 @@ namespace Gizmo_V1_02.Pages.Chapters
                 TickerMessages = copyToChapter.TickerMessages
             });
 
-            if (TaskObject.SmartflowObject.Id == 0)
+            if (TaskObject.Id == 0)
             {
-                await chapterManagementService.Add(TaskObject.SmartflowObject);
+                var returnObject = await chapterManagementService.Add(TaskObject);
+                TaskObject.Id = returnObject.Id;
+                await CompanyDbAccess.SaveSmartFlowRecord(TaskObject, sessionState);
             }
             else
             {
-                await chapterManagementService.Update(TaskObject.SmartflowObject);
+                await chapterManagementService.UpdateMainItem(TaskObject);
             }
 
             DataChanged?.Invoke();

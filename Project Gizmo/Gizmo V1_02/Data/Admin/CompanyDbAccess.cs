@@ -51,6 +51,7 @@ namespace Gizmo_V1_02.Data.Admin
         Task<SmartflowRecords> RemoveSmartFlowRecord(int id, IUserSessionState sessionState);
         Task<List<SmartflowRecords>> SyncAdminSysToClient(List<UsrOrsfSmartflows> clientObjects, IUserSessionState sessionState);
         Task<List<SmartflowRecords>> GetAllSmartflowRecords(IUserSessionState sessionState);
+        Task<List<SmartflowRecords>> GetAllSmartflowRecordsForAllCompanies();
         bool Lock { get; set; }
     }
 
@@ -685,6 +686,27 @@ namespace Gizmo_V1_02.Data.Admin
 
             return returnValues;
         }
+
+        public async Task<List<SmartflowRecords>> GetAllSmartflowRecordsForAllCompanies()
+        {
+            var returnValues = new List<SmartflowRecords>();
+
+            try
+            {
+                Lock = true;
+
+                returnValues = await context.SmartflowRecords
+                                .ToListAsync();
+
+            }
+            finally
+            {
+                Lock = false;
+            }
+
+            return returnValues;
+        }
+
 
         public async Task<SmartflowRecords> SaveSmartFlowRecord(UsrOrsfSmartflows chapter, IUserSessionState sessionState)
         {

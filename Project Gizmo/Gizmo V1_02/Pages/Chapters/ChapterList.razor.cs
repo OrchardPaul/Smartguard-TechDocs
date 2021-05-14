@@ -1681,6 +1681,8 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
             parameters.Add("AllChapters", lstChapters);
             parameters.Add("currentChapter", selectedChapter);
             parameters.Add("DataChanged", Action);
+            parameters.Add("sessionState", sessionState);
+            parameters.Add("CompanyDbAccess", CompanyDbAccess);
 
             var options = new ModalOptions()
             {
@@ -2307,10 +2309,109 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
             Modal.Show<ModalDelete>($"Delete {editObject.ChapterObject.Type}", parameters, options);
         }
 
+
+        protected void PrepareDeleteAltDataView(VmDataViews selectedItem)
+        {
+            EditDataViewObject = selectedItem;
+
+            Action SelectedDeleteAction = HandleAltDataViewDelete;
+            var parameters = new ModalParameters();
+            parameters.Add("ItemName", editObject.ChapterObject.Name);
+            parameters.Add("ModalHeight", "300px");
+            parameters.Add("ModalWidth", "500px");
+            parameters.Add("DeleteAction", SelectedDeleteAction);
+            parameters.Add("InfoText", $"Are you sure you wish to delete the '{EditDataViewObject.DataView.ViewName}' View?");
+
+            var options = new ModalOptions()
+            {
+                Class = "blazored-custom-modal"
+            };
+
+            Modal.Show<ModalDelete>($"Delete Data View", parameters, options);
+        }
+
+
+        protected void PrepareDeleteAltFee(VmFee selectedItem)
+        {
+            editFeeObject = selectedItem;
+
+            Action SelectedDeleteAction = HandleAltFeeDelete;
+            var parameters = new ModalParameters();
+            parameters.Add("ItemName", editObject.ChapterObject.Name);
+            parameters.Add("ModalHeight", "300px");
+            parameters.Add("ModalWidth", "500px");
+            parameters.Add("DeleteAction", SelectedDeleteAction);
+            parameters.Add("InfoText", $"Are you sure you wish to delete the '{editFeeObject.FeeObject.FeeName}' Fee?");
+
+            var options = new ModalOptions()
+            {
+                Class = "blazored-custom-modal"
+            };
+
+            Modal.Show<ModalDelete>($"Delete Fee", parameters, options);
+        }
+
+        protected void PrepareDeleteAltMessage(VmTickerMessages selectedItem)
+        {
+            EditTickerMessageObject = selectedItem;
+
+            Action SelectedDeleteAction = HandleAltMessageDelete;
+            var parameters = new ModalParameters();
+            parameters.Add("ItemName", editObject.ChapterObject.Name);
+            parameters.Add("ModalHeight", "300px");
+            parameters.Add("ModalWidth", "500px");
+            parameters.Add("DeleteAction", SelectedDeleteAction);
+            parameters.Add("InfoText", $"Are you sure you wish to delete this message?");
+
+            var options = new ModalOptions()
+            {
+                Class = "blazored-custom-modal"
+            };
+
+            Modal.Show<ModalDelete>($"Delete Message", parameters, options);
+        }
+
+
         private async void HandleAltDetailDelete()
         {
             await sessionState.SwitchSelectedSystem();
             altChapter.Items.Remove(editObject.ChapterObject);
+            AltChapterObject.SmartflowData = JsonConvert.SerializeObject(altChapter);
+            await chapterManagementService.Update(AltChapterObject);
+
+            await sessionState.ResetSelectedSystem();
+
+            await CompareSelectedChapterToAltSystem();
+        }
+
+        private async void HandleAltFeeDelete()
+        {
+            await sessionState.SwitchSelectedSystem();
+            altChapter.Fees.Remove(editFeeObject.FeeObject);
+            AltChapterObject.SmartflowData = JsonConvert.SerializeObject(altChapter);
+            await chapterManagementService.Update(AltChapterObject);
+
+            await sessionState.ResetSelectedSystem();
+
+            await CompareSelectedChapterToAltSystem();
+        }
+
+        private async void HandleAltDataViewDelete()
+        {
+            await sessionState.SwitchSelectedSystem();
+            altChapter.DataViews.Remove(EditDataViewObject.DataView);
+            AltChapterObject.SmartflowData = JsonConvert.SerializeObject(altChapter);
+            await chapterManagementService.Update(AltChapterObject);
+
+            await sessionState.ResetSelectedSystem();
+
+            await CompareSelectedChapterToAltSystem();
+        }
+
+        private async void HandleAltMessageDelete()
+        {
+            await sessionState.SwitchSelectedSystem();
+            altChapter.TickerMessages.Remove(EditTickerMessageObject.Message);
             AltChapterObject.SmartflowData = JsonConvert.SerializeObject(altChapter);
             await chapterManagementService.Update(AltChapterObject);
 

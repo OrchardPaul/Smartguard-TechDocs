@@ -145,17 +145,17 @@ namespace Gizmo_V1_02.Pages.Chapters
             }
             else
             {
-                TaskObject.Name = Regex.Replace(CopyObject.Name, "[^0-9a-zA-Z-_ ]+", "");
+                TaskObject.Name = Regex.Replace(CopyObject.Name, "[^0-9a-zA-Z-_ (){}!£$%^&*,]+", "");
             }
 
             
             TaskObject.EntityType = CopyObject.EntityType;
             TaskObject.SeqNo = CopyObject.SeqNo;
             TaskObject.SuppressStep = CopyObject.SuppressStep;
-            TaskObject.CompleteName = CopyObject.CompleteName is null ? "" : Regex.Replace(CopyObject.CompleteName, "[^0-9a-zA-Z-_ ]+", "");
-            TaskObject.AsName = CopyObject.AsName is null ? "" : Regex.Replace(CopyObject.AsName, "[^0-9a-zA-Z-_ ]+", "");
+            TaskObject.CompleteName = CopyObject.CompleteName is null ? "" : Regex.Replace(CopyObject.CompleteName, "[^0-9a-zA-Z-_ (){}!£$%^&*,]+", "");
+            TaskObject.AsName = CopyObject.AsName is null ? "" : Regex.Replace(CopyObject.AsName, "[^0-9a-zA-Z-_ (){}!£$%^&*,]+", "");
             TaskObject.RescheduleDays = CopyObject.RescheduleDays;
-            TaskObject.AltDisplayName = CopyObject.AltDisplayName is null ? "" : Regex.Replace(CopyObject.AltDisplayName, "[^0-9a-zA-Z-_ ]+", "");
+            TaskObject.AltDisplayName = CopyObject.AltDisplayName is null ? "" : Regex.Replace(CopyObject.AltDisplayName, "[^0-9a-zA-Z-_ (){}!£$%^&*,]+", "");
             TaskObject.UserMessage = CopyObject.UserMessage;
             TaskObject.PopupAlert = CopyObject.PopupAlert;
             TaskObject.NextStatus = CopyObject.NextStatus;

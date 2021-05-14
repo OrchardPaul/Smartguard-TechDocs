@@ -10,50 +10,95 @@
     </div>
 </div>
 
-    @if (lstCompanyDetails is null)
-    {
-        <div class="spinner"></div>
-    }
-    else
-    {
-        <div class="col-xl-5 col-lg-8 col-12 tran-block rounded mb-3">
-            <div class="container-fluid ">
-                <div class="mb-3">
-                    <button data-toggle="modal" data-target="#companyModal" @onclick='(() => PrepareForInsert())' class="btn btn-main btn-shadow"><i class="fa fa-plus pr-1"></i> Add New Company</button>
+
+@if (AllCompanies is null)
+{
+    <div class="spinner"></div>
+}
+else
+{
+
+
+    <div class="grid-can-edit">
+        <div class="row grid-header invisible-md-down">
+            <div class="data-item ">
+                <div class="data-item-sub">
+                    Company
                 </div>
-                <div class="grid-can-edit">
-                    @foreach (var vmCompany in lstCompanyDetails)
-                    {
-                        <div class="row grid-row">
-                            <div class="col-12 data-item">
-                                <div class="btn-ellipses float-left">
-                                    <span class="fa fa-ellipsis-v"></span>
-                                    <div class="ellipsis-menu">
-                                        <ul>
-                                            <li class="col-main" @onclick='() => PrepareForEdit(vmCompany.Company)'>
-                                                <span class="fa fa-pencil-alt mr-2"></span>
-                                                <span>Edit</span>
-                                            </li>
-                                            <li class="col-red" @onclick="() => PrepareForDelete(vmCompany.Company)">
-                                                <span class="fa fa-trash-alt mr-2"></span>
-                                                <span>Delete</span>
-                                            </li>
-
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="data-item-sub"><span class="fa fa-building mr-1"></span> @vmCompany.Company.CompanyName
-                                @if (!string.IsNullOrEmpty(vmCompany.Company.CompanyDesc))
-                                {
-                                    <span class="font-85 font-grey ml-3">@vmCompany.Company.CompanyDesc</span>
-                                }
-                                </div>
-                            </div>
-                        </div>
-
-                    }
+            </div>
+            <div class="data-item ">
+                <div class="data-item-sub">
+                    Users
+                </div>
+            </div>
+            <div class="data-item ">
+                <div class="data-item-sub">
+                    SFs Live
+                </div>
+            </div>
+            <div class="data-item ">
+                <div class="data-item-sub">
+                    SFs Dev
+                </div>
+            </div>
+            <div class="data-item ">
+                <div class="data-item-sub">
+                    Last Updated
                 </div>
             </div>
         </div>
+        <div class="grid-data">
+            @foreach (var companyObject in AllCompanies)
+            {
+                <div class="row grid-row">
+                    <div class="data-item">
+                        <div class="btn-ellipses float-left">
+                            <span class="fa fa-ellipsis-v"></span>
+                            <div class="ellipsis-menu">
+                                <ul>
+                                    <li class="col-main" @onclick='() => PrepareForEdit(companyObject.Company.Company)'>
+                                        <span class="fa fa-pencil-alt mr-2"></span>
+                                        <span>Edit</span>
+                                    </li>
+                                    <li class="col-red" @onclick="() => PrepareForDelete(companyObject.Company.Company)">
+                                        <span class="fa fa-trash-alt mr-2"></span>
+                                        <span>Delete</span>
+                                    </li>
 
-    }
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="data-item-sub">
+                            <span class="fa fa-building mr-1"></span> @companyObject.Company.Company.CompanyName
+                            @if (!string.IsNullOrEmpty(companyObject.Company.Company.CompanyDesc))
+                            {
+                                <span class="font-85 font-grey ml-3">@companyObject.Company.Company.CompanyDesc</span>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="data-item">
+                        @companyObject.Users.Count()
+                    </div>
+
+                    <div class="data-item">
+                        @companyObject.SmartflowsLive.Count()
+                    </div>
+
+                    <div class="data-item">
+                        @companyObject.SmartflowsDev.Count()
+                    </div>
+
+                    <div class="data-item">
+                        @companyObject.LastUpdated
+                    </div>
+
+                </div>
+            }
+
+
+        </div>
+
+    </div>
+}
+

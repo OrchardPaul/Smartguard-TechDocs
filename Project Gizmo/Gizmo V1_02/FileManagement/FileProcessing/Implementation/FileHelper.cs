@@ -861,7 +861,7 @@ namespace Gizmo_V1_02.FileManagement.FileProcessing.Implementation
             workSheetLookUp.Cells[1, 1, 1, 2].Merge = true;
 
             workSheetLookUp.Cells[1, 1].Style.Fill.SetBackground(System.Drawing.Color.Black);
-            workSheetLookUp.Cells[1, 1].Value = "Documents for Case Type Group: 'Case type group name'";
+            workSheetLookUp.Cells[1, 1].Value = $"Documents for Case Type Group: '{selectedChapter.P4WCaseTypeGroup}'";
             workSheetLookUp.Cells[2, 1].Value = "Document Type";
             workSheetLookUp.Cells[2, 2].Value = "Document Name";
 
