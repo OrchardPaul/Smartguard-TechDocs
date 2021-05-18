@@ -18,87 +18,93 @@
 else
 {
 
+    <div class="col-12 mb-3 tran-block rounded">
 
-    <div class="grid-can-edit">
-        <div class="row grid-header invisible-md-down">
-            <div class="data-item ">
-                <div class="data-item-sub">
-                    Company
-                </div>
-            </div>
-            <div class="data-item ">
-                <div class="data-item-sub">
-                    Users
-                </div>
-            </div>
-            <div class="data-item ">
-                <div class="data-item-sub">
-                    SFs Live
-                </div>
-            </div>
-            <div class="data-item ">
-                <div class="data-item-sub">
-                    SFs Dev
-                </div>
-            </div>
-            <div class="data-item ">
-                <div class="data-item-sub">
-                    Last Updated
-                </div>
-            </div>
-        </div>
-        <div class="grid-data">
-            @foreach (var companyObject in AllCompanies)
-            {
-                <div class="row grid-row">
-                    <div class="data-item">
-                        <div class="btn-ellipses float-left">
-                            <span class="fa fa-ellipsis-v"></span>
-                            <div class="ellipsis-menu">
-                                <ul>
-                                    <li class="col-main" @onclick='() => PrepareForEdit(companyObject.Company.Company)'>
-                                        <span class="fa fa-pencil-alt mr-2"></span>
-                                        <span>Edit</span>
-                                    </li>
-                                    <li class="col-red" @onclick="() => PrepareForDelete(companyObject.Company.Company)">
-                                        <span class="fa fa-trash-alt mr-2"></span>
-                                        <span>Delete</span>
-                                    </li>
-
-                                </ul>
-                            </div>
-                        </div>
+        <div class="container-fluid grid-admin grid-admin-company">
+            <div class="grid-can-edit">
+                <div class="row grid-header invisible-md-down">
+                    <div class="data-item ">
                         <div class="data-item-sub">
-                            <span class="fa fa-building mr-1"></span> @companyObject.Company.Company.CompanyName
-                            @if (!string.IsNullOrEmpty(companyObject.Company.Company.CompanyDesc))
-                            {
-                                <span class="font-85 font-grey ml-3">@companyObject.Company.Company.CompanyDesc</span>
-                            }
+                            Company
                         </div>
                     </div>
-
-                    <div class="data-item">
-                        @companyObject.Users.Count()
+                    <div class="data-item ">
+                        
+                            Users
+                        
                     </div>
-
-                    <div class="data-item">
-                        @companyObject.SmartflowsLive.Count()
+                    <div class="data-item ">
+                        
+                            SFs Live
+                       
                     </div>
-
-                    <div class="data-item">
-                        @companyObject.SmartflowsDev.Count()
+                    <div class="data-item ">
+                        
+                            SFs Dev
+                        
                     </div>
-
-                    <div class="data-item">
-                        @companyObject.LastUpdated
+                    <div class="data-item ">
+                        
+                            Last Updated
+                        
                     </div>
+                </div>
+                <div class="grid-data">
+                    @foreach (var companyObject in AllCompanies)
+                    {
+                        <div class="row grid-row grid-row-lg">
+                            <div class="data-item">
+                                <div class="btn-ellipses float-left">
+                                    <span class="fa fa-ellipsis-v"></span>
+                                    <div class="ellipsis-menu">
+                                        <ul>
+                                            <li class="col-main" @onclick='() => PrepareForEdit(companyObject.Company.Company)'>
+                                                <span class="fa fa-pencil-alt mr-2"></span>
+                                                <span>Edit</span>
+                                            </li>
+                                            <li class="col-red" @onclick="() => PrepareForDelete(companyObject.Company.Company)">
+                                                <span class="fa fa-trash-alt mr-2"></span>
+                                                <span>Delete</span>
+                                            </li>
+
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="data-item-sub">
+                                    <span class="fa fa-building mr-1"></span> @companyObject.Company.Company.CompanyName
+                                    @if (!string.IsNullOrEmpty(companyObject.Company.Company.CompanyDesc))
+                                    {
+                                        <span class="font-85 font-grey ml-3">@companyObject.Company.Company.CompanyDesc</span>
+                                    }
+                                </div>
+                            </div>
+
+                            <div class="data-item invisible-md-down">
+                                    @companyObject.Users.Count()
+                            </div>
+
+                                <div class="data-item invisible-md-down">
+                                    @companyObject.SmartflowsLive.Count()
+                                </div>
+
+                                <div class="data-item invisible-md-down">
+                                    @companyObject.SmartflowsDev.Count()
+                                </div>
+
+                                <div class="data-item invisible-md-down">
+                                    @companyObject.LastUpdated
+                                </div>
+
+                            </div>
+                    }
+
 
                 </div>
-            }
 
-
+            </div>
         </div>
 
     </div>
+
 }
 
