@@ -412,9 +412,9 @@ else
                                                                  ValueChanged="@((string value) => SaveSelectedView(value))">
                                                         <option value="">Select</option>
                                                         @foreach (var view in ListP4WViews
-                                                                    .Where(V => !(V.InternalNote is null) && (V.InternalNote.Contains("Smartflow")))
-                                                                    .OrderBy(V => V.Name)
-                                                                    .ToList())
+                                                                   .Where(V => !(V.InternalNote is null) && (V.InternalNote.Contains("Smartflow")))
+                                                                   .OrderBy(V => V.Name)
+                                                                   .ToList())
                                                         {
                                                             <option value="@view.Name">
                                                                 @view.Name
@@ -435,18 +435,18 @@ else
                                                         <option value="">Select</option>
                                                         <option value="Create New">--- Create New ---</option>
                                                         @foreach (var step in dropDownChapterList
-                                                         .Where(D => D.DocumentType == 6)
-                                                         .Where(D => D.Notes.Contains("Smartflow:"))
-                                                         .Where(V => V.CaseTypeGroupRef == (string.IsNullOrEmpty(selectedChapter.P4WCaseTypeGroup)
-                                                                                             ? 0
-                                                                                             : selectedChapter.P4WCaseTypeGroup == "Entity Documents"
-                                                                                             ? -1
-                                                                                             : partnerCaseTypeGroups
-                                                                                                 .Where(P => P.Name == selectedChapter.P4WCaseTypeGroup)
-                                                                                                 .Select(P => P.Id)
-                                                                                                 .FirstOrDefault()))
-                                                         .OrderBy(D => D.Name)
-                                                         .ToList())
+                                                        .Where(D => D.DocumentType == 6)
+                                                        .Where(D => D.Notes.Contains("Smartflow:"))
+                                                        .Where(V => V.CaseTypeGroupRef == (string.IsNullOrEmpty(selectedChapter.P4WCaseTypeGroup)
+                                                                                            ? 0
+                                                                                            : selectedChapter.P4WCaseTypeGroup == "Entity Documents"
+                                                                                            ? -1
+                                                                                            : partnerCaseTypeGroups
+                                                                                                .Where(P => P.Name == selectedChapter.P4WCaseTypeGroup)
+                                                                                                .Select(P => P.Id)
+                                                                                                .FirstOrDefault()))
+                                                        .OrderBy(D => D.Name)
+                                                        .ToList())
                                                         {
                                                             <option value="@step.Name">
                                                                 @step.Name
@@ -545,7 +545,7 @@ else
                                         @ListChapterColours.Where(C => C.ColourCode == @selectedChapter.BackgroundColour).Select(C => C.ColourName).SingleOrDefault()
                                     </label>
                                 </div>
-                                <div class="form-group" style="height: 100px; margin: 0; padding: 0;" >
+                                <div class="form-group" style="height: 100px; margin: 0; padding: 0;">
 
                                     @if (!string.IsNullOrEmpty(selectedChapter.BackgroundImageName))
                                     {
@@ -561,7 +561,15 @@ else
                                         <img src="/images/BackgroundImages/NoImage.jpg" alt="" class="img-thumbnail ml-2" />
 
                                     }
+
                                 </div>
+                                <div class="form-group hidden-lg-down">
+                                <label style="display: inline-block; width: 150px">Preview Image</label>
+                                <label class="switch">
+                                    <input type="checkbox" @bind="PreviewChapterImage">
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
 
                             }
                         </div>
@@ -1938,14 +1946,13 @@ else
                                                 <ModalTooltip Direction="right" Text=@("Exists on alternate system, Do you wish to delete?") Class="w-2">
                                                     <div class="btn-dashed" @onclick="() => PrepareDeleteAltMessage(vmtickerMessages)"><span class="fa fa-trash"></span></div>
                                                 </ModalTooltip>
-                                                <div class="data-item-sub">
-                                                    <span class="fa fa-comment mr-2 tickericon"></span> @vmtickerMessages.Message.Message
-                                                </div>
                                             </div>
-
-                                                <div class="data-item-right">
-                                                    <div class="seq-no">@vmtickerMessages.Message.SeqNo</div>
-                                                </div>
+                                            <div class="data-item-sub">
+                                                <span class="fa fa-comment mr-2 tickericon"></span> @vmtickerMessages.Message.Message
+                                            </div>
+                                            <div class="data-item-right">
+                                                <div class="seq-no">@vmtickerMessages.Message.SeqNo</div>
+                                            </div>
 
                                         </div>
                                         @if (!string.IsNullOrEmpty(vmtickerMessages.Message.FromDate))
