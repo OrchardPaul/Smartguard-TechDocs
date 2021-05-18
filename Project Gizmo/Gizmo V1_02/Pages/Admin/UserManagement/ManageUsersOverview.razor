@@ -81,10 +81,15 @@ else
                                             <span class="fa fa-pencil-alt mr-2"></span>
                                             <span>Edit</span>
                                         </li>
-                                        <li class="col-red" @onclick="() => PrepareModalForDelete(userDataItem.User)">
-                                            <span class="fa fa-trash-alt mr-2"></span>
-                                            <span>Delete</span>
-                                        </li>
+
+                                        @if (!(userDataItem.User.UserName == sessionState.User.UserName))
+                                        {
+                                            <li class="col-red" @onclick="() => PrepareModalForDelete(userDataItem.User)">
+                                                <span class="fa fa-trash-alt mr-2"></span>
+                                                <span>Delete</span>
+                                            </li>
+                                        }
+
                                     </ul>
                                 </div>
                             </div>

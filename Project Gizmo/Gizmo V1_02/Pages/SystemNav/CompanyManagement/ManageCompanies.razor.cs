@@ -193,18 +193,47 @@ namespace Gizmo_V1_02.Pages.SystemNav.CompanyManagement
             ShowEditModal();
         }
 
-        protected void PrepareForDelete(AppCompanyDetails seletedRole)
+        protected void PrepareForDelete(companyInfo seletedRole)
         {
-            editCompany = seletedRole;
+            if (seletedRole.Users is null || seletedRole.Users.Count != 0)
+            {
+                var errorDets = new List<string>();
 
-            Action SelectedDeleteAction = HandleValidDelete;
-            var parameters = new ModalParameters();
-            parameters.Add("InfoHeader", "Delete?");
-            parameters.Add("ModalHeight", "300px");
-            parameters.Add("ModalWidth", "500px");
-            parameters.Add("DeleteAction", SelectedDeleteAction);
+                errorDets.Add("Users exist with claims to this company");
 
-            Modal.Show<ModalDelete>("Delete?", parameters);
+                var parameters = new ModalParameters();
+                parameters.Add("ErrorDesc", "Cannot delete company for the following reasons:");
+                parameters.Add("ErrorDetails", errorDets);
+
+                var options = new ModalOptions()
+                {
+                    Class = "blazored-custom-modal modal-chapter-import"
+                };
+
+                Modal.Show<ModalErrorInfo>("Delete Company Issue", parameters, options);
+            }
+            else
+            {
+                editCompany = seletedRole.Company.Company;
+
+                Action SelectedDeleteAction = HandleValidDelete;
+                var parameters = new ModalParameters();
+                parameters.Add("InfoHeader", "Delete?");
+                parameters.Add("ModalHeight", "300px");
+                parameters.Add("ModalWidth", "500px");
+                parameters.Add("DeleteAction", SelectedDeleteAction);
+
+
+                var options = new ModalOptions()
+                {
+                    Class = "blazored-custom-modal modal-chapter-import"
+                };
+
+                Modal.Show<ModalDelete>("Delete?", parameters, options);
+            }
+
+
+
         }
 
         protected void PrepareForInsert()
