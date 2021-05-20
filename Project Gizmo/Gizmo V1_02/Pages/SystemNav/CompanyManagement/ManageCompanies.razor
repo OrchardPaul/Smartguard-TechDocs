@@ -18,6 +18,13 @@
 else
 {
 
+
+    <div class="grid-actions">
+        <div class="btn-group">
+            <button @onclick='() => PrepareForInsert()' class="btn btn-main btn-shadow" title="Add new company"><i class="fa fa-plus"></i><span>New</span></button>           
+        </div>
+    </div>
+
     <div class="col-12 mb-3 tran-block rounded">
 
         <div class="container-fluid grid-admin grid-admin-company">
@@ -62,7 +69,7 @@ else
                                                 <span class="fa fa-pencil-alt mr-2"></span>
                                                 <span>Edit</span>
                                             </li>
-                                            <li class="col-red" @onclick="() => PrepareForDelete(companyObject.Company.Company)">
+                                            <li class="col-red" @onclick="() => PrepareForDelete(companyObject)">
                                                 <span class="fa fa-trash-alt mr-2"></span>
                                                 <span>Delete</span>
                                             </li>

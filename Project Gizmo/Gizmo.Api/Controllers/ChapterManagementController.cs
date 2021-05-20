@@ -55,6 +55,13 @@ namespace GadjIT.ClientAPI.Controllers
 
         }
 
+        [HttpGet]
+        public async Task<ActionResult> TestApi()
+        {
+            return Ok("Test");
+
+        }
+
         //[HttpGet("{caseTypeGroup}/{caseType}")]
         //public async Task<ActionResult> GetFeeDefs(string caseTypeGroup, string caseType)
         //{

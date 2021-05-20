@@ -28,5 +28,8 @@ namespace GadjIT.GadjitContext.GadjIT_App
         public string CompCol3 { get; set; }
         [StringLength(50)]
         public string CompCol4 { get; set; }
+
+        public bool ExcludeFromAccounts { get; set; }
+
     }
 }
