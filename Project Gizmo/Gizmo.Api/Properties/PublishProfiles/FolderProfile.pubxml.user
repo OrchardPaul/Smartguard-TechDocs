@@ -8,8 +8,8 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
     <_PublishTargetUrl>F:\WorkSpaces\JD\Gizmo Api Publish</_PublishTargetUrl>
   </PropertyGroup>
   <ItemGroup>
-    <DestinationConnectionStrings Include="OR_RESI_LIVE">
-      <Value>Data Source=webserver\SQLEXPRESS%3bInitial Catalog=OR_Gizmo_OrchardRock%3bIntegrated Security=True</Value>
+    <DestinationConnectionStrings Include="GadjIT_API">
+      <Value>Data Source=dev\SQLEXPRESS%3bInitial Catalog=P4W_OR_RESI_V5_DEV%3bUser ID=OR_GadjIT_API%3bPassword=Alaska%40or.2014</Value>
     </DestinationConnectionStrings>
   </ItemGroup>
 </Project>

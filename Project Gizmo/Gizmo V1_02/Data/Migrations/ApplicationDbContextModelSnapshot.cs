@@ -19,6 +19,73 @@ namespace Gizmo_V1_02.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("GadjIT.GadjitContext.GadjIT_App.AppCompanyAccountsSmartflow", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("CompanyId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("SmartflowCost")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Subscription")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("TotalBilled")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AppCompanyAccountsSmartflow");
+                });
+
+            modelBuilder.Entity("GadjIT.GadjitContext.GadjIT_App.AppCompanyAccountsSmartflowDetails", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("Duration")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("MonthlyCharge")
+                        .HasColumnType("money");
+
+                    b.Property<int>("MonthsRemaining")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Outstanding")
+                        .HasColumnType("money");
+
+                    b.Property<int>("SmartflowAccountId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SmartflowRecordId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Status")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
+                    b.Property<decimal>("TotalBilled")
+                        .HasColumnType("money");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AppCompanyAccountsSmartflowDetails");
+                });
+
             modelBuilder.Entity("GadjIT.GadjitContext.GadjIT_App.AppCompanyDetails", b =>
                 {
                     b.Property<int>("Id")
@@ -54,6 +121,9 @@ namespace Gizmo_V1_02.Data.Migrations
                     b.Property<string>("DevUri")
                         .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
+
+                    b.Property<bool>("ExcludeFromAccounts")
+                        .HasColumnType("bit");
 
                     b.Property<string>("LiveUri")
                         .HasColumnType("nvarchar(256)")

@@ -145,7 +145,18 @@ namespace Gizmo_V1_02.Pages.Chapters
                 else
                 {
                     await sessionState.SwitchSelectedSystem();
-                    AltChapterRow = CurrentChapterRow;
+
+                    AltChapterRow = new UsrOrsfSmartflows
+                    {
+                        CaseTypeGroup = CurrentChapterRow.CaseTypeGroup,
+                        CaseType = CurrentChapterRow.CaseType,
+                        SmartflowName = CurrentChapterRow.SmartflowName,
+                        SeqNo = CurrentChapterRow.SeqNo,
+                        SmartflowData = CurrentChapterRow.SmartflowData,
+                        VariantName = CurrentChapterRow.VariantName,
+                        VariantNo = CurrentChapterRow.VariantNo
+                    };
+
                     var returnObject = await chapterManagementService.Add(AltChapterRow);
                     AltChapterRow.Id = returnObject.Id;
                     await CompanyDbAccess.SaveSmartFlowRecord(AltChapterRow, sessionState);

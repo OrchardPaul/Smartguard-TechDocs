@@ -54,23 +54,25 @@
                     </td>
                 </tr>
 
-                <tr>
-                    <td>
-                        Display Name:
-                    </td>
-                    <td>
-                        <input type="text" class="read-only" readonly value="@Object.ChapterObject.AltDisplayName" />
-                    </td>
-                    <td>
-                        <input type="text" class="read-only" value="@Object.AltObject.AltDisplayName" />
-                    </td>
-                    <td>
-                        <span class="fa fa-@(Object.ChapterObject.AltDisplayName == @Object.AltObject.AltDisplayName ? "check" : "exclamation")"></span>
-                    </td>
-                </tr>
 
                 @if (Object.ChapterObject.Type != "Status")
                 {
+                    <tr>
+                        <td>
+                            Display Name:
+                        </td>
+                        <td>
+                            <input type="text" class="read-only" readonly value="@Object.ChapterObject.AltDisplayName" />
+                        </td>
+                        <td>
+                            <input type="text" class="read-only" value="@Object.AltObject.AltDisplayName" />
+                        </td>
+                        <td>
+                            <span class="fa fa-@(Object.ChapterObject.AltDisplayName == @Object.AltObject.AltDisplayName ? "check" : "exclamation")"></span>
+                        </td>
+                    </tr>
+
+
                     <tr>
                         <td>
                             Schedule As Name:

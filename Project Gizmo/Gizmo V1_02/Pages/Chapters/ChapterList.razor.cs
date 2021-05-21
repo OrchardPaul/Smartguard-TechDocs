@@ -279,7 +279,7 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
             }
             catch (Exception e)
             {
-                NavigationManager.NavigateTo($"/", true);
+                Console.WriteLine(e.Message);
             }
 
 
