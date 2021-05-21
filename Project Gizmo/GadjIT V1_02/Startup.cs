@@ -48,10 +48,10 @@ namespace GadjIT_V1_02
         {
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
-                    Configuration.GetConnectionString("AuthentificationConnection")));
+                    Configuration.GetConnectionString("OR_GadjIT_Web")));
             services.AddDbContext<AuthorisationDBContext>(options =>
                 options.UseSqlServer(
-                    Configuration.GetConnectionString("AuthentificationConnection")));
+                    Configuration.GetConnectionString("OR_GadjIT_Web")));
 
             services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddRoles<ApplicationRole>()

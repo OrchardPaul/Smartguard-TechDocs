@@ -12,6 +12,8 @@ namespace GadjIT.ClientAPI.Controllers
      * Controller to access P4W default tables
      */
 
+    
+
     [Route("api/[controller]/[action]")]
     [ApiController]
     public class PartnerAccessController : ControllerBase
