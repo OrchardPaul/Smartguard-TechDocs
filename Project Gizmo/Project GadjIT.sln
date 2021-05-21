@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.30413.136
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GadjIT.ClientAPI", "Gizmo.Api\GadjIT.ClientAPI.csproj", "{CD9F35A6-EF76-44FA-A9F4-0F2E3633E5A4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GadjIT V1_02", "Gizmo V1_02\GadjIT V1_02.csproj", "{55D5E322-50AD-46F7-AF6C-F73CE931ADD0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GadjIT V1_02", "GadjIT V1_02\GadjIT V1_02.csproj", "{55D5E322-50AD-46F7-AF6C-F73CE931ADD0}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GadjIT.GadjitContext", "GadjIT.GadjitContext\GadjIT.GadjitContext.csproj", "{80A0D625-4A22-4EE3-A0E8-28F95AC00DDF}"
 EndProject

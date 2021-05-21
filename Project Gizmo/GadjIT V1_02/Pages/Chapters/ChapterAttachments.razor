@@ -1,0 +1,107 @@
+﻿@using GadjIT_V1_02.Data.CustomFormObjects;
+
+<EditForm Model="@Attachment" OnValidSubmit="HandleValidSubmit">
+    <div class="modal-body">
+
+        <DataAnnotationsValidator />
+
+        @if (dropDownChapterList is null)
+        {
+            <div class="spinner"></div>
+        }
+        else
+        {
+            <div class="form-group">
+                <label for="DocType">Case Type Group</label>
+                <InputSelectInteger class="form-control form-control-lg"
+                                    @bind-Value="selectedCaseTypeGroup">
+                    <option value="-2">Select</option>
+                    @foreach (var group in CaseTypeGroups)
+                        {
+                        <option value="@group.Id">
+                            @group.Name
+                        </option>
+                        }
+                    <option value="-1">Entity Documents</option>
+                </InputSelectInteger>
+            </div>
+
+            <div class="form-group">
+                <label for="DocName">Document / Step</label>
+                @if (selectedCaseTypeGroup == -2 & Attachment.DocName is null)
+                {
+                    <select class="form-control" disabled />
+                }
+                else
+                {
+                    <div class="form-label-check" style="margin-right: 13px">
+                        <label>Custom Item</label><input type="checkbox" @bind-value="@useCustomItem" />
+                    </div>
+                    @if (!useCustomItem)
+                    {
+                        <div class="form-group">
+                            <label for="AltDisplayName">Filter</label>
+                            <InputText class="form-control form-control-xl" @bind-Value="@filterText" />
+                        </div>
+
+                        <InputSelect class="form-control form-control-xl" @bind-Value="Attachment.DocName">
+                            @if (Attachment.DocName is null)
+                                        {
+                                <option value="">Select</option>
+                                        }
+                                        else
+                                        {
+                                <option value="@Attachment.DocName">@Attachment.DocName</option>
+                                        }
+
+
+                            @foreach (var doc in dropDownChapterList.Where(D => D.CaseTypeGroupRef == selectedCaseTypeGroup).Where(C => C.Name.ToUpper().Contains(filterText.ToUpper())).OrderBy(D => D.Name).ToList())
+                                        {
+                                <option value="@doc.Name">
+                                    @doc.Name
+                                </option>
+                                        }
+                        </InputSelect>
+
+                        <div class="form-group">
+                            <label for="CompleteName">Display Name</label>
+                            <InputText class="form-control form-control-xl" @bind-Value="@Attachment.DocAsName" />
+                        </div>
+                    }
+                    else
+                    {
+
+                        <InputText class="form-control form-control-xl" @bind-Value="@Attachment.DocName"></InputText>
+                    }
+                }
+                <ValidationMessage For="@(() => Attachment.DocName)" />
+            </div>
+        }
+
+        
+
+        <div class="form-group">
+            <label for="NextStatus">Action</label>
+            <InputSelect class="form-control form-control-sm"
+                         @bind-Value="Attachment.Action">
+                <option value=""></option>
+                @foreach (var s in ActionList)
+                {
+                    <option value="@s">
+                        @s
+                    </option>
+                }
+            </InputSelect>
+            <ValidationMessage For="@(() => Attachment.Action)" />
+        </div>
+    </div>
+
+    <div class="button-container">
+        @if (CopyObject.FollowUpDocs.Select(F => F.DocName).ToList().Contains(Attachment.DocName))
+        {
+            <button type="button" class="btn btn-secondary" title="Delete Attachment" @onclick="RemoveAttachment"><span class="fa fa-trash"></span></button>
+        }
+        <button type="submit" class="btn btn-main ml-auto"><span class="fa fa-save"></span> <span class="ml-2">Save</span></button>
+        <button type="button" class="btn btn-secondary" @onclick="Close">Cancel</button>
+    </div>
+</EditForm>
