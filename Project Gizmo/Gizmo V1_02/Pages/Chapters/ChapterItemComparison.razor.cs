@@ -80,6 +80,7 @@ namespace Gizmo_V1_02.Pages.Chapters
                 taskObject.PopupAlert = Object.AltObject.PopupAlert;
                 taskObject.NextStatus = Object.AltObject.NextStatus;
                 taskObject.Action = Object.AltObject.Action;
+                taskObject.FollowUpDocs = Object.AltObject.FollowUpDocs;
 
                 CurrentChapterRow.SmartflowData = JsonConvert.SerializeObject(CurrentChapter);
                 await chapterManagementService.Update(CurrentChapterRow).ConfigureAwait(false);
@@ -102,7 +103,7 @@ namespace Gizmo_V1_02.Pages.Chapters
                 taskObject.PopupAlert = Object.ChapterObject.PopupAlert;
                 taskObject.NextStatus = Object.ChapterObject.NextStatus;
                 taskObject.Action = Object.ChapterObject.Action;
-
+                taskObject.FollowUpDocs = Object.ChapterObject.FollowUpDocs;
 
                 await sessionState.SwitchSelectedSystem();
                 AltChapterRow.SmartflowData = JsonConvert.SerializeObject(AltChapter);
@@ -134,7 +135,8 @@ namespace Gizmo_V1_02.Pages.Chapters
                     UserMessage = Object.AltObject.UserMessage,
                     PopupAlert = Object.AltObject.PopupAlert,
                     NextStatus = Object.AltObject.NextStatus,
-                    Action = Object.AltObject.Action
+                    Action = Object.AltObject.Action,
+                    FollowUpDocs = Object.AltObject.FollowUpDocs
                 };
 
                 CurrentChapter.Items.Add(AltObject);
@@ -160,7 +162,8 @@ namespace Gizmo_V1_02.Pages.Chapters
                         UserMessage = Object.ChapterObject.UserMessage,
                         PopupAlert = Object.ChapterObject.PopupAlert,
                         NextStatus = Object.ChapterObject.NextStatus,
-                        Action = Object.ChapterObject.Action
+                        Action = Object.ChapterObject.Action,
+                        FollowUpDocs = Object.ChapterObject.FollowUpDocs
                     };
 
                     AltChapter.Items.Add(PushObject);

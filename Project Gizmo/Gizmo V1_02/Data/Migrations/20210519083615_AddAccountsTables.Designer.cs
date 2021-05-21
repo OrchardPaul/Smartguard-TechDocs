@@ -4,14 +4,16 @@ using Gizmo_V1_02.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Gizmo_V1_02.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210519083615_AddAccountsTables")]
+    partial class AddAccountsTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -57,13 +59,13 @@ namespace Gizmo_V1_02.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<decimal>("MonthlyCharge")
-                        .HasColumnType("money");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("MonthsRemaining")
                         .HasColumnType("int");
 
                     b.Property<decimal>("Outstanding")
-                        .HasColumnType("money");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("SmartflowAccountId")
                         .HasColumnType("int");
@@ -79,7 +81,7 @@ namespace Gizmo_V1_02.Data.Migrations
                         .HasMaxLength(50);
 
                     b.Property<decimal>("TotalBilled")
-                        .HasColumnType("money");
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
