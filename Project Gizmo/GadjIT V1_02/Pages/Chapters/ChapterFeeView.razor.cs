@@ -4,6 +4,7 @@ using GadjIT.ClientContext.P4W.Custom;
 using GadjIT_V1_02.Services;
 using GadjIT_V1_02.Services.SessionState;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Http;
 using Microsoft.JSInterop;
 using Newtonsoft.Json;
 using System;
@@ -15,6 +16,8 @@ namespace GadjIT_V1_02.Pages.Chapters
 {
     public partial class ChapterFeeView
     {
+
+
         [CascadingParameter]
         BlazoredModalInstance ModalInstance { get; set; }
 
