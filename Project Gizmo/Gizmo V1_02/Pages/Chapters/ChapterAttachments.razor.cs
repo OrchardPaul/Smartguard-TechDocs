@@ -71,7 +71,9 @@ namespace Gizmo_V1_02.Pages.Chapters
 
         private int selectedCaseTypeGroup { get; set; } = -1;
 
-        
+        public bool useCustomItem { get; set; } = false;
+
+
         List<string> ActionList = new List<string>() { "TAKE", "INSERT" };
 
         public List<string> documentList;
