@@ -17,6 +17,7 @@ namespace GadjIT.ClientContext.P4W.Custom
         public string BackgroundImage { get; set; }
         public string BackgroundImageName { get; set; }
         public string ShowPartnerNotes { get; set; }
+        public string ShowDocumentTracking { get; set; }
         public string GeneralNotes { get; set; }
         public string DeveloperNotes { get; set; }
         public string SelectedView { get; set; }
