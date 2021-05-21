@@ -358,7 +358,31 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
             await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
         }
 
+        public bool ShowAttachemntTracking
+        {
+            get { return (selectedChapter.ShowDocumentTracking == "Y" ? true : false); }
+            set
+            {
+                if (value)
+                {
+                    selectedChapter.ShowDocumentTracking = "Y";
+                }
+                else
+                {
+                    selectedChapter.ShowDocumentTracking = "N";
+                }
 
+                SaveAttachmentTracking();
+            }
+
+        }
+
+        private async void SaveAttachmentTracking()
+        {
+            SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(selectedChapter);
+
+            await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
+        }
 
 
         public void DirectToLogin()
