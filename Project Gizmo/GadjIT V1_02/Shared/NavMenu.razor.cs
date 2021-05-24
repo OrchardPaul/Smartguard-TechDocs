@@ -17,10 +17,10 @@ namespace GadjIT_V1_02.Shared
         IModalService Modal { get; set; }
 
         [Inject]
-        public IUserSessionState userSession { get; set; }
+        public IUserSessionState UserSession { get; set; }
 
         [Inject]
-        public NavigationManager navigationManager { get; set; }
+        public NavigationManager NavigationManager { get; set; }
 
         private bool collapseNavMenu = true;
 
@@ -37,11 +37,11 @@ namespace GadjIT_V1_02.Shared
 
         private void refreshSmartFlowScreen()
         {
-            if (navigationManager.Uri.Contains("smartflow"))
+            if (NavigationManager.Uri.Contains("smartflow"))
             {
-                if(!(userSession.HomeActionSmartflow is null))
+                if(!(UserSession.HomeActionSmartflow is null))
                 {
-                    userSession.HomeActionSmartflow?.Invoke();
+                    UserSession.HomeActionSmartflow?.Invoke();
                 }
             }
 
@@ -50,10 +50,10 @@ namespace GadjIT_V1_02.Shared
 
         private void refreshBackGround()
         {
-            if (!string.IsNullOrEmpty(userSession.TempBackGroundImage))
+            if (!string.IsNullOrEmpty(UserSession.TempBackGroundImage))
             {
-                userSession.TempBackGroundImage = "";
-                userSession.RefreshHome?.Invoke();
+                UserSession.TempBackGroundImage = "";
+                UserSession.RefreshHome?.Invoke();
             }
             
         }
@@ -61,7 +61,7 @@ namespace GadjIT_V1_02.Shared
         protected void ShowSystemSelectModel()
         {
             var parameters = new ModalParameters();
-            parameters.Add("currentUser", userSession.User);
+            parameters.Add("currentUser", UserSession.User);
 
             var options = new ModalOptions()
             {
@@ -77,8 +77,8 @@ namespace GadjIT_V1_02.Shared
         {
             refreshBackGround();
             //set Return URI
-            userSession.SetUserProfileReturnURI(navigationManager.Uri);
-            navigationManager.NavigateTo("/userprofile");
+            UserSession.SetUserProfileReturnURI(NavigationManager.Uri);
+            NavigationManager.NavigateTo("/userprofile");
         }
     }
 }

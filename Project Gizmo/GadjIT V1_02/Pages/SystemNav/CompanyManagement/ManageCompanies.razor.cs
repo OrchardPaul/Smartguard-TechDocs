@@ -64,7 +64,12 @@ namespace GadjIT_V1_02.Pages.SystemNav.CompanyManagement
 
         private string LastUpdated { get; set; }
 
-        protected override async Task OnInitializedAsync()
+        protected override void OnInitialized()
+        {
+            DataChanged();
+        }
+
+        private async void DataChanged()
         {
             bool gotLock = sessionState.Lock;
             while (gotLock)
@@ -81,9 +86,9 @@ namespace GadjIT_V1_02.Pages.SystemNav.CompanyManagement
 
             AllUsers = await userAccess.GetUsers();
             AllUserinfo = AllUsers.Select(U => new userInfo
-                                            { 
-                                                user = U
-                                            })
+            {
+                user = U
+            })
                                     .ToList();
 
             foreach (var user in AllUserinfo)
@@ -92,7 +97,7 @@ namespace GadjIT_V1_02.Pages.SystemNav.CompanyManagement
 
                 user.claims = claims;
             }
-            
+
 
 
 
@@ -102,25 +107,25 @@ namespace GadjIT_V1_02.Pages.SystemNav.CompanyManagement
 
             AllCompanies = lstCompanyDetails
                                     .Select(C => new companyInfo
-                                            {
-                                                Company = C,
-                                                SmartflowsDev = AllSmartflows
+                                    {
+                                        Company = C,
+                                        SmartflowsDev = AllSmartflows
                                                                     .Where(S => S.CompanyId == C.Company.Id)
                                                                     .Where(S => S.System == "Dev")
                                                                     .ToList(),
-                                                SmartflowsLive = AllSmartflows
+                                        SmartflowsLive = AllSmartflows
                                                                     .Where(S => S.CompanyId == C.Company.Id)
                                                                     .Where(S => S.System == "Live")
                                                                     .ToList(),
-                                                Users = AllUserinfo.Where(U => U
-                                                                                .claims
-                                                                                .Select(C => C.Value)
-                                                                                .ToList()
-                                                                                .Contains(C.Company.Id.ToString()))
+                                        Users = AllUserinfo.Where(U => U
+                                                                        .claims
+                                                                        .Select(C => C.Value)
+                                                                        .ToList()
+                                                                        .Contains(C.Company.Id.ToString()))
                                                                     .Select(U => U.user)
                                                                     .ToList()
-                                                
-                                                
+
+
 
                                     })
                                     .ToList();
@@ -152,11 +157,11 @@ namespace GadjIT_V1_02.Pages.SystemNav.CompanyManagement
                     isLiveDate = false;
                 }
 
-                if(isDevDate && isLiveDate)
+                if (isDevDate && isLiveDate)
                 {
                     company.LastUpdated = lastDevDate > lastLiveDate ? lastDevDate.ToString("dd MMM yyyy") : lastLiveDate.ToString("dd MMM yyyy");
                 }
-                else if(isDevDate && !isLiveDate)
+                else if (isDevDate && !isLiveDate)
                 {
                     company.LastUpdated = lastDevDate.ToString("dd MMM yyyy");
                 }
@@ -168,20 +173,7 @@ namespace GadjIT_V1_02.Pages.SystemNav.CompanyManagement
                 {
                     company.LastUpdated = "Not Used";
                 }
-
-
-
-
             }
-
-        }
-
-        private async void DataChanged()
-        {
-            var lstAppCompanyDetails = await companyDbAccess.GetCompanies();
-            lstCompanyDetails = lstAppCompanyDetails
-                                            .Select(A => new VmCompanyDetails { Company = A })
-                                            .ToList();
 
             StateHasChanged();
         }

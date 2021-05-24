@@ -159,6 +159,10 @@ app {
 
 }
 
+.localhost {
+    border: 3pt dotted purple;
+}
+
 @media (max-width: 1199px) {
     #blazor-error-ui span {
         margin-left: 10px;
