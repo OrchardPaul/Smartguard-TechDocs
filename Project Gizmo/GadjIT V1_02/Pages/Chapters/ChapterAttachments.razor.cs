@@ -75,6 +75,8 @@ namespace GadjIT_V1_02.Pages.Chapters
 
 
         List<string> ActionList = new List<string>() { "TAKE", "INSERT" };
+        
+        List<string> TrackMethodList = new List<string>() { "N/A", "Send Only", "Response Required" };
 
         public List<string> documentList;
 

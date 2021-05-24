@@ -96,7 +96,7 @@
 
         @if (selectedList == "Steps and Documents")
         {
-            
+
 
             <div class="form-group">
                 <label for="Action">Action</label>
@@ -159,6 +159,30 @@
                 <InputTextArea class="form-control form-control-xl" @bind-Value="@CopyObject.PopupAlert" />
             </div>
 
+            @if (SelectedChapter.ShowDocumentTracking == "Y")
+            {
+                <div class="form-group">
+                    <label for="TrackMethod">Tracking Method</label>
+                    <InputSelect class="form-control form-control-sm"
+                                 @bind-Value="CopyObject.TrackingMethod">
+                        <option value=""></option>
+                        @foreach (var s in TrackMethodList)
+                                {
+                            <option value="@s">
+                                @s
+                            </option>
+                                }
+                    </InputSelect>
+                    <ValidationMessage For="@(() => CopyObject.TrackingMethod)" />
+                </div>
+                @if (CopyObject.TrackingMethod == "Response Required")
+                {
+                    <div class="form-group">
+                        <label for="ChaserDesc">Chaser Description</label>
+                        <InputText class="form-control form-control-xl" @bind-Value="@CopyObject.ChaserDesc" />
+                    </div>
+                }
+            }
 
         }
         else if (selectedList == "Status")

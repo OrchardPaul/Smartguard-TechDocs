@@ -78,7 +78,6 @@
             </div>
         }
 
-        
 
         <div class="form-group">
             <label for="NextStatus">Action</label>
@@ -94,6 +93,31 @@
             </InputSelect>
             <ValidationMessage For="@(() => Attachment.Action)" />
         </div>
+        @if (SelectedChapter.ShowDocumentTracking == "Y")
+        {
+            <div class="form-group">
+                <label for="TrackMethod">Tracking Method</label>
+                <InputSelect class="form-control form-control-sm"
+                             @bind-Value="Attachment.TrackingMethod">
+                    <option value=""></option>
+                    @foreach (var s in TrackMethodList)
+                        {
+                        <option value="@s">
+                            @s
+                        </option>
+                        }
+                </InputSelect>
+                <ValidationMessage For="@(() => Attachment.TrackingMethod)" />
+            </div>
+            @if (Attachment.TrackingMethod == "Response Required")
+            {
+                <div class="form-group">
+                    <label for="ChaserDesc">Chaser Description</label>
+                    <InputText class="form-control form-control-xl" @bind-Value="@Attachment.ChaserDesc" />
+                </div>
+            }
+        }
+
     </div>
 
     <div class="button-container">

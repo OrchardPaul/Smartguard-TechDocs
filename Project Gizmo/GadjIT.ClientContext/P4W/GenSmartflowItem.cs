@@ -31,6 +31,8 @@ namespace GadjIT.ClientContext.P4W
         public string PopupAlert { get; set; }
         public string DeveloperNotes { get; set; }
         public string StoryNotes { get; set; }
+        public string TrackingMethod { get; set; }
+        public string ChaserDesc { get; set; }
         public List<FollowUpDoc> FollowUpDocs { get; set; }
 
 
@@ -45,5 +47,7 @@ namespace GadjIT.ClientContext.P4W
         [Required]
         public string Action { get; set; }
 
+        public string TrackingMethod { get; set; }
+        public string ChaserDesc { get; set; }
     }
 }
