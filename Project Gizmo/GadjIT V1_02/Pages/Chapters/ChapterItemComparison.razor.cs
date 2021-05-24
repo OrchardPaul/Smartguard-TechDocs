@@ -105,6 +105,15 @@ namespace GadjIT_V1_02.Pages.Chapters
                 taskObject.Action = Object.ChapterObject.Action;
                 taskObject.FollowUpDocs = Object.ChapterObject.FollowUpDocs;
 
+
+                bool gotLock = sessionState.Lock;
+                while (gotLock)
+                {
+                    await Task.Yield();
+                    gotLock = sessionState.Lock;
+                }
+
+
                 await sessionState.SwitchSelectedSystem();
                 AltChapterRow.SmartflowData = JsonConvert.SerializeObject(AltChapter);
                 await chapterManagementService.Update(AltChapterRow);
@@ -168,6 +177,14 @@ namespace GadjIT_V1_02.Pages.Chapters
 
                     AltChapter.Items.Add(PushObject);
 
+                    bool gotLock = sessionState.Lock;
+                    while (gotLock)
+                    {
+                        await Task.Yield();
+                        gotLock = sessionState.Lock;
+                    }
+
+
                     await sessionState.SwitchSelectedSystem();
                     AltChapterRow.SmartflowData = JsonConvert.SerializeObject(AltChapter);
                     await chapterManagementService.Update(AltChapterRow);
@@ -175,6 +192,15 @@ namespace GadjIT_V1_02.Pages.Chapters
                 }
                 else
                 {
+
+                    bool gotLock = sessionState.Lock;
+                    while (gotLock)
+                    {
+                        await Task.Yield();
+                        gotLock = sessionState.Lock;
+                    }
+
+
                     await sessionState.SwitchSelectedSystem();
                 
                     AltChapterRow = new UsrOrsfSmartflows

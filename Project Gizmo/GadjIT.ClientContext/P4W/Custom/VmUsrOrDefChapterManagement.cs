@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 
 namespace GadjIT.ClientContext.P4W.Custom
 {
@@ -126,6 +127,61 @@ namespace GadjIT.ClientContext.P4W.Custom
                 isSame = false;
                 ComparisonList.Add("Action");
             }
+
+
+            if(!(ChapterObject.FollowUpDocs is null))
+            {
+                if(!(compItem.FollowUpDocs is null))
+                {
+                    if (ChapterObject.FollowUpDocs.Count == compItem.FollowUpDocs.Count)
+                    {
+                        
+                        foreach (var doc in ChapterObject.FollowUpDocs)
+                        {
+                            var compDoc = compItem.FollowUpDocs.Where(F => F.DocName == doc.DocName).FirstOrDefault();
+
+                            if(compDoc is null)
+                            {
+                                isSame = false;
+                                ComparisonList.Add("FollowUpDocs");
+                            }
+                            else
+                            {
+                                if(!(compDoc.Action == doc.Action))
+                                {
+                                    isSame = false;
+                                    ComparisonList.Add("FollowUpDocs");
+                                }
+
+                                if (!(compDoc.DocAsName == doc.DocAsName))
+                                {
+                                    isSame = false;
+                                    ComparisonList.Add("FollowUpDocs");
+                                }
+                            }
+    
+                        }
+                    }
+                    else
+                    {
+                        isSame = false;
+                        ComparisonList.Add("FollowUpDocs");
+                    }
+                }
+                else
+                {
+                    isSame = false;
+                    ComparisonList.Add("FollowUpDocs");
+                }
+            }
+            else if (!(compItem.FollowUpDocs is null))
+            {
+                isSame = false;
+                ComparisonList.Add("FollowUpDocs");
+            }
+
+
+
 
             return isSame;
         }

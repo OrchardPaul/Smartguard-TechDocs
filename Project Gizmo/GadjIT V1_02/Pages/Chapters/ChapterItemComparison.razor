@@ -171,6 +171,20 @@
                             <span class="fa fa-@(Object.ChapterObject.PopupAlert == @Object.AltObject.PopupAlert ? "check" : "exclamation")"></span>
                         </td>
                     </tr>
+                    <tr>
+                        <td>
+                            Attachments
+                        </td>
+                        <td>
+                            <input type="text" class="read-only" value="@(Object.ChapterObject.FollowUpDocs is null ? "0" : Object.ChapterObject.FollowUpDocs.Count().ToString())" />
+                        </td>
+                        <td>
+                            <input type="text" class="read-only" value="@(Object.AltObject.FollowUpDocs is null ? "0" : Object.AltObject.FollowUpDocs.Count().ToString())" />
+                        </td>
+                        <td>
+                            <span class="fa fa-@(Object.ComparisonList.Contains("FollowUpDocs") ? "exclamation" : "check")"></span>
+                        </td>
+                    </tr>
                 }
                 @if (Object.ChapterObject.Type == "Status")
                 {
