@@ -1798,8 +1798,10 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
                 UserMessage = editObject.ChapterObject.UserMessage,
                 PopupAlert = editObject.ChapterObject.PopupAlert,
                 NextStatus = editObject.ChapterObject.NextStatus,
-                Action = editObject.ChapterObject.Action
-            };
+                Action = editObject.ChapterObject.Action,
+                TrackingMethod = editObject.ChapterObject.TrackingMethod,
+                ChaserDesc = editObject.ChapterObject.ChaserDesc
+        };
 
             var parameters = new ModalParameters();
             parameters.Add("TaskObject", editObject.ChapterObject);

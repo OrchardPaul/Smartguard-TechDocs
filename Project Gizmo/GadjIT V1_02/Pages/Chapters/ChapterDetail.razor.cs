@@ -97,6 +97,8 @@ namespace GadjIT_V1_02.Pages.Chapters
         private int selectedCaseTypeGroup { get; set; } = -2;
 
         List<string> Actions = new List<string>() { "TAKE", "INSERT" };
+        
+        List<string> TrackMethodList = new List<string>() { "N/A", "Send Only", "Response Required" };
 
         public List<string> documentList;
 
@@ -160,6 +162,8 @@ namespace GadjIT_V1_02.Pages.Chapters
             TaskObject.PopupAlert = CopyObject.PopupAlert;
             TaskObject.NextStatus = CopyObject.NextStatus;
             TaskObject.Action = CopyObject.Action;
+            TaskObject.TrackingMethod = CopyObject.TrackingMethod;
+            TaskObject.ChaserDesc = CopyObject.ChaserDesc;
 
             if (Option == "Insert")
             {
