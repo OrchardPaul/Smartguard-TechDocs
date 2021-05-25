@@ -107,15 +107,23 @@ namespace GadjIT_V1_02.Shared
                 }
                 else if (!(sessionState.User is null) && !string.IsNullOrEmpty(sessionState.User.MainBackgroundImage))
                 {
-                    if (sessionState.User.MainBackgroundImage.Contains("#"))
+                    if (sessionState.selectedSystem == "Live")
                     {
-                        parallax = ".parallax {  background-color: " + sessionState.User.MainBackgroundImage + " }";
+                        parallax = ".parallax {  background-color: #DDDDDD }";
                     }
-
                     else
                     {
-                        parallax = ".parallax { background-image: url('" + sessionState.User.MainBackgroundImage + "');  } .inner-content{ background-image: none;}";
+                        parallax = ".parallax {  background-color: #555555 }";
                     }
+                    //if (sessionState.User.MainBackgroundImage.Contains("#"))
+                    //{
+
+                    //}
+
+                    //else
+                    //{
+                    //    parallax = ".parallax { background-image: url('" + sessionState.User.MainBackgroundImage + "');  } .inner-content{ background-image: none;}";
+                    //}
                 }
                 else
                 {
