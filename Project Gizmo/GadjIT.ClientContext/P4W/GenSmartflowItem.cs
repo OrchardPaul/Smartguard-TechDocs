@@ -33,12 +33,12 @@ namespace GadjIT.ClientContext.P4W
         public string StoryNotes { get; set; }
         public string TrackingMethod { get; set; }
         public string ChaserDesc { get; set; }
-        public List<FollowUpDoc> FollowUpDocs { get; set; }
+        public List<LinkedItems> LinkedItems { get; set; }
 
 
     }
 
-    public class FollowUpDoc
+    public class LinkedItems
     {
         [Required]
         public string DocName { get; set; }
@@ -49,5 +49,6 @@ namespace GadjIT.ClientContext.P4W
 
         public string TrackingMethod { get; set; }
         public string ChaserDesc { get; set; }
+        public int ScheduleDays { get; set; }
     }
 }

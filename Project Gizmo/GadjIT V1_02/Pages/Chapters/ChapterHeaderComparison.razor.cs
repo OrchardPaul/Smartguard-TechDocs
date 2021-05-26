@@ -1,6 +1,7 @@
 ﻿using Blazored.Modal;
 using GadjIT.ClientContext.P4W;
 using GadjIT.ClientContext.P4W.Custom;
+using GadjIT_V1_02.Data.Admin;
 using GadjIT_V1_02.Services;
 using GadjIT_V1_02.Services.SessionState;
 using Microsoft.AspNetCore.Components;
@@ -32,6 +33,12 @@ namespace GadjIT_V1_02.Pages.Chapters
 
         [Parameter]
         public Action ComparisonRefresh { get; set; }
+
+
+        [Parameter]
+        public ICompanyDbAccess CompanyDbAccess { get; set; }
+
+
 
         [Parameter]
         public VmChapter AltChapter { get; set; }
@@ -126,6 +133,42 @@ namespace GadjIT_V1_02.Pages.Chapters
             Close();
 
         }
+
+        
+
+
+        private async void AddObject()
+        {
+            bool gotLock = sessionState.Lock;
+            while (gotLock)
+            {
+                await Task.Yield();
+                gotLock = sessionState.Lock;
+            }
+
+
+            await sessionState.SwitchSelectedSystem();
+                
+            AltChapterRow = new UsrOrsfSmartflows
+            {
+                CaseTypeGroup = CurrentChapterRow.CaseTypeGroup,
+                CaseType = CurrentChapterRow.CaseType,
+                SmartflowName = CurrentChapterRow.SmartflowName,
+                SeqNo = CurrentChapterRow.SeqNo,
+                SmartflowData = CurrentChapterRow.SmartflowData,
+                VariantName = CurrentChapterRow.VariantName,
+                VariantNo = CurrentChapterRow.VariantNo
+            };
+
+            var returnObject = await chapterManagementService.Add(AltChapterRow);
+            AltChapterRow.Id = returnObject.Id;
+            await CompanyDbAccess.SaveSmartFlowRecord(AltChapterRow, sessionState);
+            await sessionState.ResetSelectedSystem();
+    
+            ComparisonRefresh?.Invoke();
+            Close();
+        }
+
 
     }
 }

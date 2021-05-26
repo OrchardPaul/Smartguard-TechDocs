@@ -24,7 +24,7 @@ namespace GadjIT_V1_02.Pages.Chapters
         IChapterManagementService chapterManagementService { get; set; }
 
         [Parameter]
-        public FollowUpDoc Attachment { get; set; }
+        public LinkedItems Attachment { get; set; }
 
         [Parameter]
         public RenderFragment CustomHeader { get; set; }
@@ -74,7 +74,7 @@ namespace GadjIT_V1_02.Pages.Chapters
         public bool useCustomItem { get; set; } = false;
 
 
-        List<string> ActionList = new List<string>() { "TAKE", "INSERT" };
+        List<string> ActionList = new List<string>() { "TAKE", "INSERT", "SCHEDULE" };
         
         List<string> TrackMethodList = new List<string>() { "N/A", "Send Only", "Response Required" };
 
@@ -104,22 +104,25 @@ namespace GadjIT_V1_02.Pages.Chapters
 
         private async void HandleValidSubmit()
         {
-            if(CopyObject.FollowUpDocs is null)
+            if(CopyObject.LinkedItems is null)
             {
-                CopyObject.FollowUpDocs = new List<FollowUpDoc> { Attachment };
+                CopyObject.LinkedItems = new List<LinkedItems> { Attachment };
             }
             else
             {
-                if (CopyObject.FollowUpDocs.Select(F => F.DocName).ToList().Contains(Attachment.DocName))
+                if (CopyObject.LinkedItems.Select(F => F.DocName).ToList().Contains(Attachment.DocName))
                 {
-                    var updateItem = CopyObject.FollowUpDocs.Where(F => F.DocName == Attachment.DocName).FirstOrDefault();
+                    var updateItem = CopyObject.LinkedItems.Where(F => F.DocName == Attachment.DocName).FirstOrDefault();
 
                     updateItem.DocAsName = Attachment.DocAsName;
+                    updateItem.ScheduleDays = Attachment.ScheduleDays;
+                    updateItem.TrackingMethod = Attachment.TrackingMethod;
+                    updateItem.ChaserDesc = Attachment.ChaserDesc;
                     updateItem.Action = Attachment.Action;
                 }
                 else
                 {
-                    CopyObject.FollowUpDocs.Add(Attachment);
+                    CopyObject.LinkedItems.Add(Attachment);
                 }
             }
 
@@ -139,7 +142,7 @@ namespace GadjIT_V1_02.Pages.Chapters
             TaskObject.PopupAlert = CopyObject.PopupAlert;
             TaskObject.NextStatus = CopyObject.NextStatus;
 
-            TaskObject.FollowUpDocs = CopyObject.FollowUpDocs;
+            TaskObject.LinkedItems = CopyObject.LinkedItems;
 
             SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(SelectedChapter);
             await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
@@ -154,18 +157,18 @@ namespace GadjIT_V1_02.Pages.Chapters
 
         private async void RemoveAttachment()
         {
-            if (!(CopyObject.FollowUpDocs is null))
+            if (!(CopyObject.LinkedItems is null))
             {
-                if (CopyObject.FollowUpDocs.Select(F => F.DocName).ToList().Contains(Attachment.DocName))
+                if (CopyObject.LinkedItems.Select(F => F.DocName).ToList().Contains(Attachment.DocName))
                 {
-                    var updateItem = CopyObject.FollowUpDocs.Where(F => F.DocName == Attachment.DocName).FirstOrDefault();
+                    var updateItem = CopyObject.LinkedItems.Where(F => F.DocName == Attachment.DocName).FirstOrDefault();
 
-                    CopyObject.FollowUpDocs.Remove(updateItem);
+                    CopyObject.LinkedItems.Remove(updateItem);
                 }
             }
 
 
-            TaskObject.FollowUpDocs = CopyObject.FollowUpDocs;
+            TaskObject.LinkedItems = CopyObject.LinkedItems;
 
             SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(SelectedChapter);
             await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);

@@ -522,7 +522,7 @@ else
                                                 </label>
                                             </div>
                                             <div class="form-group">
-                                                <label style="display: inline-block; width: 150px">Track Attachments</label>
+                                                <label style="display: inline-block; width: 150px">Track Documents</label>
                                                 <label class="switch">
                                                     <input type="checkbox" @bind="ShowAttachemntTracking">
                                                     <span class="slider round"></span>
@@ -664,13 +664,13 @@ else
                                                         </li>
                                                         <li class="col-main">
                                                             <span class="fa fa-paperclip mr-2"></span>
-                                                            <span>Attachments</span>
+                                                            <span>Linked Items</span>
                                                             <div class="menu-toggle">
                                                                 <span class="fa fa-chevron-right"></span>
                                                                 <ul style="width: 300px">
-                                                                    @if (!(doc.ChapterObject.FollowUpDocs is null) && doc.ChapterObject.FollowUpDocs.Count > 0)
+                                                                    @if (!(doc.ChapterObject.LinkedItems is null) && doc.ChapterObject.LinkedItems.Count > 0)
                                                                     {
-                                                                        foreach (var attach in doc.ChapterObject.FollowUpDocs)
+                                                                        foreach (var attach in doc.ChapterObject.LinkedItems)
                                                                         {
                                                                             <li class="font-85" @onclick='(() => PrepareAttachmentForEdit(doc, attach))'>@(string.IsNullOrEmpty(attach.DocAsName) ? attach.DocName : attach.DocAsName)</li>
                                                                         }
@@ -769,7 +769,7 @@ else
                                             </div>
                                         }
 
-                                        @if (!(doc.ChapterObject.FollowUpDocs is null) && doc.ChapterObject.FollowUpDocs.Count > 0)
+                                        @if (!(doc.ChapterObject.LinkedItems is null) && doc.ChapterObject.LinkedItems.Count > 0)
                                         {
                                             <div class="data-item-right hidden-md-down">
                                                 <ModalTooltip Direction="left" Text=@($"This item has attachments.") Class="w-2">
@@ -901,7 +901,7 @@ else
                                                 </div>
                                             }
 
-                                            @if (!(doc.ChapterObject.FollowUpDocs is null) && doc.ChapterObject.FollowUpDocs.Count > 0)
+                                            @if (!(doc.ChapterObject.LinkedItems is null) && doc.ChapterObject.LinkedItems.Count > 0)
                                             {
                                                 <div class="data-item-right hidden-md-down">
                                                     <ModalTooltip Direction="left" Text=@($"This item has attachments.") Class="w-2">

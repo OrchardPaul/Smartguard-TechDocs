@@ -149,7 +149,7 @@ namespace GadjIT_V1_02.Pages.Chapters
 
         public VmUsrOrDefChapterManagement editObject = new VmUsrOrDefChapterManagement { ChapterObject = new GenSmartflowItem() };
 
-        public FollowUpDoc attachObject = new FollowUpDoc();
+        public LinkedItems attachObject = new LinkedItems();
 
         public VmFee editFeeObject = new VmFee { FeeObject = new Fee() };
 
@@ -1894,11 +1894,11 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
             ShowChapterAttachmentModal();
         }
 
-        private void PrepareAttachmentForEdit(VmUsrOrDefChapterManagement item, FollowUpDoc followUpDoc)
+        private void PrepareAttachmentForEdit(VmUsrOrDefChapterManagement item, LinkedItems LinkedItems)
         {
             selectedList = "Edit Attachement";
             editObject = item;
-            attachObject = followUpDoc;
+            attachObject = LinkedItems;
 
             ShowChapterAttachmentModal();
         }
@@ -1921,11 +1921,11 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
                 UserMessage = editObject.ChapterObject.UserMessage,
                 PopupAlert = editObject.ChapterObject.PopupAlert,
                 NextStatus = editObject.ChapterObject.NextStatus,
-                FollowUpDocs = editObject.ChapterObject.FollowUpDocs is null ? new List<FollowUpDoc>() : editObject.ChapterObject.FollowUpDocs
+                LinkedItems = editObject.ChapterObject.LinkedItems is null ? new List<LinkedItems>() : editObject.ChapterObject.LinkedItems
             };
 
            
-            var attachment = attachObject is null ? new FollowUpDoc { Action = "INSERT"} : attachObject;
+            var attachment = attachObject is null ? new LinkedItems { Action = "INSERT"} : attachObject;
 
 
             var parameters = new ModalParameters();
@@ -1950,10 +1950,10 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
             }
             var options = new ModalOptions()
             {
-                Class = "blazored-custom-modal " + className
+                Class = "blazored-custom-modal modal-chapter-doc"
             };
 
-            Modal.Show<ChapterAttachments>(selectedList, parameters, options);
+            Modal.Show<ChapterAttachments>("Linked Item", parameters, options);
         }
 
         protected void PrepareFeeForInsert (string option)
@@ -2304,6 +2304,7 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
             parameters.Add("AltChapter", altChapter);
             parameters.Add("CurrentChapterRow", SelectedChapterObject);
             parameters.Add("AltChapterRow", AltChapterObject);
+            parameters.Add("CompanyDbAccess", CompanyDbAccess);
 
             var options = new ModalOptions()
             {
@@ -2719,7 +2720,7 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
         {
             SelectedChapterObject = selectedChapter;
 
-            string infoText = $"Do you wish to sync this chapter to {(sessionState.selectedSystem == "Live" ? "Dev" : "Live")}.";
+            string infoText = $"Do you wish to sync this smartflow to {(sessionState.selectedSystem == "Live" ? "Dev" : "Live")}.";
 
             Action SelectedAction = CreateSelectedChapterOnAlt;
             var parameters = new ModalParameters();

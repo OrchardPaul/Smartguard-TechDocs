@@ -11,6 +11,23 @@
         }
         else
         {
+
+            <div class="form-group">
+                <label for="NextStatus">Action</label>
+                <InputSelect class="form-control form-control-sm"
+                             @bind-Value="Attachment.Action">
+                    <option value=""></option>
+                    @foreach (var s in ActionList)
+                        {
+                        <option value="@s">
+                            @s
+                        </option>
+                        }
+                </InputSelect>
+                <ValidationMessage For="@(() => Attachment.Action)" />
+            </div>
+
+
             <div class="form-group">
                 <label for="DocType">Case Type Group</label>
                 <InputSelectInteger class="form-control form-control-lg"
@@ -34,14 +51,19 @@
                 }
                 else
                 {
-                    <div class="form-label-check" style="margin-right: 13px">
-                        <label>Custom Item</label><input type="checkbox" @bind-value="@useCustomItem" />
-                    </div>
+                    @if ((!(Attachment.Action is null) && Attachment.Action == "SCHEDULE") || (!(SelectedChapter.ShowDocumentTracking is null) && SelectedChapter.ShowDocumentTracking == "Y"))
+                    {
+                        <div class="form-label-check" style="margin-right: 13px">
+                            <label>Custom Item</label><input type="checkbox" @bind-value="@useCustomItem" />
+                        </div>
+                    }
+
+
                     @if (!useCustomItem)
                     {
                         <div class="form-group">
                             <label for="AltDisplayName">Filter</label>
-                            <InputText class="form-control form-control-xl" @bind-Value="@filterText" />
+                            <InputText class="form-control form-control-md" @bind-Value="@filterText" />
                         </div>
 
                         <InputSelect class="form-control form-control-xl" @bind-Value="Attachment.DocName">
@@ -79,20 +101,18 @@
         }
 
 
-        <div class="form-group">
-            <label for="NextStatus">Action</label>
-            <InputSelect class="form-control form-control-sm"
-                         @bind-Value="Attachment.Action">
-                <option value=""></option>
-                @foreach (var s in ActionList)
-                {
-                    <option value="@s">
-                        @s
-                    </option>
-                }
-            </InputSelect>
-            <ValidationMessage For="@(() => Attachment.Action)" />
-        </div>
+
+        @if (Attachment.Action == "SCHEDULE")
+        {
+
+            <div class="form-group">
+                <label for="ScheduleDays">Schedule Days</label>
+                <InputNumber class="form-control form-control-xs" @bind-Value="Attachment.ScheduleDays"></InputNumber>
+                <ValidationMessage For="@(() => Attachment.ScheduleDays)" />
+            </div>
+        }
+
+
         @if (SelectedChapter.ShowDocumentTracking == "Y")
         {
             <div class="form-group">
@@ -116,12 +136,16 @@
                     <InputText class="form-control form-control-xl" @bind-Value="@Attachment.ChaserDesc" />
                 </div>
             }
+
+
         }
+
+
 
     </div>
 
     <div class="button-container">
-        @if (CopyObject.FollowUpDocs.Select(F => F.DocName).ToList().Contains(Attachment.DocName))
+        @if (CopyObject.LinkedItems.Select(F => F.DocName).ToList().Contains(Attachment.DocName))
         {
             <button type="button" class="btn btn-secondary" title="Delete Attachment" @onclick="RemoveAttachment"><span class="fa fa-trash"></span></button>
         }

@@ -80,7 +80,7 @@ namespace GadjIT_V1_02.Pages.Chapters
                 taskObject.PopupAlert = Object.AltObject.PopupAlert;
                 taskObject.NextStatus = Object.AltObject.NextStatus;
                 taskObject.Action = Object.AltObject.Action;
-                taskObject.FollowUpDocs = Object.AltObject.FollowUpDocs;
+                taskObject.LinkedItems = Object.AltObject.LinkedItems;
 
                 CurrentChapterRow.SmartflowData = JsonConvert.SerializeObject(CurrentChapter);
                 await chapterManagementService.Update(CurrentChapterRow).ConfigureAwait(false);
@@ -103,7 +103,7 @@ namespace GadjIT_V1_02.Pages.Chapters
                 taskObject.PopupAlert = Object.ChapterObject.PopupAlert;
                 taskObject.NextStatus = Object.ChapterObject.NextStatus;
                 taskObject.Action = Object.ChapterObject.Action;
-                taskObject.FollowUpDocs = Object.ChapterObject.FollowUpDocs;
+                taskObject.LinkedItems = Object.ChapterObject.LinkedItems;
 
 
                 bool gotLock = sessionState.Lock;
@@ -145,7 +145,7 @@ namespace GadjIT_V1_02.Pages.Chapters
                     PopupAlert = Object.AltObject.PopupAlert,
                     NextStatus = Object.AltObject.NextStatus,
                     Action = Object.AltObject.Action,
-                    FollowUpDocs = Object.AltObject.FollowUpDocs
+                    LinkedItems = Object.AltObject.LinkedItems
                 };
 
                 CurrentChapter.Items.Add(AltObject);
@@ -172,7 +172,7 @@ namespace GadjIT_V1_02.Pages.Chapters
                         PopupAlert = Object.ChapterObject.PopupAlert,
                         NextStatus = Object.ChapterObject.NextStatus,
                         Action = Object.ChapterObject.Action,
-                        FollowUpDocs = Object.ChapterObject.FollowUpDocs
+                        LinkedItems = Object.ChapterObject.LinkedItems
                     };
 
                     AltChapter.Items.Add(PushObject);

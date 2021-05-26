@@ -129,34 +129,34 @@ namespace GadjIT.ClientContext.P4W.Custom
             }
 
 
-            if(!(ChapterObject.FollowUpDocs is null))
+            if(!(ChapterObject.LinkedItems is null))
             {
-                if(!(compItem.FollowUpDocs is null))
+                if(!(compItem.LinkedItems is null))
                 {
-                    if (ChapterObject.FollowUpDocs.Count == compItem.FollowUpDocs.Count)
+                    if (ChapterObject.LinkedItems.Count == compItem.LinkedItems.Count)
                     {
                         
-                        foreach (var doc in ChapterObject.FollowUpDocs)
+                        foreach (var doc in ChapterObject.LinkedItems)
                         {
-                            var compDoc = compItem.FollowUpDocs.Where(F => F.DocName == doc.DocName).FirstOrDefault();
+                            var compDoc = compItem.LinkedItems.Where(F => F.DocName == doc.DocName).FirstOrDefault();
 
                             if(compDoc is null)
                             {
                                 isSame = false;
-                                ComparisonList.Add("FollowUpDocs");
+                                ComparisonList.Add("LinkedItems");
                             }
                             else
                             {
                                 if(!(compDoc.Action == doc.Action))
                                 {
                                     isSame = false;
-                                    ComparisonList.Add("FollowUpDocs");
+                                    ComparisonList.Add("LinkedItems");
                                 }
 
                                 if (!(compDoc.DocAsName == doc.DocAsName))
                                 {
                                     isSame = false;
-                                    ComparisonList.Add("FollowUpDocs");
+                                    ComparisonList.Add("LinkedItems");
                                 }
                             }
     
@@ -165,19 +165,19 @@ namespace GadjIT.ClientContext.P4W.Custom
                     else
                     {
                         isSame = false;
-                        ComparisonList.Add("FollowUpDocs");
+                        ComparisonList.Add("LinkedItems");
                     }
                 }
                 else
                 {
                     isSame = false;
-                    ComparisonList.Add("FollowUpDocs");
+                    ComparisonList.Add("LinkedItems");
                 }
             }
-            else if (!(compItem.FollowUpDocs is null))
+            else if (!(compItem.LinkedItems is null))
             {
                 isSame = false;
-                ComparisonList.Add("FollowUpDocs");
+                ComparisonList.Add("LinkedItems");
             }
 
 

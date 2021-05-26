@@ -141,7 +141,17 @@ namespace GadjIT_V1_02.Pages.Chapters
 
             if(CopyOptions.Where(C => C.Option == "Agenda").Select(C => C.Selected).FirstOrDefault())
             {
-                foreach(var item in copyToChapter.Items.Where(C => C.Type == "Agenda").ToList())
+                if (copyToChapter.Items is null)
+                {
+                    copyToChapter.Items = new List<GenSmartflowItem>();
+                }
+
+                if (currentChapter.Items is null)
+                {
+                    currentChapter.Items = new List<GenSmartflowItem>();
+                }
+
+                foreach (var item in copyToChapter.Items.Where(C => C.Type == "Agenda").ToList())
                 {
                     copyToChapter.Items.Remove(item);
                 }
@@ -171,6 +181,16 @@ namespace GadjIT_V1_02.Pages.Chapters
 
             if (CopyOptions.Where(C => C.Option == "Fees").Select(C => C.Selected).FirstOrDefault())
             {
+                if (copyToChapter.Fees is null)
+                {
+                    copyToChapter.Fees = new List<Fee>();
+                }
+
+                if (currentChapter.Fees is null)
+                {
+                    currentChapter.Fees = new List<Fee>();
+                }
+
                 foreach (var item in copyToChapter.Fees.ToList())
                 {
                     copyToChapter.Fees.Remove(item);
@@ -181,6 +201,16 @@ namespace GadjIT_V1_02.Pages.Chapters
 
             if (CopyOptions.Where(C => C.Option == "Data Views").Select(C => C.Selected).FirstOrDefault())
             {
+                if(copyToChapter.DataViews is null)
+                {
+                    copyToChapter.DataViews = new List<DataViews>();
+                }
+
+                if (currentChapter.DataViews is null)
+                {
+                    currentChapter.DataViews = new List<DataViews>();
+                }
+
                 foreach (var item in copyToChapter.DataViews.ToList())
                 {
                     copyToChapter.DataViews.Remove(item);
@@ -195,6 +225,12 @@ namespace GadjIT_V1_02.Pages.Chapters
                 if(copyToChapter.TickerMessages is null)
                 {
                     copyToChapter.TickerMessages = new List<TickerMessages>();
+                }
+
+
+                if (currentChapter.TickerMessages is null)
+                {
+                    currentChapter.TickerMessages = new List<TickerMessages>();
                 }
 
                 foreach (var item in copyToChapter.TickerMessages.ToList())

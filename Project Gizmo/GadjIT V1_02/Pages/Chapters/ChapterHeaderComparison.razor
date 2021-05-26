@@ -1,4 +1,5 @@
-﻿
+﻿@if (!(Object.AltChapter is null | Object.CurrentChapter is null))
+{
     <div class="modal-body" tabindex="0">
         <table class="table-basic table-left-header table-borderless">
             <thead>
@@ -36,9 +37,9 @@
                         <span class="fa fa-@(Object.CurrentChapter.P4WCaseTypeGroup == @Object.AltChapter.P4WCaseTypeGroup ? "check" : "exclamation")"></span>
                     </td>
                     <td>
-                        @if(Object.CurrentChapter.P4WCaseTypeGroup != @Object.AltChapter.P4WCaseTypeGroup) 
-                        { 
-                        <input type="checkbox" class="ml-1 mt-1" @bind="@syncCaseTypeGroup" />
+                        @if (Object.CurrentChapter.P4WCaseTypeGroup != @Object.AltChapter.P4WCaseTypeGroup)
+                        {
+                            <input type="checkbox" class="ml-1 mt-1" @bind="@syncCaseTypeGroup" />
                         }
                     </td>
                 </tr>
@@ -120,7 +121,7 @@
                         {
                             <input type="checkbox" class="ml-1 mt-1" @bind="@syncBgImage" />
                         }
-                        
+
                     </td>
                 </tr>
             </tbody>
@@ -146,3 +147,23 @@
             </tfoot>
         </table>
     </div>
+}
+else
+{
+    @code {
+        string curSystem;
+    }
+
+
+    curSystem = (sessionState.selectedSystem == "Dev" ? "Live" : "Dev");
+
+    <div class="modal-body">
+        <p>Smartflow item does not exist on @curSystem</p>
+        <p>Do you wish create this object on @curSystem?</p>
+    </div>
+
+    <div class="button-container">
+        <button type="submit" autofocus class="btn btn-main" @onclick="() => AddObject()">Create on @curSystem</button>
+        <button type="button" class="btn btn-secondary" @onclick="() => Close()">Cancel</button>
+    </div>
+}

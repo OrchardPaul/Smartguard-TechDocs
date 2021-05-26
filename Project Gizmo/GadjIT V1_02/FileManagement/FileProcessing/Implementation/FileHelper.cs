@@ -732,23 +732,11 @@ namespace GadjIT_V1_02.FileManagement.FileProcessing.Implementation
              * 
              */
 
-            var workSheetAttachments = excel.Workbook.Worksheets.Add("Attachments");
+            var workSheetAttachments = excel.Workbook.Worksheets.Add("LinkedItems");
 
             workSheetAttachments.TabColor = System.Drawing.Color.DarkGray;
             workSheetAttachments.DefaultRowHeight = 12;
-            workSheetAttachments.Row(1).Style.Font.Size = 8;
-            workSheetAttachments.Row(1).Style.Font.Color.SetColor(System.Drawing.Color.DarkGray);
-            workSheetAttachments.Row(1).Height = 42;
-            workSheetAttachments.Cells[1, 1].Style.WrapText = true;
-            workSheetAttachments.Cells[1, 1].Value = "When the following document is selected:";
-            workSheetAttachments.Cells[1, 2].Style.WrapText = true;
-            workSheetAttachments.Cells[1, 2].Value = "I would also like the following document to be automatically inserted into the case agenda:";
-            workSheetAttachments.Cells[1, 3].Style.WrapText = true;
-            workSheetAttachments.Cells[1, 3].Value = "With the following alternative name:";
-            workSheetAttachments.Cells[1, 4].Style.WrapText = true;
-            workSheetAttachments.Cells[1, 4].Value = "I would like it to be: (Insert or Take)";
-            workSheetAttachments.Cells[1, 5].Style.WrapText = true;
-            workSheetAttachments.Cells[1, 5].Value = "If I have selected insert then schedule for this many days:";
+
 
             //Header of table
             workSheetAttachments.Row(1).Height = 30;
@@ -761,8 +749,13 @@ namespace GadjIT_V1_02.FileManagement.FileProcessing.Implementation
             workSheetAttachments.Cells[1, 3].Style.WrapText = true;
             workSheetAttachments.Cells[1, 3].Value = "Alternative name to be shown in agenda.";
             workSheetAttachments.Cells[1, 4].Style.WrapText = true;
-            workSheetAttachments.Cells[1, 4].Value = "TAKE or INSERT.";
-
+            workSheetAttachments.Cells[1, 4].Value = "TAKE / INSERT / SCHEDULE.";
+            workSheetAttachments.Cells[1, 5].Style.WrapText = true;
+            workSheetAttachments.Cells[1, 5].Value = "Send Only / Response Required";
+            workSheetAttachments.Cells[1, 6].Style.WrapText = true;
+            workSheetAttachments.Cells[1, 6].Value = "";
+            workSheetAttachments.Cells[1, 7].Style.WrapText = true;
+            workSheetAttachments.Cells[1, 7].Value = "If action is SCHEDULE, how many days the item will be scheduled for";
 
             workSheetAttachments.Row(2).Height = 20;
             workSheetAttachments.Row(2).Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
@@ -771,21 +764,27 @@ namespace GadjIT_V1_02.FileManagement.FileProcessing.Implementation
             workSheetAttachments.Cells[2, 2].Value = "Attachment Name";
             workSheetAttachments.Cells[2, 3].Value = "Attachment Display Name";
             workSheetAttachments.Cells[2, 4].Value = "Action";
+            workSheetAttachments.Cells[2, 5].Value = "Tracking Method";
+            workSheetAttachments.Cells[2, 6].Value = "Chaser Description";
+            workSheetAttachments.Cells[2, 7].Value = "Schedule Days";
 
             //Body of table
             recordIndex = 3;
             foreach (var chapterItem in selectedChapter
                                             .Items
-                                            .Where(C => !(C.FollowUpDocs is null) && C.FollowUpDocs.Count() > 0)
+                                            .Where(C => !(C.LinkedItems is null) && C.LinkedItems.Count() > 0)
                                             .OrderBy(C => C.SeqNo)
                                             .ToList())
             {
-                foreach(var doc in chapterItem.FollowUpDocs)
+                foreach(var doc in chapterItem.LinkedItems)
                 {
                     workSheetAttachments.Cells[recordIndex, 1].Value = string.IsNullOrEmpty(chapterItem.Name) ? "" : chapterItem.Name;
                     workSheetAttachments.Cells[recordIndex, 2].Value = string.IsNullOrEmpty(doc.DocName) ? "" : doc.DocName;
                     workSheetAttachments.Cells[recordIndex, 3].Value = string.IsNullOrEmpty(doc.DocAsName) ? "" : doc.DocAsName;
                     workSheetAttachments.Cells[recordIndex, 4].Value = string.IsNullOrEmpty(doc.Action) ? "" : doc.Action;
+                    workSheetAttachments.Cells[recordIndex, 5].Value = string.IsNullOrEmpty(doc.TrackingMethod) ? "" : doc.TrackingMethod;
+                    workSheetAttachments.Cells[recordIndex, 6].Value = string.IsNullOrEmpty(doc.ChaserDesc) ? "" : doc.ChaserDesc;
+                    workSheetAttachments.Cells[recordIndex, 7].Value = doc.ScheduleDays;
 
                     //workSheetAttachments.Cells[recordIndex, 1].DataValidation.AddListDataValidation().Formula.ExcelFormula = $"= Documents!A3:A{selectedChapter.Items.Where(C => docTypes.Contains(C.Type)).ToList().Count() + 3}";
 
@@ -798,6 +797,9 @@ namespace GadjIT_V1_02.FileManagement.FileProcessing.Implementation
             workSheetAttachments.Column(3).Width = 25;
             workSheetAttachments.Column(4).Width = 10;
             workSheetAttachments.Column(5).Width = 22;
+            workSheetAttachments.Column(6).Width = 22;
+            workSheetAttachments.Column(7).Width = 22;
+            workSheetAttachments.Column(8).Width = 22;
 
             /*
            * 
@@ -1119,7 +1121,7 @@ namespace GadjIT_V1_02.FileManagement.FileProcessing.Implementation
                 }
 
 
-                ExcelWorksheet worksheetAttachments = excelPackage.Workbook.Worksheets.Where(W => W.Name == "Attachments").SingleOrDefault();
+                ExcelWorksheet worksheetAttachments = excelPackage.Workbook.Worksheets.Where(W => W.Name == "LinkedItems").SingleOrDefault();
                 totalColumns = worksheetAttachments.Dimension.End.Column;
                 totalRows = worksheetAttachments.Dimension.End.Row;
 
@@ -1128,7 +1130,7 @@ namespace GadjIT_V1_02.FileManagement.FileProcessing.Implementation
                 for (int row = 3; row <= totalRows; row++)
                 {
                     readObject = null;
-                    FollowUpDoc newAttachment = new FollowUpDoc();
+                    LinkedItems newAttachment = new LinkedItems();
 
                     for (int column = 1; column <= totalColumns; column++)
                     {
@@ -1159,16 +1161,39 @@ namespace GadjIT_V1_02.FileManagement.FileProcessing.Implementation
                                             : worksheetAttachments.Cells[row, column].Value is null
                                             ? "INSERT"
                                             : worksheetAttachments.Cells[row, column].Value.ToString().ToUpper();
+                            if (column == 5) newAttachment.TrackingMethod = worksheetAttachments.Cells[row, column].FirstOrDefault() is null
+                                            ? ""
+                                            : worksheetAttachments.Cells[row, column].Value is null
+                                            ? ""
+                                            : worksheetAttachments.Cells[row, column].Value.ToString().ToUpper();
+                            if (column == 6) newAttachment.ChaserDesc = worksheetAttachments.Cells[row, column].FirstOrDefault() is null
+                                            ? ""
+                                            : worksheetAttachments.Cells[row, column].Value is null
+                                            ? ""
+                                            : worksheetAttachments.Cells[row, column].Value.ToString().ToUpper();
+                            try
+                            {
+                                if (column == 7) newAttachment.ScheduleDays = worksheetAttachments.Cells[row, column].FirstOrDefault() is null
+                                                                                ? 0
+                                                                                : worksheetAttachments.Cells[row, column].Value is null
+                                                                                ? 0
+                                                                                : Convert.ToInt32(worksheetAttachments.Cells[row, column].Value.ToString());
+                            }
+                            catch
+                            {
+                                newAttachment.ScheduleDays = 0;
+                            }
+
                         }
                     }
 
                     if (!(readObject is null))
                     {
-                        if (readObject.FollowUpDocs is null)
+                        if (readObject.LinkedItems is null)
                         {
-                            readObject.FollowUpDocs = new List<FollowUpDoc>();
+                            readObject.LinkedItems = new List<LinkedItems>();
                         }
-                        readObject.FollowUpDocs.Add(newAttachment);
+                        readObject.LinkedItems.Add(newAttachment);
                     }
 
                 }
