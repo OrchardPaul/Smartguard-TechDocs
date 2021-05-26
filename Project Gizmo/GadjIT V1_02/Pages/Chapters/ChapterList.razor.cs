@@ -358,7 +358,7 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
             await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
         }
 
-        public bool ShowAttachemntTracking
+        public bool ShowDocumentTracking
         {
             get { return (selectedChapter.ShowDocumentTracking == "Y" ? true : false); }
             set

@@ -97,6 +97,7 @@
                                     {
 
                                         <label for="@TaskObject.SelectedUri">System</label>
+                                        //here
                                         <InputSelect class="form-control" style="width: 200px;" @bind-Value="TaskObject.SelectedUri">
                                             <option selected value="Live">
                                                 Live
@@ -150,21 +151,20 @@
                                 </div>
                             </div>
                         </div>
-                        <h5>Preferences</h5>
+                        <!--<h5>Preferences</h5>
                         <div class="detail-group-box">
                             <div class="form-group">
                                 <div class="container-fluid">
                                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-6 p-2">
-                                        <label>Main Background Style</label>
+                                        <label>Main Background Style</label>-->
                                         @*<div class="thumbnails">
                             <img src="@TaskObject.MainBackgroundImage" alt="" class="img-thumbnail" />
                         </div>*@
-                                        <InputSelect class="form-control form-control-lg"
+                                        <!--<InputSelect class="form-control form-control-lg"
                                                      @bind-Value="TaskObject.MainBackgroundImage">
                                             <option value="">Select</option>
                                             <option value="#DDDDDD">Light</option>
-                                            <option value="#555555">Dark</option>
-
+                                            <option value="#555555">Dark</option>-->
                                             @*@if (!(ListFileDescriptions is null))
                             {
                             @foreach (var fileDesc in ListFileDescriptions.ToList().OrderByDescending(F => F.FileName))
@@ -174,12 +174,12 @@
                                 </option>
                                 }
                             }*@
-                                        </InputSelect>
+                                        <!--</InputSelect>
 
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div>-->
 
                         <h5>Smartflow</h5>
                         <div class="detail-group-box">
