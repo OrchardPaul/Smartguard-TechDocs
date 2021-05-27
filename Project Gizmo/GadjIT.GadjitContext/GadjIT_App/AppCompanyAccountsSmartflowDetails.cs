@@ -17,14 +17,24 @@ namespace GadjIT.GadjitContext.GadjIT_App
         [Required]
         public int SmartflowRecordId { get; set; }
 
+        public bool Billable { get; set; }
+
+        [StringLength(200)]
+        public string BillingDescription { get; set; }
+
         [StringLength(50)]
         public string Status { get; set; }
+
+        [StringLength(100)]
+        public string CreatedBy { get; set; }
 
         public DateTime StartDate { get; set; }
 
         public DateTime EndDate { get; set; }
 
-        public int Duration { get; set; }
+        public DateTime DeletedDate { get; set; }
+
+        public int MonthsDuration { get; set; }
 
         public int MonthsRemaining { get; set; }
 

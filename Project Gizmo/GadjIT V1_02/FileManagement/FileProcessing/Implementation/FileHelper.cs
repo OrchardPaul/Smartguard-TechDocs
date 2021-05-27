@@ -732,7 +732,7 @@ namespace GadjIT_V1_02.FileManagement.FileProcessing.Implementation
              * 
              */
 
-            var workSheetAttachments = excel.Workbook.Worksheets.Add("LinkedItems");
+            var workSheetAttachments = excel.Workbook.Worksheets.Add("Linked Items");
 
             workSheetAttachments.TabColor = System.Drawing.Color.DarkGray;
             workSheetAttachments.DefaultRowHeight = 12;
@@ -785,8 +785,6 @@ namespace GadjIT_V1_02.FileManagement.FileProcessing.Implementation
                     workSheetAttachments.Cells[recordIndex, 5].Value = string.IsNullOrEmpty(doc.TrackingMethod) ? "" : doc.TrackingMethod;
                     workSheetAttachments.Cells[recordIndex, 6].Value = string.IsNullOrEmpty(doc.ChaserDesc) ? "" : doc.ChaserDesc;
                     workSheetAttachments.Cells[recordIndex, 7].Value = doc.ScheduleDays;
-
-                    //workSheetAttachments.Cells[recordIndex, 1].DataValidation.AddListDataValidation().Formula.ExcelFormula = $"= Documents!A3:A{selectedChapter.Items.Where(C => docTypes.Contains(C.Type)).ToList().Count() + 3}";
 
                     recordIndex++;
                 }
@@ -1121,7 +1119,7 @@ namespace GadjIT_V1_02.FileManagement.FileProcessing.Implementation
                 }
 
 
-                ExcelWorksheet worksheetAttachments = excelPackage.Workbook.Worksheets.Where(W => W.Name == "LinkedItems").SingleOrDefault();
+                ExcelWorksheet worksheetAttachments = excelPackage.Workbook.Worksheets.Where(W => W.Name == "Linked Items").SingleOrDefault();
                 totalColumns = worksheetAttachments.Dimension.End.Column;
                 totalRows = worksheetAttachments.Dimension.End.Row;
 

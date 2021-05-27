@@ -235,6 +235,10 @@
     
 }
 
+.form-control-filter {
+    background-color: #eee;
+}
+
 .form-group label {
     padding-bottom: 0px;
     margin-bottom: 3px;
