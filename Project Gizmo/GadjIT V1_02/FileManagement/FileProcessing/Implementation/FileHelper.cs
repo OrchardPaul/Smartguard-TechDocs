@@ -761,8 +761,8 @@ namespace GadjIT_V1_02.FileManagement.FileProcessing.Implementation
             workSheetAttachments.Row(2).Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
             workSheetAttachments.Row(2).Style.Font.Bold = true;
             workSheetAttachments.Cells[2, 1].Value = "Document Item Name ";
-            workSheetAttachments.Cells[2, 2].Value = "Attachment Name";
-            workSheetAttachments.Cells[2, 3].Value = "Attachment Display Name";
+            workSheetAttachments.Cells[2, 2].Value = "Linked Item Name";
+            workSheetAttachments.Cells[2, 3].Value = "Linked Item Display Name";
             workSheetAttachments.Cells[2, 4].Value = "Action";
             workSheetAttachments.Cells[2, 5].Value = "Tracking Method";
             workSheetAttachments.Cells[2, 6].Value = "Chaser Description";
