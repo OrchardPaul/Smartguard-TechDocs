@@ -17,13 +17,17 @@
                     <InputSelectInteger class="form-control form-control-lg"
                                         @bind-Value="selectedCaseTypeGroup">
                         <option value="-2">Select</option>
-                        @foreach (var group in CaseTypeGroups)
+                        @foreach (var group in CaseTypeGroups.Where(C => C.Name == SelectedChapter.P4WCaseTypeGroup).ToList())
                                 {
                             <option value="@group.Id">
                                 @group.Name
                             </option>
                                 }
-                        <option value="-1">Entity Documents</option>
+                        <option value="0">Global Documents</option>
+                        @if (SelectedChapter.P4WCaseTypeGroup == "Entity Documents")
+                        {
+                            <option value="-1">Entity Documents</option>
+                        }
                     </InputSelectInteger>
                 </div>
 

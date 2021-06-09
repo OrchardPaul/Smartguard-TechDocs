@@ -87,9 +87,15 @@ namespace GadjIT_V1_02.Pages.Chapters
             {
                 selectedCaseTypeGroup = CaseTypeGroups.Where(CT => CT.Name == SelectedChapter.P4WCaseTypeGroup).Select(CT => CT.Id).FirstOrDefault();
 
+
                 if (SelectedChapter.P4WCaseTypeGroup == "Entity Documents")
                 {
                     selectedCaseTypeGroup = -1;
+                }
+
+                if (SelectedChapter.P4WCaseTypeGroup == "Global Documents")
+                {
+                    selectedCaseTypeGroup = 0;
                 }
             }
         }

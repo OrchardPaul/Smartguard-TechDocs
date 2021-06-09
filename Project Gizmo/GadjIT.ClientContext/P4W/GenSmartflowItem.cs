@@ -40,7 +40,7 @@ namespace GadjIT.ClientContext.P4W
 
     public class LinkedItems
     {
-        [Required]
+        [Required (ErrorMessage = "Name field is required")]
         public string DocName { get; set; }
         public string DocAsName { get; set; }
 

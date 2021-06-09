@@ -10,10 +10,13 @@ namespace GadjIT.ClientContext.P4W
         public int SeqNo { get; set; }
 
         [StringLength(150)]
+        [Required(ErrorMessage = "Name field is required")]
         public string Message { get; set; }
 
+        [Required]
         public string FromDate { get; set; }
 
+        [Required]
         public string ToDate { get; set; }
     }
 }

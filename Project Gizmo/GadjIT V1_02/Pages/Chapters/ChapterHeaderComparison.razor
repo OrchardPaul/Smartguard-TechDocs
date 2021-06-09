@@ -124,6 +124,48 @@
 
                     </td>
                 </tr>
+                <tr>
+                    <td>
+                        Show Notes
+                    </td>
+                    <td>
+                        @Object.CurrentChapter.ShowPartnerNotes
+                    </td>
+                    <td>
+                        @Object.AltChapter.ShowPartnerNotes
+                    </td>
+                    <td>
+                        <span class="fa fa-@(Object.CurrentChapter.ShowPartnerNotes == @Object.AltChapter.ShowPartnerNotes ? "check" : "exclamation")"></span>
+                    </td>
+                    <td>
+                        @if (Object.CurrentChapter.ShowPartnerNotes != @Object.AltChapter.ShowPartnerNotes)
+                        {
+                            <input type="checkbox" class="ml-1 mt-1" @bind="@syncShowPartnerNotes" />
+                        }
+
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Track Documents
+                    </td>
+                    <td>
+                        @Object.CurrentChapter.ShowDocumentTracking
+                    </td>
+                    <td>
+                        @Object.AltChapter.ShowDocumentTracking
+                    </td>
+                    <td>
+                        <span class="fa fa-@(Object.CurrentChapter.ShowDocumentTracking == @Object.AltChapter.ShowDocumentTracking ? "check" : "exclamation")"></span>
+                    </td>
+                    <td>
+                        @if (Object.CurrentChapter.ShowDocumentTracking != @Object.AltChapter.ShowDocumentTracking)
+                        {
+                            <input type="checkbox" class="ml-1 mt-1" @bind="@syncShowDocumentTracking" />
+                        }
+
+                    </td>
+                </tr>
             </tbody>
             <tfoot>
                 <tr>

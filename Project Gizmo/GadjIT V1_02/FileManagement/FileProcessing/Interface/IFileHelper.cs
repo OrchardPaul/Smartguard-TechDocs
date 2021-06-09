@@ -27,6 +27,7 @@ namespace GadjIT_V1_02.FileManagement.FileProcessing.Interface
         List<string> ValidateChapterExcel(string FilePath);
         byte[] ReadFileIntoByteArray(string path);
         void Write(List<string> output, string fileName);
+        Task<bool> DownloadFile(string FileName, byte[] data);
 
         Task<string> WriteChapterDataToExcel(VmChapter selectedChapter, List<DmDocuments> documents, List<CaseTypeGroups> caseTypeGroups);
     }

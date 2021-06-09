@@ -993,7 +993,7 @@ app {
     min-height: 400px;
 }
 
-.grid-chapter-docs, .grid-chapter-fees, .grid-chapter-chapter, .grid-chapter-messages, .grid-chapter-backups, .grid-chapter-background, .grid-admin-company {
+.grid-chapter-docs, .grid-chapter-fees, .grid-chapter-chapter, .grid-chapter-messages, .grid-accounts-company, .grid-chapter-backups, .grid-chapter-background, .grid-admin-company {
     width: 100%;
     min-height: 400px;
 }
@@ -1039,12 +1039,22 @@ app {
     width: 15%;
 }
 
+.grid-accounts-company .row .data-item:nth-of-type(1) {
+    width: 30%;
+}
+
+.grid-accounts-company .row .data-item:nth-of-type(2), .grid-accounts-company .row .data-item:nth-of-type(3), .grid-accounts-company .row .data-item:nth-of-type(4), .grid-accounts-company .row .data-item:nth-of-type(5), .grid-accounts-company .row .data-item:nth-of-type(6) {
+    width: 14%;
+    padding-right: 20px;
+    justify-content: flex-end;
+}
+
 @media (max-width: 991px) {
     .grid-chapter {
         width: 100%;
     }
 
-    .grid-chapter-docs .row .data-item:nth-of-type(1), .grid-chapter-messages .row .data-item:nth-of-type(1) {
+    .grid-chapter-docs .row .data-item:nth-of-type(1), .grid-chapter-messages .row .data-item:nth-of-type(1), .grid-accounts-company .row .data-item:nth-of-type(1) {
         width: 100%;
     }
 
