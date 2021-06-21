@@ -86,6 +86,9 @@ namespace GadjIT_V1_02.Pages.Chapters
         public Action DataChanged { get; set; }
 
         [Parameter]
+        public Action RefreshDocList { get; set; }
+
+        [Parameter]
         public List<DmDocuments> dropDownChapterList { get; set; }
 
         [Parameter]
@@ -123,6 +126,28 @@ namespace GadjIT_V1_02.Pages.Chapters
                     selectedCaseTypeGroup = -1;
                 }
             }
+
+            if (!(dropDownChapterList.ToList() is null)
+                    && CopyObject.Name != ""
+                    && !(CopyObject.Name is null)
+                    && !dropDownChapterList.ToList().Select(D => D.Name).Contains(CopyObject.Name))
+            {
+                useCustomItem = true;
+                customItemName = CopyObject.Name;
+            }
+            else
+            {
+                useCustomItem = false;
+            }
+
+        }
+
+
+        private async void RefreshDocListOnModel()
+        {
+            dropDownChapterList = await chapterManagementService.GetDocumentList(SelectedChapter.CaseType);
+            StateHasChanged();
+            RefreshDocList?.Invoke();
         }
 
         private async void Close()

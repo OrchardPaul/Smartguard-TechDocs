@@ -41,10 +41,22 @@
                     else
                     {
                         <div class="form-label-check" style="margin-right: 13px">
-                            <label>Custom Item</label><input type="checkbox" @bind-value="@useCustomItem" />
+                            @if (useCustomItem)
+                            {
+                                <label>Custom Item</label><input type="checkbox" checked="checked" @bind-value="@useCustomItem" />
+                            }
+                            else
+                            {
+                                <label>Custom Item</label><input type="checkbox" @bind-value="@useCustomItem" />
+                            }
+
                         </div>
                         @if (!useCustomItem)
                         {
+                            <div class="button-container">
+                                <button type="button" class="btn btn-secondary" @onclick="() => RefreshDocListOnModel()">Refresh Doc List</button>
+                            </div>
+
                             <div class="form-group">
                                 <label for="AltDisplayName">Filter</label>
                                 <InputText class="form-control form-control-md form-control-filter" @bind-Value="@filterText" />

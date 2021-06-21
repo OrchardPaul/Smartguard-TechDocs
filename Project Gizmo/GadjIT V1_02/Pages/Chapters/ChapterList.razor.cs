@@ -482,6 +482,12 @@ namespace GadjIT_V1_02.Pages.Chapters
 
         }
 
+        private async void RefreshDocList()
+        {
+            dropDownChapterList = await chapterManagementService.GetDocumentList(selectedChapter.CaseType);
+            StateHasChanged();
+        }
+
         private void SetSmartflowFilePath()
         {
             ChapterFileOption = new ChapterFileOptions
@@ -1781,6 +1787,7 @@ namespace GadjIT_V1_02.Pages.Chapters
         protected void ShowChapterDetailModal(string option)
         {
             Action action = RefreshSelectedList;
+            Action RefreshDocList = this.RefreshDocList;
 
             var copyObject = new GenSmartflowItem
             {
@@ -1803,6 +1810,7 @@ namespace GadjIT_V1_02.Pages.Chapters
 
             var parameters = new ModalParameters();
             parameters.Add("TaskObject", editObject.ChapterObject);
+            parameters.Add("RefreshDocList", RefreshDocList);
             parameters.Add("CopyObject", copyObject);
             parameters.Add("DataChanged", action);
             parameters.Add("selectedList", selectedList);
@@ -1904,6 +1912,7 @@ namespace GadjIT_V1_02.Pages.Chapters
         protected void ShowChapterAttachmentModal()
         {
             Action action = RefreshSelectedList;
+            Action RefreshDocList = this.RefreshDocList;
 
             var copyObject = new GenSmartflowItem
             {
@@ -1938,6 +1947,7 @@ namespace GadjIT_V1_02.Pages.Chapters
             parameters.Add("SelectedChapterObject", SelectedChapterObject);
             parameters.Add("CompanyDbAccess", CompanyDbAccess);
             parameters.Add("sessionState", sessionState);
+            parameters.Add("RefreshDocList", RefreshDocList);
             parameters.Add("Attachment", attachment);
 
             string className = "modal-chapter-item";

@@ -39,6 +39,8 @@ namespace GadjIT.ClientAPI
                         builder.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null);
                     }));
 
+            services.AddSwaggerDocument();
+
             services.AddScoped<IChapters_Service, Chapters_Service>();
             services.AddScoped<IPartner_Access_Service, Partner_Access_Service>();
         }
@@ -46,6 +48,9 @@ namespace GadjIT.ClientAPI
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseOpenApi();
+            app.UseSwaggerUi3();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

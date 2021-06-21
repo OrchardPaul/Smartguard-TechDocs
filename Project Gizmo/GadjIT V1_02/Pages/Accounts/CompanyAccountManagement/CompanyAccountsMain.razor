@@ -12,8 +12,8 @@
         <p class="hidden-md-down">
             Selected Company: <span class="badge badge-grey mr-3">
                 @(CompanyAccountObjects
-                                                                    .Where(A => A.AccountObject.Id == SelectedCompanyAccount.Id)
-                                                                    .SingleOrDefault().CompanyObject.CompanyName)
+                                        .Where(A => A.AccountObject.Id == SelectedCompanyAccount.Id)
+                                        .SingleOrDefault().CompanyObject.CompanyName)
             </span>
         </p>
     }
