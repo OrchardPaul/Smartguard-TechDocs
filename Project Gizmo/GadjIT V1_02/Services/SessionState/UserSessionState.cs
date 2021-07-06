@@ -1,5 +1,6 @@
 ﻿using GadjIT.GadjitContext.GadjIT_App;
 using GadjIT_V1_02.Data.Admin;
+using GadjIT_V1_02.Services.AppState;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using System;
@@ -23,13 +24,18 @@ namespace GadjIT_V1_02.Services.SessionState
         string baseUri { get; }
         AppCompanyDetails Company { get; }
         List<AppCompanyDetails> allAssignedCompanies { get; }
-        bool isSuperUser { get;  }
-        bool isAdminUser { get;  }
+        bool isSuperUser { get; }
+        bool isAdminUser { get; }
         string FullName { get; }
         SpinLock IdentityLock { get; set; }
         bool Lock { get; set; }
         string selectedSystem { get; }
         string TempBackGroundImage { get; set; }
+
+        DateTime ChapterLastCompared { get; set; }     //keeps a record of the last time a Chapter of list of Chapters was compared for updates by another user
+                                                       //each time a user navigates within Smartflow this is set to the ChapterLastUpdated value from the local store
+                                                       //if the values are not the same the StateHasChanged method is invoked.
+
         event Action OnChange;
 
         Claim getCompanyClaim();
@@ -53,8 +59,8 @@ namespace GadjIT_V1_02.Services.SessionState
         void SetTempBackground(string image, string Uri);
 
         bool SuppressChangeSystemError { get; set; }
-
     }
+        
 
     public class UserSessionState : IUserSessionState
     {
@@ -109,6 +115,9 @@ namespace GadjIT_V1_02.Services.SessionState
 
         public string SelectedChapter { get; protected set; }
 
+        public DateTime ChapterLastCompared { get; set; }     
+                                                                        
+                                                                        
 
         public Action HomeActionSmartflow { get; set; }
 
@@ -123,7 +132,11 @@ namespace GadjIT_V1_02.Services.SessionState
             this.navigationManager = navigationManager;
         }
 
-        
+
+        public void SetChapterLastCompared(DateTime chapterLastCompared)
+        {
+            ChapterLastCompared = chapterLastCompared;
+        }
 
         public void SetTempBackground(string image, string Uri)
         {

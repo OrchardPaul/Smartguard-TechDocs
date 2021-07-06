@@ -29,6 +29,8 @@ using GadjIT_V1_02.Data.Admin;
 using System.Globalization;
 using GadjIT.GadjitContext.GadjIT_App;
 using AutoMapper;
+using System.Timers;
+using GadjIT_V1_02.Services.AppState;
 
 namespace GadjIT_V1_02.Pages.Chapters
 {
@@ -66,6 +68,9 @@ namespace GadjIT_V1_02.Pages.Chapters
 
         [Inject]
         private IIdentityUserAccess UserAccess { get; set; }
+
+        [Inject]
+        public IAppChapterState appChapterState { get; set; }
 
         [Inject]
         private ICompanyDbAccess CompanyDbAccess { get; set; }
@@ -117,6 +122,88 @@ namespace GadjIT_V1_02.Pages.Chapters
             {
                 SaveSelectedBackgroundColour(value);
             }
+        }
+
+        protected override async Task OnInitializedAsync()
+        {
+            //var authenticationState = await pageAuthorisationState.ChapterListAuthorisation();
+
+            //if (!authenticationState)
+            //{
+            //    string returnUrl = HttpUtility.UrlEncode($"/chapterlist");
+            //    NavigationManager.NavigateTo($"Identity/Account/Login?returnUrl={returnUrl}", true);
+            //}
+
+            bool gotLock = sessionState.Lock;
+            while (gotLock)
+            {
+                await Task.Yield();
+                gotLock = sessionState.Lock;
+            }
+
+
+            try
+            {
+                RefreshChapters();
+                partnerCaseTypeGroups = await partnerAccessService.GetPartnerCaseTypeGroups();
+                ListP4WViews = await partnerAccessService.GetPartnerViews();
+                sessionState.HomeActionSmartflow = SelectHome;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+            
+
+        }
+
+        private Timer timer;
+
+        protected override void OnAfterRender(bool firstRender)
+        {
+            if (firstRender)
+            {
+                timer = new Timer();
+                timer.Interval = 10000; //10 seconds
+                timer.Elapsed += OnTimerInterval;
+                timer.AutoReset = true;
+                // Start the timer
+                timer.Enabled = true;
+            }
+            base.OnAfterRender(firstRender);
+        }
+
+        private async void OnTimerInterval(object sender, ElapsedEventArgs e)
+        {
+            //Compare current session with Chapter State to see if any other users have updated the Chapter
+            //If an update is detected (ChapterLastUpdated is greater than session's ChapterLastCompared) then 
+            // reload the data and invoke StateHasChanged to refresh the page.
+            var ChapterLastUpdated = appChapterState.GetLastUpdatedDate(sessionState, selectedChapter);
+
+            if (!(selectedChapter.Name == "" | selectedChapter.Name is null))
+            {
+                if (sessionState.ChapterLastCompared != ChapterLastUpdated)
+                {
+                    await RefreshChapterItems(navDisplay);
+                    await InvokeAsync(() =>
+                    {
+                        StateHasChanged();
+                    });
+
+                    sessionState.ChapterLastCompared = ChapterLastUpdated;
+                }
+            }
+
+            appChapterState.SetUsersCurrentChapter(sessionState, selectedChapter);
+
+        }
+
+        public void Dispose()
+        {
+            // During prerender, this component is rendered without calling OnAfterRender and then immediately disposed
+            // this mean timer will be null so we have to check for null or use the Null-conditional operator ? 
+            timer?.Dispose();
         }
 
         public async void SaveSelectedBackgroundColour (string colour)
@@ -252,38 +339,7 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
 
         
 
-        protected override async Task OnInitializedAsync()
-        {
-            //var authenticationState = await pageAuthorisationState.ChapterListAuthorisation();
-
-            //if (!authenticationState)
-            //{
-            //    string returnUrl = HttpUtility.UrlEncode($"/chapterlist");
-            //    NavigationManager.NavigateTo($"Identity/Account/Login?returnUrl={returnUrl}", true);
-            //}
-
-            bool gotLock = sessionState.Lock;
-            while (gotLock)
-            {
-                await Task.Yield();
-                gotLock = sessionState.Lock;
-            }
-
-
-            try
-            {
-                RefreshChapters();
-                partnerCaseTypeGroups = await partnerAccessService.GetPartnerCaseTypeGroups();
-                ListP4WViews = await partnerAccessService.GetPartnerViews();
-                sessionState.HomeActionSmartflow = SelectHome;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
-
-
-        }
+        
 
 
 
@@ -479,8 +535,15 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
             SetSmartflowFilePath();
             GetSeletedChapterFileList();
 
-            StateHasChanged();
 
+            //set the session ChapterLastCompared to be the same as the Chapter State value to prevent an immediate 
+            // refresh of the page (by OnTimerInterval)
+            if (!(selectedChapter.Name == "" | selectedChapter.Name is null))
+            {
+                sessionState.ChapterLastCompared = appChapterState.GetLastUpdatedDate(sessionState, selectedChapter);
+            }
+
+            StateHasChanged();
 
         }
 
