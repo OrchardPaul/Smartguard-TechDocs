@@ -30,6 +30,7 @@ using GadjIT_V1_02.FileManagement.FileProcessing.Interface;
 using GadjIT_V1_02.FileManagement.FileProcessing.Implementation;
 using Microsoft.Extensions.FileProviders;
 using System.IO;
+using GadjIT_V1_02.Services.AppState;
 
 namespace GadjIT_V1_02
 {
@@ -84,6 +85,9 @@ namespace GadjIT_V1_02
             services.AddScoped<IPDFHelper, PDFHelper>();
             services.AddScoped<IExcelHelper, ExcelHelper>();
             services.AddScoped<IChapterFileUpload, ChapterFileUpload>();
+
+            services.AddSingleton<IAppChapterState, AppChapterStateList>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
