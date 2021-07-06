@@ -82,6 +82,8 @@ namespace GadjIT_V1_02
             services.AddScoped<IChapterState, ChapterState>();
             services.AddBlazoredModal();
             services.AddScoped<IFileHelper, FileHelper>();
+            services.AddScoped<IPDFHelper, PDFHelper>();
+            services.AddScoped<IExcelHelper, ExcelHelper>();
             services.AddScoped<IChapterFileUpload, ChapterFileUpload>();
 
             services.AddSingleton<IAppChapterState, AppChapterStateList>();

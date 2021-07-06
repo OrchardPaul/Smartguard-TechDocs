@@ -1,10 +1,23 @@
-﻿@*<div class="tran-block page-header-block ">
+﻿@page "/accounts/companyaccounts"
+
+<div class="tran-block page-header-block ">
     <div class="page-header-title">
-        <div class="float-left back-link" >
+        <div class="float-left back-link">
             <span class="col-alt fa fa-angle-double-left"></span>
         </div>
         <h3>Accounts</h3>
     </div>
+    @if (!(CompanyAccountObjects.Where(A => A.AccountObject.Id == SelectedCompanyAccount.Id).SingleOrDefault() is null))
+    {
+        <p class="hidden-md-down">
+            Selected Company: <span class="badge badge-grey mr-3">
+                @(CompanyAccountObjects
+                                        .Where(A => A.AccountObject.Id == SelectedCompanyAccount.Id)
+                                        .SingleOrDefault().CompanyObject.CompanyName)
+            </span>
+        </p>
+    }
+
 </div>
 
 <div class="tran-block rounded">
@@ -12,8 +25,13 @@
         <nav class="navbar navbar-expand ">
 
             <ul class="navbar-nav">
-                <li class="nav-item @(navDisplay == "Chapter" ? "active" : "")" @onclick='() => ShowNav("Chapter")'>
-                    <span class="font-120"><span class="fa fa-home" Title="Home - main Smartflow settings"></span></span>
+                <li class="nav-item @(navDisplay == "Companies" ? "active" : "")" @onclick='() => ShowNav("Companies")'>
+                    <span class="font-120"><span class="fa fa-building" Title="Company List"></span></span>
+                    <div class="subtitle">Companies</div>
+                </li>
+                <li class="nav-item @(navDisplay == "Accounts" ? "active" : "")" @onclick='() => ShowNav("Accounts")'>
+                    <span class="font-120"><span class="fa fa-sitemap" Title="Smartflow Breakdown"></span></span>
+                    <div class="subtitle">Smartflows</div>
                 </li>
             </ul>
 
@@ -22,9 +40,13 @@
 
     <div class="page-navbar hidden-xl-up">
         <ul class="nav nav-pills tran-tabs">
-            <li class="nav-item @(navDisplay == "Chapter" ? "active" : "")" @onclick='() => ShowNav("Chapter")'>
+            <li class="nav-item @(navDisplay == "Companies" ? "active" : "")" @onclick='() => ShowNav("Companies")'>
                 <span class="font-120"><span class="fa fa-home" Title="Home - main Smartflow settings"></span></span>
                 <div class="subtitle">Home</div>
+            </li>
+            <li class="nav-item @(navDisplay == "Accounts" ? "active" : "")" @onclick='() => ShowNav("Accounts")'>
+                <span class="font-120"><span class="fa fa-home" Title="Home - main Smartflow settings"></span></span>
+                <div class="subtitle">Accounts</div>
             </li>
         </ul>
 
@@ -37,238 +59,208 @@
     else
     {
 
-        @if (navDisplay == "TickerMessages")
+        @if (navDisplay == "Companies")
         {
 
-            <div class="grid-chapter grid-chapter-messages">
+            <div class="grid-chapter grid-accounts-company">
 
                 <div class="grid-actions">
-
-                    @if (!compareSystems)
+                    @if (SessionState.isAdminUser)
                     {
-                        @if (sessionState.isAdminUser)
-                        {
-                            <div class="btn-group">
-                                <button @onclick='() => PrepareTickerMessageForInsert(navDisplay)' class="btn btn-main btn-shadow" title="Add new ticker message"><i class="fa fa-plus"></i><span>New</span></button>
-                                <button @onclick='() => CondenseMessageSeqNo("TickerMessages")' class="btn btn-main btn-shadow @(MessagesSeqNoIsValid() ? "invisible" : "")" title="Re-order Sequence Numbers"><i class="fa fa-sort-numeric-down"></i></button>
-                            </div>
-                        }
-                    }
-
-                    <ModalTooltip Direction="top" Text="Ticker Message to be made visible on the Smartflow screen." Class="w-2">
-                        <span class="info-icon">
-                            <span class=" fa fa-info-circle fa-2x "></span>
-                        </span>
-                    </ModalTooltip>
-
-                    <div class="spacer">
-                    </div>
-                    @if (sessionState.isAdminUser)
-                    {
-                        <div class="btn-group sync-group invisible-md-down">
-                            <button type="button" @onclick="() => PrepareChapterSync()" class="btn btn-main btn-shadow @(!compareSystems ? "hidden" : "")" title="Sync To @(sessionState.selectedSystem == "Dev" ? "Live" : "Dev")"><i class="fa fa-sync"></i><span>Sync</span></button>
-                            <input type="checkbox" class="ml-1 mt-1" @onchange="() => ToggleComparison()" /><span class="ml-2 font-75 ">Compare to @(sessionState.selectedSystem == "Dev" ? "Live" : "Dev") </span>
+                        <div class="btn-group">
+                            <button @onclick='() => RefreshCompanyAccounts()' class="btn btn-main btn-shadow" title="Refresh Companies"><i class="fa fa-plus"></i><span>Refresh Company Accounts</span></button>
+                            <button @onclick='() => ExportToPdf()' class="btn btn-main btn-shadow" title="Refresh Companies"><i class="fa fa-plus"></i><span>Export</span></button>
                         </div>
                     }
                 </div>
 
-                <div class="@(sessionState.isAdminUser ? "grid-can-edit" : "") ">
+                <div class="@(SessionState.isAdminUser ? "grid-can-edit" : "") ">
                     <div class="row grid-header invisible-md-down">
                         <div class="data-item ">
                             <div class="data-item-sub">
-                                Message
+                                Company Name
                             </div>
+                                
                         </div>
                         <div class="data-item ">
-                            <div class="data-item-sub">
-                                From Date
-                            </div>
+                                Total SmartFlows
                         </div>
                         <div class="data-item ">
-                            <div class="data-item-sub">
-                                To Date
-                            </div>
+                                Smartflows Live
+                        </div>
+                        <div class="data-item ">
+                                Smartflows Dev
+                        </div>
+                        <div class="data-item ">
+                                Outstanding
+                        </div>
+                        <div class="data-item ">
+                                Total Billed
                         </div>
                     </div>
                     <div class="grid-data">
-                        @foreach (var vmtickerMessages in ListVmTickerMessages)
+                        @if (CompanyAccountObjects is null)
                         {
-                            <div class="row grid-row @(rowChanged == vmtickerMessages.Message.SeqNo ? "row-changed" : "" )">
-                                <div class="data-item">
-                                    @if (sessionState.isAdminUser && !compareSystems)
-                                    {
-
-                                        <div class="btn-ellipses float-left">
-                                            <span class="fa fa-ellipsis-v"></span>
-                                            <div class="ellipsis-menu">
-                                                <ul>
-                                                    <li class="col-main" @onclick='() => PrepareTickerMessageForEdit(vmtickerMessages, navDisplay)'>
-                                                        <span class="fa fa-pencil-alt mr-2"></span>
-                                                        <span>Edit</span>
-                                                    </li>
-                                                    <li class="col-main" @onclick='() => ShowTickerMessageDisplayModal(vmtickerMessages)'>
-                                                        <span class="fa fa-binoculars mr-2"></span>
-                                                        <span>View</span>
-                                                    </li>
-                                                    <li class="col-red" @onclick='() => PrepareTickerMessageDelete(vmtickerMessages)'>
-                                                        <span class="fa fa-trash-alt mr-2"></span>
-                                                        <span>Delete</span>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <div class="data-item-right">
-                                            <ModalTooltip Direction="top" Text="@vmtickerMessages.msgTooltip" Class="w-3">
-                                                <span class="@(vmtickerMessages.msgValidation == "Exceeded" ? "" : "invisible")"><span class="fa fa-comment mr-2 font-grey "></span></span>
-                                                <span class="@(vmtickerMessages.msgValidation == "Expired" ? "" : "invisible")"><span class="fa fa-comment mr-2 font-red "></span></span>
-                                                <span class="@(vmtickerMessages.msgValidation == "Future" ? "" : "invisible")"><span class="fa fa-comment mr-2 font-green "></span></span>
-                                                <span class="@(vmtickerMessages.msgValidation == "Invalid" ? "" : "invisible")"><span class="fa fa-exclamation-triangle mr-2 font-red "></span></span>
-                                                <span class="@(vmtickerMessages.msgValidation == "Valid" ? "" : "invisible")"><span class="fa fa-comment mr-2 font-blue "></span></span>
-                                            </ModalTooltip>
-                                        </div>
-                                        <div class="data-item-sub">
-                                            @vmtickerMessages.Message.Message
-                                        </div>
-                                    }
-                                    else if (sessionState.isAdminUser && compareSystems)
-                                    {
-                                        <div class="btn-ellipses float-left">
-                                            @if (!(vmtickerMessages.ComparisonIcon is null))
-                                            {
-                                                @if (!(vmtickerMessages.ComparisonResult == "Exact match"))
-                                                {
-                                                    <div class="btn-dashed" @onclick="() => PrepareTickerMessageForComparison(vmtickerMessages)"><span class="fa fa-@vmtickerMessages.ComparisonIcon"></span></div>
-                                                }
-                                                else
-                                                {
-                                                    <span class="fa fa-@vmtickerMessages.ComparisonIcon"></span>
-                                                }
-                                            }
-                                            else
-                                            {
-                                                <div class="spinner"></div>
-                                            }
-
-                                        </div>
-
-                                        <div class="data-item-sub">
-                                            <span class="fa fa-comment mr-2 tickericon"></span> @vmtickerMessages.Message.Message
-                                        </div>
-                                    }
-                                    else
-                                    {
-                                        <div class="btn-ellipses float-left">
-                                            <span class="fa fa-ellipsis-v"></span>
-                                            <div class="ellipsis-menu">
-                                                <ul>
-                                                    <li class="col-main" @onclick='() => ShowTickerMessageDisplayModal(vmtickerMessages)'>
-                                                        <span class="fa fa-binoculars mr-2"></span>
-                                                        <span>View</span>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <div class="data-item-sub">
-                                            <span class="fa fa-comment mr-2 tickericon"></span> @vmtickerMessages.Message.Message
-                                        </div>
-                                    }
-
-                                    @if (sessionState.isAdminUser && !compareSystems)
-                                    {
-
-                                        <div class="data-item-right seq-change">
-                                            <div @onclick='() => MoveMessageSeqNo(vmtickerMessages.Message, "TickerMessages", "Up")'><span class="fa fa-angle-up"></span></div>
-                                            <div class="seq-no">@vmtickerMessages.Message.SeqNo</div>
-                                            <div @onclick='() => MoveMessageSeqNo(vmtickerMessages.Message, "TickerMessages", "Down")'><span class="fa fa-angle-down"></span></div>
-                                        </div>
-                                    }
-                                    else
-                                    {
-                                        <div class="data-item-right">
-                                            <div class="seq-no">@vmtickerMessages.Message.SeqNo</div>
-                                        </div>
-                                    }
-
-                                </div>
-                                @if (!string.IsNullOrEmpty(vmtickerMessages.Message.FromDate))
-                                {
-                                    <div class="hidden-md-down data-item ">
-                                        <div class="data-item-sub">@(DateTime.ParseExact(vmtickerMessages.Message.FromDate, "yyyyMMdd", CultureInfo.InvariantCulture).ToString("dd/MM/yyyy"))</div>
-                                    </div>
-                                }
-                                else
-                                {
-                                    <div class="hidden-md-down data-item ">
-                                        <div class="data-item-sub">
-                                        </div>
-                                    </div>
-                                }
-                                @if (!string.IsNullOrEmpty(vmtickerMessages.Message.ToDate))
-                                {
-                                    <div class="hidden-md-down data-item ">
-                                        <div class="data-item-sub font-85 pl-3">@(DateTime.ParseExact(vmtickerMessages.Message.ToDate, "yyyyMMdd", CultureInfo.InvariantCulture).ToString("dd/MM/yyyy"))</div>
-                                    </div>
-                                }
-                                else
-                                {
-                                    <div class="hidden-md-down data-item ">
-                                        <div class="data-item-sub">
-                                        </div>
-                                    </div>
-                                }
-                            </div>
+                            <div class="spinner"></div>
                         }
-
-
-                        @if (compareSystems && !(lstAltSystemTickerMessages is null))
+                        else
                         {
-                            @foreach (var vmtickerMessages in lstAltSystemTickerMessages.Where(F => !F.Compared).ToList())
+                            @foreach (var companyAccountObject in CompanyAccountObjects)
                             {
-                                <div class="row grid-row @(rowChanged == vmtickerMessages.Message.SeqNo ? "row-changed" : "" )">
+                                <div class="row grid-row">
                                     <div class="data-item">
-
                                         <div class="btn-ellipses float-left">
-                                            <ModalTooltip Direction="right" Text=@("Exists on alternate system, Do you wish to delete?") Class="w-2">
-                                                <div class="btn-dashed" @onclick="() => PrepareDeleteAltMessage(vmtickerMessages)"><span class="fa fa-trash"></span></div>
-                                            </ModalTooltip>
-                                        </div>
-                                        <div class="data-item-sub">
-                                            <span class="fa fa-comment mr-2 tickericon"></span> @vmtickerMessages.Message.Message
-                                        </div>
-                                        <div class="data-item-right">
-                                            <div class="seq-no">@vmtickerMessages.Message.SeqNo</div>
+                                            <span class="fa fa-ellipsis-v"></span>
+                                            <div class="ellipsis-menu">
+                                                <ul>
+                                                    <li class="col-main" @onclick='(() => SelectCompany(companyAccountObject.AccountObject))'>
+                                                        <span class="fa fa-binoculars mr-2"></span>
+                                                        <span>View Smartflows</span>
+                                                    </li>
+                                                </ul>
+                                            </div>
                                         </div>
 
+                                        <div class="data-item-sub">
+                                            @companyAccountObject.CompanyObject.CompanyName
+                                        </div>
                                     </div>
-                                    @if (!string.IsNullOrEmpty(vmtickerMessages.Message.FromDate))
-                                    {
-                                        <div class="hidden-md-down data-item ">
-                                            <div class="data-item-sub">@(DateTime.ParseExact(vmtickerMessages.Message.FromDate, "yyyyMMdd", CultureInfo.InvariantCulture).ToString("dd/MM/yyyy"))</div>
-                                        </div>
-                                    }
-                                    else
-                                    {
-                                        <div class="hidden-md-down data-item ">
-                                            <div class="data-item-sub">
-                                            </div>
-                                        </div>
-                                    }
-                                    @if (!string.IsNullOrEmpty(vmtickerMessages.Message.ToDate))
-                                    {
-                                        <div class="hidden-md-down data-item ">
-                                            <div class="data-item-sub font-85 pl-3">@(DateTime.ParseExact(vmtickerMessages.Message.ToDate, "yyyyMMdd", CultureInfo.InvariantCulture).ToString("dd/MM/yyyy"))</div>
-                                        </div>
-                                    }
-                                    else
-                                    {
-                                        <div class="hidden-md-down data-item ">
-                                            <div class="data-item-sub">
-                                            </div>
-                                        </div>
-                                    }
+
+                                    <div class="data-item">
+                                        @companyAccountObject.SmartflowAccounts.Count()
+                                    </div>
+
+
+                                    <div class="data-item">
+                                        @companyAccountObject.SmartflowAccounts.Where(S => S.System == "Live").Count()
+                                    </div>
+
+                                    <div class="data-item">
+                                        @companyAccountObject.SmartflowAccounts.Where(S => S.System == "Dev").Count()
+                                    </div>
+
+                                    <div class="data-item">
+                                            £@string.Format("{0:N2}", companyAccountObject.SmartflowAccounts.Sum(S => S.Outstanding))
+                             
+                                        
+                                    </div>
+
+                                    <div class="data-item">
+                                            £@string.Format("{0:N2}", companyAccountObject.SmartflowAccounts.Sum(S => S.TotalBilled))
+                                        
+
+                                        
+                                    </div>
                                 </div>
                             }
                         }
+
+
+
+                    </div>
+
+                </div>
+            </div>
+
+
+        }
+
+
+        @if (navDisplay == "Accounts")
+        {
+
+            <div class="grid-chapter grid-accounts-company">
+
+                <div class="grid-actions">
+                    @if (SessionState.isAdminUser)
+                    {
+                        <div class="btn-group">
+                            <button @onclick='() => Bill()' class="btn btn-main btn-shadow" title="Refresh Companies"><i class="fa fa-plus"></i><span>Bill</span></button>
+                        </div>
+                    }
+                </div>
+
+
+                <div class="grid-actions">
+                    <select class="form-control form-control-xxl" @bind="SelectedSystem">
+                        <option value="Live">Live</option>
+                        <option value="Dev">Dev</option>
+                    </select>
+                </div>
+
+                <div class="@(SessionState.isAdminUser ? "grid-can-edit" : "") ">
+                    <div class="row grid-header invisible-md-down">
+                        <div class="data-item ">
+                            <div class="data-item-sub">
+                                Smartflow Name
+                            </div>
+                        </div>
+                        <div class="data-item ">
+                                Status
+                        </div>
+                        <div class="data-item ">
+                                Start Date
+                        </div>
+                        <div class="data-item ">
+                                End Date
+                        </div>
+                        <div class="data-item ">
+                                Months Remaining
+                        </div>
+                        <div class="data-item ">
+                                Total Billed
+                        </div>
+                    </div>
+                    <div class="grid-data">
+                        @foreach (var companyAccountObject in CompanyAccountObjects
+                                                                    .Where(A => A.AccountObject.Id == SelectedCompanyAccount.Id)
+                                                                    .Select(A => A.SmartflowAccounts)
+                                                                    .SingleOrDefault()
+                                                                    .Where(A => A.System == SelectedSystem)
+                                                                    .ToList())
+                        {
+                            <div class="row grid-row">
+                                <div class="data-item">
+                                    <div class="btn-ellipses float-left">
+                                        <span class="fa fa-ellipsis-v"></span>
+                                        <div class="ellipsis-menu">
+                                            <ul>
+                                                <li class="col-main" @onclick='(() => ShowCompanyAccountsDetailModal(companyAccountObject))'>
+                                                    <span class="fa fa-binoculars mr-2"></span>
+                                                    <span>Edit</span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                    <div class="data-item-sub">
+                                        @AllRecords.Where(A => A.Id == companyAccountObject.SmartflowRecordId).Select(A => A.SmartflowName).FirstOrDefault()
+                                    </div>
+                                </div>
+
+                                <div class="data-item">
+                                        @companyAccountObject.Status
+                                </div>
+
+
+                                <div class="data-item">
+                                        @companyAccountObject.StartDate.ToString("dd/MM/yyyy")
+                                </div>
+
+                                <div class="data-item">
+                                        @companyAccountObject.EndDate.ToString("dd/MM/yyyy")
+                                </div>
+
+                                <div class="data-item">
+                                        @companyAccountObject.MonthsRemaining.ToString()
+                                </div>
+
+                                <div class="data-item">
+                                        £@string.Format("{0:N2}", companyAccountObject.TotalBilled)
+                                </div>
+                            </div>
+                        }
+
                     </div>
 
                 </div>
@@ -279,7 +271,6 @@
 
 
 
-
     }
-</div>*@
+</div>
 

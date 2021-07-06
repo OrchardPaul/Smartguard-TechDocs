@@ -17,6 +17,9 @@ namespace GadjIT.GadjitContext.GadjIT_App
         [Required]
         public int SmartflowRecordId { get; set; }
 
+        [StringLength(50)]
+        public string System { get; set; }
+
         public bool Billable { get; set; }
 
         [StringLength(200)]

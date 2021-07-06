@@ -77,6 +77,26 @@ namespace GadjIT_V1_02.FileManagement.FileProcessing.Implementation
 
         }
 
+        public async Task<bool> DownloadFile(string FileName, byte[] data)
+        {
+            try
+            {
+                await jsRuntime.InvokeAsync<object>(
+                     "DownloadTextFile",
+                     FileName,
+                     data);
+
+                return true;
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return false;
+            }
+
+        }
+
+
         public async Task<bool> Upload(IFileListEntry file)
         {
             var path = string.IsNullOrEmpty(CustomPath) ?
@@ -426,10 +446,10 @@ namespace GadjIT_V1_02.FileManagement.FileProcessing.Implementation
 
                     try
                     {
-                        ExcelWorksheet worksheetAttachments = excelPackage.Workbook.Worksheets.Where(W => W.Name == "Attachments").SingleOrDefault();
+                        ExcelWorksheet worksheetAttachments = excelPackage.Workbook.Worksheets.Where(W => W.Name == "Linked Items").SingleOrDefault();
                         if (worksheetAttachments is null)
                         {
-                            isExcelValid.Add("Missing Attachments Worksheet");
+                            isExcelValid.Add("Missing Link Items Worksheet");
                         }
                     }
                     catch
@@ -470,13 +490,13 @@ namespace GadjIT_V1_02.FileManagement.FileProcessing.Implementation
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             ExcelPackage excel = new ExcelPackage();
             
-            var workSheetHeader = excel.Workbook.Worksheets.Add(selectedChapter.Name);
+            var workSheetHeader = excel.Workbook.Worksheets.Add("Overview");
             workSheetHeader.TabColor = System.Drawing.Color.RoyalBlue;
             workSheetHeader.DefaultRowHeight = 12;
 
             workSheetHeader.Cells[1, 1, 1, 16].Merge = true;
 
-            workSheetHeader.Row(1).Height = 30;
+            workSheetHeader.Row(1).Height = 82;
             workSheetHeader.Cells[1, 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
             workSheetHeader.Cells[1, 1].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
 
@@ -502,6 +522,12 @@ namespace GadjIT_V1_02.FileManagement.FileProcessing.Implementation
             workSheetHeader.Cells[7, 1].Value = "General Notes: ";
             workSheetHeader.Cells[7, 2].Value = selectedChapter.GeneralNotes;
 
+            workSheetHeader.Cells[8, 1].Value = "Show Partner Notes: ";
+            workSheetHeader.Cells[8, 2].Value = selectedChapter.ShowPartnerNotes;
+
+            workSheetHeader.Cells[9, 1].Value = "Show Document Tracking: ";
+            workSheetHeader.Cells[9, 2].Value = selectedChapter.ShowDocumentTracking;
+
             /*
              * 
              * Agenda
@@ -514,7 +540,7 @@ namespace GadjIT_V1_02.FileManagement.FileProcessing.Implementation
             workSheetAgenda.TabColor = System.Drawing.Color.Black;
             workSheetAgenda.DefaultRowHeight = 12;
 
-            workSheetAgenda.Row(1).Height = 30;
+            workSheetAgenda.Row(1).Height = 82;
             workSheetAgenda.Row(1).Style.Font.Size = 8;
             workSheetAgenda.Row(1).Style.Font.Color.SetColor(System.Drawing.Color.DarkGray);
             workSheetAgenda.Cells[1, 1].Style.WrapText = true;
@@ -552,7 +578,7 @@ namespace GadjIT_V1_02.FileManagement.FileProcessing.Implementation
             workSheetStatus.DefaultRowHeight = 12;
 
             //Header of table
-            workSheetStatus.Row(1).Height = 21;
+            workSheetStatus.Row(1).Height = 82;
             workSheetStatus.Row(1).Style.Font.Size = 8;
             workSheetStatus.Row(1).Style.Font.Color.SetColor(System.Drawing.Color.DarkGray);
             workSheetStatus.Cells[1, 1].Style.WrapText = true;
@@ -594,7 +620,7 @@ namespace GadjIT_V1_02.FileManagement.FileProcessing.Implementation
             workSheetFees.DefaultRowHeight = 12;
 
             //Header of table
-            workSheetFees.Row(1).Height = 30;
+            workSheetFees.Row(1).Height = 82;
             workSheetFees.Row(1).Style.Font.Size = 8;
             workSheetFees.Row(1).Style.Font.Color.SetColor(System.Drawing.Color.DarkGray);
             workSheetFees.Cells[1, 1].Style.WrapText = true;
@@ -653,7 +679,7 @@ namespace GadjIT_V1_02.FileManagement.FileProcessing.Implementation
             workSheetDocument.DefaultRowHeight = 12;
             workSheetDocument.Row(1).Style.Font.Size = 8;
             workSheetDocument.Row(1).Style.Font.Color.SetColor(System.Drawing.Color.DarkGray);
-            workSheetDocument.Row(1).Height = 62;
+            workSheetDocument.Row(1).Height = 82;
             workSheetDocument.Cells[1, 1].Style.WrapText = true;
             workSheetDocument.Cells[1, 1].Value = "Mandatory: \r\nI would like the following documents available from the Smartflow screen: ";
             workSheetDocument.Cells[1, 2].Style.WrapText = true;
@@ -739,7 +765,7 @@ namespace GadjIT_V1_02.FileManagement.FileProcessing.Implementation
 
 
             //Header of table
-            workSheetAttachments.Row(1).Height = 30;
+            workSheetAttachments.Row(1).Height = 82;
             workSheetAttachments.Row(1).Style.Font.Size = 8;
             workSheetAttachments.Row(1).Style.Font.Color.SetColor(System.Drawing.Color.LightGray);
             workSheetAttachments.Cells[1, 1].Style.WrapText = true;
@@ -812,7 +838,7 @@ namespace GadjIT_V1_02.FileManagement.FileProcessing.Implementation
             workSheetDataViews.DefaultRowHeight = 12;
 
             //Header of table
-            workSheetDataViews.Row(1).Height = 32;
+            workSheetDataViews.Row(1).Height = 82;
             workSheetDataViews.Row(1).Style.Font.Size = 8;
             workSheetDataViews.Row(1).Style.Font.Color.SetColor(System.Drawing.Color.DarkGray);
             workSheetDataViews.Cells[1, 1].Style.WrapText = true;
@@ -853,7 +879,7 @@ namespace GadjIT_V1_02.FileManagement.FileProcessing.Implementation
 
             //Header of table
 
-            workSheetLookUp.Row(1).Height = 14;
+            workSheetLookUp.Row(1).Height = 30;
             workSheetLookUp.Row(1).Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
             workSheetLookUp.Row(1).Style.Font.Bold = true;
             workSheetLookUp.Row(1).Style.Font.Color.SetColor(System.Drawing.Color.White);
@@ -912,7 +938,9 @@ namespace GadjIT_V1_02.FileManagement.FileProcessing.Implementation
             workSheetLookUp.Column(3).AutoFit();
             workSheetLookUp.Column(4).AutoFit();
             workSheetLookUp.Column(5).AutoFit();
-
+            workSheetLookUp.Column(6).AutoFit();
+            workSheetLookUp.Column(7).AutoFit();
+            workSheetLookUp.Column(8).AutoFit();
 
             //Download SpreadSheet
             string excelName = $"{selectedChapter.Name}.xlsx";
@@ -938,10 +966,31 @@ namespace GadjIT_V1_02.FileManagement.FileProcessing.Implementation
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             using (ExcelPackage excelPackage = new ExcelPackage(fileInfo))
             {
-                
+                ExcelWorksheet workSheetHeader = excelPackage.Workbook.Worksheets.Where(W => W.Name == "Overview").SingleOrDefault();
+                int totalColumns = workSheetHeader.Dimension.End.Column;
+                int totalRows = workSheetHeader.Dimension.End.Row;
+
+                readChapters.ShowPartnerNotes = workSheetHeader.Cells[8, 2].FirstOrDefault() is null
+                                            ? "N"
+                                            : workSheetHeader.Cells[8, 2].Value is null
+                                            ? "N"
+                                            : workSheetHeader.Cells[8, 2].Value.ToString() == "Y"
+                                            ? "Y"
+                                            : "N";
+
+
+                readChapters.ShowDocumentTracking = workSheetHeader.Cells[9, 2].FirstOrDefault() is null
+                                            ? "N"
+                                            : workSheetHeader.Cells[9, 2].Value is null
+                                            ? "N"
+                                            : workSheetHeader.Cells[9, 2].Value.ToString() == "Y"
+                                            ? "Y"
+                                            : "N";
+
+
                 ExcelWorksheet worksheetAgenda = excelPackage.Workbook.Worksheets.Where(W => W.Name == "Agenda").SingleOrDefault();
-                int totalColumns = worksheetAgenda.Dimension.End.Column;
-                int totalRows = worksheetAgenda.Dimension.End.Row;
+                totalColumns = worksheetAgenda.Dimension.End.Column;
+                totalRows = worksheetAgenda.Dimension.End.Row;
 
                 for (int row = 3; row <= totalRows; row++)
                 {
@@ -976,7 +1025,7 @@ namespace GadjIT_V1_02.FileManagement.FileProcessing.Implementation
                                             ? ""
                                             : worksheetStatus.Cells[row, column].Value is null
                                             ? ""
-                                            : Regex.Replace(worksheetStatus.Cells[row, column].Value.ToString(), "[^0-9a-zA-Z-_ ]+", "");
+                                            : Regex.Replace(worksheetStatus.Cells[row, column].Value.ToString(), "[^0-9a-zA-Z-_ (){}!£$%^&*,]+", "");
                         if (column == 2) readObject.SuppressStep = worksheetStatus.Cells[row, column].FirstOrDefault() is null
                                             ? ""
                                             : worksheetStatus.Cells[row, column].Value is null
@@ -1055,17 +1104,17 @@ namespace GadjIT_V1_02.FileManagement.FileProcessing.Implementation
                                             ? ""
                                             : worksheetDocuments.Cells[row, column].Value is null
                                             ? ""
-                                            : Regex.Replace(worksheetDocuments.Cells[row, column].Value.ToString(), "[^0-9a-zA-Z-_ ]+", "");
+                                            : Regex.Replace(worksheetDocuments.Cells[row, column].Value.ToString(), "[^0-9a-zA-Z-_ (){}!£$%^&*,]+", "");
                         if (column == 2) readObject.AltDisplayName = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
                                             ? ""
                                             : worksheetDocuments.Cells[row, column].Value is null
                                             ? ""
-                                            : Regex.Replace(worksheetDocuments.Cells[row, column].Value.ToString(), "[^0-9a-zA-Z-_ ]+", "");
+                                            : Regex.Replace(worksheetDocuments.Cells[row, column].Value.ToString(), "[^0-9a-zA-Z-_ (){}!£$%^&*,]+", "");
                         if (column == 3) readObject.AsName = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
                                             ? ""
                                             : worksheetDocuments.Cells[row, column].Value is null
                                             ? ""
-                                            : Regex.Replace(worksheetDocuments.Cells[row, column].Value.ToString(), "[^0-9a-zA-Z-_ ]+", "");
+                                            : Regex.Replace(worksheetDocuments.Cells[row, column].Value.ToString(), "[^0-9a-zA-Z-_ (){}!£$%^&*,]+", "");
                         try
                         {
                             if (column == 4) readObject.RescheduleDays = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
@@ -1082,7 +1131,7 @@ namespace GadjIT_V1_02.FileManagement.FileProcessing.Implementation
                                             ? ""
                                             : worksheetDocuments.Cells[row, column].Value is null
                                             ? ""
-                                            : Regex.Replace(worksheetDocuments.Cells[row, column].Value.ToString(), "[^0-9a-zA-Z-_ ]+", "");
+                                            : Regex.Replace(worksheetDocuments.Cells[row, column].Value.ToString(), "[^0-9a-zA-Z-_ (){}!£$%^&*,]+", "");
                         if (column == 6) readObject.NextStatus = worksheetDocuments.Cells[row, column].FirstOrDefault() is null 
                                             ? "" 
                                             : worksheetDocuments.Cells[row, column].Value is null

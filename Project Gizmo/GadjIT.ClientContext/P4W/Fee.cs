@@ -7,7 +7,7 @@ namespace GadjIT.ClientContext.P4W
 {
     public partial class Fee
     {
-        [Required]
+        [Required(ErrorMessage = "Name field is required")]
         public string FeeName { get; set; }
         public int? SeqNo { get; set; }
         public string FeeCategory { get; set; }

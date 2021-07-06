@@ -299,9 +299,7 @@ namespace GadjIT_V1_02.Pages.Chapters
 
         public IList<string> JSONErrors { get; set; }
 
-        
-
-public ChapterP4WStepSchema ChapterP4WStep { get; set; }
+        public ChapterP4WStepSchema ChapterP4WStep { get; set; }
 
         public bool showNewStep { get; set; } = false;
 
@@ -545,6 +543,12 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
 
             StateHasChanged();
 
+        }
+
+        private async void RefreshDocList()
+        {
+            dropDownChapterList = await chapterManagementService.GetDocumentList(selectedChapter.CaseType);
+            StateHasChanged();
         }
 
         private void SetSmartflowFilePath()
@@ -1846,6 +1850,7 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
         protected void ShowChapterDetailModal(string option)
         {
             Action action = RefreshSelectedList;
+            Action RefreshDocList = this.RefreshDocList;
 
             var copyObject = new GenSmartflowItem
             {
@@ -1868,6 +1873,7 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
 
             var parameters = new ModalParameters();
             parameters.Add("TaskObject", editObject.ChapterObject);
+            parameters.Add("RefreshDocList", RefreshDocList);
             parameters.Add("CopyObject", copyObject);
             parameters.Add("DataChanged", action);
             parameters.Add("selectedList", selectedList);
@@ -1969,6 +1975,7 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
         protected void ShowChapterAttachmentModal()
         {
             Action action = RefreshSelectedList;
+            Action RefreshDocList = this.RefreshDocList;
 
             var copyObject = new GenSmartflowItem
             {
@@ -2003,6 +2010,7 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
             parameters.Add("SelectedChapterObject", SelectedChapterObject);
             parameters.Add("CompanyDbAccess", CompanyDbAccess);
             parameters.Add("sessionState", sessionState);
+            parameters.Add("RefreshDocList", RefreshDocList);
             parameters.Add("Attachment", attachment);
 
             string className = "modal-chapter-item";
@@ -3058,7 +3066,15 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
             }
             else
             {
-                AltChapterObject = new UsrOrsfSmartflows();
+                AltChapterObject = new UsrOrsfSmartflows 
+                                    { 
+                                        CaseType = SelectedChapterObject.CaseType
+                                        ,CaseTypeGroup = SelectedChapterObject.CaseTypeGroup
+                                        ,SeqNo = SelectedChapterObject.SeqNo
+                                        ,SmartflowName = SelectedChapterObject.SmartflowName
+                                        ,VariantName = SelectedChapterObject.VariantName
+                                        ,VariantNo = SelectedChapterObject.VariantNo
+                                    };
             }
 
 
@@ -3130,10 +3146,10 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
 
             AltChapterObject.SmartflowData = JsonConvert.SerializeObject(new VmChapter
             {
-                CaseTypeGroup = AltChapterObject.CaseTypeGroup,
-                CaseType = AltChapterObject.CaseType,
-                Name = AltChapterObject.SmartflowName,
-                SeqNo = AltChapterObject.SeqNo.GetValueOrDefault(),
+                CaseTypeGroup = SelectedChapterObject.CaseTypeGroup,
+                CaseType = SelectedChapterObject.CaseType,
+                Name = SelectedChapterObject.SmartflowName,
+                SeqNo = SelectedChapterObject.SeqNo.GetValueOrDefault(),
                 Items = selectedCopyItems.Items,
                 DataViews = selectedChapter.DataViews,
                 Fees = selectedCopyItems.Fees,
@@ -3218,8 +3234,9 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
                     selectedChapter.SelectedStep = chapterData.SelectedStep;
                     selectedChapter.SelectedView = chapterData.SelectedView;
                     selectedChapter.ShowPartnerNotes = chapterData.ShowPartnerNotes;
+                    selectedChapter.ShowDocumentTracking = chapterData.ShowDocumentTracking;
                     SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(selectedChapter);
-
+                    
                     await chapterManagementService.Update(SelectedChapterObject);
 
                     SelectChapter(SelectedChapterObject);
@@ -3296,7 +3313,9 @@ public ChapterP4WStepSchema ChapterP4WStep { get; set; }
 
         private async void ExportSmartflowToExcel()
         {
+            WriteChapterJSONToFile();
             await ChapterFileUpload.WriteChapterDataToExcel(selectedChapter, dropDownChapterList, partnerCaseTypeGroups);
+
         }
 
         public void CancelCreateP4WStep()

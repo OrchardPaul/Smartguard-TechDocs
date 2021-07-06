@@ -18,5 +18,10 @@ namespace GadjIT.GadjitContext.GadjIT_App
         public decimal Subscription { get; set; }
 
         public decimal TotalBilled { get; set; }
+
+        [StringLength(25)]
+        public string ClientCode { get; set; }
+
+        public DateTime LastBilledDate { get; set; }
     }
 }

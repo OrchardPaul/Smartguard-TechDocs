@@ -59,7 +59,9 @@ namespace GadjIT_V1_02.Pages.Chapters
         public bool syncView { get; set; }
         public bool syncStepName { get; set; }
         public bool syncBgColour { get; set; }
-        public bool syncBgImage { get; set; } 
+        public bool syncBgImage { get; set; }
+        public bool syncShowPartnerNotes { get; set; }
+        public bool syncShowDocumentTracking { get; set; }
 
 
         protected override void OnInitialized()
@@ -69,6 +71,8 @@ namespace GadjIT_V1_02.Pages.Chapters
             syncStepName  = CurrentChapter.StepName == AltChapter.StepName ? false : true;
             syncBgColour  = CurrentChapter.BackgroundColour == AltChapter.BackgroundColour ? false : true;
             syncBgImage  = CurrentChapter.BackgroundImage == AltChapter.BackgroundImage ? false : true;
+            syncShowPartnerNotes = CurrentChapter.ShowPartnerNotes == AltChapter.ShowPartnerNotes ? false : true;
+            syncShowDocumentTracking = CurrentChapter.ShowDocumentTracking == AltChapter.ShowDocumentTracking ? false : true;
         }
 
         private async void Close()
@@ -115,6 +119,15 @@ namespace GadjIT_V1_02.Pages.Chapters
                 toObject.BackgroundImage = fromObject.BackgroundImage;
                 toObject.BackgroundImageName = fromObject.BackgroundImageName;
             }
+            if (syncShowPartnerNotes)
+            {
+                toObject.ShowPartnerNotes = fromObject.ShowPartnerNotes;
+            }
+            if (syncShowDocumentTracking)
+            {
+                toObject.ShowDocumentTracking = fromObject.ShowDocumentTracking;
+            }
+
 
             if (TakeAlternate)
             {

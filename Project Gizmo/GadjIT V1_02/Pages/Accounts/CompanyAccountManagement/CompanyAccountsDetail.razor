@@ -1,0 +1,55 @@
+﻿@using GadjIT_V1_02.Data.CustomFormObjects;
+
+<EditForm Model="@CopyObject" OnValidSubmit="HandleValidSubmit">
+    <div class="modal-body">
+
+        <DataAnnotationsValidator />
+
+        <div class="form-group">
+            <label for="SmartflowName">Smartflow Name</label>
+            <input type="text" disabled="disabled" class="form-control form-control-xl" @bind="SelectedAccountSmartflowObject.SmartflowName" />
+        </div>
+
+        <div class="form-group">
+            <label>Billable</label>
+            <InputCheckbox class="form-control form-control-sm" @bind-Value="@CopyObject.Billable" />
+        </div>
+
+        <div class="form-group">
+            <label>Billing Description</label>
+            <InputText class="form-control form-control-sm" @bind-Value="@CopyObject.BillingDescription" />
+        </div>
+
+        <div class="form-group">
+            <label>Total Billed</label>
+            <InputNumber class="form-control form-control-sm" @bind-Value="@CopyObject.TotalBilled" />
+        </div>
+
+        <div class="form-group">
+            <label>Outstanding</label>
+            <InputNumber class="form-control form-control-sm" @bind-Value="@CopyObject.Outstanding" />
+        </div>
+
+        <div class="form-group">
+            <label>Months Duration</label>
+            <InputNumber class="form-control form-control-sm" @bind-Value="@CopyObject.MonthsDuration" />
+        </div>
+
+        <div class="form-group">
+            <label>Months Remaining</label>
+            <InputNumber class="form-control form-control-sm" @bind-Value="@CopyObject.MonthsRemaining" />
+        </div>
+
+        <div class="form-group">
+            <label>Months Charge</label>
+            <InputNumber class="form-control form-control-sm" @bind-Value="@CopyObject.MonthlyCharge" />
+        </div>
+
+
+    </div>
+
+    <div class="button-container">
+        <button type="submit" class="btn btn-main">Save</button>
+        <button type="button" class="btn btn-secondary" @onclick="Close">Cancel</button>
+    </div>
+</EditForm>

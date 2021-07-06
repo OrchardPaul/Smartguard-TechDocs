@@ -228,6 +228,8 @@ namespace GadjIT_V1_02.Pages.Chapters
                 CaseType = TaskObject.CaseType,
                 Name = TaskObject.SmartflowName,
                 SeqNo = TaskObject.SeqNo.GetValueOrDefault(),
+                ShowDocumentTracking = ChapterItems.ShowDocumentTracking,
+                ShowPartnerNotes = ChapterItems.ShowPartnerNotes,
                 P4WCaseTypeGroup = SelectedCopyItems.P4WCaseTypeGroup,
                 SelectedStep = SelectedCopyItems.SelectedStep,
                 SelectedView = SelectedCopyItems.SelectedView,
