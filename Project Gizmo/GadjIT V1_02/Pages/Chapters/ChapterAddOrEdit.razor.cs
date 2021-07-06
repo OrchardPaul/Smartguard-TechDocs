@@ -57,6 +57,7 @@ namespace GadjIT_V1_02.Pages.Chapters
         {
             if (TaskObject.Id == 0)
             {
+
                 var name = Regex.Replace(TaskObject.SmartflowName, "[^0-9a-zA-Z-_ ]+", "");
                 var caseType = Regex.Replace(TaskObject.CaseType, "[^0-9a-zA-Z-_ ]+", "");
                 var caseTypeGroup = Regex.Replace(TaskObject.CaseTypeGroup, "[^0-9a-zA-Z-_ ]+", "");
