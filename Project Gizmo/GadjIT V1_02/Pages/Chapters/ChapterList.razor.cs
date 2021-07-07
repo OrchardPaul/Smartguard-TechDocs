@@ -1928,9 +1928,16 @@ namespace GadjIT_V1_02.Pages.Chapters
             Modal.Show<ChapterDetail>(selectedList, parameters, options);
         }
 
+        public async void RefreshViewList()
+        {
+            ListP4WViews = await partnerAccessService.GetPartnerViews();
+            StateHasChanged();
+        }
+
         protected void ShowDataViewDetailModal(string option)
         {
             Action action = RefreshSelectedList;
+            Action refreshViewList = RefreshViewList; 
 
             var copyObject = new DataViews
             {
@@ -1947,10 +1954,12 @@ namespace GadjIT_V1_02.Pages.Chapters
             parameters.Add("SelectedChapter", selectedChapter);
             parameters.Add("SelectedChapterObject", SelectedChapterObject);
             parameters.Add("Option", option);
+            parameters.Add("PartnerAccessService", partnerAccessService);
+            parameters.Add("RefreshViewList", refreshViewList);
 
             var options = new ModalOptions()
             {
-                Class = "blazored-custom-modal modal-chapter-item"
+                Class = "blazored-custom-modal modal-chapter-data"
             };
 
             Modal.Show<DataViewDetail>("Data View", parameters, options);

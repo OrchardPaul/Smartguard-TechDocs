@@ -46,6 +46,12 @@ namespace GadjIT_V1_02.Pages.Chapters
         [Parameter]
         public Action DataChanged { get; set; }
 
+        [Parameter]
+        public IPartnerAccessService PartnerAccessService { get; set; }
+
+        [Parameter]
+        public Action RefreshViewList { get; set; }
+
 
         public List<string> documentList;
 
@@ -81,6 +87,14 @@ namespace GadjIT_V1_02.Pages.Chapters
             Close();
 
         }
+
+        private async void RefreshViewListOnModel()
+        {
+            ListPartnerViews = await PartnerAccessService.GetPartnerViews();
+            StateHasChanged();
+            RefreshViewList?.Invoke();
+        }
+
 
 
     }
