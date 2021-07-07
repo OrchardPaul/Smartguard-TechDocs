@@ -178,8 +178,8 @@
     text-align: left;
     border-color: #aaa;
     font-size: 0.9em;
-    margin-left: 1px;
-    margin-right: 1px;
+    margin-left: 1px !important;
+    margin-right: 1px !important;
 }
 
 .form-control-value {
@@ -200,7 +200,7 @@
 }
 
 .modal-body.form-control-xxl, .modal-body .form-control-xl {
-    width: 97%;
+    width: calc(100% - 10px);
 }
 
 .form-control-md {
@@ -232,7 +232,42 @@
     .form-control-xxl, .form-control-xl, .form-control-lg {
         width: 100%;
     }
-    
+
+}
+
+.control-with-button .control-main {
+    float: left;
+    width: calc(100% - 30px);
+    margin: 0;
+    padding: 0;
+}
+
+.control-with-button .control-button {
+    float: left;
+    margin-left: 0;
+}
+
+.control-with-button .control-button {
+    border: none !important;
+    color: #777;
+    width: 28px !important;
+    height: 28px !important;
+    margin-left: -10px;
+    transition-duration: 0.5s;
+    transition-property: color;
+}
+
+.control-with-button .control-button:hover {
+    transition-duration: 0.5s;
+    transition-property: color;
+}
+
+.control-with-button .control-button:active {
+    color: #BBB !important;
+}
+
+.control-with-button .control-button li{
+    width: 28px !important;
 }
 
 .form-control-filter {
@@ -375,7 +410,7 @@
     width: 350px;
 }
 
-.modal-chapter-doc {
+.modal-chapter-doc, .modal-chapter-data {
     width: 550px;
 }
 
@@ -403,7 +438,7 @@
 }
 
 @media (max-width: 768px) {
-    .modal-chapter-item, .modal-chapter-doc, .modal-chapter-fees, .modal-chapter-comparison {
+    .modal-chapter-item, .modal-chapter-data, .modal-chapter-doc, .modal-chapter-fees, .modal-chapter-comparison {
         width: calc(100% - 20px);
     }
 

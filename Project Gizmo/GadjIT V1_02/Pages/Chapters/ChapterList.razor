@@ -256,11 +256,19 @@ else
             Group: <span class="badge badge-grey mr-3">@selectedChapter.CaseTypeGroup</span>
             Case Type: <span class="badge badge-grey mr-3">@selectedChapter.CaseType</span>
             Smartflow: <span class="badge badge-grey mr-3"> @selectedChapter.Name</span>
-            @if (!(appChapterState.GetChapterItemState(sessionState, selectedChapter).ActiveUsers is null))
-            { 
-                @foreach (var user in appChapterState.GetChapterItemState(sessionState, selectedChapter).ActiveUsers)
+
+            @{
+                if (appChapterState.GetChapterItemState(sessionState, selectedChapter).ActiveUsers.Where(U => U.UserName != sessionState.User.FullName).ToList().Count > 0)
                 {
-                    <span class="badge badge-grey mr-3">@user.UserName - @user.LastActive.ToString() </span>
+                    <span class="pl-5">Active Users: </span>
+                    string userClass = "active-user";
+                    foreach (var user in appChapterState.GetChapterItemState(sessionState, selectedChapter).ActiveUsers.Where(U => U.UserName != sessionState.User.FullName).ToList())
+                    {
+                        <span class="ml-2 @userClass font-120"><li class="fa fa-user" title="@user.UserName"></li></span>
+                        userClass = (userClass == "active-user" ? "active-user-alt" : "active-user");
+                    }
+
+
                 }
             }
 

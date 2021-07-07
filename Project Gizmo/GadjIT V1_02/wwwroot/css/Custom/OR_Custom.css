@@ -169,187 +169,187 @@ app {
     }
 }
 
-    /*--------------------------------------------------*/
-    /*  Thumbnails and Thumbnail Gallery                */
-    /*--------------------------------------------------*/
+/*--------------------------------------------------*/
+/*  Thumbnails and Thumbnail Gallery                */
+/*--------------------------------------------------*/
 
-    .selected-thumbnail {
-        height: 130px;
+.selected-thumbnail {
+    height: 130px;
+}
+
+.thumbnail-list {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.thumbnail-item {
+    background-color: rgba(255, 255, 255, 0.6);
+    width: 150px;
+    height: 160px;
+    margin: 10px;
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    align-items: center;
+    padding-top: 5px;
+}
+
+.thumbnail-list .active {
+    background-color: rgba(0, 0, 0, 0.25);
+}
+
+.thumbnail-item label {
+    font-size: 7pt;
+    width: 96%;
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis !important;
+    padding-top: 3px;
+    text-align: center;
+}
+
+.img-thumbnail {
+    height: 80px;
+}
+
+.thumbnail-item button {
+    background: none;
+    border: none !important;
+}
+
+
+/*--------------------------------------------------*/
+/*  Same as hidden but taking up no space           */
+/*--------------------------------------------------*/
+/* Breakpoint XS */
+@media (max-width: 575px) {
+    .invisible-xs-down, .invisible-sm-down, .invisible-md-down, .invisible-lg-down, .invisible-xl-down, .invisible-xs-up, .invisible-unless-sm, .invisible-unless-md, .invisible-unless-lg, .invisible-unless-xl {
+        display: none !important;
+        position: absolute;
+        left: -99999px;
+        width: 0px;
+    }
+}
+
+/* Breakpoint SM */
+@media (min-width: 576px) and (max-width: 767px) {
+    .invisible-sm-down, .invisible-md-down, .invisible-lg-down, .invisible-xl-down,
+    .invisible-xs-up, .invisible-sm-up,
+    .invisible-unless-xs, .invisible-unless-md, .invisible-unless-lg, .invisible-unless-xl {
+        display: none !important;
+        position: absolute;
+        left: -99999px;
+        width: 0px;
+    }
+}
+
+/* Breakpoint MD */
+@media (min-width: 768px) and (max-width: 991px) {
+    .invisible-md-down, .invisible-lg-down, .invisible-xl-down,
+    .invisible-xs-up, .invisible-sm-up, .invisible-md-up,
+    .invisible-unless-xs, .invisible-unless-sm, .invisible-unless-lg, .invisible-unless-xl {
+        display: none !important;
+        position: absolute;
+        left: -99999px;
+        width: 0px;
+    }
+}
+
+/* Breakpoint LG */
+@media (min-width: 992px) and (max-width: 1199px) {
+    .invisible-lg-down, .invisible-xl-down,
+    .invisible-xs-up, .invisible-sm-up, .invisible-md-up, .invisible-lg-up,
+    .invisible-unless-xs, .invisible-unless-sm, .invisible-unless-md, .invisible-unless-xl {
+        display: none !important;
+        position: absolute;
+        left: -99999px;
+        width: 0px;
+    }
+}
+
+/* Breakpoint XL */
+@media (min-width: 1200px) {
+    .invisible-xl-down,
+    .invisible-xs-up, .invisible-sm-up, .invisible-md-up, .invisible-lg-up, .invisible-xl-up,
+    .invisible-unless-xs, .invisible-unless-sm, .invisible-unless-md, .invisible-unless-lg {
+        display: none !important;
+        position: absolute;
+        left: -99999px;
+        width: 0px;
+    }
+}
+
+/*-----------------------------*/
+/*  FLEX Boxes           */
+/*-----------------------------*/
+.flex-box {
+    display: flex;
+}
+
+.flex-push {
+    margin-left: auto;
+}
+
+/*-----------------------------*/
+/*  BUTTONS & LINKS            */
+/*-----------------------------*/
+
+/*dt-buttons are from DataTabes - used for exporting to Excel*/
+.btn, .dt-button {
+    border: 2pt solid !important;
+    border-radius: 5px !important;
+    min-height: 35px;
+    text-align: center;
+}
+
+    .btn:hover, .dt-button:hover {
+        box-shadow: 0 8px 12px 0 rgba(0, 0, 0, 0);
+        transition-duration: 0.5s;
+        transition-property: box-shadow, background-color, border;
     }
 
-    .thumbnail-list {
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-    }
+.btn-secondary {
+    border-color: #aaa !important;
+}
 
-    .thumbnail-item {
-        background-color: rgba(255, 255, 255, 0.6);
-        width: 150px;
-        height: 160px;
-        margin: 10px;
-        display: flex;
-        flex-direction: column;
-        align-content: center;
-        align-items: center;
-        padding-top: 5px;
-    }
-
-    .thumbnail-list .active {
-        background-color: rgba(0, 0, 0, 0.25);
-    }
-
-    .thumbnail-item label {
-        font-size: 7pt;
-        width: 96%;
-        display: block;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis !important;
-        padding-top: 3px;
-        text-align: center;
-    }
-
-    .img-thumbnail {
-        height: 80px;
-    }
-
-    .thumbnail-item button {
-        background: none;
-        border: none !important;
-    }
+.btn-edit {
+    display: block;
+    height: 100%;
+    width: 35px;
+    margin: 0 0 0 5px;
+    border: none !important;
+    border-radius: 5px !important;
+    background-color: rgba(245, 245, 245, 0.5) !important;
+}
 
 
-    /*--------------------------------------------------*/
-    /*  Same as hidden but taking up no space           */
-    /*--------------------------------------------------*/
-    /* Breakpoint XS */
-    @media (max-width: 575px) {
-        .invisible-xs-down, .invisible-sm-down, .invisible-md-down, .invisible-lg-down, .invisible-xl-down, .invisible-xs-up, .invisible-unless-sm, .invisible-unless-md, .invisible-unless-lg, .invisible-unless-xl {
-            display: none !important;
-            position: absolute;
-            left: -99999px;
-            width: 0px;
-        }
-    }
+/*-----------------------------*/
+/*  FILE INPUTS                */
+/*-----------------------------*/
+.custom-file {
+    width: 300px;
+    margin: 5px 0 5px 0;
+}
 
-    /* Breakpoint SM */
-    @media (min-width: 576px) and (max-width: 767px) {
-        .invisible-sm-down, .invisible-md-down, .invisible-lg-down, .invisible-xl-down,
-        .invisible-xs-up, .invisible-sm-up,
-        .invisible-unless-xs, .invisible-unless-md, .invisible-unless-lg, .invisible-unless-xl {
-            display: none !important;
-            position: absolute;
-            left: -99999px;
-            width: 0px;
-        }
-    }
+.custom-file-input[disabled] ~ .custom-file-label,
+.custom-file-input:disabled ~ .custom-file-label,
+.custom-file-label {
+    background-color: #fff !important;
+}
 
-    /* Breakpoint MD */
-    @media (min-width: 768px) and (max-width: 991px) {
-        .invisible-md-down, .invisible-lg-down, .invisible-xl-down,
-        .invisible-xs-up, .invisible-sm-up, .invisible-md-up,
-        .invisible-unless-xs, .invisible-unless-sm, .invisible-unless-lg, .invisible-unless-xl {
-            display: none !important;
-            position: absolute;
-            left: -99999px;
-            width: 0px;
-        }
-    }
-
-    /* Breakpoint LG */
-    @media (min-width: 992px) and (max-width: 1199px) {
-        .invisible-lg-down, .invisible-xl-down,
-        .invisible-xs-up, .invisible-sm-up, .invisible-md-up, .invisible-lg-up,
-        .invisible-unless-xs, .invisible-unless-sm, .invisible-unless-md, .invisible-unless-xl {
-            display: none !important;
-            position: absolute;
-            left: -99999px;
-            width: 0px;
-        }
-    }
-
-    /* Breakpoint XL */
-    @media (min-width: 1200px) {
-        .invisible-xl-down,
-        .invisible-xs-up, .invisible-sm-up, .invisible-md-up, .invisible-lg-up, .invisible-xl-up,
-        .invisible-unless-xs, .invisible-unless-sm, .invisible-unless-md, .invisible-unless-lg {
-            display: none !important;
-            position: absolute;
-            left: -99999px;
-            width: 0px;
-        }
-    }
-
-    /*-----------------------------*/
-    /*  FLEX Boxes           */
-    /*-----------------------------*/
-    .flex-box {
-        display: flex;
-    }
-
-    .flex-push {
-        margin-left: auto;
-    }
-
-    /*-----------------------------*/
-    /*  BUTTONS & LINKS            */
-    /*-----------------------------*/
-
-    /*dt-buttons are from DataTabes - used for exporting to Excel*/
-    .btn, .dt-button {
-        border: 2pt solid !important;
-        border-radius: 5px !important;
-        min-height: 35px;
-        text-align: center;
-    }
-
-        .btn:hover, .dt-button:hover {
-            box-shadow: 0 8px 12px 0 rgba(0, 0, 0, 0);
-            transition-duration: 0.5s;
-            transition-property: box-shadow, background-color, border;
-        }
-
-    .btn-secondary {
-        border-color: #aaa !important;
-    }
-
-    .btn-edit {
-        display: block;
-        height: 100%;
-        width: 35px;
-        margin: 0 0 0 5px;
-        border: none !important;
-        border-radius: 5px !important;
-        background-color: rgba(245, 245, 245, 0.5) !important;
-    }
-
-
-    /*-----------------------------*/
-    /*  FILE INPUTS                */
-    /*-----------------------------*/
-    .custom-file {
-        width: 300px;
-        margin: 5px 0 5px 0;
-    }
-
-    .custom-file-input[disabled] ~ .custom-file-label,
-    .custom-file-input:disabled ~ .custom-file-label,
-    .custom-file-label {
-        background-color: #fff !important;
-    }
-
-    .custom-file-input:lang(en) ~ .custom-file-label::after {
-        content: "Browse";
-        display: inline-block;
-        border: 1px solid #999;
-        border-radius: 3px;
-        padding: 5px 8px;
-        outline: none;
-        white-space: nowrap;
-        -webkit-user-select: none;
-        cursor: pointer;
-    }
+.custom-file-input:lang(en) ~ .custom-file-label::after {
+    content: "Browse";
+    display: inline-block;
+    border: 1px solid #999;
+    border-radius: 3px;
+    padding: 5px 8px;
+    outline: none;
+    white-space: nowrap;
+    -webkit-user-select: none;
+    cursor: pointer;
+}
     /*.custom-file-input::-webkit-file-upload-button {
     visibility: hidden;
 }*/
@@ -1561,3 +1561,24 @@ app {
         #feesWrapper .detail-list-box {
             height: 205px;
         }
+
+/*-----------------------------*/
+/*  MISC OBJECTS & ANIMATIONS  */
+/*-----------------------------*/
+
+@keyframes blinker-30 {
+    50% {
+        opacity: 30%;
+    }
+}
+
+
+.active-user {
+    color: #000;
+    animation: blinker-30 2s linear infinite;
+}
+.active-user-alt {
+    color: #000;
+    animation: blinker-30 2s linear infinite;
+    animation-delay: 1s;
+}
