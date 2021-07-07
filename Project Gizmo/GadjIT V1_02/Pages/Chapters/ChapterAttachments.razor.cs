@@ -103,9 +103,9 @@ namespace GadjIT_V1_02.Pages.Chapters
             }
 
             if (!(dropDownChapterList.ToList() is null)
-                    && CopyObject.Name != ""
-                    && !(CopyObject.Name is null)
-                    && !dropDownChapterList.ToList().Select(D => D.Name).Contains(CopyObject.Name))
+                    && Attachment.DocName != ""
+                    && !(Attachment.DocName is null)
+                    && !dropDownChapterList.ToList().Select(D => D.Name).Contains(Attachment.DocName))
             {
                 useCustomItem = true;
             }

@@ -185,6 +185,36 @@ namespace GadjIT_V1_02.Pages.Chapters
             {
                 if (sessionState.ChapterLastCompared != ChapterLastUpdated)
                 {
+                    var id = SelectedChapterObject.Id;
+
+                    var lsrSR = await CompanyDbAccess.GetAllSmartflowRecords(sessionState);
+                    lstChapters = lsrSR.Select(A => new VmUsrOrsfSmartflows { SmartflowObject = mapper.Map(A, new UsrOrsfSmartflows()) }).ToList();
+
+                    var refreshedChapter = lstChapters.Where(C => C.SmartflowObject.Id == id).Select(C => C.SmartflowObject).FirstOrDefault();
+
+                    if (!(refreshedChapter.SmartflowData is null))
+                    {
+                        selectedChapter = JsonConvert.DeserializeObject<VmChapter>(refreshedChapter.SmartflowData);
+                    }
+                    else
+                    {
+                        //Initialise the VmChapter in case of null Json
+                        selectedChapter = new VmChapter
+                        {
+                            Items = new List<GenSmartflowItem>()
+                                                         ,
+                            DataViews = new List<DataViews>()
+                                                         ,
+                            TickerMessages = new List<TickerMessages>()
+                                                         ,
+                            Fees = new List<Fee>()
+                        };
+                        selectedChapter.CaseTypeGroup = refreshedChapter.CaseTypeGroup;
+                        selectedChapter.CaseType = refreshedChapter.CaseType;
+                        selectedChapter.Name = refreshedChapter.SmartflowName;
+                    }
+
+
                     await RefreshChapterItems(navDisplay);
                     await InvokeAsync(() =>
                     {

@@ -95,7 +95,7 @@ namespace GadjIT_V1_02.Services.AppState
 
             appChapterItemState = GetChapterItemState(sessionState, selectedChapter);
 
-            
+
             appChapterItemState.LastUpdated = currentDate;
             sessionState.ChapterLastCompared = currentDate;
 
