@@ -3,6 +3,7 @@ using GadjIT.ClientContext.P4W;
 using GadjIT.ClientContext.P4W.Custom;
 using GadjIT_V1_02.Data.Admin;
 using GadjIT_V1_02.Services;
+using GadjIT_V1_02.Services.AppState;
 using GadjIT_V1_02.Services.SessionState;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
@@ -21,6 +22,9 @@ namespace GadjIT_V1_02.Pages.Chapters
 
         [Inject]
         IChapterManagementService chapterManagementService { get; set; }
+
+        [Inject]
+        IAppChapterState appChapterState { get; set; }
 
         [Parameter]
         public IUserSessionState sessionState { get; set; }
@@ -150,6 +154,9 @@ namespace GadjIT_V1_02.Pages.Chapters
                     await sessionState.ResetSelectedSystem();
                 }
             }
+
+            //keep track of time last updated ready for comparison by other sessions checking for updates
+            appChapterState.SetLastUpdated(sessionState, CurrentChapter);
 
             ComparisonRefresh?.Invoke();
             Close();

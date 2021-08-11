@@ -2,6 +2,8 @@
 using GadjIT.ClientContext.P4W;
 using GadjIT.ClientContext.P4W.Custom;
 using GadjIT_V1_02.Services;
+using GadjIT_V1_02.Services.AppState;
+using GadjIT_V1_02.Services.SessionState;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using Newtonsoft.Json;
@@ -62,6 +64,12 @@ namespace GadjIT_V1_02.Pages.Chapters
         [Parameter]
         public Action DataChanged { get; set; }
 
+        [Inject]
+        IAppChapterState appChapterState { get; set; }
+
+        [Inject]
+        IUserSessionState sessionState { get; set; }
+
         private int selectedCaseTypeGroup { get; set; } = -1;
 
         private List<PostingType> PostingTypes { get; set; } = new List<PostingType> 
@@ -118,6 +126,9 @@ namespace GadjIT_V1_02.Pages.Chapters
             await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
 
             TaskObject = new Fee();
+
+            //keep track of time last updated ready for comparison by other sessions checking for updates
+            appChapterState.SetLastUpdated(sessionState, SelectedChapter);
 
             DataChanged?.Invoke();
             Close();

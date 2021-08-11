@@ -21,6 +21,11 @@ namespace GadjIT_V1_02.Services.AppState
 
         void SetUsersCurrentChapter(IUserSessionState sessionState, VmChapter selectedChapter);
 
+        void DisposeUser(IUserSessionState sessionState);
+
+        bool Lock { get; set; }
+
+
     }
     public interface IAppChapterItemState
     {
@@ -56,6 +61,8 @@ namespace GadjIT_V1_02.Services.AppState
         public List<IAppChapterItemState> lstAppChapterStateItems { get; set; } = new List<IAppChapterItemState>();
 
 
+        public bool Lock { get; set; }
+
         private class AppChapterItemState : IAppChapterItemState
         {
             public int CompanyID { get; set; }
@@ -80,9 +87,13 @@ namespace GadjIT_V1_02.Services.AppState
 
         public DateTime GetLastUpdatedDate(IUserSessionState sessionState,VmChapter selectedChapter)
         {
+            Lock = true;
+
             IAppChapterItemState appChapterItemState;
 
             appChapterItemState = GetChapterItemState(sessionState, selectedChapter);
+
+            Lock = false;
 
             return appChapterItemState.LastUpdated;
 
@@ -137,6 +148,8 @@ namespace GadjIT_V1_02.Services.AppState
 
         public void SetUsersCurrentChapter(IUserSessionState sessionState, VmChapter selectedChapter)
         {
+            Lock = true;
+
             IAppChapterItemState appChapterItemState;
 
             appChapterItemState = GetChapterItemState(sessionState, selectedChapter);
@@ -156,6 +169,7 @@ namespace GadjIT_V1_02.Services.AppState
 
             FlushInactiveUsers(sessionState, selectedChapter);
 
+            Lock = false;
         }
 
         public void FlushInactiveUsers(IUserSessionState sessionState, VmChapter selectedChapter)
@@ -171,6 +185,20 @@ namespace GadjIT_V1_02.Services.AppState
             {
                 appChapterItemState.LastUpdated = DateTime.Now;
             }                        
+        }
+
+
+        public void DisposeUser(IUserSessionState sessionState)
+        {
+            lstAppChapterStateItems = lstAppChapterStateItems.Where(A => A.ActiveUsers.Select(U => U.UserName).Contains(sessionState.User.FullName))
+                .Select(A => { A.LastUpdated = DateTime.Now; return A; }).ToList();
+
+            var ActiveUsers = lstAppChapterStateItems.Select(A => A.ActiveUsers).ToList();
+
+            foreach(var ActiveUserList in ActiveUsers)
+            {
+                ActiveUserList.RemoveAll(A => A.UserName == sessionState.User.UserName);
+            }
         }
 
     }

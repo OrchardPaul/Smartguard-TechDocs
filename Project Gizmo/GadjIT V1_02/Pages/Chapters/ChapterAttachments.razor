@@ -71,9 +71,9 @@
                     }
 
 
-                    @if (!useCustomItem )
+                    @if (!useCustomItem || (((SelectedChapter.ShowDocumentTracking is null) || SelectedChapter.ShowDocumentTracking == "N") && Attachment.Action != "SCHEDULE"))
                     {
-                       
+
                         <div class="form-group">
                             <label for="AltDisplayName">Filter</label>
                             <InputText class="form-control form-control-md form-control-filter" @bind-Value="@filterText" />

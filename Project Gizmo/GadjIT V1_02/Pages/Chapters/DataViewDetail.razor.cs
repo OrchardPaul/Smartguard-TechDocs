@@ -2,6 +2,8 @@
 using GadjIT.ClientContext.P4W;
 using GadjIT.ClientContext.P4W.Custom;
 using GadjIT_V1_02.Services;
+using GadjIT_V1_02.Services.AppState;
+using GadjIT_V1_02.Services.SessionState;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using Newtonsoft.Json;
@@ -21,6 +23,12 @@ namespace GadjIT_V1_02.Pages.Chapters
 
         [Inject]
         IChapterManagementService chapterManagementService { get; set; }
+
+        [Inject]
+        IAppChapterState appChapterState { get; set; }
+
+        [Inject]
+        IUserSessionState sessionState { get; set; }
 
         public string filterText { get; set; } = "";
 
@@ -82,6 +90,10 @@ namespace GadjIT_V1_02.Pages.Chapters
 
             CopyObject = new DataViews();
             filterText = "";
+
+
+            //keep track of time last updated ready for comparison by other sessions checking for updates
+            appChapterState.SetLastUpdated(sessionState, SelectedChapter);
 
             DataChanged?.Invoke();
             Close();

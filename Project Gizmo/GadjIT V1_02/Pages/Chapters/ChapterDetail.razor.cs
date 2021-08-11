@@ -152,6 +152,7 @@ namespace GadjIT_V1_02.Pages.Chapters
 
         private async void RefreshDocListOnModel()
         {
+            dropDownChapterList = await chapterManagementService.GetDocumentList(SelectedChapter.CaseType);
             StateHasChanged();
             RefreshDocList?.Invoke();
         }

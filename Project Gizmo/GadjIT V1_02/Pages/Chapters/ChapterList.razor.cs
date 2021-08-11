@@ -179,22 +179,41 @@ namespace GadjIT_V1_02.Pages.Chapters
             //Compare current session with Chapter State to see if any other users have updated the Chapter
             //If an update is detected (ChapterLastUpdated is greater than session's ChapterLastCompared) then 
             // reload the data and invoke StateHasChanged to refresh the page.
+            bool gotLock = appChapterState.Lock;
+            while (gotLock)
+            {
+                await Task.Yield();
+                gotLock = appChapterState.Lock;
+            }
+
             var ChapterLastUpdated = appChapterState.GetLastUpdatedDate(sessionState, selectedChapter);
 
             if (!(selectedChapter.Name == "" | selectedChapter.Name is null))
             {
                 if (sessionState.ChapterLastCompared != ChapterLastUpdated)
                 {
+                    gotLock = CompanyDbAccess.Lock;
+                    while (gotLock)
+                    {
+                        await Task.Yield();
+                        gotLock = CompanyDbAccess.Lock;
+                    }
+
+
+                    var lstC = await chapterManagementService.GetAllChapters();
+
+                    await CompanyDbAccess.SyncAdminSysToClient(lstC, sessionState);
+
                     var id = SelectedChapterObject.Id;
 
                     var lsrSR = await CompanyDbAccess.GetAllSmartflowRecords(sessionState);
                     lstChapters = lsrSR.Select(A => new VmUsrOrsfSmartflows { SmartflowObject = mapper.Map(A, new UsrOrsfSmartflows()) }).ToList();
 
-                    var refreshedChapter = lstChapters.Where(C => C.SmartflowObject.Id == id).Select(C => C.SmartflowObject).FirstOrDefault();
+                    SelectedChapterObject = lstChapters.Where(C => C.SmartflowObject.Id == id).Select(C => C.SmartflowObject).FirstOrDefault();
 
-                    if (!(refreshedChapter.SmartflowData is null))
+                    if (!(SelectedChapterObject.SmartflowData is null))
                     {
-                        selectedChapter = JsonConvert.DeserializeObject<VmChapter>(refreshedChapter.SmartflowData);
+                        selectedChapter = JsonConvert.DeserializeObject<VmChapter>(SelectedChapterObject.SmartflowData);
                     }
                     else
                     {
@@ -209,13 +228,13 @@ namespace GadjIT_V1_02.Pages.Chapters
                                                          ,
                             Fees = new List<Fee>()
                         };
-                        selectedChapter.CaseTypeGroup = refreshedChapter.CaseTypeGroup;
-                        selectedChapter.CaseType = refreshedChapter.CaseType;
-                        selectedChapter.Name = refreshedChapter.SmartflowName;
+                        selectedChapter.CaseTypeGroup = SelectedChapterObject.CaseTypeGroup;
+                        selectedChapter.CaseType = SelectedChapterObject.CaseType;
+                        selectedChapter.Name = SelectedChapterObject.SmartflowName;
                     }
 
 
-                    await RefreshChapterItems(navDisplay);
+                    await RefreshChapterItems("All");
                     await InvokeAsync(() =>
                     {
                         StateHasChanged();
@@ -223,6 +242,13 @@ namespace GadjIT_V1_02.Pages.Chapters
 
                     sessionState.ChapterLastCompared = ChapterLastUpdated;
                 }
+            }
+
+            gotLock = appChapterState.Lock;
+            while (gotLock)
+            {
+                await Task.Yield();
+                gotLock = appChapterState.Lock;
             }
 
             appChapterState.SetUsersCurrentChapter(sessionState, selectedChapter);
@@ -234,6 +260,7 @@ namespace GadjIT_V1_02.Pages.Chapters
             // During prerender, this component is rendered without calling OnAfterRender and then immediately disposed
             // this mean timer will be null so we have to check for null or use the Null-conditional operator ? 
             timer?.Dispose();
+            appChapterState.DisposeUser(sessionState);
         }
 
         public async void SaveSelectedBackgroundColour (string colour)
@@ -254,6 +281,9 @@ namespace GadjIT_V1_02.Pages.Chapters
 
             await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
 
+
+            //keep track of time last updated ready for comparison by other sessions checking for updates
+            appChapterState.SetLastUpdated(sessionState, selectedChapter);
         }
 
         public UsrOrsfSmartflows editChapter { get; set; }
@@ -440,6 +470,9 @@ namespace GadjIT_V1_02.Pages.Chapters
             SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(selectedChapter);
 
             await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
+
+            //keep track of time last updated ready for comparison by other sessions checking for updates
+            appChapterState.SetLastUpdated(sessionState, selectedChapter);
         }
 
         public bool ShowDocumentTracking
@@ -466,6 +499,9 @@ namespace GadjIT_V1_02.Pages.Chapters
             SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(selectedChapter);
 
             await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
+
+            //keep track of time last updated ready for comparison by other sessions checking for updates
+            appChapterState.SetLastUpdated(sessionState, selectedChapter);
         }
 
 
@@ -568,6 +604,14 @@ namespace GadjIT_V1_02.Pages.Chapters
             // refresh of the page (by OnTimerInterval)
             if (!(selectedChapter.Name == "" | selectedChapter.Name is null))
             {
+
+                bool gotLock = appChapterState.Lock;
+                while (gotLock)
+                {
+                    await Task.Yield();
+                    gotLock = appChapterState.Lock;
+                }
+
                 sessionState.ChapterLastCompared = appChapterState.GetLastUpdatedDate(sessionState, selectedChapter);
             }
 
@@ -600,6 +644,10 @@ namespace GadjIT_V1_02.Pages.Chapters
 
             SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(selectedChapter);
             await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
+
+
+            //keep track of time last updated ready for comparison by other sessions checking for updates
+            appChapterState.SetLastUpdated(sessionState, selectedChapter);
 
             await RefreshChapterItems("All");
             await InvokeAsync(() =>
@@ -1466,6 +1514,8 @@ namespace GadjIT_V1_02.Pages.Chapters
                 await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
 
 
+                //keep track of time last updated ready for comparison by other sessions checking for updates
+                appChapterState.SetLastUpdated(sessionState, selectedChapter);
 
             }
 
@@ -1539,6 +1589,10 @@ namespace GadjIT_V1_02.Pages.Chapters
                 SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(selectedChapter);
                 await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
 
+
+                //keep track of time last updated ready for comparison by other sessions checking for updates
+                appChapterState.SetLastUpdated(sessionState, selectedChapter);
+
             }
 
             await RefreshChapterItems(listType);
@@ -1571,6 +1625,10 @@ namespace GadjIT_V1_02.Pages.Chapters
                 SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(selectedChapter);
                 await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
 
+
+                //keep track of time last updated ready for comparison by other sessions checking for updates
+                appChapterState.SetLastUpdated(sessionState, selectedChapter);
+
             }
 
             await RefreshChapterItems(listType);
@@ -1602,6 +1660,10 @@ namespace GadjIT_V1_02.Pages.Chapters
 
                 SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(selectedChapter);
                 await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
+
+
+                //keep track of time last updated ready for comparison by other sessions checking for updates
+                appChapterState.SetLastUpdated(sessionState, selectedChapter);
 
             }
 
@@ -1688,6 +1750,10 @@ namespace GadjIT_V1_02.Pages.Chapters
             SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(selectedChapter);
             await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
 
+            
+            //keep track of time last updated ready for comparison by other sessions checking for updates
+            appChapterState.SetLastUpdated(sessionState, selectedChapter);
+
             await RefreshChapterItems(ListType);
 
             await InvokeAsync(() =>
@@ -1711,6 +1777,10 @@ namespace GadjIT_V1_02.Pages.Chapters
             SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(selectedChapter);
             await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
 
+
+            //keep track of time last updated ready for comparison by other sessions checking for updates
+            appChapterState.SetLastUpdated(sessionState, selectedChapter);
+
             await RefreshChapterItems(ListType);
 
             await InvokeAsync(() =>
@@ -1733,6 +1803,10 @@ namespace GadjIT_V1_02.Pages.Chapters
 
             SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(selectedChapter);
             await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
+
+
+            //keep track of time last updated ready for comparison by other sessions checking for updates
+            appChapterState.SetLastUpdated(sessionState, selectedChapter);
 
             await RefreshChapterItems(ListType);
 
@@ -1758,6 +1832,10 @@ namespace GadjIT_V1_02.Pages.Chapters
 
             SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(selectedChapter);
             await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
+
+
+            //keep track of time last updated ready for comparison by other sessions checking for updates
+            appChapterState.SetLastUpdated(sessionState, selectedChapter);
 
             await RefreshChapterItems(ListType);
 
@@ -2348,6 +2426,10 @@ namespace GadjIT_V1_02.Pages.Chapters
 
             await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
 
+
+            //keep track of time last updated ready for comparison by other sessions checking for updates
+            appChapterState.SetLastUpdated(sessionState, selectedChapter);
+
             sessionState.SetTempBackground(selectedChapter.BackgroundImage.Replace("/wwwroot", ""), NavigationManager.Uri);
             sessionState.RefreshHome?.Invoke();
 
@@ -2696,6 +2778,9 @@ namespace GadjIT_V1_02.Pages.Chapters
             SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(selectedChapter);
             await chapterManagementService.Update(SelectedChapterObject);
 
+            //keep track of time last updated ready for comparison by other sessions checking for updates
+            appChapterState.SetLastUpdated(sessionState, selectedChapter);
+
             CondenseSeq(navDisplay);
 
             StateHasChanged();
@@ -2703,10 +2788,12 @@ namespace GadjIT_V1_02.Pages.Chapters
 
         private async void HandleChapterFeeDelete()
         {
-
             selectedChapter.Fees.Remove(editFeeObject.FeeObject);
             SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(selectedChapter);
             await chapterManagementService.Update(SelectedChapterObject);
+
+            //keep track of time last updated ready for comparison by other sessions checking for updates
+            appChapterState.SetLastUpdated(sessionState, selectedChapter);
 
             await RefreshChapterItems(navDisplay);
             StateHasChanged();
@@ -2718,6 +2805,9 @@ namespace GadjIT_V1_02.Pages.Chapters
             SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(selectedChapter);
             await chapterManagementService.Update(SelectedChapterObject);
 
+            //keep track of time last updated ready for comparison by other sessions checking for updates
+            appChapterState.SetLastUpdated(sessionState, selectedChapter);
+
             await RefreshChapterItems(navDisplay);
             StateHasChanged();
         }
@@ -2727,6 +2817,9 @@ namespace GadjIT_V1_02.Pages.Chapters
             selectedChapter.TickerMessages.Remove(EditTickerMessageObject.Message);
             SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(selectedChapter);
             await chapterManagementService.Update(SelectedChapterObject);
+
+            //keep track of time last updated ready for comparison by other sessions checking for updates
+            appChapterState.SetLastUpdated(sessionState, selectedChapter);
 
             await RefreshChapterItems(navDisplay);
             StateHasChanged();
@@ -3278,6 +3371,10 @@ namespace GadjIT_V1_02.Pages.Chapters
                     
                     await chapterManagementService.Update(SelectedChapterObject);
 
+
+                    //keep track of time last updated ready for comparison by other sessions checking for updates
+                    appChapterState.SetLastUpdated(sessionState, selectedChapter);
+
                     SelectChapter(SelectedChapterObject);
 
                     showJSON = false;
@@ -3484,6 +3581,10 @@ namespace GadjIT_V1_02.Pages.Chapters
 
                     await chapterManagementService.Update(SelectedChapterObject);
 
+
+                    //keep track of time last updated ready for comparison by other sessions checking for updates
+                    appChapterState.SetLastUpdated(sessionState, selectedChapter);
+
                     StateHasChanged();
                 }
             }
@@ -3501,6 +3602,10 @@ namespace GadjIT_V1_02.Pages.Chapters
             SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(selectedChapter);
 
             await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
+
+
+            //keep track of time last updated ready for comparison by other sessions checking for updates
+            appChapterState.SetLastUpdated(sessionState, selectedChapter);
         }
 
         private async void SaveSelectedView(string view)
@@ -3510,6 +3615,10 @@ namespace GadjIT_V1_02.Pages.Chapters
             SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(selectedChapter);
 
             await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
+
+
+            //keep track of time last updated ready for comparison by other sessions checking for updates
+            appChapterState.SetLastUpdated(sessionState, selectedChapter);
         }
         
         private async void SaveSelectedStep(string step)
@@ -3519,6 +3628,10 @@ namespace GadjIT_V1_02.Pages.Chapters
             SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(selectedChapter);
 
             await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
+
+
+            //keep track of time last updated ready for comparison by other sessions checking for updates
+            appChapterState.SetLastUpdated(sessionState, selectedChapter);
         }
 
         private void TickerValidation()
