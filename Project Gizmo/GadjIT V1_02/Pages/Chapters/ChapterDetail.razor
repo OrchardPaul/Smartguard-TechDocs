@@ -143,6 +143,19 @@
             <div class="form-group">
                 <label for="RescheduleDays">Reschedule Days</label>
                 <InputNumber class="form-control form-control-xs" @bind-Value="RescheduleDays" />
+
+                <label for="RescheduleDays">Reschedule Data Item</label>
+                <InputSelect class="form-control form-control-sm"
+                             @bind-Value="CopyObject.RescheduleDataItem">
+                    <option value=""></option>
+                    @foreach (var a in TableDates)
+                        {
+                        <option value="@a.TableField">
+                            @a.TableField
+                        </option>
+                        }
+                </InputSelect>
+                <ValidationMessage For="@(() => CopyObject.RescheduleDataItem)" />
             </div>
 
             <div class="form-group">
