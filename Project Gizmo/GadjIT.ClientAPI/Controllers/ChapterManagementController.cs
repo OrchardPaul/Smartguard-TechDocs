@@ -42,7 +42,7 @@ namespace GadjIT.ClientAPI.Controllers
             {
                 return Ok(await chapterRepository.GetDatabaseTableDateFields());
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
@@ -166,7 +166,7 @@ namespace GadjIT.ClientAPI.Controllers
 
                 return await chapterRepository.Update(item);
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Error Updating Data");
             }

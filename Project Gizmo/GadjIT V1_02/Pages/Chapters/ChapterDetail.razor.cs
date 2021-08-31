@@ -204,6 +204,7 @@ namespace GadjIT_V1_02.Pages.Chapters
             TaskObject.Action = CopyObject.Action;
             TaskObject.TrackingMethod = CopyObject.TrackingMethod;
             TaskObject.ChaserDesc = CopyObject.ChaserDesc;
+            TaskObject.RescheduleDataItem = CopyObject.RescheduleDataItem;
 
             if (Option == "Insert")
             {

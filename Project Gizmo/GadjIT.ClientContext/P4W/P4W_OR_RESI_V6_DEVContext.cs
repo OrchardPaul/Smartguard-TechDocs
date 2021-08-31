@@ -33,7 +33,7 @@ namespace GadjIT.ClientContext.P4W
 
 
         public IQueryable<TableDate> GetTableDates() =>
-                Set<TableDate>().FromSqlInterpolated($"SELECT t.InternalName + '.' + f.InternalFieldName FROM Mp_Sys_FieldDef f INNER JOIN Mp_Sys_TableDef t on f.TableRef = t.ID WHERE SQLTypeRef = 91");
+                Set<TableDate>().FromSqlInterpolated($"SELECT t.InternalName + '.' + f.InternalFieldName TableField FROM Mp_Sys_FieldDef f INNER JOIN Mp_Sys_TableDef t on f.TableRef = t.ID WHERE SQLTypeRef = 91");
 
 
 
@@ -51,7 +51,7 @@ namespace GadjIT.ClientContext.P4W
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //modelBuilder.Entity<fnORCHAGetFeeDefinitions>().HasNoKey().ToView(null);
+            modelBuilder.Entity<TableDate>().HasNoKey().ToView(null);
 
             modelBuilder.Entity<CaseTypeGroups>(entity =>
             {
