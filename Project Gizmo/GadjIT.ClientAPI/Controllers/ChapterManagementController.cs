@@ -36,6 +36,19 @@ namespace GadjIT.ClientAPI.Controllers
         }
 
         [HttpGet]
+        public async Task<ActionResult> GetDatabaseTableDateFields()
+        {
+            try
+            {
+                return Ok(await chapterRepository.GetDatabaseTableDateFields());
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpGet]
         public async Task<ActionResult> GetCaseTypes()
         {
             try

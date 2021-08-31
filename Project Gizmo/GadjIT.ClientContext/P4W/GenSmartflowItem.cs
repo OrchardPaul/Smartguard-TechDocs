@@ -15,17 +15,27 @@ namespace GadjIT.ClientContext.P4W
         public int? SeqNo { get; set; }
         [StringLength(1)]
         public string SuppressStep { get; set; }
+        
         [StringLength(100)]
         public string EntityType { get; set; }
+        
         [StringLength(250)]
         public string AsName { get; set; }
+        
         [StringLength(250)]
         public string CompleteName { get; set; }
+        
         public int? RescheduleDays { get; set; }
+
+        [StringLength(250)]
+        public string RescheduleDataItem { get; set; }
+
         [StringLength(300)]
         public string AltDisplayName { get; set; }
+        
         [StringLength(100)]
         public string NextStatus { get; set; }
+        
         public string Action { get; set; }
         public string UserMessage { get; set; }
         public string PopupAlert { get; set; }

@@ -107,6 +107,7 @@ namespace GadjIT_V1_02.Pages.Chapters
 
         public List<MpSysViews> ListP4WViews;
         public List<DmDocuments> dropDownChapterList;
+        public List<TableDate> TableDates;
         public List<CaseTypeGroups> partnerCaseTypeGroups;
 
         public string editCaseType { get; set; } = "";
@@ -582,6 +583,7 @@ namespace GadjIT_V1_02.Pages.Chapters
 
 
             dropDownChapterList = await chapterManagementService.GetDocumentList(selectedChapter.CaseType);
+            TableDates = await chapterManagementService.GetDatabaseTableDateFields();
 
             await RefreshChapterItems("All");
             
@@ -1441,6 +1443,7 @@ namespace GadjIT_V1_02.Pages.Chapters
             if (!(selectedChapter.CaseType == ""))
             {
                 dropDownChapterList = await chapterManagementService.GetDocumentList(SelectedChapterObject.CaseType);
+                TableDates = await chapterManagementService.GetDatabaseTableDateFields();
                 StateHasChanged();
             }
         }
@@ -1986,6 +1989,7 @@ namespace GadjIT_V1_02.Pages.Chapters
             parameters.Add("DataChanged", action);
             parameters.Add("selectedList", selectedList);
             parameters.Add("dropDownChapterList", dropDownChapterList);
+            parameters.Add("TableDates", TableDates);
             parameters.Add("CaseTypeGroups", partnerCaseTypeGroups);
             parameters.Add("ListOfStatus", lstStatus);
             parameters.Add("SelectedChapter", selectedChapter);
@@ -3567,6 +3571,7 @@ namespace GadjIT_V1_02.Pages.Chapters
                 if (creationSuccess)
                 {
                     dropDownChapterList = await chapterManagementService.GetDocumentList(selectedChapter.CaseType);
+                    TableDates = await chapterManagementService.GetDatabaseTableDateFields();
 
                     selectedChapter.SelectedStep = selectedChapter.StepName;
 

@@ -99,6 +99,9 @@ namespace GadjIT_V1_02.Pages.Chapters
         public List<DmDocuments> dropDownChapterList { get; set; }
 
         [Parameter]
+        public List<TableDate> TableDates { get; set; }
+
+        [Parameter]
         public List<CaseTypeGroups> CaseTypeGroups { get; set; }
 
         [Parameter]

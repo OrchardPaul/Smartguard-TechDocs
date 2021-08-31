@@ -32,6 +32,11 @@ namespace GadjIT.ClientContext.P4W
         //        Set<fnORCHAGetFeeDefinitions>().FromSqlInterpolated($"select * from fn_OR_CHA_GetFeeDefinitions({Group},{CaseType})");
 
 
+        public IQueryable<TableDate> GetTableDates() =>
+                Set<TableDate>().FromSqlInterpolated($"SELECT t.InternalName + '.' + f.InternalFieldName FROM Mp_Sys_FieldDef f INNER JOIN Mp_Sys_TableDef t on f.TableRef = t.ID WHERE SQLTypeRef = 91");
+
+
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
 

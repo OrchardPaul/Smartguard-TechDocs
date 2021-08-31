@@ -28,6 +28,7 @@ namespace GadjIT.ClientAPI.Repository.Chapters
         Task<UsrOrsfSmartflows> Update(UsrOrsfSmartflows item);
         Task<List<UsrOrsfSmartflows>> UpdateCaseType(string newCaseType, string originalCaseType, string caseTypeGroup);
         Task<List<UsrOrsfSmartflows>> UpdateCaseTypeGroups(string newCaseTypeGroup, string originalCaseTypeGroup);
+        Task<List<TableDate>> GetDatabaseTableDateFields();
     }
 
     public class Chapters_Service : IChapters_Service
@@ -44,6 +45,10 @@ namespace GadjIT.ClientAPI.Repository.Chapters
         //    return await _context.fnORCHAGetFeeDefinitions(caseTypeGroup, caseType).ToListAsync();
         //}
 
+        public async Task<List<TableDate>> GetDatabaseTableDateFields()
+        {
+            return await _context.GetTableDates().ToListAsync();
+        }
 
 
         public async Task<List<UsrOrsfSmartflows>> GetAllChapters()

@@ -27,6 +27,7 @@ namespace GadjIT_V1_02.Services
         Task<List<UsrOrsfSmartflows>> UpdateCaseType(string newCaseTypeName, string originalCaseTypeName, string caseTypeGroup);
         Task<List<UsrOrsfSmartflows>> UpdateCaseTypeGroups(string newCaseTypeGroupName, string originalCaseTypeGroupName);
         Task<bool> CreateStep(VmChapterP4WStepSchemaJSONObject stepSchemaJSONObject);
+        Task<List<TableDate>> GetDatabaseTableDateFields();
         bool Lock { get; set; }
 
     }
@@ -106,6 +107,10 @@ namespace GadjIT_V1_02.Services
         public Task<List<UsrOrsfSmartflows>> GetAllChapters()
         {
             return httpClient.GetJsonAsync<List<UsrOrsfSmartflows>>($"{userSession.baseUri}api/ChapterManagement/GetAllChapters");
+        }
+        public Task<List<TableDate>> GetDatabaseTableDateFields()
+        {
+            return httpClient.GetJsonAsync<List<TableDate>>($"{userSession.baseUri}api/ChapterManagement/GetDatabaseTableDateFields");
         }
 
         //public Task<List<fnORCHAGetFeeDefinitions>> GetFeeDefs(string caseTypeGroup, string caseType)
