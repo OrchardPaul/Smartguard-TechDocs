@@ -41,17 +41,12 @@ namespace GadjIT_V1_02.Pages.Chapters
             get { return CopyObject.RescheduleDays; }
             set
             {
-                if (value < 0)
-                {
-                    CopyObject.RescheduleDays = 0;
-                }
-                else
-                {
-                    CopyObject.RescheduleDays = value;
-                }
+                
+                 CopyObject.RescheduleDays = value;
             }
         }
 
+        
 
         [CascadingParameter]
         BlazoredModalInstance ModalInstance { get; set; }
@@ -115,7 +110,18 @@ namespace GadjIT_V1_02.Pages.Chapters
 
         public List<string> documentList;
 
+        
         public bool useCustomItem { get; set; } = false;
+
+        public bool _useCustomReschedule { get; set; }
+        public bool useCustomReschedule {
+            get { return _useCustomReschedule; }
+            set
+            {
+                CopyObject.RescheduleDataItem = !value ? "" : CopyObject.RescheduleDataItem;
+                _useCustomReschedule = value;
+            }
+        }
 
         [Required]
         public string customItemName { get; set; } = "";
@@ -148,6 +154,16 @@ namespace GadjIT_V1_02.Pages.Chapters
             else
             {
                 useCustomItem = false;
+            }
+
+            if (!string.IsNullOrEmpty(CopyObject.RescheduleDataItem)
+                    && TableDates.ToList().Select(D => D.TableField).Contains(CopyObject.RescheduleDataItem))
+            {
+                useCustomReschedule = true;
+            }
+            else
+            {
+                useCustomReschedule = false;
             }
 
         }
