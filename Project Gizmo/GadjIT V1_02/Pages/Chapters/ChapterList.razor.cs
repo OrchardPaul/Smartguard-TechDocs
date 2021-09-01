@@ -2134,13 +2134,8 @@ namespace GadjIT_V1_02.Pages.Chapters
             parameters.Add("sessionState", sessionState);
             parameters.Add("RefreshDocList", RefreshDocList);
             parameters.Add("Attachment", attachment);
+            parameters.Add("TableDates", TableDates);
 
-            string className = "modal-chapter-item";
-
-            if (selectedList == "Steps and Documents")
-            {
-                className = "modal-chapter-doc";
-            }
             var options = new ModalOptions()
             {
                 Class = "blazored-custom-modal modal-chapter-doc"

@@ -782,6 +782,9 @@ namespace GadjIT_V1_02.FileManagement.FileProcessing.Implementation
             workSheetAttachments.Cells[1, 6].Value = "";
             workSheetAttachments.Cells[1, 7].Style.WrapText = true;
             workSheetAttachments.Cells[1, 7].Value = "If action is SCHEDULE, how many days the item will be scheduled for";
+            workSheetAttachments.Cells[1, 8].Style.WrapText = true;
+            workSheetAttachments.Cells[1, 8].Value = "If action is SCHEDULE, date field the schedule days are base from";
+
 
             workSheetAttachments.Row(2).Height = 20;
             workSheetAttachments.Row(2).Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
@@ -793,6 +796,7 @@ namespace GadjIT_V1_02.FileManagement.FileProcessing.Implementation
             workSheetAttachments.Cells[2, 5].Value = "Tracking Method";
             workSheetAttachments.Cells[2, 6].Value = "Chaser Description";
             workSheetAttachments.Cells[2, 7].Value = "Schedule Days";
+            workSheetAttachments.Cells[2, 8].Value = "Schedule Data Item";
 
             //Body of table
             recordIndex = 3;
@@ -811,6 +815,7 @@ namespace GadjIT_V1_02.FileManagement.FileProcessing.Implementation
                     workSheetAttachments.Cells[recordIndex, 5].Value = string.IsNullOrEmpty(doc.TrackingMethod) ? "" : doc.TrackingMethod;
                     workSheetAttachments.Cells[recordIndex, 6].Value = string.IsNullOrEmpty(doc.ChaserDesc) ? "" : doc.ChaserDesc;
                     workSheetAttachments.Cells[recordIndex, 7].Value = doc.ScheduleDays;
+                    workSheetAttachments.Cells[recordIndex, 8].Value = string.IsNullOrEmpty(doc.ScheduleDataItem) ? "" : doc.ScheduleDataItem; ;
 
                     recordIndex++;
                 }
@@ -1230,6 +1235,12 @@ namespace GadjIT_V1_02.FileManagement.FileProcessing.Implementation
                             {
                                 newAttachment.ScheduleDays = 0;
                             }
+
+                            if (column == 8) newAttachment.ScheduleDataItem = worksheetAttachments.Cells[row, column].FirstOrDefault() is null
+                                            ? ""
+                                            : worksheetAttachments.Cells[row, column].Value is null
+                                            ? ""
+                                            : worksheetAttachments.Cells[row, column].Value.ToString();
 
                         }
                     }

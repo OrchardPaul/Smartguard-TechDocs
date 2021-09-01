@@ -33,6 +33,8 @@ namespace GadjIT_V1_02.Pages.Chapters
         [Parameter]
         public string selectedList { get; set; }
 
+        [Parameter]
+        public List<TableDate> TableDates { get; set; }
 
         [Inject]
         IAppChapterState appChapterState { get; set; }
@@ -88,6 +90,18 @@ namespace GadjIT_V1_02.Pages.Chapters
 
         public List<string> documentList;
 
+        public bool _useCustomReschedule { get; set; }
+        public bool useCustomReschedule
+        {
+            get { return _useCustomReschedule; }
+            set
+            {
+                Attachment.ScheduleDataItem = !value ? "" : Attachment.ScheduleDataItem;
+                _useCustomReschedule = value;
+            }
+        }
+
+
 
         protected override void OnInitialized()
         {
@@ -117,6 +131,16 @@ namespace GadjIT_V1_02.Pages.Chapters
             else
             {
                 useCustomItem = false;
+            }
+
+            if (!string.IsNullOrEmpty(Attachment.ScheduleDataItem)
+                && TableDates.ToList().Select(D => D.TableField).Contains(Attachment.ScheduleDataItem))
+            {
+                useCustomReschedule = true;
+            }
+            else
+            {
+                useCustomReschedule = false;
             }
         }
 
@@ -153,6 +177,7 @@ namespace GadjIT_V1_02.Pages.Chapters
                     updateItem.TrackingMethod = Attachment.TrackingMethod;
                     updateItem.ChaserDesc = Attachment.ChaserDesc;
                     updateItem.Action = Attachment.Action;
+                    updateItem.ScheduleDataItem = Attachment.ScheduleDataItem;
                 }
                 else
                 {

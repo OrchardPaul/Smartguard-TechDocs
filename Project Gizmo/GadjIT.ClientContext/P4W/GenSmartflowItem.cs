@@ -60,5 +60,8 @@ namespace GadjIT.ClientContext.P4W
         public string TrackingMethod { get; set; }
         public string ChaserDesc { get; set; }
         public int ScheduleDays { get; set; }
+
+        [StringLength(250)]
+        public string ScheduleDataItem { get; set; }
     }
 }
