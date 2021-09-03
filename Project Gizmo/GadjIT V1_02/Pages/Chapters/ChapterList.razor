@@ -820,7 +820,7 @@ else
                                     <div class="hidden-md-down data-item ">
                                         <div class="data-item-sub font-85 pl-3" title="@(string.IsNullOrEmpty(doc.ChapterObject.AsName) ? "" : doc.ChapterObject.AsName)">@(string.IsNullOrEmpty(doc.ChapterObject.AsName) ? "" : doc.ChapterObject.AsName)</div>
 
-                                        @if (doc.ChapterObject.RescheduleDays.HasValue)
+                                        @if (!string.IsNullOrEmpty(doc.ChapterObject.AsName)) // && (doc.ChapterObject.RescheduleDays.HasValue && ) //(doc.ChapterObject.RescheduleDays != 0 | !string.IsNullOrEmpty(doc.ChapterObject.RescheduleDataItem)))
                                         {
                                             <div class="data-item-right schedule-days">
                                                 <ModalTooltip Direction="left" Text="@(string.IsNullOrEmpty(doc.ChapterObject.AsName) ? "" : "The step named " + doc.ChapterObject.AsName + " will be scheduled for " + doc.ChapterObject.RescheduleDays.ToString() + " days" + (!string.IsNullOrEmpty(doc.ChapterObject.RescheduleDataItem) ? " from " + doc.ChapterObject.RescheduleDataItem : ""))" Class="w-3">
