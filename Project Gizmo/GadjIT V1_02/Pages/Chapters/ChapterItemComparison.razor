@@ -145,6 +145,20 @@
                     </tr>
                     <tr>
                         <td>
+                            Reschedule Data Item
+                        </td>
+                        <td>
+                            <input type="text" class="read-only" value="@Object.ChapterObject.RescheduleDataItem" />
+                        </td>
+                        <td>
+                            <input type="text" class="read-only" value="@Object.AltObject.RescheduleDataItem" />
+                        </td>
+                        <td>
+                            <span class="fa fa-@(Object.ChapterObject.RescheduleDataItem == @Object.AltObject.RescheduleDataItem ? "check" : "exclamation")"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
                             User Message
                         </td>
                         <td>

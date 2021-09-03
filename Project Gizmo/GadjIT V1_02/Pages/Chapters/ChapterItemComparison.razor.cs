@@ -75,6 +75,7 @@ namespace GadjIT_V1_02.Pages.Chapters
                 taskObject.CompleteName = Object.AltObject.CompleteName;
                 taskObject.AsName = Object.AltObject.AsName;
                 taskObject.RescheduleDays = Object.AltObject.RescheduleDays;
+                taskObject.RescheduleDataItem = Object.AltObject.RescheduleDataItem;
                 taskObject.AltDisplayName = Object.AltObject.AltDisplayName;
                 taskObject.UserMessage = Object.AltObject.UserMessage;
                 taskObject.PopupAlert = Object.AltObject.PopupAlert;
@@ -98,6 +99,7 @@ namespace GadjIT_V1_02.Pages.Chapters
                 taskObject.CompleteName = Object.ChapterObject.CompleteName;
                 taskObject.AsName = Object.ChapterObject.AsName;
                 taskObject.RescheduleDays = Object.ChapterObject.RescheduleDays;
+                taskObject.RescheduleDataItem = Object.ChapterObject.RescheduleDataItem;
                 taskObject.AltDisplayName = Object.ChapterObject.AltDisplayName;
                 taskObject.UserMessage = Object.ChapterObject.UserMessage;
                 taskObject.PopupAlert = Object.ChapterObject.PopupAlert;
@@ -140,6 +142,7 @@ namespace GadjIT_V1_02.Pages.Chapters
                     CompleteName = Object.AltObject.CompleteName,
                     AsName = Object.AltObject.AsName,
                     RescheduleDays = Object.AltObject.RescheduleDays,
+                    RescheduleDataItem = Object.AltObject.RescheduleDataItem,
                     AltDisplayName = Object.AltObject.AltDisplayName,
                     UserMessage = Object.AltObject.UserMessage,
                     PopupAlert = Object.AltObject.PopupAlert,
@@ -167,6 +170,7 @@ namespace GadjIT_V1_02.Pages.Chapters
                         CompleteName = Object.ChapterObject.CompleteName,
                         AsName = Object.ChapterObject.AsName,
                         RescheduleDays = Object.ChapterObject.RescheduleDays,
+                        RescheduleDataItem = Object.ChapterObject.RescheduleDataItem,
                         AltDisplayName = Object.ChapterObject.AltDisplayName,
                         UserMessage = Object.ChapterObject.UserMessage,
                         PopupAlert = Object.ChapterObject.PopupAlert,

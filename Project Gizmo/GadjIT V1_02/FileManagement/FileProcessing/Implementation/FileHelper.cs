@@ -689,17 +689,19 @@ namespace GadjIT_V1_02.FileManagement.FileProcessing.Implementation
             workSheetDocument.Cells[1, 4].Style.WrapText = true;
             workSheetDocument.Cells[1, 4].Value = "Optional: \r\nI would like the next item to be scheduled for this many days:";
             workSheetDocument.Cells[1, 5].Style.WrapText = true;
-            workSheetDocument.Cells[1, 5].Value = "Optional: \r\nOn running the document I would also like a history item created called: ";
+            workSheetDocument.Cells[1, 5].Value = "Optional: \r\nI would like the reschedule days to be based on this table field: ";
             workSheetDocument.Cells[1, 6].Style.WrapText = true;
-            workSheetDocument.Cells[1, 6].Value = "Optional: \r\nWhen the document is selected the Smartflow Status should be changed to:";
+            workSheetDocument.Cells[1, 6].Value = "Optional: \r\nOn running the document I would also like a history item created called: ";
             workSheetDocument.Cells[1, 7].Style.WrapText = true;
-            workSheetDocument.Cells[1, 7].Value = "Optional: \r\nI would like the document to be inserted or taken automatically [INSERT or TAKE]:";
+            workSheetDocument.Cells[1, 7].Value = "Optional: \r\nWhen the document is selected the Smartflow Status should be changed to:";
             workSheetDocument.Cells[1, 8].Style.WrapText = true;
-            workSheetDocument.Cells[1, 8].Value = "Optional: \r\nWhen the document is selected the following user message should appear: ";
+            workSheetDocument.Cells[1, 8].Value = "Optional: \r\nI would like the document to be inserted or taken automatically [INSERT or TAKE]:";
             workSheetDocument.Cells[1, 9].Style.WrapText = true;
-            workSheetDocument.Cells[1, 9].Value = "Optional: \r\nWhen the document is selected the following pop up alert should appear:";
+            workSheetDocument.Cells[1, 9].Value = "Optional: \r\nWhen the document is selected the following user message should appear: ";
             workSheetDocument.Cells[1, 10].Style.WrapText = true;
-            workSheetDocument.Cells[1, 10].Value = "Optional: \r\nWhen the document is processed the following field should be updated: ";
+            workSheetDocument.Cells[1, 10].Value = "Optional: \r\nWhen the document is selected the following pop up alert should appear:";
+            workSheetDocument.Cells[1, 11].Style.WrapText = true;
+            workSheetDocument.Cells[1, 11].Value = "Optional: \r\nWhen the document is processed the following field should be updated: ";
 
 
 
@@ -711,12 +713,13 @@ namespace GadjIT_V1_02.FileManagement.FileProcessing.Implementation
             workSheetDocument.Cells[2, 2].Value = "Alternative Item Name";
             workSheetDocument.Cells[2, 3].Value = "Reschedule As Description";
             workSheetDocument.Cells[2, 4].Value = "Reschedule Days";
-            workSheetDocument.Cells[2, 5].Value = "Step History Description";
-            workSheetDocument.Cells[2, 6].Value = "Status Change";
-            workSheetDocument.Cells[2, 7].Value = "Action";
-            workSheetDocument.Cells[2, 8].Value = "Item User Message";
-            workSheetDocument.Cells[2, 9].Value = "Popup Alert";
-            workSheetDocument.Cells[2, 10].Value = "Notes to Developer";
+            workSheetDocument.Cells[2, 5].Value = "Reschedule Data Item";
+            workSheetDocument.Cells[2, 6].Value = "Step History Description";
+            workSheetDocument.Cells[2, 7].Value = "Status Change";
+            workSheetDocument.Cells[2, 8].Value = "Action";
+            workSheetDocument.Cells[2, 9].Value = "Item User Message";
+            workSheetDocument.Cells[2, 10].Value = "Popup Alert";
+            workSheetDocument.Cells[2, 11].Value = "Notes to Developer";
 
             //Body of table
             recordIndex = 3;
@@ -726,12 +729,13 @@ namespace GadjIT_V1_02.FileManagement.FileProcessing.Implementation
                 workSheetDocument.Cells[recordIndex, 2].Value = string.IsNullOrEmpty(chapterItem.AltDisplayName) ? "" : chapterItem.AltDisplayName;
                 workSheetDocument.Cells[recordIndex, 3].Value = string.IsNullOrEmpty(chapterItem.AsName) ? "" : chapterItem.AsName;
                 workSheetDocument.Cells[recordIndex, 4].Value = chapterItem.RescheduleDays is null ? "" : chapterItem.RescheduleDays.ToString();
-                workSheetDocument.Cells[recordIndex, 5].Value = string.IsNullOrEmpty(chapterItem.CompleteName) ? "" : chapterItem.CompleteName;
-                workSheetDocument.Cells[recordIndex, 6].Value = string.IsNullOrEmpty(chapterItem.NextStatus) ? "" : chapterItem.NextStatus;
-                workSheetDocument.Cells[recordIndex, 7].Value = string.IsNullOrEmpty(chapterItem.Action) ? "" : chapterItem.Action;
-                workSheetDocument.Cells[recordIndex, 8].Value = string.IsNullOrEmpty(chapterItem.UserMessage) ? "" : chapterItem.UserMessage;
-                workSheetDocument.Cells[recordIndex, 9].Value = string.IsNullOrEmpty(chapterItem.PopupAlert) ? "" : chapterItem.PopupAlert;
-                workSheetDocument.Cells[recordIndex, 10].Value = string.IsNullOrEmpty(chapterItem.DeveloperNotes) ? "" : chapterItem.DeveloperNotes;
+                workSheetDocument.Cells[recordIndex, 5].Value = string.IsNullOrEmpty(chapterItem.RescheduleDataItem) ? "" : chapterItem.RescheduleDataItem;
+                workSheetDocument.Cells[recordIndex, 6].Value = string.IsNullOrEmpty(chapterItem.CompleteName) ? "" : chapterItem.CompleteName;
+                workSheetDocument.Cells[recordIndex, 7].Value = string.IsNullOrEmpty(chapterItem.NextStatus) ? "" : chapterItem.NextStatus;
+                workSheetDocument.Cells[recordIndex, 8].Value = string.IsNullOrEmpty(chapterItem.Action) ? "" : chapterItem.Action;
+                workSheetDocument.Cells[recordIndex, 9].Value = string.IsNullOrEmpty(chapterItem.UserMessage) ? "" : chapterItem.UserMessage;
+                workSheetDocument.Cells[recordIndex, 10].Value = string.IsNullOrEmpty(chapterItem.PopupAlert) ? "" : chapterItem.PopupAlert;
+                workSheetDocument.Cells[recordIndex, 11].Value = string.IsNullOrEmpty(chapterItem.DeveloperNotes) ? "" : chapterItem.DeveloperNotes;
 
                 //workSheetDocument.Cells[recordIndex, 6].DataValidation.AddListDataValidation().Formula.ExcelFormula = $"= Status!A3:A{selectedChapter.Items.Where(C => C.Type == "Status").ToList().Count() + 3}";
 
@@ -748,7 +752,7 @@ namespace GadjIT_V1_02.FileManagement.FileProcessing.Implementation
             workSheetDocument.Column(8).AutoFit();
             workSheetDocument.Column(9).AutoFit();
             workSheetDocument.Column(10).AutoFit();
-
+            workSheetDocument.Column(11).AutoFit();
 
 
             /*
@@ -782,6 +786,9 @@ namespace GadjIT_V1_02.FileManagement.FileProcessing.Implementation
             workSheetAttachments.Cells[1, 6].Value = "";
             workSheetAttachments.Cells[1, 7].Style.WrapText = true;
             workSheetAttachments.Cells[1, 7].Value = "If action is SCHEDULE, how many days the item will be scheduled for";
+            workSheetAttachments.Cells[1, 8].Style.WrapText = true;
+            workSheetAttachments.Cells[1, 8].Value = "If action is SCHEDULE, date field the schedule days are base from";
+
 
             workSheetAttachments.Row(2).Height = 20;
             workSheetAttachments.Row(2).Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
@@ -793,6 +800,7 @@ namespace GadjIT_V1_02.FileManagement.FileProcessing.Implementation
             workSheetAttachments.Cells[2, 5].Value = "Tracking Method";
             workSheetAttachments.Cells[2, 6].Value = "Chaser Description";
             workSheetAttachments.Cells[2, 7].Value = "Schedule Days";
+            workSheetAttachments.Cells[2, 8].Value = "Schedule Data Item";
 
             //Body of table
             recordIndex = 3;
@@ -811,6 +819,7 @@ namespace GadjIT_V1_02.FileManagement.FileProcessing.Implementation
                     workSheetAttachments.Cells[recordIndex, 5].Value = string.IsNullOrEmpty(doc.TrackingMethod) ? "" : doc.TrackingMethod;
                     workSheetAttachments.Cells[recordIndex, 6].Value = string.IsNullOrEmpty(doc.ChaserDesc) ? "" : doc.ChaserDesc;
                     workSheetAttachments.Cells[recordIndex, 7].Value = doc.ScheduleDays;
+                    workSheetAttachments.Cells[recordIndex, 8].Value = string.IsNullOrEmpty(doc.ScheduleDataItem) ? "" : doc.ScheduleDataItem; ;
 
                     recordIndex++;
                 }
@@ -1127,32 +1136,37 @@ namespace GadjIT_V1_02.FileManagement.FileProcessing.Implementation
                         {
                             readObject.RescheduleDays = null;
                         }
-                        if (column == 5) readObject.CompleteName = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
+                        if (column == 5) readObject.RescheduleDataItem = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
+                                            ? ""
+                                            : worksheetDocuments.Cells[row, column].Value is null
+                                            ? ""
+                                            : Regex.Replace(worksheetDocuments.Cells[row, column].Value.ToString(), "[^0-9a-zA-Z-_ (){}!£$%^&*,.]+", "");
+                        if (column == 6) readObject.CompleteName = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
                                             ? ""
                                             : worksheetDocuments.Cells[row, column].Value is null
                                             ? ""
                                             : Regex.Replace(worksheetDocuments.Cells[row, column].Value.ToString(), "[^0-9a-zA-Z-_ (){}!£$%^&*,]+", "");
-                        if (column == 6) readObject.NextStatus = worksheetDocuments.Cells[row, column].FirstOrDefault() is null 
+                        if (column == 7) readObject.NextStatus = worksheetDocuments.Cells[row, column].FirstOrDefault() is null 
                                             ? "" 
                                             : worksheetDocuments.Cells[row, column].Value is null
                                             ? ""
                                             : worksheetDocuments.Cells[row, column].Value.ToString();
-                        if (column == 7) readObject.Action = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
+                        if (column == 8) readObject.Action = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
                                             ? "INSERT"
                                             : worksheetDocuments.Cells[row, column].Value is null
                                             ? "INSERT"
                                             : worksheetDocuments.Cells[row, column].Value.ToString().ToUpper();
-                        if (column == 8) readObject.UserMessage = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
+                        if (column == 9) readObject.UserMessage = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
                                             ? ""
                                             : worksheetDocuments.Cells[row, column].Value is null
                                             ? ""
                                             : worksheetDocuments.Cells[row, column].Value.ToString();
-                        if (column == 9) readObject.PopupAlert = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
+                        if (column == 10) readObject.PopupAlert = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
                                             ? ""
                                             : worksheetDocuments.Cells[row, column].Value is null
                                             ? ""
                                             : worksheetDocuments.Cells[row, column].Value.ToString();
-                        if (column == 10) readObject.DeveloperNotes = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
+                        if (column == 11) readObject.DeveloperNotes = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
                                             ? ""
                                             : worksheetDocuments.Cells[row, column].Value is null
                                             ? ""
@@ -1230,6 +1244,12 @@ namespace GadjIT_V1_02.FileManagement.FileProcessing.Implementation
                             {
                                 newAttachment.ScheduleDays = 0;
                             }
+
+                            if (column == 8) newAttachment.ScheduleDataItem = worksheetAttachments.Cells[row, column].FirstOrDefault() is null
+                                            ? ""
+                                            : worksheetAttachments.Cells[row, column].Value is null
+                                            ? ""
+                                            : worksheetAttachments.Cells[row, column].Value.ToString();
 
                         }
                     }
