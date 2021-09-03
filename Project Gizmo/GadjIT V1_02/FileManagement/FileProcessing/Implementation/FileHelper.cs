@@ -728,7 +728,7 @@ namespace GadjIT_V1_02.FileManagement.FileProcessing.Implementation
                 workSheetDocument.Cells[recordIndex, 1].Value = string.IsNullOrEmpty(chapterItem.Name) ? "" : chapterItem.Name;
                 workSheetDocument.Cells[recordIndex, 2].Value = string.IsNullOrEmpty(chapterItem.AltDisplayName) ? "" : chapterItem.AltDisplayName;
                 workSheetDocument.Cells[recordIndex, 3].Value = string.IsNullOrEmpty(chapterItem.AsName) ? "" : chapterItem.AsName;
-                workSheetDocument.Cells[recordIndex, 4].Value = chapterItem.RescheduleDays is null ? "" : chapterItem.RescheduleDays.ToString();
+                workSheetDocument.Cells[recordIndex, 4].Value = string.IsNullOrEmpty(chapterItem.AsName) ? "" : chapterItem.RescheduleDays is null ? "0" : chapterItem.RescheduleDays.ToString();
                 workSheetDocument.Cells[recordIndex, 5].Value = string.IsNullOrEmpty(chapterItem.RescheduleDataItem) ? "" : chapterItem.RescheduleDataItem;
                 workSheetDocument.Cells[recordIndex, 6].Value = string.IsNullOrEmpty(chapterItem.CompleteName) ? "" : chapterItem.CompleteName;
                 workSheetDocument.Cells[recordIndex, 7].Value = string.IsNullOrEmpty(chapterItem.NextStatus) ? "" : chapterItem.NextStatus;
