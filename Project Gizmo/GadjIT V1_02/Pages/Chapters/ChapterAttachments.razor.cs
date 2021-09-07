@@ -40,6 +40,8 @@ namespace GadjIT_V1_02.Pages.Chapters
         IAppChapterState appChapterState { get; set; }
 
         public string filterText { get; set; } = "";
+        
+        public string filterTextDataItem { get; set; } = "";
 
         [Parameter]
         public string Option { get; set; }

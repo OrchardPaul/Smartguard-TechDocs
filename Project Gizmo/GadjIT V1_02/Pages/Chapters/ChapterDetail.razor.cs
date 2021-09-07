@@ -67,6 +67,8 @@ namespace GadjIT_V1_02.Pages.Chapters
         public string selectedList { get; set; }
 
         public string filterText { get; set; } = "";
+        
+        public string filterTextDataItem { get; set; } = "";
 
         [Parameter]
         public string Option { get; set; }
