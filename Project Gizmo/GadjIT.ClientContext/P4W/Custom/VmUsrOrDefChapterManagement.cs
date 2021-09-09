@@ -80,6 +80,12 @@ namespace GadjIT.ClientContext.P4W.Custom
                 ComparisonList.Add("RescheduleDays");
             }
 
+            if (ChapterObject.RescheduleDataItem != compItem.RescheduleDataItem)
+            {
+                isSame = false;
+                ComparisonList.Add("RescheduleDays");
+            }
+
             if (ChapterObject.CompleteName != compItem.CompleteName)
             {
                 isSame = false;
@@ -152,6 +158,13 @@ namespace GadjIT.ClientContext.P4W.Custom
                                     isSame = false;
                                     ComparisonList.Add("LinkedItems");
                                 }
+
+                                if (!(compDoc.ScheduleDataItem == doc.ScheduleDataItem))
+                                {
+                                    isSame = false;
+                                    ComparisonList.Add("LinkedItems");
+                                }
+
 
                                 if (!(compDoc.DocAsName == doc.DocAsName))
                                 {
