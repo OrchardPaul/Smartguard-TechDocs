@@ -161,24 +161,29 @@
                 <InputNumber class="form-control form-control-xs" @bind-Value="RescheduleDays" />
             </div>
 
-                @if (useCustomReschedule)
-                {
-                    <div class="form-group mb-3">
-                        <label>Reschedule From Data Item</label>
-                        <InputSelect class="form-control form-control-xl"
-                                     @bind-Value="CopyObject.RescheduleDataItem">
-                            <option value=""></option>
-                            @foreach (var a in TableDates)
-                                    {
-                                <option value="@a.TableField">
-                                    @a.TableField
-                                </option>
-                                    }
-                        </InputSelect>
-                        <ValidationMessage For="@(() => CopyObject.RescheduleDataItem)" />
-                    </div>
-                }
-            
+            @if (useCustomReschedule)
+            {
+                <div class="form-group">
+                    <label>Reschedule From Data Item</label><br>
+                    <label>Filter</label>
+                    <InputText class="form-control form-control-md form-control-filter" @bind-Value="@filterTextDataItem" />
+                </div>
+
+                <div class="form-group mb-3">
+                    <InputSelect class="form-control form-control-xl"
+                                 @bind-Value="CopyObject.RescheduleDataItem">
+                        <option value=""></option>
+                        @foreach (var a in TableDates.Where(F => F.TableField.ToUpper().Contains(filterTextDataItem.ToUpper())))
+                                {
+                            <option value="@a.TableField">
+                                @a.TableField
+                            </option>
+                                }
+                    </InputSelect>
+                    <ValidationMessage For="@(() => CopyObject.RescheduleDataItem)" />
+                </div>
+            }
+
 
             <div class="form-group">
                 <label for="CompleteName">Complete As Name</label>
@@ -250,8 +255,8 @@
         }
     </div>
 
-    <div class="button-container">
-        <button type="submit" class="btn btn-main">Save</button>
-        <button type="button" class="btn btn-secondary" @onclick="Close">Cancel</button>
-    </div>
+                <div class="button-container">
+                    <button type="submit" class="btn btn-main">Save</button>
+                    <button type="button" class="btn btn-secondary" @onclick="Close">Cancel</button>
+                </div>
 </EditForm>
