@@ -15,7 +15,9 @@ namespace GadjIT.ClientContext.P4W
         public int? SeqNo { get; set; }
         [StringLength(1)]
         public string SuppressStep { get; set; }
-        
+
+        public string MilestoneStatus { get; set; }
+
         [StringLength(100)]
         public string EntityType { get; set; }
         

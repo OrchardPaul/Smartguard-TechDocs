@@ -125,6 +125,17 @@ namespace GadjIT_V1_02.Pages.Chapters
             }
         }
 
+        public bool _useCustomMilestone { get; set; }
+        public bool useCustomMilestone
+        {
+            get { return _useCustomMilestone; }
+            set
+            {
+                CopyObject.RescheduleDataItem = !value ? "" : CopyObject.RescheduleDataItem;
+                _useCustomMilestone = value;
+            }
+        }
+
         [Required]
         public string customItemName { get; set; } = "";
 
@@ -223,6 +234,7 @@ namespace GadjIT_V1_02.Pages.Chapters
             TaskObject.TrackingMethod = CopyObject.TrackingMethod;
             TaskObject.ChaserDesc = CopyObject.ChaserDesc;
             TaskObject.RescheduleDataItem = CopyObject.RescheduleDataItem;
+            TaskObject.MilestoneStatus = CopyObject.MilestoneStatus;
 
             if (Option == "Insert")
             {

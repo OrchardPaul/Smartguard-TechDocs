@@ -1981,7 +1981,8 @@ namespace GadjIT_V1_02.Pages.Chapters
                 Action = editObject.ChapterObject.Action,
                 TrackingMethod = editObject.ChapterObject.TrackingMethod,
                 ChaserDesc = editObject.ChapterObject.ChaserDesc,
-                RescheduleDataItem = editObject.ChapterObject.RescheduleDataItem
+                RescheduleDataItem = editObject.ChapterObject.RescheduleDataItem,
+                MilestoneStatus = editObject.ChapterObject.MilestoneStatus
         };
 
             var parameters = new ModalParameters();

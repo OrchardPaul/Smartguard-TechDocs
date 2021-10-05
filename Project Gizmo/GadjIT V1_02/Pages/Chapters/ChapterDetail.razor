@@ -249,6 +249,52 @@
         else if (selectedList == "Status")
         {
             <div class="form-group">
+                <label>Select Milestone</label>
+                <div class="form-label-check" style="margin-right: 13px">
+                    @if (useCustomMilestone)
+                    {
+                        <label>Custom Milestone</label><input type="checkbox" checked="checked" @bind-value="@useCustomMilestone" />
+                    }
+                    else
+                    {
+                        <label>Custom Milestone</label><input type="checkbox" @bind-value="@useCustomMilestone" />
+                    }
+
+                </div>
+                <div class="form-group">
+                    @if (useCustomMilestone)
+                    {
+                        <InputText class="form-control" @bind-Value="@CopyObject.MilestoneStatus" />
+
+                    }
+                    else
+                    {
+                <InputSelect class="form-control"
+                             @bind-Value="CopyObject.MilestoneStatus">
+                    <option value=""></option>
+                    @foreach (var s in ListOfStatus
+                        .Where(S => !string.IsNullOrEmpty(S.ChapterObject.MilestoneStatus))
+                        .Where(S => !ListOfStatus.Select(L => L.ChapterObject.Name).Contains(S.ChapterObject.MilestoneStatus))
+                        .GroupBy(S => S.ChapterObject.MilestoneStatus.ToLower())
+                        .Select(S => S.First())
+                        .ToList()
+                        )
+                            {
+                        <option value="@s.ChapterObject.MilestoneStatus">
+                            @s.ChapterObject.MilestoneStatus
+                        </option>
+                            }
+                    @foreach (var s in ListOfStatus)
+                            {
+                        <option value="@s.ChapterObject.Name">
+                            @s.ChapterObject.Name
+                        </option>
+                            }
+                </InputSelect>
+                    }
+                </div>
+            </div>
+            <div class="form-group">
                 <label for="Suppress">Suppress Step</label>
                 <InputCheckbox class="form-control" @bind-Value="suppressStep" />
             </div>
