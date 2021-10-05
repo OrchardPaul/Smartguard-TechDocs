@@ -1258,6 +1258,8 @@ app {
     }
 
 
+
+
     .card-header {
         font-size: 1.2em;
         border: 0;
@@ -1310,6 +1312,14 @@ app {
     /****************************************/
     /*     ADVERTS                          */
     /****************************************/
+
+    .main-advert .card {
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.7); /* this adds the "card" effect */
+        margin: 30px;
+        border-radius: 0px !important;
+        width: 640px !important;
+        height: 360px !important;
+    }
 
     .advert-list .card {
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.7); /* this adds the "card" effect */

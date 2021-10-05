@@ -6,6 +6,7 @@ using GadjIT_V1_02.Data.Admin;
 using GadjIT_V1_02.FileManagement.FileProcessing.Interface;
 using GadjIT_V1_02.Services.SessionState;
 using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,8 +14,24 @@ using System.Threading.Tasks;
 
 namespace GadjIT_V1_02.Pages.Accounts.CompanyAccountManagement
 {
+
+    public class JsConsole
+    {
+        private readonly IJSRuntime JsRuntime;
+        public JsConsole(IJSRuntime jSRuntime)
+        {
+            this.JsRuntime = jSRuntime;
+        }
+
+        public async Task LogAsync(string message)
+        {
+            await this.JsRuntime.InvokeVoidAsync("console.log", message);
+        }
+    }
+
     public partial class CompanyAccountsMain
     {
+
 
         [Inject]
         IModalService Modal { get; set; }
@@ -22,6 +39,9 @@ namespace GadjIT_V1_02.Pages.Accounts.CompanyAccountManagement
         [Inject]
         public IUserSessionState SessionState { get; set; }
         
+        [Inject]
+        public JsConsole jsConsole { get; set; }
+
         [Inject]
         public IFileHelper FileHelper { get; set; }
 
@@ -54,22 +74,29 @@ namespace GadjIT_V1_02.Pages.Accounts.CompanyAccountManagement
 
         protected override async Task OnInitializedAsync()
         {
+            try
+            {
+                displaySpinner = true;
 
-            displaySpinner = true;
+                AppCompanyDetails = await CompanyDbAccess.GetCompanies();
 
-            AppCompanyDetails = await CompanyDbAccess.GetCompanies();
+                AppCompanyAccounts = await CompanyDbAccess.GetCompanyAccounts();
 
-            AppCompanyAccounts = await CompanyDbAccess.GetCompanyAccounts();
+                AllRecords = await CompanyDbAccess.GetAllSmartflowRecordsForAllCompanies();
 
-            AllRecords = await CompanyDbAccess.GetAllSmartflowRecordsForAllCompanies();
+                SelectedCompanyAccount = AppCompanyAccounts.Where(A => A.CompanyId == SessionState.Company.Id).FirstOrDefault();
 
-            SelectedCompanyAccount = AppCompanyAccounts.Where(A => A.CompanyId == SessionState.Company.Id).FirstOrDefault();
+                RefreshCompanyObjects();
 
-            RefreshCompanyObjects();
+                RefreshCompanyAccounts();
 
-            RefreshCompanyAccounts();
+                displaySpinner = false;
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
 
-            displaySpinner = false;
         }
 
         protected async void RefreshCompanyObjects()

@@ -3465,9 +3465,12 @@ namespace GadjIT_V1_02.Pages.Chapters
 
         
 
-        protected async void CreateP4WSmartflowStep()
+        protected void CreateP4WSmartflowStep()
         {
-            IList<string> Errors = new List<string>(); 
+            IList<string> Errors = new List<string>();
+
+            string confirmText = "";
+            string confirmHeader = "";
 
             if (string.IsNullOrEmpty(selectedChapter.P4WCaseTypeGroup))
             {
@@ -3483,20 +3486,56 @@ namespace GadjIT_V1_02.Pages.Chapters
             {
                 Errors.Add("Missing Step Name");
             }
-                
-
-            if (Errors.Count == 0)
+            else if(dropDownChapterList
+                .Where(D => D.DocumentType == 6)
+                .Where(D => D.Notes.Contains("Smartflow:"))
+                .Where(V => V.CaseTypeGroupRef == (string.IsNullOrEmpty(selectedChapter.P4WCaseTypeGroup)
+                                                    ? -2
+                                                    : selectedChapter.P4WCaseTypeGroup == "Global Documents"
+                                                    ? 0
+                                                    : selectedChapter.P4WCaseTypeGroup == "Entity Documents"
+                                                    ? -1
+                                                    : partnerCaseTypeGroups
+                                                        .Where(P => P.Name == selectedChapter.P4WCaseTypeGroup)
+                                                        .Select(P => P.Id)
+                                                        .FirstOrDefault()))
+                .OrderBy(D => D.Name)
+                .Select(D => D.Name)
+                .ToList()
+                .Contains(selectedChapter.StepName))
             {
-                if(selectedChapter.P4WCaseTypeGroup == "Entity Documents")
+                confirmHeader = "Possible Conflict?";
+                confirmText = $"This Step already exists in the case type group: {selectedChapter.P4WCaseTypeGroup}. Do you still wish to create?";
+            }
+
+
+            if (Errors.Count == 0 && confirmHeader == "")
+            {
+                CreateStep();
+            }
+            else if (Errors.Count > 0)
+            {
+                ShowErrorModal("Step Creation", "Step creation could not be completed:", Errors);
+            }
+            else
+            {
+                ShowModalConfirm(confirmText, confirmHeader, CreateStep);
+            }
+
+        }
+
+        private async void CreateStep()
+        {
+            if (selectedChapter.P4WCaseTypeGroup == "Entity Documents")
+            {
+                ChapterP4WStep = new ChapterP4WStepSchema
                 {
-                    ChapterP4WStep = new ChapterP4WStepSchema
-                    {
-                        StepName = selectedChapter.StepName,
-                        P4WCaseTypeGroup = selectedChapter.P4WCaseTypeGroup,
-                        GadjITCaseTypeGroup = selectedChapter.CaseTypeGroup,
-                        GadjITCaseType = selectedChapter.CaseType,
-                        Smartflow = selectedChapter.Name,
-                        Questions = new List<ChapterP4WStepQuestion>{
+                    StepName = selectedChapter.StepName,
+                    P4WCaseTypeGroup = selectedChapter.P4WCaseTypeGroup,
+                    GadjITCaseTypeGroup = selectedChapter.CaseTypeGroup,
+                    GadjITCaseType = selectedChapter.CaseType,
+                    Smartflow = selectedChapter.Name,
+                    Questions = new List<ChapterP4WStepQuestion>{
                                     new ChapterP4WStepQuestion {QNo = 1, QText= "HQ - Set Current Chapter Details" }
                                     ,new ChapterP4WStepQuestion {QNo = 2, QText= "HQ - Show View" }
                                     ,new ChapterP4WStepQuestion {QNo = 3, QText= "HQ - Run Required Steps" }
@@ -3507,7 +3546,7 @@ namespace GadjIT_V1_02.Pages.Chapters
                                     ,new ChapterP4WStepQuestion {QNo = 8, QText= "HQ - Check if completion name exists" }
                                     ,new ChapterP4WStepQuestion {QNo = 9, QText= "HQ - Delete Step" }
                                     },
-                        Answers = new List<ChapterP4WStepAnswer>{
+                    Answers = new List<ChapterP4WStepAnswer>{
                                      new ChapterP4WStepAnswer {QNo = 1, GoToData= $"2 [SQL: EXEC up_ORSF_CreateMatterTableEntries '[matters.entityref]', -1] [SQL: UPDATE Usr_ORSF_ENT_Control SET Current_SF = '{selectedChapter.Name}', Current_Case_Type_Group = '{selectedChapter.CaseTypeGroup}', Current_Case_Type = '{selectedChapter.CaseType}', Default_Step = '{selectedChapter.StepName}', Date_Schedule_For = DATEADD(d, 7, getdate()), Steps_To_Run = '', Schedule_AsName = (SELECT CASE WHEN dbo.fn_ORSF_IsAllCap (Description) = 1 THEN '{selectedChapter.StepName}' ELSE Description END + '|' + CONVERT(VARCHAR(20),ISNULL(Date_Schedule_For,DATEADD(d, 7, getdate())),103) + '|' + '[CurrentUser.Code]' FROM Cm_CaseItems WHERE ItemID = [currentstep.stepid]), Complete_AsName = ''WHERE EntityRef = '[Entity.Code]'][SQL: UPDATE Usr_ORSF_ENT_Control SET Screen_Opened_Via_Step = 'Y' WHERE EntityRef='[Entity.Code]']" }
                                     ,new ChapterP4WStepAnswer {QNo = 2, GoToData= $"3 [VIEW: '{selectedChapter.SelectedView}' UPDATE=Yes]" }
                                     ,new ChapterP4WStepAnswer {QNo = 3, GoToData= $"4 [SQL: SELECT dbo.fn_ORSF_GetStepsFromList('[~Usr_ORSF_MT_Control.Steps_To_Run]')] [SQL: UPDATE Usr_ORSF_ENT_Control SET Screen_Opened_Via_Step = null WHERE EntityRef='[Entity.Code]']" }
@@ -3516,20 +3555,20 @@ namespace GadjIT_V1_02.Pages.Chapters
                                     ,new ChapterP4WStepAnswer {QNo = 6, GoToData= $"[SQL: UPDATE cm_caseitems set CompletionDate = GETDATE(), description = UPPER('[!Usr_ORSF_ENT_Control.Complete_AsName]') where itemid = [currentstep.stepid]]" }
                                     ,new ChapterP4WStepAnswer {QNo = 7, GoToData= $"8 [SQL: exec up_ORSF_DeleteDueStep '', [currentstep.stepid], '{selectedChapter.StepName}']" }
                                     ,new ChapterP4WStepAnswer {QNo = 8, GoToData= $"[SQL: SELECT CASE WHEN ISNULL('[!Usr_ORSF_ENT_Control.Complete_AsName]','') <> '' THEN 6 ELSE 9 END]" }
-                                    ,new ChapterP4WStepAnswer {QNo = 9, GoToData= $"[SQL: DELETE FROM cm_caseitems where itemid = [currentstep.stepid]]" } 
+                                    ,new ChapterP4WStepAnswer {QNo = 9, GoToData= $"[SQL: DELETE FROM cm_caseitems where itemid = [currentstep.stepid]]" }
                                     }
-                    };
-                }
-                else
+                };
+            }
+            else
+            {
+                ChapterP4WStep = new ChapterP4WStepSchema
                 {
-                    ChapterP4WStep = new ChapterP4WStepSchema
-                    {
-                        StepName = selectedChapter.StepName,
-                        P4WCaseTypeGroup = selectedChapter.P4WCaseTypeGroup,
-                        GadjITCaseTypeGroup = selectedChapter.CaseTypeGroup,
-                        GadjITCaseType = selectedChapter.CaseType,
-                        Smartflow = selectedChapter.Name,
-                        Questions = new List<ChapterP4WStepQuestion>{
+                    StepName = selectedChapter.StepName,
+                    P4WCaseTypeGroup = selectedChapter.P4WCaseTypeGroup,
+                    GadjITCaseTypeGroup = selectedChapter.CaseTypeGroup,
+                    GadjITCaseType = selectedChapter.CaseType,
+                    Smartflow = selectedChapter.Name,
+                    Questions = new List<ChapterP4WStepQuestion>{
                                     new ChapterP4WStepQuestion {QNo = 1, QText= "HQ - Set Current Chapter Details" }
                                     ,new ChapterP4WStepQuestion {QNo = 2, QText= "HQ - Show View" }
                                     ,new ChapterP4WStepQuestion {QNo = 3, QText= "HQ - Run Required Steps" }
@@ -3540,7 +3579,7 @@ namespace GadjIT_V1_02.Pages.Chapters
                                     ,new ChapterP4WStepQuestion {QNo = 8, QText= "HQ - Check if completion name exists" }
                                     ,new ChapterP4WStepQuestion {QNo = 9, QText= "HQ - Delete Step" }
                                     },
-                        Answers = new List<ChapterP4WStepAnswer>{
+                    Answers = new List<ChapterP4WStepAnswer>{
                                     new ChapterP4WStepAnswer {QNo = 1, GoToData= $"2 [SQL: EXEC up_ORSF_CreateMatterTableEntries '[matters.entityref]', [matters.number]] [SQL: UPDATE Usr_ORSF_MT_Control SET Current_SF = '{selectedChapter.Name}', Current_Case_Type_Group = '{selectedChapter.CaseTypeGroup}', Current_Case_Type = '{selectedChapter.CaseType}', Default_Step = '{selectedChapter.StepName}', Date_Schedule_For = DATEADD(d, 7, getdate()), Steps_To_Run = '', Schedule_AsName = '{selectedChapter.StepName}|' + (SELECT CASE WHEN dbo.fn_ORSF_IsAllCap (Description) = 1 THEN '{selectedChapter.StepName}' + '|' + CONVERT(VARCHAR(20),ISNULL(Date_Schedule_For,DATEADD(d, 7, getdate())),103) ELSE Description + '|' + CONVERT(VARCHAR(20),ISNULL(s.DiaryDate, getdate()),103) END + '|' + '[matters.feeearnerref]' FROM Cm_CaseItems i INNER JOIN Cm_Steps s on s.ItemID = i.ItemID WHERE i.ItemID = [currentstep.stepid]), Complete_AsName = '' WHERE EntityRef = '[matters.entityref]' AND MatterNo = [matters.number]] [SQL: UPDATE Usr_ORSF_MT_Control SET Screen_Opened_Via_Step = 'Y' WHERE EntityRef = '[matters.entityref]' AND matterNo =[matters.number]]" }
                                     ,new ChapterP4WStepAnswer {QNo = 2, GoToData= $"3 [VIEW: '{selectedChapter.SelectedView}' UPDATE=Yes]" }
                                     ,new ChapterP4WStepAnswer {QNo = 3, GoToData= $"4 [SQL: EXEC up_ORSF_GetStepsFromList '[matters.entityref]', [matters.number]] [SQL: UPDATE Usr_ORSF_MT_Control SET Screen_Opened_Via_Step = null WHERE EntityRef='[matters.entityref]' AND matterNo=[matters.number]]" }
@@ -3551,49 +3590,60 @@ namespace GadjIT_V1_02.Pages.Chapters
                                     ,new ChapterP4WStepAnswer {QNo = 8, GoToData= $"[SQL: SELECT CASE WHEN ISNULL('[!Usr_ORSF_MT_Control.Complete_AsName]','') <> '' THEN 6 ELSE 9 END]" }
                                     ,new ChapterP4WStepAnswer {QNo = 9, GoToData= $"[SQL: DELETE FROM cm_caseitems where itemid = [currentstep.stepid]]" }
                                     }
-                    };
-                }
-
-
-                
-
-                string stepJSON = JsonConvert.SerializeObject(ChapterP4WStep);
-
-                bool creationSuccess;
-
-
-
-                creationSuccess = await chapterManagementService.CreateStep(new VmChapterP4WStepSchemaJSONObject { StepSchemaJSON = stepJSON });
-
-                if (creationSuccess)
-                {
-                    dropDownChapterList = await chapterManagementService.GetDocumentList(selectedChapter.CaseType);
-                    TableDates = await chapterManagementService.GetDatabaseTableDateFields();
-
-                    selectedChapter.SelectedStep = selectedChapter.StepName;
-
-                    SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(selectedChapter);
-
-                    bool gotLock = chapterManagementService.Lock;
-                    while (gotLock)
-                    {
-                        await Task.Yield();
-                        gotLock = chapterManagementService.Lock;
-                    }
-
-                    await chapterManagementService.Update(SelectedChapterObject);
-
-
-                    //keep track of time last updated ready for comparison by other sessions checking for updates
-                    appChapterState.SetLastUpdated(sessionState, selectedChapter);
-
-                    StateHasChanged();
-                }
+                };
             }
-            else
+
+
+
+
+            string stepJSON = JsonConvert.SerializeObject(ChapterP4WStep);
+
+            bool creationSuccess;
+
+
+
+            creationSuccess = await chapterManagementService.CreateStep(new VmChapterP4WStepSchemaJSONObject { StepSchemaJSON = stepJSON });
+
+            if (creationSuccess)
             {
-                ShowErrorModal("Step Creation", "Step creation could not be completed:", Errors);
+                dropDownChapterList = await chapterManagementService.GetDocumentList(selectedChapter.CaseType);
+                TableDates = await chapterManagementService.GetDatabaseTableDateFields();
+
+                selectedChapter.SelectedStep = selectedChapter.StepName;
+
+                SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(selectedChapter);
+
+                bool gotLock = chapterManagementService.Lock;
+                while (gotLock)
+                {
+                    await Task.Yield();
+                    gotLock = chapterManagementService.Lock;
+                }
+
+                await chapterManagementService.Update(SelectedChapterObject);
+
+
+                //keep track of time last updated ready for comparison by other sessions checking for updates
+                appChapterState.SetLastUpdated(sessionState, selectedChapter);
+
+                StateHasChanged();
             }
+        }
+
+
+        private void ShowModalConfirm(string infoText, string infoHeader, Action selectedAction)
+        {
+            var parameters = new ModalParameters();
+            parameters.Add("InfoHeader", infoHeader);
+            parameters.Add("InfoText", infoText);
+            parameters.Add("ConfirmAction", selectedAction);
+
+            var options = new ModalOptions()
+            {
+                Class = "blazored-custom-modal modal-confirm"
+            };
+
+            Modal.Show<ModalConfirm>(infoHeader, parameters, options);
         }
 
         

@@ -46,6 +46,9 @@ namespace GadjIT_V1_02.Pages.Chapters
         public ICompanyDbAccess CompanyDbAccess { get; set; }
 
 
+        public int Error { get; set; } = 0;
+
+
         private async void Close()
         {
             await ModalInstance.CloseAsync();
@@ -53,31 +56,31 @@ namespace GadjIT_V1_02.Pages.Chapters
 
         }
 
-        private async void HandleValidSubmit()
+        private async void CreateSmartFlow()
         {
             if (TaskObject.Id == 0)
             {
 
-                var name = Regex.Replace(TaskObject.SmartflowName, "[^0-9a-zA-Z-_ ]+", "");
-                var caseType = Regex.Replace(TaskObject.CaseType, "[^0-9a-zA-Z-_ ]+", "");
-                var caseTypeGroup = Regex.Replace(TaskObject.CaseTypeGroup, "[^0-9a-zA-Z-_ ]+", "");
+                var name = Regex.Replace(TaskObject.SmartflowName, "[^0-9a-zA-Z-_ (){}!£$%^&*,. ]+", "");
+                var caseType = Regex.Replace(TaskObject.CaseType, "[^0-9a-zA-Z-_ (){}!£$%^&*,. ]+", "");
+                var caseTypeGroup = Regex.Replace(TaskObject.CaseTypeGroup, "[^0-9a-zA-Z-_ (){}!£$%^&*,. ]+", "");
 
                 TaskObject.SmartflowName = name;
                 TaskObject.CaseType = caseType;
                 TaskObject.CaseTypeGroup = caseTypeGroup;
                 TaskObject.SmartflowData = JsonConvert.SerializeObject(new VmChapter
-                                                                                        {
-                                                                                            CaseTypeGroup = caseTypeGroup,
-                                                                                            CaseType = caseType,
-                                                                                            Name = name,
-                                                                                            SeqNo = TaskObject.SeqNo.GetValueOrDefault(),
-                                                                                            StepName = "",
-                                                                                            ShowPartnerNotes = "N",
-                                                                                            Items = new List<GenSmartflowItem>(),
-                                                                                            Fees = new List<Fee>(),
-                                                                                            DataViews = new List<DataViews>(),
-                                                                                            TickerMessages = new List<TickerMessages>()
-                                                                                        });
+                {
+                    CaseTypeGroup = caseTypeGroup,
+                    CaseType = caseType,
+                    Name = name,
+                    SeqNo = TaskObject.SeqNo.GetValueOrDefault(),
+                    StepName = "",
+                    ShowPartnerNotes = "N",
+                    Items = new List<GenSmartflowItem>(),
+                    Fees = new List<Fee>(),
+                    DataViews = new List<DataViews>(),
+                    TickerMessages = new List<TickerMessages>()
+                });
 
 
                 var returnObject = await chapterManagementService.Add(TaskObject);
@@ -93,12 +96,37 @@ namespace GadjIT_V1_02.Pages.Chapters
             Close();
         }
 
+
+        private void HandleValidSubmit()
+        {
+            if (AllObjects
+                .Where(A => A.SmartflowObject.CaseTypeGroup == TaskObject.CaseTypeGroup)
+                .Select(A => A.SmartflowObject.SmartflowName)
+                .Contains(TaskObject.SmartflowName))
+            {
+                Error = 1;
+                StateHasChanged();
+            }
+            else
+            {
+
+                CreateSmartFlow();
+            }
+
+        }
+
         private async void HandleValidDelete()
         {
             await chapterManagementService.DeleteChapter(TaskObject.Id);
 
             DataChanged?.Invoke();
             Close();
+        }
+
+        private void ResetError()
+        {
+            Error = 0;
+            StateHasChanged();
         }
     }
 }

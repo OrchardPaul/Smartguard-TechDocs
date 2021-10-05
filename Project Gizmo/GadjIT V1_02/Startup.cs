@@ -31,6 +31,7 @@ using GadjIT_V1_02.FileManagement.FileProcessing.Implementation;
 using Microsoft.Extensions.FileProviders;
 using System.IO;
 using GadjIT_V1_02.Services.AppState;
+using GadjIT_V1_02.Pages.Accounts.CompanyAccountManagement;
 
 namespace GadjIT_V1_02
 {
@@ -85,6 +86,7 @@ namespace GadjIT_V1_02
             services.AddScoped<IPDFHelper, PDFHelper>();
             services.AddScoped<IExcelHelper, ExcelHelper>();
             services.AddScoped<IChapterFileUpload, ChapterFileUpload>();
+            services.AddScoped<JsConsole>();
 
             services.AddSingleton<IAppChapterState, AppChapterStateList>();
 
