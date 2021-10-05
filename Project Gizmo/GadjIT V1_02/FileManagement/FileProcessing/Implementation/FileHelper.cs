@@ -812,7 +812,7 @@ namespace GadjIT_V1_02.FileManagement.FileProcessing.Implementation
             {
                 foreach(var doc in chapterItem.LinkedItems)
                 {
-                    workSheetAttachments.Cells[recordIndex, 1].Value = string.IsNullOrEmpty(chapterItem.Name) ? "" : chapterItem.Name;
+                    workSheetAttachments.Cells[recordIndex, 1].Value = string.IsNullOrEmpty(chapterItem.AltDisplayName) ? (string.IsNullOrEmpty(chapterItem.Name) ? "" : chapterItem.Name) : chapterItem.AltDisplayName;
                     workSheetAttachments.Cells[recordIndex, 2].Value = string.IsNullOrEmpty(doc.DocName) ? "" : doc.DocName;
                     workSheetAttachments.Cells[recordIndex, 3].Value = string.IsNullOrEmpty(doc.DocAsName) ? "" : doc.DocAsName;
                     workSheetAttachments.Cells[recordIndex, 4].Value = string.IsNullOrEmpty(doc.Action) ? "" : doc.Action;
@@ -1034,7 +1034,7 @@ namespace GadjIT_V1_02.FileManagement.FileProcessing.Implementation
                                             ? ""
                                             : worksheetStatus.Cells[row, column].Value is null
                                             ? ""
-                                            : Regex.Replace(worksheetStatus.Cells[row, column].Value.ToString(), "[^0-9a-zA-Z-_ (){}!£$%^&*,]+", "");
+                                            : Regex.Replace(worksheetStatus.Cells[row, column].Value.ToString(), "[^0-9a-zA-Z-_ (){}!£$%^&*,.]+", "");
                         if (column == 2) readObject.SuppressStep = worksheetStatus.Cells[row, column].FirstOrDefault() is null
                                             ? ""
                                             : worksheetStatus.Cells[row, column].Value is null
@@ -1113,17 +1113,17 @@ namespace GadjIT_V1_02.FileManagement.FileProcessing.Implementation
                                             ? ""
                                             : worksheetDocuments.Cells[row, column].Value is null
                                             ? ""
-                                            : Regex.Replace(worksheetDocuments.Cells[row, column].Value.ToString(), "[^0-9a-zA-Z-_ (){}!£$%^&*,]+", "");
+                                            : Regex.Replace(worksheetDocuments.Cells[row, column].Value.ToString(), "[^0-9a-zA-Z-_ (){}!£$%^&*,.]+", "");
                         if (column == 2) readObject.AltDisplayName = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
                                             ? ""
                                             : worksheetDocuments.Cells[row, column].Value is null
                                             ? ""
-                                            : Regex.Replace(worksheetDocuments.Cells[row, column].Value.ToString(), "[^0-9a-zA-Z-_ (){}!£$%^&*,]+", "");
+                                            : Regex.Replace(worksheetDocuments.Cells[row, column].Value.ToString(), "[^0-9a-zA-Z-_ (){}!£$%^&*,.]+", "");
                         if (column == 3) readObject.AsName = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
                                             ? ""
                                             : worksheetDocuments.Cells[row, column].Value is null
                                             ? ""
-                                            : Regex.Replace(worksheetDocuments.Cells[row, column].Value.ToString(), "[^0-9a-zA-Z-_ (){}!£$%^&*,]+", "");
+                                            : Regex.Replace(worksheetDocuments.Cells[row, column].Value.ToString(), "[^0-9a-zA-Z-_ (){}!£$%^&*,.]+", "");
                         try
                         {
                             if (column == 4) readObject.RescheduleDays = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
@@ -1145,7 +1145,7 @@ namespace GadjIT_V1_02.FileManagement.FileProcessing.Implementation
                                             ? ""
                                             : worksheetDocuments.Cells[row, column].Value is null
                                             ? ""
-                                            : Regex.Replace(worksheetDocuments.Cells[row, column].Value.ToString(), "[^0-9a-zA-Z-_ (){}!£$%^&*,]+", "");
+                                            : Regex.Replace(worksheetDocuments.Cells[row, column].Value.ToString(), "[^0-9a-zA-Z-_ (){}!£$%^&*,.]+", "");
                         if (column == 7) readObject.NextStatus = worksheetDocuments.Cells[row, column].FirstOrDefault() is null 
                                             ? "" 
                                             : worksheetDocuments.Cells[row, column].Value is null
@@ -1202,7 +1202,19 @@ namespace GadjIT_V1_02.FileManagement.FileProcessing.Implementation
                                             : worksheetAttachments.Cells[row, column].Value is null
                                             ? ""
                                             : worksheetAttachments.Cells[row, column].Value.ToString();
-                            readObject = readChapters.Items.Where(C => C.Name == documentName).FirstOrDefault();
+
+                            readObject = readChapters
+                                .Items
+                                .Where(C => !string.IsNullOrEmpty(C.AltDisplayName) & C.AltDisplayName == documentName)
+                                .FirstOrDefault();
+
+                            if(readObject is null)
+                            {
+                                readObject = readChapters
+                                .Items
+                                .Where(C => C.Name == documentName)
+                                .FirstOrDefault();
+                            }
                         }
 
                         if(!(readObject is null))
@@ -1226,12 +1238,12 @@ namespace GadjIT_V1_02.FileManagement.FileProcessing.Implementation
                                             ? ""
                                             : worksheetAttachments.Cells[row, column].Value is null
                                             ? ""
-                                            : worksheetAttachments.Cells[row, column].Value.ToString().ToUpper();
+                                            : worksheetAttachments.Cells[row, column].Value.ToString();
                             if (column == 6) newAttachment.ChaserDesc = worksheetAttachments.Cells[row, column].FirstOrDefault() is null
                                             ? ""
                                             : worksheetAttachments.Cells[row, column].Value is null
                                             ? ""
-                                            : worksheetAttachments.Cells[row, column].Value.ToString().ToUpper();
+                                            : worksheetAttachments.Cells[row, column].Value.ToString();
                             try
                             {
                                 if (column == 7) newAttachment.ScheduleDays = worksheetAttachments.Cells[row, column].FirstOrDefault() is null
