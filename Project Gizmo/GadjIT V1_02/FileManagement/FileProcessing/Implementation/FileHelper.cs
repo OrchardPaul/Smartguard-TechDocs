@@ -584,13 +584,16 @@ namespace GadjIT_V1_02.FileManagement.FileProcessing.Implementation
             workSheetStatus.Cells[1, 1].Style.WrapText = true;
             workSheetStatus.Cells[1, 1].Value = "I would like the following Statuses to be available in the Smartflow:";
             workSheetStatus.Cells[1, 2].Style.WrapText = true;
-            workSheetStatus.Cells[1, 2].Value = "The Smartflow will no longer reschedule when this status has been reached.";
+            workSheetStatus.Cells[1, 2].Value = "I would like the Status to update the Matter Milestone to:";
+            workSheetStatus.Cells[1, 3].Style.WrapText = true;
+            workSheetStatus.Cells[1, 3].Value = "The Smartflow will no longer reschedule when this status has been reached.";
 
             workSheetStatus.Row(2).Height = 14;
             workSheetStatus.Row(2).Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
             workSheetStatus.Row(2).Style.Font.Bold = true;
             workSheetStatus.Cells[2, 1].Value = "Status Name";
-            workSheetStatus.Cells[2, 2].Value = "End Of Flow (Y or Blank)";
+            workSheetStatus.Cells[2, 2].Value = "Milestone";
+            workSheetStatus.Cells[2, 3].Value = "End Of Flow (Y or Blank)";
 
 
             //Body of table
@@ -598,13 +601,15 @@ namespace GadjIT_V1_02.FileManagement.FileProcessing.Implementation
             foreach (var chapterItem in selectedChapter.Items.Where(C => C.Type == "Status").OrderBy(C => C.SeqNo).ToList())
             {
                 workSheetStatus.Cells[recordIndex, 1].Value = string.IsNullOrEmpty(chapterItem.Name) ? "" : chapterItem.Name;
-                workSheetStatus.Cells[recordIndex, 2].Value = string.IsNullOrEmpty(chapterItem.SuppressStep) ? "" : chapterItem.SuppressStep;
+                workSheetStatus.Cells[recordIndex, 2].Value = string.IsNullOrEmpty(chapterItem.MilestoneStatus) ? "" : chapterItem.MilestoneStatus;
+                workSheetStatus.Cells[recordIndex, 3].Value = string.IsNullOrEmpty(chapterItem.SuppressStep) ? "" : chapterItem.SuppressStep;
 
                 recordIndex++;
             }
 
             workSheetStatus.Column(1).Width = 22;
-            workSheetStatus.Column(2).Width = 31;
+            workSheetStatus.Column(2).Width = 22;
+            workSheetStatus.Column(3).Width = 31;
 
 
             /*
@@ -1035,7 +1040,12 @@ namespace GadjIT_V1_02.FileManagement.FileProcessing.Implementation
                                             : worksheetStatus.Cells[row, column].Value is null
                                             ? ""
                                             : Regex.Replace(worksheetStatus.Cells[row, column].Value.ToString(), "[^0-9a-zA-Z-_ (){}!£$%^&*,.]+", "");
-                        if (column == 2) readObject.SuppressStep = worksheetStatus.Cells[row, column].FirstOrDefault() is null
+                        if (column == 2) readObject.MilestoneStatus = worksheetStatus.Cells[row, column].FirstOrDefault() is null
+                                            ? ""
+                                            : worksheetStatus.Cells[row, column].Value is null
+                                            ? ""
+                                            : Regex.Replace(worksheetStatus.Cells[row, column].Value.ToString(), "[^0-9a-zA-Z-_ (){}!£$%^&*,.]+", "");
+                        if (column == 3) readObject.SuppressStep = worksheetStatus.Cells[row, column].FirstOrDefault() is null
                                             ? ""
                                             : worksheetStatus.Cells[row, column].Value is null
                                             ? ""
