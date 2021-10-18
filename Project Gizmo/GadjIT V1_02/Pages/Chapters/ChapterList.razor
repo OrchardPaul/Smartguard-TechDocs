@@ -382,7 +382,7 @@ else
                         {
                             <div class="invisible-md-down btn-group">
                                 <button @onclick='(() => ShowChapterImportModel())' class="btn btn-main btn-shadow" title="Import Smartflow Details"><i class="fa fa-file-import"></i><span>Import</span></button>
-                                <button @onclick='PrepareChapterForCopy' class="btn btn-main btn-shadow" title="Copy Smartflow"><i class="fa fa-paste"></i><span>Copy</span></button>
+                                @*<button @onclick='PrepareChapterForCopy' class="btn btn-main btn-shadow" title="Copy Smartflow"><i class="fa fa-paste"></i><span>Copy</span></button>*@
                                 <button @onclick="() => PrepareHeaderForComparison()" class="btn btn-main btn-shadow" title="Sync To @(sessionState.selectedSystem == "Dev" ? "Live" : "Dev")"><i class="fa fa-sync"></i><span>Sync</span></button>
                             </div>
                         }

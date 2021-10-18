@@ -66,6 +66,8 @@ namespace GadjIT_V1_02.Pages.Chapters
         [Parameter]
         public string selectedList { get; set; }
 
+        public int Error { get; set; } = 0;
+
         public string filterText { get; set; } = "";
         
         public string filterTextDataItem { get; set; } = "";
@@ -199,62 +201,75 @@ namespace GadjIT_V1_02.Pages.Chapters
 
         private async void HandleValidSubmit()
         {
-            if(!(new string[] { "Agenda", "Status" }.Any(s => TaskObject.Type.ToString().Contains(s))))
+            if (SelectedChapter.Items.Select(I => I.Name).Contains(CopyObject.Name))
             {
-                //clears lagacy value of "Letter" and revert it back to "Doc"
-                TaskObject.Type = "Doc";
+                Error = 1;
+                StateHasChanged();
             }
             else
             {
-                
-                TaskObject.Type = CopyObject.Type;
+
+                if (!(new string[] { "Agenda", "Status" }.Any(s => TaskObject.Type.ToString().Contains(s))))
+                {
+                    //clears lagacy value of "Letter" and revert it back to "Doc"
+                    TaskObject.Type = "Doc";
+                }
+                else
+                {
+                    TaskObject.Type = CopyObject.Type;
+                }
+
+                if (TaskObject.Type == "Agenda")
+                {
+                    TaskObject.Name = CopyObject.Name;
+                }
+                else
+                {
+                    TaskObject.Name = Regex.Replace(CopyObject.Name, "[^0-9a-zA-Z-_ (){}!£$%^&*,.]+", "");
+                }
+
+
+                TaskObject.EntityType = CopyObject.EntityType;
+                TaskObject.SeqNo = CopyObject.SeqNo;
+                TaskObject.SuppressStep = CopyObject.SuppressStep;
+                TaskObject.CompleteName = CopyObject.CompleteName is null ? "" : Regex.Replace(CopyObject.CompleteName, "[^0-9a-zA-Z-_ (){}!£$%^&*,.]+", "");
+                TaskObject.AsName = CopyObject.AsName is null ? "" : Regex.Replace(CopyObject.AsName, "[^0-9a-zA-Z-_ (){}!£$%^&*,.]+", "");
+                TaskObject.RescheduleDays = CopyObject.RescheduleDays is null ? 0 : CopyObject.RescheduleDays;
+                TaskObject.AltDisplayName = CopyObject.AltDisplayName is null ? "" : Regex.Replace(CopyObject.AltDisplayName, "[^0-9a-zA-Z-_ (){}!£$%^&*,.]+", "");
+                TaskObject.UserMessage = CopyObject.UserMessage;
+                TaskObject.PopupAlert = CopyObject.PopupAlert;
+                TaskObject.NextStatus = CopyObject.NextStatus;
+                TaskObject.Action = CopyObject.Action;
+                TaskObject.TrackingMethod = CopyObject.TrackingMethod;
+                TaskObject.ChaserDesc = CopyObject.ChaserDesc;
+                TaskObject.RescheduleDataItem = CopyObject.RescheduleDataItem;
+                TaskObject.MilestoneStatus = CopyObject.MilestoneStatus;
+
+                if (Option == "Insert")
+                {
+                    SelectedChapter.Items.Add(TaskObject);
+                }
+
+                SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(SelectedChapter);
+                await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
+
+                TaskObject = new GenSmartflowItem();
+                filterText = "";
+
+                //keep track of time last updated ready for comparison by other sessions checking for updates
+                appChapterState.SetLastUpdated(sessionState, SelectedChapter);
+
+                DataChanged?.Invoke();
+                Close();
             }
 
-            if (TaskObject.Type == "Agenda")
-            {
-                TaskObject.Name = CopyObject.Name;
-            }
-            else
-            {
-                TaskObject.Name = Regex.Replace(CopyObject.Name, "[^0-9a-zA-Z-_ (){}!£$%^&*,.]+", "");
-            }
-
-            
-            TaskObject.EntityType = CopyObject.EntityType;
-            TaskObject.SeqNo = CopyObject.SeqNo;
-            TaskObject.SuppressStep = CopyObject.SuppressStep;
-            TaskObject.CompleteName = CopyObject.CompleteName is null ? "" : Regex.Replace(CopyObject.CompleteName, "[^0-9a-zA-Z-_ (){}!£$%^&*,.]+", "");
-            TaskObject.AsName = CopyObject.AsName is null ? "" : Regex.Replace(CopyObject.AsName, "[^0-9a-zA-Z-_ (){}!£$%^&*,.]+", "");
-            TaskObject.RescheduleDays = CopyObject.RescheduleDays is null ? 0 : CopyObject.RescheduleDays;
-            TaskObject.AltDisplayName = CopyObject.AltDisplayName is null ? "" : Regex.Replace(CopyObject.AltDisplayName, "[^0-9a-zA-Z-_ (){}!£$%^&*,.]+", "");
-            TaskObject.UserMessage = CopyObject.UserMessage;
-            TaskObject.PopupAlert = CopyObject.PopupAlert;
-            TaskObject.NextStatus = CopyObject.NextStatus;
-            TaskObject.Action = CopyObject.Action;
-            TaskObject.TrackingMethod = CopyObject.TrackingMethod;
-            TaskObject.ChaserDesc = CopyObject.ChaserDesc;
-            TaskObject.RescheduleDataItem = CopyObject.RescheduleDataItem;
-            TaskObject.MilestoneStatus = CopyObject.MilestoneStatus;
-
-            if (Option == "Insert")
-            {
-                SelectedChapter.Items.Add(TaskObject);
-            }
-            
-            SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(SelectedChapter);
-            await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
-
-            TaskObject = new GenSmartflowItem();
-            filterText = "";
-
-            //keep track of time last updated ready for comparison by other sessions checking for updates
-            appChapterState.SetLastUpdated(sessionState, SelectedChapter);
-
-            DataChanged?.Invoke();
-            Close();
 
         }
 
-
+                private void ResetError()
+        {
+            Error = 0;
+            StateHasChanged();
+        }
     }
 }

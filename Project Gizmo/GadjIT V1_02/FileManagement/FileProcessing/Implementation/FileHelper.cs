@@ -1017,7 +1017,11 @@ namespace GadjIT_V1_02.FileManagement.FileProcessing.Implementation
                     readObject.Type = "Agenda";
                     readObject.SeqNo = row - 2;
 
-                    readChapters.Items.Add(readObject);
+
+                    if (!string.IsNullOrEmpty(readObject.Name))
+                    {
+                        readChapters.Items.Add(readObject);
+                    }
                 }
 
                 ExcelWorksheet worksheetStatus = excelPackage.Workbook.Worksheets.Where(W => W.Name == "Status").SingleOrDefault();
@@ -1045,7 +1049,15 @@ namespace GadjIT_V1_02.FileManagement.FileProcessing.Implementation
                     readObject.Type = "Status";
                     readObject.SeqNo = row - 2;
 
-                    readChapters.Items.Add(readObject);
+                    if (!string.IsNullOrEmpty(readObject.Name))
+                    {
+                        if(readChapters.Items.Where(I => I.Name == readObject.Name).Count() == 0)
+                        {
+                            readChapters.Items.Add(readObject);
+                        }
+                    }
+
+                    
                 }
 
                 ExcelWorksheet worksheetFees = excelPackage.Workbook.Worksheets.Where(W => W.Name == "Fees").SingleOrDefault();
@@ -1178,7 +1190,11 @@ namespace GadjIT_V1_02.FileManagement.FileProcessing.Implementation
 
                     readObject.SeqNo = row - 2;
 
-                    readChapters.Items.Add(readObject);
+                    if (!string.IsNullOrEmpty(readObject.Name))
+                    {
+                        readChapters.Items.Add(readObject);
+                    }
+
                 }
 
 

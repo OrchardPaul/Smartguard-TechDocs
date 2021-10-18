@@ -4,305 +4,326 @@
     <div class="modal-body">
 
         <DataAnnotationsValidator />
-        @if (selectedList == "Steps and Documents")
+        @if (Error == 0)
         {
-            @if (dropDownChapterList is null)
+            @if (selectedList == "Steps and Documents")
             {
-                <div class="spinner"></div>
+                @if (dropDownChapterList is null)
+                {
+                    <div class="spinner"></div>
+                }
+                else
+                {
+                    <div class="form-group">
+                        <label for="DocType">P4W Case Type Group</label>
+                        <InputSelectInteger class="form-control form-control-lg"
+                                            @bind-Value="selectedCaseTypeGroup">
+                            <option value="-2">Select</option>
+                            @foreach (var group in CaseTypeGroups.Where(C => C.Name == SelectedChapter.P4WCaseTypeGroup).ToList())
+                                        {
+                                <option value="@group.Id">
+                                    @group.Name
+                                </option>
+                                        }
+                            <option value="0">Global Documents</option>
+                            @if (SelectedChapter.P4WCaseTypeGroup == "Entity Documents")
+                                        {
+                                <option value="-1">Entity Documents</option>
+                                        }
+                        </InputSelectInteger>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="DocName">Document / Step</label>
+
+                        @if (selectedCaseTypeGroup == -2 & CopyObject.Name is null)
+                        {
+                            <select class="form-control form-control-xl" disabled />
+                        }
+                        else
+                        {
+                            <div class="form-label-check" style="margin-right: 13px">
+                                @if (useCustomItem)
+                                {
+                                    <label>Custom Item</label><input type="checkbox" checked="checked" @bind-value="@useCustomItem" />
+                                }
+                                else
+                                {
+                                    <label>Custom Item</label><input type="checkbox" @bind-value="@useCustomItem" />
+                                }
+
+                            </div>
+                            @if (!useCustomItem)
+                            {
+
+
+                                <div class="form-group">
+                                    <label for="AltDisplayName">Filter</label>
+                                    <InputText class="form-control form-control-md form-control-filter" @bind-Value="@filterText" />
+                                </div>
+
+
+                                <div class="form-group control-with-button">
+                                    <div class="control-main">
+                                        <InputSelect class="form-control form-control-xl" @bind-Value="CopyObject.Name">
+                                            @if (CopyObject.Name is null)
+                                                                {
+                                                <option value="">Select</option>
+                                                                }
+                                                                else
+                                                                {
+                                                <option value="@CopyObject.Name">@CopyObject.Name</option>
+                                                                }
+
+
+                                            @foreach (var doc in dropDownChapterList.Where(D => D.CaseTypeGroupRef == selectedCaseTypeGroup).Where(C => C.Name.ToUpper().Contains(filterText.ToUpper())).OrderBy(D => D.Name).ToList())
+                                                                {
+                                                <option value="@doc.Name">
+                                                    @doc.Name
+                                                </option>
+                                                                }
+                                        </InputSelect>
+                                    </div>
+                                    <div class="control-button btn" @onclick="() => RefreshDocListOnModel()" title="Refresh List">
+                                        <i class="fa fa-sync"></i>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="AltDisplayName">Display Name</label>
+                                    <InputText class="form-control form-control-xl" @bind-Value="@CopyObject.AltDisplayName" />
+                                </div>
+                            }
+                            else
+                            {
+
+                                <InputText class="form-control form-control-xl" @bind-Value="@CopyObject.Name"></InputText>
+                            }
+                            <ValidationMessage For="@(() => CopyObject.Name)" />
+
+                        }
+
+                    </div>
+                }
+
             }
             else
             {
                 <div class="form-group">
-                    <label for="DocType">P4W Case Type Group</label>
-                    <InputSelectInteger class="form-control form-control-lg"
-                                        @bind-Value="selectedCaseTypeGroup">
-                        <option value="-2">Select</option>
-                        @foreach (var group in CaseTypeGroups.Where(C => C.Name == SelectedChapter.P4WCaseTypeGroup).ToList())
-                                {
-                            <option value="@group.Id">
-                                @group.Name
-                            </option>
-                                }
-                        <option value="0">Global Documents</option>
-                        @if (SelectedChapter.P4WCaseTypeGroup == "Entity Documents")
-                                {
-                            <option value="-1">Entity Documents</option>
-                                }
-                    </InputSelectInteger>
-                </div>
-
-                <div class="form-group">
-                    <label for="DocName">Document / Step</label>
-
-                    @if (selectedCaseTypeGroup == -2 & CopyObject.Name is null)
-                    {
-                        <select class="form-control form-control-xl" disabled />
-                    }
-                    else
-                    {
-                        <div class="form-label-check" style="margin-right: 13px">
-                            @if (useCustomItem)
-                            {
-                                <label>Custom Item</label><input type="checkbox" checked="checked" @bind-value="@useCustomItem" />
-                            }
-                            else
-                            {
-                                <label>Custom Item</label><input type="checkbox" @bind-value="@useCustomItem" />
-                            }
-
-                        </div>
-                        @if (!useCustomItem)
-                        {
-
-
-                            <div class="form-group">
-                                <label for="AltDisplayName">Filter</label>
-                                <InputText class="form-control form-control-md form-control-filter" @bind-Value="@filterText" />
-                            </div>
-
-
-                            <div class="form-group control-with-button">
-                                <div class="control-main">
-                                    <InputSelect class="form-control form-control-xl" @bind-Value="CopyObject.Name">
-                                        @if (CopyObject.Name is null)
-                                                        {
-                                            <option value="">Select</option>
-                                                        }
-                                                        else
-                                                        {
-                                            <option value="@CopyObject.Name">@CopyObject.Name</option>
-                                                        }
-
-
-                                        @foreach (var doc in dropDownChapterList.Where(D => D.CaseTypeGroupRef == selectedCaseTypeGroup).Where(C => C.Name.ToUpper().Contains(filterText.ToUpper())).OrderBy(D => D.Name).ToList())
-                                                        {
-                                            <option value="@doc.Name">
-                                                @doc.Name
-                                            </option>
-                                                        }
-                                    </InputSelect>
-                                </div>
-                                <div class="control-button btn" @onclick="() => RefreshDocListOnModel()" title="Refresh List">
-                                    <i class="fa fa-sync"></i>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="AltDisplayName">Display Name</label>
-                                <InputText class="form-control form-control-xl" @bind-Value="@CopyObject.AltDisplayName" />
-                            </div>
-                        }
-                        else
-                        {
-
-                            <InputText class="form-control form-control-xl" @bind-Value="@CopyObject.Name"></InputText>
-                        }
-                        <ValidationMessage For="@(() => CopyObject.Name)" />
-
-                    }
-
+                    <label for="Name">@CustomHeader Name</label>
+                    <InputText class="form-control" @bind-Value="@CopyObject.Name" />
                 </div>
             }
 
+
+
+            @if (selectedList == "Steps and Documents")
+            {
+
+
+                <div class="form-group">
+                    <label for="Action">Action</label>
+                    <InputSelect class="form-control form-control-sm"
+                                 @bind-Value="CopyObject.Action">
+                        <option value=""></option>
+                        @foreach (var a in Actions)
+                                {
+                            <option value="@a">
+                                @a
+                            </option>
+                                }
+                    </InputSelect>
+                    <ValidationMessage For="@(() => CopyObject.Action)" />
+                </div>
+
+
+                <div class="form-group">
+                    <label for="AsName">Schedule As Name</label>
+                    <InputText class="form-control form-control-xl" @bind-Value="@CopyObject.AsName" />
+                </div>
+
+                <div class="form-group">
+                    <label for="RescheduleDays">Reschedule Days</label>
+
+                    <div class="form-label-check" style="margin-right: 13px">
+                        @if (useCustomReschedule)
+                        {
+
+                            <label>From Data Item</label>
+                            <input type="checkbox" checked="checked" @bind-value="@useCustomReschedule" />
+
+                        }
+                        else
+                        {
+                            <label>From Data Item</label>
+                            <input type="checkbox" @bind-value="@useCustomReschedule" />
+                        }
+
+                    </div>
+                    <InputNumber class="form-control form-control-xs" @bind-Value="RescheduleDays" />
+                </div>
+
+                @if (useCustomReschedule)
+                {
+                    <div class="form-group">
+                        <label>Reschedule From Data Item</label><br>
+                        <label>Filter</label>
+                        <InputText class="form-control form-control-md form-control-filter" @bind-Value="@filterTextDataItem" />
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <InputSelect class="form-control form-control-xl"
+                                     @bind-Value="CopyObject.RescheduleDataItem">
+                            <option value=""></option>
+                            @foreach (var a in TableDates.Where(F => F.TableField.ToUpper().Contains(filterTextDataItem.ToUpper())))
+                                        {
+                                <option value="@a.TableField">
+                                    @a.TableField
+                                </option>
+                                        }
+                        </InputSelect>
+                        <ValidationMessage For="@(() => CopyObject.RescheduleDataItem)" />
+                    </div>
+                }
+
+
+                <div class="form-group">
+                    <label for="CompleteName">Complete As Name</label>
+                    <InputText class="form-control form-control-xl" @bind-Value="@CopyObject.CompleteName" />
+                </div>
+
+
+
+                <div class="form-group">
+                    <label for="NextStatus">Next Status</label>
+                    <InputSelect class="form-control form-control-sm"
+                                 @bind-Value="CopyObject.NextStatus">
+                        <option value=""></option>
+                        @foreach (var s in ListOfStatus)
+                                {
+                            <option value="@s.ChapterObject.Name">
+                                @s.ChapterObject.Name
+                            </option>
+                                }
+                    </InputSelect>
+                    <ValidationMessage For="@(() => CopyObject.Type)" />
+                </div>
+
+
+
+
+                <div class="form-group">
+                    <label for="UserMessage">User Message</label>
+                    <InputTextArea class="form-control form-control-xl" @bind-Value="@CopyObject.UserMessage" />
+                </div>
+
+                <div class="form-group">
+                    <label for="PopupAlert">Pop Up Message(Alert)</label>
+                    <InputTextArea class="form-control form-control-xl" @bind-Value="@CopyObject.PopupAlert" />
+                </div>
+
+                @if (SelectedChapter.ShowDocumentTracking == "Y")
+                {
+                    <div class="form-group">
+                        <label for="TrackMethod">Tracking Method</label>
+                        <InputSelect class="form-control form-control-md"
+                                     @bind-Value="CopyObject.TrackingMethod">
+                            <option value=""></option>
+                            @foreach (var s in TrackMethodList)
+                                        {
+                                <option value="@s">
+                                    @s
+                                </option>
+                                        }
+                        </InputSelect>
+                        <ValidationMessage For="@(() => CopyObject.TrackingMethod)" />
+                    </div>
+                    @if (CopyObject.TrackingMethod == "Response Required")
+                    {
+                        <div class="form-group">
+                            <label for="ChaserDesc">Chaser Description</label>
+                            <InputText class="form-control form-control-xl" @bind-Value="@CopyObject.ChaserDesc" />
+                        </div>
+                    }
+                }
+
+            }
+            else if (selectedList == "Status")
+            {
+                <div class="form-group">
+                    <label>Select Milestone</label>
+                    <div class="form-label-check" style="margin-right: 13px">
+                        @if (useCustomMilestone)
+                        {
+                            <label>Custom Milestone</label><input type="checkbox" checked="checked" @bind-value="@useCustomMilestone" />
+                        }
+                        else
+                        {
+                            <label>Custom Milestone</label><input type="checkbox" @bind-value="@useCustomMilestone" />
+                        }
+
+                    </div>
+                    <div class="form-group">
+                        @if (useCustomMilestone)
+                        {
+                            <InputText class="form-control" @bind-Value="@CopyObject.MilestoneStatus" />
+
+                        }
+                        else
+                        {
+                            <InputSelect class="form-control"
+                                         @bind-Value="CopyObject.MilestoneStatus">
+                                <option value=""></option>
+                                @foreach (var s in ListOfStatus
+                                 .Where(S => !string.IsNullOrEmpty(S.ChapterObject.MilestoneStatus))
+                                 .Where(S => !ListOfStatus.Select(L => L.ChapterObject.Name).Contains(S.ChapterObject.MilestoneStatus))
+                                 .GroupBy(S => S.ChapterObject.MilestoneStatus.ToLower())
+                                 .Select(S => S.First())
+                                 .ToList()
+                                 )
+                                            {
+                                    <option value="@s.ChapterObject.MilestoneStatus">
+                                        @s.ChapterObject.MilestoneStatus
+                                    </option>
+                                            }
+                                @foreach (var s in ListOfStatus)
+                                            {
+                                    <option value="@s.ChapterObject.Name">
+                                        @s.ChapterObject.Name
+                                    </option>
+                                            }
+                            </InputSelect>
+                        }
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="Suppress">Suppress Step</label>
+                    <InputCheckbox class="form-control" @bind-Value="suppressStep" />
+                </div>
+            }
         }
         else
         {
             <div class="form-group">
-                <label for="Name">@CustomHeader Name</label>
-                <InputText class="form-control" @bind-Value="@CopyObject.Name" />
+                <label>A Status already exists with the name: @CopyObject.Name</label>
             </div>
         }
 
 
 
-        @if (selectedList == "Steps and Documents")
-        {
-
-
-            <div class="form-group">
-                <label for="Action">Action</label>
-                <InputSelect class="form-control form-control-sm"
-                             @bind-Value="CopyObject.Action">
-                    <option value=""></option>
-                    @foreach (var a in Actions)
-                        {
-                        <option value="@a">
-                            @a
-                        </option>
-                        }
-                </InputSelect>
-                <ValidationMessage For="@(() => CopyObject.Action)" />
-            </div>
-
-
-            <div class="form-group">
-                <label for="AsName">Schedule As Name</label>
-                <InputText class="form-control form-control-xl" @bind-Value="@CopyObject.AsName" />
-            </div>
-
-            <div class="form-group">
-                <label for="RescheduleDays">Reschedule Days</label>
-
-                <div class="form-label-check" style="margin-right: 13px">
-                    @if (useCustomReschedule)
-                    {
-
-                        <label>From Data Item</label>
-                        <input type="checkbox" checked="checked" @bind-value="@useCustomReschedule" />
-
-                    }
-                    else
-                    {
-                        <label>From Data Item</label>
-                        <input type="checkbox" @bind-value="@useCustomReschedule" />
-                    }
-
-                </div>
-                <InputNumber class="form-control form-control-xs" @bind-Value="RescheduleDays" />
-            </div>
-
-            @if (useCustomReschedule)
-            {
-                <div class="form-group">
-                    <label>Reschedule From Data Item</label><br>
-                    <label>Filter</label>
-                    <InputText class="form-control form-control-md form-control-filter" @bind-Value="@filterTextDataItem" />
-                </div>
-
-                <div class="form-group mb-3">
-                    <InputSelect class="form-control form-control-xl"
-                                 @bind-Value="CopyObject.RescheduleDataItem">
-                        <option value=""></option>
-                        @foreach (var a in TableDates.Where(F => F.TableField.ToUpper().Contains(filterTextDataItem.ToUpper())))
-                                {
-                            <option value="@a.TableField">
-                                @a.TableField
-                            </option>
-                                }
-                    </InputSelect>
-                    <ValidationMessage For="@(() => CopyObject.RescheduleDataItem)" />
-                </div>
-            }
-
-
-            <div class="form-group">
-                <label for="CompleteName">Complete As Name</label>
-                <InputText class="form-control form-control-xl" @bind-Value="@CopyObject.CompleteName" />
-            </div>
-
-
-
-            <div class="form-group">
-                <label for="NextStatus">Next Status</label>
-                <InputSelect class="form-control form-control-sm"
-                             @bind-Value="CopyObject.NextStatus">
-                    <option value=""></option>
-                    @foreach (var s in ListOfStatus)
-                        {
-                        <option value="@s.ChapterObject.Name">
-                            @s.ChapterObject.Name
-                        </option>
-                        }
-                </InputSelect>
-                <ValidationMessage For="@(() => CopyObject.Type)" />
-            </div>
-
-
-
-
-            <div class="form-group">
-                <label for="UserMessage">User Message</label>
-                <InputTextArea class="form-control form-control-xl" @bind-Value="@CopyObject.UserMessage" />
-            </div>
-
-            <div class="form-group">
-                <label for="PopupAlert">Pop Up Message(Alert)</label>
-                <InputTextArea class="form-control form-control-xl" @bind-Value="@CopyObject.PopupAlert" />
-            </div>
-
-            @if (SelectedChapter.ShowDocumentTracking == "Y")
-            {
-                <div class="form-group">
-                    <label for="TrackMethod">Tracking Method</label>
-                    <InputSelect class="form-control form-control-md"
-                                 @bind-Value="CopyObject.TrackingMethod">
-                        <option value=""></option>
-                        @foreach (var s in TrackMethodList)
-                                {
-                            <option value="@s">
-                                @s
-                            </option>
-                                }
-                    </InputSelect>
-                    <ValidationMessage For="@(() => CopyObject.TrackingMethod)" />
-                </div>
-                @if (CopyObject.TrackingMethod == "Response Required")
-                {
-                    <div class="form-group">
-                        <label for="ChaserDesc">Chaser Description</label>
-                        <InputText class="form-control form-control-xl" @bind-Value="@CopyObject.ChaserDesc" />
-                    </div>
-                }
-            }
-
-        }
-        else if (selectedList == "Status")
-        {
-            <div class="form-group">
-                <label>Select Milestone</label>
-                <div class="form-label-check" style="margin-right: 13px">
-                    @if (useCustomMilestone)
-                    {
-                        <label>Custom Milestone</label><input type="checkbox" checked="checked" @bind-value="@useCustomMilestone" />
-                    }
-                    else
-                    {
-                        <label>Custom Milestone</label><input type="checkbox" @bind-value="@useCustomMilestone" />
-                    }
-
-                </div>
-                <div class="form-group">
-                    @if (useCustomMilestone)
-                    {
-                        <InputText class="form-control" @bind-Value="@CopyObject.MilestoneStatus" />
-
-                    }
-                    else
-                    {
-                <InputSelect class="form-control"
-                             @bind-Value="CopyObject.MilestoneStatus">
-                    <option value=""></option>
-                    @foreach (var s in ListOfStatus
-                        .Where(S => !string.IsNullOrEmpty(S.ChapterObject.MilestoneStatus))
-                        .Where(S => !ListOfStatus.Select(L => L.ChapterObject.Name).Contains(S.ChapterObject.MilestoneStatus))
-                        .GroupBy(S => S.ChapterObject.MilestoneStatus.ToLower())
-                        .Select(S => S.First())
-                        .ToList()
-                        )
-                            {
-                        <option value="@s.ChapterObject.MilestoneStatus">
-                            @s.ChapterObject.MilestoneStatus
-                        </option>
-                            }
-                    @foreach (var s in ListOfStatus)
-                            {
-                        <option value="@s.ChapterObject.Name">
-                            @s.ChapterObject.Name
-                        </option>
-                            }
-                </InputSelect>
-                    }
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="Suppress">Suppress Step</label>
-                <InputCheckbox class="form-control" @bind-Value="suppressStep" />
-            </div>
-        }
     </div>
 
-                <div class="button-container">
-                    <button type="submit" class="btn btn-main">Save</button>
-                    <button type="button" class="btn btn-secondary" @onclick="Close">Cancel</button>
-                </div>
+    <div class="button-container">
+        @if (Error == 0)
+        {
+            <button type="submit" class="btn btn-main">Save</button>
+            <button type="button" class="btn btn-secondary" @onclick="Close">Cancel</button>
+        }
+        else
+        {
+            <button type="button" class="btn btn-main" @onclick="ResetError">Return</button>
+            <button type="button" class="btn btn-secondary" @onclick="Close">Cancel</button>
+        }
+
+    </div>
 </EditForm>
