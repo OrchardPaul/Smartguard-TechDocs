@@ -55,7 +55,7 @@ namespace GadjIT_V1_02.Pages.Chapters
             await ModalInstance.CloseAsync();
         }
 
-        private async void HandleValidSubmit()
+        private async Task HandleValidSubmit()
         {
             if (isCaseTypeOrGroup == "CaseType")
             {

@@ -24,7 +24,7 @@ namespace GadjIT_V1_02.Pages.Chapters
         [Parameter]
         public VmFee Object { get; set; }
 
-        private async void Close()
+        private async Task Close()
         {
             await ModalInstance.CloseAsync();
         }

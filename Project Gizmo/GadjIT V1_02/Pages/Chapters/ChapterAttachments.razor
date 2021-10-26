@@ -163,7 +163,11 @@
                     <InputSelect class="form-control form-control-xl"
                                  @bind-Value="Attachment.ScheduleDataItem">
                         <option value=""></option>
-                        @foreach (var a in TableDates.Where(F => F.TableField.ToUpper().Contains(filterTextDataItem.ToUpper())))
+                        @foreach (var a in TableDates
+                            .Where(T => (T.TableType == 1 && SelectedChapter.P4WCaseTypeGroup != "Entity Documents")
+                                        ||
+                                        (T.TableType == 0 && SelectedChapter.P4WCaseTypeGroup == "Entity Documents"))
+                            .Where(F => F.TableField.ToUpper().Contains(filterTextDataItem.ToUpper())))
                                 {
                             <option value="@a.TableField">
                                 @a.TableField

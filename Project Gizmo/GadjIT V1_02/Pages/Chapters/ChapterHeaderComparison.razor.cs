@@ -81,7 +81,7 @@ namespace GadjIT_V1_02.Pages.Chapters
         }
 
         
-        private async void HandleValidSubmit(bool TakeAlternate)
+        private async Task HandleValidSubmit(bool TakeAlternate)
         {
             VmChapter toObject; //= new VmChapter();
             VmChapter fromObject; // = new VmChapter();
@@ -150,7 +150,7 @@ namespace GadjIT_V1_02.Pages.Chapters
         
 
 
-        private async void AddObject()
+        private async Task AddObject()
         {
             bool gotLock = sessionState.Lock;
             while (gotLock)

@@ -187,13 +187,13 @@ namespace GadjIT_V1_02.Pages.Accounts.CompanyAccountManagement
             Modal.Show<CompanyAccountsDetail>("Account Detail", parameters, options);
         }
 
-        public async void ExportToPdf()
+        public async Task ExportToPdf()
         {
             var data = PDFHelper.GenerateReport(CompanyAccountObjects);
             await FileHelper.DownloadFile("Accounts.pdf", data);
         }
 
-        public async void Bill()
+        public async Task Bill()
         {
             var selectedAccountObject = CompanyAccountObjects
                                                         .Where(A => A.AccountObject.Id == SelectedCompanyAccount.Id)

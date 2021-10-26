@@ -60,7 +60,7 @@ namespace GadjIT_V1_02.Pages.Chapters
             await ModalInstance.CloseAsync();
         }
 
-        private async void HandleValidSubmit(bool TakeAlternate)
+        private async Task HandleValidSubmit(bool TakeAlternate)
         {
             if (TakeAlternate)
             {
@@ -96,7 +96,7 @@ namespace GadjIT_V1_02.Pages.Chapters
         }
 
 
-        private async void AddObject(bool TakeAlternate)
+        private async Task AddObject(bool TakeAlternate)
         {
             if (TakeAlternate)
             {

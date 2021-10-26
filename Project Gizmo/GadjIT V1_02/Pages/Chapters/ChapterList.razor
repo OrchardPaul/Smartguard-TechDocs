@@ -696,7 +696,22 @@ else
                                                                     {
                                                                         foreach (var attach in doc.ChapterObject.LinkedItems)
                                                                         {
-                                                                            <li class="font-85" @onclick='(() => PrepareAttachmentForEdit(doc, attach))'>@(string.IsNullOrEmpty(attach.DocAsName) ? attach.DocName : attach.DocAsName)</li>
+                                                                    <li class="font-85" @onclick='(() => PrepareAttachmentForEdit(doc, attach))'>
+                                                                        <span class="font-85" title="@attach.Action">
+                                                                            <span class="@(attach.Action == "TAKE" ? "" : "invisible")"><span class="fa fa-running mr-2"></span></span>
+                                                                            <span class="@(attach.Action == "INSERT" ? "" : "invisible")"><span class="fa fa-arrow-down mr-2"></span></span>
+                                                                            <span class="@(attach.Action == "SCHEDULE" ? "" : "invisible")"><span class="fa fa-calendar-check mr-2"></span></span>
+                                                                        </span>
+                                                                        <span class="font-85">
+                                                                            <span class="@(attach.DocType == "Doc" ? "" : "invisible")"><span class="fa fa-file mr-2"></span></span>
+                                                                            <span class="@(attach.DocType == "Form" ? "" : "invisible")"><span class=" fa fa-file-pdf mr-2"></span></span>
+                                                                            <span class="@(attach.DocType == "Email" ? "" : "invisible")"><span class="fa fa-envelope mr-2"></span></span>
+                                                                            <span class="@(attach.DocType == "Step" ? "" : "invisible")"><span class=" fa fa-list-ol mr-2"></span></span>
+                                                                            <span class="@(attach.DocType == "Date" ? "" : "invisible")"><span class="fa fa-calendar mr-2"></span></span>
+                                                                            <span class="@(string.IsNullOrEmpty(attach.DocType) ? "" : "invisible")"><span class="fa fa-minus mr-2"></span></span>
+                                                                        </span>
+                                                                        @(string.IsNullOrEmpty(attach.DocAsName) ? attach.DocName : attach.DocAsName)
+                                                                    </li>
                                                                         }
                                                                         <li class="ellipsis-menu-divider"></li>
                                                                     }
@@ -750,18 +765,42 @@ else
                                                             <span class="fa fa-binoculars mr-2"></span>
                                                             <span>View</span>
                                                         </li>
+                                                        <li class="col-main">
+                                                            <span class="fa fa-paperclip mr-2"></span>
+                                                            <span>Linked Items</span>
+                                                            <div class="menu-toggle">
+                                                                <span class="fa fa-chevron-right"></span>
+                                                                <ul style="width: 300px">
+                                                                    @if (!(doc.ChapterObject.LinkedItems is null) && doc.ChapterObject.LinkedItems.Count > 0)
+                                                                    {
+                                                                        foreach (var attach in doc.ChapterObject.LinkedItems)
+                                                                        {
+                                                                            <li class="font-85" @onclick='(() => PrepareAttachmentForView(doc, attach))'>
+                                                                                @(string.IsNullOrEmpty(attach.DocAsName) ? attach.DocName : attach.DocAsName)
+                                                                            </li>
+                                                                        }
+                                                                    }
+                                                                </ul>
+                                                            </div>
+                                                        </li>
                                                     </ul>
                                                 </div>
                                             </div>
                                         }
 
                                         <div class="data-item-sub " title="@doc.DocDisplayName">
+                                            
+                                            <span class="font-100" title="@doc.ChapterObject.Action">
+                                                <span class="@(doc.ChapterObject.Action == "TAKE" ? "" : "invisible")"><span class="fa fa-running mr-2"></span></span>
+                                                <span class="@(doc.ChapterObject.Action == "INSERT" ? "" : "invisible")"><span class="fa fa-arrow-down mr-2"></span></span>
+                                            </span>
                                             <span class="font-100">
                                                 <span class="@(doc.DocType == "Doc" ? "" : "invisible")"><span class="fa fa-file mr-2"></span></span>
                                                 <span class="@(doc.DocType == "Form" ? "" : "invisible")"><span class=" fa fa-file-pdf mr-2"></span></span>
                                                 <span class="@(doc.DocType == "Email" ? "" : "invisible")"><span class="fa fa-envelope mr-2"></span></span>
                                                 <span class="@(doc.DocType == "Step" ? "" : "invisible")"><span class=" fa fa-list-ol mr-2"></span></span>
                                                 <span class="@(doc.DocType == "Date" ? "" : "invisible")"><span class="fa fa-calendar mr-2"></span></span>
+                                                <span class="@(string.IsNullOrEmpty(doc.DocType) ? "" : "invisible")"><span class="fa fa-minus mr-2"></span></span>
                                             </span>
                                             @doc.DocDisplayName
                                         </div>

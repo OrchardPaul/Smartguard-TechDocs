@@ -108,7 +108,7 @@ namespace GadjIT_V1_02.Pages.Chapters
 
         }
 
-        private async void HandleValidSubmit()
+        private async Task HandleValidSubmit()
         {
             TaskObject.FeeName = CopyObject.FeeName;
             TaskObject.FeeCategory = CopyObject.FeeCategory;

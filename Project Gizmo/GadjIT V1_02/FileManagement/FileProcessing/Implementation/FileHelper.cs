@@ -88,7 +88,7 @@ namespace GadjIT_V1_02.FileManagement.FileProcessing.Implementation
 
                 return true;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Console.WriteLine(e.Message);
                 return false;
@@ -152,12 +152,18 @@ namespace GadjIT_V1_02.FileManagement.FileProcessing.Implementation
             {
                 fileList.AddRange(Directory
                     .GetFiles(CustomPath)
-                    .Select(F => new FileDesc 
-                    { FileName = Path.GetFileName(F)
-                    , FilePath = Path.GetFullPath(F)
-                    , FileURL = '/' + CustomPath + '/' + Path.GetFileName(F)
-                    , FileDirectory = Path.GetDirectoryName(F)
-                    , FileDate = File.GetCreationTime(F)}).ToList());
+                    .Select(F => new FileDesc
+                    {
+                        FileName = Path.GetFileName(F)
+                    ,
+                        FilePath = Path.GetFullPath(F)
+                    ,
+                        FileURL = '/' + CustomPath + '/' + Path.GetFileName(F)
+                    ,
+                        FileDirectory = Path.GetDirectoryName(F)
+                    ,
+                        FileDate = File.GetCreationTime(F)
+                    }).ToList());
 
                 return fileList;
             }
@@ -216,7 +222,7 @@ namespace GadjIT_V1_02.FileManagement.FileProcessing.Implementation
                 }
                 catch
                 {
-                   
+
                     return returnBytes;
                 }
             }
@@ -340,7 +346,7 @@ namespace GadjIT_V1_02.FileManagement.FileProcessing.Implementation
 
 
 
-        public void Write(List<string> output,string fileName)
+        public void Write(List<string> output, string fileName)
         {
             // Write the string array to a new file named "WriteLines.txt".
             try
@@ -434,7 +440,7 @@ namespace GadjIT_V1_02.FileManagement.FileProcessing.Implementation
                     try
                     {
                         ExcelWorksheet worksheetDocuments = excelPackage.Workbook.Worksheets.Where(W => W.Name == "Documents").FirstOrDefault();
-                        if(worksheetDocuments is null)
+                        if (worksheetDocuments is null)
                         {
                             isExcelValid.Add("Missing Documents Worksheet");
                         }
@@ -489,7 +495,7 @@ namespace GadjIT_V1_02.FileManagement.FileProcessing.Implementation
 
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             ExcelPackage excel = new ExcelPackage();
-            
+
             var workSheetHeader = excel.Workbook.Worksheets.Add("Overview");
             workSheetHeader.TabColor = System.Drawing.Color.RoyalBlue;
             workSheetHeader.DefaultRowHeight = 12;
@@ -552,7 +558,7 @@ namespace GadjIT_V1_02.FileManagement.FileProcessing.Implementation
             workSheetAgenda.Row(2).Style.Font.Bold = true;
             workSheetAgenda.Cells[2, 1].Value = "Agenda Name";
 
-            
+
             //Body of table
             int recordIndex = 3;
             foreach (var chapterItem in selectedChapter.Items.Where(C => C.Type == "Agenda").OrderBy(C => C.SeqNo).ToList())
@@ -584,13 +590,16 @@ namespace GadjIT_V1_02.FileManagement.FileProcessing.Implementation
             workSheetStatus.Cells[1, 1].Style.WrapText = true;
             workSheetStatus.Cells[1, 1].Value = "I would like the following Statuses to be available in the Smartflow:";
             workSheetStatus.Cells[1, 2].Style.WrapText = true;
-            workSheetStatus.Cells[1, 2].Value = "The Smartflow will no longer reschedule when this status has been reached.";
+            workSheetStatus.Cells[1, 2].Value = "I would like the Status to update the Matter Milestone to:";
+            workSheetStatus.Cells[1, 3].Style.WrapText = true;
+            workSheetStatus.Cells[1, 3].Value = "The Smartflow will no longer reschedule when this status has been reached.";
 
             workSheetStatus.Row(2).Height = 14;
             workSheetStatus.Row(2).Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
             workSheetStatus.Row(2).Style.Font.Bold = true;
             workSheetStatus.Cells[2, 1].Value = "Status Name";
-            workSheetStatus.Cells[2, 2].Value = "End Of Flow (Y or Blank)";
+            workSheetStatus.Cells[2, 2].Value = "Milestone";
+            workSheetStatus.Cells[2, 3].Value = "End Of Flow (Y or Blank)";
 
 
             //Body of table
@@ -598,13 +607,15 @@ namespace GadjIT_V1_02.FileManagement.FileProcessing.Implementation
             foreach (var chapterItem in selectedChapter.Items.Where(C => C.Type == "Status").OrderBy(C => C.SeqNo).ToList())
             {
                 workSheetStatus.Cells[recordIndex, 1].Value = string.IsNullOrEmpty(chapterItem.Name) ? "" : chapterItem.Name;
-                workSheetStatus.Cells[recordIndex, 2].Value = string.IsNullOrEmpty(chapterItem.SuppressStep) ? "" : chapterItem.SuppressStep;
+                workSheetStatus.Cells[recordIndex, 2].Value = string.IsNullOrEmpty(chapterItem.MilestoneStatus) ? "" : chapterItem.MilestoneStatus;
+                workSheetStatus.Cells[recordIndex, 3].Value = string.IsNullOrEmpty(chapterItem.SuppressStep) ? "" : chapterItem.SuppressStep;
 
                 recordIndex++;
             }
 
             workSheetStatus.Column(1).Width = 22;
-            workSheetStatus.Column(2).Width = 31;
+            workSheetStatus.Column(2).Width = 22;
+            workSheetStatus.Column(3).Width = 31;
 
 
             /*
@@ -810,7 +821,7 @@ namespace GadjIT_V1_02.FileManagement.FileProcessing.Implementation
                                             .OrderBy(C => C.SeqNo)
                                             .ToList())
             {
-                foreach(var doc in chapterItem.LinkedItems)
+                foreach (var doc in chapterItem.LinkedItems)
                 {
                     workSheetAttachments.Cells[recordIndex, 1].Value = string.IsNullOrEmpty(chapterItem.AltDisplayName) ? (string.IsNullOrEmpty(chapterItem.Name) ? "" : chapterItem.Name) : chapterItem.AltDisplayName;
                     workSheetAttachments.Cells[recordIndex, 2].Value = string.IsNullOrEmpty(doc.DocName) ? "" : doc.DocName;
@@ -965,7 +976,7 @@ namespace GadjIT_V1_02.FileManagement.FileProcessing.Implementation
 
         public VmChapter ReadChapterDataFromExcel(string FilePath)
         {
-            VmChapter readChapters = new VmChapter { Items = new List<GenSmartflowItem>(), Fees = new List<Fee>(), DataViews = new List<DataViews>()};
+            VmChapter readChapters = new VmChapter { Items = new List<GenSmartflowItem>(), Fees = new List<Fee>(), DataViews = new List<DataViews>() };
             GenSmartflowItem readObject;
             Fee feeObject;
             DataViews readView;
@@ -1038,8 +1049,13 @@ namespace GadjIT_V1_02.FileManagement.FileProcessing.Implementation
                                             ? ""
                                             : worksheetStatus.Cells[row, column].Value is null
                                             ? ""
-                                            : Regex.Replace(worksheetStatus.Cells[row, column].Value.ToString(), "[^0-9a-zA-Z-_ (){}!£$%^&*,.]+", "");
-                        if (column == 2) readObject.SuppressStep = worksheetStatus.Cells[row, column].FirstOrDefault() is null
+                                            : Regex.Replace(worksheetStatus.Cells[row, column].Value.ToString(), "[^0-9a-zA-Z-_ (){}!£$%^&*,./#?@<>`:]+", "");
+                        if (column == 2) readObject.MilestoneStatus = worksheetStatus.Cells[row, column].FirstOrDefault() is null
+                                            ? ""
+                                            : worksheetStatus.Cells[row, column].Value is null
+                                            ? ""
+                                            : Regex.Replace(worksheetStatus.Cells[row, column].Value.ToString(), "[^0-9a-zA-Z-_ (){}!£$%^&*,./#?@<>`:]+", "");
+                        if (column == 3) readObject.SuppressStep = worksheetStatus.Cells[row, column].FirstOrDefault() is null
                                             ? ""
                                             : worksheetStatus.Cells[row, column].Value is null
                                             ? ""
@@ -1051,13 +1067,13 @@ namespace GadjIT_V1_02.FileManagement.FileProcessing.Implementation
 
                     if (!string.IsNullOrEmpty(readObject.Name))
                     {
-                        if(readChapters.Items.Where(I => I.Name == readObject.Name).Count() == 0)
+                        if (readChapters.Items.Where(I => I.Name == readObject.Name).Count() == 0)
                         {
                             readChapters.Items.Add(readObject);
                         }
                     }
 
-                    
+
                 }
 
                 ExcelWorksheet worksheetFees = excelPackage.Workbook.Worksheets.Where(W => W.Name == "Fees").SingleOrDefault();
@@ -1082,8 +1098,8 @@ namespace GadjIT_V1_02.FileManagement.FileProcessing.Implementation
                                             : worksheetFees.Cells[row, column].Value.ToString();
                         try
                         {
-                            if (column == 3) feeObject.Amount = worksheetFees.Cells[row, column].FirstOrDefault() is null 
-                                                                        ? 0 
+                            if (column == 3) feeObject.Amount = worksheetFees.Cells[row, column].FirstOrDefault() is null
+                                                                        ? 0
                                                                         : worksheetFees.Cells[row, column].Value is null
                                                                         ? 0
                                                                         : Convert.ToDecimal(worksheetFees.Cells[row, column].Value.ToString());
@@ -1120,22 +1136,22 @@ namespace GadjIT_V1_02.FileManagement.FileProcessing.Implementation
 
                     for (int column = 1; column <= totalColumns; column++)
                     {
-                        
+
                         if (column == 1) readObject.Name = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
                                             ? ""
                                             : worksheetDocuments.Cells[row, column].Value is null
                                             ? ""
-                                            : Regex.Replace(worksheetDocuments.Cells[row, column].Value.ToString(), "[^0-9a-zA-Z-_ (){}!£$%^&*,.]+", "");
+                                            : Regex.Replace(worksheetDocuments.Cells[row, column].Value.ToString(), "[^0-9a-zA-Z-_ (){}!£$%^&*,./#?@<>`:]+", "");
                         if (column == 2) readObject.AltDisplayName = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
                                             ? ""
                                             : worksheetDocuments.Cells[row, column].Value is null
                                             ? ""
-                                            : Regex.Replace(worksheetDocuments.Cells[row, column].Value.ToString(), "[^0-9a-zA-Z-_ (){}!£$%^&*,.]+", "");
+                                            : Regex.Replace(worksheetDocuments.Cells[row, column].Value.ToString(), "[^0-9a-zA-Z-_ (){}!£$%^&*,./#?@<>`:]+", "");
                         if (column == 3) readObject.AsName = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
                                             ? ""
                                             : worksheetDocuments.Cells[row, column].Value is null
                                             ? ""
-                                            : Regex.Replace(worksheetDocuments.Cells[row, column].Value.ToString(), "[^0-9a-zA-Z-_ (){}!£$%^&*,.]+", "");
+                                            : Regex.Replace(worksheetDocuments.Cells[row, column].Value.ToString(), "[^0-9a-zA-Z-_ (){}!£$%^&*,./#?@<>`:]+", "");
                         try
                         {
                             if (column == 4) readObject.RescheduleDays = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
@@ -1152,14 +1168,14 @@ namespace GadjIT_V1_02.FileManagement.FileProcessing.Implementation
                                             ? ""
                                             : worksheetDocuments.Cells[row, column].Value is null
                                             ? ""
-                                            : Regex.Replace(worksheetDocuments.Cells[row, column].Value.ToString(), "[^0-9a-zA-Z-_ (){}!£$%^&*,.]+", "");
+                                            : Regex.Replace(worksheetDocuments.Cells[row, column].Value.ToString(), "[^0-9a-zA-Z-_ (){}!£$%^&*,./#?@<>`:]+", "");
                         if (column == 6) readObject.CompleteName = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
                                             ? ""
                                             : worksheetDocuments.Cells[row, column].Value is null
                                             ? ""
-                                            : Regex.Replace(worksheetDocuments.Cells[row, column].Value.ToString(), "[^0-9a-zA-Z-_ (){}!£$%^&*,.]+", "");
-                        if (column == 7) readObject.NextStatus = worksheetDocuments.Cells[row, column].FirstOrDefault() is null 
-                                            ? "" 
+                                            : Regex.Replace(worksheetDocuments.Cells[row, column].Value.ToString(), "[^0-9a-zA-Z-_ (){}!£$%^&*,./#?@<>`:]+", "");
+                        if (column == 7) readObject.NextStatus = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
+                                            ? ""
                                             : worksheetDocuments.Cells[row, column].Value is null
                                             ? ""
                                             : worksheetDocuments.Cells[row, column].Value.ToString();
@@ -1185,7 +1201,7 @@ namespace GadjIT_V1_02.FileManagement.FileProcessing.Implementation
                                             : worksheetDocuments.Cells[row, column].Value.ToString();
                     }
 
-                    
+
                     readObject.Type = "Doc";
 
                     readObject.SeqNo = row - 2;
@@ -1224,7 +1240,7 @@ namespace GadjIT_V1_02.FileManagement.FileProcessing.Implementation
                                 .Where(C => !string.IsNullOrEmpty(C.AltDisplayName) & C.AltDisplayName == documentName)
                                 .FirstOrDefault();
 
-                            if(readObject is null)
+                            if (readObject is null)
                             {
                                 readObject = readChapters
                                 .Items
@@ -1233,7 +1249,7 @@ namespace GadjIT_V1_02.FileManagement.FileProcessing.Implementation
                             }
                         }
 
-                        if(!(readObject is null))
+                        if (!(readObject is null))
                         {
                             if (column == 2) newAttachment.DocName = worksheetAttachments.Cells[row, column].FirstOrDefault() is null
                                             ? ""

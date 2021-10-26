@@ -82,7 +82,7 @@ namespace GadjIT_V1_02.Pages.Chapters
             await ModalInstance.CloseAsync();
         }
 
-        private async void HandleValidSubmit()
+        private async Task HandleValidSubmit()
         {
             TaskObject.SeqNo = CopyObject.SeqNo;
             TaskObject.Message = CopyObject.Message;

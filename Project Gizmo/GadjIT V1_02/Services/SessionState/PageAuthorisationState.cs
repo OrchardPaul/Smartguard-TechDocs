@@ -14,6 +14,7 @@ namespace GadjIT_V1_02.Services.SessionState
         Task<string> AdminNavAuthorisation();
         Task<string> SystemNavAuthorisation();
         Task<string> UserManagementAuthorisation();
+        Task<bool> IsSignedIn();
     }
 
     public class PageAuthorisationState : IPageAuthorisationState
@@ -23,6 +24,18 @@ namespace GadjIT_V1_02.Services.SessionState
         public PageAuthorisationState (AuthenticationStateProvider stateProvider)
         {
             this.stateProvider = stateProvider;
+        }
+
+        public async Task<bool> IsSignedIn()
+        {
+            var authenticationState = await stateProvider.GetAuthenticationStateAsync();
+
+            if (authenticationState.User.Identity.IsAuthenticated)
+            {
+                return true;
+            }
+
+            return false;
         }
 
         public async Task<bool> ChapterListAuthorisation()

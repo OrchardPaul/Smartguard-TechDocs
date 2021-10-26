@@ -28,7 +28,7 @@ namespace GadjIT_V1_02.Pages.SystemNav.WorkTypeManagement
             await ModalInstance.CloseAsync();
         }
 
-        private async void HandleValidSubmit()
+        private async Task HandleValidSubmit()
         {
             await service.SubmitDepartment(TaskObject);
 

@@ -164,24 +164,20 @@ namespace GadjIT_V1_02.Pages.Chapters
 
         private async void HandleValidSubmit()
         {
-            if(CopyObject.LinkedItems is null)
+            Dictionary<int?, string> docTypes = new Dictionary<int?, string> { { 1, "Doc" }, { 4, "Form" }, { 6, "Step" }, { 8, "Date" }, { 9, "Email" }, { 11, "Doc" }, { 12, "Email" } };
+
+            Attachment.DocType = dropDownChapterList.Where(D => D.Name.ToUpper() == Attachment.DocName.ToUpper())
+                                                                                        .Select(D => string.IsNullOrEmpty(docTypes[D.DocumentType]) ? "Doc" : docTypes[D.DocumentType])
+                                                                                        .FirstOrDefault();
+
+            if (CopyObject.LinkedItems is null)
             {
                 CopyObject.LinkedItems = new List<LinkedItems> { Attachment };
             }
             else
             {
-                if (CopyObject.LinkedItems.Select(F => F.DocName).ToList().Contains(Attachment.DocName))
-                {
-                    var updateItem = CopyObject.LinkedItems.Where(F => F.DocName == Attachment.DocName).FirstOrDefault();
 
-                    updateItem.DocAsName = Attachment.DocAsName;
-                    updateItem.ScheduleDays = Attachment.ScheduleDays;
-                    updateItem.TrackingMethod = Attachment.TrackingMethod;
-                    updateItem.ChaserDesc = Attachment.ChaserDesc;
-                    updateItem.Action = Attachment.Action;
-                    updateItem.ScheduleDataItem = Attachment.ScheduleDataItem;
-                }
-                else
+                if (selectedList != "Edit Attachement")
                 {
                     CopyObject.LinkedItems.Add(Attachment);
                 }

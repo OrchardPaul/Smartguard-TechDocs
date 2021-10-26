@@ -7,5 +7,7 @@ namespace GadjIT.ClientContext.P4W
     public partial class TableDate
     { 
         public string TableField { get; set; }
+
+        public int TableType { get; set; } = 1;
     }
 }

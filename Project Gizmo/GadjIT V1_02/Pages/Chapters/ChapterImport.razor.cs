@@ -70,7 +70,7 @@ namespace GadjIT_V1_02.Pages.Chapters
         
         
 
-        private async void Close()
+        private async Task Close()
         {
             await ModalInstance.CloseAsync();
         }
@@ -87,7 +87,7 @@ namespace GadjIT_V1_02.Pages.Chapters
         }
 
 
-        private async void HandleFileSelection(IFileListEntry[] entryFiles)
+        private async Task HandleFileSelection(IFileListEntry[] entryFiles)
         {
             var files = new List<IFileListEntry>();
             ToggleError = false;
@@ -157,7 +157,7 @@ namespace GadjIT_V1_02.Pages.Chapters
         /// </remarks>
         /// <returns>string: row-changed or row-changedx</returns>
 
-        private async void HandleValidSubmit()
+        private async Task HandleValidSubmit()
         {
             var originalJson = new string(TaskObject.SmartflowData);
             var SelectedCopyItems = new VmChapter { Items = new List<GenSmartflowItem>(), Fees = new List<Fee>(), DataViews = new List<DataViews>() };

@@ -33,7 +33,7 @@ namespace GadjIT_V1_02.Pages.Chapters
             await ModalInstance.CloseAsync();
         }
 
-        private async void WriteToExcel()
+        private async Task WriteToExcel()
         {
             await ChapterFileUpload.WriteChapterDataToExcel(SelectedChapter, Documents, CaseTypeGroups);
             Close();

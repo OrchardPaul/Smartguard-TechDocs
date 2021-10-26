@@ -115,7 +115,16 @@ namespace GadjIT_V1_02.Pages.Chapters
         public List<string> documentList;
 
         
-        public bool useCustomItem { get; set; } = false;
+        public bool useCustomItem { get { return _useCustomItem; }
+            set {
+                _useCustomItem = value;
+                if (value)
+                {
+                    CopyObject.AltDisplayName = "";
+                }
+            } }
+        public bool _useCustomItem { get; set; } = false;
+
 
         public bool _useCustomReschedule { get; set; }
         public bool useCustomReschedule {
@@ -201,7 +210,7 @@ namespace GadjIT_V1_02.Pages.Chapters
 
         private async void HandleValidSubmit()
         {
-            if (SelectedChapter.Items.Select(I => I.Name).Contains(CopyObject.Name))
+            if (SelectedChapter.Items.Where(I => I.Name != CopyObject.Name).Select(I => I.Name).Contains(CopyObject.Name))
             {
                 Error = 1;
                 StateHasChanged();
@@ -225,17 +234,17 @@ namespace GadjIT_V1_02.Pages.Chapters
                 }
                 else
                 {
-                    TaskObject.Name = Regex.Replace(CopyObject.Name, "[^0-9a-zA-Z-_ (){}!£$%^&*,.]+", "");
+                    TaskObject.Name = Regex.Replace(CopyObject.Name, "[^0-9a-zA-Z-_ (){}!£$%^&*,./#?@<>`:]+", "");
                 }
 
 
                 TaskObject.EntityType = CopyObject.EntityType;
                 TaskObject.SeqNo = CopyObject.SeqNo;
                 TaskObject.SuppressStep = CopyObject.SuppressStep;
-                TaskObject.CompleteName = CopyObject.CompleteName is null ? "" : Regex.Replace(CopyObject.CompleteName, "[^0-9a-zA-Z-_ (){}!£$%^&*,.]+", "");
-                TaskObject.AsName = CopyObject.AsName is null ? "" : Regex.Replace(CopyObject.AsName, "[^0-9a-zA-Z-_ (){}!£$%^&*,.]+", "");
+                TaskObject.CompleteName = CopyObject.CompleteName is null ? "" : Regex.Replace(CopyObject.CompleteName, "[^0-9a-zA-Z-_ (){}!£$%^&*,./#?@<>`:]+", "");
+                TaskObject.AsName = CopyObject.AsName is null ? "" : Regex.Replace(CopyObject.AsName, "[^0-9a-zA-Z-_ (){}!£$%^&*,./#?@<>`:]+", "");
                 TaskObject.RescheduleDays = CopyObject.RescheduleDays is null ? 0 : CopyObject.RescheduleDays;
-                TaskObject.AltDisplayName = CopyObject.AltDisplayName is null ? "" : Regex.Replace(CopyObject.AltDisplayName, "[^0-9a-zA-Z-_ (){}!£$%^&*,.]+", "");
+                TaskObject.AltDisplayName = CopyObject.AltDisplayName is null ? "" : Regex.Replace(CopyObject.AltDisplayName, "[^0-9a-zA-Z-_ (){}!£$%^&*,./#?@<>`:]+", "");
                 TaskObject.UserMessage = CopyObject.UserMessage;
                 TaskObject.PopupAlert = CopyObject.PopupAlert;
                 TaskObject.NextStatus = CopyObject.NextStatus;

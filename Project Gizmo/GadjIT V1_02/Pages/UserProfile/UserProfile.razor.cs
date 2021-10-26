@@ -134,7 +134,7 @@ namespace GadjIT_V1_02.Pages.UserProfile
             StateHasChanged();
         }
 
-        private async void ToggleCompany(int selectedId)
+        private async Task ToggleCompany(int selectedId)
         {
             TaskObject.SelectedCompanyId = selectedId;
 
@@ -153,7 +153,7 @@ namespace GadjIT_V1_02.Pages.UserProfile
         }
 
 
-        private async void HandleValidSubmit()
+        private async Task HandleValidSubmit()
         {
             await SubmitChange();
             NavigateBack();

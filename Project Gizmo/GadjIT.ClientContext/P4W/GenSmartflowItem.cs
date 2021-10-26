@@ -55,6 +55,7 @@ namespace GadjIT.ClientContext.P4W
         [Required (ErrorMessage = "Name field is required")]
         public string DocName { get; set; }
         public string DocAsName { get; set; }
+        public string DocType { get; set; } = "";
 
         [Required]
         public string Action { get; set; }

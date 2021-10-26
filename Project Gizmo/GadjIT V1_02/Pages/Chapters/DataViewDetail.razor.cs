@@ -60,6 +60,7 @@ namespace GadjIT_V1_02.Pages.Chapters
         [Parameter]
         public Action RefreshViewList { get; set; }
 
+        public string Level { get; set; } = "Matter";
 
         public List<string> documentList;
 
@@ -69,7 +70,7 @@ namespace GadjIT_V1_02.Pages.Chapters
             await ModalInstance.CloseAsync();
         }
 
-        private async void HandleValidSubmit()
+        private async Task HandleValidSubmit()
         {
             TaskObject.BlockNo = CopyObject.BlockNo;
             TaskObject.DisplayName = CopyObject.DisplayName;
@@ -100,7 +101,7 @@ namespace GadjIT_V1_02.Pages.Chapters
 
         }
 
-        private async void RefreshViewListOnModel()
+        private async Task RefreshViewListOnModel()
         {
             ListPartnerViews = await PartnerAccessService.GetPartnerViews();
             StateHasChanged();

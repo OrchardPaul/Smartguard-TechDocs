@@ -190,15 +190,27 @@ namespace GadjIT_V1_02.Services.AppState
 
         public void DisposeUser(IUserSessionState sessionState)
         {
-            lstAppChapterStateItems = lstAppChapterStateItems.Where(A => A.ActiveUsers.Select(U => U.UserName).Contains(sessionState.User.FullName))
-                .Select(A => { A.LastUpdated = DateTime.Now; return A; }).ToList();
-
-            var ActiveUsers = lstAppChapterStateItems.Select(A => A.ActiveUsers).ToList();
-
-            foreach(var ActiveUserList in ActiveUsers)
+            try
             {
-                ActiveUserList.RemoveAll(A => A.UserName == sessionState.User.UserName);
+                if(!(sessionState.User is null))
+                {
+                    lstAppChapterStateItems = lstAppChapterStateItems.Where(A => A.ActiveUsers.Select(U => U.UserName).Contains(sessionState.User.FullName))
+                                                                .Select(A => { A.LastUpdated = DateTime.Now; return A; }).ToList();
+
+                    var ActiveUsers = lstAppChapterStateItems.Select(A => A.ActiveUsers).ToList();
+
+                    foreach (var ActiveUserList in ActiveUsers)
+                    {
+                        ActiveUserList.RemoveAll(A => A.UserName == sessionState.User.UserName);
+                    }
+                }
+
             }
+            catch(Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            
         }
 
     }

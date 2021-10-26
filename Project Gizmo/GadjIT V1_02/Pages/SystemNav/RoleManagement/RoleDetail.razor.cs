@@ -25,7 +25,7 @@ namespace GadjIT_V1_02.Pages.SystemNav.RoleManagement
         [Inject]
         private IIdentityRoleAccess service { get; set; }
 
-        private async void HandleValidSubmit()
+        private async Task HandleValidSubmit()
         {
             await service.SubmitChanges(TaskObject);
 

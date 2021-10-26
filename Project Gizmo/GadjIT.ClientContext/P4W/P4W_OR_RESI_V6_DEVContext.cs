@@ -33,7 +33,7 @@ namespace GadjIT.ClientContext.P4W
 
 
         public IQueryable<TableDate> GetTableDates() =>
-                Set<TableDate>().FromSqlInterpolated($"SELECT t.InternalName + '.' + f.InternalFieldName TableField FROM Mp_Sys_FieldDef f INNER JOIN Mp_Sys_TableDef t on f.TableRef = t.ID WHERE SQLTypeRef = 91 AND t.Type = 1 AND MaxRecords = 1 ORDER BY TableField");
+                Set<TableDate>().FromSqlInterpolated($"SELECT t.InternalName + '.' + f.InternalFieldName TableField, T.Type TableType FROM Mp_Sys_FieldDef f INNER JOIN Mp_Sys_TableDef t on f.TableRef = t.ID WHERE SQLTypeRef = 91 AND MaxRecords = 1 ORDER BY TableField");
 
 
 

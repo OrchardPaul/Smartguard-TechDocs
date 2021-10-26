@@ -28,7 +28,7 @@ namespace GadjIT_V1_02.Pages.SystemNav.WorkTypeManagement
         [Inject]
         private ICompanyDbAccess service { get; set; }
 
-        private async void HandleValidSubmit()
+        private async Task HandleValidSubmit()
         {
             await service.SubmitWorkTypeGroup(TaskObject.group);
 

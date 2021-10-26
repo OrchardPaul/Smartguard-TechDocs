@@ -139,7 +139,7 @@ namespace GadjIT_V1_02.Pages.Admin.UserManagement
             StateHasChanged();
         }
 
-        private async void ToggleCompany(int selectedId)
+        private async Task ToggleCompany(int selectedId)
         {
             TaskObject.SelectedCompanyId = selectedId;
 
@@ -158,7 +158,7 @@ namespace GadjIT_V1_02.Pages.Admin.UserManagement
         }
 
 
-        private async void HandleValidSubmit()
+        private async Task HandleValidSubmit()
         {
             await SubmitChange();
 
