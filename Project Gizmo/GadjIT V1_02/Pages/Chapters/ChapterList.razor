@@ -223,7 +223,7 @@ else
                                                         </div>
                                                     }
                                                     <div title="Click to edit @Chapter.SmartflowObject.SmartflowName" class="data-item-right link-direction" @onclick="() => SelectChapter(Chapter.SmartflowObject)">
-                                                        <div class="fa fa-chevron-circle-right"></div>
+                                                        <div class="fa fa-pencil-alt"></div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -696,22 +696,22 @@ else
                                                                     {
                                                                         foreach (var attach in doc.ChapterObject.LinkedItems)
                                                                         {
-                                                                    <li class="font-85" @onclick='(() => PrepareAttachmentForEdit(doc, attach))'>
-                                                                        <span class="font-85" title="@attach.Action">
-                                                                            <span class="@(attach.Action == "TAKE" ? "" : "invisible")"><span class="fa fa-running mr-2"></span></span>
-                                                                            <span class="@(attach.Action == "INSERT" ? "" : "invisible")"><span class="fa fa-arrow-down mr-2"></span></span>
-                                                                            <span class="@(attach.Action == "SCHEDULE" ? "" : "invisible")"><span class="fa fa-calendar-check mr-2"></span></span>
-                                                                        </span>
-                                                                        <span class="font-85">
-                                                                            <span class="@(attach.DocType == "Doc" ? "" : "invisible")"><span class="fa fa-file mr-2"></span></span>
-                                                                            <span class="@(attach.DocType == "Form" ? "" : "invisible")"><span class=" fa fa-file-pdf mr-2"></span></span>
-                                                                            <span class="@(attach.DocType == "Email" ? "" : "invisible")"><span class="fa fa-envelope mr-2"></span></span>
-                                                                            <span class="@(attach.DocType == "Step" ? "" : "invisible")"><span class=" fa fa-list-ol mr-2"></span></span>
-                                                                            <span class="@(attach.DocType == "Date" ? "" : "invisible")"><span class="fa fa-calendar mr-2"></span></span>
-                                                                            <span class="@(string.IsNullOrEmpty(attach.DocType) ? "" : "invisible")"><span class="fa fa-minus mr-2"></span></span>
-                                                                        </span>
-                                                                        @(string.IsNullOrEmpty(attach.DocAsName) ? attach.DocName : attach.DocAsName)
-                                                                    </li>
+                                                                            <li class="font-85" @onclick='(() => PrepareAttachmentForEdit(doc, attach))'>
+                                                                                <span class="font-85" title="@attach.Action">
+                                                                                    <span class="doc-icon @(attach.Action == "TAKE" ? "" : "invisible")"><span class="fa fa-running mr-2"></span></span>
+                                                                                    <span class="doc-icon @(attach.Action == "INSERT" ? "" : "invisible")"><span class="fa fa-hand-point-down mr-2"></span></span>
+                                                                                    <span class="doc-icon @(attach.Action == "SCHEDULE" ? "" : "invisible")"><span class="fa fa-calendar-check mr-2"></span></span>
+                                                                                </span>
+                                                                                <span class="font-85">
+                                                                                    <span class="doc-icon @(attach.DocType == "Doc" ? "" : "invisible")" title="Document"><span class="fa fa-file mr-2"></span></span>
+                                                                                    <span class="doc-icon @(attach.DocType == "Form" ? "" : "invisible")" title="Form"><span class=" fa fa-file-pdf mr-2"></span></span>
+                                                                                    <span class="doc-icon @(attach.DocType == "Email" ? "" : "invisible")" title="Email"><span class="fa fa-envelope mr-2"></span></span>
+                                                                                    <span class="doc-icon @(attach.DocType == "Step" ? "" : "invisible")" title="Step"><span class=" fa fa-list-ol mr-2"></span></span>
+                                                                                    <span class="doc-icon @(attach.DocType == "Date" ? "" : "invisible")" title="Diary Item"><span class="fa fa-calendar mr-2"></span></span>
+                                                                                    <span class="doc-icon @(string.IsNullOrEmpty(attach.DocType) ? "" : "invisible")" title="Custom Item: will insert a step to run the current Smartflow"><span class="fa fa-retweet mr-2"></span></span>
+                                                                                </span>
+                                                                                @(string.IsNullOrEmpty(attach.DocAsName) ? attach.DocName : attach.DocAsName)
+                                                                            </li>
                                                                         }
                                                                         <li class="ellipsis-menu-divider"></li>
                                                                     }
@@ -789,18 +789,18 @@ else
                                         }
 
                                         <div class="data-item-sub " title="@doc.DocDisplayName">
-                                            
+
                                             <span class="font-100" title="@doc.ChapterObject.Action">
-                                                <span class="@(doc.ChapterObject.Action == "TAKE" ? "" : "invisible")"><span class="fa fa-running mr-2"></span></span>
-                                                <span class="@(doc.ChapterObject.Action == "INSERT" ? "" : "invisible")"><span class="fa fa-arrow-down mr-2"></span></span>
+                                                <span class="doc-icon @(doc.ChapterObject.Action == "TAKE" ? "" : "invisible")"><span class="fa fa-running mr-2"></span></span>
+                                                <span class="doc-icon @(doc.ChapterObject.Action == "INSERT" ? "" : "invisible")"><span class="fa fa-hand-point-down mr-2"></span></span>
                                             </span>
                                             <span class="font-100">
-                                                <span class="@(doc.DocType == "Doc" ? "" : "invisible")"><span class="fa fa-file mr-2"></span></span>
-                                                <span class="@(doc.DocType == "Form" ? "" : "invisible")"><span class=" fa fa-file-pdf mr-2"></span></span>
-                                                <span class="@(doc.DocType == "Email" ? "" : "invisible")"><span class="fa fa-envelope mr-2"></span></span>
-                                                <span class="@(doc.DocType == "Step" ? "" : "invisible")"><span class=" fa fa-list-ol mr-2"></span></span>
-                                                <span class="@(doc.DocType == "Date" ? "" : "invisible")"><span class="fa fa-calendar mr-2"></span></span>
-                                                <span class="@(string.IsNullOrEmpty(doc.DocType) ? "" : "invisible")"><span class="fa fa-minus mr-2"></span></span>
+                                                <span class="doc-icon @(doc.DocType == "Doc" ? "" : "invisible")" title="Document"><span class="fa fa-file mr-2"></span></span>
+                                                <span class="doc-icon @(doc.DocType == "Form" ? "" : "invisible")" title="Form"><span class=" fa fa-file-pdf mr-2"></span></span>
+                                                <span class="doc-icon @(doc.DocType == "Email" ? "" : "invisible")" title="Email"><span class="fa fa-envelope mr-2"></span></span>
+                                                <span class="doc-icon @(doc.DocType == "Step" ? "" : "invisible")" title="Step"><span class=" fa fa-list-ol mr-2"></span></span>
+                                                <span class="doc-icon @(doc.DocType == "Date" ? "" : "invisible")" title="Diary Item"><span class="fa fa-calendar mr-2"></span></span>
+                                                <span class="doc-icon @(string.IsNullOrEmpty(doc.DocType) ? "" : "invisible")"><span class=" mr-2"></span></span>
                                             </span>
                                             @doc.DocDisplayName
                                         </div>
@@ -837,6 +837,15 @@ else
                                             <div class="data-item-right hidden-md-down">
                                                 <ModalTooltip Direction="left" Text=@($"This item has attachments.") Class="w-2">
                                                     <span class="fa fa-paperclip"></span>
+                                                </ModalTooltip>
+                                            </div>
+                                        }
+
+                                        @if (@selectedChapter.ShowDocumentTracking == "Y" && !(doc.ChapterObject.TrackingMethod is null) && "Send Only|Response Required".Contains(doc.ChapterObject.TrackingMethod))
+                                        {
+                                            <div class="data-item-right hidden-md-down">
+                                                <ModalTooltip Direction="left" Text=@($"This item is tracked: {doc.ChapterObject.TrackingMethod}") Class="w-2">
+                                                    <span class="fa fa-map-marker-alt"></span>
                                                 </ModalTooltip>
                                             </div>
                                         }

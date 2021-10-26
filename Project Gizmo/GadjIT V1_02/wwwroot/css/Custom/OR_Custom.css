@@ -1107,6 +1107,19 @@ app {
     
 }
 
+/*---------------------------*/
+/*   Document Icons          */
+/*                           */
+/*---------------------------*/
+.doc-icon {
+    display: inline-block;
+    width: 23px !important;
+    text-align: center;
+}
+
+.font-85 .doc-icon {
+    width: 25px;
+}
 
     /*---------------------------------------*/
     /*    CHAPTER LISTINGS                   */
