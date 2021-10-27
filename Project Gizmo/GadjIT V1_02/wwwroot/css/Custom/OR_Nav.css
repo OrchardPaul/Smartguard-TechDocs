@@ -555,7 +555,7 @@
 .btn-ellipses .ellipsis-menu {
     position: absolute;
     display: block;
-    width: 180px;
+    width: 130px;
     top: 20px;
     left: 8px;
     margin: 0;
@@ -570,7 +570,7 @@
 
 .btn-ellipses .ellipsis-menu-left {
     top: 8px;
-    left: calc(100% - 170px) !important;
+    left: calc(100% - 120px) !important;
 }
 
 .btn-ellipses ul {
@@ -601,6 +601,10 @@
     background: #fff;
     cursor: pointer;
     position: relative;
+    height: 35px;
+}
+
+.ellipsis-menu ul:first-of-type li {
     height: 28px;
 }
 
@@ -652,6 +656,10 @@
 .ellipsis-menu .menu-toggle:hover ul {
     visibility: visible;
     color: blue !important;
+}
+
+.ellipsis-menu .menu-toggle ul li {
+    height: 35px !important;
 }
 
 .ellipsis-menu .menu-toggle:hover ul li {
