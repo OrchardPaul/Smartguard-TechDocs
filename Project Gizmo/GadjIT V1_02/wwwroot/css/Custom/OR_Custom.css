@@ -1108,12 +1108,37 @@ app {
 }
 
 /*---------------------------*/
-/*   Document Icons          */
+/* Document Lists and Icons  */
 /*                           */
 /*---------------------------*/
+
+.attach-list {
+    width: 400px !important
+}
+
+@media (max-width: 767px) {
+    .attach-list {
+        width: 343px !important
+    }
+}
+
+.attach-name {
+    display: inline-block;
+    vertical-align: middle;
+    width: 250px !important;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 .doc-icon {
     display: inline-block;
     width: 23px !important;
+    text-align: center;
+}
+
+.doc-icon-lg {
+    display: inline-block;
+    width: 38px !important;
     text-align: center;
 }
 
@@ -1585,23 +1610,24 @@ app {
             height: 205px;
         }
 
-/*-----------------------------*/
-/*  MISC OBJECTS & ANIMATIONS  */
-/*-----------------------------*/
+    /*-----------------------------*/
+    /*  MISC OBJECTS & ANIMATIONS  */
+    /*-----------------------------*/
 
-@keyframes blinker-30 {
-    50% {
-        opacity: 30%;
+    @keyframes blinker-30 {
+        50% {
+            opacity: 30%;
+        }
     }
-}
 
 
-.active-user {
-    color: #000;
-    animation: blinker-30 2s linear infinite;
-}
-.active-user-alt {
-    color: #000;
-    animation: blinker-30 2s linear infinite;
-    animation-delay: 1s;
-}
+    .active-user {
+        color: #000;
+        animation: blinker-30 2s linear infinite;
+    }
+
+    .active-user-alt {
+        color: #000;
+        animation: blinker-30 2s linear infinite;
+        animation-delay: 1s;
+    }

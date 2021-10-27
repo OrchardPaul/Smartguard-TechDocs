@@ -688,30 +688,47 @@ else
                                                         </li>
                                                         <li class="col-main">
                                                             <span class="fa fa-paperclip mr-2"></span>
-                                                            <span>Linked Items</span>
+                                                            <span>Links</span>
                                                             <div class="menu-toggle">
                                                                 <span class="fa fa-chevron-right"></span>
-                                                                <ul style="width: 300px">
+                                                                <ul class="attach-list">
                                                                     @if (!(doc.ChapterObject.LinkedItems is null) && doc.ChapterObject.LinkedItems.Count > 0)
                                                                     {
                                                                         foreach (var attach in doc.ChapterObject.LinkedItems)
                                                                         {
-                                                                            <li class="font-85" @onclick='(() => PrepareAttachmentForEdit(doc, attach))'>
-                                                                                <span class="font-85" title="@attach.Action">
-                                                                                    <span class="doc-icon @(attach.Action == "TAKE" ? "" : "invisible")"><span class="fa fa-running mr-2"></span></span>
-                                                                                    <span class="doc-icon @(attach.Action == "INSERT" ? "" : "invisible")"><span class="fa fa-hand-point-down mr-2"></span></span>
-                                                                                    <span class="doc-icon @(attach.Action == "SCHEDULE" ? "" : "invisible")"><span class="fa fa-calendar-check mr-2"></span></span>
-                                                                                </span>
-                                                                                <span class="font-85">
-                                                                                    <span class="doc-icon @(attach.DocType == "Doc" ? "" : "invisible")" title="Document"><span class="fa fa-file mr-2"></span></span>
-                                                                                    <span class="doc-icon @(attach.DocType == "Form" ? "" : "invisible")" title="Form"><span class=" fa fa-file-pdf mr-2"></span></span>
-                                                                                    <span class="doc-icon @(attach.DocType == "Email" ? "" : "invisible")" title="Email"><span class="fa fa-envelope mr-2"></span></span>
-                                                                                    <span class="doc-icon @(attach.DocType == "Step" ? "" : "invisible")" title="Step"><span class=" fa fa-list-ol mr-2"></span></span>
-                                                                                    <span class="doc-icon @(attach.DocType == "Date" ? "" : "invisible")" title="Diary Item"><span class="fa fa-calendar mr-2"></span></span>
-                                                                                    <span class="doc-icon @(string.IsNullOrEmpty(attach.DocType) ? "" : "invisible")" title="Custom Item: will insert a step to run the current Smartflow"><span class="fa fa-retweet mr-2"></span></span>
-                                                                                </span>
-                                                                                @(string.IsNullOrEmpty(attach.DocAsName) ? attach.DocName : attach.DocAsName)
-                                                                            </li>
+                                                                    <li class="font-85" @onclick='(() => PrepareAttachmentForEdit(doc, attach))'>
+                                                                        <span class="font-85" title="@attach.Action">
+                                                                            <span class="doc-icon @(attach.Action == "TAKE" ? "" : "invisible")"><span class="fa fa-running mr-2"></span></span>
+                                                                            <span class="doc-icon @(attach.Action == "INSERT" ? "" : "invisible")"><span class="fa fa-hand-point-down mr-2"></span></span>
+                                                                            <span class="doc-icon @(attach.Action == "SCHEDULE" ? "" : "invisible")"><span class="fa fa-calendar-check mr-2"></span></span>
+                                                                        </span>
+                                                                        <span class="font-85">
+                                                                            <span class="doc-icon @(attach.DocType == "Doc" ? "" : "invisible")" title="Document"><span class="fa fa-file mr-2"></span></span>
+                                                                            <span class="doc-icon @(attach.DocType == "Form" ? "" : "invisible")" title="Form"><span class=" fa fa-file-pdf mr-2"></span></span>
+                                                                            <span class="doc-icon @(attach.DocType == "Email" ? "" : "invisible")" title="Email"><span class="fa fa-envelope mr-2"></span></span>
+                                                                            <span class="doc-icon @(attach.DocType == "Step" ? "" : "invisible")" title="Step"><span class=" fa fa-list-ol mr-2"></span></span>
+                                                                            <span class="doc-icon @(attach.DocType == "Date" ? "" : "invisible")" title="Diary Item"><span class="fa fa-calendar mr-2"></span></span>
+                                                                            <span class="doc-icon @(string.IsNullOrEmpty(attach.DocType) ? "" : "invisible")" title="Custom Item: will insert a step to run the current Smartflow"><span class="fa fa-retweet mr-2"></span></span>
+                                                                        </span>
+                                                                        <span class="attach-name" title="@(string.IsNullOrEmpty(attach.DocAsName) ? attach.DocName : attach.DocAsName)">
+                                                                            @(string.IsNullOrEmpty(attach.DocAsName) ? attach.DocName : attach.DocAsName)
+                                                                        </span>
+
+                                                                        <span class="doc-icon hidden-md-down">
+                                                                            @if (attach.DocAsName != "")
+                                                                            {
+                                                                                <span class="fa fa-clone" title="Template: @attach.DocName"></span>
+                                                                            }
+                                                                        </span>
+
+                                                                        <span class="doc-icon-lg hidden-md-down">
+                                                                            @if (attach.Action == "SCHEDULE")
+                                                                            {
+                                                                                <span class="" title="@("Will be scheduled for " + attach.ScheduleDays.ToString() + " days" + (!string.IsNullOrEmpty(attach.ScheduleDataItem) ? " from " + attach.ScheduleDataItem : ""))">@(!string.IsNullOrEmpty(attach.ScheduleDataItem) ? "* " : "") @attach.ScheduleDays.ToString()d</span>
+                                                                            }
+                                                                        </span>
+
+                                                                        </li>
                                                                         }
                                                                         <li class="ellipsis-menu-divider"></li>
                                                                     }
