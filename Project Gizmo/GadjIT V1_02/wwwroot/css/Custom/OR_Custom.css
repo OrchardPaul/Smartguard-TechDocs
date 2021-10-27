@@ -1113,12 +1113,16 @@ app {
 /*---------------------------*/
 
 .attach-list {
-    width: 400px !important
+    width: 400px !important;
+}
+
+.tracking .attach-list {
+    width: 430px !important;
 }
 
 @media (max-width: 767px) {
     .attach-list {
-        width: 343px !important
+        width: 343px !important;
     }
 }
 

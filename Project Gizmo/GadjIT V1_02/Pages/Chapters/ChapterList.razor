@@ -689,7 +689,7 @@ else
                                                         <li class="col-main">
                                                             <span class="fa fa-paperclip mr-2"></span>
                                                             <span>Links</span>
-                                                            <div class="menu-toggle">
+                                                            <div class="menu-toggle @(selectedChapter.ShowDocumentTracking == "Y" ? "tracking" : "")" >
                                                                 <span class="fa fa-chevron-right"></span>
                                                                 <ul class="attach-list">
                                                                     @if (!(doc.ChapterObject.LinkedItems is null) && doc.ChapterObject.LinkedItems.Count > 0)
@@ -714,14 +714,14 @@ else
                                                                             @(string.IsNullOrEmpty(attach.DocAsName) ? attach.DocName : attach.DocAsName)
                                                                         </span>
 
-                                                                        <span class="doc-icon hidden-md-down">
+                                                                        <span class="doc-icon hidden-sm-down">
                                                                             @if (attach.DocAsName != "")
                                                                             {
                                                                                 <span class="fa fa-clone" title="Template: @attach.DocName"></span>
                                                                             }
                                                                         </span>
 
-                                                                        <span class="doc-icon-lg hidden-md-down">
+                                                                        <span class="doc-icon-lg hidden-sm-down">
                                                                             @if (attach.Action == "SCHEDULE")
                                                                             {
                                                                                 <span class="" title="@("Will be scheduled for " + attach.ScheduleDays.ToString() + " days" + (!string.IsNullOrEmpty(attach.ScheduleDataItem) ? " from " + attach.ScheduleDataItem : ""))">@(!string.IsNullOrEmpty(attach.ScheduleDataItem) ? "* " : "") @attach.ScheduleDays.ToString()d</span>
