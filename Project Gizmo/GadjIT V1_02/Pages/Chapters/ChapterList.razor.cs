@@ -156,10 +156,6 @@ namespace GadjIT_V1_02.Pages.Chapters
                 }
             }
 
-
-
-            
-
         }
 
         private Timer timer;
@@ -563,6 +559,121 @@ namespace GadjIT_V1_02.Pages.Chapters
         {
             NavigationManager.NavigateTo($"Smartflow/{chapter.CaseTypeGroup}/{chapter.CaseType}/{chapter.SmartflowName}",true);
         }
+
+        private async Task UpdateSteps()
+        {
+            bool overAllCreationSuccess = true;
+            bool creationSuccess = true;
+            int creationCount = 0;
+
+            foreach (var chapter in lstChapters)
+            {
+                var decodedChapter = JsonConvert.DeserializeObject<VmChapter>(chapter.SmartflowObject.SmartflowData);
+
+                if (!string.IsNullOrEmpty(decodedChapter.SelectedStep) && !string.IsNullOrEmpty(decodedChapter.SelectedView))
+                {
+                    if (decodedChapter.P4WCaseTypeGroup == "Entity Documents")
+                    {
+                        ChapterP4WStep = new ChapterP4WStepSchema
+                        {
+                            StepName = decodedChapter.StepName,
+                            P4WCaseTypeGroup = decodedChapter.P4WCaseTypeGroup,
+                            GadjITCaseTypeGroup = decodedChapter.CaseTypeGroup,
+                            GadjITCaseType = decodedChapter.CaseType,
+                            Smartflow = decodedChapter.Name,
+                            Questions = new List<ChapterP4WStepQuestion>{
+                                    new ChapterP4WStepQuestion {QNo = 1, QText= "HQ - Set Current Chapter Details" }
+                                    ,new ChapterP4WStepQuestion {QNo = 2, QText= "HQ - Show View" }
+                                    ,new ChapterP4WStepQuestion {QNo = 3, QText= "HQ - Run Required Steps" }
+                                    ,new ChapterP4WStepQuestion {QNo = 4, QText= "HQ - Update reschedule date" }
+                                    ,new ChapterP4WStepQuestion {QNo = 5, QText= "HQ - Reinsert this step with asname" }
+                                    ,new ChapterP4WStepQuestion {QNo = 6, QText= "HQ - Rename Step" }
+                                    ,new ChapterP4WStepQuestion {QNo = 7, QText= "HQ - Delete Previous Instances" }
+                                    ,new ChapterP4WStepQuestion {QNo = 8, QText= "HQ - Check if completion name exists" }
+                                    ,new ChapterP4WStepQuestion {QNo = 9, QText= "HQ - Delete Step" }
+                                    },
+                            Answers = new List<ChapterP4WStepAnswer>{
+                                     new ChapterP4WStepAnswer {QNo = 1, GoToData= $"2 [SQL: EXEC up_ORSF_CreateTableEntries '[entity.code]', 0] [SQL: UPDATE Usr_ORSF_ENT_Control SET Current_SF = '{decodedChapter.Name}', Current_Case_Type_Group = '{decodedChapter.CaseTypeGroup}', Current_Case_Type = '{decodedChapter.CaseType}', Default_Step = '{decodedChapter.StepName}', Date_Schedule_For = DATEADD(d, 7, getdate()), Steps_To_Run = '', Schedule_AsName = '{decodedChapter.StepName}|' + (SELECT CASE WHEN dbo.fn_ORSF_IsAllCap (Description) = 1 THEN '{decodedChapter.StepName}' + '|' + CONVERT(VARCHAR(20),ISNULL(Date_Schedule_For,DATEADD(d, 7, getdate())),103) ELSE Description + '|' + CONVERT(VARCHAR(20),ISNULL(s.DiaryDate, getdate()),103) END + '|' + '[CurrentUser.Code]' FROM Cm_CaseItems i INNER JOIN Cm_Steps s on s.ItemID = i.ItemID WHERE i.ItemID = [currentstep.stepid]), Complete_AsName = '' WHERE EntityRef = '[Entity.Code]'] [SQL: UPDATE Usr_ORSF_ENT_Control SET Screen_Opened_Via_Step = 'Y' WHERE EntityRef = '[Entity.Code]' ]" }
+                                    ,new ChapterP4WStepAnswer {QNo = 2, GoToData= $"3 [VIEW: '{decodedChapter.SelectedView}' UPDATE=Yes]" }
+                                    ,new ChapterP4WStepAnswer {QNo = 3, GoToData= $"4 [SQL: EXEC up_ORSF_GetStepsFromList '[entity.code]', 0] [SQL: UPDATE Usr_ORSF_ENT_Control SET Screen_Opened_Via_Step = null WHERE EntityRef='[entity.code]']" }
+                                    ,new ChapterP4WStepAnswer {QNo = 4, GoToData= $"5 [SQL: UPDATE Usr_ORSF_ENT_Control SET Date_Schedule_For = isnull(Date_Schedule_For, Cast(getdate() as Date)) WHERE EntityRef = '[Entity.Code]']" }
+                                    ,new ChapterP4WStepAnswer {QNo = 5, GoToData= $"8 [SQL: SELECT ScheduleCommand FROM fn_ORSF_GetScheduleItems('[Entity.Code]', 0)]" }
+                                    ,new ChapterP4WStepAnswer {QNo = 6, GoToData= $"[SQL: UPDATE cm_caseitems set CompletionDate = GETDATE(), description = UPPER('[!Usr_ORSF_ENT_Control.Complete_AsName]') where itemid = [currentstep.stepid]]" }
+                                    ,new ChapterP4WStepAnswer {QNo = 7, GoToData= $"8 [SQL: exec up_ORSF_DeleteDueStep '', [currentstep.stepid], '{decodedChapter.StepName}']" }
+                                    ,new ChapterP4WStepAnswer {QNo = 8, GoToData= $"[SQL: SELECT CASE WHEN ISNULL('[!Usr_ORSF_ENT_Control.Complete_AsName]','') <> '' THEN 6 ELSE 9 END]" }
+                                    ,new ChapterP4WStepAnswer {QNo = 9, GoToData= $"[SQL: DELETE FROM cm_caseitems where itemid = [currentstep.stepid]]" }
+                                    }
+                        };
+                    }
+                    else
+                    {
+                        ChapterP4WStep = new ChapterP4WStepSchema
+                        {
+                            StepName = decodedChapter.StepName,
+                            P4WCaseTypeGroup = decodedChapter.P4WCaseTypeGroup,
+                            GadjITCaseTypeGroup = decodedChapter.CaseTypeGroup,
+                            GadjITCaseType = decodedChapter.CaseType,
+                            Smartflow = decodedChapter.Name,
+                            Questions = new List<ChapterP4WStepQuestion>{
+                                    new ChapterP4WStepQuestion {QNo = 1, QText= "HQ - Set Current Chapter Details" }
+                                    ,new ChapterP4WStepQuestion {QNo = 2, QText= "HQ - Show View" }
+                                    ,new ChapterP4WStepQuestion {QNo = 3, QText= "HQ - Run Required Steps" }
+                                    ,new ChapterP4WStepQuestion {QNo = 4, QText= "HQ - Update reschedule date" }
+                                    ,new ChapterP4WStepQuestion {QNo = 5, QText= "HQ - Reinsert this step with asname" }
+                                    ,new ChapterP4WStepQuestion {QNo = 6, QText= "HQ - Rename Step" }
+                                    ,new ChapterP4WStepQuestion {QNo = 7, QText= "HQ - Delete Previous Instances" }
+                                    ,new ChapterP4WStepQuestion {QNo = 8, QText= "HQ - Check if completion name exists" }
+                                    ,new ChapterP4WStepQuestion {QNo = 9, QText= "HQ - Delete Step" }
+                                    },
+                            Answers = new List<ChapterP4WStepAnswer>{
+                                    new ChapterP4WStepAnswer {QNo = 1, GoToData= $"2 [SQL: EXEC up_ORSF_CreateTableEntries '[matters.entityref]', [matters.number]] [SQL: UPDATE Usr_ORSF_MT_Control SET Current_SF = '{decodedChapter.Name}', Current_Case_Type_Group = '{decodedChapter.CaseTypeGroup}', Current_Case_Type = '{decodedChapter.CaseType}', Default_Step = '{decodedChapter.StepName}', Date_Schedule_For = DATEADD(d, 7, getdate()), Steps_To_Run = '', Schedule_AsName = '{decodedChapter.StepName}|' + (SELECT CASE WHEN dbo.fn_ORSF_IsAllCap (Description) = 1 THEN '{decodedChapter.StepName}' + '|' + CONVERT(VARCHAR(20),ISNULL(Date_Schedule_For,DATEADD(d, 7, getdate())),103) ELSE Description + '|' + CONVERT(VARCHAR(20),ISNULL(s.DiaryDate, getdate()),103) END + '|' + '[matters.feeearnerref]' FROM Cm_CaseItems i INNER JOIN Cm_Steps s on s.ItemID = i.ItemID WHERE i.ItemID = [currentstep.stepid]), Complete_AsName = '' WHERE EntityRef = '[matters.entityref]' AND MatterNo = [matters.number]] [SQL: UPDATE Usr_ORSF_MT_Control SET Screen_Opened_Via_Step = 'Y' WHERE EntityRef = '[matters.entityref]' AND matterNo =[matters.number]]" }
+                                    ,new ChapterP4WStepAnswer {QNo = 2, GoToData= $"3 [VIEW: '{decodedChapter.SelectedView}' UPDATE=Yes]" }
+                                    ,new ChapterP4WStepAnswer {QNo = 3, GoToData= $"4 [SQL: EXEC up_ORSF_GetStepsFromList '[matters.entityref]', [matters.number]] [SQL: UPDATE Usr_ORSF_MT_Control SET Screen_Opened_Via_Step = null WHERE EntityRef='[matters.entityref]' AND matterNo=[matters.number]]" }
+                                    ,new ChapterP4WStepAnswer {QNo = 4, GoToData= $"5 [SQL: UPDATE Usr_ORSF_MT_Control SET Date_Schedule_For = isnull(Date_Schedule_For, Cast(getdate() as Date)) WHERE EntityRef = '[matters.entityref]' AND MatterNo = [matters.number]]" }
+                                    ,new ChapterP4WStepAnswer {QNo = 5, GoToData= $"8 [SQL: SELECT ScheduleCommand FROM fn_ORSF_GetScheduleItems('[matters.entityref]', [matters.number])]" }
+                                    ,new ChapterP4WStepAnswer {QNo = 6, GoToData= $"[SQL: UPDATE cm_caseitems set CompletionDate = GETDATE(), description = UPPER('[!Usr_ORSF_MT_Control.Complete_AsName]') where itemid = [currentstep.stepid]]" }
+                                    ,new ChapterP4WStepAnswer {QNo = 7, GoToData= $"8 [SQL: exec up_ORSF_DeleteDueStep '', [currentstep.stepid], '{decodedChapter.StepName}']" }
+                                    ,new ChapterP4WStepAnswer {QNo = 8, GoToData= $"[SQL: SELECT CASE WHEN ISNULL('[!Usr_ORSF_MT_Control.Complete_AsName]','') <> '' THEN 6 ELSE 9 END]" }
+                                    ,new ChapterP4WStepAnswer {QNo = 9, GoToData= $"[SQL: DELETE FROM cm_caseitems where itemid = [currentstep.stepid]]" }
+                                    }
+                        };
+                    }
+
+                    string stepJSON = JsonConvert.SerializeObject(ChapterP4WStep);
+
+                    
+
+                    creationSuccess = await chapterManagementService.CreateStep(new VmChapterP4WStepSchemaJSONObject { StepSchemaJSON = stepJSON });
+
+                    if (!creationSuccess)
+                    {
+                        overAllCreationSuccess = false;
+                    }
+
+                    creationCount += 1;
+
+                }
+
+
+
+            }
+
+
+
+            var parameters = new ModalParameters();
+            var message = overAllCreationSuccess ? "Creation Successfull" : "Creation Unsuccessfull";
+            parameters.Add("InfoText", message);
+
+            var options = new ModalOptions()
+            {
+                Class = "blazored-custom-modal modal-chapter-chapter"
+            };
+            string title = $"Updated {creationCount} Steps";
+            Modal.Show<ModalInfo>(title, parameters, options);
+
+        }
+
+
 
         private async void SelectChapter(UsrOrsfSmartflows chapter)
         {
@@ -3655,14 +3766,9 @@ namespace GadjIT_V1_02.Pages.Chapters
                 };
             }
 
-
-
-
             string stepJSON = JsonConvert.SerializeObject(ChapterP4WStep);
 
             bool creationSuccess;
-
-
 
             creationSuccess = await chapterManagementService.CreateStep(new VmChapterP4WStepSchemaJSONObject { StepSchemaJSON = stepJSON });
 
@@ -3683,7 +3789,6 @@ namespace GadjIT_V1_02.Pages.Chapters
                 }
 
                 await chapterManagementService.Update(SelectedChapterObject);
-
 
                 //keep track of time last updated ready for comparison by other sessions checking for updates
                 appChapterState.SetLastUpdated(sessionState, selectedChapter);

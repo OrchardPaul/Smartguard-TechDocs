@@ -1,0 +1,42 @@
+﻿@page "/admin/managesteps"
+@using GadjIT_V1_02.Data.CustomFormObjects;
+
+
+
+<div class="mb-4 grid-tran grid-chapter-nav">
+    <div class="tran-block rounded">
+
+        <div class="grid-actions">
+            <select @bind="uSelectedCaseType">
+                <option value=""></option>
+                @foreach (var casetype in PartnerCaseTypes)
+                {
+                    <option value="@casetype.Id">@casetype.Name</option>
+                }
+
+            </select>
+                    
+        </div>
+
+        <div class="container-fluid">
+
+            <!-- SHOW ALL GROUPS -->
+            @foreach (var step in StepObjects.Page(PageNumber, 10))
+            {
+                <div class="grid-row-lg mt-3 nav-row-1">
+                    <div class="data-item">
+                        <input type="checkbox" @bind="step.IsSelected"/>
+                        <div class="data-item-nav" >
+                            <div class="data-item-sub"><span class="fa fa-boxes mr-2"></span>@step.Step.Name</div>
+                        </div>
+                    </div>
+                </div>
+            }
+            <div class="button-container">
+                <button class="btn-primary" @onclick="() => ChangePage(PageNumber - 1)">Previous Page</button>
+                <button class="btn-primary" @onclick="() => ChangePage(PageNumber + 1)">Next Page</button>
+            </div>
+
+        </div>
+    </div>
+</div>

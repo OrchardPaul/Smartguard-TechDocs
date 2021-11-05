@@ -9,15 +9,15 @@
     <div class="container-fluid">
         <div class="row">
             @*<div class="col-xl-4 col-lg-6 col-md-12 col-sm-12 col-12">
-                <div class="card">
-                    <a href="admin/worktypemapping">
-                        <div class="card-header bg-alt"><span class="fa fa-project-diagram fa-2x card-icon"></span>Map Company Work Types</div>
-                        <div class="card-body">
-                            <p class="card-text">Assign company work types to GadJIT work types.</p>
-                        </div>
-                    </a>
-                </div>
-            </div>*@
+            <div class="card">
+                <a href="admin/worktypemapping">
+                    <div class="card-header bg-alt"><span class="fa fa-project-diagram fa-2x card-icon"></span>Map Company Work Types</div>
+                    <div class="card-body">
+                        <p class="card-text">Assign company work types to GadJIT work types.</p>
+                    </div>
+                </a>
+            </div>
+        </div>*@
             <div class="col-xl-4 col-lg-6 col-md-12 col-sm-12 col-12">
                 <div class="card">
                     <a href="admin/manageusers">
@@ -28,6 +28,21 @@
                     </a>
                 </div>
             </div>
+            <AuthorizeView Roles="Super User">
+                <Authorized>
+                    <div class="col-xl-4 col-lg-6 col-md-12 col-sm-12 col-12">
+                        <div class="card">
+                            <a href="admin/managesteps">
+                                <div class="card-header bg-alt"><span class="fa fa-id-card fa-2x card-icon"></span>Step Management</div>
+                                <div class="card-body">
+                                    <p class="card-text">Manage Steps.</p>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </Authorized>
+            </AuthorizeView>
+            
         </div>
     </div>
 </div>

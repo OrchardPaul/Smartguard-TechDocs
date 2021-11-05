@@ -121,6 +121,8 @@ namespace GadjIT_V1_02.Services
         public Task<List<DmDocuments>> GetDocumentList(string caseType)
         {
             Lock = true;
+            
+
             var returnValue = httpClient.GetJsonAsync<List<DmDocuments>>($"{userSession.baseUri}api/ChapterManagement/GetDocumentList/{caseType}");
             Lock = false;
 

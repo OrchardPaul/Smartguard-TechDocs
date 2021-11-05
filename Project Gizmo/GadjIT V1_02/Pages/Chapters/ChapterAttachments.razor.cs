@@ -176,7 +176,6 @@ namespace GadjIT_V1_02.Pages.Chapters
             }
             else
             {
-
                 if (selectedList != "Edit Attachement")
                 {
                     CopyObject.LinkedItems.Add(Attachment);

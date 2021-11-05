@@ -41,6 +41,7 @@ else
                         @if (sessionState.isSuperUser)
                         {
                             <button @onclick='SyncSmartFlowSystems' class="btn btn-main btn-shadow" title="Sync Systems"><i class="fa fa-sync pr-1"></i><span>Sync Systems</span></button>
+                            <button @onclick='UpdateSteps' class="btn btn-main btn-shadow" title="Update Steps"><i class="fa fa-download pr-1"></i><span>Update Steps</span></button>
                         }
 
                         <div class="spacer"></div>
@@ -457,20 +458,20 @@ else
                                                         <option value="">Select</option>
                                                         <option value="Create New">--- Create New ---</option>
                                                         @foreach (var step in dropDownChapterList
-                                                       .Where(D => D.DocumentType == 6)
-                                                       .Where(D => D.Notes.Contains("Smartflow:"))
-                                                       .Where(V => V.CaseTypeGroupRef == (string.IsNullOrEmpty(selectedChapter.P4WCaseTypeGroup)
-                                                                                           ? -2
-                                                                                           : selectedChapter.P4WCaseTypeGroup == "Global Documents"
-                                                                                           ? 0
-                                                                                           : selectedChapter.P4WCaseTypeGroup == "Entity Documents"
-                                                                                           ? -1
-                                                                                           : partnerCaseTypeGroups
-                                                                                               .Where(P => P.Name == selectedChapter.P4WCaseTypeGroup)
-                                                                                               .Select(P => P.Id)
-                                                                                               .FirstOrDefault()))
-                                                       .OrderBy(D => D.Name)
-                                                       .ToList())
+                                                        .Where(D => D.DocumentType == 6)
+                                                        .Where(D => D.Notes.Contains("Smartflow:"))
+                                                        .Where(V => V.CaseTypeGroupRef == (string.IsNullOrEmpty(selectedChapter.P4WCaseTypeGroup)
+                                                                                            ? -2
+                                                                                            : selectedChapter.P4WCaseTypeGroup == "Global Documents"
+                                                                                            ? 0
+                                                                                            : selectedChapter.P4WCaseTypeGroup == "Entity Documents"
+                                                                                            ? -1
+                                                                                            : partnerCaseTypeGroups
+                                                                                                .Where(P => P.Name == selectedChapter.P4WCaseTypeGroup)
+                                                                                                .Select(P => P.Id)
+                                                                                                .FirstOrDefault()))
+                                                        .OrderBy(D => D.Name)
+                                                        .ToList())
                                                         {
                                                             <option value="@step.Name">
                                                                 @step.Name
@@ -714,21 +715,23 @@ else
                                                                             @(string.IsNullOrEmpty(attach.DocAsName) ? attach.DocName : attach.DocAsName)
                                                                         </span>
 
-                                                                        <span class="doc-icon hidden-sm-down">
-                                                                            @if (attach.DocAsName != "")
-                                                                            {
-                                                                                <span class="fa fa-clone" title="Template: @attach.DocName"></span>
-                                                                            }
+                                                                        <span class="doc-icon hidden-sm-down @(attach.DocAsName != "" ? "" : "invisible")">
+                                                                            <span class="fa fa-clone" title="Template: @attach.DocName"></span>
                                                                         </span>
 
-                                                                        <span class="doc-icon-lg hidden-sm-down">
-                                                                            @if (attach.Action == "SCHEDULE")
-                                                                            {
-                                                                                <span class="" title="@("Will be scheduled for " + attach.ScheduleDays.ToString() + " days" + (!string.IsNullOrEmpty(attach.ScheduleDataItem) ? " from " + attach.ScheduleDataItem : ""))">@(!string.IsNullOrEmpty(attach.ScheduleDataItem) ? "* " : "") @attach.ScheduleDays.ToString()d</span>
-                                                                            }
+
+                                                                        <span class="doc-icon hidden-sm-down @(@selectedChapter.ShowDocumentTracking == "Y" && !(attach.TrackingMethod is null) && "Send Only|Response Required".Contains(attach.TrackingMethod) ? "" : "invisible")">
+
+                                                                                <span title="@($"This item is tracked: {attach.TrackingMethod}")" class="fa fa-map-marker-alt">HI</span>
                                                                         </span>
 
-                                                                        </li>
+
+                                                                        <span class="doc-icon-lg hidden-sm-down @(attach.Action == "SCHEDULE" ? "" : "invisible")">
+                                                                            <span class="" title="@("Will be scheduled for " + attach.ScheduleDays.ToString() + " days" + (!string.IsNullOrEmpty(attach.ScheduleDataItem) ? " from " + attach.ScheduleDataItem : ""))">@(!string.IsNullOrEmpty(attach.ScheduleDataItem) ? "* " : "") @attach.ScheduleDays.ToString()d</span>
+                                                                        </span>
+
+
+                                                                    </li>
                                                                         }
                                                                         <li class="ellipsis-menu-divider"></li>
                                                                     }
