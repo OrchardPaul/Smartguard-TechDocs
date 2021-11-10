@@ -884,17 +884,32 @@ namespace GadjIT_V1_02.Pages.Chapters
                 }
                 if (listType == "Docs" | listType == "All")
                 {
-                    lstDocs = lstAll    
+                    lstDocs = lstAll
                                         .OrderBy(A => A.ChapterObject.SeqNo)
                                         .Where(A => A.ChapterObject.Type == "Doc")
                                         .Select(A => {
+                                            //Make sure all Items have the DocType set by comparing against dm_documents for matches
                                             A.DocType = dropDownChapterList.Where(D => D.Name.ToUpper() == A.ChapterObject.Name.ToUpper())
-                                                                                        .Select(D => string.IsNullOrEmpty(docTypes[D.DocumentType]) ? "Doc" : docTypes[D.DocumentType])
-                                                                                        .FirstOrDefault();
-                                            A.ChapterObject.RescheduleDays = !string.IsNullOrEmpty(A.ChapterObject.AsName) && A.ChapterObject.RescheduleDays is null ? 0 : A.ChapterObject.RescheduleDays;
-                                                        return A;
+                                                                                    .Select(D => string.IsNullOrEmpty(docTypes[D.DocumentType]) ? "Doc" : docTypes[D.DocumentType])
+                                                                                    .FirstOrDefault();
+                                        A.ChapterObject.RescheduleDays = !string.IsNullOrEmpty(A.ChapterObject.AsName) && A.ChapterObject.RescheduleDays is null ? 0 : A.ChapterObject.RescheduleDays;
+                                        A.ChapterObject.Action = (A.ChapterObject.Action == "" ? "INSERT" : A.ChapterObject.Action);
+                                            
+                                            return A;
                                         })
                                         .ToList();
+
+                    //Make sure all Linked Items have the DocType set by comparing against dm_documents for matches
+                    foreach(VmUsrOrDefChapterManagement doc in lstDocs)
+                    {
+                        if(doc.ChapterObject.LinkedItems != null)
+                        {
+                            doc.ChapterObject.LinkedItems.ForEach(LI => LI.DocType = dropDownChapterList.Where(D => D.Name.ToUpper() == LI.DocName.ToUpper())
+                                                                                    .Select(D => string.IsNullOrEmpty(docTypes[D.DocumentType]) ? "Doc" : docTypes[D.DocumentType])
+                                                                                    .FirstOrDefault()
+                                                                                    );
+                        }
+                    }
 
                 }
                 if (listType == "Fees" | listType == "All")

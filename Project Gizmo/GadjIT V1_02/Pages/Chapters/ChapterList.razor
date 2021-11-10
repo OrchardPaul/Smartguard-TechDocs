@@ -700,7 +700,7 @@ else
                                                                     <li class="font-85" @onclick='(() => PrepareAttachmentForEdit(doc, attach))'>
                                                                         <span class="font-85" title="@attach.Action">
                                                                             <span class="doc-icon @(attach.Action == "TAKE" ? "" : "invisible")"><span class="fa fa-running mr-2"></span></span>
-                                                                            <span class="doc-icon @(attach.Action == "INSERT" ? "" : "invisible")"><span class="fa fa-hand-point-down mr-2"></span></span>
+                                                                            <span class="doc-icon @(attach.Action == "INSERT" ? "" : "invisible")"><span class="fa fa-arrow-down mr-2"></span></span>
                                                                             <span class="doc-icon @(attach.Action == "SCHEDULE" ? "" : "invisible")"><span class="fa fa-calendar-check mr-2"></span></span>
                                                                         </span>
                                                                         <span class="font-85">
@@ -720,9 +720,9 @@ else
                                                                         </span>
 
 
-                                                                        <span class="doc-icon hidden-sm-down @(@selectedChapter.ShowDocumentTracking == "Y" && !(attach.TrackingMethod is null) && "Send Only|Response Required".Contains(attach.TrackingMethod) ? "" : "invisible")">
+                                                                        <span class="doc-icon hidden-sm-down @(@selectedChapter.ShowDocumentTracking == "Y" && !(string.IsNullOrEmpty(attach.TrackingMethod)) && "Send Only|Response Required".Contains(attach.TrackingMethod) ? "" : "invisible")">
 
-                                                                                <span title="@($"This item is tracked: {attach.TrackingMethod}")" class="fa fa-map-marker-alt">HI</span>
+                                                                                <span title="@($"This item is tracked: {attach.TrackingMethod}")" class="fa fa-map-marker-alt"></span>
                                                                         </span>
 
 
@@ -812,7 +812,7 @@ else
 
                                             <span class="font-100" title="@doc.ChapterObject.Action">
                                                 <span class="doc-icon @(doc.ChapterObject.Action == "TAKE" ? "" : "invisible")"><span class="fa fa-running mr-2"></span></span>
-                                                <span class="doc-icon @(doc.ChapterObject.Action == "INSERT" ? "" : "invisible")"><span class="fa fa-hand-point-down mr-2"></span></span>
+                                                <span class="doc-icon @(doc.ChapterObject.Action == "INSERT" ? "" : "invisible")"><span class="fa fa-arrow-down mr-2"></span></span>
                                             </span>
                                             <span class="font-100">
                                                 <span class="doc-icon @(doc.DocType == "Doc" ? "" : "invisible")" title="Document"><span class="fa fa-file mr-2"></span></span>
@@ -861,7 +861,7 @@ else
                                             </div>
                                         }
 
-                                        @if (@selectedChapter.ShowDocumentTracking == "Y" && !(doc.ChapterObject.TrackingMethod is null) && "Send Only|Response Required".Contains(doc.ChapterObject.TrackingMethod))
+                                        @if (@selectedChapter.ShowDocumentTracking == "Y" && !(string.IsNullOrEmpty(doc.ChapterObject.TrackingMethod)) && "Send Only|Response Required".Contains(doc.ChapterObject.TrackingMethod))
                                         {
                                             <div class="data-item-right hidden-md-down">
                                                 <ModalTooltip Direction="left" Text=@($"This item is tracked: {doc.ChapterObject.TrackingMethod}") Class="w-2">
