@@ -1,0 +1,38 @@
+﻿@page "/Release"
+
+<div class="tran-block page-header-block ">
+    <h3>Release Notes</h3>
+    <p class="hidden-md-down">Smartflow Release Notes and Product Updates</p>
+</div>
+
+<div class="mb-4 grid-tran grid-chapter-nav">
+    <div class="tran-block rounded">
+        <div class="grid-nav">
+            
+            @if(CurrentVersion == "")
+            {
+                foreach(var version in ListVersions)
+                {
+                    <div class="grid-row-md nav-row-3 no-border ">
+                        <div class="data-item">
+
+                            <div class="data-item-sub">@version.VersionName</div>
+                            <div class="data-item-sub">@version.FromDate.ToString("dd MMM yyyy") to @version.ToDate.ToString("dd MMM yyyy")</div>
+
+                            <div title="Click to edit" class="data-item-right link-direction" @onclick="() => SelectVersion(version.VersionName)">
+                                <i class="fa fa-folder-open"></i> View
+                            </div>
+                        </div>
+                    </div>
+                }
+
+            }
+            else
+            {
+
+            }
+        </div>
+    </div>
+</div>
+
+

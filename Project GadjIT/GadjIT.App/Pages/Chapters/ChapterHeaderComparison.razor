@@ -1,0 +1,211 @@
+﻿@if (!(Object.AltChapter is null | Object.CurrentChapter is null))
+{
+    <div class="modal-body" tabindex="0">
+        <table class="table-basic table-left-header table-borderless">
+            <thead>
+
+                <tr>
+                    <td style="width: 150px">
+                    </td>
+                    <td style="width: 250px">
+                        <div class=" d-flex justify-content-center">
+                            @(sessionState.selectedSystem == "Dev" ? "Dev" : "Live")
+                        </div>
+                    </td>
+                    <td style="width: 250px">
+                        <div class=" d-flex justify-content-center">
+                            @(sessionState.selectedSystem == "Dev" ? "Live" : "Dev")
+                        </div>
+                    </td>
+                    <td style="width: 30px">
+                    </td>
+                    <td></td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        Case Type Group
+                    </td>
+                    <td>
+                        @Object.CurrentChapter.P4WCaseTypeGroup
+                    </td>
+                    <td>
+                        @Object.AltChapter.P4WCaseTypeGroup
+                    </td>
+                    <td>
+                        <span class="fa fa-@(Object.CurrentChapter.P4WCaseTypeGroup == @Object.AltChapter.P4WCaseTypeGroup ? "check" : "exclamation")"></span>
+                    </td>
+                    <td>
+                        @if (Object.CurrentChapter.P4WCaseTypeGroup != @Object.AltChapter.P4WCaseTypeGroup)
+                        {
+                            <input type="checkbox" class="ml-1 mt-1" @bind="@syncCaseTypeGroup" />
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Smartflow View
+                    </td>
+                    <td>
+                        @Object.CurrentChapter.SelectedView
+                    </td>
+                    <td>
+                        @Object.AltChapter.SelectedView
+                    </td>
+                    <td>
+                        <span class="fa fa-@(Object.CurrentChapter.SelectedView == @Object.AltChapter.SelectedView ? "check" : "exclamation")"></span>
+                    </td>
+                    <td>
+                        @if (Object.CurrentChapter.SelectedView != @Object.AltChapter.SelectedView)
+                        {
+                            <input type="checkbox" class="ml-1 mt-1" @bind="@syncView" />
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Step Name
+                    </td>
+                    <td>
+                        @Object.CurrentChapter.StepName
+                    </td>
+                    <td>
+                        @Object.AltChapter.StepName
+                    </td>
+                    <td>
+                        <span class="fa fa-@(Object.CurrentChapter.StepName == @Object.AltChapter.StepName ? "check" : "exclamation")"></span>
+                    </td>
+                    <td>
+                        @if (Object.CurrentChapter.StepName != @Object.AltChapter.StepName)
+                        {
+                            <input type="checkbox" class="ml-1 mt-1" @bind="@syncStepName" />
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Background Colour
+                    </td>
+                    <td>
+                        @Object.CurrentChapter.BackgroundColour
+                    </td>
+                    <td>
+                        @Object.AltChapter.BackgroundColour
+                    </td>
+                    <td>
+                        <span class="fa fa-@(Object.CurrentChapter.BackgroundColour == @Object.AltChapter.BackgroundColour ? "check" : "exclamation")"></span>
+                    </td>
+                    <td>
+                        @if (Object.CurrentChapter.BackgroundColour != @Object.AltChapter.BackgroundColour)
+                        {
+                            <input type="checkbox" class="ml-1 mt-1" @bind="@syncBgColour" />
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Background Image
+                    </td>
+                    <td>
+                        @Object.CurrentChapter.BackgroundImageName
+                    </td>
+                    <td>
+                        @Object.AltChapter.BackgroundImageName
+                    </td>
+                    <td>
+                        <span class="fa fa-@(Object.CurrentChapter.BackgroundImage == @Object.AltChapter.BackgroundImage ? "check" : "exclamation")"></span>
+                    </td>
+                    <td>
+                        @if (Object.CurrentChapter.BackgroundImage != @Object.AltChapter.BackgroundImage)
+                        {
+                            <input type="checkbox" class="ml-1 mt-1" @bind="@syncBgImage" />
+                        }
+
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Show Notes
+                    </td>
+                    <td>
+                        @Object.CurrentChapter.ShowPartnerNotes
+                    </td>
+                    <td>
+                        @Object.AltChapter.ShowPartnerNotes
+                    </td>
+                    <td>
+                        <span class="fa fa-@(Object.CurrentChapter.ShowPartnerNotes == @Object.AltChapter.ShowPartnerNotes ? "check" : "exclamation")"></span>
+                    </td>
+                    <td>
+                        @if (Object.CurrentChapter.ShowPartnerNotes != @Object.AltChapter.ShowPartnerNotes)
+                        {
+                            <input type="checkbox" class="ml-1 mt-1" @bind="@syncShowPartnerNotes" />
+                        }
+
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Track Documents
+                    </td>
+                    <td>
+                        @Object.CurrentChapter.ShowDocumentTracking
+                    </td>
+                    <td>
+                        @Object.AltChapter.ShowDocumentTracking
+                    </td>
+                    <td>
+                        <span class="fa fa-@(Object.CurrentChapter.ShowDocumentTracking == @Object.AltChapter.ShowDocumentTracking ? "check" : "exclamation")"></span>
+                    </td>
+                    <td>
+                        @if (Object.CurrentChapter.ShowDocumentTracking != @Object.AltChapter.ShowDocumentTracking)
+                        {
+                            <input type="checkbox" class="ml-1 mt-1" @bind="@syncShowDocumentTracking" />
+                        }
+
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td>
+                    </td>
+                    <td>
+                        <div class=" d-flex justify-content-center">
+                            <button type="submit" autofocus class="btn btn-main" @onclick="() => HandleValidSubmit(false)">@(sessionState.selectedSystem == "Dev" ? ">> Live" : ">> Dev")</button>
+                        </div>
+                    </td>
+                    <td>
+                        <div class=" d-flex justify-content-center">
+                            <button type="submit" autofocus class="btn btn-main" @onclick="() => HandleValidSubmit(true)">@(sessionState.selectedSystem == "Dev" ? "Dev <<" : "Live <<")</button>
+                        </div>
+                    </td>
+                    <td>
+                    </td>
+                    <td>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+}
+else
+{
+    @code {
+        string curSystem;
+    }
+
+
+    curSystem = (sessionState.selectedSystem == "Dev" ? "Live" : "Dev");
+
+    <div class="modal-body">
+        <p>Smartflow item does not exist on @curSystem</p>
+        <p>Do you wish create this object on @curSystem?</p>
+    </div>
+
+    <div class="button-container">
+        <button type="submit" autofocus class="btn btn-main" @onclick="() => AddObject()">Create on @curSystem</button>
+        <button type="button" class="btn btn-secondary" @onclick="() => Close()">Cancel</button>
+    </div>
+}

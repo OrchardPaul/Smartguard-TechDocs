@@ -1,0 +1,60 @@
+﻿@page "/system/manageuserroles"
+@using GadjIT_App.Pages.Shared.Modals
+
+<div class="tran-block page-header-block ">
+    <div class="page-header-title">
+        <div class="float-left back-link">
+            <NavLink href="system"><span class="col-alt fa fa-angle-double-left"></span></NavLink>
+        </div>
+        <h3>Manage User Roles</h3>
+    </div>
+</div>
+
+    @if (lstRoles is null)
+    {
+        <div class="spinner"></div>
+    }
+    else
+    {
+        <div class="col-xl-8 col-12 mb-3 tran-block rounded">
+
+            <div class="container-fluid ">
+                <div class="mb-3">
+                    <button @onclick='(() => PrepareForInsert())' class="btn btn-main"><i class="fa fa-plus"></i> Add New Role</button>
+                </div>
+                <div class="grid-can-edit">
+                    <div class="row grid-header hidden-lg-down">
+                        <div class="col-xl-5 col-12 data-item"><div class="data-item-sub">Name</div></div>
+                        <div class="col-7 hidden-lg-down data-item"><div class="data-item-sub">Description</div></div>
+                    </div>
+                    @foreach (var role in lstRoles)
+                    {
+                        <div class="row grid-row">
+                            <div class="col-xl-5 col-12 data-item">
+                                <div class="btn-ellipses float-left">
+                                    <span class="fa fa-ellipsis-v"></span>
+                                    <div class="ellipsis-menu">
+                                        <ul>
+                                            <li class="col-main" @onclick='(() => PrepareForEdit(role))'>
+                                                <span class="fa fa-pencil-alt mr-2"></span>
+                                                <span>Edit</span>
+                                            </li>
+                                            <li class="col-red" @onclick="(() => PrepareForDelete(role))">
+                                                <span class="fa fa-trash-alt mr-2"></span>
+                                                <span>Delete</span>
+                                            </li>
+
+
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="data-item-sub"><span class="fa fa-user-alt mr-1"></span> @role.Name</div>
+                            </div>
+                            <div class="col-7 hidden-lg-down data-item"><div class="data-item-sub">@role.RoleDescription</div></div>
+                        </div>
+
+                    }
+                </div>
+            </div>
+        </div>
+    }

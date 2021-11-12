@@ -1,0 +1,90 @@
+﻿
+<div class="modal-body" tabindex="0">
+    <table class="table-basic table-top-header table-left-header table-borderless">
+        <thead>
+
+            <tr>
+                <td style="width: 150px">
+                </td>
+                <td style="width: 500px">
+                </td>
+            </tr>
+        </thead>
+        <tbody>
+
+            <tr>
+                <td>
+                    Action
+                </td>
+                <td>
+                    <input type="text" class="read-only" readonly value="@Attachment.Action" />
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    Document
+                </td>
+                <td>
+                    <input type="text" class="read-only" readonly value="@Attachment.DocName" />
+                </td>
+            </tr>
+
+            @if (Attachment.Action == "SCHEDULE")
+            {
+                <tr>
+                    <td>
+                        Schedule Days
+                    </td>
+                    <td>
+                        @Attachment.ScheduleDays
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        Reschedule From Data Item
+                    </td>
+                    <td>
+                        <input type="text" class="read-only" readonly value="@Attachment.ScheduleDataItem" />
+                    </td>
+                </tr>
+
+            }
+
+            @if (SelectedChapter.ShowDocumentTracking == "Y" && Attachment.Action != "SCHEDULE")
+            {
+
+                <tr>
+                    <td>
+                        Tracking Method
+                    </td>
+                    <td>
+                        <input type="text" class="read-only" readonly value="@Attachment.TrackingMethod" />
+                    </td>
+                </tr>
+
+                @if (Attachment.TrackingMethod == "Response Required")
+                {
+                    <tr>
+                        <td>
+                            Tracking Method
+                        </td>
+                        <td>
+                            <input type="text" class="read-only" readonly value="@Attachment.ChaserDesc" />
+                        </td>
+                    </tr>
+                }
+
+
+            }
+
+
+
+        </tbody>
+    </table>
+</div>
+
+<div class="button-container">
+    <button type="button" class="btn btn-secondary" @onclick="() => Close()">Close</button>
+</div>

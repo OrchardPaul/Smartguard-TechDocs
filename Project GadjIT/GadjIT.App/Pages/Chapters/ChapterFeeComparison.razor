@@ -1,0 +1,170 @@
+﻿@if (!(Object.AltObject is null | Object.FeeObject is null))
+{
+    <div class="modal-body" tabindex="0">
+        <table class="table-basic table-top-header table-left-header table-borderless">
+            <thead>
+
+                <tr>
+                    <td style="width: 150px">
+                    </td>
+                    <td style="width: 250px">
+                        <div class=" d-flex justify-content-center">
+                            @(sessionState.selectedSystem == "Dev" ? "Dev" : "Live")
+                        </div>
+                    </td>
+                    <td style="width: 250px">
+                        <div class=" d-flex justify-content-center">
+                            @(sessionState.selectedSystem == "Dev" ? "Live" : "Dev")
+                        </div>
+                    </td>
+                    <td style="width: 30px">
+                    </td>
+
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        Seq Number
+                    </td>
+                    <td>
+                        @Object.FeeObject.SeqNo
+                    </td>
+                    <td>
+                        @Object.AltObject.SeqNo
+                    </td>
+                    <td>
+                        <span class="fa fa-@(Object.FeeObject.SeqNo == @Object.AltObject.SeqNo ? "check" : "exclamation")"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Fee Name:
+                    </td>
+                    <td>
+                        <input type="text" class="read-only" readonly value="@Object.FeeObject.FeeName" />
+                    </td>
+                    <td>
+                        <input type="text" class="read-only" value="@Object.AltObject.FeeName" />
+                    </td>
+                    <td>
+                        <span class="fa fa-@(Object.FeeObject.FeeName == @Object.AltObject.FeeName ? "check" : "exclamation")"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Fee Category
+                    </td>
+                    <td>
+                        <input type="text" class="read-only" readonly value="@Object.FeeObject.FeeCategory" />
+                    </td>
+                    <td>
+                        <input type="text" class="read-only" value="@Object.AltObject.FeeCategory" />
+                    </td>
+                    <td>
+                        <span class="fa fa-@(Object.FeeObject.FeeCategory == @Object.AltObject.FeeCategory ? "check" : "exclamation")"></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        Amount
+                    </td>
+                    <td>
+                        @Object.FeeObject.Amount
+                    </td>
+                    <td>
+                        @Object.AltObject.Amount
+                    </td>
+                    <td>
+                        <span class="fa fa-@(Object.FeeObject.Amount == @Object.AltObject.Amount ? "check" : "exclamation")"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        VATable
+                    </td>
+                    <td>
+                        <input type="text" class="read-only" value="@Object.FeeObject.VATable" />
+                    </td>
+                    <td>
+                        <input type="text" class="read-only" value="@Object.AltObject.VATable" />
+                    </td>
+                    <td>
+                        <span class="fa fa-@(Object.FeeObject.VATable == @Object.AltObject.VATable ? "check" : "exclamation")"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Posting Type
+                    </td>
+                    <td>
+                        <input type="text" class="read-only" value="@Object.FeeObject.PostingType" />
+                    </td>
+                    <td>
+                        <input type="text" class="read-only" value="@Object.AltObject.PostingType" />
+                    </td>
+                    <td>
+                        <span class="fa fa-@(Object.FeeObject.PostingType == @Object.AltObject.PostingType ? "check" : "exclamation")"></span>
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td>
+                    </td>
+                    <td>
+                        <div class=" d-flex justify-content-center">
+                            <button type="submit" autofocus class="btn btn-main" @onclick="() => HandleValidSubmit(false)">@(sessionState.selectedSystem == "Dev" ? ">> Live" : ">> Dev")</button>
+                        </div>
+                    </td>
+                    <td>
+                        <div class=" d-flex justify-content-center">
+                            <button type="submit" autofocus class="btn btn-main" @onclick="() => HandleValidSubmit(true)">@(sessionState.selectedSystem == "Dev" ? "Dev <<" : "Live <<")</button>
+                        </div>
+                    </td>
+                    <td>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+}
+else
+{
+    @code {
+        string curSystem;
+    }
+
+    @if (Object.AltObject is null)
+    {
+        curSystem = (sessionState.selectedSystem == "Dev" ? "Live" : "Dev");
+    }
+    else
+    {
+        curSystem = (sessionState.selectedSystem == "Dev" ? "Dev" : "Live");
+
+    }
+
+    @if (!CreateNewSmartflow)
+    {
+        <div class="modal-body">
+            <p>Smartflow item does not exist on @curSystem</p>
+            <p>Do you wish create this object on @curSystem?</p>
+        </div>
+    }
+    else
+    {
+        <div class="modal-body">
+            <p>Smartflow does not exist on @curSystem</p>
+            <p>Do you wish create this Smartflow on @curSystem?</p>
+        </div>
+    }
+
+    <div class="button-container">
+        <button type="submit" autofocus class="btn btn-main" @onclick="() => AddObject(false)">Create on @curSystem</button>
+        <button type="button" class="btn btn-secondary" @onclick="() => Close()">Cancel</button>
+    </div>
+}
+
+

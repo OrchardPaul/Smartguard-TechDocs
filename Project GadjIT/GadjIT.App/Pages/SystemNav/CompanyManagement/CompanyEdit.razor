@@ -1,0 +1,84 @@
+﻿<EditForm Model="@TaskObject" OnValidSubmit="@HandleValidSubmit">
+    <div class="modal-body">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <h5>Company:</h5>
+        <div class="form-group">
+            <label for="@TaskObject.CompanyName">Company Name</label>
+            <InputText class="form-control form-control-lg" @bind-Value="TaskObject.CompanyName"></InputText>
+        </div>
+        <div class="form-group">
+            <label for="@TaskObject.CompanyDesc">Description</label>
+            <InputText class="form-control form-control-lg" @bind-Value="TaskObject.CompanyDesc"></InputText>
+        </div>
+
+        <h5>Client APIs:</h5>
+        <div class="form-group">
+            <label for="@TaskObject.DevUri">Dev URL</label>
+            <InputText class="form-control form-control-xl" @bind-Value="TaskObject.DevUri"></InputText>
+        </div>
+
+        <div class="form-group">
+            <label for="@TaskObject.LiveUri">Live URL</label>
+            <InputText class="form-control form-control-xl" @bind-Value="TaskObject.LiveUri"></InputText>
+        </div>
+
+        <div class="hidden-lg-down">
+            <h5>Colours:</h5>
+            <div class="float-left" style="width: 200px">
+                <div class="form-group">
+                    <label for="@TaskObject.CompCol1">Buttons</label>
+                    <InputText class="form-control" style="width: 100px" @bind-Value="TaskObject.CompCol1"></InputText>
+                </div>
+
+                <div class="form-group">
+                    <label for="@TaskObject.CompCol3">Links</label>
+                    <InputText class="form-control" style="width: 100px" @bind-Value="TaskObject.CompCol3"></InputText>
+                </div>
+            </div>
+
+            <div class="float-left" style="width: 200px">
+
+                <div class="form-group">
+                    <label for="@TaskObject.CompCol2">Contrast</label>
+                    <InputText class="form-control" style="width: 100px" @bind-Value="TaskObject.CompCol2"></InputText>
+                </div>
+                <div class="form-group">
+                    <label for="@TaskObject.CompCol4">Contrast</label>
+                    <InputText class="form-control" style="width: 100px" @bind-Value="TaskObject.CompCol4"></InputText>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="@TaskObject.CurrentVersion">Smartflow Version</label>
+            <InputText class="form-control form-control-lg" @bind-Value="TaskObject.CurrentVersion"></InputText>
+        </div>
+    </div>
+
+    <div class="button-container">
+        <button type="submit" class="float-left btn btn-main">Save</button>
+        <button type="button" @onclick="@Close" class="btn btn-secondary">Cancel</button>
+    </div>
+
+
+</EditForm>
+
+
+
+@functions {
+    bool ShowForm { get; set; } = true;
+    string FirstName { get; set; }
+    string LastName { get; set; }
+
+    void SubmitForm()
+    {
+        ShowForm = false;
+    }
+
+    void CancelForm()
+    {
+        ShowForm = true;
+    }
+}
