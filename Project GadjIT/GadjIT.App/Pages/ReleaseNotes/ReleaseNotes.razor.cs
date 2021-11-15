@@ -7,7 +7,7 @@ namespace GadjIT_App.Pages.ReleaseNotes
 {
     public partial class ReleaseNotes
     {
-        private class VersionItem
+        public class VersionItem
         {
             public string VersionName { get; set; }
             public DateTime FromDate { get; set; }
@@ -16,6 +16,8 @@ namespace GadjIT_App.Pages.ReleaseNotes
         }
 
         public string CurrentVersion { get; set; } = "";
+
+        public VersionItem SelectedVersion { get; set; }
 
         private List<VersionItem> ListVersions
         {
@@ -33,7 +35,14 @@ namespace GadjIT_App.Pages.ReleaseNotes
 
         public void SelectVersion(string version)
         {
+            SelectedVersion = ListVersions.Where(V => V.VersionName == version).FirstOrDefault();
             CurrentVersion = version;
+            StateHasChanged();
+        }
+
+        void SelectHome()
+        {
+            CurrentVersion = "";
             StateHasChanged();
         }
     }
