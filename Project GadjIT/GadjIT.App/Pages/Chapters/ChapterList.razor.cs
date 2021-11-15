@@ -893,24 +893,25 @@ namespace GadjIT_App.Pages.Chapters
                                             A.DocType = dropDownChapterList.Where(D => D.Name.ToUpper() == A.ChapterObject.Name.ToUpper())
                                                                                     .Select(D => string.IsNullOrEmpty(docTypes[D.DocumentType]) ? "Doc" : docTypes[D.DocumentType])
                                                                                     .FirstOrDefault();
-                                        A.ChapterObject.RescheduleDays = !string.IsNullOrEmpty(A.ChapterObject.AsName) && A.ChapterObject.RescheduleDays is null ? 0 : A.ChapterObject.RescheduleDays;
-                                        A.ChapterObject.Action = (A.ChapterObject.Action == "" ? "INSERT" : A.ChapterObject.Action);
-                                            
+                                            A.ChapterObject.RescheduleDays = !string.IsNullOrEmpty(A.ChapterObject.AsName) && A.ChapterObject.RescheduleDays is null ? 0 : A.ChapterObject.RescheduleDays;
+                                            A.ChapterObject.Action = (A.ChapterObject.Action == "" ? "INSERT" : A.ChapterObject.Action);
+                                            //Make sure all Linked Items have the DocType set by comparing against dm_documents for matches
+                                            A.ChapterObject.LinkedItems = A.ChapterObject.LinkedItems == null
+                                                                                    ? null
+                                                                                    : A.ChapterObject.LinkedItems
+                                                                                                    .Select(L => {
+                                                                                                        L.DocType = dropDownChapterList
+                                                                                                                .Where(D => D.Name.ToUpper() == L.DocName.ToUpper())
+                                                                                                                .Select(D => string.IsNullOrEmpty(docTypes[D.DocumentType]) ? "Doc" : docTypes[D.DocumentType])
+                                                                                                                .FirstOrDefault();
+                                                                                                        return L;
+                                                                                                                }
+                                                                                        ).ToList(); 
                                             return A;
                                         })
                                         .ToList();
 
-                    //Make sure all Linked Items have the DocType set by comparing against dm_documents for matches
-                    foreach(VmUsrOrDefChapterManagement doc in lstDocs)
-                    {
-                        if(doc.ChapterObject.LinkedItems != null)
-                        {
-                            doc.ChapterObject.LinkedItems.ForEach(LI => LI.DocType = dropDownChapterList.Where(D => D.Name.ToUpper() == LI.DocName.ToUpper())
-                                                                                    .Select(D => string.IsNullOrEmpty(docTypes[D.DocumentType]) ? "Doc" : docTypes[D.DocumentType])
-                                                                                    .FirstOrDefault()
-                                                                                    );
-                        }
-                    }
+                    
 
                 }
                 if (listType == "Fees" | listType == "All")
