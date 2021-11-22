@@ -525,15 +525,20 @@ app {
         margin: 5px 0 0 0 0;
     }
 
-.page-header-block #right-block{
-    position: absolute;
-    top: 70px;
-    right: 30px;
+.page-header-block #right-block {
+    float: right;
+    margin-top: -60px;
+    margin-right: 20px;
     height: 50px;
     width: 300px;
     text-align: right;
 }
 
+@media (max-width: 1199px) {
+    .page-header-block #right-block {
+        visibility: hidden;
+    }
+}
 .detail-block {
     width: 100%;
     margin: 20px 10px 20px 0px;

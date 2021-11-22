@@ -3,6 +3,7 @@ using GadjIT_App.Services.SessionState;
 using Microsoft.AspNetCore.Components;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Net.Http.Json;
 using System.Threading.Tasks;
 
 namespace GadjIT_App.Services
@@ -25,46 +26,25 @@ namespace GadjIT_App.Services
             this.userSession = userSession;
         }
 
-        public Task<List<CaseTypes>> GetPartnerCaseTypes()
+        public async Task<List<CaseTypes>> GetPartnerCaseTypes()
         {
-            var result = httpClient.GetJsonAsync<List<CaseTypes>>($"{userSession.baseUri}api/PartnerAccess/GetAllCaseTypes");
+            var result = await httpClient.GetFromJsonAsync<List<CaseTypes>>($"{userSession.baseUri}api/PartnerAccess/GetAllCaseTypes");
 
-            if (result.Exception is null)
-            {
-                return result;
-            }
-            else
-            {
-                return null;
-            }
+            return result;
         }
 
         public Task<List<CaseTypeGroups>> GetPartnerCaseTypeGroups()
         {
-            var result = httpClient.GetJsonAsync<List<CaseTypeGroups>>($"{userSession.baseUri}api/PartnerAccess/GetAllCaseTypeGroups");
+            var result = httpClient.GetFromJsonAsync<List<CaseTypeGroups>>($"{userSession.baseUri}api/PartnerAccess/GetAllCaseTypeGroups");
 
-            if (result.Exception is null)
-            {
-                return result;
-            }
-            else
-            {
-                return null;
-            }
+            return result;
         }
 
         public Task<List<MpSysViews>> GetPartnerViews()
         {
-            var result = httpClient.GetJsonAsync<List<MpSysViews>>($"{userSession.baseUri}api/PartnerAccess/GetAllP4WViews");
+            var result = httpClient.GetFromJsonAsync<List<MpSysViews>>($"{userSession.baseUri}api/PartnerAccess/GetAllP4WViews");
 
-            if (result.Exception is null)
-            {
-                return result;
-            }
-            else
-            {
-                return null;
-            }
+            return result;
         }
     }
 }

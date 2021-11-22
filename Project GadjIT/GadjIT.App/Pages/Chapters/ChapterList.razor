@@ -2140,7 +2140,7 @@ else
                         </div>
 
                         <div class="custom-file">
-                            <InputFile multiple OnChange="HandleBgImageFileSelection" class="custom-file-input" id="customFileInput"></InputFile>
+                            <BlazorInputFile.InputFile multiple OnChange="HandleBgImageFileSelection" class="custom-file-input" id="customFileInput"></BlazorInputFile.InputFile>
                             <label class="custom-file-label" for="customInput">Upload images</label>
                         </div>
 
@@ -2189,7 +2189,7 @@ else
                         <div class="alert alert-danger mt-3 @(string.IsNullOrEmpty(alertMsgJSOM) ? "hidden" : "")">@alertMsgJSOM</div>
 
                         <div class="custom-file">
-                            <InputFile multiple OnChange="HandleBackupFileSelection" class="custom-file-input" id="customFileInput"></InputFile>
+                            <BlazorInputFile.InputFile multiple OnChange="HandleBackupFileSelection" class="custom-file-input" id="customFileInput"></BlazorInputFile.InputFile>
                             <label class="custom-file-label" for="customInput">Upload backup files</label>
                         </div>
 

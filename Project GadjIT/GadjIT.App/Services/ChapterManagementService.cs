@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Json;
 using System.Threading.Tasks;
 
 namespace GadjIT_App.Services
@@ -48,9 +49,12 @@ namespace GadjIT_App.Services
         public bool Lock { get; set; } = false;
 
 
+
         public async Task<UsrOrsfSmartflows> Add(UsrOrsfSmartflows item)
         {
-            return await httpClient.PostJsonAsync<UsrOrsfSmartflows>($"{userSession.baseUri}api/ChapterManagement/Add", item);
+            using var response = await httpClient.PostAsJsonAsync($"{userSession.baseUri}api/ChapterManagement/Add", item);
+
+            return await response.Content.ReadFromJsonAsync<UsrOrsfSmartflows>();
         }
 
         public async Task<UsrOrsfSmartflows> Update(UsrOrsfSmartflows item)
@@ -65,29 +69,39 @@ namespace GadjIT_App.Services
 
             await companyDbAccess.SaveSmartFlowRecordData(item, userSession);
 
-            return await httpClient.PutJsonAsync<UsrOrsfSmartflows>($"{userSession.baseUri}api/ChapterManagement/Update/{item.Id}", item);
+            using var response = await httpClient.PutAsJsonAsync($"{userSession.baseUri}api/ChapterManagement/Update/{item.Id}", item);
+
+            return await response.Content.ReadFromJsonAsync<UsrOrsfSmartflows>();
         }
 
         public async Task<UsrOrsfSmartflows> UpdateMainItem(UsrOrsfSmartflows item)
         {
             await companyDbAccess.SaveSmartFlowRecord(item, userSession);
 
-            return await httpClient.PutJsonAsync<UsrOrsfSmartflows>($"{userSession.baseUri}api/ChapterManagement/Update/{item.Id}", item);
+            using var response = await httpClient.PutAsJsonAsync($"{userSession.baseUri}api/ChapterManagement/Update/{item.Id}", item);
+
+            return await response.Content.ReadFromJsonAsync<UsrOrsfSmartflows>();
         }
 
 
 
-        public Task<List<UsrOrsfSmartflows>> UpdateCaseType(string newCaseTypeName, string originalCaseTypeName, string caseTypeGroup)
+        public async Task<List<UsrOrsfSmartflows>> UpdateCaseType(string newCaseTypeName, string originalCaseTypeName, string caseTypeGroup)
         {
             var item = new UsrOrsfSmartflows();
-            return httpClient.PutJsonAsync<List<UsrOrsfSmartflows>>($"{userSession.baseUri}api/ChapterManagement/UpdateCaseType/{newCaseTypeName}/{originalCaseTypeName}/{caseTypeGroup}", item);
+
+            using var response = await httpClient.PutAsJsonAsync($"{userSession.baseUri}api/ChapterManagement/UpdateCaseType/{newCaseTypeName}/{originalCaseTypeName}/{caseTypeGroup}", item);
+
+            return await response.Content.ReadFromJsonAsync<List<UsrOrsfSmartflows>>();
         }
 
 
-        public Task<List<UsrOrsfSmartflows>> UpdateCaseTypeGroups(string newCaseTypeGroupName, string originalCaseTypeGroupName)
+        public async Task<List<UsrOrsfSmartflows>> UpdateCaseTypeGroups(string newCaseTypeGroupName, string originalCaseTypeGroupName)
         {
             var item = new UsrOrsfSmartflows();
-            return httpClient.PutJsonAsync<List<UsrOrsfSmartflows>>($"{userSession.baseUri}api/ChapterManagement/UpdateCaseTypeGroups/{newCaseTypeGroupName}/{originalCaseTypeGroupName}", item);
+
+            using var response = await httpClient.PutAsJsonAsync($"{userSession.baseUri}api/ChapterManagement/UpdateCaseTypeGroups/{newCaseTypeGroupName}/{originalCaseTypeGroupName}", item);
+
+            return await response.Content.ReadFromJsonAsync<List<UsrOrsfSmartflows>>();
         }
 
         public async Task<Task<HttpResponseMessage>> Delete(int id)
@@ -104,68 +118,57 @@ namespace GadjIT_App.Services
             return httpClient.DeleteAsync($"{userSession.baseUri}api/ChapterManagement/DeleteChapter/{id}");
         }
 
-        public Task<List<UsrOrsfSmartflows>> GetAllChapters()
+        public async Task<List<UsrOrsfSmartflows>> GetAllChapters()
         {
-            return httpClient.GetJsonAsync<List<UsrOrsfSmartflows>>($"{userSession.baseUri}api/ChapterManagement/GetAllChapters");
+
+            return await httpClient.GetFromJsonAsync<List<UsrOrsfSmartflows>>($"{userSession.baseUri}api/ChapterManagement/GetAllChapters");
+
         }
-        public Task<List<TableDate>> GetDatabaseTableDateFields()
+        public async Task<List<TableDate>> GetDatabaseTableDateFields()
         {
-            return httpClient.GetJsonAsync<List<TableDate>>($"{userSession.baseUri}api/ChapterManagement/GetDatabaseTableDateFields");
+            return await httpClient.GetFromJsonAsync<List<TableDate>>($"{userSession.baseUri}api/ChapterManagement/GetDatabaseTableDateFields");
         }
 
-        //public Task<List<fnORCHAGetFeeDefinitions>> GetFeeDefs(string caseTypeGroup, string caseType)
-        //{
-        //    return httpClient.GetJsonAsync<List<fnORCHAGetFeeDefinitions>>($"{userSession.baseUri}api/ChapterManagement/GetFeeDefs/{caseTypeGroup}/{caseType}");
-        //}
-
-        public Task<List<DmDocuments>> GetDocumentList(string caseType)
+        public async Task<List<DmDocuments>> GetDocumentList(string caseType)
         {
             Lock = true;
             
-
-            var returnValue = httpClient.GetJsonAsync<List<DmDocuments>>($"{userSession.baseUri}api/ChapterManagement/GetDocumentList/{caseType}");
+            var returnValue = await httpClient.GetFromJsonAsync<List<DmDocuments>>($"{userSession.baseUri}api/ChapterManagement/GetDocumentList/{caseType}");
+            
             Lock = false;
 
             return returnValue;
         }
 
-        public Task<List<DmDocuments>> GetDocumentListByCaseTypeGroup(int caseTypeGroupRef)
+        public async Task<List<DmDocuments>> GetDocumentListByCaseTypeGroup(int caseTypeGroupRef)
         {
-            return httpClient.GetJsonAsync<List<DmDocuments>>($"{userSession.baseUri}api/ChapterManagement/GetDocumentListByCaseTypeGroupRef/{caseTypeGroupRef}");
+            return await httpClient.GetFromJsonAsync<List<DmDocuments>>($"{userSession.baseUri}api/ChapterManagement/GetDocumentListByCaseTypeGroupRef/{caseTypeGroupRef}");
         }
 
-        public Task<List<string>> GetCaseTypeGroup()
+        public async Task<List<string>> GetCaseTypeGroup()
         {
-            return httpClient.GetJsonAsync<List<string>>($"{userSession.baseUri}api/ChapterManagement/GetCaseTypeGroup");
+            return await httpClient.GetFromJsonAsync<List<string>>($"{userSession.baseUri}api/ChapterManagement/GetCaseTypeGroup");
         }
 
-        public Task<List<string>> GetCaseTypes()
+        public async Task<List<string>> GetCaseTypes()
         {
-            var result = httpClient.GetJsonAsync<List<string>>($"{userSession.baseUri}api/ChapterManagement/GetCaseTypes");
-
-            if (result.Exception is null)
-            {
-                return result;
-            }
-            else
-            {
-                return null;
-            }
+            return await httpClient.GetFromJsonAsync<List<string>>($"{userSession.baseUri}api/ChapterManagement/GetCaseTypes");
         }
 
-
-        public Task<List<UsrOrsfSmartflows>> GetChapterListByCaseType(string caseType)
+        public async Task<List<UsrOrsfSmartflows>> GetChapterListByCaseType(string caseType)
         {
-            return httpClient.GetJsonAsync<List<UsrOrsfSmartflows>>($"{userSession.baseUri}api/ChapterManagement/GetChapterListByCaseType/{caseType}");
+            return await httpClient.GetFromJsonAsync<List<UsrOrsfSmartflows>>($"{userSession.baseUri}api/ChapterManagement/GetChapterListByCaseType/{caseType}");
         }
 
-        public Task<bool> CreateStep(VmChapterP4WStepSchemaJSONObject stepSchemaJSONObject)
+        public async Task<bool> CreateStep(VmChapterP4WStepSchemaJSONObject stepSchemaJSONObject)
         {
             Lock = true;
-            var returnValue = httpClient.PutJsonAsync<bool>($"{userSession.baseUri}api/ChapterManagement/CreateStep", stepSchemaJSONObject);
+
+            using var response = await httpClient.PutAsJsonAsync($"{userSession.baseUri}api/ChapterManagement/CreateStep", stepSchemaJSONObject);
+
             Lock = false;
 
-            return returnValue;
+            return await response.Content.ReadFromJsonAsync<bool>();
         }
 
     }

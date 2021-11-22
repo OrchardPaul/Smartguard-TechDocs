@@ -23,7 +23,7 @@ namespace GadjIT_App.Pages.Chapters
         IAppChapterState appChapterState { get; set; }
 
         [Inject]
-        IUserSessionState sessionState { get; set; }
+        IUserSessionState UserSession { get; set; }
 
 
         [CascadingParameter]
@@ -103,7 +103,7 @@ namespace GadjIT_App.Pages.Chapters
             await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
 
             //keep track of time last updated ready for comparison by other sessions checking for updates
-            appChapterState.SetLastUpdated(sessionState, SelectedChapter);
+            appChapterState.SetLastUpdated(UserSession, SelectedChapter);
 
             CopyObject = new TickerMessages();
             filterText = "";

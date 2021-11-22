@@ -9,12 +9,12 @@
                     </td>
                     <td style="width: 250px">
                         <div class=" d-flex justify-content-center">
-                            @(sessionState.selectedSystem == "Dev" ? "Dev" : "Live")
+                            @(UserSession.selectedSystem == "Dev" ? "Dev" : "Live")
                         </div>
                     </td>
                     <td style="width: 250px">
                         <div class=" d-flex justify-content-center">
-                            @(sessionState.selectedSystem == "Dev" ? "Live" : "Dev")
+                            @(UserSession.selectedSystem == "Dev" ? "Live" : "Dev")
                         </div>
                     </td>
                     <td style="width: 30px">
@@ -173,12 +173,12 @@
                     </td>
                     <td>
                         <div class=" d-flex justify-content-center">
-                            <button type="submit" autofocus class="btn btn-main" @onclick="() => HandleValidSubmit(false)">@(sessionState.selectedSystem == "Dev" ? ">> Live" : ">> Dev")</button>
+                            <button type="submit" autofocus class="btn btn-main" @onclick="() => HandleValidSubmit(false)">@(UserSession.selectedSystem == "Dev" ? ">> Live" : ">> Dev")</button>
                         </div>
                     </td>
                     <td>
                         <div class=" d-flex justify-content-center">
-                            <button type="submit" autofocus class="btn btn-main" @onclick="() => HandleValidSubmit(true)">@(sessionState.selectedSystem == "Dev" ? "Dev <<" : "Live <<")</button>
+                            <button type="submit" autofocus class="btn btn-main" @onclick="() => HandleValidSubmit(true)">@(UserSession.selectedSystem == "Dev" ? "Dev <<" : "Live <<")</button>
                         </div>
                     </td>
                     <td>
@@ -197,7 +197,7 @@ else
     }
 
 
-    curSystem = (sessionState.selectedSystem == "Dev" ? "Live" : "Dev");
+    curSystem = (UserSession.selectedSystem == "Dev" ? "Live" : "Dev");
 
     <div class="modal-body">
         <p>Smartflow item does not exist on @curSystem</p>

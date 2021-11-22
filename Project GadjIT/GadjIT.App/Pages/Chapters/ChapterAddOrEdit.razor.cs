@@ -40,7 +40,7 @@ namespace GadjIT_App.Pages.Chapters
         public bool addNewCaseTypeOption { get; set; } = false;
 
         [Parameter]
-        public IUserSessionState sessionState { get; set; }
+        public IUserSessionState UserSession { get; set; }
 
         [Parameter]
         public ICompanyDbAccess CompanyDbAccess { get; set; }
@@ -85,7 +85,7 @@ namespace GadjIT_App.Pages.Chapters
 
                 var returnObject = await chapterManagementService.Add(TaskObject);
                 TaskObject.Id = returnObject.Id;
-                await CompanyDbAccess.SaveSmartFlowRecord(TaskObject, sessionState);
+                await CompanyDbAccess.SaveSmartFlowRecord(TaskObject, UserSession);
             }
             else
             {

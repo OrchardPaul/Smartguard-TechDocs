@@ -23,7 +23,7 @@ namespace GadjIT_App.Pages.Chapters
         IChapterManagementService chapterManagementService { get; set; }
 
         [Parameter]
-        public IUserSessionState sessionState { get; set; }
+        public IUserSessionState UserSession { get; set; }
 
         [Parameter]
         public VmChapterComparison Object { get; set; }
@@ -136,10 +136,10 @@ namespace GadjIT_App.Pages.Chapters
             }
             else
             {
-                await sessionState.SwitchSelectedSystem();
+                await UserSession.SwitchSelectedSystem();
                 AltChapterRow.SmartflowData = JsonConvert.SerializeObject(AltChapter);
                 await chapterManagementService.Update(AltChapterRow);
-                await sessionState.ResetSelectedSystem();
+                await UserSession.ResetSelectedSystem();
             }
 
             ComparisonRefresh?.Invoke();
@@ -152,15 +152,15 @@ namespace GadjIT_App.Pages.Chapters
 
         private async Task AddObject()
         {
-            bool gotLock = sessionState.Lock;
+            bool gotLock = UserSession.Lock;
             while (gotLock)
             {
                 await Task.Yield();
-                gotLock = sessionState.Lock;
+                gotLock = UserSession.Lock;
             }
 
 
-            await sessionState.SwitchSelectedSystem();
+            await UserSession.SwitchSelectedSystem();
                 
             AltChapterRow = new UsrOrsfSmartflows
             {
@@ -175,8 +175,8 @@ namespace GadjIT_App.Pages.Chapters
 
             var returnObject = await chapterManagementService.Add(AltChapterRow);
             AltChapterRow.Id = returnObject.Id;
-            await CompanyDbAccess.SaveSmartFlowRecord(AltChapterRow, sessionState);
-            await sessionState.ResetSelectedSystem();
+            await CompanyDbAccess.SaveSmartFlowRecord(AltChapterRow, UserSession);
+            await UserSession.ResetSelectedSystem();
     
             ComparisonRefresh?.Invoke();
             Close();

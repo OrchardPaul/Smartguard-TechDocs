@@ -32,6 +32,7 @@ using Microsoft.Extensions.FileProviders;
 using System.IO;
 using GadjIT_App.Services.AppState;
 using GadjIT_App.Pages.Accounts.CompanyAccountManagement;
+using Serilog;
 
 namespace GadjIT_App
 {
@@ -108,7 +109,7 @@ namespace GadjIT_App
             }
 
             app.UseHttpsRedirection();
-            
+
             app.UseRouting();
 
             app.UseAuthentication();

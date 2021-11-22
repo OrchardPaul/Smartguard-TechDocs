@@ -58,7 +58,7 @@ namespace GadjIT_App.Pages.Chapters
         IAppChapterState appChapterState { get; set; }
 
         [Inject]
-        IUserSessionState sessionState { get; set; }
+        IUserSessionState UserSession { get; set; }
 
         [Parameter]
         public RenderFragment CustomHeader { get; set; }
@@ -266,7 +266,7 @@ namespace GadjIT_App.Pages.Chapters
                 filterText = "";
 
                 //keep track of time last updated ready for comparison by other sessions checking for updates
-                appChapterState.SetLastUpdated(sessionState, SelectedChapter);
+                appChapterState.SetLastUpdated(UserSession, SelectedChapter);
 
                 DataChanged?.Invoke();
                 Close();

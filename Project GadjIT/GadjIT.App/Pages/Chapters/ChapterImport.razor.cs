@@ -36,7 +36,7 @@ namespace GadjIT_App.Pages.Chapters
         IChapterManagementService chapterManagementService { get; set; }
 
         [Parameter]
-        public IUserSessionState sessionState { get; set; }
+        public IUserSessionState UserSession { get; set; }
 
         [Inject]
         IAppChapterState appChapterState { get; set; }

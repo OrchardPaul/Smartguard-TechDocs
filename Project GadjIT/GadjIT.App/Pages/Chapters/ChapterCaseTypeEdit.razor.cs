@@ -47,7 +47,7 @@ namespace GadjIT_App.Pages.Chapters
         public ICompanyDbAccess CompanyDbAccess { get; set; }
 
         [Parameter]
-        public IUserSessionState sessionState { get; set; }
+        public IUserSessionState UserSession { get; set; }
 
 
         private async void Close()

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Serilog;
 
 namespace GadjIT.ClientAPI
 {
@@ -13,6 +14,8 @@ namespace GadjIT.ClientAPI
     {
         public static void Main(string[] args)
         {
+
+
             CreateHostBuilder(args).Build().Run();
         }
 

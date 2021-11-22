@@ -79,7 +79,7 @@ namespace GadjIT_App.Pages.Chapters
         public ICompanyDbAccess CompanyDbAccess { get; set; }
 
         [Parameter]
-        public IUserSessionState sessionState { get; set; }
+        public IUserSessionState UserSession { get; set; }
 
         private int selectedCaseTypeGroup { get; set; } = -1;
 
@@ -208,7 +208,7 @@ namespace GadjIT_App.Pages.Chapters
 
 
             //keep track of time last updated ready for comparison by other sessions checking for updates
-            appChapterState.SetLastUpdated(sessionState, SelectedChapter);
+            appChapterState.SetLastUpdated(UserSession, SelectedChapter);
 
             DataChanged?.Invoke();
             Close();
@@ -233,13 +233,13 @@ namespace GadjIT_App.Pages.Chapters
             SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(SelectedChapter);
             await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
 
-            await CompanyDbAccess.SaveSmartFlowRecord(SelectedChapterObject, sessionState);
+            await CompanyDbAccess.SaveSmartFlowRecord(SelectedChapterObject, UserSession);
 
             TaskObject = new GenSmartflowItem();
             filterText = "";
 
             //keep track of time last updated ready for comparison by other sessions checking for updates
-            appChapterState.SetLastUpdated(sessionState, SelectedChapter);
+            appChapterState.SetLastUpdated(UserSession, SelectedChapter);
 
             DataChanged?.Invoke();
             Close();
