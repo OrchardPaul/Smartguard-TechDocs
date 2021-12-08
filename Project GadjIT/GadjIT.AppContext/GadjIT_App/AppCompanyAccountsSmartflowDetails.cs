@@ -14,8 +14,17 @@ namespace GadjIT.AppContext.GadjIT_App
         [Required]
         public int SmartflowAccountId { get; set; }
 
-        [Required]
-        public int SmartflowRecordId { get; set; }
+        public SmartflowRecords SmartflowRecord { get; set; }
+
+        public int? SmartflowRecordId { get; set; }
+
+        [StringLength(100)]
+        public string CaseTypeGroup { get; set; }
+        [StringLength(100)]
+        public string CaseType { get; set; }
+        [StringLength(250)]
+        public string SmartflowName { get; set; }
+
 
         [StringLength(50)]
         public string System { get; set; }

@@ -7,7 +7,7 @@
 
         <div class="form-group">
             <label for="SmartflowName">Smartflow Name</label>
-            <input type="text" disabled="disabled" class="form-control form-control-xl" @bind="SelectedAccountSmartflowObject.SmartflowName" />
+            <input type="text" disabled="disabled" class="form-control form-control-xl" @bind="CopyObject.SmartflowName" />
         </div>
 
         <div class="form-group">
@@ -43,6 +43,11 @@
         <div class="form-group">
             <label>Months Charge</label>
             <InputNumber class="form-control form-control-sm" @bind-Value="@CopyObject.MonthlyCharge" />
+        </div>
+
+        <div class="form-group">
+            <label>Start Date</label>
+            <InputDate class="form-control form-control-sm" @bind-Value="@CopyObject.StartDate" />
         </div>
 
 

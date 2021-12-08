@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GadjIT.ClientAPI", "GadjIT.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GadjIT.ClientContext", "Gadjit.ClientContext\GadjIT.ClientContext.csproj", "{A6534BC2-27AA-45B1-B4C4-156A02389E43}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GadjIT.TableHelper", "GadjIT.TableHelper\GadjIT.TableHelper.csproj", "{083F837B-39E0-4CCE-A834-C493A740F64F}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestApp", "TestApp\TestApp.csproj", "{37B55158-6C07-404D-B5DB-8780E4B3CF37}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GadjIT.AppContext", "GadjIT.AppContext\GadjIT.AppContext.csproj", "{A9EA2C10-5DD4-486C-A99D-489B6E09EB01}"
@@ -29,10 +27,6 @@ Global
 		{A6534BC2-27AA-45B1-B4C4-156A02389E43}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A6534BC2-27AA-45B1-B4C4-156A02389E43}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A6534BC2-27AA-45B1-B4C4-156A02389E43}.Release|Any CPU.Build.0 = Release|Any CPU
-		{083F837B-39E0-4CCE-A834-C493A740F64F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{083F837B-39E0-4CCE-A834-C493A740F64F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{083F837B-39E0-4CCE-A834-C493A740F64F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{083F837B-39E0-4CCE-A834-C493A740F64F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{37B55158-6C07-404D-B5DB-8780E4B3CF37}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{37B55158-6C07-404D-B5DB-8780E4B3CF37}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{37B55158-6C07-404D-B5DB-8780E4B3CF37}.Release|Any CPU.ActiveCfg = Release|Any CPU

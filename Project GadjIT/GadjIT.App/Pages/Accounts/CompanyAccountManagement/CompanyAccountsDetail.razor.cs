@@ -28,9 +28,6 @@ namespace GadjIT_App.Pages.Accounts.CompanyAccountManagement
         public AppCompanyAccountsSmartflowDetails SelectedAccountDetailsObject { get; set; }
 
         [Parameter]
-        public SmartflowRecords SelectedAccountSmartflowObject { get; set; }
-
-        [Parameter]
         public AppCompanyAccountsSmartflowDetails CopyObject { get; set; }
 
 

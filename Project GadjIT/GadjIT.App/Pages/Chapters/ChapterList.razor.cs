@@ -31,6 +31,8 @@ using GadjIT.AppContext.GadjIT_App;
 using AutoMapper;
 using System.Timers;
 using GadjIT_App.Services.AppState;
+using Microsoft.Extensions.Logging;
+using Serilog.Context;
 
 namespace GadjIT_App.Pages.Chapters
 {
@@ -75,6 +77,9 @@ namespace GadjIT_App.Pages.Chapters
 
         [Inject]
         private ICompanyDbAccess CompanyDbAccess { get; set; }
+
+        [Inject]
+        private ILogger<ChapterList> logger { get; set; }
 
 
         [Inject]
@@ -130,6 +135,8 @@ namespace GadjIT_App.Pages.Chapters
             }
         }
 
+
+
         protected override async Task OnInitializedAsync()
         {
             var authenticationState = await pageAuthorisationState.IsSignedIn();
@@ -150,10 +157,26 @@ namespace GadjIT_App.Pages.Chapters
                     partnerCaseTypeGroups = await partnerAccessService.GetPartnerCaseTypeGroups();
                     ListP4WViews = await partnerAccessService.GetPartnerViews();
                     UserSession.HomeActionSmartflow = SelectHome;
+
+                    using (LogContext.PushProperty("SourceSystem", UserSession.selectedSystem))
+                    using (LogContext.PushProperty("SourceCompanyId", UserSession.Company.Id))
+                    using (LogContext.PushProperty("SourceUserId", UserSession.User.Id))
+                    using (LogContext.PushProperty("SourceContext", nameof(ChapterList)))
+                    {
+                        logger.LogInformation("Starting up...");
+                    }
+
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e.Message);
+
+                    using (LogContext.PushProperty("SourceSystem", UserSession.selectedSystem))
+                    using (LogContext.PushProperty("SourceCompanyId", UserSession.Company.Id))
+                    using (LogContext.PushProperty("SourceUserId", UserSession.User.Id))
+                    using (LogContext.PushProperty("SourceContext", nameof(ChapterList)))
+                    {
+                        logger?.LogError(e, "Error on smartflow list startup");
+                    }
                 }
             }
 
@@ -265,7 +288,13 @@ namespace GadjIT_App.Pages.Chapters
             }
             catch (Exception D)
             {
-                Console.WriteLine(D.Message);
+                using (LogContext.PushProperty("SourceSystem", UserSession.selectedSystem))
+                using (LogContext.PushProperty("SourceCompanyId", UserSession.Company.Id))
+                using (LogContext.PushProperty("SourceUserId", UserSession.User.Id))
+                using (LogContext.PushProperty("SourceContext", nameof(ChapterList)))
+                {
+                    logger?.LogError(D, "Smartflow timer error");
+                }
             }
 
 
@@ -372,6 +401,7 @@ namespace GadjIT_App.Pages.Chapters
         public string alertMsgJSOM { get; set; }
 
         public bool showJSON = false;
+
 
         public IList<string> JSONErrors { get; set; }
 
@@ -571,7 +601,12 @@ namespace GadjIT_App.Pages.Chapters
             {
                 var decodedChapter = JsonConvert.DeserializeObject<VmChapter>(chapter.SmartflowObject.SmartflowData);
 
-                if (!string.IsNullOrEmpty(decodedChapter.SelectedStep) && !string.IsNullOrEmpty(decodedChapter.SelectedView))
+                if (!string.IsNullOrEmpty(decodedChapter.SelectedStep) 
+                    && !string.IsNullOrEmpty(decodedChapter.SelectedView)
+                    && !string.IsNullOrEmpty(decodedChapter.Name)
+                    && !string.IsNullOrEmpty(decodedChapter.StepName)
+                    && !string.IsNullOrEmpty(decodedChapter.P4WCaseTypeGroup)
+                    && !string.IsNullOrEmpty(decodedChapter.CaseTypeGroup))
                 {
                     if (decodedChapter.P4WCaseTypeGroup == "Entity Documents")
                     {
@@ -704,6 +739,8 @@ namespace GadjIT_App.Pages.Chapters
             selectedChapter.SelectedStep = selectedChapter.SelectedStep is null || selectedChapter.SelectedStep == "Create New" ? "" : selectedChapter.SelectedStep;
             selectedChapter.Fees = selectedChapter.Fees is null ? new List<Fee>() : selectedChapter.Fees;
             selectedChapter.Items = selectedChapter.Items is null ? new List<GenSmartflowItem>() : selectedChapter.Items;
+            selectedChapter.TickerMessages = selectedChapter.TickerMessages is null ? new List<TickerMessages>() : selectedChapter.TickerMessages;
+            selectedChapter.DataViews = selectedChapter.DataViews is null ? new List<DataViews>() : selectedChapter.DataViews;
             selectedChapterId = chapter.Id;
             compareSystems = false;
             rowChanged = 0;
@@ -714,11 +751,18 @@ namespace GadjIT_App.Pages.Chapters
             try
             {
                 dropDownChapterList = await chapterManagementService.GetDocumentList(selectedChapter.CaseType);
+                dropDownChapterList = dropDownChapterList.Where(D => !(D.Name is null)).ToList();
                 TableDates = await chapterManagementService.GetDatabaseTableDateFields();
             }
             catch(Exception e)
             {
-                Console.WriteLine(e.Message);
+                using (LogContext.PushProperty("SourceSystem", UserSession.selectedSystem))
+                using (LogContext.PushProperty("SourceCompanyId", UserSession.Company.Id))
+                using (LogContext.PushProperty("SourceUserId", UserSession.User.Id))
+                using (LogContext.PushProperty("SourceContext", nameof(ChapterList)))
+                {
+                    logger?.LogError(e, "Error retrieving document list");
+                }
             }
 
 
@@ -761,6 +805,7 @@ namespace GadjIT_App.Pages.Chapters
         private async void RefreshDocList()
         {
             dropDownChapterList = await chapterManagementService.GetDocumentList(selectedChapter.CaseType);
+            dropDownChapterList = dropDownChapterList.Where(D => !(D.Name is null)).ToList();
             StateHasChanged();
         }
 
@@ -817,9 +862,15 @@ namespace GadjIT_App.Pages.Chapters
                 var lsrSR = await CompanyDbAccess.GetAllSmartflowRecords(UserSession);
                 lstChapters = lsrSR.Select(A => new VmUsrOrsfSmartflows { SmartflowObject = mapper.Map(A, new UsrOrsfSmartflows()) }).ToList();
             }
-            catch
+            catch(Exception e)
             {
-                Console.WriteLine("Error Caught");
+                using (LogContext.PushProperty("SourceSystem", UserSession.selectedSystem))
+                using (LogContext.PushProperty("SourceCompanyId", UserSession.Company.Id))
+                using (LogContext.PushProperty("SourceUserId", UserSession.User.Id))
+                using (LogContext.PushProperty("SourceContext", nameof(ChapterList)))
+                {
+                    logger?.LogError(e, "Error retrieving smartflow records");
+                }
             }
 
 
@@ -845,112 +896,127 @@ namespace GadjIT_App.Pages.Chapters
 
         private async Task<bool> RefreshChapterItems(string listType)
         {
-
-            if (listType == "Chapters")
+            try
             {
-                //var lstC = await chapterManagementService.GetAllChapters();
-                //lstChapters = lstC.Select(A => new VmUsrOrDefChapterManagement { ChapterObject = A }).ToList();
-
-                bool gotLock = CompanyDbAccess.Lock;
-                while (gotLock)
+                if (listType == "Chapters")
                 {
-                    await Task.Yield();
-                    gotLock = CompanyDbAccess.Lock;
-                }
+                    //var lstC = await chapterManagementService.GetAllChapters();
+                    //lstChapters = lstC.Select(A => new VmUsrOrDefChapterManagement { ChapterObject = A }).ToList();
 
-                var lsrSR = await CompanyDbAccess.GetAllSmartflowRecords(UserSession);
-                lstChapters = lsrSR.Select(A => new VmUsrOrsfSmartflows { SmartflowObject = mapper.Map(A, new UsrOrsfSmartflows()) }).ToList();
+                    bool gotLock = CompanyDbAccess.Lock;
+                    while (gotLock)
+                    {
+                        await Task.Yield();
+                        gotLock = CompanyDbAccess.Lock;
+                    }
 
-            }
-            else
-            {
-                var lst = selectedChapter.Items;
-                Dictionary<int?, string> docTypes = new Dictionary<int?, string> { { 1, "Doc" },{ 4, "Form" }, {6, "Step" }, { 8, "Date" }, { 9, "Email" }, {11,"Doc" } , { 12, "Email" } };
-
-                lstAll = lst.Select(L => new VmUsrOrDefChapterManagement { ChapterObject = L })
-                                .ToList();
-
-                /*
-                 * listType = All when chapter is selected, 
-                 * listType = nav selected e.g. Agenda when and object in a specific list has been altered
-                 * 
-                 */
-                if (listType == "Agenda" | listType == "All")
-                {
-                    lstAgendas = lstAll
-                                        .OrderBy(A => A.ChapterObject.SeqNo)
-                                        .Where(A => A.ChapterObject.Type == "Agenda")
-                                        .ToList();
+                    var lsrSR = await CompanyDbAccess.GetAllSmartflowRecords(UserSession);
+                    lstChapters = lsrSR.Select(A => new VmUsrOrsfSmartflows { SmartflowObject = mapper.Map(A, new UsrOrsfSmartflows()) }).ToList();
 
                 }
-                if (listType == "Docs" | listType == "All")
+                else
                 {
-                    lstDocs = lstAll
-                                        .OrderBy(A => A.ChapterObject.SeqNo)
-                                        .Where(A => A.ChapterObject.Type == "Doc")
-                                        .Select(A => {
+                    var lst = selectedChapter.Items;
+                    Dictionary<int?, string> docTypes = new Dictionary<int?, string> { { 1, "Doc" }, { 4, "Form" }, { 6, "Step" }, { 8, "Date" }, { 9, "Email" }, { 11, "Doc" }, { 12, "Email" } };
+
+                    lstAll = lst.Select(L => new VmUsrOrDefChapterManagement { ChapterObject = L })
+                                    .ToList();
+
+                    /*
+                     * listType = All when chapter is selected, 
+                     * listType = nav selected e.g. Agenda when and object in a specific list has been altered
+                     * 
+                     */
+                    if (listType == "Agenda" | listType == "All")
+                    {
+                        lstAgendas = lstAll
+                                            .OrderBy(A => A.ChapterObject.SeqNo)
+                                            .Where(A => A.ChapterObject.Type == "Agenda")
+                                            .ToList();
+
+                    }
+                    if (listType == "Docs" | listType == "All")
+                    {
+
+                        lstDocs = lstAll
+                                            .OrderBy(A => A.ChapterObject.SeqNo)
+                                            .Where(A => A.ChapterObject.Type == "Doc")
+                                            .Select(A => {
                                             //Make sure all Items have the DocType set by comparing against dm_documents for matches
                                             A.DocType = dropDownChapterList.Where(D => D.Name.ToUpper() == A.ChapterObject.Name.ToUpper())
-                                                                                    .Select(D => string.IsNullOrEmpty(docTypes[D.DocumentType]) ? "Doc" : docTypes[D.DocumentType])
-                                                                                    .FirstOrDefault();
-                                            A.ChapterObject.RescheduleDays = !string.IsNullOrEmpty(A.ChapterObject.AsName) && A.ChapterObject.RescheduleDays is null ? 0 : A.ChapterObject.RescheduleDays;
-                                            A.ChapterObject.Action = (A.ChapterObject.Action == "" ? "INSERT" : A.ChapterObject.Action);
+                                                                                        .Select(D => string.IsNullOrEmpty(docTypes[D.DocumentType]) ? "Doc" : docTypes[D.DocumentType])
+                                                                                        .FirstOrDefault();
+                                                A.ChapterObject.RescheduleDays = !string.IsNullOrEmpty(A.ChapterObject.AsName) && A.ChapterObject.RescheduleDays is null ? 0 : A.ChapterObject.RescheduleDays;
+                                                A.ChapterObject.Action = (A.ChapterObject.Action == "" ? "INSERT" : A.ChapterObject.Action);
                                             //Make sure all Linked Items have the DocType set by comparing against dm_documents for matches
                                             A.ChapterObject.LinkedItems = A.ChapterObject.LinkedItems == null
-                                                                                    ? null
-                                                                                    : A.ChapterObject.LinkedItems
-                                                                                                    .Select(L => {
-                                                                                                        L.DocType = dropDownChapterList
-                                                                                                                .Where(D => D.Name.ToUpper() == L.DocName.ToUpper())
-                                                                                                                .Select(D => string.IsNullOrEmpty(docTypes[D.DocumentType]) ? "Doc" : docTypes[D.DocumentType])
-                                                                                                                .FirstOrDefault();
-                                                                                                        return L;
-                                                                                                                }
-                                                                                        ).ToList(); 
-                                            return A;
-                                        })
-                                        .ToList();
-
-                    
-
-                }
-                if (listType == "Fees" | listType == "All")
-                {
-                    lstFees = selectedChapter.Fees.Select(F => new VmFee { FeeObject = F }).ToList();
+                                                                                        ? null
+                                                                                        : A.ChapterObject.LinkedItems
+                                                                                                        .Select(L => {
+                                                                                                            L.DocType = dropDownChapterList
+                                                                                                                    .Where(D => D.Name.ToUpper() == L.DocName.ToUpper())
+                                                                                                                    .Select(D => string.IsNullOrEmpty(docTypes[D.DocumentType]) ? "Doc" : docTypes[D.DocumentType])
+                                                                                                                    .FirstOrDefault();
+                                                                                                            return L;
+                                                                                                        }
+                                                                                            ).ToList();
+                                                return A;
+                                            })
+                                            .ToList();
 
 
-                }
-                if (listType == "Status" | listType == "All")
-                {
-                    lstStatus = lstAll
-                                        .OrderBy(A => A.ChapterObject.SeqNo)
-                                        .Where(A => A.ChapterObject.Type == "Status")
-                                        .ToList();
-                }
-                if(listType == "DataViews" | listType == "All")
-                {
-                    ListVmDataViews = (selectedChapter.DataViews is null) 
-                                                    ? new List<VmDataViews>() 
-                                                    : selectedChapter
-                                                            .DataViews
-                                                            .Select(D => new VmDataViews { DataView = D })
-                                                            .OrderBy(D => D.DataView.BlockNo)
-                                                            .ToList();
-                }
-                if (listType == "TickerMessages" | listType == "All")
-                {
-                    ListVmTickerMessages = (selectedChapter.TickerMessages is null)
-                                                    ? new List<VmTickerMessages>()
-                                                    : selectedChapter
-                                                            .TickerMessages
-                                                            .Select(D => new VmTickerMessages { Message = D })
-                                                            .OrderBy(D => D.Message.SeqNo)
-                                                            .ToList();
-                    TickerValidation();
-                    
+
+                    }
+                    if (listType == "Fees" | listType == "All")
+                    {
+                        lstFees = selectedChapter.Fees.Select(F => new VmFee { FeeObject = F }).ToList();
+
+
+                    }
+                    if (listType == "Status" | listType == "All")
+                    {
+                        lstStatus = lstAll
+                                            .OrderBy(A => A.ChapterObject.SeqNo)
+                                            .Where(A => A.ChapterObject.Type == "Status")
+                                            .ToList();
+                    }
+                    if (listType == "DataViews" | listType == "All")
+                    {
+                        ListVmDataViews = (selectedChapter.DataViews is null)
+                                                        ? new List<VmDataViews>()
+                                                        : selectedChapter
+                                                                .DataViews
+                                                                .Select(D => new VmDataViews { DataView = D })
+                                                                .OrderBy(D => D.DataView.BlockNo)
+                                                                .ToList();
+                    }
+                    if (listType == "TickerMessages" | listType == "All")
+                    {
+                        ListVmTickerMessages = (selectedChapter.TickerMessages is null)
+                                                        ? new List<VmTickerMessages>()
+                                                        : selectedChapter
+                                                                .TickerMessages
+                                                                .Select(D => new VmTickerMessages { Message = D })
+                                                                .OrderBy(D => D.Message.SeqNo)
+                                                                .ToList();
+                        TickerValidation();
+
+                    }
                 }
             }
+            catch (Exception e)
+            {
+                using (LogContext.PushProperty("SourceSystem", UserSession.selectedSystem))
+                using (LogContext.PushProperty("SourceCompanyId", UserSession.Company.Id))
+                using (LogContext.PushProperty("SourceUserId", UserSession.User.Id))
+                using (LogContext.PushProperty("SourceContext", nameof(ChapterList)))
+                {
+                    logger?.LogError(e, "Error refreshing Smartflow List");
+                }
 
+                return false;
+            }
+            
             displaySpinner = false;
 
             return true;

@@ -62,7 +62,7 @@
         @if (navDisplay == "Companies")
         {
 
-            <div class="grid-chapter grid-accounts-company">
+            <div class="grid-chapter grid-admin-company">
 
                 <div class="grid-actions">
                     @if (SessionState.isAdminUser)
@@ -140,7 +140,10 @@
                                     </div>
 
                                     <div class="data-item">
-                                            £@string.Format("{0:N2}", companyAccountObject.SmartflowAccounts.Sum(S => S.Outstanding))
+                                            £@string.Format("{0:N2}", companyAccountObject.SmartflowAccounts
+                                            .Where(S => S.System == "Live")
+                                            .Where(S => S.Status != "Deleted")
+                                            .Sum(S => S.Outstanding))
                              
                                         
                                     </div>
@@ -192,75 +195,137 @@
                     <div class="row grid-header invisible-md-down">
                         <div class="data-item ">
                             <div class="data-item-sub">
-                                Smartflow Name
+                                Case Type Group
                             </div>
                         </div>
                         <div class="data-item ">
+                            Case Type
+                        </div>
+                        <div class="data-item ">
+                            Smartflow Name
+                        </div>
+                        <div @onclick="SwitchStatusSort" class="data-item ">
+                            <div class="data-item-sub">
                                 Status
+                                <span class="fa-stack">
+                                    <span class="@(SortByStatus ? "col-alt" : "")">
+                                        <i class="fas fa-caret-up"></i>
+                                    </span>
+                                    <span class="@(SortByStatusDesc ? "col-alt" : "") ">
+                                        <i class="fas fa-caret-down"></i>
+                                    </span>
+                                </span>
+
+                            </div>
                         </div>
-                        <div class="data-item ">
+                        <div @onclick="SwitchStartDateSort" class="data-item ">
+                            <div class="data-item-sub">
                                 Start Date
+                                <span class="fa-stack">
+                                    <span class="@(SortByStartDate ? "col-alt" : "")">
+                                        <i class="fas fa-caret-up"></i>
+                                    </span>
+                                    <span class="@(SortByStartDateDesc ? "col-alt" : "") ">
+                                        <i class="fas fa-caret-down"></i>
+                                    </span>
+                                </span>
+  
+                            </div>
                         </div>
-                        <div class="data-item ">
+                        <div @onclick="SwitchEndDateSort" class="data-item ">
+                            <div class="data-item-sub">
                                 End Date
+                                <span class="fa-stack">
+                                    <span class="@(SortByEndDate ? "col-alt" : "")">
+                                        <i class="fas fa-caret-up"></i>
+                                    </span>
+                                    <span class="@(SortByEndDateDesc ? "col-alt" : "") ">
+                                        <i class="fas fa-caret-down"></i>
+                                    </span>
+                                </span>
+    
+                            </div>
                         </div>
                         <div class="data-item ">
-                                Months Remaining
+                            Months Remaining
                         </div>
                         <div class="data-item ">
-                                Total Billed
+                            Total Billed
                         </div>
                     </div>
                     <div class="grid-data">
-                        @foreach (var companyAccountObject in CompanyAccountObjects
-                                                                    .Where(A => A.AccountObject.Id == SelectedCompanyAccount.Id)
-                                                                    .Select(A => A.SmartflowAccounts)
-                                                                    .SingleOrDefault()
-                                                                    .Where(A => A.System == SelectedSystem)
-                                                                    .ToList())
+                        @if (CompanyAccountObjects.Count > 0)
                         {
-                            <div class="row grid-row">
-                                <div class="data-item">
-                                    <div class="btn-ellipses float-left">
-                                        <span class="fa fa-ellipsis-v"></span>
-                                        <div class="ellipsis-menu">
-                                            <ul>
-                                                <li class="col-main" @onclick='(() => ShowCompanyAccountsDetailModal(companyAccountObject))'>
-                                                    <span class="fa fa-binoculars mr-2"></span>
-                                                    <span>Edit</span>
-                                                </li>
-                                            </ul>
-                                        </div>
+                            @foreach (var companyAccountObject in CompanyAccountObjects
+                                                                 .Where(A => A.AccountObject.Id == SelectedCompanyAccount.Id)
+                                                                 .Select(A => A.SmartflowAccounts)
+                                                                 .SingleOrDefault()
+                                                                 .Where(A => A.System == SelectedSystem)
+                                                                 .OrderBy(A => A.SmartflowName)
+                                                                 .OrderBy(A => SortByStatus ? A.Status : null)
+                                                                 .OrderByDescending(A => SortByStatusDesc ? A.Status : null)
+                                                                 .OrderBy(A => SortByStartDate ? (A.StartDate - DateTime.Now).TotalDays
+                                                                              : SortByStartDateDesc ? -(A.StartDate - DateTime.Now).TotalDays
+                                                                              : 0)
+                                                                 .OrderBy(A => SortByEndDate ? (A.EndDate - DateTime.Now).TotalDays
+                                                                              : SortByEndDateDesc ? -(A.EndDate - DateTime.Now).TotalDays
+                                                                              : (SortByEndDate || SortByEndDateDesc) && A.Status == "Deleted" ? -1000000
+                                                                              : 0)
+                                                                 .OrderBy(A => A.CaseType)
+                                                                 .OrderBy(A => A.CaseTypeGroup)
+
+                                                                 .ToList())
+                            {
+                        <div class="row grid-row">
+                            <div class="data-item">
+                                <div class="btn-ellipses float-left">
+                                    <span class="fa fa-ellipsis-v"></span>
+                                    <div class="ellipsis-menu">
+                                        <ul>
+                                            <li class="col-main" @onclick='(() => ShowCompanyAccountsDetailModal(companyAccountObject))'>
+                                                <span class="fa fa-binoculars mr-2"></span>
+                                                <span>Edit</span>
+                                            </li>
+                                        </ul>
                                     </div>
-
-                                    <div class="data-item-sub">
-                                        @AllRecords.Where(A => A.Id == companyAccountObject.SmartflowRecordId).Select(A => A.SmartflowName).FirstOrDefault()
-                                    </div>
                                 </div>
 
-                                <div class="data-item">
-                                        @companyAccountObject.Status
-                                </div>
-
-
-                                <div class="data-item">
-                                        @companyAccountObject.StartDate.ToString("dd/MM/yyyy")
-                                </div>
-
-                                <div class="data-item">
-                                        @companyAccountObject.EndDate.ToString("dd/MM/yyyy")
-                                </div>
-
-                                <div class="data-item">
-                                        @companyAccountObject.MonthsRemaining.ToString()
-                                </div>
-
-                                <div class="data-item">
-                                        £@string.Format("{0:N2}", companyAccountObject.TotalBilled)
+                                <div class="data-item-sub">
+                                    @companyAccountObject.CaseTypeGroup
                                 </div>
                             </div>
-                        }
 
+                            <div class="data-item">
+                                @companyAccountObject.CaseType
+                            </div>
+
+                            <div class="data-item">
+                                @companyAccountObject.SmartflowName
+                            </div>
+
+                            <div class="data-item">
+                                @companyAccountObject.Status
+                            </div>
+
+
+                            <div class="data-item">
+                                @companyAccountObject.StartDate.ToString("dd/MM/yyyy")
+                            </div>
+
+                            <div class="data-item">
+                                @(companyAccountObject.Status == "Deleted" ? "N/A" : companyAccountObject.EndDate.ToString("dd/MM/yyyy"))
+                            </div>
+
+                            <div class="data-item">
+                                @(companyAccountObject.Status == "Deleted" ? "N/A" : companyAccountObject.MonthsRemaining.ToString())
+                            </div>
+
+                            <div class="data-item">
+                                £@string.Format("{0:N2}", companyAccountObject.TotalBilled)
+                            </div>
+                        </div>
+                            }
+                        }
                     </div>
 
                 </div>

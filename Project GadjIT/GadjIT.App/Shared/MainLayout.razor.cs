@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Server.HttpSys;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Extensions.Logging;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +20,17 @@ namespace GadjIT_App.Shared
 {
     public partial class MainLayout
     {
+        private readonly ILogger<MainLayout> logger;
+
+        public MainLayout()
+        {
+
+        }
+
+        public MainLayout(ILogger<MainLayout> logger)
+        {
+            this.logger = logger;
+        }
 
         [Inject]
         protected IUserSessionState sessionState { get; set; }
@@ -76,13 +89,11 @@ namespace GadjIT_App.Shared
                     }
                 }
 
-
-
                 StateHasChanged();
             }
-            catch
+            catch (Exception e)
             {
-                Console.WriteLine("Caught Error");
+                logger.LogError(e,$"Error caught on main layout");
             }
 
 
@@ -92,7 +103,14 @@ namespace GadjIT_App.Shared
         {
             if (firstRender)
             {
-                setParallax();
+                try
+                {
+                    setParallax();
+                }
+                catch(Exception e)
+                {
+                    logger.LogError(e, "Error setting parallax");
+                }
             }
         }
 
@@ -154,7 +172,14 @@ namespace GadjIT_App.Shared
 
         public void Refresh()
         {
-            setParallax();
+            try
+            {
+                setParallax();
+            }
+            catch(Exception e)
+            {
+                logger.LogError(e, "Error refreshing parallax");
+            }
         }
 
 

@@ -798,8 +798,25 @@ namespace GadjIT_App.Data.Admin
                                                 .Where(R => R.System == sessionState.selectedSystem)
                                                 .SingleOrDefaultAsync();
 
+
+
             if (!(existingRecord is null))
             {
+                var existingAccount = await context
+                            .AppCompanyAccountsSmartflowDetails
+                            .Where(A => A.SmartflowRecordId == existingRecord.Id)
+                            .FirstOrDefaultAsync();
+
+                if(!(existingAccount is null))
+                {
+                    existingAccount.SmartflowRecordId = null;
+                    existingAccount.Status = "Deleted";
+
+                    context.AppCompanyAccountsSmartflowDetails.Update(existingAccount);
+                    await context.SaveChangesAsync();
+                }
+
+
                 context.SmartflowRecords.Remove(existingRecord);
                 await context.SaveChangesAsync();
             }
@@ -817,7 +834,8 @@ namespace GadjIT_App.Data.Admin
 
             var existingCompanies = await context.AppCompanyDetails.ToListAsync();
 
-            var newAccounts = existingCompanies.Where(C => !existingAccounts.Select(A => A.CompanyId).ToList().Contains(C.Id))
+            var newAccounts = existingCompanies
+                                            .Where(C => !existingAccounts.Select(A => A.CompanyId).ToList().Contains(C.Id))
                                             .Select(C => new AppCompanyAccountsSmartflow
                                             {
                                                 CompanyId = C.Id,
@@ -836,19 +854,23 @@ namespace GadjIT_App.Data.Admin
             var existingAccountDetails = await context.AppCompanyAccountsSmartflowDetails.ToListAsync();
             var existingSmartflowRecords = await context.SmartflowRecords.ToListAsync();
 
-            var newAccountDetails = existingSmartflowRecords.Where(R => !existingAccountDetails.Select(D => D.SmartflowRecordId).ToList().Contains(R.Id))
+            var newAccountDetails = existingSmartflowRecords
+                                                            .Where(R => !existingAccountDetails.Select(D => D.SmartflowRecordId).ToList().Contains(R.Id))
                                                             .Select(R => new AppCompanyAccountsSmartflowDetails
                                                             {
                                                                 SmartflowRecordId = R.Id,
-                                                                StartDate = R.CreatedDate,
-                                                                EndDate = R.CreatedDate.AddMonths(24),
+                                                                StartDate = R.System == "Live" ? R.CreatedDate.AddMonths(1) : R.CreatedDate,
+                                                                EndDate = R.System == "Live" ? R.CreatedDate.AddMonths(13) : R.CreatedDate,
                                                                 System = R.System,
+                                                                SmartflowName = R.SmartflowName,
+                                                                CaseType = R.CaseType,
+                                                                CaseTypeGroup = R.CaseTypeGroup,
                                                                 Billable = true,
                                                                 Status = "Active",
-                                                                MonthlyCharge = 5,
-                                                                MonthsDuration = 24,
-                                                                MonthsRemaining = 24,
-                                                                Outstanding = 5 * 24,
+                                                                MonthlyCharge = R.System == "Live" ? 5 : 0,
+                                                                MonthsDuration = R.System == "Live" ? 12 : 0,
+                                                                MonthsRemaining = R.System == "Live" ? 12 : 0,
+                                                                Outstanding = R.System == "Live" ? 5 * 12 : 0,
                                                                 TotalBilled = 0,
                                                                 CreatedBy = R.CreatedByUserId,
                                                                 SmartflowAccountId = existingAccounts
@@ -862,12 +884,12 @@ namespace GadjIT_App.Data.Admin
 
 
 
-            var deletedRecords = existingAccountDetails.Where(R => !(existingSmartflowRecords.Select(D => D.Id).ToList().Contains(R.SmartflowRecordId))).ToList();
-            deletedRecords = deletedRecords.Select(R => { R.Status = "Deleted"; R.DeletedDate = DateTime.Now; return R; }).ToList();
+            //var deletedRecords = existingAccountDetails.Where(R => !existingSmartflowRecords.Select(D => D.Id).ToList().Contains((int)R.SmartflowRecordId)).ToList();
+            //deletedRecords = deletedRecords.Select(R => { R.Status = "Deleted"; R.DeletedDate = DateTime.Now; return R; }).ToList();
 
-            
+            //context.AppCompanyAccountsSmartflowDetails.UpdateRange(deletedRecords);
+
             await context.SaveChangesAsync();
-
             return true;
         }
 
@@ -887,7 +909,11 @@ namespace GadjIT_App.Data.Admin
         {
             Lock = true;
 
-            var returnValue = await context.AppCompanyAccountsSmartflowDetails.Where(D => D.SmartflowAccountId == accountId).ToListAsync();
+            var returnValue = 
+                await context
+                .AppCompanyAccountsSmartflowDetails
+                .Where(D => D.SmartflowAccountId == accountId)
+                .ToListAsync();
 
             Lock = false;
 
@@ -932,12 +958,35 @@ namespace GadjIT_App.Data.Admin
             return updatingAccount;
         }
 
+        public class BillThing
+        {
+            public AppCompanyAccountsSmartflowDetails AccountObject { get; set; }
+
+            public SmartflowRecords RecordObject { get; set; }
+
+        }
+
         public async Task<List<BillingItem>> BillCompany(CompanyAccountObject companyAccount, List<SmartflowRecords> smartflowRecords)
         {
-            var companyBillingSmartflowAccounts = await context.AppCompanyAccountsSmartflowDetails.Where(C => C.SmartflowAccountId == companyAccount.AccountObject.Id).ToListAsync();
+
+            var companyBillingSmartflowAccounts =
+                context.AppCompanyAccountsSmartflowDetails
+                        .Where(C => C.SmartflowAccountId == companyAccount.AccountObject.Id)
+                        .Select(C => new BillThing { AccountObject = C
+                                    })
+                        .ToList();
+
+            companyBillingSmartflowAccounts = companyBillingSmartflowAccounts.Select(A =>
+                                                {
+                                                    A.RecordObject = smartflowRecords
+                                                    .Where(S => A.AccountObject.SmartflowRecordId == S.Id).FirstOrDefault(); return A;
+                                                })
+                .Where(A => A.AccountObject.System == "Live")
+                .Where(A => A.AccountObject.Status != "Deleted")
+                .ToList();
 
             companyAccount.AccountObject.TotalBilled = companyAccount.AccountObject.TotalBilled
-                                                        + companyBillingSmartflowAccounts.Select(A => A.MonthlyCharge).Sum()
+                                                        + companyBillingSmartflowAccounts.Select(A => A.AccountObject.MonthlyCharge).Sum()
                                                         + companyAccount.AccountObject.Subscription;
 
             companyAccount.AccountObject.LastBilledDate = DateTime.Now;
@@ -947,23 +996,20 @@ namespace GadjIT_App.Data.Admin
                                                         { 
                                                             AccountName = companyAccount.CompanyObject.CompanyName,
                                                             BillDate = DateTime.Now,
-                                                            MonthlyCharge = B.MonthlyCharge,
-                                                            MonthsRemaing = B.MonthsRemaining - 1,
-                                                            Outstanding = B.Outstanding - B.MonthlyCharge,
-                                                            Billed = B.TotalBilled + B.MonthlyCharge,
-                                                            SmartflowName = smartflowRecords
-                                                                                .Where(R => R.Id == B.SmartflowRecordId)
-                                                                                .Select(R => R.SmartflowName)
-                                                                                .FirstOrDefault()
+                                                            MonthlyCharge = B.AccountObject.MonthlyCharge,
+                                                            MonthsRemaing = B.AccountObject.MonthsRemaining - 1,
+                                                            Outstanding = B.AccountObject.Outstanding - B.AccountObject.MonthlyCharge,
+                                                            Billed = B.AccountObject.TotalBilled + B.AccountObject.MonthlyCharge,
+                                                            SmartflowName = B.RecordObject.SmartflowName
                                                         })
                                         .ToList();
 
 
             companyBillingSmartflowAccounts = companyBillingSmartflowAccounts.Select(B => 
                                                                                 { 
-                                                                                    B.Outstanding = B.Outstanding - B.MonthlyCharge;
-                                                                                    B.MonthsRemaining = B.MonthsRemaining - 1;
-                                                                                    B.TotalBilled = B.TotalBilled + B.MonthlyCharge;
+                                                                                    B.AccountObject.Outstanding = B.AccountObject.Outstanding - B.AccountObject.MonthlyCharge;
+                                                                                    B.AccountObject.MonthsRemaining = B.AccountObject.MonthsRemaining - 1;
+                                                                                    B.AccountObject.TotalBilled = B.AccountObject.TotalBilled + B.AccountObject.MonthlyCharge;
                                                                                     return B; 
                                                                                 })
                                                                             .ToList();

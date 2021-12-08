@@ -31,5 +31,6 @@ namespace GadjIT_App.Data
         public virtual DbSet<AppWorkTypes> AppWorkTypes { get; set; }
         public virtual DbSet<AppCompanyWorkTypeMapping> AppCompanyWorkTypeMapping { get; set; }
         public virtual DbSet<SmartflowRecords> SmartflowRecords { get; set; }
+        public virtual DbSet<GadjITLog> GadjItLogs { get; set; }
     }
 }

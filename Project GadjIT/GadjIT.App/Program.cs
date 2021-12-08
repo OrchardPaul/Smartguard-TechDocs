@@ -29,7 +29,6 @@ namespace GadjIT_App
 
             try
             {
-                Log.Information("Application Started");
                 CreateHostBuilder(args).Build().Run();
             }
             catch(Exception e)

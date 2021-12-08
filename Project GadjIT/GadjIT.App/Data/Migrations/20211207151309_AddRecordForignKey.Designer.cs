@@ -4,14 +4,16 @@ using GadjIT_App.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GadjIT_App.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211207151309_AddRecordForignKey")]
+    partial class AddRecordForignKey
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -64,14 +66,6 @@ namespace GadjIT_App.Data.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<string>("CaseType")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("CaseTypeGroup")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
                     b.Property<string>("CreatedBy")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
@@ -97,11 +91,7 @@ namespace GadjIT_App.Data.Migrations
                     b.Property<int>("SmartflowAccountId")
                         .HasColumnType("int");
 
-                    b.Property<string>("SmartflowName")
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
-
-                    b.Property<int?>("SmartflowRecordId")
+                    b.Property<int>("SmartflowRecordId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("StartDate")
@@ -640,7 +630,9 @@ namespace GadjIT_App.Data.Migrations
                 {
                     b.HasOne("GadjIT.AppContext.GadjIT_App.SmartflowRecords", "SmartflowRecord")
                         .WithMany()
-                        .HasForeignKey("SmartflowRecordId");
+                        .HasForeignKey("SmartflowRecordId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("SmartflowRecord");
                 });

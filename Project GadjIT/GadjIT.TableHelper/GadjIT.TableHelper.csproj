@@ -8,8 +8,4 @@
     <PackageReference Include="ServiceStack.Interfaces" Version="5.10.4" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\GadjIT.App\GadjIT.App.csproj" />
-  </ItemGroup>
-
 </Project>

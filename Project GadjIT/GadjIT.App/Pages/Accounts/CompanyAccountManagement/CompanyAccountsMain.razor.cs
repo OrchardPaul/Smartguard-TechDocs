@@ -70,6 +70,18 @@ namespace GadjIT_App.Pages.Accounts.CompanyAccountManagement
 
         public AppCompanyAccountsSmartflow SelectedCompanyAccount { get; set; }
 
+        public bool SortByStartDate { get; set; }
+
+        public bool SortByStartDateDesc { get; set; }
+
+        public bool SortByEndDate { get; set; }
+
+        public bool SortByEndDateDesc { get; set; }
+
+        public bool SortByStatus { get; set; }
+
+        public bool SortByStatusDesc { get; set; }
+
         public string SelectedSystem { get; set; } = "Live";
 
         protected override async Task OnInitializedAsync()
@@ -86,11 +98,11 @@ namespace GadjIT_App.Pages.Accounts.CompanyAccountManagement
 
                 SelectedCompanyAccount = AppCompanyAccounts.Where(A => A.CompanyId == SessionState.Company.Id).FirstOrDefault();
 
-                RefreshCompanyObjects();
-
                 RefreshCompanyAccounts();
 
                 displaySpinner = false;
+
+                StateHasChanged();
             }
             catch(Exception e)
             {
@@ -116,10 +128,14 @@ namespace GadjIT_App.Pages.Accounts.CompanyAccountManagement
                     SmartflowAccounts = AppCompanyAccountsDetails
                 };
 
+
                 CompanyAccountObjects.Add(companyAccountObject);
             }
 
-            StateHasChanged();
+            await InvokeAsync(() =>
+            {
+                StateHasChanged();
+            });
         }
 
 
@@ -139,6 +155,8 @@ namespace GadjIT_App.Pages.Accounts.CompanyAccountManagement
             }
 
             await CompanyDbAccess.RefreshAccounts();
+
+            RefreshCompanyObjects();
         }
 
         protected void SelectCompany(AppCompanyAccountsSmartflow selectedCompany)
@@ -157,6 +175,10 @@ namespace GadjIT_App.Pages.Accounts.CompanyAccountManagement
             {
                 SmartflowAccountId = taskObject.SmartflowAccountId,
                 SmartflowRecordId = taskObject.SmartflowRecordId,
+                SmartflowRecord = taskObject.SmartflowRecord,
+                SmartflowName = taskObject.SmartflowName,
+                CaseType = taskObject.CaseType,
+                CaseTypeGroup = taskObject.CaseTypeGroup,
                 StartDate = taskObject.StartDate,
                 EndDate = taskObject.EndDate,
                 Status = taskObject.Status,
@@ -175,7 +197,6 @@ namespace GadjIT_App.Pages.Accounts.CompanyAccountManagement
             var parameters = new ModalParameters();
             parameters.Add("CopyObject", copyObject);
             parameters.Add("SelectedAccountDetailsObject", taskObject);
-            parameters.Add("SelectedAccountSmartflowObject", AllRecords.Where(A => A.Id == copyObject.SmartflowRecordId).FirstOrDefault());
             parameters.Add("DataChanged", dataChanged);
 
             var options = new ModalOptions()
@@ -205,6 +226,80 @@ namespace GadjIT_App.Pages.Accounts.CompanyAccountManagement
             await ExcelHelper.WriteChapterDataToExcel(selectedAccountObject, billingItems);
 
             RefreshCompanyObjects();
+        }
+
+        public void SwitchStartDateSort()
+        {
+            if (SortByStartDate)
+            {
+                SortByStartDate = false;
+                SortByStartDateDesc = true;
+            }
+            else if (SortByStartDateDesc)
+            {
+                SortByStartDateDesc = false;
+            }
+            else
+            {
+                SortByStartDate = true;
+            }
+
+            SortByEndDate = false;
+            SortByEndDateDesc = false;
+            SortByStatus = false;
+            SortByStatusDesc = false;
+
+            StateHasChanged();
+        }
+
+
+        public void SwitchEndDateSort()
+        {
+            if (SortByEndDate)
+            {
+                SortByEndDate = false;
+                SortByEndDateDesc = true;
+            }
+            else if (SortByEndDateDesc)
+            {
+                SortByEndDateDesc = false;
+            }
+            else
+            {
+                SortByEndDate = true;
+            }
+
+            SortByStartDate = false;
+            SortByStartDateDesc = false;
+            SortByStatus = false;
+            SortByStatusDesc = false;
+
+            StateHasChanged();
+        }
+
+
+        public void SwitchStatusSort()
+        {
+            if (SortByStatus)
+            {
+                SortByStatus = false;
+                SortByStatusDesc = true;
+            }
+            else if (SortByStatusDesc)
+            {
+                SortByStatusDesc = false;
+            }
+            else
+            {
+                SortByStatus = true;
+            }
+
+            SortByEndDate = false;
+            SortByEndDateDesc = false;
+            SortByStartDate = false;
+            SortByStartDateDesc = false;
+
+            StateHasChanged();
         }
 
     }

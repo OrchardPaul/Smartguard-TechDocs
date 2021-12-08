@@ -24,7 +24,7 @@ namespace GadjIT_App.Pages.Chapters
         public string Smartflow { get; set; }
 
         [StringLength(30)]
-        public string SFVersion { get; set; } = "V1.01";
+        public string SFVersion { get; set; } = "V1.03";
 
 
         public List<ChapterP4WStepQuestion> Questions { get; set; }

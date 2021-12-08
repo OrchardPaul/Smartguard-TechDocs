@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using GadjIT_App.Services.SessionState;
 using AutoMapper;
+using Microsoft.Extensions.Logging;
+using Serilog.Context;
 
 namespace GadjIT_App.Data.Admin
 {
@@ -39,120 +41,148 @@ namespace GadjIT_App.Data.Admin
         private readonly AuthenticationStateProvider authenticationStateProvider;
         private readonly ApplicationDbContext context;
         private readonly IMapper mapper;
+        private readonly ILogger<IdentityUserAccess> logger;
 
         private ApplicationUser selectedUser { get; set; }
 
 
         public bool Lock { get; set; } = false;
 
+        public IdentityUserAccess()
+        {
+
+        }
+
         public IdentityUserAccess(UserManager<ApplicationUser> userManager
             , RoleManager<ApplicationRole> roleManager
             , AuthenticationStateProvider authenticationStateProvider
             , ApplicationDbContext context
-            , IMapper mapper)
+            , IMapper mapper
+            , ILogger<IdentityUserAccess> logger)
         {
             this.userManager = userManager;
             this.roleManager = roleManager;
             this.authenticationStateProvider = authenticationStateProvider;
             this.context = context;
             this.mapper = mapper;
+            this.logger = logger;
         }
 
         public async Task<AspNetUsers> SwitchSelectedCompany(AspNetUsers user)
         {
-            var signedInUserState = await authenticationStateProvider.GetAuthenticationStateAsync();
-
-            selectedUser = await userManager.FindByNameAsync(user.UserName);
-            selectedUser.SelectedCompanyId = user.SelectedCompanyId;
-            selectedUser.SelectedUri = user.SelectedUri;
-
-            if (!signedInUserState.User.IsInRole("Super User"))
+            try
             {
-                var selectedCompanyUserRoles = await context.AppCompanyUserRoles
-                                                    .Where(A => A.UserId == selectedUser.Id
-                                                                & A.CompanyId == selectedUser.SelectedCompanyId)
-                                                    .Select(A => A.RoleId)
-                                                    .ToListAsync();
+                var signedInUserState = await authenticationStateProvider.GetAuthenticationStateAsync();
 
-                var newRoles = await roleManager.Roles
-                                            .Where(R => selectedCompanyUserRoles.Contains(R.Id))
-                                            .Select(R => R.Name)
-                                            .ToListAsync();
+                selectedUser = await userManager.FindByNameAsync(user.UserName);
+                selectedUser.SelectedCompanyId = user.SelectedCompanyId;
+                selectedUser.SelectedUri = user.SelectedUri;
 
-
-
-                var currentRoles = await userManager.GetRolesAsync(selectedUser);
-
-                if (currentRoles.Count > 0)
+                if (!signedInUserState.User.IsInRole("Super User"))
                 {
-                    await userManager.RemoveFromRolesAsync(selectedUser, currentRoles);
+                    var selectedCompanyUserRoles = await context.AppCompanyUserRoles
+                                                        .Where(A => A.UserId == selectedUser.Id
+                                                                    & A.CompanyId == selectedUser.SelectedCompanyId)
+                                                        .Select(A => A.RoleId)
+                                                        .ToListAsync();
+
+                    var newRoles = await roleManager.Roles
+                                                .Where(R => selectedCompanyUserRoles.Contains(R.Id))
+                                                .Select(R => R.Name)
+                                                .ToListAsync();
+
+
+
+                    var currentRoles = await userManager.GetRolesAsync(selectedUser);
+
+                    if (currentRoles.Count > 0)
+                    {
+                        await userManager.RemoveFromRolesAsync(selectedUser, currentRoles);
+                    }
+
+                    if (newRoles.Count > 0)
+                    {
+                        await userManager.AddToRolesAsync(selectedUser, newRoles);
+                    }
+
                 }
 
-                if (newRoles.Count > 0)
-                {
-                    await userManager.AddToRolesAsync(selectedUser, newRoles);
-                }
+                await userManager.UpdateAsync(selectedUser);
 
+                return mapper.Map(selectedUser, new AspNetUsers());
+            }
+            catch(Exception e)
+            {
+                logger.LogError(e, $"Error switching companies for user {user.FullName}");
             }
 
- 
-
-
-            await userManager.UpdateAsync(selectedUser);
-
-
-
-            return mapper.Map(selectedUser, new AspNetUsers());
+            return user;
         }
 
         public async Task<AspNetUsers> SubmitCompanyCliams(List<CompanyItem> companies, AspNetUsers user)
         {
-            selectedUser = await userManager.FindByIdAsync(user.Id);
+            try
+            {
+                selectedUser = await userManager.FindByIdAsync(user.Id);
 
-            var removeClaims = companies.Where(C => !C.IsSubscribed)
-                .Select(C => new Claim("Company", C.Id.ToString()))
-                .ToList();
+                var removeClaims = companies.Where(C => !C.IsSubscribed)
+                    .Select(C => new Claim("Company", C.Id.ToString()))
+                    .ToList();
 
-            await userManager.RemoveClaimsAsync(selectedUser, removeClaims);
+                await userManager.RemoveClaimsAsync(selectedUser, removeClaims);
 
-            var claims = await userManager.GetClaimsAsync(selectedUser);
+                var claims = await userManager.GetClaimsAsync(selectedUser);
 
-            var claimsId = claims.Where(C => C.Type == "Company")
-                                .Select(C => C.Value)
-                                .ToList();
+                var claimsId = claims.Where(C => C.Type == "Company")
+                                    .Select(C => C.Value)
+                                    .ToList();
 
-            var addClaims = companies.Where(C => C.IsSubscribed)
-                .Where(C => !claimsId.Contains(C.Id.ToString()))
-                .Select(C => new Claim("Company", C.Id.ToString()))
-                .ToList();
+                var addClaims = companies.Where(C => C.IsSubscribed)
+                    .Where(C => !claimsId.Contains(C.Id.ToString()))
+                    .Select(C => new Claim("Company", C.Id.ToString()))
+                    .ToList();
 
-            await userManager.AddClaimsAsync(selectedUser, addClaims);
+                await userManager.AddClaimsAsync(selectedUser, addClaims);
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, $"Error assigning company claims to user: {user.FullName}");
+            }
+
 
             return user;
         }
 
         public async Task<IList<Claim>> GetSignedInUserClaims()
         {
-            var auth = await authenticationStateProvider.GetAuthenticationStateAsync();
-
-            if (!(auth is null))
+            try
             {
-                var user = auth.User;
-                var userName = user.Identity.Name;
+                var auth = await authenticationStateProvider.GetAuthenticationStateAsync();
 
-                if (!(userName is null))
+                if (!(auth is null))
                 {
-                    var currentUser = await userManager.Users
-                                            .Where(U => U.UserName == userName)
-                                            .SingleAsync();
+                    var user = auth.User;
+                    var userName = user.Identity.Name;
 
-                    if (!(currentUser is null))
+                    if (!(userName is null))
                     {
-                        var claims = await userManager.GetClaimsAsync(currentUser);
+                        var currentUser = await userManager.Users
+                                                .Where(U => U.UserName == userName)
+                                                .SingleAsync();
 
-                        return claims.ToList();
+                        if (!(currentUser is null))
+                        {
+                            var claims = await userManager.GetClaimsAsync(currentUser);
+
+                            return claims.ToList();
+                        }
                     }
                 }
+
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, $"Error retrieving signed in user's claims");
             }
 
             return null;
@@ -342,10 +372,22 @@ namespace GadjIT_App.Data.Admin
 
         public async Task<AspNetUsers> GetUserByName(string userName)
         {
-            return await userManager.Users
-                .Where(U => U.UserName == userName)
-                .Select(U => mapper.Map(U, new AspNetUsers()))
-                .SingleAsync();
+            try
+            {
+                return await userManager.Users
+                    .Where(U => U.UserName == userName)
+                    .Select(U => mapper.Map(U, new AspNetUsers()))
+                    .SingleAsync();
+            }
+            catch(Exception e)
+            {
+                using (LogContext.PushProperty("SourceContext", nameof(UserSessionState)))
+                {
+                    logger.LogError(e,"Error retrieving user by name: {userName}",userName);
+                }
+            }
+
+            return null;
         }
 
         public async Task<AspNetUsers> UpdateUserDetails(AspNetUsers user)

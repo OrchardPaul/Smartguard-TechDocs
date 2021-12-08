@@ -3,6 +3,7 @@ using GadjIT_App.Data.Admin;
 using GadjIT_App.Services.AppState;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -68,6 +69,7 @@ namespace GadjIT_App.Services.SessionState
         private readonly IIdentityUserAccess userAccess;
         private readonly ICompanyDbAccess companyDbAccess;
         private readonly NavigationManager navigationManager;
+        private readonly ILogger<UserSessionState> logger;
 
         public AspNetUsers User { get; protected set; }
 
@@ -124,12 +126,14 @@ namespace GadjIT_App.Services.SessionState
         public UserSessionState(AuthenticationStateProvider authenticationStateProvider
                                 , IIdentityUserAccess userAccess
                                 , ICompanyDbAccess companyDbAccess
-                                , NavigationManager navigationManager)
+                                , NavigationManager navigationManager
+                                , ILogger<UserSessionState> logger)
         {
             this.authenticationStateProvider = authenticationStateProvider;
             this.userAccess = userAccess;
             this.companyDbAccess = companyDbAccess;
             this.navigationManager = navigationManager;
+            this.logger = logger;
         }
 
 
