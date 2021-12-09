@@ -1,4 +1,5 @@
 ﻿@page "/accounts/companyaccounts"
+@using System.Linq.Dynamic.Core;
 
 <div class="tran-block page-header-block ">
     <div class="page-header-title">
@@ -144,8 +145,6 @@
                                             .Where(S => S.System == "Live")
                                             .Where(S => S.Status != "Deleted")
                                             .Sum(S => S.Outstanding))
-                             
-                                        
                                     </div>
 
                                     <div class="data-item">
@@ -257,24 +256,23 @@
                         @if (CompanyAccountObjects.Count > 0)
                         {
                             @foreach (var companyAccountObject in CompanyAccountObjects
-                                                                 .Where(A => A.AccountObject.Id == SelectedCompanyAccount.Id)
-                                                                 .Select(A => A.SmartflowAccounts)
-                                                                 .SingleOrDefault()
-                                                                 .Where(A => A.System == SelectedSystem)
-                                                                 .OrderBy(A => A.SmartflowName)
-                                                                 .OrderBy(A => SortByStatus ? A.Status : null)
-                                                                 .OrderByDescending(A => SortByStatusDesc ? A.Status : null)
-                                                                 .OrderBy(A => SortByStartDate ? (A.StartDate - DateTime.Now).TotalDays
-                                                                              : SortByStartDateDesc ? -(A.StartDate - DateTime.Now).TotalDays
-                                                                              : 0)
-                                                                 .OrderBy(A => SortByEndDate ? (A.EndDate - DateTime.Now).TotalDays
-                                                                              : SortByEndDateDesc ? -(A.EndDate - DateTime.Now).TotalDays
-                                                                              : (SortByEndDate || SortByEndDateDesc) && A.Status == "Deleted" ? -1000000
-                                                                              : 0)
-                                                                 .OrderBy(A => A.CaseType)
-                                                                 .OrderBy(A => A.CaseTypeGroup)
-
-                                                                 .ToList())
+                                                          .Where(A => A.AccountObject.Id == SelectedCompanyAccount.Id)
+                                                          .Select(A => A.SmartflowAccounts)
+                                                          .SingleOrDefault()
+                                                          .Where(A => A.System == SelectedSystem)
+                                                          .OrderBy(A => A.SmartflowName)
+                                                          .OrderBy(A => SortByStatus ? A.Status : null)
+                                                          .OrderByDescending(A => SortByStatusDesc ? A.Status : null)
+                                                          .OrderBy(A => SortByStartDate ? (A.StartDate.Date - DateTime.Now.Date).TotalDays
+                                                                       : SortByStartDateDesc ? -(A.StartDate.Date - DateTime.Now.Date).TotalDays
+                                                                       : 0)
+                                                          .OrderBy(A => SortByEndDate ? (A.EndDate.Date - DateTime.Now.Date).TotalDays
+                                                                       : SortByEndDateDesc ? -(A.EndDate.Date - DateTime.Now.Date).TotalDays
+                                                                       : (SortByEndDate || SortByEndDateDesc) && A.Status == "Deleted" ? -1000000
+                                                                       : 0)
+                                                          .OrderBy(A => A.CaseType)
+                                                          .OrderBy(A => A.CaseTypeGroup)
+                                                          .ToList())
                             {
                         <div class="row grid-row">
                             <div class="data-item">
