@@ -158,7 +158,7 @@ else
                                              .ToList())
                                         {
                                             <div class="grid-row-md nav-row-3 no-border  @(rowChanged == Chapter.SmartflowObject.SeqNo ? ToggleRowChangedClass() : "" )">
-                                                <div class="data-item @(Chapter.SmartflowObject.SmartflowName.Length > 6 && Chapter.SmartflowObject.SmartflowName.Substring(0,6) == "GROUP " ? "data-item-group" : "")">
+                                                <div id="Smartflow-@Chapter.SmartflowObject.Id" class="data-item @(Chapter.SmartflowObject.SmartflowName.Length > 6 && Chapter.SmartflowObject.SmartflowName.Substring(0,6) == "GROUP " ? "data-item-group" : "")">
 
                                                     @if (UserSession.isAdminUser)
                                                     {

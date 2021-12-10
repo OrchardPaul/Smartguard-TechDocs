@@ -44,6 +44,7 @@ namespace GadjIT_App.Pages.Chapters
             public string ColourCode { get; set; }
         }
 
+
         [Inject]
         IModalService Modal { get; set; }
 
@@ -123,6 +124,8 @@ namespace GadjIT_App.Pages.Chapters
         public string editCaseType { get; set; } = "";
         public string updateJSON { get; set; } = "";
         public bool CreateNewSmartflow { get; set; }
+
+        public float ScrollPosition { get; set; }
 
         public string selectColour { 
             get 
@@ -557,7 +560,7 @@ namespace GadjIT_App.Pages.Chapters
             NavigationManager.NavigateTo($"Identity/Account/Login?returnUrl={returnUrl}", true);
         }
 
-        void SelectHome()
+        public async void SelectHome()
         {
             //NavigationManager.NavigateTo($"Smartflow/{selectedChapter.CaseTypeGroup}/{selectedChapter.CaseType}",true);
             if (!string.IsNullOrEmpty(UserSession.TempBackGroundImage))
@@ -570,7 +573,19 @@ namespace GadjIT_App.Pages.Chapters
             rowChanged = 0;
 
             StateHasChanged();
+
+
+            await MovePos().ConfigureAwait(false);
+          
         }
+
+
+        public async Task MovePos()
+        {
+            await Task.Delay(1);
+            await jsRuntime.InvokeVoidAsync("moveToPosition", ScrollPosition);
+        }
+       
 
         void SelectCaseTypeGroup(string caseTypeGroup)
         {
@@ -713,6 +728,8 @@ namespace GadjIT_App.Pages.Chapters
 
         private async void SelectChapter(UsrOrsfSmartflows chapter)
         {
+            ScrollPosition = await jsRuntime.InvokeAsync<float>("getElementPosition");
+
             displaySpinner = true;
 
             lstAll = new List<VmUsrOrDefChapterManagement>();
@@ -798,7 +815,11 @@ namespace GadjIT_App.Pages.Chapters
                 UserSession.ChapterLastCompared = appChapterState.GetLastUpdatedDate(UserSession, selectedChapter);
             }
 
+            await jsRuntime.InvokeVoidAsync("moveToPosition", 0);
+
             StateHasChanged();
+
+
 
         }
 

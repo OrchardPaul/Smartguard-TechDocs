@@ -20,17 +20,11 @@ namespace GadjIT_App.Shared
 {
     public partial class MainLayout
     {
-        private readonly ILogger<MainLayout> logger;
 
-        public MainLayout()
-        {
+        [Inject]
+        private ILogger<MainLayout> logger { get; set; }
 
-        }
 
-        public MainLayout(ILogger<MainLayout> logger)
-        {
-            this.logger = logger;
-        }
 
         [Inject]
         protected IUserSessionState sessionState { get; set; }

@@ -66,6 +66,7 @@ app {
     /*background-image: url("../images/Textures/binding-dark.png");*/
     background-image: url("../images/Textures/brick-wall-dark.png");
     background-repeat: repeat;
+
 }
 
 @media (max-width: 1199px) {
