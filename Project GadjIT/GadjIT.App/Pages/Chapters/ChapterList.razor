@@ -56,189 +56,278 @@ else
                     </div>
 
                 }
-                <div class="container-fluid">
+            <div class="container-fluid">
 
-                    <!-- SHOW ALL GROUPS -->
-                    @foreach (var caseTypeGroup in lstChapters
-                                                     .Where(C => !(C.SmartflowObject.CaseTypeGroup is null))
-                                                     .OrderBy(C => C.SmartflowObject.CaseTypeGroup)
-                                                     .Select(C => C.SmartflowObject.CaseTypeGroup)
-                                                     .Distinct()
-                                                     .ToList())
-                    {
+                <!-- SHOW ALL GROUPS -->
+                @foreach (var caseTypeGroup in lstChapters
+                                                .Where(C => !(C.SmartflowObject.CaseTypeGroup is null))
+                                                .OrderBy(C => C.SmartflowObject.CaseTypeGroup)
+                                                .Select(C => C.SmartflowObject.CaseTypeGroup)
+                                                .Distinct()
+                                                .ToList())
+                {
 
-                        <div class="grid-row-lg mt-3 nav-row-1">
-                            <div class="data-item" title="Group: click to see case types assigned to @caseTypeGroup">
-                                @if (UserSession.isAdminUser)
-                                {
-                                    <div class="btn-ellipses float-left">
-                                        <span class="fa fa-ellipsis-v"></span>
-                                        <div class="ellipsis-menu" style="margin-top: 20px">
-                                            <ul>
-                                                <li class="col-main" @onclick='() => PrepareCaseTypeForEdit(caseTypeGroup, "CaseTypeGroup")'>
-                                                    <span class="fa fa-font mr-2"></span>
-                                                    <span>Rename</span>
-                                                </li>
+                    <div class="grid-row-lg mt-3 nav-row-1">
+                        <div class="data-item" title="Group: click to see case types assigned to @caseTypeGroup">
+                            @if (UserSession.isAdminUser)
+                            {
+                                <div class="btn-ellipses float-left">
+                                    <span class="fa fa-ellipsis-v"></span>
+                                    <div class="ellipsis-menu" style="margin-top: 20px">
+                                        <ul>
+                                            <li class="col-main" @onclick='() => PrepareCaseTypeForEdit(caseTypeGroup, "CaseTypeGroup")'>
+                                                <span class="fa fa-font mr-2"></span>
+                                                <span>Rename</span>
+                                            </li>
 
-                                            </ul>
-                                        </div>
+                                        </ul>
                                     </div>
-                                }
-
-                                <div class="data-item-nav" @onclick='() => SelectCaseTypeGroup(caseTypeGroup)'>
-                                    <div class="data-item-sub"><span class="fa fa-boxes mr-2"></span>@caseTypeGroup</div>
-                                    <div class="data-item-right col-alt"><div class="link-direction @(caseTypeGroup == selectedChapter.CaseTypeGroup ? "triangle-up " : "triangle-down")"></div></div>
                                 </div>
+                            }
+
+                            <div class="data-item-nav" @onclick='() => SelectCaseTypeGroup(caseTypeGroup)'>
+                                <div class="data-item-sub"><span class="fa fa-boxes mr-2"></span>@caseTypeGroup</div>
+                                <div class="data-item-right col-alt"><div class="link-direction @(caseTypeGroup == selectedChapter.CaseTypeGroup ? "triangle-up " : "triangle-down")"></div></div>
                             </div>
-
-
                         </div>
 
 
+                    </div>
 
-                        <!-- GROUP SELECTED SHOW CASE TYPES-->
-                        @if (caseTypeGroup == selectedChapter.CaseTypeGroup)
+
+
+                    <!-- GROUP SELECTED SHOW CASE TYPES-->
+                    @if (caseTypeGroup == selectedChapter.CaseTypeGroup)
+                    {
+
+                        @foreach (var caseType in lstChapters
+                                                     .Where(C => !(C.SmartflowObject.CaseType is null))
+                                                     .Where(C => C.SmartflowObject.CaseTypeGroup == selectedChapter.CaseTypeGroup)
+                                                     .OrderBy(C => C.SmartflowObject.CaseType)
+                                                     .Select(C => C.SmartflowObject.CaseType)
+                                                     .Distinct()
+                                                     .ToList())
                         {
 
-                            @foreach (var caseType in lstChapters
-                                                          .Where(C => !(C.SmartflowObject.CaseType is null))
-                                                          .Where(C => C.SmartflowObject.CaseTypeGroup == selectedChapter.CaseTypeGroup)
-                                                          .OrderBy(C => C.SmartflowObject.CaseType)
-                                                          .Select(C => C.SmartflowObject.CaseType)
-                                                          .Distinct()
-                                                          .ToList())
-                            {
+                            <div class="grid-row-md nav-row-2">
+                                <div class="data-item" title="Case Type: click to see the Smartflows within @caseType">
+                                    @if (UserSession.isAdminUser)
+                                    {
+                                        <div class="btn-ellipses float-left">
+                                            <span class="fa fa-ellipsis-v"></span>
+                                            <div class="ellipsis-menu">
+                                                <ul>
+                                                    <li class="col-main" @onclick='() => PrepareCaseTypeForEdit(caseType, "CaseType")'>
 
-                                <div class="grid-row-md nav-row-2">
-                                    <div class="data-item" title="Case Type: click to see the Smartflows within @caseType">
-                                        @if (UserSession.isAdminUser)
+                                                        <span class="fa fa-font mr-2"></span>
+                                                        <span>Rename</span>
+
+                                                    </li>
+
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    }
+                                    <div class="data-item-nav" @onclick='() => SelectCaseType(caseType)'>
+                                        @if (caseType == selectedChapter.CaseType)
                                         {
-                                            <div class="btn-ellipses float-left">
-                                                <span class="fa fa-ellipsis-v"></span>
-                                                <div class="ellipsis-menu">
-                                                    <ul>
-                                                        <li class="col-main" @onclick='() => PrepareCaseTypeForEdit(caseType, "CaseType")'>
-
-                                                            <span class="fa fa-font mr-2"></span>
-                                                            <span>Rename</span>
-
-                                                        </li>
-
-                                                    </ul>
-                                                </div>
+                                            <div class="data-item-sub">
+                                                <span class="fa fa-folder-open mr-2"></span>@caseType
                                             </div>
                                         }
-                                        <div class="data-item-nav" @onclick='() => SelectCaseType(caseType)'>
-                                            @if (caseType == selectedChapter.CaseType)
-                                            {
-                                                <div class="data-item-sub">
-                                                    <span class="fa fa-folder-open mr-2"></span>@caseType
-                                                </div>
-                                            }
-                                            else
-                                            {
-                                                <div class="data-item-sub">
-                                                    <span class="fa fa-folder mr-2"></span>@caseType
-                                                </div>
-                                            }
+                                        else
+                                        {
+                                            <div class="data-item-sub">
+                                                <span class="fa fa-folder mr-2"></span>@caseType
+                                            </div>
+                                        }
 
 
-                                            <div class="data-item-right col-alt "><div class="link-direction @(caseType == selectedChapter.CaseType ? "triangle-up " : "triangle-down")"></div></div>
+                                        <div class="data-item-right col-alt "><div class="link-direction @(caseType == selectedChapter.CaseType ? "triangle-up " : "triangle-down")"></div></div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            @if (caseType == selectedChapter.CaseType)
+                            {
+                                <Dropzone Items="lstChapters.Where(C => C.SmartflowObject.CaseType == selectedChapter.CaseType)
+                                        .Where(C => C.SmartflowObject.CaseTypeGroup == selectedChapter.CaseTypeGroup)
+                                        .OrderBy(C => C.SmartflowObject.SeqNo)
+                                        .ToList()">
+                                    <div class="grid-row-md nav-row-3 no-border">
+                                        
+
+                                        <div class="data-item @(context.SmartflowObject.SmartflowName.Length > 6 && context.SmartflowObject.SmartflowName.Substring(0,6) == "GROUP " ? "data-item-group" : "")">
+                                            @context.SmartflowObject.SmartflowName
                                         </div>
+
                                     </div>
 
-                                </div>
-                                @if (caseType == selectedChapter.CaseType)
-                                {
-                                    <div class="grid-nav">
-                                        @foreach (var Chapter in lstChapters
-                                             .Where(C => C.SmartflowObject.CaseType == selectedChapter.CaseType)
-                                             .Where(C => C.SmartflowObject.CaseTypeGroup == selectedChapter.CaseTypeGroup)
-                                             .OrderBy(C => C.SmartflowObject.SeqNo)
-                                             .ToList())
-                                        {
-                                            <div class="grid-row-md nav-row-3 no-border  @(rowChanged == Chapter.SmartflowObject.SeqNo ? ToggleRowChangedClass() : "" )">
-                                                <div id="Smartflow-@Chapter.SmartflowObject.Id" class="data-item @(Chapter.SmartflowObject.SmartflowName.Length > 6 && Chapter.SmartflowObject.SmartflowName.Substring(0,6) == "GROUP " ? "data-item-group" : "")">
+                                    @*<div class="grid-row-md nav-row-3 no-border  @(rowChanged == context.SmartflowObject.SeqNo ? ToggleRowChangedClass() : "" )">
+                                            <div id="Smartflow-@context.SmartflowObject.Id" class="data-item @(context.SmartflowObject.SmartflowName.Length > 6 && context.SmartflowObject.SmartflowName.Substring(0,6) == "GROUP " ? "data-item-group" : "")">
 
-                                                    @if (UserSession.isAdminUser)
+                                                @if (UserSession.isAdminUser)
+                                                {
+                                                    @if (!compareSystems)
                                                     {
-                                                        @if (!compareSystems)
-                                                        {
-                                                            <div class="btn-ellipses float-left ">
-                                                                <span class="fa fa-ellipsis-v"></span>
-                                                                <div class="ellipsis-menu">
-                                                                    <ul>
-                                                                        <li class="col-main" @onclick='() => PrepareChapterForEdit(Chapter.SmartflowObject, "Chapter")' title="">
-                                                                            <span class="fa fa-font mr-2"></span>
-                                                                            <span>Rename</span>
-                                                                        </li>
-                                                                        <li class="col-main" @onclick="() => SelectChapter(Chapter.SmartflowObject)" title="">
-                                                                            <span class="fa fa-pencil-alt mr-2"></span>
-                                                                            <span>Edit</span>
-                                                                        </li>
-                                                                        <li class="col-red" @onclick='() => PrepareChapterDelete(Chapter)' title="">
-                                                                            <span class="fa fa-trash-alt mr-2"></span>
-                                                                            <span>Delete</span>
-                                                                        </li>
-                                                                    </ul>
-                                                                </div>
+                                                        <div class="btn-ellipses float-left ">
+                                                            <span class="fa fa-ellipsis-v"></span>
+                                                            <div class="ellipsis-menu">
+                                                                <ul>
+                                                                    <li class="col-main" @onclick='() => PrepareChapterForEdit(context.SmartflowObject, "Chapter")' title="">
+                                                                        <span class="fa fa-font mr-2"></span>
+                                                                        <span>Rename</span>
+                                                                    </li>
+                                                                    <li class="col-main" @onclick="() => SelectChapter(context.SmartflowObject)" title="">
+                                                                        <span class="fa fa-pencil-alt mr-2"></span>
+                                                                        <span>Edit</span>
+                                                                    </li>
+                                                                    <li class="col-red" @onclick='() => PrepareChapterDelete(context)' title="">
+                                                                        <span class="fa fa-trash-alt mr-2"></span>
+                                                                        <span>Delete</span>
+                                                                    </li>
+                                                                </ul>
                                                             </div>
-                                                        }
-                                                        else
-                                                        {
-                                                            <div class="btn-ellipses float-left">
-                                                                @if (!(Chapter.ComparisonIcon is null))
+                                                        </div>
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="btn-ellipses float-left">
+                                                            @if (!(context.ComparisonIcon is null))
+                                                            {
+                                                                @if (!(context.ComparisonResult == "Exact match"))
                                                                 {
-                                                                    @if (!(Chapter.ComparisonResult == "Exact match"))
-                                                                    {
-                                                                        <ModalTooltip Direction="right" Text=@(Chapter.ComparisonResult == "Partial match" ? "Differences found, click to sync" : "Does not exist, click to create") Class="w-2">
-                                                                            <div class="btn-dashed" @onclick="() => PrepareChapterCreateOnAlt(Chapter.SmartflowObject)"><span class="fa fa-@Chapter.ComparisonIcon"></span></div>
-                                                                        </ModalTooltip>
+                                                                    <ModalTooltip Direction="right" Text=@(context.ComparisonResult == "Partial match" ? "Differences found, click to sync" : "Does not exist, click to create") Class="w-2">
+                                                                        <div class="btn-dashed" @onclick="() => PrepareChapterCreateOnAlt(context.SmartflowObject)"><span class="fa fa-@context.ComparisonIcon"></span></div>
+                                                                    </ModalTooltip>
 
-                                                                    }
-                                                                    else
-                                                                    {
-                                                                        <ModalTooltip Direction="right" Text="Exact Match" Class="w-1">
-                                                                            <span class="fa fa-@Chapter.ComparisonIcon"></span>
-                                                                        </ModalTooltip>
-
-                                                                    }
                                                                 }
                                                                 else
                                                                 {
-                                                                    <div class="spinner"></div>
-                                                                }
-                                                            </div>
-                                                        }
+                                                                    <ModalTooltip Direction="right" Text="Exact Match" Class="w-1">
+                                                                        <span class="fa fa-@context.ComparisonIcon"></span>
+                                                                    </ModalTooltip>
 
-                                                    }
-                                                    <div class="data-item-sub">
-                                                        <span class="hidden-sm-down"><span class=" fa fa-share-alt-square mr-2"></span></span>
-                                                        @Chapter.SmartflowObject.SmartflowName
-                                                    </div>
-                                                    @if (UserSession.isAdminUser)
-                                                    {
-                                                        <div class="data-item-right seq-change">
-                                                            <div @onclick='() => MoveSmartFlowSeq(Chapter.SmartflowObject, "Chapters", "Up")'><span class="fa fa-angle-up"></span></div>
-                                                            <div class="seq-no">@Chapter.SmartflowObject.SeqNo</div>
-                                                            <div @onclick='() => MoveSmartFlowSeq(Chapter.SmartflowObject, "Chapters", "Down")'><span class="fa fa-angle-down"></span></div>
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                <div class="spinner"></div>
+                                                            }
                                                         </div>
                                                     }
-                                                    <div title="Click to edit @Chapter.SmartflowObject.SmartflowName" class="data-item-right link-direction" @onclick="() => SelectChapter(Chapter.SmartflowObject)">
-                                                        <div class="fa fa-pencil-alt"></div>
+
+                                                }
+                                                <div class="data-item-sub">
+                                                    <span class="hidden-sm-down"><span class=" fa fa-share-alt-square mr-2"></span></span>
+                                                    @context.SmartflowObject.SmartflowName
+                                                </div>
+                                                @if (UserSession.isAdminUser)
+                                                {
+                                                    <div class="data-item-right seq-change">
+                                                        <div @onclick='() => MoveSmartFlowSeq(context.SmartflowObject, "Chapters", "Up")'><span class="fa fa-angle-up"></span></div>
+                                                        <div class="seq-no">@context.SmartflowObject.SeqNo</div>
+                                                        <div @onclick='() => MoveSmartFlowSeq(context.SmartflowObject, "Chapters", "Down")'><span class="fa fa-angle-down"></span></div>
                                                     </div>
+                                                }
+                                                <div title="Click to edit @context.SmartflowObject.SmartflowName" class="data-item-right link-direction" @onclick="() => SelectChapter(context.SmartflowObject)">
+                                                    <div class="fa fa-pencil-alt"></div>
                                                 </div>
                                             </div>
+                                        </div>*@
 
-                                        }
-                                    </div>
+                                </Dropzone>
 
-                                }
+
+                                @*<div class="grid-nav">
+                                    @foreach (var Chapter in lstChapters
+                                        .Where(C => C.SmartflowObject.CaseType == selectedChapter.CaseType)
+                                        .Where(C => C.SmartflowObject.CaseTypeGroup == selectedChapter.CaseTypeGroup)
+                                        .OrderBy(C => C.SmartflowObject.SeqNo)
+                                        .ToList())
+                                    {
+                                        <div class="grid-row-md nav-row-3 no-border  @(rowChanged == Chapter.SmartflowObject.SeqNo ? ToggleRowChangedClass() : "" )">
+                                            <div id="Smartflow-@Chapter.SmartflowObject.Id" class="data-item @(Chapter.SmartflowObject.SmartflowName.Length > 6 && Chapter.SmartflowObject.SmartflowName.Substring(0,6) == "GROUP " ? "data-item-group" : "")">
+
+                                                @if (UserSession.isAdminUser)
+                                                {
+                                                    @if (!compareSystems)
+                                                    {
+                                                        <div class="btn-ellipses float-left ">
+                                                            <span class="fa fa-ellipsis-v"></span>
+                                                            <div class="ellipsis-menu">
+                                                                <ul>
+                                                                    <li class="col-main" @onclick='() => PrepareChapterForEdit(Chapter.SmartflowObject, "Chapter")' title="">
+                                                                        <span class="fa fa-font mr-2"></span>
+                                                                        <span>Rename</span>
+                                                                    </li>
+                                                                    <li class="col-main" @onclick="() => SelectChapter(Chapter.SmartflowObject)" title="">
+                                                                        <span class="fa fa-pencil-alt mr-2"></span>
+                                                                        <span>Edit</span>
+                                                                    </li>
+                                                                    <li class="col-red" @onclick='() => PrepareChapterDelete(Chapter)' title="">
+                                                                        <span class="fa fa-trash-alt mr-2"></span>
+                                                                        <span>Delete</span>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="btn-ellipses float-left">
+                                                            @if (!(Chapter.ComparisonIcon is null))
+                                                            {
+                                                                @if (!(Chapter.ComparisonResult == "Exact match"))
+                                                                {
+                                                                    <ModalTooltip Direction="right" Text=@(Chapter.ComparisonResult == "Partial match" ? "Differences found, click to sync" : "Does not exist, click to create") Class="w-2">
+                                                                        <div class="btn-dashed" @onclick="() => PrepareChapterCreateOnAlt(Chapter.SmartflowObject)"><span class="fa fa-@Chapter.ComparisonIcon"></span></div>
+                                                                    </ModalTooltip>
+
+                                                                }
+                                                                else
+                                                                {
+                                                                    <ModalTooltip Direction="right" Text="Exact Match" Class="w-1">
+                                                                        <span class="fa fa-@Chapter.ComparisonIcon"></span>
+                                                                    </ModalTooltip>
+
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                <div class="spinner"></div>
+                                                            }
+                                                        </div>
+                                                    }
+
+                                                }
+                                                <div class="data-item-sub">
+                                                    <span class="hidden-sm-down"><span class=" fa fa-share-alt-square mr-2"></span></span>
+                                                    @Chapter.SmartflowObject.SmartflowName
+                                                </div>
+                                                @if (UserSession.isAdminUser)
+                                                {
+                                                    <div class="data-item-right seq-change">
+                                                        <div @onclick='() => MoveSmartFlowSeq(Chapter.SmartflowObject, "Chapters", "Up")'><span class="fa fa-angle-up"></span></div>
+                                                        <div class="seq-no">@Chapter.SmartflowObject.SeqNo</div>
+                                                        <div @onclick='() => MoveSmartFlowSeq(Chapter.SmartflowObject, "Chapters", "Down")'><span class="fa fa-angle-down"></span></div>
+                                                    </div>
+                                                }
+                                                <div title="Click to edit @Chapter.SmartflowObject.SmartflowName" class="data-item-right link-direction" @onclick="() => SelectChapter(Chapter.SmartflowObject)">
+                                                    <div class="fa fa-pencil-alt"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    }
+                                </div>*@
 
                             }
+
                         }
                     }
-                </div>
+                }
+            </div>
             </div>
         </div>
     }

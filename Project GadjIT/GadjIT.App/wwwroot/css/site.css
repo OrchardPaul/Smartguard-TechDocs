@@ -1,5 +1,8 @@
 @import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
 
+
+
+
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
@@ -45,6 +48,9 @@ app {
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
+
+
 
 .sidebar {
     /*background-image: linear-gradient(180deg, rgb(5, 39, 103) 0%, #3a0647 70%);*/
