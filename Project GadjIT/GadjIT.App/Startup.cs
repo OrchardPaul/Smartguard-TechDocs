@@ -33,6 +33,7 @@ using System.IO;
 using GadjIT_App.Services.AppState;
 using GadjIT_App.Pages.Accounts.CompanyAccountManagement;
 using Serilog;
+using GadjIT_App.Data.Dropzone_Objects;
 
 namespace GadjIT_App
 {
@@ -88,6 +89,7 @@ namespace GadjIT_App
             services.AddScoped<IExcelHelper, ExcelHelper>();
             services.AddScoped<IChapterFileUpload, ChapterFileUpload>();
             services.AddScoped<JsConsole>();
+            services.AddScoped(typeof(DragDropService<>));
 
             services.AddSingleton<IAppChapterState, AppChapterStateList>();
 
