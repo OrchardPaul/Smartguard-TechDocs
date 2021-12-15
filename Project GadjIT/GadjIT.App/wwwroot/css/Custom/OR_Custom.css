@@ -814,6 +814,8 @@ app {
             width: 100%;
             padding: 5px;
         }
+
+
     }
 
 
@@ -1004,6 +1006,8 @@ app {
     max-width: 800px;
 }
 
+
+
 @media (min-width: 1200px) {
     .grid-chapter-nav {
         width: 75%;
@@ -1015,6 +1019,7 @@ app {
         width: 50%;
     }
 }
+
 
 
 .grid-chapter, .grid-admin {
@@ -1259,11 +1264,11 @@ app {
 
 
     .grid-can-edit div.grid-row:first-child .seq-change div:first-child, .grid-data div.grid-row:first-child .seq-change div:first-child, .grid-nav div[class*="grid-row"]:first-child .seq-change div:first-child {
-        visibility: hidden;
+        visibility: visible;
     }
 
     .grid-can-edit div.grid-row:last-child .seq-change div:last-child, .grid-data div.grid-row:last-child .seq-change div:last-child, .grid-nav div[class*="grid-row"]:last-child .seq-change div:last-child {
-        visibility: hidden;
+        visibility: visible;
     }
 
     .row-changer {

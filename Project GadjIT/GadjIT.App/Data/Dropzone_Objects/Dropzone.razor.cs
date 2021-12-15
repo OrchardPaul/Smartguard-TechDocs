@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using System.Text;
+using Microsoft.JSInterop;
 
 namespace GadjIT_App.Data.Dropzone_Objects
 {
@@ -94,6 +95,18 @@ namespace GadjIT_App.Data.Dropzone_Objects
             DragDropService.StateHasChanged += ForceRender;
             base.OnInitialized();
         }
+
+        //protected override async Task OnAfterRenderAsync(bool firstRender)
+        //{
+        //    //if (firstRender)
+        //    //{
+        //    //    foreach (var item in Items)
+        //    //    {
+        //    //        await jsRuntime.InvokeVoidAsync("addEventListener", $"drag-with-create-add-{Items.IndexOf(item)}");
+        //    //    }
+        //    //}
+        //}
+
 
         public string CheckIfDraggable(TItem item)
         {

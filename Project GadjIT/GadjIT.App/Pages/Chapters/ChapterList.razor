@@ -7,6 +7,7 @@
 @using GadjIT_App.Pages.Shared.Modals
 @using System.Globalization;
 @implements IDisposable
+@using GadjIT.ClientContext.P4W.Custom
 
 @if (ListChapterLoaded == false)
 {
@@ -56,278 +57,275 @@ else
                     </div>
 
                 }
-            <div class="container-fluid">
+                <div class="container-fluid">
 
-                <!-- SHOW ALL GROUPS -->
-                @foreach (var caseTypeGroup in lstChapters
-                                                .Where(C => !(C.SmartflowObject.CaseTypeGroup is null))
-                                                .OrderBy(C => C.SmartflowObject.CaseTypeGroup)
-                                                .Select(C => C.SmartflowObject.CaseTypeGroup)
-                                                .Distinct()
-                                                .ToList())
-                {
+                    <!-- SHOW ALL GROUPS -->
+                    @foreach (var caseTypeGroup in lstChapters
+                                                  .Where(C => !(C.SmartflowObject.CaseTypeGroup is null))
+                                                  .OrderBy(C => C.SmartflowObject.CaseTypeGroup)
+                                                  .Select(C => C.SmartflowObject.CaseTypeGroup)
+                                                  .Distinct()
+                                                  .ToList())
+                    {
 
-                    <div class="grid-row-lg mt-3 nav-row-1">
-                        <div class="data-item" title="Group: click to see case types assigned to @caseTypeGroup">
-                            @if (UserSession.isAdminUser)
-                            {
-                                <div class="btn-ellipses float-left">
-                                    <span class="fa fa-ellipsis-v"></span>
-                                    <div class="ellipsis-menu" style="margin-top: 20px">
-                                        <ul>
-                                            <li class="col-main" @onclick='() => PrepareCaseTypeForEdit(caseTypeGroup, "CaseTypeGroup")'>
-                                                <span class="fa fa-font mr-2"></span>
-                                                <span>Rename</span>
-                                            </li>
+                        <div class="grid-row-lg mt-3 nav-row-1">
+                            <div class="data-item" title="Group: click to see case types assigned to @caseTypeGroup">
+                                @if (UserSession.isAdminUser)
+                                {
+                                    <div class="btn-ellipses float-left">
+                                        <span class="fa fa-ellipsis-v"></span>
+                                        <div class="ellipsis-menu" style="margin-top: 20px">
+                                            <ul>
+                                                <li class="col-main" @onclick='() => PrepareCaseTypeForEdit(caseTypeGroup, "CaseTypeGroup")'>
+                                                    <span class="fa fa-font mr-2"></span>
+                                                    <span>Rename</span>
+                                                </li>
 
-                                        </ul>
+                                            </ul>
+                                        </div>
                                     </div>
-                                </div>
-                            }
+                                }
 
-                            <div class="data-item-nav" @onclick='() => SelectCaseTypeGroup(caseTypeGroup)'>
-                                <div class="data-item-sub"><span class="fa fa-boxes mr-2"></span>@caseTypeGroup</div>
-                                <div class="data-item-right col-alt"><div class="link-direction @(caseTypeGroup == selectedChapter.CaseTypeGroup ? "triangle-up " : "triangle-down")"></div></div>
+                                <div class="data-item-nav" @onclick='() => SelectCaseTypeGroup(caseTypeGroup)'>
+                                    <div class="data-item-sub"><span class="fa fa-boxes mr-2"></span>@caseTypeGroup</div>
+                                    <div class="data-item-right col-alt"><div class="link-direction @(caseTypeGroup == selectedChapter.CaseTypeGroup ? "triangle-up " : "triangle-down")"></div></div>
+                                </div>
                             </div>
+
+
                         </div>
 
 
-                    </div>
 
-
-
-                    <!-- GROUP SELECTED SHOW CASE TYPES-->
-                    @if (caseTypeGroup == selectedChapter.CaseTypeGroup)
-                    {
-
-                        @foreach (var caseType in lstChapters
-                                                     .Where(C => !(C.SmartflowObject.CaseType is null))
-                                                     .Where(C => C.SmartflowObject.CaseTypeGroup == selectedChapter.CaseTypeGroup)
-                                                     .OrderBy(C => C.SmartflowObject.CaseType)
-                                                     .Select(C => C.SmartflowObject.CaseType)
-                                                     .Distinct()
-                                                     .ToList())
+                        <!-- GROUP SELECTED SHOW CASE TYPES-->
+                        @if (caseTypeGroup == selectedChapter.CaseTypeGroup)
                         {
 
-                            <div class="grid-row-md nav-row-2">
-                                <div class="data-item" title="Case Type: click to see the Smartflows within @caseType">
-                                    @if (UserSession.isAdminUser)
-                                    {
-                                        <div class="btn-ellipses float-left">
-                                            <span class="fa fa-ellipsis-v"></span>
-                                            <div class="ellipsis-menu">
-                                                <ul>
-                                                    <li class="col-main" @onclick='() => PrepareCaseTypeForEdit(caseType, "CaseType")'>
-
-                                                        <span class="fa fa-font mr-2"></span>
-                                                        <span>Rename</span>
-
-                                                    </li>
-
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    }
-                                    <div class="data-item-nav" @onclick='() => SelectCaseType(caseType)'>
-                                        @if (caseType == selectedChapter.CaseType)
-                                        {
-                                            <div class="data-item-sub">
-                                                <span class="fa fa-folder-open mr-2"></span>@caseType
-                                            </div>
-                                        }
-                                        else
-                                        {
-                                            <div class="data-item-sub">
-                                                <span class="fa fa-folder mr-2"></span>@caseType
-                                            </div>
-                                        }
-
-
-                                        <div class="data-item-right col-alt "><div class="link-direction @(caseType == selectedChapter.CaseType ? "triangle-up " : "triangle-down")"></div></div>
-                                    </div>
-                                </div>
-
-                            </div>
-                            @if (caseType == selectedChapter.CaseType)
+                            @foreach (var caseType in lstChapters
+                                                       .Where(C => !(C.SmartflowObject.CaseType is null))
+                                                       .Where(C => C.SmartflowObject.CaseTypeGroup == selectedChapter.CaseTypeGroup)
+                                                       .OrderBy(C => C.SmartflowObject.CaseType)
+                                                       .Select(C => C.SmartflowObject.CaseType)
+                                                       .Distinct()
+                                                       .ToList())
                             {
-                                <Dropzone Items="lstChapters.Where(C => C.SmartflowObject.CaseType == selectedChapter.CaseType)
-                                        .Where(C => C.SmartflowObject.CaseTypeGroup == selectedChapter.CaseTypeGroup)
-                                        .OrderBy(C => C.SmartflowObject.SeqNo)
-                                        .ToList()">
-                                    <div class="grid-row-md nav-row-3 no-border">
-                                        
 
-                                        <div class="data-item @(context.SmartflowObject.SmartflowName.Length > 6 && context.SmartflowObject.SmartflowName.Substring(0,6) == "GROUP " ? "data-item-group" : "")">
-                                            @context.SmartflowObject.SmartflowName
+                                <div class="grid-row-md nav-row-2">
+                                    <div class="data-item" title="Case Type: click to see the Smartflows within @caseType">
+                                        @if (UserSession.isAdminUser)
+                                        {
+                                            <div class="btn-ellipses float-left">
+                                                <span class="fa fa-ellipsis-v"></span>
+                                                <div class="ellipsis-menu">
+                                                    <ul>
+                                                        <li class="col-main" @onclick='() => PrepareCaseTypeForEdit(caseType, "CaseType")'>
+
+                                                            <span class="fa fa-font mr-2"></span>
+                                                            <span>Rename</span>
+
+                                                        </li>
+
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        }
+                                        <div class="data-item-nav" @onclick='() => SelectCaseType(caseType)'>
+                                            @if (caseType == selectedChapter.CaseType)
+                                            {
+                                                <div class="data-item-sub">
+                                                    <span class="fa fa-folder-open mr-2"></span>@caseType
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="data-item-sub">
+                                                    <span class="fa fa-folder mr-2"></span>@caseType
+                                                </div>
+                                            }
+
+
+                                            <div class="data-item-right col-alt "><div class="link-direction @(caseType == selectedChapter.CaseType ? "triangle-up " : "triangle-down")"></div></div>
                                         </div>
-
                                     </div>
 
-                                    @*<div class="grid-row-md nav-row-3 no-border  @(rowChanged == context.SmartflowObject.SeqNo ? ToggleRowChangedClass() : "" )">
-                                            <div id="Smartflow-@context.SmartflowObject.Id" class="data-item @(context.SmartflowObject.SmartflowName.Length > 6 && context.SmartflowObject.SmartflowName.Substring(0,6) == "GROUP " ? "data-item-group" : "")">
+                                </div>
+                                @if (caseType == selectedChapter.CaseType)
+                                {
 
-                                                @if (UserSession.isAdminUser)
-                                                {
-                                                    @if (!compareSystems)
+
+                                    <div class="grid-nav">
+                                        <Dropzone Items="lstSelectedChapters"
+                                                  InstantReplace="false"
+                                                  OnItemDrop="@((sf)=>HandleDrop(sf))"
+                                                  TItem="VmUsrOrsfSmartflows">
+
+
+                                            <div class="grid-row-md nav-row-3 no-border  @(rowChanged == context.SmartflowObject.SeqNo ? ToggleRowChangedClass() : "" )">
+                                                <div id="Smartflow-@context.SmartflowObject.Id" class="data-item @(context.SmartflowObject.SmartflowName.Length > 6 && context.SmartflowObject.SmartflowName.Substring(0,6) == "GROUP " ? "data-item-group" : "")">
+
+                                                    @if (UserSession.isAdminUser)
                                                     {
-                                                        <div class="btn-ellipses float-left ">
-                                                            <span class="fa fa-ellipsis-v"></span>
-                                                            <div class="ellipsis-menu">
-                                                                <ul>
-                                                                    <li class="col-main" @onclick='() => PrepareChapterForEdit(context.SmartflowObject, "Chapter")' title="">
-                                                                        <span class="fa fa-font mr-2"></span>
-                                                                        <span>Rename</span>
-                                                                    </li>
-                                                                    <li class="col-main" @onclick="() => SelectChapter(context.SmartflowObject)" title="">
-                                                                        <span class="fa fa-pencil-alt mr-2"></span>
-                                                                        <span>Edit</span>
-                                                                    </li>
-                                                                    <li class="col-red" @onclick='() => PrepareChapterDelete(context)' title="">
-                                                                        <span class="fa fa-trash-alt mr-2"></span>
-                                                                        <span>Delete</span>
-                                                                    </li>
-                                                                </ul>
+                                                        @if (!compareSystems)
+                                                        {
+                                                            <div class="btn-ellipses float-left ">
+                                                                <span class="fa fa-ellipsis-v"></span>
+                                                                <div class="ellipsis-menu">
+                                                                    <ul>
+                                                                        <li class="col-main" @onclick='() => PrepareChapterForEdit(context.SmartflowObject, "Chapter")' title="">
+                                                                            <span class="fa fa-font mr-2"></span>
+                                                                            <span>Rename</span>
+                                                                        </li>
+                                                                        <li class="col-main" @onclick="() => SelectChapter(context.SmartflowObject)" title="">
+                                                                            <span class="fa fa-pencil-alt mr-2"></span>
+                                                                            <span>Edit</span>
+                                                                        </li>
+                                                                        <li class="col-red" @onclick='() => PrepareChapterDelete(context)' title="">
+                                                                            <span class="fa fa-trash-alt mr-2"></span>
+                                                                            <span>Delete</span>
+                                                                        </li>
+                                                                    </ul>
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                    }
-                                                    else
-                                                    {
-                                                        <div class="btn-ellipses float-left">
-                                                            @if (!(context.ComparisonIcon is null))
-                                                            {
-                                                                @if (!(context.ComparisonResult == "Exact match"))
+                                                        }
+                                                        else
+                                                        {
+                                                            <div class="btn-ellipses float-left">
+                                                                @if (!(context.ComparisonIcon is null))
                                                                 {
-                                                                    <ModalTooltip Direction="right" Text=@(context.ComparisonResult == "Partial match" ? "Differences found, click to sync" : "Does not exist, click to create") Class="w-2">
-                                                                        <div class="btn-dashed" @onclick="() => PrepareChapterCreateOnAlt(context.SmartflowObject)"><span class="fa fa-@context.ComparisonIcon"></span></div>
-                                                                    </ModalTooltip>
+                                                                    @if (!(context.ComparisonResult == "Exact match"))
+                                                                    {
+                                                                        <ModalTooltip Direction="right" Text=@(context.ComparisonResult == "Partial match" ? "Differences found, click to sync" : "Does not exist, click to create") Class="w-2">
+                                                                            <div class="btn-dashed" @onclick="() => PrepareChapterCreateOnAlt(context.SmartflowObject)"><span class="fa fa-@context.ComparisonIcon"></span></div>
+                                                                        </ModalTooltip>
 
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <ModalTooltip Direction="right" Text="Exact Match" Class="w-1">
+                                                                            <span class="fa fa-@context.ComparisonIcon"></span>
+                                                                        </ModalTooltip>
+
+                                                                    }
                                                                 }
                                                                 else
                                                                 {
-                                                                    <ModalTooltip Direction="right" Text="Exact Match" Class="w-1">
-                                                                        <span class="fa fa-@context.ComparisonIcon"></span>
-                                                                    </ModalTooltip>
-
+                                                                    <div class="spinner"></div>
                                                                 }
-                                                            }
-                                                            else
-                                                            {
-                                                                <div class="spinner"></div>
-                                                            }
-                                                        </div>
-                                                    }
-
-                                                }
-                                                <div class="data-item-sub">
-                                                    <span class="hidden-sm-down"><span class=" fa fa-share-alt-square mr-2"></span></span>
-                                                    @context.SmartflowObject.SmartflowName
-                                                </div>
-                                                @if (UserSession.isAdminUser)
-                                                {
-                                                    <div class="data-item-right seq-change">
-                                                        <div @onclick='() => MoveSmartFlowSeq(context.SmartflowObject, "Chapters", "Up")'><span class="fa fa-angle-up"></span></div>
-                                                        <div class="seq-no">@context.SmartflowObject.SeqNo</div>
-                                                        <div @onclick='() => MoveSmartFlowSeq(context.SmartflowObject, "Chapters", "Down")'><span class="fa fa-angle-down"></span></div>
-                                                    </div>
-                                                }
-                                                <div title="Click to edit @context.SmartflowObject.SmartflowName" class="data-item-right link-direction" @onclick="() => SelectChapter(context.SmartflowObject)">
-                                                    <div class="fa fa-pencil-alt"></div>
-                                                </div>
-                                            </div>
-                                        </div>*@
-
-                                </Dropzone>
-
-
-                                @*<div class="grid-nav">
-                                    @foreach (var Chapter in lstChapters
-                                        .Where(C => C.SmartflowObject.CaseType == selectedChapter.CaseType)
-                                        .Where(C => C.SmartflowObject.CaseTypeGroup == selectedChapter.CaseTypeGroup)
-                                        .OrderBy(C => C.SmartflowObject.SeqNo)
-                                        .ToList())
-                                    {
-                                        <div class="grid-row-md nav-row-3 no-border  @(rowChanged == Chapter.SmartflowObject.SeqNo ? ToggleRowChangedClass() : "" )">
-                                            <div id="Smartflow-@Chapter.SmartflowObject.Id" class="data-item @(Chapter.SmartflowObject.SmartflowName.Length > 6 && Chapter.SmartflowObject.SmartflowName.Substring(0,6) == "GROUP " ? "data-item-group" : "")">
-
-                                                @if (UserSession.isAdminUser)
-                                                {
-                                                    @if (!compareSystems)
-                                                    {
-                                                        <div class="btn-ellipses float-left ">
-                                                            <span class="fa fa-ellipsis-v"></span>
-                                                            <div class="ellipsis-menu">
-                                                                <ul>
-                                                                    <li class="col-main" @onclick='() => PrepareChapterForEdit(Chapter.SmartflowObject, "Chapter")' title="">
-                                                                        <span class="fa fa-font mr-2"></span>
-                                                                        <span>Rename</span>
-                                                                    </li>
-                                                                    <li class="col-main" @onclick="() => SelectChapter(Chapter.SmartflowObject)" title="">
-                                                                        <span class="fa fa-pencil-alt mr-2"></span>
-                                                                        <span>Edit</span>
-                                                                    </li>
-                                                                    <li class="col-red" @onclick='() => PrepareChapterDelete(Chapter)' title="">
-                                                                        <span class="fa fa-trash-alt mr-2"></span>
-                                                                        <span>Delete</span>
-                                                                    </li>
-                                                                </ul>
                                                             </div>
+                                                        }
+
+                                                    }
+                                                    <div class="data-item-sub">
+                                                        <span class="hidden-sm-down"><span class=" fa fa-share-alt-square mr-2"></span></span>
+                                                        @context.SmartflowObject.SmartflowName
+                                                    </div>
+                                                    @if (UserSession.isAdminUser)
+                                                    {
+                                                        <div class="data-item-right seq-change">
+                                                            <div @onclick='() => MoveSmartFlowSeq(context.SmartflowObject, "Chapters", "Up")'><span class="fa fa-angle-up"></span></div>
+                                                            <div class="seq-no">@context.SmartflowObject.SeqNo</div>
+                                                            <div @onclick='() => MoveSmartFlowSeq(context.SmartflowObject, "Chapters", "Down")'><span class="fa fa-angle-down"></span></div>
                                                         </div>
                                                     }
-                                                    else
-                                                    {
-                                                        <div class="btn-ellipses float-left">
-                                                            @if (!(Chapter.ComparisonIcon is null))
+                                                    <div title="Click to edit @context.SmartflowObject.SmartflowName" class="data-item-right link-direction" @onclick="() => SelectChapter(context.SmartflowObject)">
+                                                        <div class="fa fa-pencil-alt"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </Dropzone>
+
+
+
+
+                                        @*@foreach (var Chapter in lstChapters
+                                              .Where(C => C.SmartflowObject.CaseType == selectedChapter.CaseType)
+                                              .Where(C => C.SmartflowObject.CaseTypeGroup == selectedChapter.CaseTypeGroup)
+                                              .OrderBy(C => C.SmartflowObject.SeqNo)
+                                              .ToList())
+                                            {
+                                                <div class="grid-row-md nav-row-3 no-border  @(rowChanged == Chapter.SmartflowObject.SeqNo ? ToggleRowChangedClass() : "" )">
+                                                    <div id="Smartflow-@Chapter.SmartflowObject.Id" class="data-item @(Chapter.SmartflowObject.SmartflowName.Length > 6 && Chapter.SmartflowObject.SmartflowName.Substring(0,6) == "GROUP " ? "data-item-group" : "")">
+
+                                                        @if (UserSession.isAdminUser)
+                                                        {
+                                                            @if (!compareSystems)
                                                             {
-                                                                @if (!(Chapter.ComparisonResult == "Exact match"))
-                                                                {
-                                                                    <ModalTooltip Direction="right" Text=@(Chapter.ComparisonResult == "Partial match" ? "Differences found, click to sync" : "Does not exist, click to create") Class="w-2">
-                                                                        <div class="btn-dashed" @onclick="() => PrepareChapterCreateOnAlt(Chapter.SmartflowObject)"><span class="fa fa-@Chapter.ComparisonIcon"></span></div>
-                                                                    </ModalTooltip>
-
-                                                                }
-                                                                else
-                                                                {
-                                                                    <ModalTooltip Direction="right" Text="Exact Match" Class="w-1">
-                                                                        <span class="fa fa-@Chapter.ComparisonIcon"></span>
-                                                                    </ModalTooltip>
-
-                                                                }
+                                                                <div class="btn-ellipses float-left ">
+                                                                    <span class="fa fa-ellipsis-v"></span>
+                                                                    <div class="ellipsis-menu">
+                                                                        <ul>
+                                                                            <li class="col-main" @onclick='() => PrepareChapterForEdit(Chapter.SmartflowObject, "Chapter")' title="">
+                                                                                <span class="fa fa-font mr-2"></span>
+                                                                                <span>Rename</span>
+                                                                            </li>
+                                                                            <li class="col-main" @onclick="() => SelectChapter(Chapter.SmartflowObject)" title="">
+                                                                                <span class="fa fa-pencil-alt mr-2"></span>
+                                                                                <span>Edit</span>
+                                                                            </li>
+                                                                            <li class="col-red" @onclick='() => PrepareChapterDelete(Chapter)' title="">
+                                                                                <span class="fa fa-trash-alt mr-2"></span>
+                                                                                <span>Delete</span>
+                                                                            </li>
+                                                                        </ul>
+                                                                    </div>
+                                                                </div>
                                                             }
                                                             else
                                                             {
-                                                                <div class="spinner"></div>
+                                                                <div class="btn-ellipses float-left">
+                                                                    @if (!(Chapter.ComparisonIcon is null))
+                                                                    {
+                                                                        @if (!(Chapter.ComparisonResult == "Exact match"))
+                                                                        {
+                                                                            <ModalTooltip Direction="right" Text=@(Chapter.ComparisonResult == "Partial match" ? "Differences found, click to sync" : "Does not exist, click to create") Class="w-2">
+                                                                                <div class="btn-dashed" @onclick="() => PrepareChapterCreateOnAlt(Chapter.SmartflowObject)"><span class="fa fa-@Chapter.ComparisonIcon"></span></div>
+                                                                            </ModalTooltip>
+
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <ModalTooltip Direction="right" Text="Exact Match" Class="w-1">
+                                                                                <span class="fa fa-@Chapter.ComparisonIcon"></span>
+                                                                            </ModalTooltip>
+
+                                                                        }
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <div class="spinner"></div>
+                                                                    }
+                                                                </div>
                                                             }
+
+                                                        }
+                                                        <div class="data-item-sub">
+                                                            <span class="hidden-sm-down"><span class=" fa fa-share-alt-square mr-2"></span></span>
+                                                            @Chapter.SmartflowObject.SmartflowName
                                                         </div>
-                                                    }
-
-                                                }
-                                                <div class="data-item-sub">
-                                                    <span class="hidden-sm-down"><span class=" fa fa-share-alt-square mr-2"></span></span>
-                                                    @Chapter.SmartflowObject.SmartflowName
-                                                </div>
-                                                @if (UserSession.isAdminUser)
-                                                {
-                                                    <div class="data-item-right seq-change">
-                                                        <div @onclick='() => MoveSmartFlowSeq(Chapter.SmartflowObject, "Chapters", "Up")'><span class="fa fa-angle-up"></span></div>
-                                                        <div class="seq-no">@Chapter.SmartflowObject.SeqNo</div>
-                                                        <div @onclick='() => MoveSmartFlowSeq(Chapter.SmartflowObject, "Chapters", "Down")'><span class="fa fa-angle-down"></span></div>
+                                                        @if (UserSession.isAdminUser)
+                                                        {
+                                                            <div class="data-item-right seq-change">
+                                                                <div @onclick='() => MoveSmartFlowSeq(Chapter.SmartflowObject, "Chapters", "Up")'><span class="fa fa-angle-up"></span></div>
+                                                                <div class="seq-no">@Chapter.SmartflowObject.SeqNo</div>
+                                                                <div @onclick='() => MoveSmartFlowSeq(Chapter.SmartflowObject, "Chapters", "Down")'><span class="fa fa-angle-down"></span></div>
+                                                            </div>
+                                                        }
+                                                        <div title="Click to edit @Chapter.SmartflowObject.SmartflowName" class="data-item-right link-direction" @onclick="() => SelectChapter(Chapter.SmartflowObject)">
+                                                            <div class="fa fa-pencil-alt"></div>
+                                                        </div>
                                                     </div>
-                                                }
-                                                <div title="Click to edit @Chapter.SmartflowObject.SmartflowName" class="data-item-right link-direction" @onclick="() => SelectChapter(Chapter.SmartflowObject)">
-                                                    <div class="fa fa-pencil-alt"></div>
                                                 </div>
-                                            </div>
-                                        </div>
 
-                                    }
-                                </div>*@
+                                            }*@
+                                    </div>
+
+                                }
 
                             }
-
                         }
                     }
-                }
-            </div>
+                </div>
             </div>
         </div>
     }
@@ -525,9 +523,9 @@ else
                                                                  ValueChanged="@((string value) => SaveSelectedView(value))">
                                                         <option value="">Select</option>
                                                         @foreach (var view in ListP4WViews
-                                                                  .Where(V => !(V.InternalNote is null) && (V.InternalNote.Contains("Smartflow")))
-                                                                  .OrderBy(V => V.Name)
-                                                                  .ToList())
+                                                                .Where(V => !(V.InternalNote is null) && (V.InternalNote.Contains("Smartflow")))
+                                                                .OrderBy(V => V.Name)
+                                                                .ToList())
                                                         {
                                                             <option value="@view.Name">
                                                                 @view.Name
@@ -548,20 +546,20 @@ else
                                                         <option value="">Select</option>
                                                         <option value="Create New">--- Create New ---</option>
                                                         @foreach (var step in dropDownChapterList
-                                                        .Where(D => D.DocumentType == 6)
-                                                        .Where(D => D.Notes.Contains("Smartflow:"))
-                                                        .Where(V => V.CaseTypeGroupRef == (string.IsNullOrEmpty(selectedChapter.P4WCaseTypeGroup)
-                                                                                            ? -2
-                                                                                            : selectedChapter.P4WCaseTypeGroup == "Global Documents"
-                                                                                            ? 0
-                                                                                            : selectedChapter.P4WCaseTypeGroup == "Entity Documents"
-                                                                                            ? -1
-                                                                                            : partnerCaseTypeGroups
-                                                                                                .Where(P => P.Name == selectedChapter.P4WCaseTypeGroup)
-                                                                                                .Select(P => P.Id)
-                                                                                                .FirstOrDefault()))
-                                                        .OrderBy(D => D.Name)
-                                                        .ToList())
+                                                      .Where(D => D.DocumentType == 6)
+                                                      .Where(D => D.Notes.Contains("Smartflow:"))
+                                                      .Where(V => V.CaseTypeGroupRef == (string.IsNullOrEmpty(selectedChapter.P4WCaseTypeGroup)
+                                                                                          ? -2
+                                                                                          : selectedChapter.P4WCaseTypeGroup == "Global Documents"
+                                                                                          ? 0
+                                                                                          : selectedChapter.P4WCaseTypeGroup == "Entity Documents"
+                                                                                          ? -1
+                                                                                          : partnerCaseTypeGroups
+                                                                                              .Where(P => P.Name == selectedChapter.P4WCaseTypeGroup)
+                                                                                              .Select(P => P.Id)
+                                                                                              .FirstOrDefault()))
+                                                      .OrderBy(D => D.Name)
+                                                      .ToList())
                                                         {
                                                             <option value="@step.Name">
                                                                 @step.Name
@@ -703,6 +701,10 @@ else
             @if (navDisplay == "Docs")
             {
 
+
+
+
+
                 <div class="grid-chapter grid-chapter-docs">
 
                     <div class="grid-actions">
@@ -756,10 +758,13 @@ else
                             </div>
                         </div>
                         <div class="grid-data">
-                            @foreach (var doc in lstDocs)
-                            {
 
-                                <div class="row grid-row grid-row-lg @(rowChanged == doc.ChapterObject.SeqNo ? "row-changed" : "" )">
+                            <Dropzone Items="lstDocs"
+                                      
+                                      InstantReplace="false"
+                                                  OnItemDrop="@((sf)=>HandleDocDrop(sf))"
+                                                  TItem="VmUsrOrDefChapterManagement">
+                                <div class="row grid-row grid-row-lg @(rowChanged == context.ChapterObject.SeqNo ? "row-changed" : "" )">
                                     <div class="data-item ">
 
                                         @if (UserSession.isAdminUser && !compareSystems)
@@ -769,68 +774,68 @@ else
 
                                                 <div class="ellipsis-menu">
                                                     <ul>
-                                                        <li class="col-main" @onclick='(() => PrepareForEdit(doc, "Steps and Documents"))'>
+                                                        <li class="col-main" @onclick='(() => PrepareForEdit(context, "Steps and Documents"))'>
                                                             <span class="fa fa-pencil-alt mr-2"></span>
                                                             <span>Edit</span>
                                                         </li>
-                                                        <li class="col-main" @onclick='(() => ShowChapterDetailViewModal(doc, "Steps and Documents"))'>
+                                                        <li class="col-main" @onclick='(() => ShowChapterDetailViewModal(context, "Steps and Documents"))'>
                                                             <span class="fa fa-binoculars mr-2"></span>
                                                             <span>View</span>
                                                         </li>
                                                         <li class="col-main">
                                                             <span class="fa fa-paperclip mr-2"></span>
                                                             <span>Links</span>
-                                                            <div class="menu-toggle @(selectedChapter.ShowDocumentTracking == "Y" ? "tracking" : "")" >
+                                                            <div class="menu-toggle @(selectedChapter.ShowDocumentTracking == "Y" ? "tracking" : "")">
                                                                 <span class="fa fa-chevron-right"></span>
                                                                 <ul class="attach-list">
-                                                                    @if (!(doc.ChapterObject.LinkedItems is null) && doc.ChapterObject.LinkedItems.Count > 0)
+                                                                    @if (!(context.ChapterObject.LinkedItems is null) && context.ChapterObject.LinkedItems.Count > 0)
                                                                     {
-                                                                        foreach (var attach in doc.ChapterObject.LinkedItems)
+                                                                        foreach (var attach in context.ChapterObject.LinkedItems)
                                                                         {
-                                                                    <li class="font-85" @onclick='(() => PrepareAttachmentForEdit(doc, attach))'>
-                                                                        <span class="font-85" title="@attach.Action">
-                                                                            <span class="doc-icon @(attach.Action == "TAKE" ? "" : "invisible")"><span class="fa fa-running mr-2"></span></span>
-                                                                            <span class="doc-icon @(attach.Action == "INSERT" ? "" : "invisible")"><span class="fa fa-arrow-down mr-2"></span></span>
-                                                                            <span class="doc-icon @(attach.Action == "SCHEDULE" ? "" : "invisible")"><span class="fa fa-calendar-check mr-2"></span></span>
-                                                                        </span>
-                                                                        <span class="font-85">
-                                                                            <span class="doc-icon @(attach.DocType == "Doc" ? "" : "invisible")" title="Document"><span class="fa fa-file mr-2"></span></span>
-                                                                            <span class="doc-icon @(attach.DocType == "Form" ? "" : "invisible")" title="Form"><span class=" fa fa-file-pdf mr-2"></span></span>
-                                                                            <span class="doc-icon @(attach.DocType == "Email" ? "" : "invisible")" title="Email"><span class="fa fa-envelope mr-2"></span></span>
-                                                                            <span class="doc-icon @(attach.DocType == "Step" ? "" : "invisible")" title="Step"><span class=" fa fa-list-ol mr-2"></span></span>
-                                                                            <span class="doc-icon @(attach.DocType == "Date" ? "" : "invisible")" title="Diary Item"><span class="fa fa-calendar mr-2"></span></span>
-                                                                            <span class="doc-icon @(string.IsNullOrEmpty(attach.DocType) ? "" : "invisible")" title="Custom Item: will insert a step to run the current Smartflow"><span class="fa fa-retweet mr-2"></span></span>
-                                                                        </span>
-                                                                        <span class="attach-name" title="@(string.IsNullOrEmpty(attach.DocAsName) ? attach.DocName : attach.DocAsName)">
-                                                                            @(string.IsNullOrEmpty(attach.DocAsName) ? attach.DocName : attach.DocAsName)
-                                                                        </span>
+                                                                            <li class="font-85" @onclick='(() => PrepareAttachmentForEdit(context, attach))'>
+                                                                                <span class="font-85" title="@attach.Action">
+                                                                                    <span class="doc-icon @(attach.Action == "TAKE" ? "" : "invisible")"><span class="fa fa-running mr-2"></span></span>
+                                                                                    <span class="doc-icon @(attach.Action == "INSERT" ? "" : "invisible")"><span class="fa fa-arrow-down mr-2"></span></span>
+                                                                                    <span class="doc-icon @(attach.Action == "SCHEDULE" ? "" : "invisible")"><span class="fa fa-calendar-check mr-2"></span></span>
+                                                                                </span>
+                                                                                <span class="font-85">
+                                                                                    <span class="doc-icon @(attach.DocType == "Doc" ? "" : "invisible")" title="Document"><span class="fa fa-file mr-2"></span></span>
+                                                                                    <span class="doc-icon @(attach.DocType == "Form" ? "" : "invisible")" title="Form"><span class=" fa fa-file-pdf mr-2"></span></span>
+                                                                                    <span class="doc-icon @(attach.DocType == "Email" ? "" : "invisible")" title="Email"><span class="fa fa-envelope mr-2"></span></span>
+                                                                                    <span class="doc-icon @(attach.DocType == "Step" ? "" : "invisible")" title="Step"><span class=" fa fa-list-ol mr-2"></span></span>
+                                                                                    <span class="doc-icon @(attach.DocType == "Date" ? "" : "invisible")" title="Diary Item"><span class="fa fa-calendar mr-2"></span></span>
+                                                                                    <span class="doc-icon @(string.IsNullOrEmpty(attach.DocType) ? "" : "invisible")" title="Custom Item: will insert a step to run the current Smartflow"><span class="fa fa-retweet mr-2"></span></span>
+                                                                                </span>
+                                                                                <span class="attach-name" title="@(string.IsNullOrEmpty(attach.DocAsName) ? attach.DocName : attach.DocAsName)">
+                                                                                    @(string.IsNullOrEmpty(attach.DocAsName) ? attach.DocName : attach.DocAsName)
+                                                                                </span>
 
-                                                                        <span class="doc-icon hidden-sm-down @(attach.DocAsName != "" ? "" : "invisible")">
-                                                                            <span class="fa fa-clone" title="Template: @attach.DocName"></span>
-                                                                        </span>
-
-
-                                                                        <span class="doc-icon hidden-sm-down @(@selectedChapter.ShowDocumentTracking == "Y" && !(string.IsNullOrEmpty(attach.TrackingMethod)) && "Send Only|Response Required".Contains(attach.TrackingMethod) ? "" : "invisible")">
-
-                                                                                <span title="@($"This item is tracked: {attach.TrackingMethod}")" class="fa fa-map-marker-alt"></span>
-                                                                        </span>
+                                                                                <span class="doc-icon hidden-sm-down @(attach.DocAsName != "" ? "" : "invisible")">
+                                                                                    <span class="fa fa-clone" title="Template: @attach.DocName"></span>
+                                                                                </span>
 
 
-                                                                        <span class="doc-icon-lg hidden-sm-down @(attach.Action == "SCHEDULE" ? "" : "invisible")">
-                                                                            <span class="" title="@("Will be scheduled for " + attach.ScheduleDays.ToString() + " days" + (!string.IsNullOrEmpty(attach.ScheduleDataItem) ? " from " + attach.ScheduleDataItem : ""))">@(!string.IsNullOrEmpty(attach.ScheduleDataItem) ? "* " : "") @attach.ScheduleDays.ToString()d</span>
-                                                                        </span>
+                                                                                <span class="doc-icon hidden-sm-down @(@selectedChapter.ShowDocumentTracking == "Y" && !(string.IsNullOrEmpty(attach.TrackingMethod)) && "Send Only|Response Required".Contains(attach.TrackingMethod) ? "" : "invisible")">
+
+                                                                                    <span title="@($"This item is tracked: {attach.TrackingMethod}")" class="fa fa-map-marker-alt"></span>
+                                                                                </span>
 
 
-                                                                    </li>
+                                                                                <span class="doc-icon-lg hidden-sm-down @(attach.Action == "SCHEDULE" ? "" : "invisible")">
+                                                                                    <span class="" title="@("Will be scheduled for " + attach.ScheduleDays.ToString() + " days" + (!string.IsNullOrEmpty(attach.ScheduleDataItem) ? " from " + attach.ScheduleDataItem : ""))">@(!string.IsNullOrEmpty(attach.ScheduleDataItem) ? "* " : "") @attach.ScheduleDays.ToString()d</span>
+                                                                                </span>
+
+
+                                                                            </li>
                                                                         }
                                                                         <li class="ellipsis-menu-divider"></li>
                                                                     }
 
-                                                                    <li class="font-85" @onclick='(() => PrepareAttachmentForAdd(doc))'><span><span class="fa fa-plus"></span></span><span class="ml-2">Add New</span></li>
+                                                                    <li class="font-85" @onclick='(() => PrepareAttachmentForAdd(context))'><span><span class="fa fa-plus"></span></span><span class="ml-2">Add New</span></li>
                                                                 </ul>
                                                             </div>
                                                         </li>
-                                                        <li class="col-red" @onclick="() => PrepareChapterDetailDelete(doc)">
+                                                        <li class="col-red" @onclick="() => PrepareChapterDetailDelete(context)">
                                                             <span class="fa fa-trash-alt mr-2"></span>
                                                             <span>Delete</span>
                                                         </li>
@@ -842,18 +847,18 @@ else
                                         else if (UserSession.isAdminUser && compareSystems)
                                         {
                                             <div class="btn-ellipses float-left">
-                                                @if (!(doc.ComparisonIcon is null))
+                                                @if (!(context.ComparisonIcon is null))
                                                 {
-                                                    @if (!(doc.ComparisonResult == "Exact match"))
+                                                    @if (!(context.ComparisonResult == "Exact match"))
                                                     {
-                                                        <ModalTooltip Direction="right" Text=@(doc.ComparisonResult == "Partial match" ? "Differences found, click to sync" : "Does not exist, click to create") Class="w-2">
-                                                            <div class="btn-dashed" @onclick="() => PrepareForComparison(doc)"><span class="fa fa-@doc.ComparisonIcon"></span></div>
+                                                        <ModalTooltip Direction="right" Text=@(context.ComparisonResult == "Partial match" ? "Differences found, click to sync" : "Does not exist, click to create") Class="w-2">
+                                                            <div class="btn-dashed" @onclick="() => PrepareForComparison(context)"><span class="fa fa-@context.ComparisonIcon"></span></div>
                                                         </ModalTooltip>
                                                     }
                                                     else
                                                     {
                                                         <ModalTooltip Direction="right" Text="Exact Match" Class="w-1">
-                                                            <span class="fa fa-@doc.ComparisonIcon"></span>
+                                                            <span class="fa fa-@context.ComparisonIcon"></span>
                                                         </ModalTooltip>
                                                     }
                                                 }
@@ -871,7 +876,7 @@ else
 
                                                 <div class="ellipsis-menu">
                                                     <ul>
-                                                        <li class="col-main" @onclick='(() => ShowChapterDetailViewModal(doc, "Steps and Documents"))'>
+                                                        <li class="col-main" @onclick='(() => ShowChapterDetailViewModal(context, "Steps and Documents"))'>
                                                             <span class="fa fa-binoculars mr-2"></span>
                                                             <span>View</span>
                                                         </li>
@@ -881,11 +886,11 @@ else
                                                             <div class="menu-toggle">
                                                                 <span class="fa fa-chevron-right"></span>
                                                                 <ul style="width: 300px">
-                                                                    @if (!(doc.ChapterObject.LinkedItems is null) && doc.ChapterObject.LinkedItems.Count > 0)
+                                                                    @if (!(context.ChapterObject.LinkedItems is null) && context.ChapterObject.LinkedItems.Count > 0)
                                                                     {
-                                                                        foreach (var attach in doc.ChapterObject.LinkedItems)
+                                                                        foreach (var attach in context.ChapterObject.LinkedItems)
                                                                         {
-                                                                            <li class="font-85" @onclick='(() => PrepareAttachmentForView(doc, attach))'>
+                                                                            <li class="font-85" @onclick='(() => PrepareAttachmentForView(context, attach))'>
                                                                                 @(string.IsNullOrEmpty(attach.DocAsName) ? attach.DocName : attach.DocAsName)
                                                                             </li>
                                                                         }
@@ -898,51 +903,51 @@ else
                                             </div>
                                         }
 
-                                        <div class="data-item-sub " title="@doc.DocDisplayName">
+                                        <div class="data-item-sub " title="@context.DocDisplayName">
 
-                                            <span class="font-100" title="@doc.ChapterObject.Action">
-                                                <span class="doc-icon @(doc.ChapterObject.Action == "TAKE" ? "" : "invisible")"><span class="fa fa-running mr-2"></span></span>
-                                                <span class="doc-icon @(doc.ChapterObject.Action == "INSERT" ? "" : "invisible")"><span class="fa fa-arrow-down mr-2"></span></span>
+                                            <span class="font-100" title="@context.ChapterObject.Action">
+                                                <span class="doc-icon @(context.ChapterObject.Action == "TAKE" ? "" : "invisible")"><span class="fa fa-running mr-2"></span></span>
+                                                <span class="doc-icon @(context.ChapterObject.Action == "INSERT" ? "" : "invisible")"><span class="fa fa-arrow-down mr-2"></span></span>
                                             </span>
                                             <span class="font-100">
-                                                <span class="doc-icon @(doc.DocType == "Doc" ? "" : "invisible")" title="Document"><span class="fa fa-file mr-2"></span></span>
-                                                <span class="doc-icon @(doc.DocType == "Form" ? "" : "invisible")" title="Form"><span class=" fa fa-file-pdf mr-2"></span></span>
-                                                <span class="doc-icon @(doc.DocType == "Email" ? "" : "invisible")" title="Email"><span class="fa fa-envelope mr-2"></span></span>
-                                                <span class="doc-icon @(doc.DocType == "Step" ? "" : "invisible")" title="Step"><span class=" fa fa-list-ol mr-2"></span></span>
-                                                <span class="doc-icon @(doc.DocType == "Date" ? "" : "invisible")" title="Diary Item"><span class="fa fa-calendar mr-2"></span></span>
-                                                <span class="doc-icon @(string.IsNullOrEmpty(doc.DocType) ? "" : "invisible")"><span class=" mr-2"></span></span>
+                                                <span class="doc-icon @(context.DocType == "Doc" ? "" : "invisible")" title="Document"><span class="fa fa-file mr-2"></span></span>
+                                                <span class="doc-icon @(context.DocType == "Form" ? "" : "invisible")" title="Form"><span class=" fa fa-file-pdf mr-2"></span></span>
+                                                <span class="doc-icon @(context.DocType == "Email" ? "" : "invisible")" title="Email"><span class="fa fa-envelope mr-2"></span></span>
+                                                <span class="doc-icon @(context.DocType == "Step" ? "" : "invisible")" title="Step"><span class=" fa fa-list-ol mr-2"></span></span>
+                                                <span class="doc-icon @(context.DocType == "Date" ? "" : "invisible")" title="Diary Item"><span class="fa fa-calendar mr-2"></span></span>
+                                                <span class="doc-icon @(string.IsNullOrEmpty(context.DocType) ? "" : "invisible")"><span class=" mr-2"></span></span>
                                             </span>
-                                            @doc.DocDisplayName
+                                            @context.DocDisplayName
                                         </div>
 
-                                        @if (doc.DocOrigName != "")
+                                        @if (context.DocOrigName != "")
                                         {
                                             <div class="data-item-right hidden-md-down">
-                                                <ModalTooltip Direction="left" Text=@("Template: " + doc.DocOrigName) Class="w-2">
+                                                <ModalTooltip Direction="left" Text=@("Template: " + context.DocOrigName) Class="w-2">
                                                     <span class="fa fa-clone"></span>
                                                 </ModalTooltip>
                                             </div>
                                         }
 
-                                        @if (!string.IsNullOrEmpty(doc.ChapterObject.PopupAlert))
+                                        @if (!string.IsNullOrEmpty(context.ChapterObject.PopupAlert))
                                         {
                                             <div class="data-item-right hidden-md-down">
-                                                <ModalTooltip Direction="left" Text=@("POPUP: " + doc.ChapterObject.PopupAlert) Class="w-3">
+                                                <ModalTooltip Direction="left" Text=@("POPUP: " + context.ChapterObject.PopupAlert) Class="w-3">
                                                     <span class="fa fa-exclamation-triangle"></span>
                                                 </ModalTooltip>
                                             </div>
                                         }
 
-                                        @if (!string.IsNullOrEmpty(doc.ChapterObject.UserMessage))
+                                        @if (!string.IsNullOrEmpty(context.ChapterObject.UserMessage))
                                         {
                                             <div class="data-item-right hidden-md-down">
-                                                <ModalTooltip Direction="left" Text=@("NOTES: " + doc.ChapterObject.UserMessage) Class="w-3">
+                                                <ModalTooltip Direction="left" Text=@("NOTES: " + context.ChapterObject.UserMessage) Class="w-3">
                                                     <span class="fa fa-comment"></span>
                                                 </ModalTooltip>
                                             </div>
                                         }
 
-                                        @if (!(doc.ChapterObject.LinkedItems is null) && doc.ChapterObject.LinkedItems.Count > 0)
+                                        @if (!(context.ChapterObject.LinkedItems is null) && context.ChapterObject.LinkedItems.Count > 0)
                                         {
                                             <div class="data-item-right hidden-md-down">
                                                 <ModalTooltip Direction="left" Text=@($"This item has attachments.") Class="w-2">
@@ -951,10 +956,10 @@ else
                                             </div>
                                         }
 
-                                        @if (@selectedChapter.ShowDocumentTracking == "Y" && !(string.IsNullOrEmpty(doc.ChapterObject.TrackingMethod)) && "Send Only|Response Required".Contains(doc.ChapterObject.TrackingMethod))
+                                        @if (@selectedChapter.ShowDocumentTracking == "Y" && !(string.IsNullOrEmpty(context.ChapterObject.TrackingMethod)) && "Send Only|Response Required".Contains(context.ChapterObject.TrackingMethod))
                                         {
                                             <div class="data-item-right hidden-md-down">
-                                                <ModalTooltip Direction="left" Text=@($"This item is tracked: {doc.ChapterObject.TrackingMethod}") Class="w-2">
+                                                <ModalTooltip Direction="left" Text=@($"This item is tracked: {context.ChapterObject.TrackingMethod}") Class="w-2">
                                                     <span class="fa fa-map-marker-alt"></span>
                                                 </ModalTooltip>
                                             </div>
@@ -963,36 +968,36 @@ else
                                         @if (UserSession.isAdminUser && !compareSystems)
                                         {
                                             <div class="data-item-right seq-change">
-                                                <div @onclick='() => MoveSeq(doc.ChapterObject, "Docs", "Up")'><span class="fa fa-angle-up"></span></div>
-                                                <div class="seq-no">@doc.ChapterObject.SeqNo</div>
-                                                <div @onclick='() => MoveSeq(doc.ChapterObject, "Docs", "Down")'><span class="fa fa-angle-down"></span></div>
+                                                <div @onclick='() => MoveSeq(context.ChapterObject, "Docs", "Up")'><span class="fa fa-angle-up"></span></div>
+                                                <div class="seq-no">@context.ChapterObject.SeqNo</div>
+                                                <div @onclick='() => MoveSeq(context.ChapterObject, "Docs", "Down")'><span class="fa fa-angle-down"></span></div>
                                             </div>
                                         }
                                         else
                                         {
                                             <div class="data-item-right mr-2 ">
-                                                <div class="seq-no">@doc.ChapterObject.SeqNo</div>
+                                                <div class="seq-no">@context.ChapterObject.SeqNo</div>
                                             </div>
                                         }
                                     </div>
                                     <div class="hidden-md-down data-item ">
-                                        <div class="data-item-sub font-85 pl-3" title="@(string.IsNullOrEmpty(doc.ChapterObject.AsName) ? "" : doc.ChapterObject.AsName)">@(string.IsNullOrEmpty(doc.ChapterObject.AsName) ? "" : doc.ChapterObject.AsName)</div>
+                                        <div class="data-item-sub font-85 pl-3" title="@(string.IsNullOrEmpty(context.ChapterObject.AsName) ? "" : context.ChapterObject.AsName)">@(string.IsNullOrEmpty(context.ChapterObject.AsName) ? "" : context.ChapterObject.AsName)</div>
 
-                                        @if (!string.IsNullOrEmpty(doc.ChapterObject.AsName)) // && (doc.ChapterObject.RescheduleDays.HasValue && ) //(doc.ChapterObject.RescheduleDays != 0 | !string.IsNullOrEmpty(doc.ChapterObject.RescheduleDataItem)))
+                                        @if (!string.IsNullOrEmpty(context.ChapterObject.AsName)) // && (doc.ChapterObject.RescheduleDays.HasValue && ) //(doc.ChapterObject.RescheduleDays != 0 | !string.IsNullOrEmpty(doc.ChapterObject.RescheduleDataItem)))
                                         {
                                             <div class="data-item-right schedule-days">
-                                                <ModalTooltip Direction="left" Text="@(string.IsNullOrEmpty(doc.ChapterObject.AsName) ? "" : "The step named " + doc.ChapterObject.AsName + " will be scheduled for " + doc.ChapterObject.RescheduleDays.ToString() + " days" + (!string.IsNullOrEmpty(doc.ChapterObject.RescheduleDataItem) ? " from " + doc.ChapterObject.RescheduleDataItem : ""))" Class="w-3">
-                                                    <span class="badge rounded-square">@(!string.IsNullOrEmpty(doc.ChapterObject.RescheduleDataItem) ? "* " : "") @doc.ChapterObject.RescheduleDays.ToString()d</span>
+                                                <ModalTooltip Direction="left" Text="@(string.IsNullOrEmpty(context.ChapterObject.AsName) ? "" : "The step named " + context.ChapterObject.AsName + " will be scheduled for " + context.ChapterObject.RescheduleDays.ToString() + " days" + (!string.IsNullOrEmpty(context.ChapterObject.RescheduleDataItem) ? " from " + context.ChapterObject.RescheduleDataItem : ""))" Class="w-3">
+                                                    <span class="badge rounded-square">@(!string.IsNullOrEmpty(context.ChapterObject.RescheduleDataItem) ? "* " : "") @context.ChapterObject.RescheduleDays.ToString()d</span>
                                                 </ModalTooltip>
                                             </div>
                                         }
 
                                     </div>
                                     <div class="hidden-md-down data-item ">
-                                        @if (!(string.IsNullOrEmpty(doc.ChapterObject.CompleteName)))
+                                        @if (!(string.IsNullOrEmpty(context.ChapterObject.CompleteName)))
                                         {
-                                            <div class="data-item-sub font-85 pl-3" title="This document will be saved in the agenda as @doc.ChapterObject.CompleteName.">
-                                                @doc.ChapterObject.CompleteName
+                                            <div class="data-item-sub font-85 pl-3" title="This document will be saved in the agenda as @context.ChapterObject.CompleteName.">
+                                                @context.ChapterObject.CompleteName
                                             </div>
 
                                         }
@@ -1002,9 +1007,9 @@ else
                                             </div>
                                         }
 
-                                        @if (!(string.IsNullOrEmpty(doc.ChapterObject.NextStatus)))
+                                        @if (!(string.IsNullOrEmpty(context.ChapterObject.NextStatus)))
                                         {
-                                            @if (lstStatus.Where(S => S.ChapterObject.Name == doc.ChapterObject.NextStatus).Select(S => S.ChapterObject.SuppressStep).SingleOrDefault() == "Y")
+                                            @if (lstStatus.Where(S => S.ChapterObject.Name == context.ChapterObject.NextStatus).Select(S => S.ChapterObject.SuppressStep).SingleOrDefault() == "Y")
                                             {
                                                 <div class="data-item-right suppress-step">
                                                     <ModalTooltip Direction="left" Text="This document will end the Smartflow when taken." Class="w-2">
@@ -1015,7 +1020,7 @@ else
 
 
                                             <div class="data-item-right suppress-step">
-                                                <ModalTooltip Direction="left" Text=@("Status Change: " + doc.ChapterObject.NextStatus) Class="w-2">
+                                                <ModalTooltip Direction="left" Text=@("Status Change: " + context.ChapterObject.NextStatus) Class="w-2">
                                                     <span class="fa fa-battery-half"></span>
                                                 </ModalTooltip>
                                             </div>
@@ -1025,8 +1030,281 @@ else
                                     </div>
 
                                 </div>
+                            </Dropzone>
 
-                            }
+
+
+                            @*@foreach (var doc in lstDocs)
+                                {
+
+                                    <div class="row grid-row grid-row-lg @(rowChanged == doc.ChapterObject.SeqNo ? "row-changed" : "" )">
+                                        <div class="data-item ">
+
+                                            @if (UserSession.isAdminUser && !compareSystems)
+                                            {
+                                                <div class="btn-ellipses float-left">
+                                                    <span class="fa fa-ellipsis-v"></span>
+
+                                                    <div class="ellipsis-menu">
+                                                        <ul>
+                                                            <li class="col-main" @onclick='(() => PrepareForEdit(doc, "Steps and Documents"))'>
+                                                                <span class="fa fa-pencil-alt mr-2"></span>
+                                                                <span>Edit</span>
+                                                            </li>
+                                                            <li class="col-main" @onclick='(() => ShowChapterDetailViewModal(doc, "Steps and Documents"))'>
+                                                                <span class="fa fa-binoculars mr-2"></span>
+                                                                <span>View</span>
+                                                            </li>
+                                                            <li class="col-main">
+                                                                <span class="fa fa-paperclip mr-2"></span>
+                                                                <span>Links</span>
+                                                                <div class="menu-toggle @(selectedChapter.ShowDocumentTracking == "Y" ? "tracking" : "")" >
+                                                                    <span class="fa fa-chevron-right"></span>
+                                                                    <ul class="attach-list">
+                                                                        @if (!(doc.ChapterObject.LinkedItems is null) && doc.ChapterObject.LinkedItems.Count > 0)
+                                                                        {
+                                                                            foreach (var attach in doc.ChapterObject.LinkedItems)
+                                                                            {
+                                                                        <li class="font-85" @onclick='(() => PrepareAttachmentForEdit(doc, attach))'>
+                                                                            <span class="font-85" title="@attach.Action">
+                                                                                <span class="doc-icon @(attach.Action == "TAKE" ? "" : "invisible")"><span class="fa fa-running mr-2"></span></span>
+                                                                                <span class="doc-icon @(attach.Action == "INSERT" ? "" : "invisible")"><span class="fa fa-arrow-down mr-2"></span></span>
+                                                                                <span class="doc-icon @(attach.Action == "SCHEDULE" ? "" : "invisible")"><span class="fa fa-calendar-check mr-2"></span></span>
+                                                                            </span>
+                                                                            <span class="font-85">
+                                                                                <span class="doc-icon @(attach.DocType == "Doc" ? "" : "invisible")" title="Document"><span class="fa fa-file mr-2"></span></span>
+                                                                                <span class="doc-icon @(attach.DocType == "Form" ? "" : "invisible")" title="Form"><span class=" fa fa-file-pdf mr-2"></span></span>
+                                                                                <span class="doc-icon @(attach.DocType == "Email" ? "" : "invisible")" title="Email"><span class="fa fa-envelope mr-2"></span></span>
+                                                                                <span class="doc-icon @(attach.DocType == "Step" ? "" : "invisible")" title="Step"><span class=" fa fa-list-ol mr-2"></span></span>
+                                                                                <span class="doc-icon @(attach.DocType == "Date" ? "" : "invisible")" title="Diary Item"><span class="fa fa-calendar mr-2"></span></span>
+                                                                                <span class="doc-icon @(string.IsNullOrEmpty(attach.DocType) ? "" : "invisible")" title="Custom Item: will insert a step to run the current Smartflow"><span class="fa fa-retweet mr-2"></span></span>
+                                                                            </span>
+                                                                            <span class="attach-name" title="@(string.IsNullOrEmpty(attach.DocAsName) ? attach.DocName : attach.DocAsName)">
+                                                                                @(string.IsNullOrEmpty(attach.DocAsName) ? attach.DocName : attach.DocAsName)
+                                                                            </span>
+
+                                                                            <span class="doc-icon hidden-sm-down @(attach.DocAsName != "" ? "" : "invisible")">
+                                                                                <span class="fa fa-clone" title="Template: @attach.DocName"></span>
+                                                                            </span>
+
+
+                                                                            <span class="doc-icon hidden-sm-down @(@selectedChapter.ShowDocumentTracking == "Y" && !(string.IsNullOrEmpty(attach.TrackingMethod)) && "Send Only|Response Required".Contains(attach.TrackingMethod) ? "" : "invisible")">
+
+                                                                                    <span title="@($"This item is tracked: {attach.TrackingMethod}")" class="fa fa-map-marker-alt"></span>
+                                                                            </span>
+
+
+                                                                            <span class="doc-icon-lg hidden-sm-down @(attach.Action == "SCHEDULE" ? "" : "invisible")">
+                                                                                <span class="" title="@("Will be scheduled for " + attach.ScheduleDays.ToString() + " days" + (!string.IsNullOrEmpty(attach.ScheduleDataItem) ? " from " + attach.ScheduleDataItem : ""))">@(!string.IsNullOrEmpty(attach.ScheduleDataItem) ? "* " : "") @attach.ScheduleDays.ToString()d</span>
+                                                                            </span>
+
+
+                                                                        </li>
+                                                                            }
+                                                                            <li class="ellipsis-menu-divider"></li>
+                                                                        }
+
+                                                                        <li class="font-85" @onclick='(() => PrepareAttachmentForAdd(doc))'><span><span class="fa fa-plus"></span></span><span class="ml-2">Add New</span></li>
+                                                                    </ul>
+                                                                </div>
+                                                            </li>
+                                                            <li class="col-red" @onclick="() => PrepareChapterDetailDelete(doc)">
+                                                                <span class="fa fa-trash-alt mr-2"></span>
+                                                                <span>Delete</span>
+                                                            </li>
+
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            }
+                                            else if (UserSession.isAdminUser && compareSystems)
+                                            {
+                                                <div class="btn-ellipses float-left">
+                                                    @if (!(doc.ComparisonIcon is null))
+                                                    {
+                                                        @if (!(doc.ComparisonResult == "Exact match"))
+                                                        {
+                                                            <ModalTooltip Direction="right" Text=@(doc.ComparisonResult == "Partial match" ? "Differences found, click to sync" : "Does not exist, click to create") Class="w-2">
+                                                                <div class="btn-dashed" @onclick="() => PrepareForComparison(doc)"><span class="fa fa-@doc.ComparisonIcon"></span></div>
+                                                            </ModalTooltip>
+                                                        }
+                                                        else
+                                                        {
+                                                            <ModalTooltip Direction="right" Text="Exact Match" Class="w-1">
+                                                                <span class="fa fa-@doc.ComparisonIcon"></span>
+                                                            </ModalTooltip>
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="spinner"></div>
+                                                    }
+
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="btn-ellipses float-left">
+                                                    <span class="fa fa-ellipsis-v"></span>
+
+                                                    <div class="ellipsis-menu">
+                                                        <ul>
+                                                            <li class="col-main" @onclick='(() => ShowChapterDetailViewModal(doc, "Steps and Documents"))'>
+                                                                <span class="fa fa-binoculars mr-2"></span>
+                                                                <span>View</span>
+                                                            </li>
+                                                            <li class="col-main">
+                                                                <span class="fa fa-paperclip mr-2"></span>
+                                                                <span>Linked Items</span>
+                                                                <div class="menu-toggle">
+                                                                    <span class="fa fa-chevron-right"></span>
+                                                                    <ul style="width: 300px">
+                                                                        @if (!(doc.ChapterObject.LinkedItems is null) && doc.ChapterObject.LinkedItems.Count > 0)
+                                                                        {
+                                                                            foreach (var attach in doc.ChapterObject.LinkedItems)
+                                                                            {
+                                                                                <li class="font-85" @onclick='(() => PrepareAttachmentForView(doc, attach))'>
+                                                                                    @(string.IsNullOrEmpty(attach.DocAsName) ? attach.DocName : attach.DocAsName)
+                                                                                </li>
+                                                                            }
+                                                                        }
+                                                                    </ul>
+                                                                </div>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            }
+
+                                            <div class="data-item-sub " title="@doc.DocDisplayName">
+
+                                                <span class="font-100" title="@doc.ChapterObject.Action">
+                                                    <span class="doc-icon @(doc.ChapterObject.Action == "TAKE" ? "" : "invisible")"><span class="fa fa-running mr-2"></span></span>
+                                                    <span class="doc-icon @(doc.ChapterObject.Action == "INSERT" ? "" : "invisible")"><span class="fa fa-arrow-down mr-2"></span></span>
+                                                </span>
+                                                <span class="font-100">
+                                                    <span class="doc-icon @(doc.DocType == "Doc" ? "" : "invisible")" title="Document"><span class="fa fa-file mr-2"></span></span>
+                                                    <span class="doc-icon @(doc.DocType == "Form" ? "" : "invisible")" title="Form"><span class=" fa fa-file-pdf mr-2"></span></span>
+                                                    <span class="doc-icon @(doc.DocType == "Email" ? "" : "invisible")" title="Email"><span class="fa fa-envelope mr-2"></span></span>
+                                                    <span class="doc-icon @(doc.DocType == "Step" ? "" : "invisible")" title="Step"><span class=" fa fa-list-ol mr-2"></span></span>
+                                                    <span class="doc-icon @(doc.DocType == "Date" ? "" : "invisible")" title="Diary Item"><span class="fa fa-calendar mr-2"></span></span>
+                                                    <span class="doc-icon @(string.IsNullOrEmpty(doc.DocType) ? "" : "invisible")"><span class=" mr-2"></span></span>
+                                                </span>
+                                                @doc.DocDisplayName
+                                            </div>
+
+                                            @if (doc.DocOrigName != "")
+                                            {
+                                                <div class="data-item-right hidden-md-down">
+                                                    <ModalTooltip Direction="left" Text=@("Template: " + doc.DocOrigName) Class="w-2">
+                                                        <span class="fa fa-clone"></span>
+                                                    </ModalTooltip>
+                                                </div>
+                                            }
+
+                                            @if (!string.IsNullOrEmpty(doc.ChapterObject.PopupAlert))
+                                            {
+                                                <div class="data-item-right hidden-md-down">
+                                                    <ModalTooltip Direction="left" Text=@("POPUP: " + doc.ChapterObject.PopupAlert) Class="w-3">
+                                                        <span class="fa fa-exclamation-triangle"></span>
+                                                    </ModalTooltip>
+                                                </div>
+                                            }
+
+                                            @if (!string.IsNullOrEmpty(doc.ChapterObject.UserMessage))
+                                            {
+                                                <div class="data-item-right hidden-md-down">
+                                                    <ModalTooltip Direction="left" Text=@("NOTES: " + doc.ChapterObject.UserMessage) Class="w-3">
+                                                        <span class="fa fa-comment"></span>
+                                                    </ModalTooltip>
+                                                </div>
+                                            }
+
+                                            @if (!(doc.ChapterObject.LinkedItems is null) && doc.ChapterObject.LinkedItems.Count > 0)
+                                            {
+                                                <div class="data-item-right hidden-md-down">
+                                                    <ModalTooltip Direction="left" Text=@($"This item has attachments.") Class="w-2">
+                                                        <span class="fa fa-paperclip"></span>
+                                                    </ModalTooltip>
+                                                </div>
+                                            }
+
+                                            @if (@selectedChapter.ShowDocumentTracking == "Y" && !(string.IsNullOrEmpty(doc.ChapterObject.TrackingMethod)) && "Send Only|Response Required".Contains(doc.ChapterObject.TrackingMethod))
+                                            {
+                                                <div class="data-item-right hidden-md-down">
+                                                    <ModalTooltip Direction="left" Text=@($"This item is tracked: {doc.ChapterObject.TrackingMethod}") Class="w-2">
+                                                        <span class="fa fa-map-marker-alt"></span>
+                                                    </ModalTooltip>
+                                                </div>
+                                            }
+
+                                            @if (UserSession.isAdminUser && !compareSystems)
+                                            {
+                                                <div class="data-item-right seq-change">
+                                                    <div @onclick='() => MoveSeq(doc.ChapterObject, "Docs", "Up")'><span class="fa fa-angle-up"></span></div>
+                                                    <div class="seq-no">@doc.ChapterObject.SeqNo</div>
+                                                    <div @onclick='() => MoveSeq(doc.ChapterObject, "Docs", "Down")'><span class="fa fa-angle-down"></span></div>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="data-item-right mr-2 ">
+                                                    <div class="seq-no">@doc.ChapterObject.SeqNo</div>
+                                                </div>
+                                            }
+                                        </div>
+                                        <div class="hidden-md-down data-item ">
+                                            <div class="data-item-sub font-85 pl-3" title="@(string.IsNullOrEmpty(doc.ChapterObject.AsName) ? "" : doc.ChapterObject.AsName)">@(string.IsNullOrEmpty(doc.ChapterObject.AsName) ? "" : doc.ChapterObject.AsName)</div>
+
+                                            @if (!string.IsNullOrEmpty(doc.ChapterObject.AsName)) // && (doc.ChapterObject.RescheduleDays.HasValue && ) //(doc.ChapterObject.RescheduleDays != 0 | !string.IsNullOrEmpty(doc.ChapterObject.RescheduleDataItem)))
+                                            {
+                                                <div class="data-item-right schedule-days">
+                                                    <ModalTooltip Direction="left" Text="@(string.IsNullOrEmpty(doc.ChapterObject.AsName) ? "" : "The step named " + doc.ChapterObject.AsName + " will be scheduled for " + doc.ChapterObject.RescheduleDays.ToString() + " days" + (!string.IsNullOrEmpty(doc.ChapterObject.RescheduleDataItem) ? " from " + doc.ChapterObject.RescheduleDataItem : ""))" Class="w-3">
+                                                        <span class="badge rounded-square">@(!string.IsNullOrEmpty(doc.ChapterObject.RescheduleDataItem) ? "* " : "") @doc.ChapterObject.RescheduleDays.ToString()d</span>
+                                                    </ModalTooltip>
+                                                </div>
+                                            }
+
+                                        </div>
+                                        <div class="hidden-md-down data-item ">
+                                            @if (!(string.IsNullOrEmpty(doc.ChapterObject.CompleteName)))
+                                            {
+                                                <div class="data-item-sub font-85 pl-3" title="This document will be saved in the agenda as @doc.ChapterObject.CompleteName.">
+                                                    @doc.ChapterObject.CompleteName
+                                                </div>
+
+                                            }
+                                            else
+                                            {
+                                                <div class="data-item-sub">
+                                                </div>
+                                            }
+
+                                            @if (!(string.IsNullOrEmpty(doc.ChapterObject.NextStatus)))
+                                            {
+                                                @if (lstStatus.Where(S => S.ChapterObject.Name == doc.ChapterObject.NextStatus).Select(S => S.ChapterObject.SuppressStep).SingleOrDefault() == "Y")
+                                                {
+                                                    <div class="data-item-right suppress-step">
+                                                        <ModalTooltip Direction="left" Text="This document will end the Smartflow when taken." Class="w-2">
+                                                            <span class="fa fa-flag-checkered"></span>
+                                                        </ModalTooltip>
+                                                    </div>
+                                                }
+
+
+                                                <div class="data-item-right suppress-step">
+                                                    <ModalTooltip Direction="left" Text=@("Status Change: " + doc.ChapterObject.NextStatus) Class="w-2">
+                                                        <span class="fa fa-battery-half"></span>
+                                                    </ModalTooltip>
+                                                </div>
+                                            }
+
+
+                                        </div>
+
+                                    </div>
+
+                                }*@
 
                             @if (compareSystems && !(lstAltSystemChapterItems is null))
                             {
@@ -2339,3 +2617,5 @@ else
 
 
 }
+
+<div id="exp"></div>

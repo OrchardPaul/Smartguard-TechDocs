@@ -10,6 +10,11 @@
 
 
 <script>
+
+    Backimg = new Image()
+    Backimg.src = "https://www.w3schools.com/images/picture.jpg";
+
+
     function ShowModal(modalId) {
         $('#' + modalId).modal('show');
         $('#' + modalId).appendTo(document.body);
@@ -42,10 +47,31 @@
         return el.scrollTop;
     }
 
+    function addEventListener(elementId) {
+        var el = document.getElementById(elementId);
+        if (el) {
+            el.addEventListener("dragstart", function (e) {
+
+                e.dataTransfer.setDragImage(Backimg, 0, 0);
+            }, false);
+        }
+    }
 
 </script>
 
 
+
+<style>
+    #coverup {
+        background: white;
+        width: 170px;
+        height: 100px;
+        position: absolute;
+        top: 0;
+        right: 0;
+        z-index: 2;
+    }
+</style>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -158,5 +184,3 @@
 
 </body>
 </html>
-
-

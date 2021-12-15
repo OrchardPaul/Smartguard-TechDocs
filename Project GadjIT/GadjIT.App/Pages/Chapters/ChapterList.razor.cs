@@ -109,6 +109,8 @@ namespace GadjIT_App.Pages.Chapters
         private List<VmTickerMessages> lstAltSystemTickerMessages { get; set; } = new List<VmTickerMessages>();
 
         private List<VmUsrOrDefChapterManagement> lstAgendas { get; set; } = new List<VmUsrOrDefChapterManagement>();
+
+        public List<VmUsrOrsfSmartflows> lstSelectedChapters { get; set; } = new List<VmUsrOrsfSmartflows>();
         private List<VmFee> lstFees { get; set; } = new List<VmFee>();
         private List<VmUsrOrDefChapterManagement> lstDocs { get; set; } = new List<VmUsrOrDefChapterManagement>();
         private List<VmUsrOrDefChapterManagement> lstStatus { get; set; } = new List<VmUsrOrDefChapterManagement>();
@@ -594,11 +596,16 @@ namespace GadjIT_App.Pages.Chapters
             selectedChapter.Name = "";
         }
 
-        void SelectCaseType(string caseType)
+        public void SelectCaseType(string caseType)
         {
-            selectedChapter.CaseType = (selectedChapter.CaseType == caseType) ? "" : caseType;
-            selectedChapter.Name = "";
+            selectedChapter.CaseType = (selectedChapter.CaseType == caseType) ? "" : caseType; 
             
+            lstSelectedChapters = lstChapters.Where(C => C.SmartflowObject.CaseType == selectedChapter.CaseType)
+                                    .Where(C => C.SmartflowObject.CaseTypeGroup == selectedChapter.CaseTypeGroup)
+                                    .OrderBy(C => C.SmartflowObject.SeqNo)
+                                    .ToList(); 
+            
+            selectedChapter.Name = "";
         }
 
         private void NavigateToChapter(UsrOrsfSmartflows chapter)
@@ -882,6 +889,11 @@ namespace GadjIT_App.Pages.Chapters
             {
                 var lsrSR = await CompanyDbAccess.GetAllSmartflowRecords(UserSession);
                 lstChapters = lsrSR.Select(A => new VmUsrOrsfSmartflows { SmartflowObject = mapper.Map(A, new UsrOrsfSmartflows()) }).ToList();
+
+                lstSelectedChapters = lstChapters.Where(C => C.SmartflowObject.CaseType == selectedChapter.CaseType)
+                                        .Where(C => C.SmartflowObject.CaseTypeGroup == selectedChapter.CaseTypeGroup)
+                                        .OrderBy(C => C.SmartflowObject.SeqNo)
+                                        .ToList();
             }
             catch(Exception e)
             {
@@ -900,7 +912,7 @@ namespace GadjIT_App.Pages.Chapters
                 partnerCaseTypeGroups = await partnerAccessService.GetPartnerCaseTypeGroups();
                 ListP4WViews = await partnerAccessService.GetPartnerViews();
 
-                SelectChapter(lstChapters
+                SelectChapter(lstSelectedChapters
                                     .Where(C => C.SmartflowObject.CaseTypeGroup == selectedChapter.CaseTypeGroup)
                                     .Where(C => C.SmartflowObject.CaseType == selectedChapter.CaseType)
                                     .Where(C => C.SmartflowObject.SmartflowName == selectedChapter.Name)
@@ -921,9 +933,6 @@ namespace GadjIT_App.Pages.Chapters
             {
                 if (listType == "Chapters")
                 {
-                    //var lstC = await chapterManagementService.GetAllChapters();
-                    //lstChapters = lstC.Select(A => new VmUsrOrDefChapterManagement { ChapterObject = A }).ToList();
-
                     bool gotLock = CompanyDbAccess.Lock;
                     while (gotLock)
                     {
@@ -933,6 +942,12 @@ namespace GadjIT_App.Pages.Chapters
 
                     var lsrSR = await CompanyDbAccess.GetAllSmartflowRecords(UserSession);
                     lstChapters = lsrSR.Select(A => new VmUsrOrsfSmartflows { SmartflowObject = mapper.Map(A, new UsrOrsfSmartflows()) }).ToList();
+
+
+                    lstSelectedChapters = lstChapters.Where(C => C.SmartflowObject.CaseType == selectedChapter.CaseType)
+                                            .Where(C => C.SmartflowObject.CaseTypeGroup == selectedChapter.CaseTypeGroup)
+                                            .OrderBy(C => C.SmartflowObject.SeqNo)
+                                            .ToList();
 
                 }
                 else
@@ -1183,7 +1198,7 @@ namespace GadjIT_App.Pages.Chapters
 
         private async void CompareAllChapters()
         {
-            lstChapters = lstChapters.Select(C => { C.ComparisonIcon = null; C.ComparisonResult = null; return C; }).ToList();
+            lstSelectedChapters.Select(C => { C.ComparisonIcon = null; C.ComparisonResult = null; return C; }).ToList();
 
             var test = new string(SelectedChapterObject.SmartflowData);
 
@@ -1214,7 +1229,7 @@ namespace GadjIT_App.Pages.Chapters
                  */
                 if(!(lstAltSystemChapters is null) && lstAltSystemChapters.Count > 0)
                 {
-                    foreach (var chapter in lstChapters)
+                    foreach (var chapter in lstSelectedChapters)
                     {
                         var chapterItems = JsonConvert.DeserializeObject<VmChapter>(chapter.SmartflowObject.SmartflowData);
 
@@ -1329,7 +1344,7 @@ namespace GadjIT_App.Pages.Chapters
                 }
                 else
                 {
-                    lstChapters = lstChapters.Select(T => { T.ComparisonIcon = "times"; T.ComparisonResult = "No match"; return T; }).ToList();
+                    lstSelectedChapters.Select(T => { T.ComparisonIcon = "times"; T.ComparisonResult = "No match"; return T; }).ToList();
                 }
 
                
@@ -1638,9 +1653,7 @@ namespace GadjIT_App.Pages.Chapters
 
             if (!string.IsNullOrWhiteSpace(selectedChapter.CaseTypeGroup) & !string.IsNullOrWhiteSpace(selectedChapter.CaseType))
             {
-                editChapterObject.SeqNo = lstChapters
-                                                  .Where(C => C.SmartflowObject.CaseType == selectedChapter.CaseType)
-                                                  .Where(C => C.SmartflowObject.CaseTypeGroup == selectedChapter.CaseTypeGroup)
+                editChapterObject.SeqNo = lstSelectedChapters
                                                   .OrderByDescending(C => C.SmartflowObject.SeqNo)
                                                   .Select(C => C.SmartflowObject.SeqNo)
                                                   .FirstOrDefault() + 1;
@@ -1776,40 +1789,55 @@ namespace GadjIT_App.Pages.Chapters
 
         protected async void MoveSmartFlowSeq(UsrOrsfSmartflows selectobject, string listType, string direction)
         {
-            seqMoving = true; //prevents changes to the form whilst process of changing seq is carried out
-
-            var lstItems = new List<VmUsrOrsfSmartflows>();
-            int incrementBy;
-
-            incrementBy = (direction.ToLower() == "up" ? -1 : 1);
-
-            rowChanged = (int)(selectobject.SeqNo + incrementBy);
-
-            lstItems = lstChapters
-                        .Where(A => A.SmartflowObject.CaseTypeGroup == selectedChapter.CaseTypeGroup)
-                        .Where(A => A.SmartflowObject.CaseType == selectedChapter.CaseType)
-                        .OrderBy(A => A.SmartflowObject.SeqNo)
-                        .ToList();
-
-
-            var swapItem = lstItems.Where(D => D.SmartflowObject.SeqNo == (selectobject.SeqNo + incrementBy)).SingleOrDefault();
-            if (!(swapItem is null))
+            try
             {
-                selectobject.SeqNo += incrementBy;
-                swapItem.SmartflowObject.SeqNo = swapItem.SmartflowObject.SeqNo + (incrementBy * -1);
+                seqMoving = true; //prevents changes to the form whilst process of changing seq is carried out
 
-                await chapterManagementService.UpdateMainItem(selectobject).ConfigureAwait(false);
-                await chapterManagementService.UpdateMainItem(swapItem.SmartflowObject).ConfigureAwait(false);
+                var lstItems = new List<VmUsrOrsfSmartflows>();
+                int incrementBy;
+
+                incrementBy = (direction.ToLower() == "up" ? -1 : 1);
+
+                rowChanged = (int)(selectobject.SeqNo + incrementBy);
+
+                lstItems = lstSelectedChapters
+                            .OrderBy(A => A.SmartflowObject.SeqNo)
+                            .ToList();
+
+
+                var swapItem = lstItems.Where(D => D.SmartflowObject.SeqNo == (selectobject.SeqNo + incrementBy)).SingleOrDefault();
+                if (!(swapItem is null))
+                {
+                    selectobject.SeqNo += incrementBy;
+                    swapItem.SmartflowObject.SeqNo = swapItem.SmartflowObject.SeqNo + (incrementBy * -1);
+
+                    await chapterManagementService.UpdateMainItem(selectobject).ConfigureAwait(false);
+                    await chapterManagementService.UpdateMainItem(swapItem.SmartflowObject).ConfigureAwait(false);
+                }
+
+
+
+                await RefreshChapterItems(listType);
+                await InvokeAsync(() =>
+                {
+                    StateHasChanged();
+                });
+
+                seqMoving = false;
+
+            }
+            catch (Exception e)
+            {
+                using (LogContext.PushProperty("SourceSystem", UserSession.selectedSystem))
+                using (LogContext.PushProperty("SourceCompanyId", UserSession.Company.Id))
+                using (LogContext.PushProperty("SourceUserId", UserSession.User.Id))
+                using (LogContext.PushProperty("SourceContext", nameof(ChapterList)))
+                {
+                    logger?.LogError(e, $"Error moving smartflow : {selectobject.SeqNo}");
+                }
             }
 
-            await RefreshChapterItems(listType);
-            await InvokeAsync(() =>
-            {
-                StateHasChanged();
-            });
 
-
-            seqMoving = false;
 
         }
 
@@ -1935,10 +1963,7 @@ namespace GadjIT_App.Pages.Chapters
                     listItems = lstStatus.OrderBy(D => D.ChapterObject.SeqNo).Select(D => D.ChapterObject.SeqNo).ToList();
                     break;
                 case "Chapters":
-                    listItems = lstChapters
-                        
-                        .Where(D => D.SmartflowObject.CaseType == selectedChapter.CaseType)
-                        .Where(D => D.SmartflowObject.CaseTypeGroup == selectedChapter.CaseTypeGroup)
+                    listItems = lstSelectedChapters
                         .OrderBy(D => D.SmartflowObject.SeqNo)
                         .Select(D => D.SmartflowObject.SeqNo).ToList();
                     break;
@@ -2091,22 +2116,34 @@ namespace GadjIT_App.Pages.Chapters
 
         protected async void CondenseChapterSeq()
         {
-            var ListItems = lstChapters
-                                .Where(C => C.SmartflowObject.CaseTypeGroup == selectedChapter.CaseTypeGroup)
-                                .Where(C => C.SmartflowObject.CaseType == selectedChapter.CaseType)
-                                .ToList();
-
-            int seqNo = 0;
-
-            foreach (VmUsrOrsfSmartflows item in ListItems.OrderBy(A => A.SmartflowObject.SeqNo))
+            try
             {
-                seqNo += 1;
-                item.SmartflowObject.SeqNo = seqNo;
+                var ListItems = lstSelectedChapters;
 
-                await chapterManagementService.UpdateMainItem(item.SmartflowObject);
+                int seqNo = 0;
+
+                foreach (VmUsrOrsfSmartflows item in ListItems.OrderBy(A => A.SmartflowObject.SeqNo))
+                {
+                    seqNo += 1;
+                    item.SmartflowObject.SeqNo = seqNo;
+
+                    await chapterManagementService.UpdateMainItem(item.SmartflowObject);
+                }
+
+                RefreshChapters();
+            }
+            catch(Exception e)
+            {
+                using (LogContext.PushProperty("SourceSystem", UserSession.selectedSystem))
+                using (LogContext.PushProperty("SourceCompanyId", UserSession.Company.Id))
+                using (LogContext.PushProperty("SourceUserId", UserSession.User.Id))
+                using (LogContext.PushProperty("SourceContext", nameof(ChapterList)))
+                {
+                    logger?.LogError(e, "Error correcting smartflow seq numbers");
+                }
             }
 
-            RefreshChapters();
+
         }
 
 
@@ -2121,7 +2158,7 @@ namespace GadjIT_App.Pages.Chapters
 
             var parameters = new ModalParameters();
             parameters.Add("TaskObject", editChapterObject);
-            parameters.Add("AllChapters", lstChapters);
+            parameters.Add("AllChapters", lstSelectedChapters);
             parameters.Add("currentChapter", selectedChapter);
             parameters.Add("DataChanged", Action);
             parameters.Add("UserSession", UserSession);
@@ -4003,5 +4040,104 @@ namespace GadjIT_App.Pages.Chapters
 
             RefreshChapters();
         }
+
+
+/****************************************/
+        /* DRAG DROP EVENTS */
+        /****************************************/
+        private int? droppedItem = 0;
+        //private VmUsrOrsfSmartflows replacedItem = new VmUsrOrsfSmartflows {SmartflowObject = new UsrOrsfSmartflows { SeqNo = 0} };
+        private int? replacedItem = 0;
+
+        public async Task HandleDrop(VmUsrOrsfSmartflows smartflow)
+        {
+            droppedItem = smartflow.SmartflowObject.SeqNo;
+            replacedItem = lstSelectedChapters.IndexOf(smartflow) + 1;
+
+            int intAdjust = (droppedItem < replacedItem ? -1 : 1);
+
+            var smartflowsToChange = lstSelectedChapters.Where(C => droppedItem < replacedItem ? C.SmartflowObject.SeqNo > droppedItem && C.SmartflowObject.SeqNo <= replacedItem
+                                                                        : C.SmartflowObject.SeqNo < droppedItem && C.SmartflowObject.SeqNo >= replacedItem)
+                                                .Select(C => { C.SmartflowObject.SeqNo += intAdjust; return C; })
+                                                .ToList();
+
+            foreach (var smartflowToChange in smartflowsToChange)
+            {
+                await chapterManagementService.UpdateMainItem(smartflowToChange.SmartflowObject).ConfigureAwait(false);
+
+            }
+
+
+
+            smartflow.SmartflowObject.SeqNo = lstSelectedChapters.IndexOf(smartflow) + 1;
+
+            await chapterManagementService.UpdateMainItem(smartflow.SmartflowObject).ConfigureAwait(false);
+
+            await InvokeAsync(() =>
+            {
+                StateHasChanged();
+            });
+
+            /*
+            * 1 2 dropped = 1
+            * 2 3 replaced = 3
+            * 3 1 target = 2,3
+            * 4 4
+            *
+            * */
+            /*
+            * 1 4 dropped = 4
+            * 2 1 replaced = 1
+            * 3 2 target = 1,2,3
+            * 4 3
+            *
+            * */
+        }
+
+
+        public async Task HandleDocDrop(VmUsrOrDefChapterManagement doc)
+        {
+            droppedItem = doc.ChapterObject.SeqNo;
+            replacedItem = lstDocs.IndexOf(doc) + 1;
+
+            int intAdjust = (droppedItem < replacedItem ? -1 : 1);
+
+            var smartflowsToChange = lstDocs.Where(C => droppedItem < replacedItem ? C.ChapterObject.SeqNo > droppedItem && C.ChapterObject.SeqNo <= replacedItem
+                                                                        : C.ChapterObject.SeqNo < droppedItem && C.ChapterObject.SeqNo >= replacedItem)
+                                                .Select(C => { C.ChapterObject.SeqNo += intAdjust; return C; })
+                                                .ToList();
+
+
+
+
+
+            doc.ChapterObject.SeqNo = lstDocs.IndexOf(doc) + 1;
+
+            SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(selectedChapter);
+            await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
+
+
+            await InvokeAsync(() =>
+            {
+                StateHasChanged();
+            });
+
+            /*
+            * 1 2 dropped = 1
+            * 2 3 replaced = 3
+            * 3 1 target = 2,3
+            * 4 4
+            *
+            * */
+            /*
+            * 1 4 dropped = 4
+            * 2 1 replaced = 1
+            * 3 2 target = 1,2,3
+            * 4 3
+            *
+            * */
+        }
+        
+
     }
 }
