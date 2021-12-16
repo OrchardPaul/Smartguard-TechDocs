@@ -4,7 +4,7 @@
 @implements IDisposable
 @inject IJSRuntime jsRuntime
 
-<div class="@GetClassesForDropzone()" @ondragover:preventDefault @ondragover="()=> { }" @ondragenter:preventDefault @ondragenter="()=> { }" @ondrop="()=>OnDrop()" @ondrop:preventDefault ondragstart="event.dataTransfer.setData('text', event.target.id);"
+<div id="DropZoneParent" class="@GetClassesForDropzone()" @ondragover:preventDefault @ondragover="()=> { }" @ondragenter:preventDefault @ondragenter="()=> { }" @ondrop="()=>OnDrop()" @ondrop:preventDefault ondragstart="event.dataTransfer.setData('text', event.target.id);"
      @ondrop:stopPropagation
      @ondragenter:stopPropagation
      @ondragend:stopPropagation
@@ -25,6 +25,7 @@
              @ondragend="()=>OnDragEnd()"
              @ondragenter="()=>OnDragEnter(item)"
              @ondragleave="()=>OnDragLeave()"
+             
              class="@GetClassesForDraggable(item) @CheckIfItemIsInTransit(item) @CheckIfItemIsDragTarget(item) @CheckIfDragOperationIsInProgess() @CheckIfDraggable(item)">
 
             @{

@@ -12,7 +12,7 @@
 <script>
 
     Backimg = new Image()
-    Backimg.src = "https://www.w3schools.com/images/picture.jpg";
+    Backimg.src = "/css/images/GhostImages/DocDragGhost2.jpg";
 
 
     function ShowModal(modalId) {
@@ -51,16 +51,13 @@
         var el = document.getElementById(elementId);
         if (el) {
             el.addEventListener("dragstart", function (e) {
-
                 e.dataTransfer.setDragImage(Backimg, 0, 0);
             }, false);
+
         }
     }
 
 </script>
-
-
-
 <style>
     #coverup {
         background: white;

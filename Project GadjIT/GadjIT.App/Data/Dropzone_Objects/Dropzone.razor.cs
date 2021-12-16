@@ -96,16 +96,16 @@ namespace GadjIT_App.Data.Dropzone_Objects
             base.OnInitialized();
         }
 
-        //protected override async Task OnAfterRenderAsync(bool firstRender)
-        //{
-        //    //if (firstRender)
-        //    //{
-        //    //    foreach (var item in Items)
-        //    //    {
-        //    //        await jsRuntime.InvokeVoidAsync("addEventListener", $"drag-with-create-add-{Items.IndexOf(item)}");
-        //    //    }
-        //    //}
-        //}
+        protected override async Task OnAfterRenderAsync(bool firstRender)
+        {
+            if (firstRender && UseCustomImage)
+            {
+                foreach (var item in Items)
+                {
+                    await jsRuntime.InvokeVoidAsync("addEventListener", $"drag-with-create-add-{Items.IndexOf(item)}");
+                }
+            }
+        }
 
 
         public string CheckIfDraggable(TItem item)
@@ -321,6 +321,9 @@ namespace GadjIT_App.Data.Dropzone_Objects
         [Parameter]
         public Func<TItem, TItem> CopyItem { get; set; }
 
+        [Parameter]
+        public bool UseCustomImage { get; set; }
+
         private bool IsDropAllowed()
         {
             var activeItem = DragDropService.ActiveItem;
@@ -422,10 +425,28 @@ namespace GadjIT_App.Data.Dropzone_Objects
             {
                 if (indexDraggedOverItem == indexActiveItem)
                     return;
-                TItem tmp = Items[indexDraggedOverItem];
-                Items[indexDraggedOverItem] = Items[indexActiveItem];
-                Items[indexActiveItem] = tmp;
-                OnReplacedItemDrop.InvokeAsync(Items[indexActiveItem]);
+
+                var diffReal = indexDraggedOverItem - indexActiveItem;
+                var diffAbsolute = diffReal < 0 ? -diffReal : diffReal;
+                
+
+
+                if (diffAbsolute > 1)
+                {
+
+                    Move(Items, indexActiveItem, indexDraggedOverItem);
+                    OnReplacedItemDrop.InvokeAsync(Items[indexActiveItem]);
+
+
+                }
+                else
+                {
+                    TItem tmp = Items[indexDraggedOverItem];
+                    Items[indexDraggedOverItem] = Items[indexActiveItem];
+                    Items[indexActiveItem] = tmp;
+                    OnReplacedItemDrop.InvokeAsync(Items[indexActiveItem]);
+                }
+
             }
             else //no instant replace, just insert it after 
             {
@@ -435,6 +456,22 @@ namespace GadjIT_App.Data.Dropzone_Objects
                 Items.RemoveAt(indexActiveItem);
                 Items.Insert(indexDraggedOverItem, tmp);
             }
+        }
+
+
+        public void Move(IList<TItem> list, int oldIndex, int newIndex)
+        {
+            var item = list[oldIndex];
+
+            list.RemoveAt(oldIndex);
+
+            if (newIndex > oldIndex) 
+            {
+                newIndex--;
+                    
+                    }
+
+            list.Insert(newIndex, item);
         }
 
         public void Dispose()

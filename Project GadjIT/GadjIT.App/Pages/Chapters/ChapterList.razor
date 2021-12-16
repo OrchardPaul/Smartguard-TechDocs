@@ -155,7 +155,7 @@ else
 
                                     <div class="grid-nav">
                                         <Dropzone Items="lstSelectedChapters"
-                                                  InstantReplace="false"
+                                                  InstantReplace="true"
                                                   OnItemDrop="@((sf)=>HandleDrop(sf))"
                                                   TItem="VmUsrOrsfSmartflows">
 
@@ -235,89 +235,6 @@ else
 
                                         </Dropzone>
 
-
-
-
-                                        @*@foreach (var Chapter in lstChapters
-                                              .Where(C => C.SmartflowObject.CaseType == selectedChapter.CaseType)
-                                              .Where(C => C.SmartflowObject.CaseTypeGroup == selectedChapter.CaseTypeGroup)
-                                              .OrderBy(C => C.SmartflowObject.SeqNo)
-                                              .ToList())
-                                            {
-                                                <div class="grid-row-md nav-row-3 no-border  @(rowChanged == Chapter.SmartflowObject.SeqNo ? ToggleRowChangedClass() : "" )">
-                                                    <div id="Smartflow-@Chapter.SmartflowObject.Id" class="data-item @(Chapter.SmartflowObject.SmartflowName.Length > 6 && Chapter.SmartflowObject.SmartflowName.Substring(0,6) == "GROUP " ? "data-item-group" : "")">
-
-                                                        @if (UserSession.isAdminUser)
-                                                        {
-                                                            @if (!compareSystems)
-                                                            {
-                                                                <div class="btn-ellipses float-left ">
-                                                                    <span class="fa fa-ellipsis-v"></span>
-                                                                    <div class="ellipsis-menu">
-                                                                        <ul>
-                                                                            <li class="col-main" @onclick='() => PrepareChapterForEdit(Chapter.SmartflowObject, "Chapter")' title="">
-                                                                                <span class="fa fa-font mr-2"></span>
-                                                                                <span>Rename</span>
-                                                                            </li>
-                                                                            <li class="col-main" @onclick="() => SelectChapter(Chapter.SmartflowObject)" title="">
-                                                                                <span class="fa fa-pencil-alt mr-2"></span>
-                                                                                <span>Edit</span>
-                                                                            </li>
-                                                                            <li class="col-red" @onclick='() => PrepareChapterDelete(Chapter)' title="">
-                                                                                <span class="fa fa-trash-alt mr-2"></span>
-                                                                                <span>Delete</span>
-                                                                            </li>
-                                                                        </ul>
-                                                                    </div>
-                                                                </div>
-                                                            }
-                                                            else
-                                                            {
-                                                                <div class="btn-ellipses float-left">
-                                                                    @if (!(Chapter.ComparisonIcon is null))
-                                                                    {
-                                                                        @if (!(Chapter.ComparisonResult == "Exact match"))
-                                                                        {
-                                                                            <ModalTooltip Direction="right" Text=@(Chapter.ComparisonResult == "Partial match" ? "Differences found, click to sync" : "Does not exist, click to create") Class="w-2">
-                                                                                <div class="btn-dashed" @onclick="() => PrepareChapterCreateOnAlt(Chapter.SmartflowObject)"><span class="fa fa-@Chapter.ComparisonIcon"></span></div>
-                                                                            </ModalTooltip>
-
-                                                                        }
-                                                                        else
-                                                                        {
-                                                                            <ModalTooltip Direction="right" Text="Exact Match" Class="w-1">
-                                                                                <span class="fa fa-@Chapter.ComparisonIcon"></span>
-                                                                            </ModalTooltip>
-
-                                                                        }
-                                                                    }
-                                                                    else
-                                                                    {
-                                                                        <div class="spinner"></div>
-                                                                    }
-                                                                </div>
-                                                            }
-
-                                                        }
-                                                        <div class="data-item-sub">
-                                                            <span class="hidden-sm-down"><span class=" fa fa-share-alt-square mr-2"></span></span>
-                                                            @Chapter.SmartflowObject.SmartflowName
-                                                        </div>
-                                                        @if (UserSession.isAdminUser)
-                                                        {
-                                                            <div class="data-item-right seq-change">
-                                                                <div @onclick='() => MoveSmartFlowSeq(Chapter.SmartflowObject, "Chapters", "Up")'><span class="fa fa-angle-up"></span></div>
-                                                                <div class="seq-no">@Chapter.SmartflowObject.SeqNo</div>
-                                                                <div @onclick='() => MoveSmartFlowSeq(Chapter.SmartflowObject, "Chapters", "Down")'><span class="fa fa-angle-down"></span></div>
-                                                            </div>
-                                                        }
-                                                        <div title="Click to edit @Chapter.SmartflowObject.SmartflowName" class="data-item-right link-direction" @onclick="() => SelectChapter(Chapter.SmartflowObject)">
-                                                            <div class="fa fa-pencil-alt"></div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                            }*@
                                     </div>
 
                                 }
@@ -760,10 +677,10 @@ else
                         <div class="grid-data">
 
                             <Dropzone Items="lstDocs"
-                                      
-                                      InstantReplace="false"
-                                                  OnItemDrop="@((sf)=>HandleDocDrop(sf))"
-                                                  TItem="VmUsrOrDefChapterManagement">
+                                        InstantReplace="true"
+                                        OnItemDrop="@((sf)=>HandleDocDrop(sf))"
+                                        TItem="VmUsrOrDefChapterManagement"
+                                      UseCustomImage="true">
                                 <div class="row grid-row grid-row-lg @(rowChanged == context.ChapterObject.SeqNo ? "row-changed" : "" )">
                                     <div class="data-item ">
 

@@ -1689,9 +1689,13 @@ app {
 
 
 /*drag drop styles*/
+.plk-dd-draggable:active {
+    cursor: grabbing !important;
+}
+
 
 .plk-dd-spacing {
-    height: 10px;
+    height: 0px;
 }
 
 .plk-dd-spacing-dragged-over {
