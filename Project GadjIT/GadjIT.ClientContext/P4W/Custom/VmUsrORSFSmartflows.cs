@@ -6,6 +6,19 @@ namespace GadjIT.ClientContext.P4W.Custom
 {
     public class VmUsrOrsfSmartflows
     {
+        public VmUsrOrsfSmartflows()
+        {
+
+        }
+
+        public VmUsrOrsfSmartflows(VmUsrOrsfSmartflows vmUsrOrsfSmartflows)
+        {
+            SmartflowObject = vmUsrOrsfSmartflows.SmartflowObject;
+            ComparisonResult = vmUsrOrsfSmartflows.ComparisonResult;
+            ComparisonIcon = vmUsrOrsfSmartflows.ComparisonIcon;
+            ComparisonList = vmUsrOrsfSmartflows.ComparisonList;
+        }
+
         public UsrOrsfSmartflows SmartflowObject { get; set; }
 
         public string ComparisonResult { get; set; }

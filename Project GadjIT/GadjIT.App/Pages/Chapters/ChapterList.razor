@@ -156,7 +156,8 @@ else
                                     <div class="grid-nav">
                                         <Dropzone Items="lstSelectedChapters"
                                                   InstantReplace="true"
-                                                  OnItemDrop="@((sf)=>HandleDrop(sf))"
+                                                  OnItemDrop="@((sf)=>ReSequenceSmartFlows(lstSelectedChapters.IndexOf(sf) + 1))"
+                                                  OnDragStartParam="() => ResetRowChanged()"
                                                   TItem="VmUsrOrsfSmartflows">
 
 
@@ -678,7 +679,8 @@ else
 
                             <Dropzone Items="lstDocs"
                                         InstantReplace="true"
-                                        OnItemDrop="@((sf)=>HandleDocDrop(sf))"
+                                        OnItemDrop="@((d)=>ReSequenceDocs(lstDocs.IndexOf(d) + 1))"
+                                        OnDragStartParam="() => ResetRowChanged()"
                                         TItem="VmUsrOrDefChapterManagement"
                                       UseCustomImage="true">
                                 <div class="row grid-row grid-row-lg @(rowChanged == context.ChapterObject.SeqNo ? "row-changed" : "" )">
@@ -948,280 +950,6 @@ else
 
                                 </div>
                             </Dropzone>
-
-
-
-                            @*@foreach (var doc in lstDocs)
-                                {
-
-                                    <div class="row grid-row grid-row-lg @(rowChanged == doc.ChapterObject.SeqNo ? "row-changed" : "" )">
-                                        <div class="data-item ">
-
-                                            @if (UserSession.isAdminUser && !compareSystems)
-                                            {
-                                                <div class="btn-ellipses float-left">
-                                                    <span class="fa fa-ellipsis-v"></span>
-
-                                                    <div class="ellipsis-menu">
-                                                        <ul>
-                                                            <li class="col-main" @onclick='(() => PrepareForEdit(doc, "Steps and Documents"))'>
-                                                                <span class="fa fa-pencil-alt mr-2"></span>
-                                                                <span>Edit</span>
-                                                            </li>
-                                                            <li class="col-main" @onclick='(() => ShowChapterDetailViewModal(doc, "Steps and Documents"))'>
-                                                                <span class="fa fa-binoculars mr-2"></span>
-                                                                <span>View</span>
-                                                            </li>
-                                                            <li class="col-main">
-                                                                <span class="fa fa-paperclip mr-2"></span>
-                                                                <span>Links</span>
-                                                                <div class="menu-toggle @(selectedChapter.ShowDocumentTracking == "Y" ? "tracking" : "")" >
-                                                                    <span class="fa fa-chevron-right"></span>
-                                                                    <ul class="attach-list">
-                                                                        @if (!(doc.ChapterObject.LinkedItems is null) && doc.ChapterObject.LinkedItems.Count > 0)
-                                                                        {
-                                                                            foreach (var attach in doc.ChapterObject.LinkedItems)
-                                                                            {
-                                                                        <li class="font-85" @onclick='(() => PrepareAttachmentForEdit(doc, attach))'>
-                                                                            <span class="font-85" title="@attach.Action">
-                                                                                <span class="doc-icon @(attach.Action == "TAKE" ? "" : "invisible")"><span class="fa fa-running mr-2"></span></span>
-                                                                                <span class="doc-icon @(attach.Action == "INSERT" ? "" : "invisible")"><span class="fa fa-arrow-down mr-2"></span></span>
-                                                                                <span class="doc-icon @(attach.Action == "SCHEDULE" ? "" : "invisible")"><span class="fa fa-calendar-check mr-2"></span></span>
-                                                                            </span>
-                                                                            <span class="font-85">
-                                                                                <span class="doc-icon @(attach.DocType == "Doc" ? "" : "invisible")" title="Document"><span class="fa fa-file mr-2"></span></span>
-                                                                                <span class="doc-icon @(attach.DocType == "Form" ? "" : "invisible")" title="Form"><span class=" fa fa-file-pdf mr-2"></span></span>
-                                                                                <span class="doc-icon @(attach.DocType == "Email" ? "" : "invisible")" title="Email"><span class="fa fa-envelope mr-2"></span></span>
-                                                                                <span class="doc-icon @(attach.DocType == "Step" ? "" : "invisible")" title="Step"><span class=" fa fa-list-ol mr-2"></span></span>
-                                                                                <span class="doc-icon @(attach.DocType == "Date" ? "" : "invisible")" title="Diary Item"><span class="fa fa-calendar mr-2"></span></span>
-                                                                                <span class="doc-icon @(string.IsNullOrEmpty(attach.DocType) ? "" : "invisible")" title="Custom Item: will insert a step to run the current Smartflow"><span class="fa fa-retweet mr-2"></span></span>
-                                                                            </span>
-                                                                            <span class="attach-name" title="@(string.IsNullOrEmpty(attach.DocAsName) ? attach.DocName : attach.DocAsName)">
-                                                                                @(string.IsNullOrEmpty(attach.DocAsName) ? attach.DocName : attach.DocAsName)
-                                                                            </span>
-
-                                                                            <span class="doc-icon hidden-sm-down @(attach.DocAsName != "" ? "" : "invisible")">
-                                                                                <span class="fa fa-clone" title="Template: @attach.DocName"></span>
-                                                                            </span>
-
-
-                                                                            <span class="doc-icon hidden-sm-down @(@selectedChapter.ShowDocumentTracking == "Y" && !(string.IsNullOrEmpty(attach.TrackingMethod)) && "Send Only|Response Required".Contains(attach.TrackingMethod) ? "" : "invisible")">
-
-                                                                                    <span title="@($"This item is tracked: {attach.TrackingMethod}")" class="fa fa-map-marker-alt"></span>
-                                                                            </span>
-
-
-                                                                            <span class="doc-icon-lg hidden-sm-down @(attach.Action == "SCHEDULE" ? "" : "invisible")">
-                                                                                <span class="" title="@("Will be scheduled for " + attach.ScheduleDays.ToString() + " days" + (!string.IsNullOrEmpty(attach.ScheduleDataItem) ? " from " + attach.ScheduleDataItem : ""))">@(!string.IsNullOrEmpty(attach.ScheduleDataItem) ? "* " : "") @attach.ScheduleDays.ToString()d</span>
-                                                                            </span>
-
-
-                                                                        </li>
-                                                                            }
-                                                                            <li class="ellipsis-menu-divider"></li>
-                                                                        }
-
-                                                                        <li class="font-85" @onclick='(() => PrepareAttachmentForAdd(doc))'><span><span class="fa fa-plus"></span></span><span class="ml-2">Add New</span></li>
-                                                                    </ul>
-                                                                </div>
-                                                            </li>
-                                                            <li class="col-red" @onclick="() => PrepareChapterDetailDelete(doc)">
-                                                                <span class="fa fa-trash-alt mr-2"></span>
-                                                                <span>Delete</span>
-                                                            </li>
-
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            }
-                                            else if (UserSession.isAdminUser && compareSystems)
-                                            {
-                                                <div class="btn-ellipses float-left">
-                                                    @if (!(doc.ComparisonIcon is null))
-                                                    {
-                                                        @if (!(doc.ComparisonResult == "Exact match"))
-                                                        {
-                                                            <ModalTooltip Direction="right" Text=@(doc.ComparisonResult == "Partial match" ? "Differences found, click to sync" : "Does not exist, click to create") Class="w-2">
-                                                                <div class="btn-dashed" @onclick="() => PrepareForComparison(doc)"><span class="fa fa-@doc.ComparisonIcon"></span></div>
-                                                            </ModalTooltip>
-                                                        }
-                                                        else
-                                                        {
-                                                            <ModalTooltip Direction="right" Text="Exact Match" Class="w-1">
-                                                                <span class="fa fa-@doc.ComparisonIcon"></span>
-                                                            </ModalTooltip>
-                                                        }
-                                                    }
-                                                    else
-                                                    {
-                                                        <div class="spinner"></div>
-                                                    }
-
-                                                </div>
-                                            }
-                                            else
-                                            {
-                                                <div class="btn-ellipses float-left">
-                                                    <span class="fa fa-ellipsis-v"></span>
-
-                                                    <div class="ellipsis-menu">
-                                                        <ul>
-                                                            <li class="col-main" @onclick='(() => ShowChapterDetailViewModal(doc, "Steps and Documents"))'>
-                                                                <span class="fa fa-binoculars mr-2"></span>
-                                                                <span>View</span>
-                                                            </li>
-                                                            <li class="col-main">
-                                                                <span class="fa fa-paperclip mr-2"></span>
-                                                                <span>Linked Items</span>
-                                                                <div class="menu-toggle">
-                                                                    <span class="fa fa-chevron-right"></span>
-                                                                    <ul style="width: 300px">
-                                                                        @if (!(doc.ChapterObject.LinkedItems is null) && doc.ChapterObject.LinkedItems.Count > 0)
-                                                                        {
-                                                                            foreach (var attach in doc.ChapterObject.LinkedItems)
-                                                                            {
-                                                                                <li class="font-85" @onclick='(() => PrepareAttachmentForView(doc, attach))'>
-                                                                                    @(string.IsNullOrEmpty(attach.DocAsName) ? attach.DocName : attach.DocAsName)
-                                                                                </li>
-                                                                            }
-                                                                        }
-                                                                    </ul>
-                                                                </div>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            }
-
-                                            <div class="data-item-sub " title="@doc.DocDisplayName">
-
-                                                <span class="font-100" title="@doc.ChapterObject.Action">
-                                                    <span class="doc-icon @(doc.ChapterObject.Action == "TAKE" ? "" : "invisible")"><span class="fa fa-running mr-2"></span></span>
-                                                    <span class="doc-icon @(doc.ChapterObject.Action == "INSERT" ? "" : "invisible")"><span class="fa fa-arrow-down mr-2"></span></span>
-                                                </span>
-                                                <span class="font-100">
-                                                    <span class="doc-icon @(doc.DocType == "Doc" ? "" : "invisible")" title="Document"><span class="fa fa-file mr-2"></span></span>
-                                                    <span class="doc-icon @(doc.DocType == "Form" ? "" : "invisible")" title="Form"><span class=" fa fa-file-pdf mr-2"></span></span>
-                                                    <span class="doc-icon @(doc.DocType == "Email" ? "" : "invisible")" title="Email"><span class="fa fa-envelope mr-2"></span></span>
-                                                    <span class="doc-icon @(doc.DocType == "Step" ? "" : "invisible")" title="Step"><span class=" fa fa-list-ol mr-2"></span></span>
-                                                    <span class="doc-icon @(doc.DocType == "Date" ? "" : "invisible")" title="Diary Item"><span class="fa fa-calendar mr-2"></span></span>
-                                                    <span class="doc-icon @(string.IsNullOrEmpty(doc.DocType) ? "" : "invisible")"><span class=" mr-2"></span></span>
-                                                </span>
-                                                @doc.DocDisplayName
-                                            </div>
-
-                                            @if (doc.DocOrigName != "")
-                                            {
-                                                <div class="data-item-right hidden-md-down">
-                                                    <ModalTooltip Direction="left" Text=@("Template: " + doc.DocOrigName) Class="w-2">
-                                                        <span class="fa fa-clone"></span>
-                                                    </ModalTooltip>
-                                                </div>
-                                            }
-
-                                            @if (!string.IsNullOrEmpty(doc.ChapterObject.PopupAlert))
-                                            {
-                                                <div class="data-item-right hidden-md-down">
-                                                    <ModalTooltip Direction="left" Text=@("POPUP: " + doc.ChapterObject.PopupAlert) Class="w-3">
-                                                        <span class="fa fa-exclamation-triangle"></span>
-                                                    </ModalTooltip>
-                                                </div>
-                                            }
-
-                                            @if (!string.IsNullOrEmpty(doc.ChapterObject.UserMessage))
-                                            {
-                                                <div class="data-item-right hidden-md-down">
-                                                    <ModalTooltip Direction="left" Text=@("NOTES: " + doc.ChapterObject.UserMessage) Class="w-3">
-                                                        <span class="fa fa-comment"></span>
-                                                    </ModalTooltip>
-                                                </div>
-                                            }
-
-                                            @if (!(doc.ChapterObject.LinkedItems is null) && doc.ChapterObject.LinkedItems.Count > 0)
-                                            {
-                                                <div class="data-item-right hidden-md-down">
-                                                    <ModalTooltip Direction="left" Text=@($"This item has attachments.") Class="w-2">
-                                                        <span class="fa fa-paperclip"></span>
-                                                    </ModalTooltip>
-                                                </div>
-                                            }
-
-                                            @if (@selectedChapter.ShowDocumentTracking == "Y" && !(string.IsNullOrEmpty(doc.ChapterObject.TrackingMethod)) && "Send Only|Response Required".Contains(doc.ChapterObject.TrackingMethod))
-                                            {
-                                                <div class="data-item-right hidden-md-down">
-                                                    <ModalTooltip Direction="left" Text=@($"This item is tracked: {doc.ChapterObject.TrackingMethod}") Class="w-2">
-                                                        <span class="fa fa-map-marker-alt"></span>
-                                                    </ModalTooltip>
-                                                </div>
-                                            }
-
-                                            @if (UserSession.isAdminUser && !compareSystems)
-                                            {
-                                                <div class="data-item-right seq-change">
-                                                    <div @onclick='() => MoveSeq(doc.ChapterObject, "Docs", "Up")'><span class="fa fa-angle-up"></span></div>
-                                                    <div class="seq-no">@doc.ChapterObject.SeqNo</div>
-                                                    <div @onclick='() => MoveSeq(doc.ChapterObject, "Docs", "Down")'><span class="fa fa-angle-down"></span></div>
-                                                </div>
-                                            }
-                                            else
-                                            {
-                                                <div class="data-item-right mr-2 ">
-                                                    <div class="seq-no">@doc.ChapterObject.SeqNo</div>
-                                                </div>
-                                            }
-                                        </div>
-                                        <div class="hidden-md-down data-item ">
-                                            <div class="data-item-sub font-85 pl-3" title="@(string.IsNullOrEmpty(doc.ChapterObject.AsName) ? "" : doc.ChapterObject.AsName)">@(string.IsNullOrEmpty(doc.ChapterObject.AsName) ? "" : doc.ChapterObject.AsName)</div>
-
-                                            @if (!string.IsNullOrEmpty(doc.ChapterObject.AsName)) // && (doc.ChapterObject.RescheduleDays.HasValue && ) //(doc.ChapterObject.RescheduleDays != 0 | !string.IsNullOrEmpty(doc.ChapterObject.RescheduleDataItem)))
-                                            {
-                                                <div class="data-item-right schedule-days">
-                                                    <ModalTooltip Direction="left" Text="@(string.IsNullOrEmpty(doc.ChapterObject.AsName) ? "" : "The step named " + doc.ChapterObject.AsName + " will be scheduled for " + doc.ChapterObject.RescheduleDays.ToString() + " days" + (!string.IsNullOrEmpty(doc.ChapterObject.RescheduleDataItem) ? " from " + doc.ChapterObject.RescheduleDataItem : ""))" Class="w-3">
-                                                        <span class="badge rounded-square">@(!string.IsNullOrEmpty(doc.ChapterObject.RescheduleDataItem) ? "* " : "") @doc.ChapterObject.RescheduleDays.ToString()d</span>
-                                                    </ModalTooltip>
-                                                </div>
-                                            }
-
-                                        </div>
-                                        <div class="hidden-md-down data-item ">
-                                            @if (!(string.IsNullOrEmpty(doc.ChapterObject.CompleteName)))
-                                            {
-                                                <div class="data-item-sub font-85 pl-3" title="This document will be saved in the agenda as @doc.ChapterObject.CompleteName.">
-                                                    @doc.ChapterObject.CompleteName
-                                                </div>
-
-                                            }
-                                            else
-                                            {
-                                                <div class="data-item-sub">
-                                                </div>
-                                            }
-
-                                            @if (!(string.IsNullOrEmpty(doc.ChapterObject.NextStatus)))
-                                            {
-                                                @if (lstStatus.Where(S => S.ChapterObject.Name == doc.ChapterObject.NextStatus).Select(S => S.ChapterObject.SuppressStep).SingleOrDefault() == "Y")
-                                                {
-                                                    <div class="data-item-right suppress-step">
-                                                        <ModalTooltip Direction="left" Text="This document will end the Smartflow when taken." Class="w-2">
-                                                            <span class="fa fa-flag-checkered"></span>
-                                                        </ModalTooltip>
-                                                    </div>
-                                                }
-
-
-                                                <div class="data-item-right suppress-step">
-                                                    <ModalTooltip Direction="left" Text=@("Status Change: " + doc.ChapterObject.NextStatus) Class="w-2">
-                                                        <span class="fa fa-battery-half"></span>
-                                                    </ModalTooltip>
-                                                </div>
-                                            }
-
-
-                                        </div>
-
-                                    </div>
-
-                                }*@
 
                             @if (compareSystems && !(lstAltSystemChapterItems is null))
                             {
@@ -1562,9 +1290,13 @@ else
                             </div>
                         </div>
                         <div class="grid-data">
-                            @foreach (var fee in lstFees.OrderBy(F => F.FeeObject.SeqNo).ToList())
-                            {
-                                <div class="row grid-row grid-row-lg @(rowChanged == fee.FeeObject.SeqNo ? "row-changed" : "" )">
+                            <Dropzone Items="lstFees"
+                                      InstantReplace="true"
+                                      OnItemDrop="@((s)=>ReSequenceFee(lstFees.IndexOf(s) + 1))"
+                                        OnDragStartParam="() => ResetRowChanged()"
+                                      TItem="VmFee"
+                                      UseCustomImage="true">
+                                <div class="row grid-row grid-row-lg @(rowChanged == context.FeeObject.SeqNo ? "row-changed" : "" )">
                                     <div class="data-item">
                                         @if (UserSession.isAdminUser)
                                         {
@@ -1574,15 +1306,15 @@ else
                                                     <span class="fa fa-ellipsis-v"></span>
                                                     <div class="ellipsis-menu">
                                                         <ul>
-                                                            <li class="col-main" @onclick='(() => ShowChapterFeesModal("Edit", fee.FeeObject))'>
+                                                            <li class="col-main" @onclick='(() => ShowChapterFeesModal("Edit", context.FeeObject))'>
                                                                 <span class="fa fa-pencil-alt mr-2"></span>
                                                                 <span>Edit</span>
                                                             </li>
-                                                            <li class="col-main" @onclick='(() => ShowChapterFeeViewModal(fee))'>
+                                                            <li class="col-main" @onclick='(() => ShowChapterFeeViewModal(context))'>
                                                                 <span class="fa fa-binoculars mr-2"></span>
                                                                 <span>View</span>
                                                             </li>
-                                                            <li class="col-red" @onclick="() => PrepareChapterFeeDelete(fee)">
+                                                            <li class="col-red" @onclick="() => PrepareChapterFeeDelete(context)">
                                                                 <span class="fa fa-trash-alt mr-2"></span>
                                                                 <span>Delete</span>
                                                             </li>
@@ -1590,10 +1322,10 @@ else
                                                     </div>
                                                 </div>
                                                 <div class="data-item-sub">
-                                                    <span class="fa fa-pound-sign mr-2"></span> @fee.FeeObject.FeeName
+                                                    <span class="fa fa-pound-sign mr-2"></span> @context.FeeObject.FeeName
                                                 </div>
 
-                                                @if (fee.FeeObject.VATable == "Y")
+                                                @if (context.FeeObject.VATable == "Y")
                                                 {
                                                     <div class="data-item-right hidden-md-down">
                                                         <ModalTooltip Direction="top" Text=@("VAT Included") Class="w-1">
@@ -1603,9 +1335,9 @@ else
                                                 }
 
                                                 <div class="data-item-right seq-change">
-                                                    <div @onclick='() => MoveFeeSeqNo(fee.FeeObject, "Fees", "Up")'><span class="fa fa-angle-up"></span></div>
-                                                    <div class="seq-no">@fee.FeeObject.SeqNo</div>
-                                                    <div @onclick='() => MoveFeeSeqNo(fee.FeeObject, "Fees", "Down")'><span class="fa fa-angle-down"></span></div>
+                                                    <div @onclick='() => MoveFeeSeqNo(context.FeeObject, "Fees", "Up")'><span class="fa fa-angle-up"></span></div>
+                                                    <div class="seq-no">@context.FeeObject.SeqNo</div>
+                                                    <div @onclick='() => MoveFeeSeqNo(context.FeeObject, "Fees", "Down")'><span class="fa fa-angle-down"></span></div>
                                                 </div>
 
                                             }
@@ -1613,19 +1345,19 @@ else
                                             {
 
                                                 <div class="btn-ellipses float-left">
-                                                    @if (!(fee.ComparisonIcon is null))
+                                                    @if (!(context.ComparisonIcon is null))
                                                     {
-                                                        @if (!(fee.ComparisonResult == "Exact match"))
+                                                        @if (!(context.ComparisonResult == "Exact match"))
                                                         {
-                                                            <ModalTooltip Direction="right" Text=@(fee.ComparisonResult == "Partial match" ? "Differences found, click to sync" : "Does not exist, click to create") Class="w-2">
-                                                                <div class="btn-dashed" @onclick="() => PrepareFeeForComparison(fee)"><span class="fa fa-@fee.ComparisonIcon"></span></div>
+                                                            <ModalTooltip Direction="right" Text=@(context.ComparisonResult == "Partial match" ? "Differences found, click to sync" : "Does not exist, click to create") Class="w-2">
+                                                                <div class="btn-dashed" @onclick="() => PrepareFeeForComparison(context)"><span class="fa fa-@context.ComparisonIcon"></span></div>
                                                             </ModalTooltip>
 
                                                         }
                                                         else
                                                         {
                                                             <ModalTooltip Direction="right" Text="Exact Match" Class="w-1">
-                                                                <span class="fa fa-@fee.ComparisonIcon"></span>
+                                                                <span class="fa fa-@context.ComparisonIcon"></span>
                                                             </ModalTooltip>
                                                         }
                                                     }
@@ -1638,6 +1370,85 @@ else
 
 
                                                 <div class="data-item-sub">
+                                                    <span class="fa fa-pound-sign mr-2"></span> @context.FeeObject.FeeName
+                                                </div>
+                                                @if (context.FeeObject.VATable == "Y")
+                                                {
+                                                    <div class="data-item-right hidden-md-down">
+                                                        <ModalTooltip Direction="top" Text=@("VAT Included") Class="w-1">
+                                                            <span class="fa fa-coins"></span>
+                                                        </ModalTooltip>
+                                                    </div>
+                                                }
+                                                <div class="data-item-right seq-change">
+                                                    <div class="seq-no">@context.FeeObject.SeqNo</div>
+                                                </div>
+                                            }
+                                        }
+                                        else
+                                        {
+
+                                            <div class="btn-ellipses float-left">
+                                                <span class="fa fa-ellipsis-v"></span>
+                                                <div class="ellipsis-menu">
+                                                    <ul>
+                                                        <li class="col-main" @onclick='(() => ShowChapterFeeViewModal(context))'>
+                                                            <span class="fa fa-binoculars mr-2"></span>
+                                                            <span>View</span>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+
+                                            <div class="data-item-sub">
+                                                <span class="fa fa-pound-sign mr-2"></span> @context.FeeObject.FeeName
+                                            </div>
+                                            @if (context.FeeObject.VATable == "Y")
+                                            {
+                                                <div class="data-item-right hidden-md-down">
+                                                    <ModalTooltip Direction="top" Text=@("VAT Included") Class="w-1">
+                                                        <span class="fa fa-coins"></span>
+                                                    </ModalTooltip>
+                                                </div>
+                                            }
+                                            <div class="data-item-right seq-change">
+                                                <div class="seq-no">@context.FeeObject.SeqNo</div>
+                                            </div>
+                                        }
+
+                                    </div>
+                                    <div class="hidden-md-down data-item ">
+                                        <div class="data-item-sub font-85 pl-3">@context.FeeObject.FeeCategory</div>
+                                    </div>
+                                    <div class="hidden-md-down data-item ">
+                                        <div class="data-item-sub font-85 pl-3">@context.FeeObject.PostingType</div>
+                                    </div>
+                                    <div class="data-item">
+                                        <div class="data-item-sub text-right font-85 pl-3">£@string.Format("{0:N2}", context.FeeObject.Amount)</div>
+                                    </div>
+                                </div>
+
+                            </Dropzone>
+
+
+                                @if (compareSystems && !(lstAltSystemFeeItems is null))
+                                {
+                                    @foreach (var fee in lstAltSystemFeeItems.Where(F => !F.Compared).ToList())
+                                    {
+
+                                        <div class="row grid-row grid-row-lg @(rowChanged == fee.FeeObject.SeqNo ? "row-changed" : "" )">
+                                            <div class="data-item">
+
+
+                                                <div class="btn-ellipses float-left">
+                                                    <ModalTooltip Direction="right" Text=@("Exists on alternate system, Do you wish to delete?") Class="w-2">
+                                                        <div class="btn-dashed" @onclick="() => PrepareDeleteAltFee(fee)"><span class="fa fa-trash"></span></div>
+                                                    </ModalTooltip>
+
+                                                </div>
+
+
+                                                <div class="data-item-sub">
                                                     <span class="fa fa-pound-sign mr-2"></span> @fee.FeeObject.FeeName
                                                 </div>
                                                 @if (fee.FeeObject.VATable == "Y")
@@ -1651,101 +1462,22 @@ else
                                                 <div class="data-item-right seq-change">
                                                     <div class="seq-no">@fee.FeeObject.SeqNo</div>
                                                 </div>
-                                            }
-                                        }
-                                        else
-                                        {
-
-                                            <div class="btn-ellipses float-left">
-                                                <span class="fa fa-ellipsis-v"></span>
-                                                <div class="ellipsis-menu">
-                                                    <ul>
-                                                        <li class="col-main" @onclick='(() => ShowChapterFeeViewModal(fee))'>
-                                                            <span class="fa fa-binoculars mr-2"></span>
-                                                            <span>View</span>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-
-                                            <div class="data-item-sub">
-                                                <span class="fa fa-pound-sign mr-2"></span> @fee.FeeObject.FeeName
-                                            </div>
-                                            @if (fee.FeeObject.VATable == "Y")
-                                            {
-                                                <div class="data-item-right hidden-md-down">
-                                                    <ModalTooltip Direction="top" Text=@("VAT Included") Class="w-1">
-                                                        <span class="fa fa-coins"></span>
-                                                    </ModalTooltip>
-                                                </div>
-                                            }
-                                            <div class="data-item-right seq-change">
-                                                <div class="seq-no">@fee.FeeObject.SeqNo</div>
-                                            </div>
-                                        }
-
-                                    </div>
-                                    <div class="hidden-md-down data-item ">
-                                        <div class="data-item-sub font-85 pl-3">@fee.FeeObject.FeeCategory</div>
-                                    </div>
-                                    <div class="hidden-md-down data-item ">
-                                        <div class="data-item-sub font-85 pl-3">@fee.FeeObject.PostingType</div>
-                                    </div>
-                                    <div class="data-item">
-                                        <div class="data-item-sub text-right font-85 pl-3">£@string.Format("{0:N2}", fee.FeeObject.Amount)</div>
-                                    </div>
-                                </div>
-
-                            }
 
 
-                            @if (compareSystems && !(lstAltSystemFeeItems is null))
-                            {
-                                @foreach (var fee in lstAltSystemFeeItems.Where(F => !F.Compared).ToList())
-                                {
-
-                                    <div class="row grid-row grid-row-lg @(rowChanged == fee.FeeObject.SeqNo ? "row-changed" : "" )">
-                                        <div class="data-item">
-
-
-                                            <div class="btn-ellipses float-left">
-                                                <ModalTooltip Direction="right" Text=@("Exists on alternate system, Do you wish to delete?") Class="w-2">
-                                                    <div class="btn-dashed" @onclick="() => PrepareDeleteAltFee(fee)"><span class="fa fa-trash"></span></div>
-                                                </ModalTooltip>
 
                                             </div>
-
-
-                                            <div class="data-item-sub">
-                                                <span class="fa fa-pound-sign mr-2"></span> @fee.FeeObject.FeeName
+                                            <div class="hidden-md-down data-item ">
+                                                <div class="data-item-sub font-85 pl-3">@fee.FeeObject.FeeCategory</div>
                                             </div>
-                                            @if (fee.FeeObject.VATable == "Y")
-                                            {
-                                                <div class="data-item-right hidden-md-down">
-                                                    <ModalTooltip Direction="top" Text=@("VAT Included") Class="w-1">
-                                                        <span class="fa fa-coins"></span>
-                                                    </ModalTooltip>
-                                                </div>
-                                            }
-                                            <div class="data-item-right seq-change">
-                                                <div class="seq-no">@fee.FeeObject.SeqNo</div>
+                                            <div class="hidden-md-down data-item ">
+                                                <div class="data-item-sub font-85 pl-3">@fee.FeeObject.PostingType</div>
                                             </div>
-
-
-
+                                            <div class="data-item">
+                                                <div class="data-item-sub text-right font-85 pl-3">£@string.Format("{0:N2}", fee.FeeObject.Amount)</div>
+                                            </div>
                                         </div>
-                                        <div class="hidden-md-down data-item ">
-                                            <div class="data-item-sub font-85 pl-3">@fee.FeeObject.FeeCategory</div>
-                                        </div>
-                                        <div class="hidden-md-down data-item ">
-                                            <div class="data-item-sub font-85 pl-3">@fee.FeeObject.PostingType</div>
-                                        </div>
-                                        <div class="data-item">
-                                            <div class="data-item-sub text-right font-85 pl-3">£@string.Format("{0:N2}", fee.FeeObject.Amount)</div>
-                                        </div>
-                                    </div>
+                                    }
                                 }
-                            }
 
 
                         </div>
@@ -1789,10 +1521,13 @@ else
                     </div>
                     <div class="@(UserSession.isAdminUser ? "grid-can-edit" : "") ">
 
-                        @foreach (var status in lstStatus)
-                        {
-
-                            <div class="row grid-row @(rowChanged == status.ChapterObject.SeqNo ? "row-changed" : "" )">
+                        <Dropzone Items="lstStatus"
+                                    InstantReplace="true"
+                                    OnItemDrop="@((s)=>ReSequenceStatus(lstStatus.IndexOf(s) + 1))"
+                                    OnDragStartParam="() => ResetRowChanged()"
+                                    TItem="VmUsrOrDefChapterManagement"
+                                    UseCustomImage="true">
+                            <div class="row grid-row @(rowChanged == context.ChapterObject.SeqNo ? "row-changed" : "" )">
                                 <div class="col-12 data-item">
                                     @if (UserSession.isAdminUser)
                                     {
@@ -1802,15 +1537,15 @@ else
                                                 <span class="fa fa-ellipsis-v"></span>
                                                 <div class="ellipsis-menu">
                                                     <ul>
-                                                        <li class="col-main" @onclick='(() => PrepareForEdit(status, "Status"))'>
+                                                        <li class="col-main" @onclick='(() => PrepareForEdit(context, "Status"))'>
                                                             <span class="fa fa-pencil-alt mr-2"></span>
                                                             <span>Edit</span>
                                                         </li>
-                                                        <li class="col-main" @onclick='(() => ShowChapterDetailViewModal(status, "Status"))'>
+                                                        <li class="col-main" @onclick='(() => ShowChapterDetailViewModal(context, "Status"))'>
                                                             <span class="fa fa-binoculars mr-2"></span>
                                                             <span>View</span>
                                                         </li>
-                                                        <li class="col-red" @onclick="() => PrepareChapterDetailDelete(status)">
+                                                        <li class="col-red" @onclick="() => PrepareChapterDetailDelete(context)">
                                                             <span class="fa fa-trash-alt mr-2"></span>
                                                             <span>Delete</span>
                                                         </li>
@@ -1822,18 +1557,18 @@ else
                                         {
 
                                             <div class="btn-ellipses float-left">
-                                                @if (!(status.ComparisonIcon is null))
+                                                @if (!(context.ComparisonIcon is null))
                                                 {
-                                                    @if (!(status.ComparisonResult == "Exact match"))
+                                                    @if (!(context.ComparisonResult == "Exact match"))
                                                     {
-                                                        <ModalTooltip Direction="right" Text=@(status.ComparisonResult == "Partial match" ? "Differences found, click to sync" : "Does not exist, click to create") Class="w-2">
-                                                            <div class="btn-dashed" @onclick="() => PrepareForComparison(status)"><span class="fa fa-@status.ComparisonIcon"></span></div>
+                                                        <ModalTooltip Direction="right" Text=@(context.ComparisonResult == "Partial match" ? "Differences found, click to sync" : "Does not exist, click to create") Class="w-2">
+                                                            <div class="btn-dashed" @onclick="() => PrepareForComparison(context)"><span class="fa fa-@context.ComparisonIcon"></span></div>
                                                         </ModalTooltip>
                                                     }
                                                     else
                                                     {
                                                         <ModalTooltip Direction="right" Text="Exact Match" Class="w-1">
-                                                            <span class="fa fa-@status.ComparisonIcon"></span>
+                                                            <span class="fa fa-@context.ComparisonIcon"></span>
                                                         </ModalTooltip>
                                                     }
                                                 }
@@ -1854,7 +1589,7 @@ else
                                             <span class="fa fa-ellipsis-v"></span>
                                             <div class="ellipsis-menu">
                                                 <ul>
-                                                    <li class="col-main" @onclick='(() => ShowChapterDetailViewModal(status, "Status"))'>
+                                                    <li class="col-main" @onclick='(() => ShowChapterDetailViewModal(context, "Status"))'>
                                                         <span class="fa fa-pencil-alt mr-2"></span>
                                                         <span>View</span>
                                                     </li>
@@ -1863,10 +1598,10 @@ else
                                         </div>
                                     }
                                     <div class="data-item-sub">
-                                        <span class="font-100"><span class="fa fa-battery-half mr-2"></span></span>@status.ChapterObject.Name
+                                        <span class="font-100"><span class="fa fa-battery-half mr-2"></span></span>@context.ChapterObject.Name
                                     </div>
 
-                                    @if (status.ChapterObject.SuppressStep == "Y")
+                                    @if (context.ChapterObject.SuppressStep == "Y")
                                     {
                                         <div class="data-item-right suppress-step">
                                             <ModalTooltip Direction="left" Text="This status will end the Smartflow." Class="w-3">
@@ -1879,15 +1614,15 @@ else
                                     {
 
                                         <div class="data-item-right seq-change">
-                                            <div @onclick='() => MoveSeq(status.ChapterObject, "Status", "Up")'><span class="fa fa-angle-up"></span></div>
-                                            <div class="seq-no">@status.ChapterObject.SeqNo</div>
-                                            <div @onclick='() => MoveSeq(status.ChapterObject, "Status", "Down")'><span class="fa fa-angle-down"></span></div>
+                                            <div @onclick='() => MoveSeq(context.ChapterObject, "Status", "Up")'><span class="fa fa-angle-up"></span></div>
+                                            <div class="seq-no">@context.ChapterObject.SeqNo</div>
+                                            <div @onclick='() => MoveSeq(context.ChapterObject, "Status", "Down")'><span class="fa fa-angle-down"></span></div>
                                         </div>
                                     }
                                     else
                                     {
                                         <div class="data-item-right seq-change">
-                                            <div class="seq-no">@status.ChapterObject.SeqNo</div>
+                                            <div class="seq-no">@context.ChapterObject.SeqNo</div>
                                         </div>
                                     }
 
@@ -1896,7 +1631,7 @@ else
 
                             </div>
 
-                        }
+                        </Dropzone>
 
                         @if (compareSystems && !(lstAltSystemChapterItems is null))
                         {
@@ -1981,11 +1716,13 @@ else
                     </div>
 
                     <div class="@(UserSession.isAdminUser ? "grid-can-edit" : "") ">
-
-                        @foreach (var vmdataView in ListVmDataViews)
-                        {
-
-                            <div class="row grid-row @(rowChanged == vmdataView.DataView.BlockNo ? "row-changed" : "" )">
+                        <Dropzone Items="ListVmDataViews"
+                                  InstantReplace="true"
+                                  OnItemDrop="@((s)=>ReSequenceDataViews(ListVmDataViews.IndexOf(s) + 1))"
+                                    OnDragStartParam="() => ResetRowChanged()"
+                                  TItem="VmDataViews"
+                                  UseCustomImage="true">
+                            <div class="row grid-row @(rowChanged == context.DataView.BlockNo ? "row-changed" : "" )">
                                 <div class="col-12 data-item">
                                     @if (UserSession.isAdminUser && !compareSystems)
                                     {
@@ -1994,15 +1731,15 @@ else
                                             <span class="fa fa-ellipsis-v"></span>
                                             <div class="ellipsis-menu">
                                                 <ul>
-                                                    <li class="col-main" @onclick='() => PrepareDataViewForEdit(vmdataView, navDisplay)'>
+                                                    <li class="col-main" @onclick='() => PrepareDataViewForEdit(context, navDisplay)'>
                                                         <span class="fa fa-pencil-alt mr-2"></span>
                                                         <span>Edit</span>
                                                     </li>
-                                                    <li class="col-main" @onclick='() => ShowDataViewDisplayModal(vmdataView)'>
+                                                    <li class="col-main" @onclick='() => ShowDataViewDisplayModal(context)'>
                                                         <span class="fa fa-binoculars mr-2"></span>
                                                         <span>View</span>
                                                     </li>
-                                                    <li class="col-red" @onclick='() => PrepareDataViewDelete(vmdataView)'>
+                                                    <li class="col-red" @onclick='() => PrepareDataViewDelete(context)'>
                                                         <span class="fa fa-trash-alt mr-2"></span>
                                                         <span>Delete</span>
                                                     </li>
@@ -2010,24 +1747,24 @@ else
                                             </div>
                                         </div>
                                         <div class="data-item-sub">
-                                            <span class="fa fa-database mr-2"></span> @vmdataView.DataViewDisplayName
+                                            <span class="fa fa-database mr-2"></span> @context.DataViewDisplayName
                                         </div>
                                     }
                                     else if (UserSession.isAdminUser && compareSystems)
                                     {
                                         <div class="btn-ellipses float-left">
-                                            @if (!(vmdataView.ComparisonIcon is null))
+                                            @if (!(context.ComparisonIcon is null))
                                             {
-                                                @if (!(vmdataView.ComparisonResult == "Exact match"))
+                                                @if (!(context.ComparisonResult == "Exact match"))
                                                 {
-                                                    <ModalTooltip Direction="right" Text=@(vmdataView.ComparisonResult == "Partial match" ? "Differences found, click to sync" : "Does not exist, click to create") Class="w-2">
-                                                        <div class="btn-dashed" @onclick="() => PrepareDataViewForComparison(vmdataView)"><span class="fa fa-@vmdataView.ComparisonIcon"></span></div>
+                                                    <ModalTooltip Direction="right" Text=@(context.ComparisonResult == "Partial match" ? "Differences found, click to sync" : "Does not exist, click to create") Class="w-2">
+                                                        <div class="btn-dashed" @onclick="() => PrepareDataViewForComparison(context)"><span class="fa fa-@context.ComparisonIcon"></span></div>
                                                     </ModalTooltip>
                                                 }
                                                 else
                                                 {
                                                     <ModalTooltip Direction="right" Text="Exact Match" Class="w-1">
-                                                        <span class="fa fa-@vmdataView.ComparisonIcon"></span>
+                                                        <span class="fa fa-@context.ComparisonIcon"></span>
                                                     </ModalTooltip>
                                                 }
                                             }
@@ -2038,7 +1775,7 @@ else
 
                                         </div>
                                         <div class="data-item-sub">
-                                            <span class="fa fa-database mr-2"></span> @vmdataView.DataViewDisplayName
+                                            <span class="fa fa-database mr-2"></span> @context.DataViewDisplayName
                                         </div>
                                     }
                                     else
@@ -2047,7 +1784,7 @@ else
                                             <span class="fa fa-ellipsis-v"></span>
                                             <div class="ellipsis-menu">
                                                 <ul>
-                                                    <li class="col-main" @onclick='() => ShowDataViewDisplayModal(vmdataView)'>
+                                                    <li class="col-main" @onclick='() => ShowDataViewDisplayModal(context)'>
                                                         <span class="fa fa-binoculars mr-2"></span>
                                                         <span>View</span>
                                                     </li>
@@ -2055,14 +1792,14 @@ else
                                             </div>
                                         </div>
                                         <div class="data-item-sub">
-                                            <span class="fa fa-database mr-2"></span> @vmdataView.DataViewDisplayName
+                                            <span class="fa fa-database mr-2"></span> @context.DataViewDisplayName
                                         </div>
                                     }
 
-                                    @if (!string.IsNullOrEmpty(vmdataView.DataView.DisplayName))
+                                    @if (!string.IsNullOrEmpty(context.DataView.DisplayName))
                                     {
                                         <div class="data-item-right hidden-md-down">
-                                            <ModalTooltip Direction="top" Text=@("Template: " + vmdataView.DataView.ViewName) Class="w-3">
+                                            <ModalTooltip Direction="top" Text=@("Template: " + context.DataView.ViewName) Class="w-3">
                                                 <span class="fa fa-clone"></span>
                                             </ModalTooltip>
                                         </div>
@@ -2072,15 +1809,15 @@ else
                                     {
 
                                         <div class="data-item-right seq-change">
-                                            <div @onclick='() => MoveBlockNo(vmdataView.DataView, "DataViews", "Up")'><span class="fa fa-angle-up"></span></div>
-                                            <div class="seq-no">@vmdataView.DataView.BlockNo</div>
-                                            <div @onclick='() => MoveBlockNo(vmdataView.DataView, "DataViews", "Down")'><span class="fa fa-angle-down"></span></div>
+                                            <div @onclick='() => MoveBlockNo(context.DataView, "DataViews", "Up")'><span class="fa fa-angle-up"></span></div>
+                                            <div class="seq-no">@context.DataView.BlockNo</div>
+                                            <div @onclick='() => MoveBlockNo(context.DataView, "DataViews", "Down")'><span class="fa fa-angle-down"></span></div>
                                         </div>
                                     }
                                     else
                                     {
                                         <div class="data-item-right seq-change">
-                                            <div class="seq-no">@vmdataView.DataView.BlockNo</div>
+                                            <div class="seq-no">@context.DataView.BlockNo</div>
                                         </div>
                                     }
 
@@ -2088,8 +1825,9 @@ else
                                 </div>
 
                             </div>
+                        </Dropzone>
 
-                        }
+
 
                         @if (compareSystems && !(lstAltSystemDataViews is null))
                         {
@@ -2190,9 +1928,13 @@ else
                             </div>
                         </div>
                         <div class="grid-data">
-                            @foreach (var vmtickerMessages in ListVmTickerMessages)
-                            {
-                                <div class="row grid-row @(rowChanged == vmtickerMessages.Message.SeqNo ? "row-changed" : "" )">
+                            <Dropzone Items="ListVmTickerMessages"
+                                      InstantReplace="true"
+                                      OnItemDrop="@((s)=>ReSequenceMessages(ListVmTickerMessages.IndexOf(s) + 1))"
+                                    OnDragStartParam="() => ResetRowChanged()"
+                                      TItem="VmTickerMessages"
+                                      UseCustomImage="true">
+                                <div class="row grid-row @(rowChanged == context.Message.SeqNo ? "row-changed" : "" )">
                                     <div class="data-item">
                                         @if (UserSession.isAdminUser && !compareSystems)
                                         {
@@ -2201,15 +1943,15 @@ else
                                                 <span class="fa fa-ellipsis-v"></span>
                                                 <div class="ellipsis-menu">
                                                     <ul>
-                                                        <li class="col-main" @onclick='() => PrepareTickerMessageForEdit(vmtickerMessages, navDisplay)'>
+                                                        <li class="col-main" @onclick='() => PrepareTickerMessageForEdit(context, navDisplay)'>
                                                             <span class="fa fa-pencil-alt mr-2"></span>
                                                             <span>Edit</span>
                                                         </li>
-                                                        <li class="col-main" @onclick='() => ShowTickerMessageDisplayModal(vmtickerMessages)'>
+                                                        <li class="col-main" @onclick='() => ShowTickerMessageDisplayModal(context)'>
                                                             <span class="fa fa-binoculars mr-2"></span>
                                                             <span>View</span>
                                                         </li>
-                                                        <li class="col-red" @onclick='() => PrepareTickerMessageDelete(vmtickerMessages)'>
+                                                        <li class="col-red" @onclick='() => PrepareTickerMessageDelete(context)'>
                                                             <span class="fa fa-trash-alt mr-2"></span>
                                                             <span>Delete</span>
                                                         </li>
@@ -2217,30 +1959,30 @@ else
                                                 </div>
                                             </div>
                                             <div class="data-item-right">
-                                                <ModalTooltip Direction="top" Text="@vmtickerMessages.msgTooltip" Class="w-3">
-                                                    <span class="@(vmtickerMessages.msgValidation == "Exceeded" ? "" : "invisible")"><span class="fa fa-comment mr-2 font-grey "></span></span>
-                                                    <span class="@(vmtickerMessages.msgValidation == "Expired" ? "" : "invisible")"><span class="fa fa-comment mr-2 font-red "></span></span>
-                                                    <span class="@(vmtickerMessages.msgValidation == "Future" ? "" : "invisible")"><span class="fa fa-comment mr-2 font-green "></span></span>
-                                                    <span class="@(vmtickerMessages.msgValidation == "Invalid" ? "" : "invisible")"><span class="fa fa-exclamation-triangle mr-2 font-red "></span></span>
-                                                    <span class="@(vmtickerMessages.msgValidation == "Valid" ? "" : "invisible")"><span class="fa fa-comment mr-2 font-blue "></span></span>
+                                                <ModalTooltip Direction="top" Text="@context.msgTooltip" Class="w-3">
+                                                    <span class="@(context.msgValidation == "Exceeded" ? "" : "invisible")"><span class="fa fa-comment mr-2 font-grey "></span></span>
+                                                    <span class="@(context.msgValidation == "Expired" ? "" : "invisible")"><span class="fa fa-comment mr-2 font-red "></span></span>
+                                                    <span class="@(context.msgValidation == "Future" ? "" : "invisible")"><span class="fa fa-comment mr-2 font-green "></span></span>
+                                                    <span class="@(context.msgValidation == "Invalid" ? "" : "invisible")"><span class="fa fa-exclamation-triangle mr-2 font-red "></span></span>
+                                                    <span class="@(context.msgValidation == "Valid" ? "" : "invisible")"><span class="fa fa-comment mr-2 font-blue "></span></span>
                                                 </ModalTooltip>
                                             </div>
                                             <div class="data-item-sub">
-                                                @vmtickerMessages.Message.Message
+                                                @context.Message.Message
                                             </div>
                                         }
                                         else if (UserSession.isAdminUser && compareSystems)
                                         {
                                             <div class="btn-ellipses float-left">
-                                                @if (!(vmtickerMessages.ComparisonIcon is null))
+                                                @if (!(context.ComparisonIcon is null))
                                                 {
-                                                    @if (!(vmtickerMessages.ComparisonResult == "Exact match"))
+                                                    @if (!(context.ComparisonResult == "Exact match"))
                                                     {
-                                                        <div class="btn-dashed" @onclick="() => PrepareTickerMessageForComparison(vmtickerMessages)"><span class="fa fa-@vmtickerMessages.ComparisonIcon"></span></div>
+                                                        <div class="btn-dashed" @onclick="() => PrepareTickerMessageForComparison(context)"><span class="fa fa-@context.ComparisonIcon"></span></div>
                                                     }
                                                     else
                                                     {
-                                                        <span class="fa fa-@vmtickerMessages.ComparisonIcon"></span>
+                                                        <span class="fa fa-@context.ComparisonIcon"></span>
                                                     }
                                                 }
                                                 else
@@ -2251,7 +1993,7 @@ else
                                             </div>
 
                                             <div class="data-item-sub">
-                                                <span class="fa fa-comment mr-2 tickericon"></span> @vmtickerMessages.Message.Message
+                                                <span class="fa fa-comment mr-2 tickericon"></span> @context.Message.Message
                                             </div>
                                         }
                                         else
@@ -2260,7 +2002,7 @@ else
                                                 <span class="fa fa-ellipsis-v"></span>
                                                 <div class="ellipsis-menu">
                                                     <ul>
-                                                        <li class="col-main" @onclick='() => ShowTickerMessageDisplayModal(vmtickerMessages)'>
+                                                        <li class="col-main" @onclick='() => ShowTickerMessageDisplayModal(context)'>
                                                             <span class="fa fa-binoculars mr-2"></span>
                                                             <span>View</span>
                                                         </li>
@@ -2268,7 +2010,7 @@ else
                                                 </div>
                                             </div>
                                             <div class="data-item-sub">
-                                                <span class="fa fa-comment mr-2 tickericon"></span> @vmtickerMessages.Message.Message
+                                                <span class="fa fa-comment mr-2 tickericon"></span> @context.Message.Message
                                             </div>
                                         }
 
@@ -2276,23 +2018,23 @@ else
                                         {
 
                                             <div class="data-item-right seq-change">
-                                                <div @onclick='() => MoveMessageSeqNo(vmtickerMessages.Message, "TickerMessages", "Up")'><span class="fa fa-angle-up"></span></div>
-                                                <div class="seq-no">@vmtickerMessages.Message.SeqNo</div>
-                                                <div @onclick='() => MoveMessageSeqNo(vmtickerMessages.Message, "TickerMessages", "Down")'><span class="fa fa-angle-down"></span></div>
+                                                <div @onclick='() => MoveMessageSeqNo(context.Message, "TickerMessages", "Up")'><span class="fa fa-angle-up"></span></div>
+                                                <div class="seq-no">@context.Message.SeqNo</div>
+                                                <div @onclick='() => MoveMessageSeqNo(context.Message, "TickerMessages", "Down")'><span class="fa fa-angle-down"></span></div>
                                             </div>
                                         }
                                         else
                                         {
                                             <div class="data-item-right">
-                                                <div class="seq-no">@vmtickerMessages.Message.SeqNo</div>
+                                                <div class="seq-no">@context.Message.SeqNo</div>
                                             </div>
                                         }
 
                                     </div>
-                                    @if (!string.IsNullOrEmpty(vmtickerMessages.Message.FromDate))
+                                    @if (!string.IsNullOrEmpty(context.Message.FromDate))
                                     {
                                         <div class="hidden-md-down data-item ">
-                                            <div class="data-item-sub">@(DateTime.ParseExact(vmtickerMessages.Message.FromDate, "yyyyMMdd", CultureInfo.InvariantCulture).ToString("dd/MM/yyyy"))</div>
+                                            <div class="data-item-sub">@(DateTime.ParseExact(context.Message.FromDate, "yyyyMMdd", CultureInfo.InvariantCulture).ToString("dd/MM/yyyy"))</div>
                                         </div>
                                     }
                                     else
@@ -2302,10 +2044,10 @@ else
                                             </div>
                                         </div>
                                     }
-                                    @if (!string.IsNullOrEmpty(vmtickerMessages.Message.ToDate))
+                                    @if (!string.IsNullOrEmpty(context.Message.ToDate))
                                     {
                                         <div class="hidden-md-down data-item ">
-                                            <div class="data-item-sub font-85 pl-3">@(DateTime.ParseExact(vmtickerMessages.Message.ToDate, "yyyyMMdd", CultureInfo.InvariantCulture).ToString("dd/MM/yyyy"))</div>
+                                            <div class="data-item-sub font-85 pl-3">@(DateTime.ParseExact(context.Message.ToDate, "yyyyMMdd", CultureInfo.InvariantCulture).ToString("dd/MM/yyyy"))</div>
                                         </div>
                                     }
                                     else
@@ -2316,7 +2058,10 @@ else
                                         </div>
                                     }
                                 </div>
-                            }
+
+                            </Dropzone>
+
+
 
 
                             @if (compareSystems && !(lstAltSystemTickerMessages is null))

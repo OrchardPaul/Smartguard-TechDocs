@@ -1005,7 +1005,7 @@ namespace GadjIT_App.Pages.Chapters
                     }
                     if (listType == "Fees" | listType == "All")
                     {
-                        lstFees = selectedChapter.Fees.Select(F => new VmFee { FeeObject = F }).ToList();
+                        lstFees = selectedChapter.Fees.Select(F => new VmFee { FeeObject = F }).OrderBy(F => F.FeeObject.SeqNo).ToList();
 
 
                     }
@@ -1723,6 +1723,7 @@ namespace GadjIT_App.Pages.Chapters
         /// <param name="listType">: Docs or Fees</param>
         /// <param name="direction">: Up or Down</param>
         /// <returns>No return</returns>
+
         protected async void MoveSeq(GenSmartflowItem selectobject, string listType, string direction)
         {
             seqMoving = true; //prevents changes to the form whilst process of changing seq is carried out
@@ -1730,62 +1731,48 @@ namespace GadjIT_App.Pages.Chapters
             var lstItems = new List<VmUsrOrDefChapterManagement>();
             int incrementBy;
 
-            incrementBy = (direction.ToLower() == "up" ? -1 : 1);
+            incrementBy = (direction.ToLower() == "up" ? -1 : 2);
 
-            rowChanged = (int)(selectobject.SeqNo + incrementBy);
+            rowChanged = (int)(selectobject.SeqNo + (direction.ToLower() == "up" ? -1 : 1));
 
             switch (listType)
             {
                 case "Docs":
                     lstItems = lstDocs;
                     break;
-                //case "Fees":
-                //    lstItems = lstFees;
-                //    break;
+
                 case "Status":
                     lstItems = lstStatus;
                     break;
-
-                //case "Chapters":
-                //    lstItems = lstChapters
-                //                        .Where(A => A.ChapterObject.CaseTypeGroup == selectedChapter.CaseTypeGroup)
-                //                        .Where(A => A.ChapterObject.CaseType == selectedChapter.CaseType)
-                //                        .OrderBy(A => A.ChapterObject.SeqNo)
-                //                        .ToList();
-                //    break;
             }
 
             var swapItem = lstItems.Where(D => D.ChapterObject.SeqNo == (selectobject.SeqNo + incrementBy)).SingleOrDefault();
             if (!(swapItem is null))
             {
-                selectobject.SeqNo += incrementBy;
-                swapItem.ChapterObject.SeqNo = swapItem.ChapterObject.SeqNo + (incrementBy * -1);
+                MoveListItem(lstItems, (selectobject.SeqNo.Value - 1), (selectobject.SeqNo.Value - 1) + incrementBy );
 
-                //if (listType == "Chapters")
-                //{
-                //    await chapterManagementService.UpdateMainItem(selectobject).ConfigureAwait(false);
-                //    await chapterManagementService.UpdateMainItem(swapItem.ChapterObject).ConfigureAwait(false);
-                //}
+                switch (listType)
+                {
+                    case "Docs":
 
-                SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(selectedChapter);
-                await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
+                        await ReSequenceDocs((int)(selectobject.SeqNo + (direction.ToLower() == "up" ? -1 : 1)));
+                        break;
 
+                    case "Status":
+                        await ReSequenceStatus((int)(selectobject.SeqNo + (direction.ToLower() == "up" ? -1 : 1)));
+                        break;
+
+                }
 
                 //keep track of time last updated ready for comparison by other sessions checking for updates
                 appChapterState.SetLastUpdated(UserSession, selectedChapter);
 
             }
 
-            await RefreshChapterItems(listType);
-            await InvokeAsync(() =>
-            {
-                StateHasChanged();
-            });
-
-
             seqMoving = false;
 
         }
+
 
         protected async void MoveSmartFlowSeq(UsrOrsfSmartflows selectobject, string listType, string direction)
         {
@@ -1796,9 +1783,7 @@ namespace GadjIT_App.Pages.Chapters
                 var lstItems = new List<VmUsrOrsfSmartflows>();
                 int incrementBy;
 
-                incrementBy = (direction.ToLower() == "up" ? -1 : 1);
-
-                rowChanged = (int)(selectobject.SeqNo + incrementBy);
+                incrementBy = (direction.ToLower() == "up" ? -1 : 2);
 
                 lstItems = lstSelectedChapters
                             .OrderBy(A => A.SmartflowObject.SeqNo)
@@ -1808,20 +1793,10 @@ namespace GadjIT_App.Pages.Chapters
                 var swapItem = lstItems.Where(D => D.SmartflowObject.SeqNo == (selectobject.SeqNo + incrementBy)).SingleOrDefault();
                 if (!(swapItem is null))
                 {
-                    selectobject.SeqNo += incrementBy;
-                    swapItem.SmartflowObject.SeqNo = swapItem.SmartflowObject.SeqNo + (incrementBy * -1);
+                    MoveListItem(lstSelectedChapters, (selectobject.SeqNo.Value - 1), (selectobject.SeqNo.Value - 1) + incrementBy);
 
-                    await chapterManagementService.UpdateMainItem(selectobject).ConfigureAwait(false);
-                    await chapterManagementService.UpdateMainItem(swapItem.SmartflowObject).ConfigureAwait(false);
+                    await ReSequenceSmartFlows((int)(selectobject.SeqNo + (direction.ToLower() == "up" ? -1 : 1)));
                 }
-
-
-
-                await RefreshChapterItems(listType);
-                await InvokeAsync(() =>
-                {
-                    StateHasChanged();
-                });
 
                 seqMoving = false;
 
@@ -4046,72 +4021,40 @@ namespace GadjIT_App.Pages.Chapters
         /* DRAG DROP EVENTS */
         /****************************************/
         private int? droppedItem = 0;
-        //private VmUsrOrsfSmartflows replacedItem = new VmUsrOrsfSmartflows {SmartflowObject = new UsrOrsfSmartflows { SeqNo = 0} };
         private int? replacedItem = 0;
 
-        public async Task HandleDrop(VmUsrOrsfSmartflows smartflow)
+        public void ResetRowChanged()
         {
-            droppedItem = smartflow.SmartflowObject.SeqNo;
-            replacedItem = lstSelectedChapters.IndexOf(smartflow) + 1;
+            rowChanged = 0;
+        }
 
-            int intAdjust = (droppedItem < replacedItem ? -1 : 1);
 
-            var smartflowsToChange = lstSelectedChapters.Where(C => droppedItem < replacedItem ? C.SmartflowObject.SeqNo > droppedItem && C.SmartflowObject.SeqNo <= replacedItem
-                                                                        : C.SmartflowObject.SeqNo < droppedItem && C.SmartflowObject.SeqNo >= replacedItem)
-                                                .Select(C => { C.SmartflowObject.SeqNo += intAdjust; return C; })
-                                                .ToList();
+        public async Task ReSequenceSmartFlows(int seq)
+        {
+            rowChanged = seq;
 
-            foreach (var smartflowToChange in smartflowsToChange)
+
+            lstSelectedChapters.Select(C => { C.SmartflowObject.SeqNo = lstSelectedChapters.IndexOf(C) + 1; return C; }).ToList();
+
+            foreach (var smartflowToChange in lstSelectedChapters)
             {
                 await chapterManagementService.UpdateMainItem(smartflowToChange.SmartflowObject).ConfigureAwait(false);
 
             }
-
-
-
-            smartflow.SmartflowObject.SeqNo = lstSelectedChapters.IndexOf(smartflow) + 1;
-
-            await chapterManagementService.UpdateMainItem(smartflow.SmartflowObject).ConfigureAwait(false);
 
             await InvokeAsync(() =>
             {
                 StateHasChanged();
             });
 
-            /*
-            * 1 2 dropped = 1
-            * 2 3 replaced = 3
-            * 3 1 target = 2,3
-            * 4 4
-            *
-            * */
-            /*
-            * 1 4 dropped = 4
-            * 2 1 replaced = 1
-            * 3 2 target = 1,2,3
-            * 4 3
-            *
-            * */
         }
 
 
-        public async Task HandleDocDrop(VmUsrOrDefChapterManagement doc)
+        public async Task ReSequenceDocs(int seq)
         {
-            droppedItem = doc.ChapterObject.SeqNo;
-            replacedItem = lstDocs.IndexOf(doc) + 1;
+            rowChanged = seq;
 
-            int intAdjust = (droppedItem < replacedItem ? -1 : 1);
-
-            var smartflowsToChange = lstDocs.Where(C => droppedItem < replacedItem ? C.ChapterObject.SeqNo > droppedItem && C.ChapterObject.SeqNo <= replacedItem
-                                                                        : C.ChapterObject.SeqNo < droppedItem && C.ChapterObject.SeqNo >= replacedItem)
-                                                .Select(C => { C.ChapterObject.SeqNo += intAdjust; return C; })
-                                                .ToList();
-
-
-
-
-
-            doc.ChapterObject.SeqNo = lstDocs.IndexOf(doc) + 1;
+            lstDocs.Select(C => { C.ChapterObject.SeqNo = lstDocs.IndexOf(C) + 1; return C; }).ToList();
 
             SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(selectedChapter);
             await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
@@ -4121,23 +4064,83 @@ namespace GadjIT_App.Pages.Chapters
             {
                 StateHasChanged();
             });
-
-            /*
-            * 1 2 dropped = 1
-            * 2 3 replaced = 3
-            * 3 1 target = 2,3
-            * 4 4
-            *
-            * */
-            /*
-            * 1 4 dropped = 4
-            * 2 1 replaced = 1
-            * 3 2 target = 1,2,3
-            * 4 3
-            *
-            * */
         }
-        
+
+        public async Task ReSequenceStatus(int seq)
+        {
+            rowChanged = seq;
+
+            lstStatus.Select(C => { C.ChapterObject.SeqNo = lstStatus.IndexOf(C) + 1; return C; }).ToList();
+
+            SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(selectedChapter);
+            await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
+
+            await InvokeAsync(() =>
+            {
+                StateHasChanged();
+            });
+        }
+
+        public async Task ReSequenceFee(int seq)
+        {
+            rowChanged = seq;
+
+            lstFees.Select(C => { C.FeeObject.SeqNo = lstFees.IndexOf(C) + 1; return C; }).ToList();
+
+            SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(selectedChapter);
+            await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
+
+            await InvokeAsync(() =>
+            {
+                StateHasChanged();
+            });
+        }
+
+        public async Task ReSequenceDataViews(int seq)
+        {
+            rowChanged = seq;
+
+            ListVmDataViews.Select(C => { C.DataView.BlockNo = ListVmDataViews.IndexOf(C) + 1; return C; }).ToList();
+
+            SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(selectedChapter);
+            await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
+
+            await InvokeAsync(() =>
+            {
+                StateHasChanged();
+            });
+        }
+
+        public async Task ReSequenceMessages(int seq)
+        {
+            rowChanged = seq;
+
+            ListVmTickerMessages.Select(C => { C.Message.SeqNo = ListVmTickerMessages.IndexOf(C) + 1; return C; }).ToList();
+
+            SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(selectedChapter);
+            await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
+
+            await InvokeAsync(() =>
+            {
+                StateHasChanged();
+            });
+        }
+
+
+        //Move an item in a given list
+        public void MoveListItem<T>(List<T> list, int oldIndex, int newIndex)
+        {
+            var item = list[oldIndex];
+
+            list.RemoveAt(oldIndex);
+
+            if (newIndex > oldIndex)
+            {
+                newIndex--;
+            }
+
+            list.Insert(newIndex, item);
+        }
 
     }
 }
