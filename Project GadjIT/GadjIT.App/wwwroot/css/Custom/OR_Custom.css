@@ -1691,8 +1691,6 @@ app {
 /*drag drop styles*/
 .plk-dd-draggable:active {
     cursor: grabbing !important;
-
-    
 }
 
 
