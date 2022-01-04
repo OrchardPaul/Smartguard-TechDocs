@@ -1,2 +1,0 @@
-﻿08/09/2020
-Scaffold-DbContext “Data Source=dev\SQLEXPRESS;Initial Catalog=Gizmo_Authentication;Integrated Security=True;Pooling=False” Microsoft.EntityFrameworkCore.SqlServer -OutputDir Gizmo_Authentification -DataAnnotations

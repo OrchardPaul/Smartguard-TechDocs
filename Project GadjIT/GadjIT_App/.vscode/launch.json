@@ -5,13 +5,13 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "GadjIT (Build)",
+            "name": "GadjIT (build)",
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/GadjIT_App/bin/Debug/net5.0/GadjIT_App_Proj.dll",
+            "program": "${workspaceFolder}/bin/Debug/net5.0/GadjIT_App_Proj.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/GadjIT_App",
+            "cwd": "${workspaceFolder}",
             "stopAtEntry": false,
             "serverReadyAction": {
                 "action": "openExternally",
@@ -29,9 +29,9 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "watch",
-            "program": "${workspaceFolder}/GadjIT_App/bin/Debug/net5.0/GadjIT_App_Proj.dll",
+            "program": "${workspaceFolder}/bin/Debug/net5.0/GadjIT_App_Proj.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/GadjIT_App",
+            "cwd": "${workspaceFolder}",
             "stopAtEntry": false,
             "serverReadyAction": {
                 "action": "openExternally",
