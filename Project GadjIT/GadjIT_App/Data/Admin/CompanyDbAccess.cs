@@ -628,40 +628,33 @@ namespace GadjIT_App.Data.Admin
 
         public async Task<List<SmartflowRecords>> SyncAdminSysToClient(List<UsrOrsfSmartflows> clientObjects, IUserSessionState sessionState)
         {
+
             var currentRecords = await context
                                             .SmartflowRecords
                                             .Where(R => R.CompanyId == sessionState.Company.Id)
                                             .Where(R => R.System == sessionState.selectedSystem)
-                                            .Where(R => clientObjects
-                                                            .Select(C => C.Id)
-                                                            .ToList()
-                                                            .Contains(R.RowId))
                                             .ToListAsync();
 
-
-            //loop though each object contained in the list
-            foreach(var clientRow in clientObjects
-                                        .Where(O => currentRecords
-                                                        .Select(R => R.RowId)
-                                                        .ToList()
-                                                        .Contains(O.Id))
-                                        .ToList())
+            foreach(var record in currentRecords)
             {
-                var record = currentRecords.Where(R => R.RowId == clientRow.Id).SingleOrDefault();
-                mapper.Map(clientRow, record);
+                var existingAccount = await context.AppCompanyAccountsSmartflowDetails
+                .Where(A => A.SmartflowRecordId == record.Id).FirstOrDefaultAsync();
 
-                record.LastModifiedByUserId = sessionState.User.Id;
-                record.LastModifiedDate = DateTime.Now;                
+                if (!(existingAccount is null))
+                {
+                    existingAccount.SmartflowRecordId = null;
+                    existingAccount.Status = "Deleted";
 
-                await context.SaveChangesAsync();
+                    context.AppCompanyAccountsSmartflowDetails.Update(existingAccount);
+
+                }
+
+                context.SmartflowRecords.Remove(record);
             }
 
-            foreach (var clientRow in clientObjects
-                                        .Where(O => !currentRecords
-                                                        .Select(R => R.RowId)
-                                                        .ToList()
-                                                        .Contains(O.Id))
-                                        .ToList())
+            await context.SaveChangesAsync();
+
+            foreach (var clientRow in clientObjects)
             {
                 var record = new SmartflowRecords { CompanyId = sessionState.Company.Id };
                 mapper.Map(clientRow, record);
