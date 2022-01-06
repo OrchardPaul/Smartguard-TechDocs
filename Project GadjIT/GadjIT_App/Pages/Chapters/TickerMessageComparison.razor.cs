@@ -23,7 +23,7 @@ namespace GadjIT_App.Pages.Chapters
         IChapterManagementService chapterManagementService { get; set; }
 
         [Parameter]
-        public IUserSessionState sessionState { get; set; }
+        public IUserSessionState UserSession { get; set; }
 
         [Parameter]
         public VmTickerMessages Object { get; set; }
@@ -84,10 +84,10 @@ namespace GadjIT_App.Pages.Chapters
                 taskObject.FromDate = Object.Message.FromDate;
                 taskObject.ToDate = Object.Message.ToDate;
 
-                await sessionState.SwitchSelectedSystem();
+                await UserSession.SwitchSelectedSystem();
                 AltChapterRow.SmartflowData = JsonConvert.SerializeObject(AltChapter);
                 await chapterManagementService.Update(AltChapterRow);
-                await sessionState.ResetSelectedSystem();
+                await UserSession.ResetSelectedSystem();
             }
 
             ComparisonRefresh?.Invoke();
@@ -128,14 +128,14 @@ namespace GadjIT_App.Pages.Chapters
                     AltChapter.TickerMessages = AltChapter.TickerMessages is null ? new List<TickerMessages>() : AltChapter.TickerMessages;
                     AltChapter.TickerMessages.Add(PushObject);
 
-                    await sessionState.SwitchSelectedSystem();
+                    await UserSession.SwitchSelectedSystem();
                     AltChapterRow.SmartflowData = JsonConvert.SerializeObject(AltChapter);
                     await chapterManagementService.Update(AltChapterRow);
-                    await sessionState.ResetSelectedSystem();
+                    await UserSession.ResetSelectedSystem();
                 }
                 else
                 {
-                    await sessionState.SwitchSelectedSystem();
+                    await UserSession.SwitchSelectedSystem();
 
                     AltChapterRow = new UsrOrsfSmartflows
                     {
@@ -150,8 +150,8 @@ namespace GadjIT_App.Pages.Chapters
 
                     var returnObject = await chapterManagementService.Add(AltChapterRow);
                     AltChapterRow.Id = returnObject.Id;
-                    await CompanyDbAccess.SaveSmartFlowRecord(AltChapterRow, sessionState);
-                    await sessionState.ResetSelectedSystem();
+                    await CompanyDbAccess.SaveSmartFlowRecord(AltChapterRow, UserSession);
+                    await UserSession.ResetSelectedSystem();
                 }
             }
 

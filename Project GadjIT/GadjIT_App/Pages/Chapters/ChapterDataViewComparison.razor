@@ -9,12 +9,12 @@
                     </td>
                     <td style="width: 250px">
                         <div class=" d-flex justify-content-center">
-                            @(sessionState.selectedSystem == "Dev" ? "Dev" : "Live")
+                            @(UserSession.selectedSystem == "Dev" ? "Dev" : "Live")
                         </div>
                     </td>
                     <td style="width: 250px">
                         <div class=" d-flex justify-content-center">
-                            @(sessionState.selectedSystem == "Dev" ? "Live" : "Dev")
+                            @(UserSession.selectedSystem == "Dev" ? "Live" : "Dev")
                         </div>
                     </td>
                     <td style="width: 30px">
@@ -34,7 +34,7 @@
                         @Object.AltDataView.BlockNo
                     </td>
                     <td>
-                        <span class="fa fa-@(Object.DataView.BlockNo == @Object.AltDataView.BlockNo ? "check" : "exclamation")"></span>
+                        <span class="fa fa-@(Object.ComparisonList.Contains("BlockNo") ? "exclamation" : "check")"></span>
                     </td>
                 </tr>
                 <tr>
@@ -48,7 +48,7 @@
                         <input type="text" class="read-only" value="@Object.AltDataView.ViewName" />
                     </td>
                     <td>
-                        <span class="fa fa-@(Object.DataView.ViewName == @Object.AltDataView.ViewName ? "check" : "exclamation")"></span>
+                        <span class="fa fa-@(Object.ComparisonList.Contains("ViewName") ? "exclamation" : "check")"></span>
                     </td>
                 </tr>
                 <tr>
@@ -62,7 +62,7 @@
                         <input type="text" class="read-only" value="@Object.AltDataView.DisplayName" />
                     </td>
                     <td>
-                        <span class="fa fa-@(Object.DataView.DisplayName == @Object.AltDataView.DisplayName ? "check" : "exclamation")"></span>
+                        <span class="fa fa-@(Object.ComparisonList.Contains("DisplayName") ? "exclamation" : "check")"></span>
                     </td>
                 </tr>
             </tbody>
@@ -72,12 +72,12 @@
                     </td>
                     <td>
                         <div class=" d-flex justify-content-center">
-                            <button type="submit" autofocus class="btn btn-main" @onclick="() => HandleValidSubmit(false)">@(sessionState.selectedSystem == "Dev" ? ">> Live" : ">> Dev")</button>
+                            <button type="submit" autofocus class="btn btn-main" @onclick="() => HandleValidSubmit(false)">@(UserSession.selectedSystem == "Dev" ? ">> Live" : ">> Dev")</button>
                         </div>
                     </td>
                     <td>
                         <div class=" d-flex justify-content-center">
-                            <button type="submit" autofocus class="btn btn-main" @onclick="() => HandleValidSubmit(true)">@(sessionState.selectedSystem == "Dev" ? "Dev <<" : "Live <<")</button>
+                            <button type="submit" autofocus class="btn btn-main" @onclick="() => HandleValidSubmit(true)">@(UserSession.selectedSystem == "Dev" ? "Dev <<" : "Live <<")</button>
                         </div>
                     </td>
                     <td>
@@ -95,11 +95,11 @@ else
 
     @if (Object.AltDataView is null)
     {
-        curSystem = (sessionState.selectedSystem == "Dev" ? "Live" : "Dev");
+        curSystem = (UserSession.selectedSystem == "Dev" ? "Live" : "Dev");
     }
     else
     {
-        curSystem = (sessionState.selectedSystem == "Dev" ? "Dev" : "Live");
+        curSystem = (UserSession.selectedSystem == "Dev" ? "Dev" : "Live");
 
     }
 

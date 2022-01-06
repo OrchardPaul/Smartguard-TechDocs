@@ -12,12 +12,12 @@
                     </td>
                     <td style="width: 250px">
                         <div class=" d-flex justify-content-center">
-                            @(sessionState.selectedSystem == "Dev" ? "Dev" : "Live")
+                            @(UserSession.selectedSystem == "Dev" ? "Dev" : "Live")
                         </div>
                     </td>
                     <td style="width: 250px">
                         <div class=" d-flex justify-content-center">
-                            @(sessionState.selectedSystem == "Dev" ? "Live" : "Dev")
+                            @(UserSession.selectedSystem == "Dev" ? "Live" : "Dev")
                         </div>
                     </td>
                     <td style="width: 30px">
@@ -37,7 +37,7 @@
                         @Object.AltMessage.SeqNo
                     </td>
                     <td>
-                        <span class="fa fa-@(Object.Message.SeqNo == @Object.AltMessage.SeqNo ? "check" : "exclamation")"></span>
+                        <span class="fa fa-@(Object.ComparisonList.Contains("SeqNo") ? "exclamation" : "check")"></span>
                     </td>
                 </tr>
                 <tr>
@@ -51,7 +51,7 @@
                         <input type="text" class="read-only" value="@Object.AltMessage.Message" />
                     </td>
                     <td>
-                        <span class="fa fa-@(Object.Message.Message == @Object.AltMessage.Message ? "check" : "exclamation")"></span>
+                        <span class="fa fa-@(Object.ComparisonList.Contains("Message") ? "exclamation" : "check")"></span>
                     </td>
                 </tr>
                 <tr>
@@ -65,7 +65,7 @@
                         <input type="text" class="read-only" value="@DateTime.ParseExact(Object.AltMessage.FromDate, "yyyyMMdd", CultureInfo.InvariantCulture).ToString("dd/MM/yyyy")" />
                     </td>
                     <td>
-                        <span class="fa fa-@(Object.Message.FromDate == @Object.AltMessage.FromDate ? "check" : "exclamation")"></span>
+                        <span class="fa fa-@(Object.ComparisonList.Contains("FromDate") ? "exclamation" : "check")"></span>
                     </td>
                 </tr>
 
@@ -80,7 +80,7 @@
                         <input type="text" class="read-only" value="@DateTime.ParseExact(Object.AltMessage.ToDate, "yyyyMMdd", CultureInfo.InvariantCulture).ToString("dd/MM/yyyy")" />
                     </td>
                     <td>
-                        <span class="fa fa-@(Object.Message.ToDate == @Object.AltMessage.ToDate ? "check" : "exclamation")"></span>
+                        <span class="fa fa-@(Object.ComparisonList.Contains("ToDate") ? "exclamation" : "check")"></span>
                     </td>
                 </tr>
             </tbody>
@@ -90,12 +90,12 @@
                     </td>
                     <td>
                         <div class=" d-flex justify-content-center">
-                            <button type="submit" autofocus class="btn btn-main" @onclick="() => HandleValidSubmit(false)">@(sessionState.selectedSystem == "Dev" ? ">> Live" : ">> Dev")</button>
+                            <button type="submit" autofocus class="btn btn-main" @onclick="() => HandleValidSubmit(false)">@(UserSession.selectedSystem == "Dev" ? ">> Live" : ">> Dev")</button>
                         </div>
                     </td>
                     <td>
                         <div class=" d-flex justify-content-center">
-                            <button type="submit" autofocus class="btn btn-main" @onclick="() => HandleValidSubmit(true)">@(sessionState.selectedSystem == "Dev" ? "Dev <<" : "Live <<")</button>
+                            <button type="submit" autofocus class="btn btn-main" @onclick="() => HandleValidSubmit(true)">@(UserSession.selectedSystem == "Dev" ? "Dev <<" : "Live <<")</button>
                         </div>
                     </td>
                     <td>
@@ -113,11 +113,11 @@ else
 
     @if (Object.AltMessage is null)
     {
-        curSystem = (sessionState.selectedSystem == "Dev" ? "Live" : "Dev");
+        curSystem = (UserSession.selectedSystem == "Dev" ? "Live" : "Dev");
     }
     else
     {
-        curSystem = (sessionState.selectedSystem == "Dev" ? "Dev" : "Live");
+        curSystem = (UserSession.selectedSystem == "Dev" ? "Dev" : "Live");
 
     }
 

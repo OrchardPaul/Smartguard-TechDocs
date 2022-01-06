@@ -27,7 +27,7 @@ namespace GadjIT_App.Pages.Chapters
         IAppChapterState appChapterState { get; set; }
 
         [Parameter]
-        public IUserSessionState sessionState { get; set; }
+        public IUserSessionState UserSession { get; set; }
 
         [Parameter]
         public VmDataViews Object { get; set; }
@@ -86,10 +86,10 @@ namespace GadjIT_App.Pages.Chapters
                 taskObject.ViewName = Object.DataView.ViewName;
 
 
-                await sessionState.SwitchSelectedSystem();
+                await UserSession.SwitchSelectedSystem();
                 AltChapterRow.SmartflowData = JsonConvert.SerializeObject(AltChapter);
                 await chapterManagementService.Update(AltChapterRow);
-                await sessionState.ResetSelectedSystem();
+                await UserSession.ResetSelectedSystem();
             }
 
             ComparisonRefresh?.Invoke();
@@ -128,14 +128,14 @@ namespace GadjIT_App.Pages.Chapters
                     AltChapter.DataViews = AltChapter.DataViews is null ? new List<DataViews>() : AltChapter.DataViews;
                     AltChapter.DataViews.Add(PushObject);
 
-                    await sessionState.SwitchSelectedSystem();
+                    await UserSession.SwitchSelectedSystem();
                     AltChapterRow.SmartflowData = JsonConvert.SerializeObject(AltChapter);
                     await chapterManagementService.Update(AltChapterRow);
-                    await sessionState.ResetSelectedSystem();
+                    await UserSession.ResetSelectedSystem();
                 }
                 else
                 {
-                    await sessionState.SwitchSelectedSystem();
+                    await UserSession.SwitchSelectedSystem();
 
                     AltChapterRow = new UsrOrsfSmartflows
                     {
@@ -150,13 +150,13 @@ namespace GadjIT_App.Pages.Chapters
 
                     var returnObject = await chapterManagementService.Add(AltChapterRow);
                     AltChapterRow.Id = returnObject.Id;
-                    await CompanyDbAccess.SaveSmartFlowRecord(AltChapterRow, sessionState);
-                    await sessionState.ResetSelectedSystem();
+                    await CompanyDbAccess.SaveSmartFlowRecord(AltChapterRow, UserSession);
+                    await UserSession.ResetSelectedSystem();
                 }
             }
 
             //keep track of time last updated ready for comparison by other sessions checking for updates
-            appChapterState.SetLastUpdated(sessionState, CurrentChapter);
+            appChapterState.SetLastUpdated(UserSession, CurrentChapter);
 
             ComparisonRefresh?.Invoke();
             Close();

@@ -34,7 +34,7 @@
                         @Object.AltChapter.P4WCaseTypeGroup
                     </td>
                     <td>
-                        <span class="fa fa-@(Object.CurrentChapter.P4WCaseTypeGroup == @Object.AltChapter.P4WCaseTypeGroup ? "check" : "exclamation")"></span>
+                        <span class="fa fa-@(Object.ComparisonList.Contains("P4WCaseTypeGroup") ? "exclamation" : "check")"></span>
                     </td>
                     <td>
                         @if (Object.CurrentChapter.P4WCaseTypeGroup != @Object.AltChapter.P4WCaseTypeGroup)
@@ -54,7 +54,7 @@
                         @Object.AltChapter.SelectedView
                     </td>
                     <td>
-                        <span class="fa fa-@(Object.CurrentChapter.SelectedView == @Object.AltChapter.SelectedView ? "check" : "exclamation")"></span>
+                        <span class="fa fa-@(Object.ComparisonList.Contains("SelectedView") ? "exclamation" : "check")"></span>
                     </td>
                     <td>
                         @if (Object.CurrentChapter.SelectedView != @Object.AltChapter.SelectedView)
@@ -74,7 +74,7 @@
                         @Object.AltChapter.StepName
                     </td>
                     <td>
-                        <span class="fa fa-@(Object.CurrentChapter.StepName == @Object.AltChapter.StepName ? "check" : "exclamation")"></span>
+                        <span class="fa fa-@(Object.ComparisonList.Contains("StepName") ? "exclamation" : "check")"></span>
                     </td>
                     <td>
                         @if (Object.CurrentChapter.StepName != @Object.AltChapter.StepName)
@@ -94,7 +94,7 @@
                         @Object.AltChapter.BackgroundColour
                     </td>
                     <td>
-                        <span class="fa fa-@(Object.CurrentChapter.BackgroundColour == @Object.AltChapter.BackgroundColour ? "check" : "exclamation")"></span>
+                        <span class="fa fa-@(Object.ComparisonList.Contains("BackgroundColour") ? "exclamation" : "check")"></span>
                     </td>
                     <td>
                         @if (Object.CurrentChapter.BackgroundColour != @Object.AltChapter.BackgroundColour)
@@ -114,7 +114,7 @@
                         @Object.AltChapter.BackgroundImageName
                     </td>
                     <td>
-                        <span class="fa fa-@(Object.CurrentChapter.BackgroundImage == @Object.AltChapter.BackgroundImage ? "check" : "exclamation")"></span>
+                        <span class="fa fa-@(Object.ComparisonList.Contains("BackgroundImageName") ? "exclamation" : "check")"></span>
                     </td>
                     <td>
                         @if (Object.CurrentChapter.BackgroundImage != @Object.AltChapter.BackgroundImage)
@@ -135,7 +135,7 @@
                         @Object.AltChapter.ShowPartnerNotes
                     </td>
                     <td>
-                        <span class="fa fa-@(Object.CurrentChapter.ShowPartnerNotes == @Object.AltChapter.ShowPartnerNotes ? "check" : "exclamation")"></span>
+                        <span class="fa fa-@(Object.ComparisonList.Contains("ShowPartnerNotes") ? "exclamation" : "check")"></span>
                     </td>
                     <td>
                         @if (Object.CurrentChapter.ShowPartnerNotes != @Object.AltChapter.ShowPartnerNotes)
@@ -156,7 +156,7 @@
                         @Object.AltChapter.ShowDocumentTracking
                     </td>
                     <td>
-                        <span class="fa fa-@(Object.CurrentChapter.ShowDocumentTracking == @Object.AltChapter.ShowDocumentTracking ? "check" : "exclamation")"></span>
+                        <span class="fa fa-@(Object.ComparisonList.Contains("ShowDocumentTracking") ? "exclamation" : "check")"></span>
                     </td>
                     <td>
                         @if (Object.CurrentChapter.ShowDocumentTracking != @Object.AltChapter.ShowDocumentTracking)

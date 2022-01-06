@@ -62,55 +62,55 @@ namespace GadjIT.ClientContext.P4W.Custom
             bool isSame = true;
             GenSmartflowItem compItem = vmCompItem.ChapterObject;
 
-            if (ChapterObject.SeqNo != compItem.SeqNo)
+            if ((ChapterObject.SeqNo ?? 0) != (compItem.SeqNo ?? 0))
             {
                 isSame = false;
                 ComparisonList.Add("SeqNo");
             }
 
-            if (ChapterObject.AsName != compItem.AsName)
+            if ((ChapterObject.AsName ?? "") != (compItem.AsName ?? ""))
             {
                 isSame = false;
                 ComparisonList.Add("AsName");
             }
 
-            if (ChapterObject.RescheduleDays != compItem.RescheduleDays)
+            if ((ChapterObject.RescheduleDays ?? 0) != (compItem.RescheduleDays ?? 0))
             {
                 isSame = false;
                 ComparisonList.Add("RescheduleDays");
             }
 
-            if (ChapterObject.RescheduleDataItem != compItem.RescheduleDataItem)
+            if ((ChapterObject.RescheduleDataItem ?? "") != (compItem.RescheduleDataItem ?? ""))
             {
                 isSame = false;
                 ComparisonList.Add("RescheduleDataItem");
             }
 
-            if (ChapterObject.CompleteName != compItem.CompleteName)
+            if ((ChapterObject.CompleteName ?? "") != (compItem.CompleteName ?? ""))
             {
                 isSame = false;
                 ComparisonList.Add("CompleteName");
             }
 
-            if (ChapterObject.SuppressStep != compItem.SuppressStep)
+            if ((ChapterObject.SuppressStep ?? "") != (compItem.SuppressStep ?? ""))
             {
                 isSame = false;
                 ComparisonList.Add("SuppressStep");
             }
 
-            if (ChapterObject.EntityType != compItem.EntityType)
+            if ((ChapterObject.EntityType ?? "") != (compItem.EntityType ?? ""))
             {
                 isSame = false;
                 ComparisonList.Add("EntityType");
             }
 
-            if (ChapterObject.AltDisplayName != compItem.AltDisplayName)
+            if ((ChapterObject.AltDisplayName ?? "") != (compItem.AltDisplayName ?? ""))
             {
                 isSame = false;
                 ComparisonList.Add("AltDisplayName");
             }
 
-            if (ChapterObject.UserMessage != compItem.UserMessage)
+            if ((ChapterObject.UserMessage ?? "") != (compItem.UserMessage ?? ""))
             {
                 isSame = false;
                 ComparisonList.Add("UserMessage");
@@ -122,57 +122,64 @@ namespace GadjIT.ClientContext.P4W.Custom
                 ComparisonList.Add("PopupAlert");
             }
 
-            if (ChapterObject.NextStatus != compItem.NextStatus)
+            if ((ChapterObject.NextStatus ?? "") != (compItem.NextStatus ?? ""))
             {
                 isSame = false;
                 ComparisonList.Add("NextStatus");
             }
 
-            if (ChapterObject.Action != compItem.Action)
+            if ((ChapterObject.Action ?? "") != (compItem.Action ?? ""))
             {
                 isSame = false;
                 ComparisonList.Add("Action");
             }
 
-
-            if(!(ChapterObject.LinkedItems is null))
+            if(!(ChapterObject.LinkedItems is null) && !(compItem.LinkedItems is null))
             {
-                if(!(compItem.LinkedItems is null))
+                if(!(ChapterObject.LinkedItems is null))
                 {
-                    if (ChapterObject.LinkedItems.Count == compItem.LinkedItems.Count)
+                    if(!(compItem.LinkedItems is null))
                     {
-                        
-                        foreach (var doc in ChapterObject.LinkedItems)
+                        if (ChapterObject.LinkedItems.Count == compItem.LinkedItems.Count)
                         {
-                            var compDoc = compItem.LinkedItems.Where(F => F.DocName == doc.DocName).FirstOrDefault();
-
-                            if(compDoc is null)
+                            
+                            foreach (var doc in ChapterObject.LinkedItems)
                             {
-                                isSame = false;
-                                ComparisonList.Add("LinkedItems");
+                                var compDoc = compItem.LinkedItems.Where(F => F.DocName == doc.DocName).FirstOrDefault();
+
+                                if(compDoc is null)
+                                {
+                                    isSame = false;
+                                    ComparisonList.Add("LinkedItems");
+                                }
+                                else
+                                {
+                                    if(!(compDoc.Action == doc.Action))
+                                    {
+                                        isSame = false;
+                                        ComparisonList.Add("LinkedItems");
+                                    }
+
+                                    if (!(compDoc.ScheduleDataItem == doc.ScheduleDataItem))
+                                    {
+                                        isSame = false;
+                                        ComparisonList.Add("LinkedItems");
+                                    }
+
+
+                                    if (!(compDoc.DocAsName == doc.DocAsName))
+                                    {
+                                        isSame = false;
+                                        ComparisonList.Add("LinkedItems");
+                                    }
+                                }
+
                             }
-                            else
-                            {
-                                if(!(compDoc.Action == doc.Action))
-                                {
-                                    isSame = false;
-                                    ComparisonList.Add("LinkedItems");
-                                }
-
-                                if (!(compDoc.ScheduleDataItem == doc.ScheduleDataItem))
-                                {
-                                    isSame = false;
-                                    ComparisonList.Add("LinkedItems");
-                                }
-
-
-                                if (!(compDoc.DocAsName == doc.DocAsName))
-                                {
-                                    isSame = false;
-                                    ComparisonList.Add("LinkedItems");
-                                }
-                            }
-    
+                        }
+                        else
+                        {
+                            isSame = false;
+                            ComparisonList.Add("LinkedItems");
                         }
                     }
                     else
@@ -181,17 +188,14 @@ namespace GadjIT.ClientContext.P4W.Custom
                         ComparisonList.Add("LinkedItems");
                     }
                 }
-                else
+                else if (!(compItem.LinkedItems is null))
                 {
                     isSame = false;
                     ComparisonList.Add("LinkedItems");
                 }
             }
-            else if (!(compItem.LinkedItems is null))
-            {
-                isSame = false;
-                ComparisonList.Add("LinkedItems");
-            }
+
+
 
 
 
