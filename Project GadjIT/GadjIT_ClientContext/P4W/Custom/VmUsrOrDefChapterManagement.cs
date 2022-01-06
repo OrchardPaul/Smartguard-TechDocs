@@ -83,7 +83,7 @@ namespace GadjIT.ClientContext.P4W.Custom
             if (ChapterObject.RescheduleDataItem != compItem.RescheduleDataItem)
             {
                 isSame = false;
-                ComparisonList.Add("RescheduleDays");
+                ComparisonList.Add("RescheduleDataItem");
             }
 
             if (ChapterObject.CompleteName != compItem.CompleteName)
@@ -116,7 +116,7 @@ namespace GadjIT.ClientContext.P4W.Custom
                 ComparisonList.Add("UserMessage");
             }
 
-            if (ChapterObject.PopupAlert != compItem.PopupAlert)
+            if ((ChapterObject.PopupAlert ?? "") != (compItem.PopupAlert ?? ""))
             {
                 isSame = false;
                 ComparisonList.Add("PopupAlert");
