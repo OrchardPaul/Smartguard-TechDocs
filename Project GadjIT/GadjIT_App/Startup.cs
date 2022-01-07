@@ -66,6 +66,7 @@ namespace GadjIT_App
 
             services.AddHttpClient<IChapterManagementService, ChapterManagementService>();
             services.AddHttpClient<IPartnerAccessService, PartnerAccessService>();
+            services.AddHttpClient<IGeneralAccessService, GeneralAccessService>();
 
             services.AddScoped<IIdentityRoleAccess, IdentityRoleAccess>();
             services.AddScoped<IIdentityUserAccess, IdentityUserAccess>();

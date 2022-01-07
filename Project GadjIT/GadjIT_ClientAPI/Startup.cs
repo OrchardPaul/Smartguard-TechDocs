@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using GadjIT.ClientAPI.Repository.Chapters;
+using GadjIT.ClientAPI.Repository.GeneralAccess;
 using GadjIT.ClientAPI.Repository.Partner;
 using GadjIT.ClientContext.P4W;
 using Microsoft.AspNetCore.Builder;
@@ -43,6 +44,7 @@ namespace GadjIT.ClientAPI
 
             services.AddScoped<IChapters_Service, Chapters_Service>();
             services.AddScoped<IPartner_Access_Service, Partner_Access_Service>();
+            services.AddScoped<IGeneralAccessService, GeneralAccessService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
