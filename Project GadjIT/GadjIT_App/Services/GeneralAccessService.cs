@@ -16,7 +16,7 @@ namespace GadjIT_App.Services
 {
     public interface IGeneralAccessService
     {
-        Task<List<MpSysViews>> GetPartnerViews();
+        Task<List<Dictionary<string,dynamic>>> RunQuery(string _query);
 
     }
 
@@ -31,13 +31,13 @@ namespace GadjIT_App.Services
             this.userSession = userSession;
         }
 
-        public async Task<List<MpSysViews>> GetPartnerViews()
+        public async Task<List<Dictionary<string,dynamic>>> RunQuery(string _query)
         {
-            var sql = new SQLRequest { Query = "SELECT * FROM Mp_Sys_Views"};
+            var sql = new SQLRequest { Query = _query};
 
             using var response = await httpClient.PutAsJsonAsync($"{userSession.baseUri}api/GeneralAccess/GetListOfData", sql);
 
-            var results = await response.Content.ReadFromJsonAsync<IEnumerable<MpSysViews>>();
+            var results = await response.Content.ReadFromJsonAsync<IEnumerable<Dictionary<string,dynamic>>>();
 
             return results.ToList();
 

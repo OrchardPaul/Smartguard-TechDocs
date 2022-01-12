@@ -48,6 +48,14 @@ namespace GadjIT.ClientAPI.Repository.GeneralAccess
                 commandType: CommandType.StoredProcedure);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sql"></param>
+        /// <param name="connectionId"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="U"></typeparam>
+        /// <returns></returns>
         public async Task<IEnumerable<T>> LoadData<T, U>(
             string sql,
             string connectionId = "GadjIT_API")

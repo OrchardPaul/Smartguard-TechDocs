@@ -25,6 +25,12 @@ namespace GadjIT.ClientAPI.Controllers
             this.generalAccessService = generalAccessService;
         }
 
+
+        /// <summary>
+        /// Run query received and return results
+        /// </summary>
+        /// <param name="sql">Query</param>
+        /// <returns>Dictionary of key/value</returns>
         [HttpPut]
         public async Task<ActionResult> GetListOfData(SQLRequest sql)
         {
