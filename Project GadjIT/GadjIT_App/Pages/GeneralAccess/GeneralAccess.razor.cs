@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Blazored.Modal;
 using Blazored.Modal.Services;
@@ -59,24 +60,42 @@ namespace GadjIT_App.Pages.GeneralAccess
         /// <returns></returns>
         public async void ExecuteQuery()
         {
+            var results = await GeneralAccessService.RunQuery(Query);
+            bool IsError = false;
 
-            if(FirstRun)
+
+            if(results.FirstOrDefault() is null)
             {
-                QueryResults = await GeneralAccessService.RunQuery(Query);
-                StateHasChanged();
+                IsError = true;
+                ShowErrorModal("No results returned");
             }
-            else
+            else if (results.FirstOrDefault().ContainsKey("ErrorFromApi"))
             {
+                IsError = true;
+                ShowErrorModal(Convert.ToString(results.FirstOrDefault()["ErrorFromApi"]));
+            }
+            
+            if(!IsError)
+            {
+                QueryResults = results;
 
-                QueryResults = await GeneralAccessService.RunQuery(Query);
-                await jsRuntime.InvokeAsync<object>("destroyDataTable", "#QueryResults");
-                StateHasChanged();
+                if(FirstRun)
+                {
+                    StateHasChanged();
+                }
+                else
+                {
+                    await jsRuntime.InvokeAsync<object>("destroyDataTable", "#QueryResults");
+                    StateHasChanged();
+                }
+
+                await jsRuntime.InvokeAsync<object>("loadDataTable", "#QueryResults");
+
+                FirstRun = false;
             }
 
-            await jsRuntime.InvokeAsync<object>("loadDataTable", "#QueryResults");
-
-            FirstRun = false;
         }
+
 
         /// <summary>
         /// Brings up confirm model
@@ -98,6 +117,25 @@ namespace GadjIT_App.Pages.GeneralAccess
 
             Modal.Show<ModalConfirm>("Confirm", parameters, options);
         }
+
+        protected void ShowErrorModal(string errorFromApi)
+        {
+            string errorDesc = "Query resulted in an error for the following reason";
+
+            var errorDetails = new List<string>{errorFromApi};
+
+            var parameters = new ModalParameters();
+            parameters.Add("ErrorDesc", errorDesc);
+            parameters.Add("ErrorDetails", errorDetails);
+
+            var options = new ModalOptions()
+            {
+                Class = "blazored-custom-modal modal-confirm"
+            };
+
+            Modal.Show<ModalErrorInfo>("Error", parameters, options);
+        }
+
 
     }
 }

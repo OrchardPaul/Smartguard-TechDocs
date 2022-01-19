@@ -39,11 +39,26 @@ namespace GadjIT_App.Services
         {
             var sql = new SQLRequest { Query = _query};
 
+            using var response = await httpClient.PutAsJsonAsync($"{userSession.baseUri}api/GeneralAccess/GetListOfData", sql);
 
-                using var response = await httpClient.PutAsJsonAsync($"{userSession.baseUri}api/GeneralAccess/GetListOfData", sql);
+            IEnumerable<Dictionary<string,dynamic>> results;
 
-                var results = await response.Content.ReadFromJsonAsync<IEnumerable<Dictionary<string,dynamic>>>();
+            if(response.IsSuccessStatusCode)
+            {
+                results = await response.Content.ReadFromJsonAsync<IEnumerable<Dictionary<string,dynamic>>>();
+            }
+            else
+            {
+                var errorReason = await response.Content.ReadFromJsonAsync<Dictionary<string,dynamic>>();
 
+                results = new List<Dictionary<string,dynamic>>
+                {
+                    new Dictionary<string,dynamic>
+                    {
+                        {"ErrorFromApi",errorReason["detail"]}
+                    }
+                };
+            }
 
 
             return results.ToList();
