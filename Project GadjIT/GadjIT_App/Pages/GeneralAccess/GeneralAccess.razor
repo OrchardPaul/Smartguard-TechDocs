@@ -1,61 +1,67 @@
 @page "/GeneralAccess"
 @using System.Globalization
 
-<div class="form-group">
-    <label>Enter Query: </label>
-    <input type="text" class="form-control form-control-md" @bind="Query"></input>
-    <button class="btn btn-main" @onclick="RunQuery">Run Query</button>
+@inject IJSRuntime jsRuntime
+
+<div class="tran-block page-header-block ">
+    <div style="display:flex;">
+        <h3>Enter Query: </h3>
+        <input type="text" style="width: 1000px; height: 100px;" class="form-control" @bind="Query"></input>
+    </div>
+    
+    <button class="btn btn-main" @onclick="RunQuery">Execute</button>
+    
 </div>
 
+<div class="grid-tran" >
+    <h3>Results: </h3>
+    <div class="tran-block rounded" style="overflow-x:auto; width:100%;">
 
-<div>
-    <label>Results: </label>
-
-    <table class="table">
-        <thead>
-            <tr>
-                @if(QueryResults.Count() > 0)
-                {
-                    @foreach (var i in QueryResults.FirstOrDefault())
-                    {
-                        <th>@i.Key</th>
-                    }
-                }
-
-            </tr>
-        </thead>
-        <tbody>
-
-            @foreach (var i in QueryResults)
-            {
+        <table id="QueryResults" class="display" >
+            <thead>
                 <tr>
-                @foreach(var c in i.Values)
-                {
-                    <td>
-                    @if(!(c is null))
+                    @if(QueryResults.Count() > 0)
                     {
-                        @if(@DateTime.TryParse(c.ToString(), out TryDate))
+                        @foreach (var i in QueryResults.FirstOrDefault())
                         {
-                            @string.Format("{0:dd MMM yyyy}",DateTime.Parse(c.ToString()))
+                            <th  style="text-overflow: ellipsis;" class="sorting sorting_asc">@i.Key</th>
                         }
-                        else
-                        {
-                            
-                            @c.ToString()
-                            
-
-                            
-                        }
-
                     }
-                    </td>
-                   
-                }
                 </tr>
+            </thead>
+            <tbody>
+                @foreach (var i in QueryResults)
+                {
+                    <tr >
+                    @foreach(var c in i.Values)
+                    {
+                        <td  style="text-overflow: ellipsis;">
+                        @if(!(c is null))
+                        {
+                            @if(@DateTime.TryParse(c.ToString(), out TryDate))
+                            {
+                                @string.Format("{0:dd MMM yyyy}",DateTime.Parse(c.ToString()))
+                            }
+                            else
+                            {
+                                
+                                @c.ToString()
+                                
 
-            }
-        </tbody>
-    </table>
+                                
+                            }
+
+                        }
+                        </td>
+                        
+                    }
+                    </tr>
+
+                }
+            </tbody>
+        </table>
+    </div>
+
 
 
 

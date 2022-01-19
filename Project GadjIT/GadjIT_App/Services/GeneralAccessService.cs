@@ -4,6 +4,7 @@ using GadjIT.ClientContext.P4W.Functions;
 using GadjIT_App.Data.Admin;
 using GadjIT_App.Services.SessionState;
 using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,6 +23,9 @@ namespace GadjIT_App.Services
 
     public class GeneralAccessService : IGeneralAccessService
     {
+        [Inject]
+        private ILogger<GeneralAccessService> Logger { get; set; }
+
         private readonly HttpClient httpClient;
         private readonly IUserSessionState userSession;
 
@@ -35,9 +39,12 @@ namespace GadjIT_App.Services
         {
             var sql = new SQLRequest { Query = _query};
 
-            using var response = await httpClient.PutAsJsonAsync($"{userSession.baseUri}api/GeneralAccess/GetListOfData", sql);
 
-            var results = await response.Content.ReadFromJsonAsync<IEnumerable<Dictionary<string,dynamic>>>();
+                using var response = await httpClient.PutAsJsonAsync($"{userSession.baseUri}api/GeneralAccess/GetListOfData", sql);
+
+                var results = await response.Content.ReadFromJsonAsync<IEnumerable<Dictionary<string,dynamic>>>();
+
+
 
             return results.ToList();
 
