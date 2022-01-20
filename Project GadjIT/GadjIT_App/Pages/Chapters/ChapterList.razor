@@ -938,7 +938,7 @@ else
 
                                             <div class="data-item-right suppress-step">
                                                 <ModalTooltip Direction="left" Text=@("Status Change: " + context.ChapterObject.NextStatus) Class="w-2">
-                                                    <span class="fa fa-battery-half"></span>
+                                                    <span class="fa fa-battery-half @(lstStatus.Select(s => s.ChapterObject.Name).Contains(context.ChapterObject.NextStatus) ? "" : "faRed")"></span>
                                                 </ModalTooltip>
                                             </div>
                                         }
