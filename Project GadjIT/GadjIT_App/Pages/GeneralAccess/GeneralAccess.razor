@@ -4,19 +4,20 @@
 @inject IJSRuntime jsRuntime
 
 <div class="tran-block page-header-block ">
-    <div style="display:flex;">
-        <h3>Enter Query: </h3>
-        <input type="text" style="width: 1000px; height: 100px;" class="form-control" @bind="Query"></input>
-    </div>
-    
-    <button class="btn btn-main" @onclick="RunQuery">Execute</button>
+    <div class="form-group" style="margin: 10px 10px 10px 20px">
+        <label class="font-weight-bold">Query: </label>
+        <div style="margin: 5px 0 5px 0;">
+            <textarea type="text" rows="10" style="width: 600px; height: 100px;" class="form-control" @bind="Query" />
+        </div>
+        <button class="btn btn-main" @onclick="RunQuery">Execute</button>
+    </div>    
     
 </div>
 
-<div class="grid-tran" >
-    <h3>Results: </h3>
-    <div class="tran-block rounded" style="overflow-x:auto; width:100%;">
-
+<div class="tran-block rounded" style="width: calc(100% - 40px)" >
+    
+    <div class="grid-admin grid-admin-query"  >
+        
         <table id="QueryResults" class="display" >
             <thead>
                 <tr>
@@ -66,10 +67,4 @@
 
 
 </div>
-
-
-
-
-
-
 
