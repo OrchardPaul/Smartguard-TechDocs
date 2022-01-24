@@ -9,6 +9,13 @@
         <div style="margin: 5px 0 5px 0;">
             <textarea type="text" rows="10" style="width: 600px; height: 100px;" class="form-control" @bind="Query" />
         </div>
+        <div style="margin: 5px 0 5px 0;">
+            <input type="text" @bind-value="EntityRef">
+            <input style="width: 40px;" type="number" @bind-value="MatterNo">
+
+            <button style="height: 25px; width: 40px;" class="btn btn-secondary" @onclick="AddEntityRefMatterNo"><i class="fas fa-plus"></i></button>
+        </div>
+
         <button class="btn btn-main" @onclick="RunQuery">Execute</button>
     </div>    
     
@@ -45,11 +52,7 @@
                             }
                             else
                             {
-                                
                                 @c.ToString()
-                                
-
-                                
                             }
 
                         }

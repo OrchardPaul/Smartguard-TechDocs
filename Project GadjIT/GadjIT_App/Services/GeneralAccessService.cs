@@ -41,11 +41,25 @@ namespace GadjIT_App.Services
 
             using var response = await httpClient.PutAsJsonAsync($"{userSession.baseUri}api/GeneralAccess/GetListOfData", sql);
 
-            IEnumerable<Dictionary<string,dynamic>> results;
+            List<Dictionary<string,dynamic>> results = new List<Dictionary<string, dynamic>>();
 
             if(response.IsSuccessStatusCode)
             {
-                results = await response.Content.ReadFromJsonAsync<IEnumerable<Dictionary<string,dynamic>>>();
+                var resultsfromApi = await response.Content.ReadFromJsonAsync<IEnumerable<Dictionary<string,dynamic>>>();
+
+                if (resultsfromApi.Count() > 200)
+                {
+                    results.Add(new Dictionary<string,dynamic>
+                    {
+                        {"WarningFromApi","Results from query exceed 200 rows, not all will be displayed"}
+                    });
+                    
+                    results.AddRange(resultsfromApi.Take(200).ToList());
+                }
+                else
+                {
+                    results = resultsfromApi.ToList();
+                }
             }
             else
             {
@@ -60,8 +74,7 @@ namespace GadjIT_App.Services
                 };
             }
 
-
-            return results.ToList();
+            return results;
 
         }
 
