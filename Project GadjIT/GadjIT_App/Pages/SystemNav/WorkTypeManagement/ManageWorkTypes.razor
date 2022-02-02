@@ -1,6 +1,8 @@
 ﻿@page "/system/manageworktypes"
 @using GadjIT_App.Pages.Shared.Modals
 
+@attribute [Authorize(Roles ="Super User")]
+
 <div class="tran-block page-header-block ">
     <div class="page-header-title">
         <div class="float-left back-link">

@@ -1,6 +1,8 @@
 ﻿@page "/accounts/companyaccounts"
 @using System.Linq.Dynamic.Core;
 
+@attribute [Authorize(Roles ="Super User")]
+
 <div class="tran-block page-header-block ">
     <div class="page-header-title">
         <div class="float-left back-link">
