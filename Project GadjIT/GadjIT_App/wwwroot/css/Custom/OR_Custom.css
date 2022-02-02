@@ -412,9 +412,6 @@ app {
     .grid-actions {
         margin-bottom: 10px !important;
         display: flex;
-    }
-
-    .grid-chapter .grid-actions {
         max-width: 800px;
     }
 
@@ -1023,11 +1020,6 @@ app {
 
 
 .grid-chapter, .grid-admin {
-    width: 800px;
-    min-height: 400px;
-}
-
-.grid-chapter-docs, .grid-chapter-fees, .grid-chapter-chapter, .grid-chapter-messages, .grid-accounts-company, .grid-chapter-backups, .grid-chapter-background, .grid-admin-company {
     width: 100%;
     min-height: 400px;
 }
@@ -1073,21 +1065,7 @@ app {
     width: 15%;
 }
 
-.grid-accounts-company .row .data-item:nth-of-type(1) {
-    width: 16%;
-}
 
-.grid-accounts-company .row .data-item:nth-of-type(2), .grid-accounts-company .row .data-item:nth-of-type(3) {
-    width: 12%;
-    padding-left: 10px;
-}
-
-
-.grid-accounts-company .row .data-item:nth-of-type(4), .grid-accounts-company .row .data-item:nth-of-type(5), .grid-accounts-company .row .data-item:nth-of-type(6), .grid-accounts-company .row .data-item:nth-of-type(7), .grid-accounts-company .row .data-item:nth-of-type(8) {
-    width: 12%;
-    padding-right: 20px;
-    justify-content: flex-end;
-}
 
 @media (max-width: 991px) {
     .grid-chapter {
@@ -1127,11 +1105,66 @@ app {
     width: 30%;
 }
 
-.grid-admin-company .row .data-item:nth-of-type(1) {
-    width: 30%;
+/**************************/
+/*ACCOUNTS                   */
+/**************************/
+.grid-accounts-companies .data-item, .grid-accounts-companies .data-item-sub
+,.grid-accounts-company .data-item, .grid-accounts-company .data-item-sub{
+    font-size: 9pt !important;
 }
 
-.grid-admin-company .row .data-item:nth-of-type(2), .grid-admin-company .row .data-item:nth-of-type(3), .grid-admin-company .row .data-item:nth-of-type(4), .grid-admin-company .row .data-item:nth-of-type(5), .grid-admin-company .row .data-item:nth-of-type(6) {
+.grid-accounts-companies .row .data-item {
+    width: 12%;
+    padding-right: 10px;
+    justify-content: flex-end;
+}
+
+.grid-accounts-companies .row .data-item:nth-of-type(1){
+    padding-left: 10px;
+    justify-content: flex-start;
+    width: 40%;
+}
+
+.grid-accounts-company .row .data-item {
+    width: 9%;
+    padding-left: 10px;
+}
+
+.grid-accounts-company .row .data-item:nth-of-type(1)
+, .grid-accounts-company .row .data-item:nth-of-type(2)
+, .grid-accounts-company .row .data-item:nth-of-type(3) {
+    width: 18%;
+}
+
+.grid-accounts-company .row .data-item:nth-of-type(8) {
+    width: 10%;
+}
+
+.grid-accounts-company .row .data-item:nth-of-type(4)
+, .grid-accounts-company .row .data-item:nth-of-type(5)
+, .grid-accounts-company .row .data-item:nth-of-type(6)
+, .grid-accounts-company .row .data-item:nth-of-type(7)
+, .grid-accounts-company .row .data-item:nth-of-type(8) {
+    padding-right: 10px;
+    justify-content: flex-end !important;
+}
+
+
+/**************************/
+/*ADMIN                   */
+/**************************/
+
+.grid-admin-company .row .data-item:nth-of-type(1){
+    width: 30%;
+    padding-right: 20px;
+    justify-content: flex-end;
+}
+
+.grid-admin-company .row .data-item:nth-of-type(2)
+, .grid-admin-company .row .data-item:nth-of-type(3)
+, .grid-admin-company .row .data-item:nth-of-type(4)
+, .grid-admin-company .row .data-item:nth-of-type(5)
+, .grid-admin-company .row .data-item:nth-of-type(6) {
     width: 14%;
     padding-right: 20px;
     justify-content: flex-end;
@@ -1147,6 +1180,60 @@ app {
     
 }
 
+/*---------------------------*/
+/* Data Tables               */
+/*                           */
+/*---------------------------*/
+.grid-admin-query{width: 800px;}
+@media (max-width: 2199px) {
+    .grid-admin-query{width: 1750px;}
+}
+@media (max-width: 2099px) {
+    .grid-admin-query{width: 1650px;}
+}
+@media (max-width: 1999px) {
+    .grid-admin-query{width: 1550px;}
+}
+@media (max-width: 1899px) {
+    .grid-admin-query{width: 1450px;}
+}
+@media (max-width: 1799px) {
+    .grid-admin-query{width: 1350px;}
+}
+@media (max-width: 1699px) {
+    .grid-admin-query{width: 1250px;}
+}
+@media (max-width: 1599px) {
+    .grid-admin-query{width: 1150px;}
+}
+@media (max-width: 1399px) {
+    .grid-admin-query{width: 1050px;}
+
+}
+@media (max-width: 1299px) {
+    .grid-admin-query{width: 950px; }
+}
+@media (max-width: 1199px) {
+    .grid-admin-query{width: 1050px; }
+}
+@media (max-width: 1099px) {
+    .grid-admin-query{width: 950px; }
+}
+@media (max-width: 991px) {
+    .grid-admin-query{width: 750px; }
+}
+
+.dataTables_scroll{
+    width: 100%;
+    font-size: 9pt !important;
+}
+.dataTable th{
+    font-size: 9pt !important;
+}
+
+.dataTable td{
+    font-size: 8pt !important;
+}
 /*---------------------------*/
 /* Document Lists and Icons  */
 /*                           */

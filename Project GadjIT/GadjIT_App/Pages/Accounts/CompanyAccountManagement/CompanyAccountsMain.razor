@@ -63,13 +63,13 @@
         @if (navDisplay == "Companies")
         {
 
-            <div class="grid-chapter grid-admin-company">
+            <div class="grid-chapter grid-accounts-companies">
 
                 <div class="grid-actions">
                     @if (SessionState.isAdminUser)
                     {
                         <div class="btn-group">
-                            <button @onclick='() => RefreshCompanyAccounts()' class="btn btn-main btn-shadow" title="Refresh Companies"><i class="fa fa-plus"></i><span>Refresh Company Accounts</span></button>
+                            <button @onclick='() => RefreshCompanyAccounts()' class="btn btn-main btn-shadow" title="Refresh"><i class="fa fa-redo"></i><span>Refresh</span></button>
                             <button @onclick='() => ExportToPdf()' class="btn btn-main btn-shadow" title="Refresh Companies"><i class="fa fa-plus"></i><span>Export</span></button>
                         </div>
                     }
@@ -77,8 +77,8 @@
 
                 <div class="@(SessionState.isAdminUser ? "grid-can-edit" : "") ">
                     <div class="row grid-header invisible-md-down">
-                        <div class="data-item ">
-                            <div class="data-item-sub">
+                        <div class="data-item">
+                            <div class="data-item-sub" >
                                 Company Name
                             </div>
                                 
@@ -87,10 +87,10 @@
                                 Total SmartFlows
                         </div>
                         <div class="data-item ">
-                                Smartflows Live
+                                Live
                         </div>
                         <div class="data-item ">
-                                Smartflows Dev
+                                Dev
                         </div>
                         <div class="data-item ">
                                 Outstanding
@@ -116,7 +116,7 @@
                                                 <ul>
                                                     <li class="col-main" @onclick='(() => SelectCompany(companyAccountObject.AccountObject))'>
                                                         <span class="fa fa-binoculars mr-2"></span>
-                                                        <span>View Smartflows</span>
+                                                        <span>View</span>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -177,7 +177,7 @@
                     @if (SessionState.isAdminUser)
                     {
                         <div class="btn-group">
-                            <button @onclick='() => Bill()' class="btn btn-main btn-shadow" title="Refresh Companies"><i class="fa fa-plus"></i><span>Bill</span></button>
+                            <button @onclick='() => Bill()' class="btn btn-main btn-shadow" title="Add New Bill"><i class="fa fa-money-bill-wave"></i><span>Bill</span></button>
                         </div>
                     }
                 </div>
@@ -204,7 +204,6 @@
                             Smartflow Name
                         </div>
                         <div @onclick="SwitchStatusSort" class="data-item ">
-                            <div class="data-item-sub">
                                 Status
                                 <span class="fa-stack">
                                     <span class="@(SortByStatus ? "col-alt" : "")">
@@ -215,11 +214,9 @@
                                     </span>
                                 </span>
 
-                            </div>
                         </div>
                         <div @onclick="SwitchStartDateSort" class="data-item ">
-                            <div class="data-item-sub">
-                                Start Date
+                                Start
                                 <span class="fa-stack">
                                     <span class="@(SortByStartDate ? "col-alt" : "")">
                                         <i class="fas fa-caret-up"></i>
@@ -229,11 +226,9 @@
                                     </span>
                                 </span>
   
-                            </div>
                         </div>
                         <div @onclick="SwitchEndDateSort" class="data-item ">
-                            <div class="data-item-sub">
-                                End Date
+                                End
                                 <span class="fa-stack">
                                     <span class="@(SortByEndDate ? "col-alt" : "")">
                                         <i class="fas fa-caret-up"></i>
@@ -241,12 +236,10 @@
                                     <span class="@(SortByEndDateDesc ? "col-alt" : "") ">
                                         <i class="fas fa-caret-down"></i>
                                     </span>
-                                </span>
-    
-                            </div>
+                                </span>    
                         </div>
-                        <div class="data-item ">
-                            Months Remaining
+                        <div class="data-item " title="Months Remaining">
+                            Remaining
                         </div>
                         <div class="data-item ">
                             Total Billed
@@ -275,7 +268,7 @@
                                                           .ToList())
                             {
                         <div class="row grid-row">
-                            <div class="data-item">
+                            <div class="data-item" title="@companyAccountObject.CaseTypeGroup">
                                 <div class="btn-ellipses float-left">
                                     <span class="fa fa-ellipsis-v"></span>
                                     <div class="ellipsis-menu">
@@ -288,12 +281,12 @@
                                     </div>
                                 </div>
 
-                                <div class="data-item-sub">
+                                <div class="data-item-sub" title="@companyAccountObject.CaseTypeGroup">
                                     @companyAccountObject.CaseTypeGroup
                                 </div>
                             </div>
 
-                            <div class="data-item">
+                            <div class="data-item" title="@companyAccountObject.CaseType">
                                 @companyAccountObject.CaseType
                             </div>
 
