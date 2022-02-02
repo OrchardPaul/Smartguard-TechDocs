@@ -12,6 +12,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Linq.Dynamic.Core;
+using Microsoft.Extensions.Logging;
+using Serilog.Context;
 
 namespace GadjIT_App.Pages.Accounts.CompanyAccountManagement
 {
@@ -55,6 +57,9 @@ namespace GadjIT_App.Pages.Accounts.CompanyAccountManagement
         [Inject]
         public IExcelHelper ExcelHelper { get; set; }
 
+        [Inject]
+        private ILogger<CompanyAccountsMain> Logger { get; set; }
+
         public string navDisplay = "Companies";
 
         public bool displaySpinner = true;
@@ -85,11 +90,28 @@ namespace GadjIT_App.Pages.Accounts.CompanyAccountManagement
 
         public string SelectedSystem { get; set; } = "Live";
 
+        /// <summary>
+        /// TODO: Not sure why but calling the RefreshCompanyObjects procedure causes a crash
+        /// Fixed by copying the code from the RefreshCompanyObjects but could do with figuring out why this happens
+        /// </summary>
+        /// <returns></returns>
         protected override async Task OnInitializedAsync()
+        {
+            await RefreshCompanyAccounts();
+        }
+
+        protected async Task RefreshPage()
         {
             try
             {
                 displaySpinner = true;
+
+                bool gotLock = SessionState.Lock;
+                while (gotLock)
+                {
+                    await Task.Yield();
+                    gotLock = SessionState.Lock;
+                }
 
                 AppCompanyDetails = await CompanyDbAccess.GetCompanies();
 
@@ -99,7 +121,29 @@ namespace GadjIT_App.Pages.Accounts.CompanyAccountManagement
 
                 SelectedCompanyAccount = AppCompanyAccounts.Where(A => A.CompanyId == SessionState.Company.Id).FirstOrDefault();
 
-                RefreshCompanyAccounts();
+
+                var companyAccountObject = new CompanyAccountObject();
+
+                foreach (var account in AppCompanyAccounts)
+                {
+
+                    AppCompanyAccountsDetails = await CompanyDbAccess.GetCompanyAccountDetailsByAccountId(account.Id);
+
+                    companyAccountObject = new CompanyAccountObject
+                    {
+                        CompanyObject = AppCompanyDetails.Where(D => D.Id == account.CompanyId).FirstOrDefault(),
+                        AccountObject = account,
+                        SmartflowAccounts = AppCompanyAccountsDetails
+                    };
+
+
+                    CompanyAccountObjects.Add(companyAccountObject);
+                }
+
+                await InvokeAsync(() =>
+                {
+                    StateHasChanged();
+                });
 
                 displaySpinner = false;
 
@@ -120,6 +164,7 @@ namespace GadjIT_App.Pages.Accounts.CompanyAccountManagement
 
             foreach (var account in AppCompanyAccounts)
             {
+
                 AppCompanyAccountsDetails = await CompanyDbAccess.GetCompanyAccountDetailsByAccountId(account.Id);
 
                 companyAccountObject = new CompanyAccountObject
@@ -132,11 +177,11 @@ namespace GadjIT_App.Pages.Accounts.CompanyAccountManagement
 
                 CompanyAccountObjects.Add(companyAccountObject);
             }
-
             await InvokeAsync(() =>
             {
                 StateHasChanged();
             });
+
         }
 
 
@@ -146,24 +191,24 @@ namespace GadjIT_App.Pages.Accounts.CompanyAccountManagement
             navDisplay = displayChange;
         }
 
-        protected async void RefreshCompanyAccounts()
+        protected async Task RefreshCompanyAccounts()
         {
-            bool gotLock = CompanyDbAccess.Lock;
+            bool gotLock = SessionState.Lock;
             while (gotLock)
             {
                 await Task.Yield();
-                gotLock = CompanyDbAccess.Lock;
+                gotLock = SessionState.Lock;
             }
 
             await CompanyDbAccess.RefreshAccounts();
 
-            RefreshCompanyObjects();
+            await RefreshPage();
         }
 
         protected void SelectCompany(AppCompanyAccountsSmartflow selectedCompany)
         {
             SelectedCompanyAccount = selectedCompany;
-
+            
             navDisplay = "Accounts";
 
             StateHasChanged();
@@ -186,7 +231,7 @@ namespace GadjIT_App.Pages.Accounts.CompanyAccountManagement
                 Billable = taskObject.Billable,
                 BillingDescription = taskObject.BillingDescription,
                 CreatedBy = taskObject.CreatedBy,
-                System = taskObject.System,
+                System = taskObject.System.Trim(),
                 DeletedDate = taskObject.DeletedDate,
                 MonthlyCharge = taskObject.MonthlyCharge,
                 MonthsDuration = taskObject.MonthsDuration,

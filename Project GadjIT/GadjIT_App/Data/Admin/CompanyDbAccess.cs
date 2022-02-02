@@ -860,9 +860,9 @@ namespace GadjIT_App.Data.Admin
                                                                 .Select(R => new AppCompanyAccountsSmartflowDetails
                                                                 {
                                                                     SmartflowRecordId = R.Id,
-                                                                    StartDate = R.System == "Live" ? R.CreatedDate.AddMonths(1) : R.CreatedDate,
-                                                                    EndDate = R.System == "Live" ? R.CreatedDate.AddMonths(13) : R.CreatedDate,
-                                                                    System = R.System,
+                                                                    StartDate = R.System.Trim() == "Live" ? R.CreatedDate.AddMonths(1) : R.CreatedDate,
+                                                                    EndDate = R.System.Trim() == "Live" ? R.CreatedDate.AddMonths(13) : R.CreatedDate,
+                                                                    System = R.System.Trim(),
                                                                     SmartflowName = R.SmartflowName,
                                                                     CaseType = R.CaseType,
                                                                     CaseTypeGroup = R.CaseTypeGroup,
@@ -880,6 +880,8 @@ namespace GadjIT_App.Data.Admin
                                                                                                     .FirstOrDefault()
                                                                 }
                                                                 ).ToList();
+
+                newAccountDetails = newAccountDetails.Select(N => { N.System = N.System.Trim(); return N; } ).ToList();
 
                 context.AppCompanyAccountsSmartflowDetails.AddRange(newAccountDetails);
 
@@ -949,7 +951,7 @@ namespace GadjIT_App.Data.Admin
                     updatingAccount.Billable = appCompanyAccountsSmartflow.Billable;
                     updatingAccount.BillingDescription = appCompanyAccountsSmartflow.BillingDescription;
                     updatingAccount.CreatedBy = appCompanyAccountsSmartflow.CreatedBy;
-                    updatingAccount.System = appCompanyAccountsSmartflow.System;
+                    updatingAccount.System = appCompanyAccountsSmartflow.System.Trim();
                     updatingAccount.DeletedDate = appCompanyAccountsSmartflow.DeletedDate;
                     updatingAccount.MonthlyCharge = appCompanyAccountsSmartflow.MonthlyCharge;
                     updatingAccount.MonthsDuration = appCompanyAccountsSmartflow.MonthsDuration;
@@ -991,11 +993,11 @@ namespace GadjIT_App.Data.Admin
         {
             try
             {
-
-
                 var companyBillingSmartflowAccounts =
                     context.AppCompanyAccountsSmartflowDetails
                             .Where(C => C.SmartflowAccountId == companyAccount.AccountObject.Id)
+                            .Where(C => C.Billable)
+                            .Where(C => C.StartDate < DateTime.Now)
                             .Select(C => new BillThing
                             {
                                 AccountObject = C
@@ -1007,7 +1009,7 @@ namespace GadjIT_App.Data.Admin
                     A.RecordObject = smartflowRecords
                     .Where(S => A.AccountObject.SmartflowRecordId == S.Id).FirstOrDefault(); return A;
                 })
-                    .Where(A => A.AccountObject.System == "Live")
+                    .Where(A => A.AccountObject.System.Trim() == "Live")
                     .Where(A => A.AccountObject.Status != "Deleted")
                     .ToList();
 
