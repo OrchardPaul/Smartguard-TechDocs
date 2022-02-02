@@ -133,25 +133,23 @@
 
 
                                     <div class="data-item">
-                                        @companyAccountObject.SmartflowAccounts.Where(S => S.System.Trim() == "Live").Count()
+                                        @companyAccountObject.SmartflowAccounts.Where(S => S.System == "Live").Count()
                                     </div>
 
                                     <div class="data-item">
-                                        @companyAccountObject.SmartflowAccounts.Where(S => S.System.Trim() == "Dev").Count()
+                                        @companyAccountObject.SmartflowAccounts.Where(S => S.System == "Dev").Count()
                                     </div>
 
                                     <div class="data-item">
                                             £@string.Format("{0:N2}", companyAccountObject.SmartflowAccounts
-                                            .Where(S => S.System.Trim() == "Live")
+                                            .Where(S => S.System == "Live")
                                             .Where(S => S.Status != "Deleted")
+                                            .Where(S => S.Billable)
                                             .Sum(S => S.Outstanding))
                                     </div>
 
                                     <div class="data-item">
                                             £@string.Format("{0:N2}", companyAccountObject.SmartflowAccounts.Sum(S => S.TotalBilled))
-                                        
-
-                                        
                                     </div>
                                 </div>
                             }
@@ -177,7 +175,7 @@
                     @if (SessionState.isAdminUser)
                     {
                         <div class="btn-group">
-                            <button @onclick='() => Bill()' class="btn btn-main btn-shadow" title="Add New Bill"><i class="fa fa-money-bill-wave"></i><span>Bill</span></button>
+                            <button @onclick='() => ExecuteConfirm()' class="btn btn-main btn-shadow" title="Add New Bill"><i class="fa fa-money-bill-wave"></i><span>Bill</span></button>
                         </div>
                     }
                 </div>
@@ -202,6 +200,9 @@
                         </div>
                         <div class="data-item ">
                             Smartflow Name
+                        </div>
+                        <div class="data-item">
+                            Billable
                         </div>
                         <div @onclick="SwitchStatusSort" class="data-item ">
                                 Status
@@ -252,7 +253,7 @@
                                                           .Where(A => A.AccountObject.Id == SelectedCompanyAccount.Id)
                                                           .Select(A => A.SmartflowAccounts)
                                                           .SingleOrDefault()
-                                                          .Where(A => A.System.Trim() == SelectedSystem)
+                                                          .Where(A => A.System == SelectedSystem)
                                                           .OrderBy(A => A.SmartflowName)
                                                           .OrderBy(A => SortByStatus ? A.Status : null)
                                                           .OrderByDescending(A => SortByStatusDesc ? A.Status : null)
@@ -268,7 +269,7 @@
                                                           .ToList())
                             {
                         <div class="row grid-row">
-                            <div class="data-item">
+                            <div class="data-item" title="@companyAccountObject.CaseTypeGroup">
                                 <div class="btn-ellipses float-left">
                                     <span class="fa fa-ellipsis-v"></span>
                                     <div class="ellipsis-menu">
@@ -281,17 +282,21 @@
                                     </div>
                                 </div>
 
-                                <div class="data-item-sub">
+                                <div class="data-item-sub" title="@companyAccountObject.CaseTypeGroup">
                                     @companyAccountObject.CaseTypeGroup
                                 </div>
                             </div>
 
-                            <div class="data-item">
+                            <div class="data-item" title="@companyAccountObject.CaseType">
                                 @companyAccountObject.CaseType
                             </div>
 
                             <div class="data-item">
                                 @companyAccountObject.SmartflowName
+                            </div>
+
+                            <div class="data-item">
+                                <input type="checkbox" checked="@companyAccountObject.Billable" @onchange="() => SaveBillablleChangesToSmartflowAccount(companyAccountObject)"></input>
                             </div>
 
                             <div class="data-item">

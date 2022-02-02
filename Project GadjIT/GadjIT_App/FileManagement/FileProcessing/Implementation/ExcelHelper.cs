@@ -78,11 +78,6 @@ namespace GadjIT_App.FileManagement.FileProcessing.Implementation
             workSheetHeader.Cells[7, 1].Value = "Bill Date:";
             workSheetHeader.Cells[7, 2].Value = companyAccount.AccountObject.LastBilledDate.ToString("dd/MM/yyyy");
 
-            //workSheetHeader.Cells[6, 1].Value = "Total Billed:";
-            //workSheetHeader.Cells[6, 2].Value = "£" + companyAccount.AccountObject.TotalBilled.ToString("F2");
-
-            //workSheetHeader.Cells[7, 1].Value = "Total Outstanding:";
-            //workSheetHeader.Cells[7, 2].Value = "£" + companyAccount.SmartflowAccounts.Sum(S => S.Outstanding).ToString("F2");
 
             /*
              * 
@@ -102,36 +97,36 @@ namespace GadjIT_App.FileManagement.FileProcessing.Implementation
             workSheetBreakdown.Row(1).Style.Font.Color.SetColor(System.Drawing.Color.DarkGray);
             workSheetBreakdown.Cells[1, 1].Style.WrapText = true;
             workSheetBreakdown.Cells[1, 1].Value = ":";
-            workSheetBreakdown.Cells[1, 2].Style.WrapText = true;
-            workSheetBreakdown.Cells[1, 2].Value = "The Smartflow will no longer reschedule when this status has been reached.";
+            workSheetBreakdown.Cells[1, 5].Style.WrapText = true;
+            workSheetBreakdown.Cells[1, 5].Value = "The Smartflow will no longer reschedule when this status has been reached.";
 
             workSheetBreakdown.Row(2).Height = 14;
             workSheetBreakdown.Row(2).Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
             workSheetBreakdown.Row(2).Style.Font.Bold = true;
-            workSheetBreakdown.Cells[2, 1].Value = "Smartflow Name";
-            workSheetBreakdown.Cells[2, 2].Value = "Bill";
-            workSheetBreakdown.Cells[2, 3].Value = "Months Remaining";
-            //workSheetBreakdown.Cells[2, 4].Value = "Outstanding";
-            //workSheetBreakdown.Cells[2, 5].Value = "Total Billed";
+            workSheetBreakdown.Cells[2, 1].Value = "Case Type Group";
+            workSheetBreakdown.Cells[2, 2].Value = "Case Type";
+            workSheetBreakdown.Cells[2, 3].Value = "Smartflow Name";
+            workSheetBreakdown.Cells[2, 4].Value = "Bill";
+            workSheetBreakdown.Cells[2, 5].Value = "Months Remaining";
+
 
             //Body of table
             int recordIndex = 3;
             foreach (var billingItem in billingItems.OrderBy(B => B.SmartflowName).ToList())
             {
-                workSheetBreakdown.Cells[recordIndex, 1].Value = string.IsNullOrEmpty(billingItem.SmartflowName) ? "" : billingItem.SmartflowName;
-                workSheetBreakdown.Cells[recordIndex, 2].Value = string.IsNullOrEmpty(billingItem.MonthlyCharge.ToString()) ? "" : "£" + billingItem.MonthlyCharge.ToString("F2");
-                workSheetBreakdown.Cells[recordIndex, 3].Value = string.IsNullOrEmpty(billingItem.MonthsRemaing.ToString()) ? "" : billingItem.MonthsRemaing.ToString();
-                //workSheetBreakdown.Cells[recordIndex, 4].Value = string.IsNullOrEmpty(billingItem.Outstanding.ToString()) ? "" : "£" + billingItem.Outstanding.ToString("F2");
-                //workSheetBreakdown.Cells[recordIndex, 5].Value = string.IsNullOrEmpty(billingItem.Billed.ToString()) ? "" : "£" + billingItem.Billed.ToString("F2");
-
+                workSheetBreakdown.Cells[recordIndex, 1].Value = string.IsNullOrEmpty(billingItem.SmartflowCaseTypeGroup) ? "" : billingItem.SmartflowCaseTypeGroup;
+                workSheetBreakdown.Cells[recordIndex, 2].Value = string.IsNullOrEmpty(billingItem.SmartflowCaseType) ? "" : billingItem.SmartflowCaseType;
+                workSheetBreakdown.Cells[recordIndex, 3].Value = string.IsNullOrEmpty(billingItem.SmartflowName) ? "" : billingItem.SmartflowName;
+                workSheetBreakdown.Cells[recordIndex, 4].Value = string.IsNullOrEmpty(billingItem.MonthlyCharge.ToString()) ? "" : "£" + billingItem.MonthlyCharge.ToString("F2");
+                workSheetBreakdown.Cells[recordIndex, 5].Value = string.IsNullOrEmpty(billingItem.MonthsRemaing.ToString()) ? "" : billingItem.MonthsRemaing.ToString();
                 recordIndex++;
             }
 
             workSheetBreakdown.Column(1).Width = 22;
             workSheetBreakdown.Column(2).Width = 31;
             workSheetBreakdown.Column(3).Width = 31;
-            //workSheetBreakdown.Column(4).Width = 31;
-            //workSheetBreakdown.Column(5).Width = 31;
+            workSheetBreakdown.Column(4).Width = 31;
+            workSheetBreakdown.Column(5).Width = 31;
 
 
             //Download SpreadSheet

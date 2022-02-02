@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using System.Linq.Dynamic.Core;
 using Microsoft.Extensions.Logging;
 using Serilog.Context;
+using GadjIT_App.Pages.Shared.Modals;
 
 namespace GadjIT_App.Pages.Accounts.CompanyAccountManagement
 {
@@ -231,7 +232,7 @@ namespace GadjIT_App.Pages.Accounts.CompanyAccountManagement
                 Billable = taskObject.Billable,
                 BillingDescription = taskObject.BillingDescription,
                 CreatedBy = taskObject.CreatedBy,
-                System = taskObject.System.Trim(),
+                System = taskObject.System,
                 DeletedDate = taskObject.DeletedDate,
                 MonthlyCharge = taskObject.MonthlyCharge,
                 MonthsDuration = taskObject.MonthsDuration,
@@ -260,7 +261,7 @@ namespace GadjIT_App.Pages.Accounts.CompanyAccountManagement
             await FileHelper.DownloadFile("Accounts.pdf", data);
         }
 
-        public async Task Bill()
+        public async void Bill()
         {
             var selectedAccountObject = CompanyAccountObjects
                                                         .Where(A => A.AccountObject.Id == SelectedCompanyAccount.Id)
@@ -272,6 +273,35 @@ namespace GadjIT_App.Pages.Accounts.CompanyAccountManagement
             await ExcelHelper.WriteChapterDataToExcel(selectedAccountObject, billingItems);
 
             RefreshCompanyObjects();
+        }
+
+        public async Task SaveBillablleChangesToSmartflowAccount(AppCompanyAccountsSmartflowDetails smartflowDetails)
+        {
+            smartflowDetails.Billable = !smartflowDetails.Billable;
+
+            await CompanyDbAccess.UpdateSmartflowAccountDetails(smartflowDetails).ConfigureAwait(false);
+        }
+
+
+        /// <summary>
+        /// Brings up the confirm model
+        /// </summary>
+        protected void ExecuteConfirm()
+        {
+            string infoText = "Do you wish to proceed with billing?";
+
+            Action SelectedAction = Bill;
+            var parameters = new ModalParameters();
+            parameters.Add("InfoHeader", "Confirm Action");
+            parameters.Add("InfoText", infoText);
+            parameters.Add("ConfirmAction", SelectedAction);
+
+            var options = new ModalOptions()
+            {
+                Class = "blazored-custom-modal modal-confirm"
+            };
+
+            Modal.Show<ModalConfirm>("Confirm", parameters, options);
         }
 
         public void SwitchStartDateSort()

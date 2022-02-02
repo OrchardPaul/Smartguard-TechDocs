@@ -8,6 +8,10 @@ namespace GadjIT.AppContext.GadjIT_App.Custom
     {
         public string AccountName { get; set; }
 
+        public string SmartflowCaseTypeGroup { get; set; }
+
+        public string SmartflowCaseType { get; set; }
+
         public string SmartflowName { get; set; }
 
         public decimal Outstanding { get; set; }

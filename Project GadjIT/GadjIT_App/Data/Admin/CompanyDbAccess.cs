@@ -998,6 +998,7 @@ namespace GadjIT_App.Data.Admin
                             .Where(C => C.SmartflowAccountId == companyAccount.AccountObject.Id)
                             .Where(C => C.Billable)
                             .Where(C => C.StartDate < DateTime.Now)
+                            .Where(C => C.MonthsRemaining > 0)
                             .Select(C => new BillThing
                             {
                                 AccountObject = C
@@ -1028,7 +1029,9 @@ namespace GadjIT_App.Data.Admin
                                                 MonthsRemaing = B.AccountObject.MonthsRemaining - 1,
                                                 Outstanding = B.AccountObject.Outstanding - B.AccountObject.MonthlyCharge,
                                                 Billed = B.AccountObject.TotalBilled + B.AccountObject.MonthlyCharge,
-                                                SmartflowName = B.RecordObject.SmartflowName
+                                                SmartflowName = B.RecordObject.SmartflowName,
+                                                SmartflowCaseTypeGroup = B.RecordObject.CaseTypeGroup,
+                                                SmartflowCaseType = B.RecordObject.CaseType
                                             })
                                             .ToList();
 

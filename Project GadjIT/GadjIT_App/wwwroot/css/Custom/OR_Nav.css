@@ -325,13 +325,13 @@
 
 
 .nav-row-2 {
-    margin-top: 12px;
+    margin-top: 5px;
     margin-left: 15px;
     font-size: 1rem !important;
 }
 
 .nav-row-3 {
-    margin-top: 7px;
+    margin-top: 5px;
     margin-left: 30px;
     margin-right: 0px;
     font-size: 1rem !important;
@@ -355,11 +355,17 @@
     /*box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.5);*/
     border: none;
     padding: 0;
+    border-radius: 2px;
+}
+
+.nav-row-2 .data-item {
+    background-color: #333;
 }
 
 
 .nav-row-3 .data-item {
     background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 2px;
 }
 
 .nav-row-3 .data-item-group {
