@@ -58,22 +58,37 @@
     }
 
     function loadDataTable(tableId) {
+
         $(tableId).DataTable({
-                dom: 'Bfrltip',
-                sdom: "<'row'<'col-5'B><'col-5'l><'col-2'f>><'row'<'col-12'tr>><'row'<'col-6'i><'col-6'p>>",
+
+                dom: 'Bflrtip',
+
                 retrieve: true,
+
                 buttons: [
+
                     'copyHtml5',
+
                     'excelHtml5',
+
                     'csvHtml5',
+
                     'pdfHtml5'
+
                 ],
+
                 pagingType: "full_numbers",
+
                 lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
+
                 autoWidth: false,
+
                 scrollX: true,
+
                 order: []
+
         });
+
     }
 
     function destroyDataTable(tableId) {

@@ -40,7 +40,7 @@ namespace GadjIT.ClientAPI.Controllers
             }
             catch (Exception e)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return Problem(e.Message);
             }
         }
 

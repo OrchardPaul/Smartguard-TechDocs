@@ -362,7 +362,6 @@ app {
     padding: 5px 8px;
     outline: none;
     white-space: nowrap;
-    -webkit-user-select: none;
     cursor: pointer;
 }
     /*.custom-file-input::-webkit-file-upload-button {
@@ -664,8 +663,7 @@ app {
         display: flex;
     }
 
-        .grid-can-edit .grid-row .data-item:first-of-type .data-item-sub {
-        }
+        
 
     .grid-header .data-item-sub {
         background-color: rgba(255, 255, 255, 0);
@@ -1373,7 +1371,7 @@ app {
         animation-iteration-count: 1;
         animation-direction: normal;
         animation-fill-mode: forwards;
-        */ /* or: backwards, both, none */
+        /* or: backwards, both, none */
     }
 
     @keyframes rowChanged {
@@ -1860,4 +1858,12 @@ app {
     -ms-user-select: none; /* Internet Explorer/Edge */
     user-select: none; /* Non-prefixed version, currently
                                   supported by Chrome, Edge, Opera and Firefox */
+}
+
+.faRed {
+    color: red;
+}
+
+.dataTables_length {
+    margin-top: 10px;
 }
