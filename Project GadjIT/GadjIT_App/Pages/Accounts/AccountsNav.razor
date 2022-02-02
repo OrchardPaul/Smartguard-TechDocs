@@ -1,5 +1,7 @@
 ﻿@page "/accounts"
 
+@attribute [Authorize(Roles ="Super User")]
+
 <div class="tran-block page-header-block">
     <h1>Accounts</h1>
     Manage accounts.

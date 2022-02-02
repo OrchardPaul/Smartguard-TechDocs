@@ -3,6 +3,8 @@
 
 @inject IJSRuntime jsRuntime
 
+@attribute [Authorize(Roles ="Super User")]
+
 <div class="tran-block page-header-block ">
     <div class="form-group" style="margin: 10px 10px 10px 20px">
         <label class="font-weight-bold">Query: </label>
