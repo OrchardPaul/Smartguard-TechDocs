@@ -718,6 +718,8 @@ namespace GadjIT_App.FileManagement.FileProcessing.Implementation
             workSheetDocument.Cells[1, 12].Value = "Optional: \r\nWhen the document is selected the following pop up alert should appear:";
             workSheetDocument.Cells[1, 13].Style.WrapText = true;
             workSheetDocument.Cells[1, 13].Value = "Optional: \r\nWhen the document is processed the following field should be updated: ";
+            workSheetDocument.Cells[1, 14].Style.WrapText = true;
+            workSheetDocument.Cells[1, 14].Value = "Optional: \r\n'Y' or 'N'. The document will appear on the smartflow as optional: ";
 
 
 
@@ -738,6 +740,7 @@ namespace GadjIT_App.FileManagement.FileProcessing.Implementation
             workSheetDocument.Cells[2, 11].Value = "Item User Message";
             workSheetDocument.Cells[2, 12].Value = "Popup Alert";
             workSheetDocument.Cells[2, 13].Value = "Notes to Developer";
+            workSheetDocument.Cells[2, 14].Value = "Optional Document";
 
             //Body of table
             recordIndex = 3;
@@ -757,6 +760,8 @@ namespace GadjIT_App.FileManagement.FileProcessing.Implementation
                 workSheetDocument.Cells[recordIndex, 11].Value = string.IsNullOrEmpty(chapterItem.UserMessage) ? "" : chapterItem.UserMessage;
                 workSheetDocument.Cells[recordIndex, 12].Value = string.IsNullOrEmpty(chapterItem.PopupAlert) ? "" : chapterItem.PopupAlert;
                 workSheetDocument.Cells[recordIndex, 13].Value = string.IsNullOrEmpty(chapterItem.DeveloperNotes) ? "" : chapterItem.DeveloperNotes;
+                workSheetDocument.Cells[recordIndex, 14].Value = string.IsNullOrEmpty(chapterItem.OptionalDocument) ? "" : chapterItem.OptionalDocument;
+
 
                 //workSheetDocument.Cells[recordIndex, 6].DataValidation.AddListDataValidation().Formula.ExcelFormula = $"= Status!A3:A{selectedChapter.Items.Where(C => C.Type == "Status").ToList().Count() + 3}";
 
@@ -776,6 +781,7 @@ namespace GadjIT_App.FileManagement.FileProcessing.Implementation
             workSheetDocument.Column(11).AutoFit();
             workSheetDocument.Column(12).AutoFit();
             workSheetDocument.Column(13).AutoFit();
+            workSheetDocument.Column(14).AutoFit();
 
             /*
              * 
@@ -810,6 +816,9 @@ namespace GadjIT_App.FileManagement.FileProcessing.Implementation
             workSheetAttachments.Cells[1, 7].Value = "If action is SCHEDULE, how many days the item will be scheduled for";
             workSheetAttachments.Cells[1, 8].Style.WrapText = true;
             workSheetAttachments.Cells[1, 8].Value = "If action is SCHEDULE, date field the schedule days are base from";
+            workSheetAttachments.Cells[1, 9].Style.WrapText = true;
+            workSheetAttachments.Cells[1, 9].Value = "Optional: \r\n'Y' or 'N'. The document will appear on the smartflow as optional: ";
+
 
 
             workSheetAttachments.Row(2).Height = 20;
@@ -823,6 +832,7 @@ namespace GadjIT_App.FileManagement.FileProcessing.Implementation
             workSheetAttachments.Cells[2, 6].Value = "Chaser Description";
             workSheetAttachments.Cells[2, 7].Value = "Schedule Days";
             workSheetAttachments.Cells[2, 8].Value = "Schedule Data Item";
+            workSheetAttachments.Cells[2, 9].Value = "Optional Document";
 
             //Body of table
             recordIndex = 3;
@@ -842,6 +852,7 @@ namespace GadjIT_App.FileManagement.FileProcessing.Implementation
                     workSheetAttachments.Cells[recordIndex, 6].Value = string.IsNullOrEmpty(doc.ChaserDesc) ? "" : doc.ChaserDesc;
                     workSheetAttachments.Cells[recordIndex, 7].Value = doc.ScheduleDays;
                     workSheetAttachments.Cells[recordIndex, 8].Value = string.IsNullOrEmpty(doc.ScheduleDataItem) ? "" : doc.ScheduleDataItem; ;
+                    workSheetAttachments.Cells[recordIndex, 9].Value = string.IsNullOrEmpty(doc.OptionalDocument) ? "N" : doc.OptionalDocument; ;
 
                     recordIndex++;
                 }
@@ -855,6 +866,7 @@ namespace GadjIT_App.FileManagement.FileProcessing.Implementation
             workSheetAttachments.Column(6).Width = 22;
             workSheetAttachments.Column(7).Width = 22;
             workSheetAttachments.Column(8).Width = 22;
+            workSheetAttachments.Column(9).Width = 22;
 
             /*
            * 
@@ -1220,6 +1232,13 @@ namespace GadjIT_App.FileManagement.FileProcessing.Implementation
                                             : worksheetDocuments.Cells[row, column].Value is null
                                             ? ""
                                             : worksheetDocuments.Cells[row, column].Value.ToString();
+                        if (column == 14) readObject.OptionalDocument = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
+                                            ? "N"
+                                            : worksheetDocuments.Cells[row, column].Value is null
+                                            ? "N"
+                                            : worksheetDocuments.Cells[row, column].Value.ToString() == "Y"
+                                            ? "Y"
+                                            : "N";
                     }
 
 
@@ -1315,6 +1334,14 @@ namespace GadjIT_App.FileManagement.FileProcessing.Implementation
                                             : worksheetAttachments.Cells[row, column].Value is null
                                             ? ""
                                             : worksheetAttachments.Cells[row, column].Value.ToString();
+
+                            if (column == 9) newAttachment.OptionalDocument = worksheetAttachments.Cells[row, column].FirstOrDefault() is null
+                                            ? "N"
+                                            : worksheetAttachments.Cells[row, column].Value is null
+                                            ? "N"
+                                            : worksheetAttachments.Cells[row, column].Value.ToString() == "Y"
+                                            ? "Y"
+                                            : "N";
 
                         }
                     }

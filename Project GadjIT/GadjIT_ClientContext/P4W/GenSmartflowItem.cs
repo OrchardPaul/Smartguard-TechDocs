@@ -45,6 +45,7 @@ namespace GadjIT.ClientContext.P4W
         public string StoryNotes { get; set; }
         public string TrackingMethod { get; set; }
         public string ChaserDesc { get; set; }
+        public string OptionalDocument { get; set; } = "N";
         public List<LinkedItems> LinkedItems { get; set; }
 
 
@@ -63,6 +64,7 @@ namespace GadjIT.ClientContext.P4W
         public string TrackingMethod { get; set; }
         public string ChaserDesc { get; set; }
         public int ScheduleDays { get; set; }
+        public string OptionalDocument { get; set; } = "N";
 
         [StringLength(250)]
         public string ScheduleDataItem { get; set; }

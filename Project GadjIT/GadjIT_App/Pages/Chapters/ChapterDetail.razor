@@ -196,7 +196,7 @@
 
                 <div class="form-group">
                     <label for="NextStatus">Next Status</label>
-                    <InputSelect class="form-control form-control-sm"
+                    <InputSelect class="form-control form-control-lg"
                                  @bind-Value="CopyObject.NextStatus">
                         <option value=""></option>
                         @foreach (var s in ListOfStatus)
@@ -222,6 +222,11 @@
                     <InputTextArea class="form-control form-control-xl" @bind-Value="@CopyObject.PopupAlert" />
                 </div>
 
+                <div class="form-group">
+                    <label for="Suppress">Is an Optional Document?</label>
+                    <InputCheckbox class="form-control" @bind-Value="optionalDocument" />
+                </div>
+
                 @if (SelectedChapter.ShowDocumentTracking == "Y")
                 {
                     <div class="form-group">
@@ -245,7 +250,11 @@
                             <InputText class="form-control form-control-xl" @bind-Value="@CopyObject.ChaserDesc" />
                         </div>
                     }
+
+
                 }
+
+
 
             }
             else if (selectedList == "Status")
@@ -303,6 +312,7 @@
                 <label for="Suppress">Suppress Step</label>
                 <InputCheckbox class="form-control" @bind-Value="suppressStep" />
             </div>
+
             }
         }else
         {

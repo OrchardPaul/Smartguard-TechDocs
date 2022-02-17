@@ -18,6 +18,22 @@ namespace GadjIT_App.Pages.Chapters
 {
     public partial class ChapterAttachments
     {
+        public bool optionalDocument
+        {
+            get { return (Attachment.OptionalDocument == "Y" ? true : false); }
+            set
+            {
+                if (value)
+                {
+                    Attachment.OptionalDocument = "Y";
+                }
+                else
+                {
+                    Attachment.OptionalDocument = "N";
+                }
+            }
+        }
+
         [CascadingParameter]
         BlazoredModalInstance ModalInstance { get; set; }
 

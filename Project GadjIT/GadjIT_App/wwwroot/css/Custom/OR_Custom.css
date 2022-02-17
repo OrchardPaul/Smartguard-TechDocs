@@ -1264,6 +1264,12 @@ app {
     text-overflow: ellipsis;
 }
 
+.doc-icon-sm {
+    display: inline-block;
+    width: 20px !important;
+    text-align: center;
+}
+
 .doc-icon {
     display: inline-block;
     width: 23px !important;

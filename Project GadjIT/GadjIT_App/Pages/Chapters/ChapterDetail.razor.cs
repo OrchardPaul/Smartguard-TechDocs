@@ -36,6 +36,22 @@ namespace GadjIT_App.Pages.Chapters
             }
         }
 
+        public bool optionalDocument
+        {
+            get { return (CopyObject.OptionalDocument == "Y" ? true : false); }
+            set
+            {
+                if (value)
+                {
+                    CopyObject.OptionalDocument = "Y";
+                }
+                else
+                {
+                    CopyObject.OptionalDocument = "N";
+                }
+            }
+        }
+
         public int? RescheduleDays
         {
             get { return CopyObject.RescheduleDays; }
@@ -253,6 +269,7 @@ namespace GadjIT_App.Pages.Chapters
                 TaskObject.ChaserDesc = CopyObject.ChaserDesc;
                 TaskObject.RescheduleDataItem = CopyObject.RescheduleDataItem;
                 TaskObject.MilestoneStatus = CopyObject.MilestoneStatus;
+                TaskObject.OptionalDocument = CopyObject.OptionalDocument;
 
                 if (Option == "Insert")
                 {

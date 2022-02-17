@@ -656,10 +656,10 @@ namespace GadjIT_App.Pages.Chapters
                                     ,new ChapterP4WStepAnswer {QNo = 3, GoToData= $"4 [SQL: EXEC up_ORSF_GetStepsFromList '[entity.code]', 0] [SQL: UPDATE Usr_ORSF_ENT_Control SET Screen_Opened_Via_Step = null WHERE EntityRef='[entity.code]']" }
                                     ,new ChapterP4WStepAnswer {QNo = 4, GoToData= $"5 [SQL: UPDATE Usr_ORSF_ENT_Control SET Date_Schedule_For = isnull(Date_Schedule_For, Cast(getdate() as Date)) WHERE EntityRef = '[Entity.Code]']" }
                                     ,new ChapterP4WStepAnswer {QNo = 5, GoToData= $"8 [SQL: SELECT ScheduleCommand FROM fn_ORSF_GetScheduleItems('[Entity.Code]', 0)]" }
-                                    ,new ChapterP4WStepAnswer {QNo = 6, GoToData= $"[SQL: UPDATE cm_caseitems set CompletionDate = GETDATE(), description = UPPER('[!Usr_ORSF_ENT_Control.Complete_AsName]') where itemid = [currentstep.stepid]]" }
+                                    ,new ChapterP4WStepAnswer {QNo = 6, GoToData= $"[SQL: UPDATE cm_caseitems set CompletionDate = GETDATE(), description = UPPER('[!Usr_ORSF_ENT_Control.Complete_AsName]') where itemid = [currentstep.stepid]] [SQL: exec up_ORSF_CompleteStep [currentStep.stepid], '', 'Y']" }
                                     ,new ChapterP4WStepAnswer {QNo = 7, GoToData= $"8 [SQL: exec up_ORSF_DeleteDueStep '', [currentstep.stepid], '{decodedChapter.StepName}']" }
                                     ,new ChapterP4WStepAnswer {QNo = 8, GoToData= $"[SQL: SELECT CASE WHEN ISNULL('[!Usr_ORSF_ENT_Control.Complete_AsName]','') <> '' THEN 6 ELSE 9 END]" }
-                                    ,new ChapterP4WStepAnswer {QNo = 9, GoToData= $"[SQL: DELETE FROM cm_caseitems where itemid = [currentstep.stepid]]" }
+                                    ,new ChapterP4WStepAnswer {QNo = 9, GoToData= $"[SQL: exec up_ORSF_DeleteStep [currentstep.stepid]]" }
                                     }
                         };
                     }
@@ -689,10 +689,10 @@ namespace GadjIT_App.Pages.Chapters
                                     ,new ChapterP4WStepAnswer {QNo = 3, GoToData= $"4 [SQL: EXEC up_ORSF_GetStepsFromList '[matters.entityref]', [matters.number]] [SQL: UPDATE Usr_ORSF_MT_Control SET Screen_Opened_Via_Step = null WHERE EntityRef='[matters.entityref]' AND matterNo=[matters.number]]" }
                                     ,new ChapterP4WStepAnswer {QNo = 4, GoToData= $"5 [SQL: UPDATE Usr_ORSF_MT_Control SET Date_Schedule_For = isnull(Date_Schedule_For, Cast(getdate() as Date)) WHERE EntityRef = '[matters.entityref]' AND MatterNo = [matters.number]]" }
                                     ,new ChapterP4WStepAnswer {QNo = 5, GoToData= $"8 [SQL: SELECT ScheduleCommand FROM fn_ORSF_GetScheduleItems('[matters.entityref]', [matters.number])]" }
-                                    ,new ChapterP4WStepAnswer {QNo = 6, GoToData= $"[SQL: UPDATE cm_caseitems set CompletionDate = GETDATE(), description = UPPER('[!Usr_ORSF_MT_Control.Complete_AsName]') where itemid = [currentstep.stepid]]" }
+                                    ,new ChapterP4WStepAnswer {QNo = 6, GoToData= $"[SQL: UPDATE cm_caseitems set CompletionDate = GETDATE(), description = UPPER('[!Usr_ORSF_MT_Control.Complete_AsName]') where itemid = [currentstep.stepid]] [SQL: exec up_ORSF_CompleteStep [currentStep.stepid], '', 'Y']" }
                                     ,new ChapterP4WStepAnswer {QNo = 7, GoToData= $"8 [SQL: exec up_ORSF_DeleteDueStep '', [currentstep.stepid], '{decodedChapter.StepName}']" }
                                     ,new ChapterP4WStepAnswer {QNo = 8, GoToData= $"[SQL: SELECT CASE WHEN ISNULL('[!Usr_ORSF_MT_Control.Complete_AsName]','') <> '' THEN 6 ELSE 9 END]" }
-                                    ,new ChapterP4WStepAnswer {QNo = 9, GoToData= $"[SQL: DELETE FROM cm_caseitems where itemid = [currentstep.stepid]]" }
+                                    ,new ChapterP4WStepAnswer {QNo = 9, GoToData= $"[SQL: exec up_ORSF_DeleteStep [currentstep.stepid]]" }
                                     }
                         };
                     }
@@ -2259,7 +2259,8 @@ namespace GadjIT_App.Pages.Chapters
                 TrackingMethod = editObject.ChapterObject.TrackingMethod,
                 ChaserDesc = editObject.ChapterObject.ChaserDesc,
                 RescheduleDataItem = editObject.ChapterObject.RescheduleDataItem,
-                MilestoneStatus = editObject.ChapterObject.MilestoneStatus
+                MilestoneStatus = editObject.ChapterObject.MilestoneStatus,
+                OptionalDocument = editObject.ChapterObject.OptionalDocument
         };
 
             var parameters = new ModalParameters();
@@ -3866,10 +3867,10 @@ namespace GadjIT_App.Pages.Chapters
                                     ,new ChapterP4WStepAnswer {QNo = 3, GoToData= $"4 [SQL: EXEC up_ORSF_GetStepsFromList '[entity.code]', 0] [SQL: UPDATE Usr_ORSF_ENT_Control SET Screen_Opened_Via_Step = null WHERE EntityRef='[entity.code]']" }
                                     ,new ChapterP4WStepAnswer {QNo = 4, GoToData= $"5 [SQL: UPDATE Usr_ORSF_ENT_Control SET Date_Schedule_For = isnull(Date_Schedule_For, Cast(getdate() as Date)) WHERE EntityRef = '[Entity.Code]']" }
                                     ,new ChapterP4WStepAnswer {QNo = 5, GoToData= $"8 [SQL: SELECT ScheduleCommand FROM fn_ORSF_GetScheduleItems('[Entity.Code]', 0)]" }
-                                    ,new ChapterP4WStepAnswer {QNo = 6, GoToData= $"[SQL: UPDATE cm_caseitems set CompletionDate = GETDATE(), description = UPPER('[!Usr_ORSF_ENT_Control.Complete_AsName]') where itemid = [currentstep.stepid]]" }
+                                    ,new ChapterP4WStepAnswer {QNo = 6, GoToData= $"[SQL: UPDATE cm_caseitems set CompletionDate = GETDATE(), description = UPPER('[!Usr_ORSF_ENT_Control.Complete_AsName]') where itemid = [currentstep.stepid]] [SQL: exec up_ORSF_CompleteStep [currentStep.stepid], '', 'Y']" }
                                     ,new ChapterP4WStepAnswer {QNo = 7, GoToData= $"8 [SQL: exec up_ORSF_DeleteDueStep '', [currentstep.stepid], '{selectedChapter.StepName}']" }
                                     ,new ChapterP4WStepAnswer {QNo = 8, GoToData= $"[SQL: SELECT CASE WHEN ISNULL('[!Usr_ORSF_ENT_Control.Complete_AsName]','') <> '' THEN 6 ELSE 9 END]" }
-                                    ,new ChapterP4WStepAnswer {QNo = 9, GoToData= $"[SQL: DELETE FROM cm_caseitems where itemid = [currentstep.stepid]]" }
+                                    ,new ChapterP4WStepAnswer {QNo = 9, GoToData= $"[SQL: exec up_ORSF_DeleteStep [currentstep.stepid]]" }
                                     }
                 };
             }
@@ -3899,10 +3900,10 @@ namespace GadjIT_App.Pages.Chapters
                                     ,new ChapterP4WStepAnswer {QNo = 3, GoToData= $"4 [SQL: EXEC up_ORSF_GetStepsFromList '[matters.entityref]', [matters.number]] [SQL: UPDATE Usr_ORSF_MT_Control SET Screen_Opened_Via_Step = null WHERE EntityRef='[matters.entityref]' AND matterNo=[matters.number]]" }
                                     ,new ChapterP4WStepAnswer {QNo = 4, GoToData= $"5 [SQL: UPDATE Usr_ORSF_MT_Control SET Date_Schedule_For = isnull(Date_Schedule_For, Cast(getdate() as Date)) WHERE EntityRef = '[matters.entityref]' AND MatterNo = [matters.number]]" }
                                     ,new ChapterP4WStepAnswer {QNo = 5, GoToData= $"8 [SQL: SELECT ScheduleCommand FROM fn_ORSF_GetScheduleItems('[matters.entityref]', [matters.number])]" }
-                                    ,new ChapterP4WStepAnswer {QNo = 6, GoToData= $"[SQL: UPDATE cm_caseitems set CompletionDate = GETDATE(), description = UPPER('[!Usr_ORSF_MT_Control.Complete_AsName]') where itemid = [currentstep.stepid]]" }
+                                    ,new ChapterP4WStepAnswer {QNo = 6, GoToData= $"[SQL: UPDATE cm_caseitems set CompletionDate = GETDATE(), description = UPPER('[!Usr_ORSF_MT_Control.Complete_AsName]') where itemid = [currentstep.stepid]] [SQL: exec up_ORSF_CompleteStep [currentStep.stepid], '', 'Y']" }
                                     ,new ChapterP4WStepAnswer {QNo = 7, GoToData= $"8 [SQL: exec up_ORSF_DeleteDueStep '', [currentstep.stepid], '{selectedChapter.StepName}']" }
                                     ,new ChapterP4WStepAnswer {QNo = 8, GoToData= $"[SQL: SELECT CASE WHEN ISNULL('[!Usr_ORSF_MT_Control.Complete_AsName]','') <> '' THEN 6 ELSE 9 END]" }
-                                    ,new ChapterP4WStepAnswer {QNo = 9, GoToData= $"[SQL: DELETE FROM cm_caseitems where itemid = [currentstep.stepid]]" }
+                                    ,new ChapterP4WStepAnswer {QNo = 9, GoToData= $"[SQL: exec up_ORSF_DeleteStep [currentstep.stepid]]" }
                                     }
                 };
             }

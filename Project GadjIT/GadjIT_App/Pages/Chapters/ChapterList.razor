@@ -692,18 +692,29 @@ else
                                                 <div class="ellipsis-menu">
                                                     <ul>
                                                         <li class="col-main" @onclick='(() => PrepareForEdit(context, "Steps and Documents"))'>
-                                                            <span class="fa fa-pencil-alt mr-2"></span>
+                                                            
+                                                                <span class="fa fa-pencil-alt fa-sm mr-2"></span>
+                                                            
+                                                            
                                                             <span>Edit</span>
                                                         </li>
                                                         <li class="col-main" @onclick='(() => ShowChapterDetailViewModal(context, "Steps and Documents"))'>
-                                                            <span class="fa fa-binoculars mr-2"></span>
+                                                            
+                                                                <span class="fa fa-binoculars fa-sm mr-2"></span>
+                                                           
                                                             <span>View</span>
                                                         </li>
                                                         <li class="col-main">
-                                                            <span class="fa fa-paperclip mr-2"></span>
+                                                            
+                                                                <span class="fa fa-paperclip fa-sm mr-2"></span>
+                                                            
+                                                            
                                                             <span>Links</span>
                                                             <div class="menu-toggle @(selectedChapter.ShowDocumentTracking == "Y" ? "tracking" : "")">
-                                                                <span class="fa fa-chevron-right"></span>
+                                                                
+                                                                <span class="fa fa-chevron-right fa-sm"></span>
+                                                                
+                                                                
                                                                 <ul class="attach-list">
                                                                     @if (!(context.ChapterObject.LinkedItems is null) && context.ChapterObject.LinkedItems.Count > 0)
                                                                     {
@@ -753,7 +764,10 @@ else
                                                             </div>
                                                         </li>
                                                         <li class="col-red" @onclick="() => PrepareChapterDetailDelete(context)">
-                                                            <span class="fa fa-trash-alt mr-2"></span>
+                                                            
+                                                            <span class="fa fa-trash-alt fa-sm mr-2"></span>
+                                                           
+                                                            
                                                             <span>Delete</span>
                                                         </li>
 
@@ -891,6 +905,16 @@ else
                                                 </ModalTooltip>
                                             </div>
                                         }
+
+                                        @if (!string.IsNullOrEmpty(context.ChapterObject.OptionalDocument) && context.ChapterObject.OptionalDocument == "Y")
+                                        {
+                                            <div class="data-item-right hidden-md-down">
+                                                <ModalTooltip Direction="left" Text=@("This will be an optional document") Class="w-3">
+                                                    <span class="fa-solid fa-check-to-slot fa-fade"></span>
+                                                </ModalTooltip>
+                                            </div>
+                                        }
+
 
                                         @if (!string.IsNullOrEmpty(context.ChapterObject.UserMessage))
                                         {
