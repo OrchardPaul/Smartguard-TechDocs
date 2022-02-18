@@ -99,7 +99,19 @@ namespace GadjIT_App.Pages.Chapters
 
         private int selectedCaseTypeGroup { get; set; } = -1;
 
-        public bool useCustomItem { get; set; } = false;
+        public bool useCustomItem 
+        { get { return Attachment.CustomItem == "Y" ? true : false; }
+            set {
+                if (value)
+                {
+                    Attachment.CustomItem = "Y";
+                    Attachment.Agenda = "";
+                }
+                else
+                {
+                    Attachment.CustomItem = "N";
+                }
+            } }
 
 
         List<string> ActionList = new List<string>() { "TAKE", "INSERT", "SCHEDULE" };

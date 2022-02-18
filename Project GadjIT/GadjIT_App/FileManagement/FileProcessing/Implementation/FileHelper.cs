@@ -706,20 +706,22 @@ namespace GadjIT_App.FileManagement.FileProcessing.Implementation
             workSheetDocument.Cells[1, 7].Style.WrapText = true;
             workSheetDocument.Cells[1, 7].Value = "Optional: \r\nWhen the document is selected the Smartflow Status should be changed to:";
             workSheetDocument.Cells[1, 8].Style.WrapText = true;
-            workSheetDocument.Cells[1, 8].Value = "Optional: \r\nI would like the document to be inserted or taken automatically [INSERT or TAKE]:";
+            workSheetDocument.Cells[1, 8].Value = "Optional: \r\nThe document will be saved in the following agenda:";
             workSheetDocument.Cells[1, 9].Style.WrapText = true;
-            workSheetDocument.Cells[1, 9].Value = "Optional: \r\nI would like to track the document via the following method [Send Only or Response Required]";
+            workSheetDocument.Cells[1, 9].Value = "Optional: \r\nI would like the document to be inserted or taken automatically [INSERT or TAKE]:";
             workSheetDocument.Cells[1, 10].Style.WrapText = true;
-            workSheetDocument.Cells[1, 10].Value = "Optional: \r\nWhen chasing tracked documents. I would like the letter to display the following text:";
-
+            workSheetDocument.Cells[1, 10].Value = "Optional: \r\nI would like to track the document via the following method [Send Only or Response Required]";
             workSheetDocument.Cells[1, 11].Style.WrapText = true;
-            workSheetDocument.Cells[1, 11].Value = "Optional: \r\nWhen the document is selected the following user message should appear: ";
+            workSheetDocument.Cells[1, 11].Value = "Optional: \r\nWhen chasing tracked documents. I would like the letter to display the following text:";
+
             workSheetDocument.Cells[1, 12].Style.WrapText = true;
-            workSheetDocument.Cells[1, 12].Value = "Optional: \r\nWhen the document is selected the following pop up alert should appear:";
+            workSheetDocument.Cells[1, 12].Value = "Optional: \r\nWhen the document is selected the following user message should appear: ";
             workSheetDocument.Cells[1, 13].Style.WrapText = true;
-            workSheetDocument.Cells[1, 13].Value = "Optional: \r\nWhen the document is processed the following field should be updated: ";
+            workSheetDocument.Cells[1, 13].Value = "Optional: \r\nWhen the document is selected the following pop up alert should appear:";
             workSheetDocument.Cells[1, 14].Style.WrapText = true;
-            workSheetDocument.Cells[1, 14].Value = "Optional: \r\n'Y' or 'N'. The document will appear on the smartflow as optional: ";
+            workSheetDocument.Cells[1, 14].Value = "Optional: \r\nWhen the document is processed the following field should be updated: ";
+            workSheetDocument.Cells[1, 15].Style.WrapText = true;
+            workSheetDocument.Cells[1, 15].Value = "Optional: \r\n'Y' or 'N'. The document will appear on the smartflow as optional: ";
 
 
 
@@ -734,13 +736,14 @@ namespace GadjIT_App.FileManagement.FileProcessing.Implementation
             workSheetDocument.Cells[2, 5].Value = "Reschedule Data Item";
             workSheetDocument.Cells[2, 6].Value = "Step History Description";
             workSheetDocument.Cells[2, 7].Value = "Status Change";
-            workSheetDocument.Cells[2, 8].Value = "Action";
-            workSheetDocument.Cells[2, 9].Value = "Tracking Method";
-            workSheetDocument.Cells[2, 10].Value = "Chaser Description";
-            workSheetDocument.Cells[2, 11].Value = "Item User Message";
-            workSheetDocument.Cells[2, 12].Value = "Popup Alert";
-            workSheetDocument.Cells[2, 13].Value = "Notes to Developer";
-            workSheetDocument.Cells[2, 14].Value = "Optional Document";
+            workSheetDocument.Cells[2, 8].Value = "Agenda";
+            workSheetDocument.Cells[2, 9].Value = "Action";
+            workSheetDocument.Cells[2, 10].Value = "Tracking Method";
+            workSheetDocument.Cells[2, 11].Value = "Chaser Description";
+            workSheetDocument.Cells[2, 12].Value = "Item User Message";
+            workSheetDocument.Cells[2, 13].Value = "Popup Alert";
+            workSheetDocument.Cells[2, 14].Value = "Notes to Developer";
+            workSheetDocument.Cells[2, 15].Value = "Optional Document";
 
             //Body of table
             recordIndex = 3;
@@ -753,14 +756,15 @@ namespace GadjIT_App.FileManagement.FileProcessing.Implementation
                 workSheetDocument.Cells[recordIndex, 5].Value = string.IsNullOrEmpty(chapterItem.RescheduleDataItem) ? "" : chapterItem.RescheduleDataItem;
                 workSheetDocument.Cells[recordIndex, 6].Value = string.IsNullOrEmpty(chapterItem.CompleteName) ? "" : chapterItem.CompleteName;
                 workSheetDocument.Cells[recordIndex, 7].Value = string.IsNullOrEmpty(chapterItem.NextStatus) ? "" : chapterItem.NextStatus;
-                workSheetDocument.Cells[recordIndex, 8].Value = string.IsNullOrEmpty(chapterItem.Action) ? "" : chapterItem.Action;
-                workSheetDocument.Cells[recordIndex, 9].Value = string.IsNullOrEmpty(chapterItem.TrackingMethod) ? "" : chapterItem.TrackingMethod;
-                workSheetDocument.Cells[recordIndex, 10].Value = string.IsNullOrEmpty(chapterItem.ChaserDesc) ? "" : chapterItem.ChaserDesc;
+                workSheetDocument.Cells[recordIndex, 8].Value = string.IsNullOrEmpty(chapterItem.Agenda) ? "" : chapterItem.Agenda;
+                workSheetDocument.Cells[recordIndex, 9].Value = string.IsNullOrEmpty(chapterItem.Action) ? "" : chapterItem.Action;
+                workSheetDocument.Cells[recordIndex, 10].Value = string.IsNullOrEmpty(chapterItem.TrackingMethod) ? "" : chapterItem.TrackingMethod;
+                workSheetDocument.Cells[recordIndex, 11].Value = string.IsNullOrEmpty(chapterItem.ChaserDesc) ? "" : chapterItem.ChaserDesc;
 
-                workSheetDocument.Cells[recordIndex, 11].Value = string.IsNullOrEmpty(chapterItem.UserMessage) ? "" : chapterItem.UserMessage;
-                workSheetDocument.Cells[recordIndex, 12].Value = string.IsNullOrEmpty(chapterItem.PopupAlert) ? "" : chapterItem.PopupAlert;
-                workSheetDocument.Cells[recordIndex, 13].Value = string.IsNullOrEmpty(chapterItem.DeveloperNotes) ? "" : chapterItem.DeveloperNotes;
-                workSheetDocument.Cells[recordIndex, 14].Value = string.IsNullOrEmpty(chapterItem.OptionalDocument) ? "" : chapterItem.OptionalDocument;
+                workSheetDocument.Cells[recordIndex, 12].Value = string.IsNullOrEmpty(chapterItem.UserMessage) ? "" : chapterItem.UserMessage;
+                workSheetDocument.Cells[recordIndex, 13].Value = string.IsNullOrEmpty(chapterItem.PopupAlert) ? "" : chapterItem.PopupAlert;
+                workSheetDocument.Cells[recordIndex, 14].Value = string.IsNullOrEmpty(chapterItem.DeveloperNotes) ? "" : chapterItem.DeveloperNotes;
+                workSheetDocument.Cells[recordIndex, 15].Value = string.IsNullOrEmpty(chapterItem.OptionalDocument) ? "" : chapterItem.OptionalDocument;
 
 
                 //workSheetDocument.Cells[recordIndex, 6].DataValidation.AddListDataValidation().Formula.ExcelFormula = $"= Status!A3:A{selectedChapter.Items.Where(C => C.Type == "Status").ToList().Count() + 3}";
@@ -782,6 +786,7 @@ namespace GadjIT_App.FileManagement.FileProcessing.Implementation
             workSheetDocument.Column(12).AutoFit();
             workSheetDocument.Column(13).AutoFit();
             workSheetDocument.Column(14).AutoFit();
+            workSheetDocument.Column(15).AutoFit();
 
             /*
              * 
@@ -1202,37 +1207,42 @@ namespace GadjIT_App.FileManagement.FileProcessing.Implementation
                                             : worksheetDocuments.Cells[row, column].Value is null
                                             ? ""
                                             : worksheetDocuments.Cells[row, column].Value.ToString();
-                        if (column == 8) readObject.Action = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
+                        if (column == 8) readObject.Agenda = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
+                                            ? ""
+                                            : worksheetDocuments.Cells[row, column].Value is null
+                                            ? ""
+                                            : worksheetDocuments.Cells[row, column].Value.ToString();                                            
+                        if (column == 9) readObject.Action = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
                                             ? "INSERT"
                                             : worksheetDocuments.Cells[row, column].Value is null
                                             ? "INSERT"
                                             : worksheetDocuments.Cells[row, column].Value.ToString().ToUpper();
-                        if (column == 9) readObject.TrackingMethod = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
+                        if (column == 10) readObject.TrackingMethod = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
                                             ? ""
                                             : worksheetDocuments.Cells[row, column].Value is null
                                             ? ""
                                             : worksheetDocuments.Cells[row, column].Value.ToString();
-                        if (column == 10) readObject.ChaserDesc = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
+                        if (column == 11) readObject.ChaserDesc = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
                                             ? ""
                                             : worksheetDocuments.Cells[row, column].Value is null
                                             ? ""
                                             : worksheetDocuments.Cells[row, column].Value.ToString();
-                        if (column == 11) readObject.UserMessage = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
+                        if (column == 12) readObject.UserMessage = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
                                             ? ""
                                             : worksheetDocuments.Cells[row, column].Value is null
                                             ? ""
                                             : worksheetDocuments.Cells[row, column].Value.ToString();
-                        if (column == 12) readObject.PopupAlert = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
+                        if (column == 13) readObject.PopupAlert = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
                                             ? ""
                                             : worksheetDocuments.Cells[row, column].Value is null
                                             ? ""
                                             : worksheetDocuments.Cells[row, column].Value.ToString();
-                        if (column == 13) readObject.DeveloperNotes = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
+                        if (column == 14) readObject.DeveloperNotes = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
                                             ? ""
                                             : worksheetDocuments.Cells[row, column].Value is null
                                             ? ""
                                             : worksheetDocuments.Cells[row, column].Value.ToString();
-                        if (column == 14) readObject.OptionalDocument = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
+                        if (column == 15) readObject.OptionalDocument = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
                                             ? "N"
                                             : worksheetDocuments.Cells[row, column].Value is null
                                             ? "N"

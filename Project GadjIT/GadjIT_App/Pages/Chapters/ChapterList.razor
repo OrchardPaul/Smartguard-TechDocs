@@ -682,7 +682,7 @@ else
                                         TItem="VmUsrOrDefChapterManagement"
                                       UseCustomImage="true">
                                 <div class="row grid-row grid-row-lg @(rowChanged == context.ChapterObject.SeqNo ? "row-changed" : "" )">
-                                    <div class="data-item ">
+                                    <div class="data-item">
 
                                         @if (UserSession.isAdminUser && !compareSystems)
                                         {
@@ -871,22 +871,39 @@ else
                                             </div>
                                         }
 
-                                        <div class="data-item-sub " title="@context.DocDisplayName">
 
-                                            <span class="font-100" title="@context.ChapterObject.Action">
+                                        <ModalTooltip Direction="top" Text="@((context.ChapterObject.OptionalDocument == "Y" && !(string.IsNullOrEmpty(context.DocType) && context.ChapterObject.CustomItem == "N") ? "Optional " : "") + context.ChapterObject.Action)" Class="w-1">
+                                            <span class="font-100 @(context.ChapterObject.OptionalDocument == "Y" && !(string.IsNullOrEmpty(context.DocType) && context.ChapterObject.CustomItem == "N") ? "pulse-light" : "") ">
                                                 <span class="doc-icon @(context.ChapterObject.Action == "TAKE" ? "" : "invisible")"><span class="fa fa-running mr-2"></span></span>
                                                 <span class="doc-icon @(context.ChapterObject.Action == "INSERT" ? "" : "invisible")"><span class="fa fa-arrow-down mr-2"></span></span>
                                             </span>
-                                            <span class="font-100">
-                                                <span class="doc-icon @(context.DocType == "Doc" ? "" : "invisible")" title="Document"><span class="fa fa-file mr-2"></span></span>
+                                        </ModalTooltip>
+                                    
+                                        <ModalTooltip Direction="top" Text="@((context.ChapterObject.OptionalDocument  == "Y" && !(string.IsNullOrEmpty(context.DocType) && context.ChapterObject.CustomItem == "N") ? "Optional " : "")
+                                         + (string.IsNullOrEmpty(context.DocType) && context.ChapterObject.CustomItem == "N" ? "Item not found" : context.DocType))" Class="w-1">
+                                            <span class="font-100 @(context.ChapterObject.OptionalDocument == "Y" && !(string.IsNullOrEmpty(context.DocType) && context.ChapterObject.CustomItem == "N") ? "pulse-light" : "") ">
+                                    
                                                 <span class="doc-icon @(context.DocType == "Form" ? "" : "invisible")" title="Form"><span class=" fa fa-file-pdf mr-2"></span></span>
                                                 <span class="doc-icon @(context.DocType == "Email" ? "" : "invisible")" title="Email"><span class="fa fa-envelope mr-2"></span></span>
                                                 <span class="doc-icon @(context.DocType == "Step" ? "" : "invisible")" title="Step"><span class=" fa fa-list-ol mr-2"></span></span>
+                                                <span class="doc-icon @(context.DocType == "Doc" ? "" : "invisible")" title="Document"><span class="fa fa-file mr-2"></span></span>
                                                 <span class="doc-icon @(context.DocType == "Date" ? "" : "invisible")" title="Diary Item"><span class="fa fa-calendar mr-2"></span></span>
-                                                <span class="doc-icon @(string.IsNullOrEmpty(context.DocType) ? "" : "invisible")"><span class=" mr-2"></span></span>
+                                                <span class="doc-icon @(string.IsNullOrEmpty(context.DocType) && context.ChapterObject.CustomItem == "N" ? "" : "invisible")" title="Missing Item"><span class="fas fa-exclamation col-red mr-2"></span></span>
+                                                <span class="doc-icon @(string.IsNullOrEmpty(context.DocType) && context.ChapterObject.CustomItem == "Y" ? "" : "invisible")" ><span class="mr-2"></span></span>
                                             </span>
+                                        </ModalTooltip>
+                                        <div class="data-item-sub">
                                             @context.DocDisplayName
+                                            @if(!(string.IsNullOrEmpty(context.ChapterObject.Agenda)))
+                                            {
+                                                <div class="secondary-item" title="Once completed, the document will be moved to the folder @context.ChapterObject.Agenda.">
+                                                    <span class="fa fa-folder-open"></span>
+                                                    @context.ChapterObject.Agenda
+                                                </div>
+                                            }
+
                                         </div>
+
 
                                         @if (context.DocOrigName != "")
                                         {
@@ -974,16 +991,17 @@ else
                                     <div class="hidden-md-down data-item ">
                                         @if (!(string.IsNullOrEmpty(context.ChapterObject.CompleteName)))
                                         {
-                                            <div class="data-item-sub font-85 pl-3" title="This document will be saved in the agenda as @context.ChapterObject.CompleteName.">
+                                            <div class="data-item-sub font-85 pl-3" title="The smartflow step will be saved as @context.ChapterObject.CompleteName when complete.">
                                                 @context.ChapterObject.CompleteName
                                             </div>
-
                                         }
                                         else
                                         {
                                             <div class="data-item-sub">
                                             </div>
                                         }
+
+       
 
                                         @if (!(string.IsNullOrEmpty(context.ChapterObject.NextStatus)))
                                         {
@@ -997,12 +1015,31 @@ else
                                             }
 
 
-                                            <div class="data-item-right suppress-step">
-                                                <ModalTooltip Direction="left" Text=@("Status Change: " + context.ChapterObject.NextStatus) Class="w-2">
-                                                    <span class="fa fa-battery-half @(lstStatus.Select(s => s.ChapterObject.Name).Contains(context.ChapterObject.NextStatus) ? "" : "faRed")"></span>
-                                                </ModalTooltip>
+                                           <div class="data-item-right suppress-step">
+
+                                                    @if (lstStatus.Select(s => s.ChapterObject.Name).Contains(context.ChapterObject.NextStatus))
+
+                                                    {
+
+                                                        <ModalTooltip Direction="left" Text=@("Status Change: " + context.ChapterObject.NextStatus) Class="w-2">
+
+                                                            <span class="fa fa-battery-half"></span>
+
+                                                        </ModalTooltip>
+
+                                                    }else{
+
+                                                        <ModalTooltip Direction="left" Text=@("Status: [" + context.ChapterObject.NextStatus + "] is not a valid option.") Class="w-2">
+
+                                                            <span class="fa fa-battery-half col-red" ></span>
+
+                                                        </ModalTooltip>
+
+                                                    }
+
                                             </div>
                                         }
+
 
 
                                     </div>
@@ -1378,6 +1415,15 @@ else
                                             else
                                             {
                                                 <div class="data-item-sub">
+                                                </div>
+                                            }
+
+                                            @if (!(string.IsNullOrEmpty(doc.ChapterObject.Agenda)))
+                                            {
+                                                <div class="data-item-right">
+                                                    <ModalTooltip Direction="left" Text=@("Agenda: " + doc.ChapterObject.Agenda) Class="w-2">
+                                                        <span class="fa fa-folder-open"></span>
+                                                    </ModalTooltip>
                                                 </div>
                                             }
 

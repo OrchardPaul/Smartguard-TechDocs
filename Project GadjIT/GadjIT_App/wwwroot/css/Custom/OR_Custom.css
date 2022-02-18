@@ -655,6 +655,13 @@ app {
         margin-right: auto;
     }
 
+    .data-item-sub .secondary-item
+    {
+        color: #AAA;
+        font-size: 0.75rem;
+        margin-left: 30px;
+    }
+
     .data-item-sm {
         font-size: 0.9em;
     }
@@ -1285,6 +1292,41 @@ app {
 .font-85 .doc-icon {
     width: 25px;
 }
+
+/*   ANIMATION                           */
+
+.pulse{
+    animation: pulse-change 5s infinite;
+}
+
+@keyframes pulse-change {
+    0% {
+      opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+      }
+    100% {
+      opacity: 1;
+    }
+  }
+
+.pulse-light{
+    animation: pulse-light-change 5s infinite;
+}
+
+@keyframes pulse-light-change {
+    0% {
+      opacity: 0.60;
+    }
+    50% {
+        opacity: 0.20;
+      }
+    100% {
+      opacity: 0.60;
+    }
+  }
+
 
     /*---------------------------------------*/
     /*    CHAPTER LISTINGS                   */

@@ -122,6 +122,9 @@ namespace GadjIT_App.Pages.Chapters
         [Parameter]
         public List<VmUsrOrDefChapterManagement> ListOfStatus { get; set; }
 
+        [Parameter]
+        public List<VmUsrOrDefChapterManagement> ListOfAgenda { get; set; }
+
         private int selectedCaseTypeGroup { get; set; } = -2;
 
         List<string> Actions = new List<string>() { "TAKE", "INSERT" };
@@ -130,15 +133,21 @@ namespace GadjIT_App.Pages.Chapters
 
         public List<string> documentList;
 
-        
-        public bool useCustomItem { get { return _useCustomItem; }
+        public bool useCustomItem 
+        { get { return CopyObject.CustomItem == "Y" ? true : false; }
             set {
-                _useCustomItem = value;
                 if (value)
                 {
+                    CopyObject.CustomItem = "Y";
                     CopyObject.AltDisplayName = "";
+                    CopyObject.Agenda = "";
+                }
+                else
+                {
+                    CopyObject.CustomItem = "N";
                 }
             } }
+            
         public bool _useCustomItem { get; set; } = false;
 
 
@@ -163,8 +172,6 @@ namespace GadjIT_App.Pages.Chapters
             }
         }
 
-        [Required]
-        public string customItemName { get; set; } = "";
 
         protected override void OnInitialized()
         {
@@ -183,18 +190,20 @@ namespace GadjIT_App.Pages.Chapters
                 }
             }
 
+            /*
+            -- custom item check
             if (!(dropDownChapterList.ToList() is null)
                     && CopyObject.Name != ""
                     && !(CopyObject.Name is null)
                     && !dropDownChapterList.ToList().Select(D => D.Name).Contains(CopyObject.Name))
             {
                 useCustomItem = true;
-                customItemName = CopyObject.Name;
             }
             else
             {
                 useCustomItem = false;
             }
+            */
 
             if (!string.IsNullOrEmpty(CopyObject.RescheduleDataItem)
                     && TableDates.ToList().Select(D => D.TableField).Contains(CopyObject.RescheduleDataItem))
@@ -270,6 +279,8 @@ namespace GadjIT_App.Pages.Chapters
                 TaskObject.RescheduleDataItem = CopyObject.RescheduleDataItem;
                 TaskObject.MilestoneStatus = CopyObject.MilestoneStatus;
                 TaskObject.OptionalDocument = CopyObject.OptionalDocument;
+                TaskObject.Agenda = CopyObject.Agenda;
+                TaskObject.CustomItem = CopyObject.CustomItem;
 
                 if (Option == "Insert")
                 {
