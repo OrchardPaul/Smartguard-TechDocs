@@ -873,7 +873,7 @@ else
 
 
                                         <ModalTooltip Direction="top" Text="@((context.ChapterObject.OptionalDocument == "Y" && !(string.IsNullOrEmpty(context.DocType) && context.ChapterObject.CustomItem == "N") ? "Optional " : "") + context.ChapterObject.Action)" Class="w-1">
-                                            <span class="font-100 @(context.ChapterObject.OptionalDocument == "Y" && !(string.IsNullOrEmpty(context.DocType) && context.ChapterObject.CustomItem == "N") ? "pulse-light" : "") ">
+                                            <span class="font-100 @(context.ChapterObject.OptionalDocument == "Y" && !(string.IsNullOrEmpty(context.DocType) && context.ChapterObject.CustomItem == "N") ? "optional-row" : "") ">
                                                 <span class="doc-icon @(context.ChapterObject.Action == "TAKE" ? "" : "invisible")"><span class="fa fa-running mr-2"></span></span>
                                                 <span class="doc-icon @(context.ChapterObject.Action == "INSERT" ? "" : "invisible")"><span class="fa fa-arrow-down mr-2"></span></span>
                                             </span>
@@ -881,7 +881,7 @@ else
                                     
                                         <ModalTooltip Direction="top" Text="@((context.ChapterObject.OptionalDocument  == "Y" && !(string.IsNullOrEmpty(context.DocType) && context.ChapterObject.CustomItem == "N") ? "Optional " : "")
                                          + (string.IsNullOrEmpty(context.DocType) && context.ChapterObject.CustomItem == "N" ? "Item not found" : context.DocType))" Class="w-1">
-                                            <span class="font-100 @(context.ChapterObject.OptionalDocument == "Y" && !(string.IsNullOrEmpty(context.DocType) && context.ChapterObject.CustomItem == "N") ? "pulse-light" : "") ">
+                                            <span class="font-100 @(context.ChapterObject.OptionalDocument == "Y" && !(string.IsNullOrEmpty(context.DocType) && context.ChapterObject.CustomItem == "N") ? "optional-row" : "") ">
                                     
                                                 <span class="doc-icon @(context.DocType == "Form" ? "" : "invisible")" title="Form"><span class=" fa fa-file-pdf mr-2"></span></span>
                                                 <span class="doc-icon @(context.DocType == "Email" ? "" : "invisible")" title="Email"><span class="fa fa-envelope mr-2"></span></span>
@@ -919,15 +919,6 @@ else
                                             <div class="data-item-right hidden-md-down">
                                                 <ModalTooltip Direction="left" Text=@("POPUP: " + context.ChapterObject.PopupAlert) Class="w-3">
                                                     <span class="fa fa-exclamation-triangle"></span>
-                                                </ModalTooltip>
-                                            </div>
-                                        }
-
-                                        @if (!string.IsNullOrEmpty(context.ChapterObject.OptionalDocument) && context.ChapterObject.OptionalDocument == "Y")
-                                        {
-                                            <div class="data-item-right hidden-md-down">
-                                                <ModalTooltip Direction="left" Text=@("This will be an optional document") Class="w-3">
-                                                    <span class="fa-solid fa-check-to-slot fa-fade"></span>
                                                 </ModalTooltip>
                                             </div>
                                         }

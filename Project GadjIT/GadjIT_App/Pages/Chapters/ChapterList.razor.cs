@@ -2408,7 +2408,8 @@ namespace GadjIT_App.Pages.Chapters
                     DocAsName = "",
                     DocName = "",
                     ScheduleDataItem = "",
-                    TrackingMethod = ""
+                    TrackingMethod = "",
+                    CustomItem = "N"
                 } 
                 : copyObject.LinkedItems.Where(F => F.DocName == attachObject.DocName).FirstOrDefault(); 
 
@@ -2421,6 +2422,7 @@ namespace GadjIT_App.Pages.Chapters
             parameters.Add("dropDownChapterList", dropDownChapterList);
             parameters.Add("CaseTypeGroups", partnerCaseTypeGroups);
             parameters.Add("ListOfStatus", lstStatus);
+            parameters.Add("ListOfAgenda", lstAgendas);
             parameters.Add("SelectedChapter", selectedChapter);
             parameters.Add("SelectedChapterObject", SelectedChapterObject);
             parameters.Add("CompanyDbAccess", CompanyDbAccess);

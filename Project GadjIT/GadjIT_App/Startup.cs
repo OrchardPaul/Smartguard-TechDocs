@@ -53,7 +53,7 @@ namespace GadjIT_App
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("OR_GadjIT_Web")));
-            services.AddDbContext<AuthorisationDBContext>(options =>
+            services.AddDbContextFactory<AuthorisationDBContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("OR_GadjIT_Web")));
 

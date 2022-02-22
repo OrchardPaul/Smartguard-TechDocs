@@ -66,21 +66,22 @@ namespace GadjIT_App.Data.Admin
 
     public class CompanyDbAccess : ICompanyDbAccess
     {
-        private readonly AuthorisationDBContext context;
+
+        private readonly IDbContextFactory<AuthorisationDBContext> contextFactory;
         private readonly AuthenticationStateProvider authenticationStateProvider;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IIdentityUserAccess identityUserAccess;
         private readonly IMapper mapper;
         private readonly ILogger<CompanyDbAccess> logger;
 
-        public CompanyDbAccess(AuthorisationDBContext context
+        public CompanyDbAccess(IDbContextFactory<AuthorisationDBContext> contextFactory
                                 , AuthenticationStateProvider authenticationStateProvider
                                 , UserManager<ApplicationUser> userManager
                                 , IIdentityUserAccess identityUserAccess
                                 , IMapper mapper
                                 , ILogger<CompanyDbAccess> logger)
         {
-            this.context = context;
+            this.contextFactory = contextFactory;
             this.authenticationStateProvider = authenticationStateProvider;
             this.userManager = userManager;
             this.identityUserAccess = identityUserAccess;
@@ -99,17 +100,27 @@ namespace GadjIT_App.Data.Admin
 
         public async Task<List<AppDepartments>> GetDepartments()
         {
-            return await context.AppDepartments.ToListAsync();
+            using (var context = contextFactory.CreateDbContext())
+            {
+                return await context.AppDepartments.ToListAsync();
+            }
         }
 
         public async Task<List<AppWorkTypeGroups>> GetWorkTypeGroups()
         {
-            return await context.AppWorkTypeGroups.ToListAsync();
+            using (var context = contextFactory.CreateDbContext())
+            {
+                return await context.AppWorkTypeGroups.ToListAsync();
+            }
+            
         }
 
         public async Task<List<AppWorkTypes>> GetWorkTypes()
         {
-            return await context.AppWorkTypes.ToListAsync();
+            using (var context = contextFactory.CreateDbContext())
+            {
+                return await context.AppWorkTypes.ToListAsync();
+            }
         }
 
         public async Task<WorkTypeMapping> GetWorkTypeMappingsByCompany(AppCompanyDetails company
@@ -117,8 +128,9 @@ namespace GadjIT_App.Data.Admin
                                                                                 , AppWorkTypes workType
                                                                                 , string system)
         {
-
-            var caseTypeAssignments = allCaseTypes
+            using (var context = contextFactory.CreateDbContext())
+            {
+                var caseTypeAssignments = allCaseTypes
                                             .Select(C => new CaseTypeAssignment
                                             {
                                                 CaseType = C
@@ -132,169 +144,189 @@ namespace GadjIT_App.Data.Admin
                                             })
                                             .ToList();
 
-
-            return await context.AppWorkTypes
-                .Where(T => T.Id == workType.Id)
-                .Select(T => new WorkTypeMapping
-                {
-                    workType = T
-                    ,
-                    caseTypeAssignments = caseTypeAssignments
-                })
-                .SingleOrDefaultAsync();
+                return await context.AppWorkTypes
+                    .Where(T => T.Id == workType.Id)
+                    .Select(T => new WorkTypeMapping
+                    {
+                        workType = T
+                        ,
+                        caseTypeAssignments = caseTypeAssignments
+                    })
+                    .SingleOrDefaultAsync();
+            }
+            
         }
 
         public async Task<List<AppCompanyWorkTypeMapping>> UpdateWorkTypeMapping(WorkTypeMapping typeMapping
                                                                                 , AppCompanyDetails company
                                                                                 , string system)
         {
-            var addMappings = typeMapping.caseTypeAssignments
-                                .Where(C => C.IsAssigned)
-                                .Select(C => new AppCompanyWorkTypeMapping
-                                {
-                                    WorkTypeId = typeMapping.workType.Id
-                                    ,
-                                    CaseTypeCode = C.CaseType.Code
-                                    ,
-                                    CompanyId = company.Id
-                                    ,
-                                    System = system
-                                })
-                                .ToList();
-
-
-
-            if (addMappings.Count > 0)
+            using (var context = contextFactory.CreateDbContext())
             {
-                addMappings = addMappings
-                                .Where(A => A.CaseTypeCode != context.AppCompanyWorkTypeMapping
-                                                                .Where(M => M.WorkTypeId == A.WorkTypeId)
-                                                                .Where(M => M.CaseTypeCode == A.CaseTypeCode)
-                                                                .Where(M => M.CompanyId == A.CompanyId)
-                                                                .Where(M => M.System == A.System)
-                                                                .Select(M => M.CaseTypeCode)
-                                                                .SingleOrDefault())
-                                .ToList();
+                var addMappings = typeMapping.caseTypeAssignments
+                    .Where(C => C.IsAssigned)
+                    .Select(C => new AppCompanyWorkTypeMapping
+                    {
+                        WorkTypeId = typeMapping.workType.Id
+                        ,
+                        CaseTypeCode = C.CaseType.Code
+                        ,
+                        CompanyId = company.Id
+                        ,
+                        System = system
+                    })
+                    .ToList();
 
-                context.AppCompanyWorkTypeMapping.AddRange(addMappings);
-                await context.SaveChangesAsync();
+
+
+                if (addMappings.Count > 0)
+                {
+                    addMappings = addMappings
+                                    .Where(A => A.CaseTypeCode != context.AppCompanyWorkTypeMapping
+                                                                    .Where(M => M.WorkTypeId == A.WorkTypeId)
+                                                                    .Where(M => M.CaseTypeCode == A.CaseTypeCode)
+                                                                    .Where(M => M.CompanyId == A.CompanyId)
+                                                                    .Where(M => M.System == A.System)
+                                                                    .Select(M => M.CaseTypeCode)
+                                                                    .SingleOrDefault())
+                                    .ToList();
+
+                    context.AppCompanyWorkTypeMapping.AddRange(addMappings);
+                    await context.SaveChangesAsync();
+                }
+
+                var removeMappings = typeMapping.caseTypeAssignments
+                                    .Where(C => !C.IsAssigned)
+                                    .Select(C => new AppCompanyWorkTypeMapping
+                                    {
+                                        WorkTypeId = typeMapping.workType.Id
+                                        ,
+                                        CaseTypeCode = C.CaseType.Code
+                                        ,
+                                        CompanyId = company.Id
+                                        ,
+                                        System = system
+                                    })
+                                    .ToList();
+
+                if (removeMappings.Count > 0)
+                {
+                    removeMappings = removeMappings
+                                    .Select(A => context.AppCompanyWorkTypeMapping
+                                                                                    .Where(M => M.WorkTypeId == A.WorkTypeId)
+                                                                                    .Where(M => M.CaseTypeCode == A.CaseTypeCode)
+                                                                                    .Where(M => M.CompanyId == A.CompanyId)
+                                                                                    .Where(M => M.System == A.System)
+                                                                                    .SingleOrDefault())
+                                    .Where(A => !(A is null))
+                                    .ToList();
+
+                    context.AppCompanyWorkTypeMapping.RemoveRange(removeMappings);
+                    await context.SaveChangesAsync();
+                }
+
+                addMappings.AddRange(removeMappings);
+                return addMappings;
             }
 
-            var removeMappings = typeMapping.caseTypeAssignments
-                                .Where(C => !C.IsAssigned)
-                                .Select(C => new AppCompanyWorkTypeMapping
-                                {
-                                    WorkTypeId = typeMapping.workType.Id
-                                    ,
-                                    CaseTypeCode = C.CaseType.Code
-                                    ,
-                                    CompanyId = company.Id
-                                    ,
-                                    System = system
-                                })
-                                .ToList();
-
-            if (removeMappings.Count > 0)
-            {
-                removeMappings = removeMappings
-                                .Select(A => context.AppCompanyWorkTypeMapping
-                                                                                .Where(M => M.WorkTypeId == A.WorkTypeId)
-                                                                                .Where(M => M.CaseTypeCode == A.CaseTypeCode)
-                                                                                .Where(M => M.CompanyId == A.CompanyId)
-                                                                                .Where(M => M.System == A.System)
-                                                                                .SingleOrDefault())
-                                .Where(A => !(A is null))
-                                .ToList();
-
-                context.AppCompanyWorkTypeMapping.RemoveRange(removeMappings);
-                await context.SaveChangesAsync();
-            }
-
-            addMappings.AddRange(removeMappings);
-            return addMappings;
 
         }
 
         public async Task<List<WorkTypeGroupItem>> GetGroupsWithWorkTypes()
         {
-            var cp = await context.AppCompanyUserRoles.ToListAsync();
 
-            return await context.AppWorkTypeGroups
-                                .Select(G => new WorkTypeGroupItem
-                                {
-                                    group = G,
-                                    workTypes = context.AppWorkTypes
-                                                            .Join(context.AppWorkTypeGroupsTypeAssignments,
-                                                                workType => workType.Id,
-                                                                assignment => assignment.WorkTypeId,
-                                                                (workType, assignment) => new { workType, assignment })
-                                                            .Where(combined => combined.assignment.WorkTypeGroupId == G.Id)
-                                                            .Select(combined => new WorkTypeItem
-                                                            {
-                                                                workType = combined.workType,
-                                                                assignment = context.AppWorkTypeGroupsTypeAssignments
-                                                                                    .Where(A => A.WorkTypeId == combined.assignment.WorkTypeId)
-                                                                                    .ToList()
-                                                            })
-                                                            .ToList()
-                                })
-                                .ToListAsync();
+            using (var context = contextFactory.CreateDbContext())
+            {
+                var cp = await context.AppCompanyUserRoles.ToListAsync();
+
+                return await context.AppWorkTypeGroups
+                                    .Select(G => new WorkTypeGroupItem
+                                    {
+                                        group = G,
+                                        workTypes = context.AppWorkTypes
+                                                                .Join(context.AppWorkTypeGroupsTypeAssignments,
+                                                                    workType => workType.Id,
+                                                                    assignment => assignment.WorkTypeId,
+                                                                    (workType, assignment) => new { workType, assignment })
+                                                                .Where(combined => combined.assignment.WorkTypeGroupId == G.Id)
+                                                                .Select(combined => new WorkTypeItem
+                                                                {
+                                                                    workType = combined.workType,
+                                                                    assignment = context.AppWorkTypeGroupsTypeAssignments
+                                                                                        .Where(A => A.WorkTypeId == combined.assignment.WorkTypeId)
+                                                                                        .ToList()
+                                                                })
+                                                                .ToList()
+                                    })
+                                    .ToListAsync();
+            }
+
         }
 
         public async Task<List<AppWorkTypeGroups>> GetWorkTypeGroupsByCompany(int companyId)
         {
-            var assignedWorkTypeGroups = await context.AppCompanyWorkTypeGroups
-                                                    .Where(A => A.CompanyId == companyId)
-                                                    .Select(A => A.WorkTypeGroupId)
-                                                    .ToListAsync();
+            using (var context = contextFactory.CreateDbContext())
+            {
+                var assignedWorkTypeGroups = await context.AppCompanyWorkTypeGroups
+                                                        .Where(A => A.CompanyId == companyId)
+                                                        .Select(A => A.WorkTypeGroupId)
+                                                        .ToListAsync();
 
-            return await context.AppWorkTypeGroups
-                .Where(A => assignedWorkTypeGroups.Contains(A.Id))
-                .ToListAsync();
+                return await context.AppWorkTypeGroups
+                    .Where(A => assignedWorkTypeGroups.Contains(A.Id))
+                    .ToListAsync();
+            }
+
+
         }
 
         public async Task<WorkTypeGroupItem> AssignWorkTypeToGroup(WorkTypeGroupItem workTypeGroup, List<WorkTypeGroupAssignment> assignments)
         {
-            bool changed = false;
-
-            var AssignmentsToRemove = await context
-                                                .AppWorkTypeGroupsTypeAssignments
-                                                .Where(A => A.WorkTypeGroupId == workTypeGroup.group.Id)
-                                                .ToListAsync();
-
-            if (AssignmentsToRemove.Count > 0)
+            using (var context = contextFactory.CreateDbContext())
             {
-                context.AppWorkTypeGroupsTypeAssignments.RemoveRange(AssignmentsToRemove);
+                bool changed = false;
 
-                changed = true;
+                var AssignmentsToRemove = await context
+                                                    .AppWorkTypeGroupsTypeAssignments
+                                                    .Where(A => A.WorkTypeGroupId == workTypeGroup.group.Id)
+                                                    .ToListAsync();
+
+                if (AssignmentsToRemove.Count > 0)
+                {
+                    context.AppWorkTypeGroupsTypeAssignments.RemoveRange(AssignmentsToRemove);
+
+                    changed = true;
+                }
+
+
+                if (assignments
+                        .Where(A => A.IsAssigned)
+                        .ToList()
+                        .Count > 0)
+                {
+                    var newAssignments = assignments
+                                            .Where(A => A.IsAssigned)
+                                            .Select(A => new AppWorkTypeGroupsTypeAssignments
+                                            {
+                                                WorkTypeGroupId = workTypeGroup.group.Id,
+                                                WorkTypeId = A.WorkType.Id
+                                            })
+                                            .ToList();
+
+                    context.AppWorkTypeGroupsTypeAssignments.AddRange(newAssignments);
+
+                    changed = true;
+                }
+
+                if (changed)
+                {
+                    await context.SaveChangesAsync();
+                }
+
+                return workTypeGroup;
             }
 
 
-            if (assignments
-                    .Where(A => A.IsAssigned)
-                    .ToList()
-                    .Count > 0)
-            {
-                var newAssignments = assignments
-                                        .Where(A => A.IsAssigned)
-                                        .Select(A => new AppWorkTypeGroupsTypeAssignments
-                                        {
-                                            WorkTypeGroupId = workTypeGroup.group.Id,
-                                            WorkTypeId = A.WorkType.Id
-                                        })
-                                        .ToList();
-
-                context.AppWorkTypeGroupsTypeAssignments.AddRange(newAssignments);
-
-                changed = true;
-            }
-
-            if (changed)
-            {
-                await context.SaveChangesAsync();
-            }
-
-            return workTypeGroup;
 
         }
 
@@ -302,173 +334,202 @@ namespace GadjIT_App.Data.Admin
 
         public async Task<AppDepartments> SubmitDepartment(AppDepartments department)
         {
-            var selectedDepartment = await context.AppDepartments.SingleOrDefaultAsync(A => A.Id == department.Id);
+            using (var context = contextFactory.CreateDbContext())
+            {
+                var selectedDepartment = await context.AppDepartments.SingleOrDefaultAsync(A => A.Id == department.Id);
 
-            if (selectedDepartment is null)
-            {
-                context.AppDepartments.Add(department);
-                await context.SaveChangesAsync();
-                return department;
+                if (selectedDepartment is null)
+                {
+                    context.AppDepartments.Add(department);
+                    await context.SaveChangesAsync();
+                    return department;
+                }
+                else
+                {
+                    selectedDepartment = department;
+                    await context.SaveChangesAsync();
+                    return selectedDepartment;
+                }
             }
-            else
-            {
-                selectedDepartment = department;
-                await context.SaveChangesAsync();
-                return selectedDepartment;
-            }
+
         }
 
         public async Task<AppWorkTypeGroups> SubmitWorkTypeGroup(AppWorkTypeGroups workTypeGroup)
         {
-            var selectedWorkTypeGroup = await context.AppWorkTypeGroups.SingleOrDefaultAsync(A => A.Id == workTypeGroup.Id);
+            using (var context = contextFactory.CreateDbContext())
+            {
+                var selectedWorkTypeGroup = await context.AppWorkTypeGroups.SingleOrDefaultAsync(A => A.Id == workTypeGroup.Id);
 
-            if (selectedWorkTypeGroup is null)
-            {
-                context.AppWorkTypeGroups.Add(workTypeGroup);
-                await context.SaveChangesAsync();
-                return selectedWorkTypeGroup;
-            }
-            else
-            {
-                selectedWorkTypeGroup = workTypeGroup;
-                await context.SaveChangesAsync();
-                return selectedWorkTypeGroup;
-            }
+                if (selectedWorkTypeGroup is null)
+                {
+                    context.AppWorkTypeGroups.Add(workTypeGroup);
+                    await context.SaveChangesAsync();
+                    return selectedWorkTypeGroup;
+                }
+                else
+                {
+                    selectedWorkTypeGroup = workTypeGroup;
+                    await context.SaveChangesAsync();
+                    return selectedWorkTypeGroup;
+                }
+            }            
+
         }
 
         public async Task<AppWorkTypes> SubmitWorkType(AppWorkTypes workType)
         {
-            var selectedWorkType = await context.AppWorkTypes.SingleOrDefaultAsync(A => A.Id == workType.Id);
-            var selectedWorkTypeWithNoTracking = await context.AppWorkTypes
-                                                                .AsNoTracking()
-                                                                .SingleOrDefaultAsync(A => A.Id == workType.Id);
+            using (var context = contextFactory.CreateDbContext())
+            {
+                var selectedWorkType = await context.AppWorkTypes.SingleOrDefaultAsync(A => A.Id == workType.Id);
+                var selectedWorkTypeWithNoTracking = await context.AppWorkTypes
+                                                                    .AsNoTracking()
+                                                                    .SingleOrDefaultAsync(A => A.Id == workType.Id);
 
-            if (selectedWorkType is null)
-            {
-                context.AppWorkTypes.Add(workType);
-                await context.SaveChangesAsync();
-                return workType;
-            }
-            else
-            {
-                if (selectedWorkTypeWithNoTracking.DepartmentId != workType.DepartmentId)
+                if (selectedWorkType is null)
                 {
-                    var assignedGroups = await context
-                                                .AppWorkTypeGroupsTypeAssignments
-                                                .Where(A => A.WorkTypeId == selectedWorkTypeWithNoTracking.Id)
-                                                .Join(context.AppWorkTypeGroups,
-                                                            A => A.WorkTypeGroupId,
-                                                            AWG => AWG.Id,
-                                                            (A, AWG) => new { A, AWG })
-                                                .Where(C => C.AWG.ParentId == selectedWorkTypeWithNoTracking.DepartmentId)
-                                                .Select(C => C.A)
-                                                .ToListAsync();
-
-                    if (assignedGroups.Count() > 0)
-                    {
-                        context.AppWorkTypeGroupsTypeAssignments.RemoveRange(assignedGroups);
-                    }
+                    context.AppWorkTypes.Add(workType);
+                    await context.SaveChangesAsync();
+                    return workType;
                 }
+                else
+                {
+                    if (selectedWorkTypeWithNoTracking.DepartmentId != workType.DepartmentId)
+                    {
+                        var assignedGroups = await context
+                                                    .AppWorkTypeGroupsTypeAssignments
+                                                    .Where(A => A.WorkTypeId == selectedWorkTypeWithNoTracking.Id)
+                                                    .Join(context.AppWorkTypeGroups,
+                                                                A => A.WorkTypeGroupId,
+                                                                AWG => AWG.Id,
+                                                                (A, AWG) => new { A, AWG })
+                                                    .Where(C => C.AWG.ParentId == selectedWorkTypeWithNoTracking.DepartmentId)
+                                                    .Select(C => C.A)
+                                                    .ToListAsync();
+
+                        if (assignedGroups.Count() > 0)
+                        {
+                            context.AppWorkTypeGroupsTypeAssignments.RemoveRange(assignedGroups);
+                        }
+                    }
 
 
 
 
 
-                selectedWorkType = workType;
-                await context.SaveChangesAsync();
-                return selectedWorkType;
-            }
+                    selectedWorkType = workType;
+                    await context.SaveChangesAsync();
+                    return selectedWorkType;
+                }
+            }            
+
         }
 
         public async Task<AppDepartments> DeleteDepartment(AppDepartments department)
         {
-            var selectedDepartment = await context.AppDepartments.SingleOrDefaultAsync(C => C.Id == department.Id);
-
-            if (!(selectedDepartment is null))
+            using (var context = contextFactory.CreateDbContext())
             {
-                var groups = await context.AppWorkTypeGroups
-                                        .Where(A => A.ParentId == department.Id)
-                                        .ToListAsync();
+                var selectedDepartment = await context.AppDepartments.SingleOrDefaultAsync(C => C.Id == department.Id);
 
-                if (!(groups.Count == 0))
+                if (!(selectedDepartment is null))
                 {
-                    groups = groups
-                                .Select(g => {
-                                    g.ParentId = 0;
-                                    return g;
-                                })
-                                .ToList();
+                    var groups = await context.AppWorkTypeGroups
+                                            .Where(A => A.ParentId == department.Id)
+                                            .ToListAsync();
 
-                    context.AppWorkTypeGroups.UpdateRange(groups);
+                    if (!(groups.Count == 0))
+                    {
+                        groups = groups
+                                    .Select(g => {
+                                        g.ParentId = 0;
+                                        return g;
+                                    })
+                                    .ToList();
+
+                        context.AppWorkTypeGroups.UpdateRange(groups);
+                    }
+
+                    var workTypes = await context.AppWorkTypes
+                            .Where(A => A.DepartmentId == department.Id)
+                            .ToListAsync();
+
+                    if (!(workTypes.Count == 0))
+                    {
+                        workTypes = workTypes
+                                    .Select(d => {
+                                        d.DepartmentId = 0;
+                                        return d;
+                                    })
+                                    .ToList();
+
+                        context.AppWorkTypes.UpdateRange(workTypes);
+                    }
+
+                    context.AppDepartments.Remove(selectedDepartment);
+                    await context.SaveChangesAsync();
+                    return selectedDepartment;
                 }
-
-                var workTypes = await context.AppWorkTypes
-                        .Where(A => A.DepartmentId == department.Id)
-                        .ToListAsync();
-
-                if (!(workTypes.Count == 0))
+                else
                 {
-                    workTypes = workTypes
-                                .Select(d => {
-                                    d.DepartmentId = 0;
-                                    return d;
-                                })
-                                .ToList();
-
-                    context.AppWorkTypes.UpdateRange(workTypes);
+                    return department;
                 }
+            }
 
-                context.AppDepartments.Remove(selectedDepartment);
-                await context.SaveChangesAsync();
-                return selectedDepartment;
-            }
-            else
-            {
-                return department;
-            }
         }
 
         public async Task<AppWorkTypeGroups> DeleteWorkTypeGroup(AppWorkTypeGroups group)
         {
-            var selectedGroup = await context.AppWorkTypeGroups.SingleOrDefaultAsync(C => C.Id == group.Id);
+            using (var context = contextFactory.CreateDbContext())
+            {
+                var selectedGroup = await context.AppWorkTypeGroups.SingleOrDefaultAsync(C => C.Id == group.Id);
 
-            var groupAssignments = await context.AppWorkTypeGroupsTypeAssignments
-                .Where(A => A.WorkTypeGroupId == group.Id)
-                .ToListAsync();
+                var groupAssignments = await context.AppWorkTypeGroupsTypeAssignments
+                    .Where(A => A.WorkTypeGroupId == group.Id)
+                    .ToListAsync();
 
-            if (!(groupAssignments is null))
-                context.AppWorkTypeGroupsTypeAssignments.RemoveRange(groupAssignments);
+                if (!(groupAssignments is null))
+                    context.AppWorkTypeGroupsTypeAssignments.RemoveRange(groupAssignments);
 
-            context.AppWorkTypeGroups.Remove(selectedGroup);
-            await context.SaveChangesAsync();
-            return selectedGroup;
+                context.AppWorkTypeGroups.Remove(selectedGroup);
+                await context.SaveChangesAsync();
+                return selectedGroup;
+            }
+
         }
 
         public async Task<AppWorkTypes> DeleteWorkType(AppWorkTypes workType)
         {
-            var selectedType = await context.AppWorkTypes.SingleOrDefaultAsync(C => C.Id == workType.Id);
+            using (var context = contextFactory.CreateDbContext())
+            {
+                var selectedType = await context.AppWorkTypes.SingleOrDefaultAsync(C => C.Id == workType.Id);
 
-            var TypeAssignments = await context.AppWorkTypeGroupsTypeAssignments
-                .Where(A => A.WorkTypeId == selectedType.Id)
-                .ToListAsync();
+                var TypeAssignments = await context.AppWorkTypeGroupsTypeAssignments
+                    .Where(A => A.WorkTypeId == selectedType.Id)
+                    .ToListAsync();
 
-            if (!(TypeAssignments is null))
-                context.AppWorkTypeGroupsTypeAssignments.RemoveRange(TypeAssignments);
+                if (!(TypeAssignments is null))
+                    context.AppWorkTypeGroupsTypeAssignments.RemoveRange(TypeAssignments);
 
-            context.AppWorkTypes.Remove(selectedType);
-            await context.SaveChangesAsync();
-            return selectedType;
+                context.AppWorkTypes.Remove(selectedType);
+                await context.SaveChangesAsync();
+                return selectedType;
+            }
+
+
         }
 
         public async Task<AppWorkTypeGroupsTypeAssignments> DeleteAssignment(AppWorkTypeGroupsTypeAssignments assignment)
         {
-            var selectedAssignment = await context.AppWorkTypeGroupsTypeAssignments
-                                                  .SingleOrDefaultAsync(C => C.Id == assignment.Id);
+            using (var context = contextFactory.CreateDbContext())
+            {
+                var selectedAssignment = await context.AppWorkTypeGroupsTypeAssignments
+                                                    .SingleOrDefaultAsync(C => C.Id == assignment.Id);
 
-            context.AppWorkTypeGroupsTypeAssignments.Remove(selectedAssignment);
-            await context.SaveChangesAsync();
+                context.AppWorkTypeGroupsTypeAssignments.Remove(selectedAssignment);
+                await context.SaveChangesAsync();
 
-            return selectedAssignment;
+                return selectedAssignment;
+            }
+
         }
 
 
@@ -480,348 +541,397 @@ namespace GadjIT_App.Data.Admin
 
         public async Task<List<AppCompanyDetails>> GetCompanies()
         {
-            var signedInUserState = await authenticationStateProvider.GetAuthenticationStateAsync();
-            var signedInUserAsp = await userManager.FindByNameAsync(signedInUserState.User.Identity.Name);
-            var signedInUser = mapper.Map(signedInUserAsp, new AspNetUsers());
-
-            if (signedInUserState.User.IsInRole("Super User"))
+            using (var context = contextFactory.CreateDbContext())
             {
-                return await context.AppCompanyDetails
-                                    .OrderBy(A => A.CompanyName)
-                                    .ToListAsync();
-            }
-            else
-            {
-                var signedInUsersCompany = await identityUserAccess.GetCompanyClaims(signedInUser);
-                var signedInUsersCompanyIds = signedInUsersCompany.Select(C => C.Value).ToList();
+                var signedInUserState = await authenticationStateProvider.GetAuthenticationStateAsync();
+                var signedInUserAsp = await userManager.FindByNameAsync(signedInUserState.User.Identity.Name);
+                var signedInUser = mapper.Map(signedInUserAsp, new AspNetUsers());
 
-                return await context.AppCompanyDetails
-                                    .Where(A => signedInUsersCompanyIds.Contains(A.Id.ToString()))
-                                    .OrderBy(A => A.CompanyName)
-                                    .ToListAsync();
-            }
+                if (signedInUserState.User.IsInRole("Super User"))
+                {
+                    return await context.AppCompanyDetails
+                                        .OrderBy(A => A.CompanyName)
+                                        .ToListAsync();
+                }
+                else
+                {
+                    var signedInUsersCompany = await identityUserAccess.GetCompanyClaims(signedInUser);
+                    var signedInUsersCompanyIds = signedInUsersCompany.Select(C => C.Value).ToList();
 
+                    return await context.AppCompanyDetails
+                                        .Where(A => signedInUsersCompanyIds.Contains(A.Id.ToString()))
+                                        .OrderBy(A => A.CompanyName)
+                                        .ToListAsync();
+                }
+            }
         }
 
 
         public async Task<AppCompanyDetails> GetCompanyById(int id)
         {
-            return await context.AppCompanyDetails.SingleAsync(C => C.Id == id);
+            using (var context = contextFactory.CreateDbContext())
+            {
+                return await context.AppCompanyDetails.SingleAsync(C => C.Id == id);
+            }
+            
         }
 
         public async Task<AppCompanyDetails> GetSelectedCompanyOfUser(AspNetUsers user)
         {
-            return await context.AppCompanyDetails.SingleOrDefaultAsync(C => C.Id == user.SelectedCompanyId);
+            using (var context = contextFactory.CreateDbContext())
+            {
+                return await context.AppCompanyDetails.SingleOrDefaultAsync(C => C.Id == user.SelectedCompanyId);
+            }
+            
         }
 
         public async Task<string> GetCompanyBaseUri(int id, string selectedServer)
         {
-            var selectedCompany = await context.AppCompanyDetails.SingleOrDefaultAsync(C => C.Id == id);
-            var selectedUri = "";
-
-            if (!(selectedCompany is null))
+            using (var context = contextFactory.CreateDbContext())
             {
-                selectedUri = (selectedServer == "Live") ? selectedCompany.LiveUri : selectedCompany.DevUri;
-                if (!selectedUri.EndsWith("/"))
-                {
-                    selectedUri = selectedUri + "/";
-                }
-            }
+                var selectedCompany = await context.AppCompanyDetails.SingleOrDefaultAsync(C => C.Id == id);
+                var selectedUri = "";
 
-            return (selectedCompany is null) ? null : selectedUri;
+                if (!(selectedCompany is null))
+                {
+                    selectedUri = (selectedServer == "Live") ? selectedCompany.LiveUri : selectedCompany.DevUri;
+                    if (!selectedUri.EndsWith("/"))
+                    {
+                        selectedUri = selectedUri + "/";
+                    }
+                }
+
+                return (selectedCompany is null) ? null : selectedUri;
+            }
+            
         }
 
         public async Task<AppCompanyDetails> SubmitChanges(AppCompanyDetails company)
         {
-            var selectedCompany = await context.AppCompanyDetails.SingleOrDefaultAsync(C => C.Id == company.Id);
-
-            if (selectedCompany is null)
+            using (var context = contextFactory.CreateDbContext())
             {
-                context.AppCompanyDetails.Add(company);
-                await context.SaveChangesAsync();
-                return company;
-            }
-            else
-            {
-                selectedCompany.CompanyName = company.CompanyName;
-                selectedCompany.DevUri = company.DevUri;
-                selectedCompany.LiveUri = company.LiveUri;
-                selectedCompany.CompCol1 = company.CompCol1;
-                selectedCompany.CompCol2 = company.CompCol2;
-                selectedCompany.CompCol3 = company.CompCol3;
-                selectedCompany.CompCol4 = company.CompCol4;
+                var selectedCompany = await context.AppCompanyDetails.SingleOrDefaultAsync(C => C.Id == company.Id);
 
-                await context.SaveChangesAsync();
-                return selectedCompany;
+                if (selectedCompany is null)
+                {
+                    context.AppCompanyDetails.Add(company);
+                    await context.SaveChangesAsync();
+                    return company;
+                }
+                else
+                {
+                    selectedCompany.CompanyName = company.CompanyName;
+                    selectedCompany.DevUri = company.DevUri;
+                    selectedCompany.LiveUri = company.LiveUri;
+                    selectedCompany.CompCol1 = company.CompCol1;
+                    selectedCompany.CompCol2 = company.CompCol2;
+                    selectedCompany.CompCol3 = company.CompCol3;
+                    selectedCompany.CompCol4 = company.CompCol4;
+
+                    await context.SaveChangesAsync();
+                    return selectedCompany;
+                }
             }
+            
         }
 
         public async Task<AppCompanyDetails> AssignWorkTypeGroupToCompany(AppCompanyDetails company, AppWorkTypeGroups workTypeGroup)
         {
-            var selectedCompany = await context.AppCompanyDetails.SingleOrDefaultAsync(C => C.Id == company.Id);
-
-            if (!(selectedCompany is null))
+            using (var context = contextFactory.CreateDbContext())
             {
-                var newAssignment = new AppCompanyWorkTypeGroups
-                {
-                    CompanyId = selectedCompany.Id
-                                                                    ,
-                    WorkTypeGroupId = workTypeGroup.Id
-                };
+                var selectedCompany = await context.AppCompanyDetails.SingleOrDefaultAsync(C => C.Id == company.Id);
 
-                var existingAssignment = await context.AppCompanyWorkTypeGroups
-                                                    .Where(A => A.CompanyId == newAssignment.CompanyId)
-                                                    .Where(A => A.WorkTypeGroupId == newAssignment.WorkTypeGroupId)
-                                                    .SingleOrDefaultAsync();
-
-                if (existingAssignment is null)
+                if (!(selectedCompany is null))
                 {
-                    context.AppCompanyWorkTypeGroups.Add(newAssignment);
-                    await context.SaveChangesAsync();
+                    var newAssignment = new AppCompanyWorkTypeGroups
+                    {
+                        CompanyId = selectedCompany.Id
+                                                                        ,
+                        WorkTypeGroupId = workTypeGroup.Id
+                    };
+
+                    var existingAssignment = await context.AppCompanyWorkTypeGroups
+                                                        .Where(A => A.CompanyId == newAssignment.CompanyId)
+                                                        .Where(A => A.WorkTypeGroupId == newAssignment.WorkTypeGroupId)
+                                                        .SingleOrDefaultAsync();
+
+                    if (existingAssignment is null)
+                    {
+                        context.AppCompanyWorkTypeGroups.Add(newAssignment);
+                        await context.SaveChangesAsync();
+                    }
+
+                    return selectedCompany;
                 }
+                else
+                {
+                    return selectedCompany;
+                }
+            }
 
-                return selectedCompany;
-            }
-            else
-            {
-                return selectedCompany;
-            }
         }
 
         public async Task<AppCompanyDetails> RemoveWorkTypeGroupFromCompany(AppCompanyDetails company, AppWorkTypeGroups workTypeGroup)
         {
-            var selectedCompany = await context.AppCompanyDetails.SingleOrDefaultAsync(C => C.Id == company.Id);
-
-            if (!(selectedCompany is null))
+            using (var context = contextFactory.CreateDbContext())
             {
+                var selectedCompany = await context.AppCompanyDetails.SingleOrDefaultAsync(C => C.Id == company.Id);
 
-                var existingAssignment = await context.AppCompanyWorkTypeGroups
-                                                    .Where(A => A.CompanyId == selectedCompany.Id)
-                                                    .Where(A => A.WorkTypeGroupId == workTypeGroup.Id)
-                                                    .SingleOrDefaultAsync();
-
-                if (!(existingAssignment is null))
+                if (!(selectedCompany is null))
                 {
-                    context.AppCompanyWorkTypeGroups.Remove(existingAssignment);
-                    await context.SaveChangesAsync();
-                }
 
-                return selectedCompany;
+                    var existingAssignment = await context.AppCompanyWorkTypeGroups
+                                                        .Where(A => A.CompanyId == selectedCompany.Id)
+                                                        .Where(A => A.WorkTypeGroupId == workTypeGroup.Id)
+                                                        .SingleOrDefaultAsync();
+
+                    if (!(existingAssignment is null))
+                    {
+                        context.AppCompanyWorkTypeGroups.Remove(existingAssignment);
+                        await context.SaveChangesAsync();
+                    }
+
+                    return selectedCompany;
+                }
+                else
+                {
+                    return selectedCompany;
+                }
             }
-            else
-            {
-                return selectedCompany;
-            }
+
         }
 
 
         public async Task<AppCompanyDetails> DeleteCompany(AppCompanyDetails company)
         {
-            var selectedCompany = await context.AppCompanyDetails.SingleOrDefaultAsync(C => C.Id == company.Id);
+            using (var context = contextFactory.CreateDbContext())
+            {
+                var selectedCompany = await context.AppCompanyDetails.SingleOrDefaultAsync(C => C.Id == company.Id);
 
-            context.AppCompanyDetails.Remove(selectedCompany);
-            await context.SaveChangesAsync();
+                context.AppCompanyDetails.Remove(selectedCompany);
+                await context.SaveChangesAsync();
 
-            return selectedCompany;
+                return selectedCompany;
+            }
+
         }
 
 
         public async Task<List<SmartflowRecords>> SyncAdminSysToClient(List<UsrOrsfSmartflows> clientObjects, IUserSessionState sessionState)
         {
-
-            var currentRecords = await context
-                                            .SmartflowRecords
-                                            .Where(R => R.CompanyId == sessionState.Company.Id)
-                                            .Where(R => R.System == sessionState.selectedSystem)
-                                            .ToListAsync();
-
-            foreach(var record in currentRecords)
+            using (var context = contextFactory.CreateDbContext())
             {
-                var existingAccount = await context.AppCompanyAccountsSmartflowDetails
-                .Where(A => A.SmartflowRecordId == record.Id).FirstOrDefaultAsync();
+                var currentRecords = await context
+                                                .SmartflowRecords
+                                                .Where(R => R.CompanyId == sessionState.Company.Id)
+                                                .Where(R => R.System == sessionState.selectedSystem)
+                                                .ToListAsync();
 
-                if (!(existingAccount is null))
+                foreach(var record in currentRecords)
                 {
-                    existingAccount.SmartflowRecordId = null;
-                    existingAccount.Status = "Deleted";
+                    var existingAccount = await context.AppCompanyAccountsSmartflowDetails
+                    .Where(A => A.SmartflowRecordId == record.Id).FirstOrDefaultAsync();
 
-                    context.AppCompanyAccountsSmartflowDetails.Update(existingAccount);
+                    if (!(existingAccount is null))
+                    {
+                        existingAccount.SmartflowRecordId = null;
+                        existingAccount.Status = "Deleted";
 
+                        context.AppCompanyAccountsSmartflowDetails.Update(existingAccount);
+
+                    }
+
+                    context.SmartflowRecords.Remove(record);
                 }
 
-                context.SmartflowRecords.Remove(record);
-            }
-
-            await context.SaveChangesAsync();
-
-            foreach (var clientRow in clientObjects)
-            {
-                var record = new SmartflowRecords { CompanyId = sessionState.Company.Id };
-                mapper.Map(clientRow, record);
-
-                record.System = sessionState.selectedSystem;
-                record.CreatedByUserId = sessionState.User.Id;
-                record.CreatedDate = DateTime.Now;
-                record.LastModifiedByUserId = sessionState.User.Id;
-                record.LastModifiedDate = DateTime.Now;
-
-                context.SmartflowRecords.Add(record);
-
                 await context.SaveChangesAsync();
+
+                foreach (var clientRow in clientObjects)
+                {
+                    var record = new SmartflowRecords { CompanyId = sessionState.Company.Id };
+                    mapper.Map(clientRow, record);
+
+                    record.System = sessionState.selectedSystem;
+                    record.CreatedByUserId = sessionState.User.Id;
+                    record.CreatedDate = DateTime.Now;
+                    record.LastModifiedByUserId = sessionState.User.Id;
+                    record.LastModifiedDate = DateTime.Now;
+
+                    context.SmartflowRecords.Add(record);
+
+                    await context.SaveChangesAsync();
+                }
+
+                return currentRecords;
             }
 
-            return currentRecords;
         }
 
 
         public async Task<List<SmartflowRecords>> GetAllSmartflowRecords(IUserSessionState sessionState)
         {
-            var returnValues = new List<SmartflowRecords>();
-
-            try
+            using (var context = contextFactory.CreateDbContext())
             {
-                Lock = true;
+                var returnValues = new List<SmartflowRecords>();
 
-                returnValues = await context.SmartflowRecords.Where(S => S.CompanyId == sessionState.Company.Id)
-                                .Where(S => S.System == sessionState.selectedSystem)
-                                .ToListAsync();
+                try
+                {
+                    Lock = true;
 
+                    returnValues = await context.SmartflowRecords.Where(S => S.CompanyId == sessionState.Company.Id)
+                                    .Where(S => S.System == sessionState.selectedSystem)
+                                    .ToListAsync();
+
+                }
+                finally
+                {
+                    Lock = false;
+                }
+
+                return returnValues;
             }
-            finally
-            {
-                Lock = false;
-            }
 
-            return returnValues;
         }
 
         public async Task<List<SmartflowRecords>> GetAllSmartflowRecordsForAllCompanies()
         {
-            var returnValues = new List<SmartflowRecords>();
-
-            try
+            using (var context = contextFactory.CreateDbContext())
             {
-                Lock = true;
+                var returnValues = new List<SmartflowRecords>();
 
-                returnValues = await context.SmartflowRecords
-                                .ToListAsync();
+                try
+                {
+                    Lock = true;
 
+                    returnValues = await context.SmartflowRecords
+                                    .ToListAsync();
+
+                }
+                finally
+                {
+                    Lock = false;
+                }
+
+                return returnValues;
             }
-            finally
-            {
-                Lock = false;
-            }
 
-            return returnValues;
         }
 
 
         public async Task<SmartflowRecords> SaveSmartFlowRecord(UsrOrsfSmartflows chapter, IUserSessionState sessionState)
         {
-            SmartflowRecords record = new SmartflowRecords { CompanyId = sessionState.Company.Id };
-
-            
-            var existingRecord = await context.SmartflowRecords
-                                                .Where(R => R.RowId == chapter.Id && R.CompanyId == sessionState.Company.Id)
-                                                .Where(R => R.System == sessionState.selectedSystem)
-                                                .SingleOrDefaultAsync();
-
-            if (existingRecord is null)
+            using (var context = contextFactory.CreateDbContext())
             {
-                mapper.Map(chapter, record);
+                SmartflowRecords record = new SmartflowRecords { CompanyId = sessionState.Company.Id };
 
-                record.System = sessionState.selectedSystem;
-                record.CreatedByUserId = sessionState.User.Id;
-                record.CreatedDate = DateTime.Now;
-                record.LastModifiedByUserId = sessionState.User.Id;
-                record.LastModifiedDate = DateTime.Now;
+                
+                var existingRecord = await context.SmartflowRecords
+                                                    .Where(R => R.RowId == chapter.Id && R.CompanyId == sessionState.Company.Id)
+                                                    .Where(R => R.System == sessionState.selectedSystem)
+                                                    .SingleOrDefaultAsync();
 
-                context.SmartflowRecords.Add(record);            
+                if (existingRecord is null)
+                {
+                    mapper.Map(chapter, record);
+
+                    record.System = sessionState.selectedSystem;
+                    record.CreatedByUserId = sessionState.User.Id;
+                    record.CreatedDate = DateTime.Now;
+                    record.LastModifiedByUserId = sessionState.User.Id;
+                    record.LastModifiedDate = DateTime.Now;
+
+                    context.SmartflowRecords.Add(record);            
+                }
+                else
+                {
+                    mapper.Map(chapter, existingRecord);
+
+                    existingRecord.LastModifiedByUserId = sessionState.User.Id;
+                    existingRecord.LastModifiedDate = DateTime.Now;
+                }
+
+                await context.SaveChangesAsync();
+                return record;
             }
-            else
-            {
-                mapper.Map(chapter, existingRecord);
 
-                existingRecord.LastModifiedByUserId = sessionState.User.Id;
-                existingRecord.LastModifiedDate = DateTime.Now;
-            }
-
-            await context.SaveChangesAsync();
-            return record;
 
         }
 
         public async Task<SmartflowRecords> SaveSmartFlowRecordData(UsrOrsfSmartflows chapter, IUserSessionState sessionState)
         {
-            Lock = true;
-
-            SmartflowRecords record = new SmartflowRecords { CompanyId = sessionState.Company.Id };
-
-
-            var existingRecord = await context.SmartflowRecords
-                                                .Where(R => R.RowId == chapter.Id && R.CompanyId == sessionState.Company.Id)
-                                                .Where(R => R.System == sessionState.selectedSystem)
-                                                .SingleOrDefaultAsync();
-
-            if (existingRecord is null)
+            using (var context = contextFactory.CreateDbContext())
             {
-                record.SmartflowData = chapter.SmartflowData;
+                Lock = true;
 
-                record.System = sessionState.selectedSystem;
-                record.CreatedByUserId = sessionState.User.Id;
-                record.CreatedDate = DateTime.Now;
-                record.LastModifiedByUserId = sessionState.User.Id;
-                record.LastModifiedDate = DateTime.Now;
+                SmartflowRecords record = new SmartflowRecords { CompanyId = sessionState.Company.Id };
 
-                context.SmartflowRecords.Add(record);
+
+                var existingRecord = await context.SmartflowRecords
+                                                    .Where(R => R.RowId == chapter.Id && R.CompanyId == sessionState.Company.Id)
+                                                    .Where(R => R.System == sessionState.selectedSystem)
+                                                    .SingleOrDefaultAsync();
+
+                if (existingRecord is null)
+                {
+                    record.SmartflowData = chapter.SmartflowData;
+
+                    record.System = sessionState.selectedSystem;
+                    record.CreatedByUserId = sessionState.User.Id;
+                    record.CreatedDate = DateTime.Now;
+                    record.LastModifiedByUserId = sessionState.User.Id;
+                    record.LastModifiedDate = DateTime.Now;
+
+                    context.SmartflowRecords.Add(record);
+                }
+                else
+                {
+                    existingRecord.SmartflowData = chapter.SmartflowData;
+
+                    existingRecord.LastModifiedByUserId = sessionState.User.Id;
+                    existingRecord.LastModifiedDate = DateTime.Now;
+                }
+
+                await context.SaveChangesAsync();
+
+                Lock = false;
+                return record;
             }
-            else
-            {
-                existingRecord.SmartflowData = chapter.SmartflowData;
-
-                existingRecord.LastModifiedByUserId = sessionState.User.Id;
-                existingRecord.LastModifiedDate = DateTime.Now;
-            }
-
-            await context.SaveChangesAsync();
-
-            Lock = false;
-            return record;
-
         }
 
         public async Task<SmartflowRecords> RemoveSmartFlowRecord(int id, IUserSessionState sessionState)
         {
-            var existingRecord = await context.SmartflowRecords
-                                                .Where(R => R.RowId == id && R.CompanyId == sessionState.Company.Id)
-                                                .Where(R => R.System == sessionState.selectedSystem)
-                                                .SingleOrDefaultAsync();
-
-
-
-            if (!(existingRecord is null))
+            using (var context = contextFactory.CreateDbContext())
             {
-                var existingAccount = await context
-                            .AppCompanyAccountsSmartflowDetails
-                            .Where(A => A.SmartflowRecordId == existingRecord.Id)
-                            .FirstOrDefaultAsync();
+                var existingRecord = await context.SmartflowRecords
+                                                    .Where(R => R.RowId == id && R.CompanyId == sessionState.Company.Id)
+                                                    .Where(R => R.System == sessionState.selectedSystem)
+                                                    .SingleOrDefaultAsync();
 
-                if(!(existingAccount is null))
+                if (!(existingRecord is null))
                 {
-                    existingAccount.SmartflowRecordId = null;
-                    existingAccount.Status = "Deleted";
+                    var existingAccount = await context
+                                .AppCompanyAccountsSmartflowDetails
+                                .Where(A => A.SmartflowRecordId == existingRecord.Id)
+                                .FirstOrDefaultAsync();
 
-                    context.AppCompanyAccountsSmartflowDetails.Update(existingAccount);
+                    if(!(existingAccount is null))
+                    {
+                        existingAccount.SmartflowRecordId = null;
+                        existingAccount.Status = "Deleted";
+
+                        context.AppCompanyAccountsSmartflowDetails.Update(existingAccount);
+                        await context.SaveChangesAsync();
+                    }
+
+
+                    context.SmartflowRecords.Remove(existingRecord);
                     await context.SaveChangesAsync();
                 }
 
-
-                context.SmartflowRecords.Remove(existingRecord);
-                await context.SaveChangesAsync();
+                
+                return existingRecord;
             }
 
-            
-            return existingRecord;
 
         }
 
@@ -831,62 +941,66 @@ namespace GadjIT_App.Data.Admin
         {
             try
             {
-                var existingAccounts = await context.AppCompanyAccountsSmartflow.ToListAsync();
-
-                var existingCompanies = await context.AppCompanyDetails.ToListAsync();
-
-                var newAccounts = existingCompanies
-                                                .Where(C => !existingAccounts.Select(A => A.CompanyId).ToList().Contains(C.Id))
-                                                .Select(C => new AppCompanyAccountsSmartflow
-                                                {
-                                                    CompanyId = C.Id,
-                                                    Subscription = 250,
-                                                    TotalBilled = 0
-                                                }
-                                                ).ToList();
-
-                if (!(newAccounts is null) && newAccounts.Count > 0)
+                using (var context = contextFactory.CreateDbContext())
                 {
-                    context.AppCompanyAccountsSmartflow.AddRange(newAccounts);
+                    var existingAccounts = await context.AppCompanyAccountsSmartflow.ToListAsync();
+
+                    var existingCompanies = await context.AppCompanyDetails.ToListAsync();
+
+                    var newAccounts = existingCompanies
+                                                    .Where(C => !existingAccounts.Select(A => A.CompanyId).ToList().Contains(C.Id))
+                                                    .Select(C => new AppCompanyAccountsSmartflow
+                                                    {
+                                                        CompanyId = C.Id,
+                                                        Subscription = 250,
+                                                        TotalBilled = 0
+                                                    }
+                                                    ).ToList();
+
+                    if (!(newAccounts is null) && newAccounts.Count > 0)
+                    {
+                        context.AppCompanyAccountsSmartflow.AddRange(newAccounts);
+                        await context.SaveChangesAsync();
+                    }
+
+                    existingAccounts = await context.AppCompanyAccountsSmartflow.ToListAsync();
+                    var existingAccountDetails = await context.AppCompanyAccountsSmartflowDetails.ToListAsync();
+                    var existingSmartflowRecords = await context.SmartflowRecords.ToListAsync();
+
+                    var newAccountDetails = existingSmartflowRecords
+                                                                    .Where(R => !existingAccountDetails.Select(D => D.SmartflowRecordId).ToList().Contains(R.Id))
+                                                                    .Select(R => new AppCompanyAccountsSmartflowDetails
+                                                                    {
+                                                                        SmartflowRecordId = R.Id,
+                                                                        StartDate = R.System.Trim() == "Live" ? R.CreatedDate.AddMonths(1) : R.CreatedDate,
+                                                                        EndDate = R.System.Trim() == "Live" ? R.CreatedDate.AddMonths(13) : R.CreatedDate,
+                                                                        System = R.System.Trim(),
+                                                                        SmartflowName = R.SmartflowName,
+                                                                        CaseType = R.CaseType,
+                                                                        CaseTypeGroup = R.CaseTypeGroup,
+                                                                        Billable = true,
+                                                                        Status = "Active",
+                                                                        MonthlyCharge = R.System == "Live" ? 5 : 0,
+                                                                        MonthsDuration = R.System == "Live" ? 12 : 0,
+                                                                        MonthsRemaining = R.System == "Live" ? 12 : 0,
+                                                                        Outstanding = R.System == "Live" ? 5 * 12 : 0,
+                                                                        TotalBilled = 0,
+                                                                        CreatedBy = R.CreatedByUserId,
+                                                                        SmartflowAccountId = existingAccounts
+                                                                                                        .Where(E => E.CompanyId == R.CompanyId)
+                                                                                                        .Select(E => E.Id)
+                                                                                                        .FirstOrDefault()
+                                                                    }
+                                                                    ).ToList();
+
+                    newAccountDetails = newAccountDetails.Select(N => { N.System = N.System.Trim(); return N; } ).ToList();
+
+                    context.AppCompanyAccountsSmartflowDetails.AddRange(newAccountDetails);
+
                     await context.SaveChangesAsync();
+                    return true;
                 }
-
-                existingAccounts = await context.AppCompanyAccountsSmartflow.ToListAsync();
-                var existingAccountDetails = await context.AppCompanyAccountsSmartflowDetails.ToListAsync();
-                var existingSmartflowRecords = await context.SmartflowRecords.ToListAsync();
-
-                var newAccountDetails = existingSmartflowRecords
-                                                                .Where(R => !existingAccountDetails.Select(D => D.SmartflowRecordId).ToList().Contains(R.Id))
-                                                                .Select(R => new AppCompanyAccountsSmartflowDetails
-                                                                {
-                                                                    SmartflowRecordId = R.Id,
-                                                                    StartDate = R.System.Trim() == "Live" ? R.CreatedDate.AddMonths(1) : R.CreatedDate,
-                                                                    EndDate = R.System.Trim() == "Live" ? R.CreatedDate.AddMonths(13) : R.CreatedDate,
-                                                                    System = R.System.Trim(),
-                                                                    SmartflowName = R.SmartflowName,
-                                                                    CaseType = R.CaseType,
-                                                                    CaseTypeGroup = R.CaseTypeGroup,
-                                                                    Billable = true,
-                                                                    Status = "Active",
-                                                                    MonthlyCharge = R.System == "Live" ? 5 : 0,
-                                                                    MonthsDuration = R.System == "Live" ? 12 : 0,
-                                                                    MonthsRemaining = R.System == "Live" ? 12 : 0,
-                                                                    Outstanding = R.System == "Live" ? 5 * 12 : 0,
-                                                                    TotalBilled = 0,
-                                                                    CreatedBy = R.CreatedByUserId,
-                                                                    SmartflowAccountId = existingAccounts
-                                                                                                    .Where(E => E.CompanyId == R.CompanyId)
-                                                                                                    .Select(E => E.Id)
-                                                                                                    .FirstOrDefault()
-                                                                }
-                                                                ).ToList();
-
-                newAccountDetails = newAccountDetails.Select(N => { N.System = N.System.Trim(); return N; } ).ToList();
-
-                context.AppCompanyAccountsSmartflowDetails.AddRange(newAccountDetails);
-
-                await context.SaveChangesAsync();
-                return true;
+                
             }
             catch(Exception e)
             {
@@ -904,69 +1018,80 @@ namespace GadjIT_App.Data.Admin
 
         public async Task<List<AppCompanyAccountsSmartflow>> GetCompanyAccounts()
         {
-            Lock = true;
+            using (var context = contextFactory.CreateDbContext())
+            {
+                Lock = true;
 
-            var returnValue = await context.AppCompanyAccountsSmartflow.ToListAsync();
+                var returnValue = await context.AppCompanyAccountsSmartflow.ToListAsync();
 
-            Lock = false;
+                Lock = false;
 
-            return returnValue;
+                return returnValue;
+            }
+
         }
 
         public async Task<List<AppCompanyAccountsSmartflowDetails>> GetCompanyAccountDetailsByAccountId(int accountId)
         {
-            Lock = true;
+            using (var context = contextFactory.CreateDbContext())
+            {
+                Lock = true;
 
-            var returnValue = 
-                await context
-                .AppCompanyAccountsSmartflowDetails
-                .Where(D => D.SmartflowAccountId == accountId)
-                .ToListAsync();
+                var returnValue = 
+                    await context
+                    .AppCompanyAccountsSmartflowDetails
+                    .Where(D => D.SmartflowAccountId == accountId)
+                    .ToListAsync();
 
-            Lock = false;
+                Lock = false;
 
-            return returnValue;
+                return returnValue;
+            }
+
         }
 
         public async Task<AppCompanyAccountsSmartflowDetails> UpdateSmartflowAccountDetails(AppCompanyAccountsSmartflowDetails appCompanyAccountsSmartflow)
         {
             try
             {
-
-                Lock = true;
-
-                var updatingAccount = await context.AppCompanyAccountsSmartflowDetails.Where(D => D.Id == appCompanyAccountsSmartflow.Id).FirstOrDefaultAsync();
-
-                if (updatingAccount is null)
+                using (var context = contextFactory.CreateDbContext())
                 {
-                    context.AppCompanyAccountsSmartflowDetails.Add(appCompanyAccountsSmartflow);
+                    Lock = true;
 
-                    updatingAccount = appCompanyAccountsSmartflow;
+                    var updatingAccount = await context.AppCompanyAccountsSmartflowDetails.Where(D => D.Id == appCompanyAccountsSmartflow.Id).FirstOrDefaultAsync();
+
+                    if (updatingAccount is null)
+                    {
+                        context.AppCompanyAccountsSmartflowDetails.Add(appCompanyAccountsSmartflow);
+
+                        updatingAccount = appCompanyAccountsSmartflow;
+                    }
+                    else
+                    {
+                        updatingAccount.StartDate = appCompanyAccountsSmartflow.StartDate;
+                        updatingAccount.EndDate = appCompanyAccountsSmartflow.EndDate;
+                        updatingAccount.Status = appCompanyAccountsSmartflow.Status;
+                        updatingAccount.Billable = appCompanyAccountsSmartflow.Billable;
+                        updatingAccount.BillingDescription = appCompanyAccountsSmartflow.BillingDescription;
+                        updatingAccount.CreatedBy = appCompanyAccountsSmartflow.CreatedBy;
+                        updatingAccount.System = appCompanyAccountsSmartflow.System.Trim();
+                        updatingAccount.DeletedDate = appCompanyAccountsSmartflow.DeletedDate;
+                        updatingAccount.MonthlyCharge = appCompanyAccountsSmartflow.MonthlyCharge;
+                        updatingAccount.MonthsDuration = appCompanyAccountsSmartflow.MonthsDuration;
+                        updatingAccount.MonthsRemaining = appCompanyAccountsSmartflow.MonthsRemaining;
+                        updatingAccount.TotalBilled = appCompanyAccountsSmartflow.TotalBilled;
+                        updatingAccount.Outstanding = appCompanyAccountsSmartflow.Outstanding;
+
+                        context.AppCompanyAccountsSmartflowDetails.Update(updatingAccount);
+                    }
+
+                    await context.SaveChangesAsync();
+
+                    Lock = false;
+
+                    return updatingAccount;
                 }
-                else
-                {
-                    updatingAccount.StartDate = appCompanyAccountsSmartflow.StartDate;
-                    updatingAccount.EndDate = appCompanyAccountsSmartflow.EndDate;
-                    updatingAccount.Status = appCompanyAccountsSmartflow.Status;
-                    updatingAccount.Billable = appCompanyAccountsSmartflow.Billable;
-                    updatingAccount.BillingDescription = appCompanyAccountsSmartflow.BillingDescription;
-                    updatingAccount.CreatedBy = appCompanyAccountsSmartflow.CreatedBy;
-                    updatingAccount.System = appCompanyAccountsSmartflow.System.Trim();
-                    updatingAccount.DeletedDate = appCompanyAccountsSmartflow.DeletedDate;
-                    updatingAccount.MonthlyCharge = appCompanyAccountsSmartflow.MonthlyCharge;
-                    updatingAccount.MonthsDuration = appCompanyAccountsSmartflow.MonthsDuration;
-                    updatingAccount.MonthsRemaining = appCompanyAccountsSmartflow.MonthsRemaining;
-                    updatingAccount.TotalBilled = appCompanyAccountsSmartflow.TotalBilled;
-                    updatingAccount.Outstanding = appCompanyAccountsSmartflow.Outstanding;
-
-                    context.AppCompanyAccountsSmartflowDetails.Update(updatingAccount);
-                }
-
-                await context.SaveChangesAsync();
-
-                Lock = false;
-
-                return updatingAccount;
+                
             }
             catch(Exception e)
             {
@@ -993,61 +1118,65 @@ namespace GadjIT_App.Data.Admin
         {
             try
             {
-                var companyBillingSmartflowAccounts =
-                    context.AppCompanyAccountsSmartflowDetails
-                            .Where(C => C.SmartflowAccountId == companyAccount.AccountObject.Id)
-                            .Where(C => C.Billable)
-                            .Where(C => C.StartDate < DateTime.Now)
-                            .Where(C => C.MonthsRemaining > 0)
-                            .Select(C => new BillThing
-                            {
-                                AccountObject = C
-                            })
-                            .ToList();
-
-                companyBillingSmartflowAccounts = companyBillingSmartflowAccounts.Select(A =>
+                using (var context = contextFactory.CreateDbContext())
                 {
-                    A.RecordObject = smartflowRecords
-                    .Where(S => A.AccountObject.SmartflowRecordId == S.Id).FirstOrDefault(); return A;
-                })
-                    .Where(A => A.AccountObject.System.Trim() == "Live")
-                    .Where(A => A.AccountObject.Status != "Deleted")
+                    var companyBillingSmartflowAccounts =
+                        context.AppCompanyAccountsSmartflowDetails
+                                .Where(C => C.SmartflowAccountId == companyAccount.AccountObject.Id)
+                                .Where(C => C.Billable)
+                                .Where(C => C.StartDate < DateTime.Now)
+                                .Where(C => C.MonthsRemaining > 0)
+                                .Select(C => new BillThing
+                                {
+                                    AccountObject = C
+                                })
+                                .ToList();
+
+                    companyBillingSmartflowAccounts = companyBillingSmartflowAccounts.Select(A =>
+                    {
+                        A.RecordObject = smartflowRecords
+                        .Where(S => A.AccountObject.SmartflowRecordId == S.Id).FirstOrDefault(); return A;
+                    })
+                        .Where(A => A.AccountObject.System.Trim() == "Live")
+                        .Where(A => A.AccountObject.Status != "Deleted")
+                        .ToList();
+
+                    companyAccount.AccountObject.TotalBilled = companyAccount.AccountObject.TotalBilled
+                                                                + companyBillingSmartflowAccounts.Select(A => A.AccountObject.MonthlyCharge).Sum()
+                                                                + companyAccount.AccountObject.Subscription;
+
+                    companyAccount.AccountObject.LastBilledDate = DateTime.Now;
+
+                    var BilledItems = companyBillingSmartflowAccounts
+                                                .Select(B => new BillingItem
+                                                {
+                                                    AccountName = companyAccount.CompanyObject.CompanyName,
+                                                    BillDate = DateTime.Now,
+                                                    MonthlyCharge = B.AccountObject.MonthlyCharge,
+                                                    MonthsRemaing = B.AccountObject.MonthsRemaining - 1,
+                                                    Outstanding = B.AccountObject.Outstanding - B.AccountObject.MonthlyCharge,
+                                                    Billed = B.AccountObject.TotalBilled + B.AccountObject.MonthlyCharge,
+                                                    SmartflowName = B.RecordObject.SmartflowName,
+                                                    SmartflowCaseTypeGroup = B.RecordObject.CaseTypeGroup,
+                                                    SmartflowCaseType = B.RecordObject.CaseType
+                                                })
+                                                .ToList();
+
+
+                    companyBillingSmartflowAccounts = companyBillingSmartflowAccounts.Select(B =>
+                    {
+                        B.AccountObject.Outstanding = B.AccountObject.Outstanding - B.AccountObject.MonthlyCharge;
+                        B.AccountObject.MonthsRemaining = B.AccountObject.MonthsRemaining - 1;
+                        B.AccountObject.TotalBilled = B.AccountObject.TotalBilled + B.AccountObject.MonthlyCharge;
+                        return B;
+                    })
                     .ToList();
 
-                companyAccount.AccountObject.TotalBilled = companyAccount.AccountObject.TotalBilled
-                                                            + companyBillingSmartflowAccounts.Select(A => A.AccountObject.MonthlyCharge).Sum()
-                                                            + companyAccount.AccountObject.Subscription;
+                    await context.SaveChangesAsync();
 
-                companyAccount.AccountObject.LastBilledDate = DateTime.Now;
+                    return BilledItems;
+                }
 
-                var BilledItems = companyBillingSmartflowAccounts
-                                            .Select(B => new BillingItem
-                                            {
-                                                AccountName = companyAccount.CompanyObject.CompanyName,
-                                                BillDate = DateTime.Now,
-                                                MonthlyCharge = B.AccountObject.MonthlyCharge,
-                                                MonthsRemaing = B.AccountObject.MonthsRemaining - 1,
-                                                Outstanding = B.AccountObject.Outstanding - B.AccountObject.MonthlyCharge,
-                                                Billed = B.AccountObject.TotalBilled + B.AccountObject.MonthlyCharge,
-                                                SmartflowName = B.RecordObject.SmartflowName,
-                                                SmartflowCaseTypeGroup = B.RecordObject.CaseTypeGroup,
-                                                SmartflowCaseType = B.RecordObject.CaseType
-                                            })
-                                            .ToList();
-
-
-                companyBillingSmartflowAccounts = companyBillingSmartflowAccounts.Select(B =>
-                {
-                    B.AccountObject.Outstanding = B.AccountObject.Outstanding - B.AccountObject.MonthlyCharge;
-                    B.AccountObject.MonthsRemaining = B.AccountObject.MonthsRemaining - 1;
-                    B.AccountObject.TotalBilled = B.AccountObject.TotalBilled + B.AccountObject.MonthlyCharge;
-                    return B;
-                })
-                .ToList();
-
-                await context.SaveChangesAsync();
-
-                return BilledItems;
             }
             catch(Exception e)
             {

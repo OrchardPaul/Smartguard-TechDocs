@@ -1315,6 +1315,11 @@ app {
     animation: pulse-light-change 5s infinite;
 }
 
+.optional-row{
+    opacity: 0.40;
+}
+
+
 @keyframes pulse-light-change {
     0% {
       opacity: 0.60;

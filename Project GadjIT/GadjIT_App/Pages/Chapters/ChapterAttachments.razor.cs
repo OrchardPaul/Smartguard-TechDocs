@@ -89,7 +89,9 @@ namespace GadjIT_App.Pages.Chapters
 
         [Parameter]
         public Action RefreshDocList { get; set; }
-
+        
+        [Parameter]
+        public List<VmUsrOrDefChapterManagement> ListOfAgenda { get; set; }
 
         [Parameter]
         public ICompanyDbAccess CompanyDbAccess { get; set; }
