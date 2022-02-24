@@ -22,15 +22,16 @@ namespace GadjIT_App.Data.Admin
     public class IdentityRoleAccess : IIdentityRoleAccess
     {
         private readonly RoleManager<ApplicationRole> roleManager;
-        private readonly AuthorisationDBContext dBContext;
+        private readonly IDbContextFactory<AuthorisationDBContext> contextFactory;
+
 
         private ApplicationRole selectedRole { get; set; }
 
         public IdentityRoleAccess(RoleManager<ApplicationRole> roleManager
-                                    , AuthorisationDBContext dBContext)
+                                    , IDbContextFactory<AuthorisationDBContext> contextFactory)
         {
             this.roleManager = roleManager;
-            this.dBContext = dBContext;
+            this.contextFactory = contextFactory;
         }
 
         public async Task<List<AspNetRoles>> GetUserRoles()
@@ -50,18 +51,22 @@ namespace GadjIT_App.Data.Admin
 
         public async Task<IList<string>> GetCurrentUserRolesForCompany(AspNetUsers user, int selectedCompany)
         {
-            var SelectedUserRoles = await dBContext.AppCompanyUserRoles
-                                            .OrderBy(A => A.RoleId)
-                                            .Where(A => A.UserId == user.Id
-                                                        & A.CompanyId == selectedCompany)
-                                            .Select(A => A.RoleId)
-                                            .ToListAsync();
+            using (var context = contextFactory.CreateDbContext())
+            {
+                var SelectedUserRoles = await context.AppCompanyUserRoles
+                                                .OrderBy(A => A.RoleId)
+                                                .Where(A => A.UserId == user.Id
+                                                            & A.CompanyId == selectedCompany)
+                                                .Select(A => A.RoleId)
+                                                .ToListAsync();
 
-            return await roleManager.Roles
-                                    .Where(x => SelectedUserRoles.Contains(x.Id))
-                                    .OrderBy(x => x.Name)
-                                    .Select(x => x.Name)
-                                    .ToListAsync();
+                return await roleManager.Roles
+                                        .Where(x => SelectedUserRoles.Contains(x.Id))
+                                        .OrderBy(x => x.Name)
+                                        .Select(x => x.Name)
+                                        .ToListAsync();
+            }
+
 
             
         }
@@ -127,25 +132,29 @@ namespace GadjIT_App.Data.Admin
 
         public async Task<IdentityResult> Delete(AspNetRoles item)
         {
-            selectedRole = await roleManager.FindByIdAsync(item.Id);
-
-            if (selectedRole is null)
+            using (var context = contextFactory.CreateDbContext())
             {
-                return IdentityResult.Failed();
-            }
-            else
-            {
-                var userRoles = await dBContext.AppCompanyUserRoles
-                                                .Where(C => C.RoleId == selectedRole.Id)
-                                                .ToListAsync();
+                selectedRole = await roleManager.FindByIdAsync(item.Id);
 
-                if (userRoles.Count > 0)
+                if (selectedRole is null)
                 {
-                    dBContext.AppCompanyUserRoles.RemoveRange(userRoles);
+                    return IdentityResult.Failed();
                 }
+                else
+                {
+                    var userRoles = await context.AppCompanyUserRoles
+                                                    .Where(C => C.RoleId == selectedRole.Id)
+                                                    .ToListAsync();
 
-                return await roleManager.DeleteAsync(selectedRole);
+                    if (userRoles.Count > 0)
+                    {
+                        context.AppCompanyUserRoles.RemoveRange(userRoles);
+                    }
+
+                    return await roleManager.DeleteAsync(selectedRole);
+                }
             }
+
 
         }
 

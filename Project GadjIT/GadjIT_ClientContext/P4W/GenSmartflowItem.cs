@@ -46,6 +46,8 @@ namespace GadjIT.ClientContext.P4W
         public string TrackingMethod { get; set; }
         public string ChaserDesc { get; set; }
         public string OptionalDocument { get; set; } = "N";
+        public string CustomItem { get; set; } = "N";
+        public string Agenda { get; set; } = "";
         public List<LinkedItems> LinkedItems { get; set; }
 
 
@@ -65,6 +67,9 @@ namespace GadjIT.ClientContext.P4W
         public string ChaserDesc { get; set; }
         public int ScheduleDays { get; set; }
         public string OptionalDocument { get; set; } = "N";
+
+        public string CustomItem { get; set; } = "N";
+        public string Agenda { get; set; } = "";
 
         [StringLength(250)]
         public string ScheduleDataItem { get; set; }

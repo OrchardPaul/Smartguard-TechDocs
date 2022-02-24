@@ -2260,7 +2260,9 @@ namespace GadjIT_App.Pages.Chapters
                 ChaserDesc = editObject.ChapterObject.ChaserDesc,
                 RescheduleDataItem = editObject.ChapterObject.RescheduleDataItem,
                 MilestoneStatus = editObject.ChapterObject.MilestoneStatus,
-                OptionalDocument = editObject.ChapterObject.OptionalDocument
+                OptionalDocument = editObject.ChapterObject.OptionalDocument,
+                Agenda = editObject.ChapterObject.Agenda,
+                CustomItem = editObject.ChapterObject.CustomItem
         };
 
             var parameters = new ModalParameters();
@@ -2273,6 +2275,7 @@ namespace GadjIT_App.Pages.Chapters
             parameters.Add("TableDates", TableDates);
             parameters.Add("CaseTypeGroups", partnerCaseTypeGroups);
             parameters.Add("ListOfStatus", lstStatus);
+            parameters.Add("ListOfAgenda", lstAgendas);
             parameters.Add("SelectedChapter", selectedChapter);
             parameters.Add("SelectedChapterObject", SelectedChapterObject);
             parameters.Add("Option", option);
@@ -2405,7 +2408,8 @@ namespace GadjIT_App.Pages.Chapters
                     DocAsName = "",
                     DocName = "",
                     ScheduleDataItem = "",
-                    TrackingMethod = ""
+                    TrackingMethod = "",
+                    CustomItem = "N"
                 } 
                 : copyObject.LinkedItems.Where(F => F.DocName == attachObject.DocName).FirstOrDefault(); 
 
@@ -2418,6 +2422,7 @@ namespace GadjIT_App.Pages.Chapters
             parameters.Add("dropDownChapterList", dropDownChapterList);
             parameters.Add("CaseTypeGroups", partnerCaseTypeGroups);
             parameters.Add("ListOfStatus", lstStatus);
+            parameters.Add("ListOfAgenda", lstAgendas);
             parameters.Add("SelectedChapter", selectedChapter);
             parameters.Add("SelectedChapterObject", SelectedChapterObject);
             parameters.Add("CompanyDbAccess", CompanyDbAccess);

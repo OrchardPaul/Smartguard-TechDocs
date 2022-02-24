@@ -529,8 +529,8 @@
 
 
 .btn-ellipses {
-    width: 20px !important;
-    margin: 0 5px 0 5px !important;
+    width: 10px !important;
+    margin: 0 10px 0 10px !important;
     height: 100%;
     font-size: 1.1rem;
     border: none !important;
@@ -542,6 +542,8 @@
     min-width: 0;
     flex-shrink: 0;
 }
+
+
 
 
 
@@ -574,7 +576,7 @@
     display: block;
     width: 130px;
     top: 0;
-    left: 18px;
+    left: 10px;
     margin: 0;
     padding: 10px 3px 3px 3px;
     background-color: none;
@@ -677,11 +679,9 @@
 
 
 .btn-ellipses:hover ul li span, .btn-ellipses:hover ul li svg {
-    height: auto;
+    height: 15px;
     opacity: 1;
 }
-
-
 
 .btn-ellipses ul li:hover {
     background-color: #ddd;

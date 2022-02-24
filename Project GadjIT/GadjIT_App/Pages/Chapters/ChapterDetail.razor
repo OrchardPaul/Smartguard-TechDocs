@@ -206,10 +206,27 @@
                             </option>
                         }
                     </InputSelect>
-                    <ValidationMessage For="@(() => CopyObject.Type)" />
+                    <ValidationMessage For="@(() => CopyObject.NextStatus)" />
                 </div>
 
-
+                if(!useCustomItem)
+                {
+                    <div class="form-group">        
+                        <label for="Agenda">Agenda</label>
+                        <InputSelect class="form-control form-control-lg"
+                                    @bind-Value="CopyObject.Agenda">
+                            <option value=""></option>
+                            @foreach (var a in ListOfAgenda)
+                            {
+                                <option value="@a.ChapterObject.Name">
+                                    @a.ChapterObject.Name
+                                </option>
+                            }
+                        </InputSelect>
+                        <ValidationMessage For="@(() => CopyObject.Agenda)" />
+                    </div>
+                }
+                
 
 
                 <div class="form-group">
