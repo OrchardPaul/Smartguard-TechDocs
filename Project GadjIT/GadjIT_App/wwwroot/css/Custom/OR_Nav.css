@@ -591,11 +591,6 @@
 
 .btn-ellipses:hover .ellipsis-menu {
     top: 20px;
-}
-
-
-
-.btn-ellipses:hover .ellipsis-menu {
     visibility: visible;
     opacity: 1;
     transition-property: opacity;
