@@ -140,7 +140,24 @@ namespace GadjIT_App.Pages.Chapters
             }
         }
 
-
+        public bool SmartflowComparison 
+        {
+            get 
+            {
+                return compareSystems;
+            }
+            set
+            {
+                compareSystems = value;
+                if(compareSystems)
+                {
+                    CompareAllChapters();
+                }
+                else{
+                    StateHasChanged();
+                }
+            }
+        }
 
         protected override async Task OnInitializedAsync()
         {
@@ -605,7 +622,38 @@ namespace GadjIT_App.Pages.Chapters
                                     .OrderBy(C => C.SmartflowObject.SeqNo)
                                     .ToList(); 
             
+
             selectedChapter.Name = "";
+
+            if(lstSelectedChapters.Count > 0)
+            {
+                if(!(SequenceIsValid("Chapters")))
+                {
+                    ReSeqSmartflows();
+                }
+
+                if(SmartflowComparison)
+                {
+                    CompareAllChapters();
+                }
+            }
+
+        }
+
+
+        private async void ReSeqSmartflows()
+        {
+            foreach(var smartflowSelected in lstSelectedChapters)
+            {
+                smartflowSelected.SmartflowObject.SeqNo = lstSelectedChapters.IndexOf(smartflowSelected) + 1;
+                await chapterManagementService.UpdateMainItem(smartflowSelected.SmartflowObject).ConfigureAwait(false);
+            }
+
+            await InvokeAsync(() =>
+            {
+                StateHasChanged();
+            })
+            .ConfigureAwait(false);
         }
 
         private void NavigateToChapter(UsrOrsfSmartflows chapter)
@@ -613,11 +661,14 @@ namespace GadjIT_App.Pages.Chapters
             NavigationManager.NavigateTo($"Smartflow/{chapter.CaseTypeGroup}/{chapter.CaseType}/{chapter.SmartflowName}",true);
         }
 
+
+
         private async Task UpdateSteps()
         {
             bool overAllCreationSuccess = true;
             bool creationSuccess = true;
             int creationCount = 0;
+            string stepJSON = "";
 
             foreach (var chapter in lstChapters)
             {
@@ -697,7 +748,7 @@ namespace GadjIT_App.Pages.Chapters
                         };
                     }
 
-                    string stepJSON = JsonConvert.SerializeObject(ChapterP4WStep);
+                    stepJSON = JsonConvert.SerializeObject(ChapterP4WStep);
 
                     
 
@@ -712,11 +763,34 @@ namespace GadjIT_App.Pages.Chapters
 
                 }
 
-
-
             }
 
 
+            ChapterP4WStep = new ChapterP4WStepSchema
+            {
+                StepName = "SF-Admin Save Items for Agenda Management",
+                P4WCaseTypeGroup = "Global Documents",
+                GadjITCaseTypeGroup = "Global",
+                GadjITCaseType = "Global Documents",
+                Smartflow = "Admin Save Items for Agenda Management",
+                Questions = new List<ChapterP4WStepQuestion>{
+                        new ChapterP4WStepQuestion {QNo = 1, QText= "HQ - Save Items for Agenda Management" }
+                        ,new ChapterP4WStepQuestion {QNo = 2, QText= "HQ - Delete Me" }
+                        },
+                Answers = new List<ChapterP4WStepAnswer>{
+                        new ChapterP4WStepAnswer {QNo = 1, GoToData= $"2 [SQL: exec up_ORSF_Agenda_Control '[matters.entityref]', [matters.number], [currentstep.stepid] ]" }
+                        ,new ChapterP4WStepAnswer {QNo = 2, GoToData= $"[SQL: EXEC dbo.up_ORSF_DeleteStep [currentstep.stepid]]" }
+                        }
+            };
+
+            stepJSON = JsonConvert.SerializeObject(ChapterP4WStep);
+
+            creationSuccess = await chapterManagementService.CreateStep(new VmChapterP4WStepSchemaJSONObject { StepSchemaJSON = stepJSON });
+
+            if (!creationSuccess)
+            {
+                overAllCreationSuccess = false;
+            }
 
             var parameters = new ModalParameters();
             var message = overAllCreationSuccess ? "Creation Successfull" : "Creation Unsuccessfull";
@@ -874,9 +948,6 @@ namespace GadjIT_App.Pages.Chapters
         private async void RefreshChapters()
         {
             ListChapterLoaded = false;
-
-            //var lstC = await chapterManagementService.GetAllChapters();
-            //lstChapters = lstC.Select(A => new VmUsrOrDefChapterManagement { ChapterObject = A }).ToList();
 
             bool gotLock = CompanyDbAccess.Lock;
             while (gotLock)
@@ -1204,7 +1275,6 @@ namespace GadjIT_App.Pages.Chapters
 
             lstAltSystemChapters = new List<VmUsrOrsfSmartflows>();
             AltChapterObject = new UsrOrsfSmartflows();
-            compareSystems = !compareSystems;
             await RefreshCompararisonAllChapters();
 
 
@@ -3150,9 +3220,11 @@ namespace GadjIT_App.Pages.Chapters
         {
             await chapterManagementService.Delete(editChapter.Id);
 
+            var chapterToRemove = lstSelectedChapters.Where(S => S.SmartflowObject.Id == editChapter.Id).First();
 
-            RefreshChapters();
-            StateHasChanged();
+            lstSelectedChapters.Remove(chapterToRemove);
+            lstChapters.Remove(chapterToRemove);
+            ReSeqSmartflows();
         }
 
 
@@ -4045,6 +4117,16 @@ namespace GadjIT_App.Pages.Chapters
             await CompanyDbAccess.SyncAdminSysToClient(lstC, UserSession);
 
             RefreshChapters();
+
+            var parameters = new ModalParameters();
+            parameters.Add("InfoText", "Systems synced successfully");
+
+            var options = new ModalOptions()
+            {
+                Class = "blazored-custom-modal modal-chapter-chapter"
+            };
+            string title = $"Systems Synced";
+            Modal.Show<ModalInfo>(title, parameters, options);
         }
 
 
@@ -4074,30 +4156,29 @@ namespace GadjIT_App.Pages.Chapters
             }
 
 
-
             smartflow.SmartflowObject.SeqNo = lstSelectedChapters.IndexOf(smartflow) + 1;
 
             await chapterManagementService.UpdateMainItem(smartflow.SmartflowObject).ConfigureAwait(false);
+            
+            await InvokeAsync(() =>
+            {
+                StateHasChanged();
+            })
+            .ConfigureAwait(false);
+
+            /*            
+            foreach(var smartflowSelected in lstSelectedChapters)
+            {
+                smartflowSelected.SmartflowObject.SeqNo = lstSelectedChapters.IndexOf(smartflowSelected) + 1;
+                await chapterManagementService.UpdateMainItem(smartflowSelected.SmartflowObject).ConfigureAwait(false);
+            }
 
             await InvokeAsync(() =>
             {
                 StateHasChanged();
-            });
-
-            /*
-            * 1 2 dropped = 1
-            * 2 3 replaced = 3
-            * 3 1 target = 2,3
-            * 4 4
-            *
-            * */
-            /*
-            * 1 4 dropped = 4
-            * 2 1 replaced = 1
-            * 3 2 target = 1,2,3
-            * 4 3
-            *
-            * */
+            })
+            .ConfigureAwait(false);
+            */
         }
 
 
@@ -4112,9 +4193,6 @@ namespace GadjIT_App.Pages.Chapters
                                                                         : C.ChapterObject.SeqNo < droppedItem && C.ChapterObject.SeqNo >= replacedItem)
                                                 .Select(C => { C.ChapterObject.SeqNo += intAdjust; return C; })
                                                 .ToList();
-
-
-
 
 
             doc.ChapterObject.SeqNo = lstDocs.IndexOf(doc) + 1;

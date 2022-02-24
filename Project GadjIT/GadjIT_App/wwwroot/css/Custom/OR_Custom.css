@@ -1042,16 +1042,19 @@ app {
     height: 300px;
 }
 
+
+
 .grid-actions .info-icon {
     margin-left: 25px;
 }
 
+
 .grid-chapter-docs .row .data-item:nth-of-type(1) {
-    width: 54%;
+    width: 48%;
 }
 
 .grid-chapter-docs .row .data-item:nth-of-type(2), .grid-chapter-docs .row .data-item:nth-of-type(3) {
-    width: 23%;
+    width: 26%;
 }
 
 .grid-chapter-fees .row .data-item:nth-of-type(1) {
@@ -1316,7 +1319,7 @@ app {
 }
 
 .optional-row{
-    opacity: 0.40;
+    opacity: 0.40 !important;
 }
 
 

@@ -30,7 +30,7 @@ else
                 {
                     <div class="grid-actions">
                         <div class="btn-group">
-                            <button @onclick='PrepareChapterForInsert' class="btn btn-main btn-shadow" title="Add new Smartflow"><i class="fa fa-plus pr-1"></i><span>New Smartflow</span></button>
+                            <button @onclick='PrepareChapterForInsert' class="btn btn-main btn-shadow" title="Add new Smartflow"><i class="fa fa-plus pr-1"></i><span>New</span></button>
                             @if (!(string.IsNullOrEmpty(selectedChapter.CaseType)))
                             {
                                 @if (!(SequenceIsValid("Chapters")))
@@ -42,7 +42,7 @@ else
                         </div>
                         @if (UserSession.isSuperUser)
                         {
-                            <button @onclick='SyncSmartFlowSystems' class="btn btn-main btn-shadow" title="Sync Systems"><i class="fa fa-sync pr-1"></i><span>Sync Systems</span></button>
+                            <button @onclick='SyncSmartFlowSystems' class="btn btn-main btn-shadow" title="Sync Systems"><i class="fa fa-sync pr-1"></i><span>Sync</span></button>
                             <button @onclick='UpdateSteps' class="btn btn-main btn-shadow" title="Update Steps"><i class="fa fa-download pr-1"></i><span>Update Steps</span></button>
                         }
 
@@ -50,7 +50,7 @@ else
                         @if (UserSession.isAdminUser)
                         {
                             <div class="btn-group sync-group invisible-sm-down">
-                                <input type="checkbox" class="ml-1 mt-1" @onchange="() => CompareAllChapters()" /><span class="ml-2 font-75">Compare to @(UserSession.selectedSystem == "Dev" ? "Live" : "Dev") </span>
+                                <input type="checkbox" class="ml-1 mt-1" @bind-value="SmartflowComparison"/><span class="ml-2 font-75">Compare to @(UserSession.selectedSystem == "Dev" ? "Live" : "Dev") </span>
                             </div>
 
                         }
@@ -520,11 +520,8 @@ else
 
                                                     @if (!string.IsNullOrEmpty(selectedChapter.BackgroundImageName))
                                                     {
-
                                                         <label class="d-block">Selected Background Image</label>
                                                         <img src="@selectedChapter.BackgroundImage.Replace("/wwwroot","")" alt="" class="img-thumbnail ml-2" />
-
-
                                                     }
                                                     else
                                                     {
@@ -721,12 +718,13 @@ else
                                                                         foreach (var attach in context.ChapterObject.LinkedItems)
                                                                         {
                                                                             <li class="font-85" @onclick='(() => PrepareAttachmentForEdit(context, attach))'>
-                                                                                <span class="font-85" title="@attach.Action">
+                                                                                <span class="font-85 @(attach.OptionalDocument == "Y" && !(string.IsNullOrEmpty(attach.DocType) && attach.CustomItem == "N") ? "optional-row" : "") " title="@attach.Action">
                                                                                     <span class="doc-icon @(attach.Action == "TAKE" ? "" : "invisible")"><span class="fa fa-running mr-2"></span></span>
                                                                                     <span class="doc-icon @(attach.Action == "INSERT" ? "" : "invisible")"><span class="fa fa-arrow-down mr-2"></span></span>
                                                                                     <span class="doc-icon @(attach.Action == "SCHEDULE" ? "" : "invisible")"><span class="fa fa-calendar-check mr-2"></span></span>
                                                                                 </span>
-                                                                                <span class="font-85">
+
+                                                                                <span class="font-85 @(attach.OptionalDocument == "Y" && !(string.IsNullOrEmpty(attach.DocType) && attach.CustomItem == "N") ? "optional-row" : "")">
                                                                                     <span class="doc-icon @(attach.DocType == "Doc" ? "" : "invisible")" title="Document"><span class="fa fa-file mr-2"></span></span>
                                                                                     <span class="doc-icon @(attach.DocType == "Form" ? "" : "invisible")" title="Form"><span class=" fa fa-file-pdf mr-2"></span></span>
                                                                                     <span class="doc-icon @(attach.DocType == "Email" ? "" : "invisible")" title="Email"><span class="fa fa-envelope mr-2"></span></span>
@@ -746,6 +744,10 @@ else
                                                                                 <span class="doc-icon hidden-sm-down @(@selectedChapter.ShowDocumentTracking == "Y" && !(string.IsNullOrEmpty(attach.TrackingMethod)) && "Send Only|Response Required".Contains(attach.TrackingMethod) ? "" : "invisible")">
 
                                                                                     <span title="@($"This item is tracked: {attach.TrackingMethod}")" class="fa fa-map-marker-alt"></span>
+                                                                                </span>
+
+                                                                                <span class="doc-icon hidden-sm-down @(!(string.IsNullOrEmpty(attach.Agenda)) ? "" : "invisible")">
+                                                                                    <span title="@($"This item will be saved in the following folder: {attach.Agenda}")" class="fa fa-folder"></span>
                                                                                 </span>
 
 
@@ -824,12 +826,15 @@ else
                                                                             @foreach (var attach in context.ChapterObject.LinkedItems)
                                                                             {
                                                                                 <li class="font-85" @onclick="() => PrepareAttachmentForView(context,attach)">
-                                                                                    <span class="font-85" title="@attach.Action">
+                                                                                    
+                                                                                    
+                                                                                    <span class="font-85 @(attach.OptionalDocument == "Y" && !(string.IsNullOrEmpty(attach.DocType) && attach.CustomItem == "N") ? "optional-row" : "") " title="@attach.Action">
                                                                                         <span class="doc-icon @(attach.Action == "TAKE" ? "" : "invisible")"><span class="fa fa-running mr-2"></span></span>
                                                                                         <span class="doc-icon @(attach.Action == "INSERT" ? "" : "invisible")"><span class="fa fa-arrow-down mr-2"></span></span>
                                                                                         <span class="doc-icon @(attach.Action == "SCHEDULE" ? "" : "invisible")"><span class="fa fa-calendar-check mr-2"></span></span>
                                                                                     </span>
-                                                                                    <span class="font-85">
+    
+                                                                                    <span class="font-85 @(attach.OptionalDocument == "Y" && !(string.IsNullOrEmpty(attach.DocType) && attach.CustomItem == "N") ? "optional-row" : "")">
                                                                                         <span class="doc-icon @(attach.DocType == "Doc" ? "" : "invisible")" title="Document"><span class="fa fa-file mr-2"></span></span>
                                                                                         <span class="doc-icon @(attach.DocType == "Form" ? "" : "invisible")" title="Form"><span class=" fa fa-file-pdf mr-2"></span></span>
                                                                                         <span class="doc-icon @(attach.DocType == "Email" ? "" : "invisible")" title="Email"><span class="fa fa-envelope mr-2"></span></span>

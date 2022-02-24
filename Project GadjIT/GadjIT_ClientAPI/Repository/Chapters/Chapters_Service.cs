@@ -214,8 +214,6 @@ namespace GadjIT.ClientAPI.Repository.Chapters
         {
             try
             {
-
-                
                 await _context.Database.ExecuteSqlRawAsync("EXEC up_ORSF_CreateSmartflowStep {0}", JSON);
                 return true;
             }

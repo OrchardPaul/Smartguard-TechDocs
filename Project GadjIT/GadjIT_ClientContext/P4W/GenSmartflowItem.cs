@@ -25,8 +25,12 @@ namespace GadjIT.ClientContext.P4W
         public string AsName { get; set; }
         
         [StringLength(250)]
-        public string CompleteName { get; set; }
-        
+        public string CompleteName { get { return string.IsNullOrEmpty(completeName) ? "" : completeName.ToUpper(); } set { completeName = string.IsNullOrEmpty(value) ? "" : value.ToUpper(); } } 
+
+
+        private string completeName;
+
+
         public int? RescheduleDays { get; set; }
 
         [StringLength(250)]

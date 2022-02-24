@@ -818,19 +818,21 @@ namespace GadjIT_App.FileManagement.FileProcessing.Implementation
             workSheetAttachments.Cells[1, 3].Style.WrapText = true;
             workSheetAttachments.Cells[1, 3].Value = "Alternative name to be shown in agenda.";
             workSheetAttachments.Cells[1, 4].Style.WrapText = true;
-            workSheetAttachments.Cells[1, 4].Value = "The document will be saved in the following agenda:";
+            workSheetAttachments.Cells[1, 4].Value = "Optional: \r\n'Y' or 'N'. The item will be a custom item:";
             workSheetAttachments.Cells[1, 5].Style.WrapText = true;
-            workSheetAttachments.Cells[1, 5].Value = "TAKE / INSERT / SCHEDULE.";
+            workSheetAttachments.Cells[1, 5].Value = "The document will be saved in the following agenda:";
             workSheetAttachments.Cells[1, 6].Style.WrapText = true;
-            workSheetAttachments.Cells[1, 6].Value = "Send Only / Response Required";
+            workSheetAttachments.Cells[1, 6].Value = "TAKE / INSERT / SCHEDULE.";
             workSheetAttachments.Cells[1, 7].Style.WrapText = true;
-            workSheetAttachments.Cells[1, 7].Value = "";
+            workSheetAttachments.Cells[1, 7].Value = "Send Only / Response Required";
             workSheetAttachments.Cells[1, 8].Style.WrapText = true;
-            workSheetAttachments.Cells[1, 8].Value = "If action is SCHEDULE, how many days the item will be scheduled for";
+            workSheetAttachments.Cells[1, 8].Value = "";
             workSheetAttachments.Cells[1, 9].Style.WrapText = true;
-            workSheetAttachments.Cells[1, 9].Value = "If action is SCHEDULE, date field the schedule days are base from";
+            workSheetAttachments.Cells[1, 9].Value = "If action is SCHEDULE, how many days the item will be scheduled for";
             workSheetAttachments.Cells[1, 10].Style.WrapText = true;
-            workSheetAttachments.Cells[1, 10].Value = "Optional: \r\n'Y' or 'N'. The document will appear on the smartflow as optional: ";
+            workSheetAttachments.Cells[1, 10].Value = "If action is SCHEDULE, date field the schedule days are base from";
+            workSheetAttachments.Cells[1, 11].Style.WrapText = true;
+            workSheetAttachments.Cells[1, 11].Value = "Optional: \r\n'Y' or 'N'. The document will appear on the smartflow as optional: ";
 
 
 
@@ -840,13 +842,14 @@ namespace GadjIT_App.FileManagement.FileProcessing.Implementation
             workSheetAttachments.Cells[2, 1].Value = "Document Item Name ";
             workSheetAttachments.Cells[2, 2].Value = "Linked Item Name";
             workSheetAttachments.Cells[2, 3].Value = "Linked Item Display Name";
-            workSheetAttachments.Cells[2, 4].Value = "Agenda";
-            workSheetAttachments.Cells[2, 5].Value = "Action";
-            workSheetAttachments.Cells[2, 6].Value = "Tracking Method";
-            workSheetAttachments.Cells[2, 7].Value = "Chaser Description";
-            workSheetAttachments.Cells[2, 8].Value = "Schedule Days";
-            workSheetAttachments.Cells[2, 9].Value = "Schedule Data Item";
-            workSheetAttachments.Cells[2, 10].Value = "Optional Document";
+            workSheetAttachments.Cells[2, 4].Value = "Custom Item";
+            workSheetAttachments.Cells[2, 5].Value = "Agenda";
+            workSheetAttachments.Cells[2, 6].Value = "Action";
+            workSheetAttachments.Cells[2, 7].Value = "Tracking Method";
+            workSheetAttachments.Cells[2, 8].Value = "Chaser Description";
+            workSheetAttachments.Cells[2, 9].Value = "Schedule Days";
+            workSheetAttachments.Cells[2, 10].Value = "Schedule Data Item";
+            workSheetAttachments.Cells[2, 11].Value = "Optional Document";
 
             //Body of table
             recordIndex = 3;
@@ -861,14 +864,16 @@ namespace GadjIT_App.FileManagement.FileProcessing.Implementation
                     workSheetAttachments.Cells[recordIndex, 1].Value = string.IsNullOrEmpty(chapterItem.AltDisplayName) ? (string.IsNullOrEmpty(chapterItem.Name) ? "" : chapterItem.Name) : chapterItem.AltDisplayName;
                     workSheetAttachments.Cells[recordIndex, 2].Value = string.IsNullOrEmpty(doc.DocName) ? "" : doc.DocName;
                     workSheetAttachments.Cells[recordIndex, 3].Value = string.IsNullOrEmpty(doc.DocAsName) ? "" : doc.DocAsName;
-                    workSheetAttachments.Cells[recordIndex, 4].Value = string.IsNullOrEmpty(doc.Agenda) ? "" : doc.Agenda;
+                    workSheetAttachments.Cells[recordIndex, 4].Value = string.IsNullOrEmpty(doc.CustomItem) ? "" : doc.CustomItem;
 
-                    workSheetAttachments.Cells[recordIndex, 5].Value = string.IsNullOrEmpty(doc.Action) ? "" : doc.Action;
-                    workSheetAttachments.Cells[recordIndex, 6].Value = string.IsNullOrEmpty(doc.TrackingMethod) ? "" : doc.TrackingMethod;
-                    workSheetAttachments.Cells[recordIndex, 7].Value = string.IsNullOrEmpty(doc.ChaserDesc) ? "" : doc.ChaserDesc;
-                    workSheetAttachments.Cells[recordIndex, 8].Value = doc.ScheduleDays;
-                    workSheetAttachments.Cells[recordIndex, 9].Value = string.IsNullOrEmpty(doc.ScheduleDataItem) ? "" : doc.ScheduleDataItem; ;
-                    workSheetAttachments.Cells[recordIndex, 10].Value = string.IsNullOrEmpty(doc.OptionalDocument) ? "" : doc.OptionalDocument; ;
+                    workSheetAttachments.Cells[recordIndex, 5].Value = string.IsNullOrEmpty(doc.Agenda) ? "" : doc.Agenda;
+
+                    workSheetAttachments.Cells[recordIndex, 6].Value = string.IsNullOrEmpty(doc.Action) ? "" : doc.Action;
+                    workSheetAttachments.Cells[recordIndex, 7].Value = string.IsNullOrEmpty(doc.TrackingMethod) ? "" : doc.TrackingMethod;
+                    workSheetAttachments.Cells[recordIndex, 8].Value = string.IsNullOrEmpty(doc.ChaserDesc) ? "" : doc.ChaserDesc;
+                    workSheetAttachments.Cells[recordIndex, 9].Value = doc.ScheduleDays;
+                    workSheetAttachments.Cells[recordIndex, 10].Value = string.IsNullOrEmpty(doc.ScheduleDataItem) ? "" : doc.ScheduleDataItem; ;
+                    workSheetAttachments.Cells[recordIndex, 11].Value = string.IsNullOrEmpty(doc.OptionalDocument) ? "" : doc.OptionalDocument; ;
 
                     recordIndex++;
                 }
@@ -884,6 +889,7 @@ namespace GadjIT_App.FileManagement.FileProcessing.Implementation
             workSheetAttachments.Column(8).Width = 22;
             workSheetAttachments.Column(9).Width = 22;
             workSheetAttachments.Column(10).Width = 22;
+            workSheetAttachments.Column(11).Width = 22;
 
             /*
            * 
@@ -1295,6 +1301,26 @@ namespace GadjIT_App.FileManagement.FileProcessing.Implementation
                         }
                     }
 
+                    if (!string.IsNullOrEmpty(readObject.NextStatus))
+                    {
+                        if(!readChapters.Items.Where(I => I.Type == "Status").Select(I => I.Name).Contains(readObject.NextStatus)){
+                            var seqNo = readChapters.Items.Where(I => I.Type == "Status").Select(I => I.SeqNo)
+                                        .OrderByDescending(I => I)
+                                        .FirstOrDefault();
+
+                            seqNo = seqNo ?? -1;            
+                            seqNo += 1;
+
+                            readChapters.Items.Add(new GenSmartflowItem 
+                                                    { 
+                                                        Name = readObject.NextStatus, 
+                                                        SeqNo = seqNo,
+                                                        Type = "Status",
+                                                        MilestoneStatus = ""
+                                                    });
+                        }
+                    }
+
                     if (!string.IsNullOrEmpty(readObject.Name))
                     {
                         readChapters.Items.Add(readObject);
@@ -1350,29 +1376,36 @@ namespace GadjIT_App.FileManagement.FileProcessing.Implementation
                                             : worksheetAttachments.Cells[row, column].Value is null
                                             ? ""
                                             : worksheetAttachments.Cells[row, column].Value.ToString();
-                            if (column == 4) newAttachment.Agenda = worksheetAttachments.Cells[row, column].FirstOrDefault() is null
+                            if (column == 4) newAttachment.CustomItem = worksheetAttachments.Cells[row, column].FirstOrDefault() is null
+                                            ? "N"
+                                            : worksheetAttachments.Cells[row, column].Value is null
+                                            ? "N"
+                                            : worksheetAttachments.Cells[row, column].Value.ToString() == "Y"
+                                            ? "Y"
+                                            : "N";
+                            if (column == 5) newAttachment.Agenda = worksheetAttachments.Cells[row, column].FirstOrDefault() is null
                                             ? ""
                                             : worksheetAttachments.Cells[row, column].Value is null
                                             ? ""
                                             : worksheetAttachments.Cells[row, column].Value.ToString();                
-                            if (column == 5) newAttachment.Action = worksheetAttachments.Cells[row, column].FirstOrDefault() is null
+                            if (column == 6) newAttachment.Action = worksheetAttachments.Cells[row, column].FirstOrDefault() is null
                                             ? "INSERT"
                                             : worksheetAttachments.Cells[row, column].Value is null
                                             ? "INSERT"
                                             : worksheetAttachments.Cells[row, column].Value.ToString().ToUpper();
-                            if (column == 6) newAttachment.TrackingMethod = worksheetAttachments.Cells[row, column].FirstOrDefault() is null
+                            if (column == 7) newAttachment.TrackingMethod = worksheetAttachments.Cells[row, column].FirstOrDefault() is null
                                             ? ""
                                             : worksheetAttachments.Cells[row, column].Value is null
                                             ? ""
                                             : worksheetAttachments.Cells[row, column].Value.ToString();
-                            if (column == 7) newAttachment.ChaserDesc = worksheetAttachments.Cells[row, column].FirstOrDefault() is null
+                            if (column == 8) newAttachment.ChaserDesc = worksheetAttachments.Cells[row, column].FirstOrDefault() is null
                                             ? ""
                                             : worksheetAttachments.Cells[row, column].Value is null
                                             ? ""
                                             : worksheetAttachments.Cells[row, column].Value.ToString();
                             try
                             {
-                                if (column == 8) newAttachment.ScheduleDays = worksheetAttachments.Cells[row, column].FirstOrDefault() is null
+                                if (column == 9) newAttachment.ScheduleDays = worksheetAttachments.Cells[row, column].FirstOrDefault() is null
                                                                                 ? 0
                                                                                 : worksheetAttachments.Cells[row, column].Value is null
                                                                                 ? 0
@@ -1383,13 +1416,13 @@ namespace GadjIT_App.FileManagement.FileProcessing.Implementation
                                 newAttachment.ScheduleDays = 0;
                             }
 
-                            if (column == 9) newAttachment.ScheduleDataItem = worksheetAttachments.Cells[row, column].FirstOrDefault() is null
+                            if (column == 10) newAttachment.ScheduleDataItem = worksheetAttachments.Cells[row, column].FirstOrDefault() is null
                                             ? ""
                                             : worksheetAttachments.Cells[row, column].Value is null
                                             ? ""
                                             : worksheetAttachments.Cells[row, column].Value.ToString();
 
-                            if (column == 10) newAttachment.OptionalDocument = worksheetAttachments.Cells[row, column].FirstOrDefault() is null
+                            if (column == 11) newAttachment.OptionalDocument = worksheetAttachments.Cells[row, column].FirstOrDefault() is null
                                             ? "N"
                                             : worksheetAttachments.Cells[row, column].Value is null
                                             ? "N"
