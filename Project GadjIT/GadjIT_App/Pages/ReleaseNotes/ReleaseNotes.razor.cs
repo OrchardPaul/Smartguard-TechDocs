@@ -25,7 +25,8 @@ namespace GadjIT_App.Pages.ReleaseNotes
             {
                 List<VersionItem> listVersions = new List<VersionItem>
                 {
-                    new VersionItem { VersionName = "V01_03", FromDate = new DateTime(2021, 11, 12), ToDate= new DateTime(), Notes="Current - In Development" }
+                    new VersionItem { VersionName = "V01_04", FromDate = new DateTime(2022, 02, 25), ToDate= new DateTime(), Notes="Current - In Development" }
+                    , new VersionItem { VersionName = "V01_03", FromDate = new DateTime(2021, 11, 12), ToDate= new DateTime(), Notes="Minor upgrade including Global Status and Bulk Step Creation" }
                     ,new VersionItem { VersionName = "V01_02", FromDate = new DateTime(2021, 06, 01), ToDate= new DateTime(2021, 11, 11), Notes="First Official Release of Smartflow" } 
                    
                 };
