@@ -621,12 +621,14 @@ namespace GadjIT_App.Data.Admin
                 else
                 {
                     selectedCompany.CompanyName = company.CompanyName;
+                    selectedCompany.CompanyDesc = company.CompanyDesc;
                     selectedCompany.DevUri = company.DevUri;
                     selectedCompany.LiveUri = company.LiveUri;
                     selectedCompany.CompCol1 = company.CompCol1;
                     selectedCompany.CompCol2 = company.CompCol2;
                     selectedCompany.CompCol3 = company.CompCol3;
                     selectedCompany.CompCol4 = company.CompCol4;
+                    selectedCompany.CurrentVersion = company.CurrentVersion;
 
                     await context.SaveChangesAsync();
                     return selectedCompany;

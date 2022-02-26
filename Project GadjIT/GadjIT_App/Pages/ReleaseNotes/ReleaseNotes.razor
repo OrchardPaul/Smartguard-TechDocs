@@ -26,7 +26,7 @@
                         <div class="data-item">
 
                             <div class="data-item-sub">@version.VersionName</div>
-                            <div class="data-item-sub">@version.FromDate.ToString("dd MMM yyyy") to @version.ToDate.ToString("dd MMM yyyy")</div>
+                            <div class="data-item-sub">@(!version.FromDate.HasValue ? "In Development" : version.FromDate?.ToString("dd MMM yyyy") + (!version.ToDate.HasValue ? " -> current" : $" to {@version.ToDate?.ToString("dd MMM yyyy")}"))</div>
 
                             <div title="Click to edit" class="data-item-right link-direction" @onclick="() => SelectVersion(version.VersionName)">
                                 <i class="fa fa-folder-open"></i> View
@@ -43,8 +43,8 @@ else
 {
 
     <ReleaseHeader Version="@CurrentVersion"
-                   FromDate="@SelectedVersion.FromDate.ToString("dd MMM yyyy")"
-                   ToDate="@SelectedVersion.ToDate.ToString("dd MMM yyyy")"
+                   FromDate="@(SelectedVersion.FromDate.HasValue ? SelectedVersion.FromDate?.ToString("dd MMM yyyy") : "")"
+                   ToDate="@(SelectedVersion.ToDate.HasValue ? SelectedVersion.ToDate?.ToString("dd MMM yyyy") : "")"
                    Notes="@SelectedVersion.Notes">
     </ReleaseHeader>
 
@@ -53,6 +53,9 @@ else
 
                 @switch (CurrentVersion)
                 {
+                    case "V01_05":
+                        <ReleaseV01_05></ReleaseV01_05>
+                        break;
                     case "V01_04":
                         <ReleaseV01_04></ReleaseV01_04>
                         break;
