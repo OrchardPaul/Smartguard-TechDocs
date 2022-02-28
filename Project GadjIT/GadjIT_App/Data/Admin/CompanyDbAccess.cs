@@ -975,7 +975,6 @@ namespace GadjIT_App.Data.Admin
                                                                     {
                                                                         SmartflowRecordId = R.Id,
                                                                         StartDate = R.System.Trim() == "Live" ? R.CreatedDate.AddMonths(1) : R.CreatedDate,
-                                                                        EndDate = R.System.Trim() == "Live" ? R.CreatedDate.AddMonths(13) : R.CreatedDate,
                                                                         System = R.System.Trim(),
                                                                         SmartflowName = R.SmartflowName,
                                                                         CaseType = R.CaseType,
@@ -1071,7 +1070,6 @@ namespace GadjIT_App.Data.Admin
                     else
                     {
                         updatingAccount.StartDate = appCompanyAccountsSmartflow.StartDate;
-                        updatingAccount.EndDate = appCompanyAccountsSmartflow.EndDate;
                         updatingAccount.Status = appCompanyAccountsSmartflow.Status;
                         updatingAccount.Billable = appCompanyAccountsSmartflow.Billable;
                         updatingAccount.BillingDescription = appCompanyAccountsSmartflow.BillingDescription;

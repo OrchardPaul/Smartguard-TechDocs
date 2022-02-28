@@ -40,13 +40,13 @@ namespace GadjIT.AppContext.GadjIT_App
         [StringLength(100)]
         public string CreatedBy { get; set; }
 
-        public DateTime StartDate { get; set; }
+        public int MonthsDuration { get; set; }
 
-        public DateTime EndDate { get; set; }
+        public DateTime StartDate { get; set; }
+    
+        public DateTime EndDate => System.Trim() == "Live" ? StartDate.AddMonths(MonthsDuration) : StartDate;
 
         public DateTime DeletedDate { get; set; }
-
-        public int MonthsDuration { get; set; }
 
         public int MonthsRemaining { get; set; }
 

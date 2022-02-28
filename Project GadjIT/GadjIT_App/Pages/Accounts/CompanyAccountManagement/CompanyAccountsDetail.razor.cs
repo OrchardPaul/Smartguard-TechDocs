@@ -41,8 +41,8 @@ namespace GadjIT_App.Pages.Accounts.CompanyAccountManagement
 
         private async void HandleValidSubmit()
         {
+            SelectedAccountDetailsObject.MonthsDuration = CopyObject.MonthsDuration;
             SelectedAccountDetailsObject.StartDate = CopyObject.StartDate;
-            SelectedAccountDetailsObject.EndDate = CopyObject.EndDate;
             SelectedAccountDetailsObject.Status = CopyObject.Status;
             SelectedAccountDetailsObject.Billable = CopyObject.Billable;
             SelectedAccountDetailsObject.BillingDescription = CopyObject.BillingDescription;
@@ -50,7 +50,6 @@ namespace GadjIT_App.Pages.Accounts.CompanyAccountManagement
             SelectedAccountDetailsObject.System = CopyObject.System;
             SelectedAccountDetailsObject.DeletedDate = CopyObject.DeletedDate;
             SelectedAccountDetailsObject.MonthlyCharge = CopyObject.MonthlyCharge;
-            SelectedAccountDetailsObject.MonthsDuration = CopyObject.MonthsDuration;
             SelectedAccountDetailsObject.MonthsRemaining = CopyObject.MonthsRemaining;
             SelectedAccountDetailsObject.TotalBilled = CopyObject.TotalBilled;
             SelectedAccountDetailsObject.Outstanding = CopyObject.Outstanding;

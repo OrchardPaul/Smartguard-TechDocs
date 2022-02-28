@@ -184,9 +184,14 @@
 
 
                 <div class="grid-actions">
-                    <select class="form-control form-control-xxl" @bind="SelectedSystem">
+                    <select class="form-control form-control-lg" @bind="SelectedSystem">
                         <option value="Live">Live</option>
                         <option value="Dev">Dev</option>
+                    </select>
+                    <select class="form-control form-control-lg" @bind="SelectedStatus">
+                        <option value="All">All</option>
+                        <option value="Active">Active</option>
+                        <option value="Deleted">Deleted</option>
                     </select>
                 </div>
 
@@ -256,6 +261,7 @@
                                                           .Select(A => A.SmartflowAccounts)
                                                           .SingleOrDefault()
                                                           .Where(A => A.System == SelectedSystem)
+                                                          .Where(A => A.Status == (SelectedStatus == "All" ? A.Status : SelectedStatus))
                                                           .OrderBy(A => A.SmartflowName)
                                                           .OrderBy(A => SortByStatus ? A.Status : null)
                                                           .OrderByDescending(A => SortByStatusDesc ? A.Status : null)

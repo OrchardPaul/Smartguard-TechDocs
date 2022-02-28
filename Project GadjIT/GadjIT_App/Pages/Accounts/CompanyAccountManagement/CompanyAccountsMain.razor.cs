@@ -90,6 +90,8 @@ namespace GadjIT_App.Pages.Accounts.CompanyAccountManagement
         public bool SortByStatusDesc { get; set; }
 
         public string SelectedSystem { get; set; } = "Live";
+        
+        public string SelectedStatus { get; set; } = "Active";
 
         /// <summary>
         /// TODO: Not sure why but calling the RefreshCompanyObjects procedure causes a crash
@@ -227,7 +229,6 @@ namespace GadjIT_App.Pages.Accounts.CompanyAccountManagement
                 CaseType = taskObject.CaseType,
                 CaseTypeGroup = taskObject.CaseTypeGroup,
                 StartDate = taskObject.StartDate,
-                EndDate = taskObject.EndDate,
                 Status = taskObject.Status,
                 Billable = taskObject.Billable,
                 BillingDescription = taskObject.BillingDescription,
