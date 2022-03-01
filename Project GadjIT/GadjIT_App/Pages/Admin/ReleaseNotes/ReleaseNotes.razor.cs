@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Components;
 using System.Threading.Tasks;
 
-namespace GadjIT_App.Pages.ReleaseNotes
+namespace GadjIT_App.Pages.Admin.ReleaseNotes
 {
     public partial class ReleaseNotes
     {
@@ -18,6 +19,10 @@ namespace GadjIT_App.Pages.ReleaseNotes
         public string CurrentVersion { get; set; } = "";
 
         public VersionItem SelectedVersion { get; set; }
+
+        [Inject]
+        public NavigationManager NavigationManager { get; set; }
+
 
         private List<VersionItem> ListVersions
         {
@@ -47,6 +52,13 @@ namespace GadjIT_App.Pages.ReleaseNotes
             CurrentVersion = "";
             StateHasChanged();
         }
+
+        void SelectAdminHome()
+        {
+            CurrentVersion = "";
+            NavigationManager.NavigateTo("/admin");
+        }
+
     }
 }
 

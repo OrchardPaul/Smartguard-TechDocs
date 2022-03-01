@@ -16,6 +16,9 @@ namespace GadjIT_App.Pages.Admin
         [Inject]
         NavigationManager NavigationManager { get; set; }
 
+        [Inject]
+        public IUserSessionState UserSession { get; set; }
+
         protected override async Task OnInitializedAsync()
         {
             var authenticationState = await PageAuthorisationState.AdminNavAuthorisation();
