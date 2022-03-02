@@ -1254,6 +1254,15 @@ app {
     width: 400px !important;
 }
 
+.attach-list li {
+    height: 35px;
+    vertical-align: middle;
+}
+
+.attach-list li .doc-icon{
+    padding-top: 4px;
+}
+
 .tracking .attach-list {
     width: 430px !important;
 }
@@ -1270,6 +1279,8 @@ app {
     width: 250px !important;
     overflow: hidden;
     text-overflow: ellipsis;
+    height: 25px !important;
+    padding-top: 2px;
 }
 
 .doc-icon-sm {
