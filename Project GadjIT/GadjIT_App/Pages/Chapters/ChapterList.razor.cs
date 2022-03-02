@@ -43,6 +43,7 @@ namespace GadjIT_App.Pages.Chapters
             public string ColourName { get; set; }
             public string ColourCode { get; set; }
         }
+        
 
 
         [Inject]
@@ -321,6 +322,8 @@ namespace GadjIT_App.Pages.Chapters
 
 
         }
+
+        
 
         public void Dispose()
         {

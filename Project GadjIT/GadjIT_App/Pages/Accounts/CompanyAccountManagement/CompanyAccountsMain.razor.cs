@@ -77,6 +77,8 @@ namespace GadjIT_App.Pages.Accounts.CompanyAccountManagement
 
         public AppCompanyAccountsSmartflow SelectedCompanyAccount { get; set; }
 
+        public bool Draft { get; set; }
+
         public bool SortByStartDate { get; set; }
 
         public bool SortByStartDateDesc { get; set; }
@@ -223,8 +225,8 @@ namespace GadjIT_App.Pages.Accounts.CompanyAccountManagement
             AppCompanyAccountsSmartflowDetails copyObject = new AppCompanyAccountsSmartflowDetails
             {
                 SmartflowAccountId = taskObject.SmartflowAccountId,
-                SmartflowRecordId = taskObject.SmartflowRecordId,
-                SmartflowRecord = taskObject.SmartflowRecord,
+                ClientRowId = taskObject.ClientRowId,
+                CompanyId = taskObject.CompanyId,
                 SmartflowName = taskObject.SmartflowName,
                 CaseType = taskObject.CaseType,
                 CaseTypeGroup = taskObject.CaseTypeGroup,
@@ -269,7 +271,8 @@ namespace GadjIT_App.Pages.Accounts.CompanyAccountManagement
                                                         .FirstOrDefault();
 
             var billingItems = await CompanyDbAccess.BillCompany(selectedAccountObject
-                                                                    , AllRecords);
+                                                                    , AllRecords
+                                                                    , Draft);
 
             await ExcelHelper.WriteChapterDataToExcel(selectedAccountObject, billingItems);
 
@@ -281,6 +284,20 @@ namespace GadjIT_App.Pages.Accounts.CompanyAccountManagement
             smartflowDetails.Billable = !smartflowDetails.Billable;
 
             await CompanyDbAccess.UpdateSmartflowAccountDetails(smartflowDetails).ConfigureAwait(false);
+        }
+
+        public void BillNotDraft()
+        {
+            Draft = false; 
+            ExecuteConfirm();
+        }
+
+
+        public void BillDraft()
+        {
+            Draft = true;
+
+            ExecuteConfirm();
         }
 
 

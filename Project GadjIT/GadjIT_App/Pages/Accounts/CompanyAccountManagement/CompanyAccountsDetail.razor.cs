@@ -53,6 +53,8 @@ namespace GadjIT_App.Pages.Accounts.CompanyAccountManagement
             SelectedAccountDetailsObject.MonthsRemaining = CopyObject.MonthsRemaining;
             SelectedAccountDetailsObject.TotalBilled = CopyObject.TotalBilled;
             SelectedAccountDetailsObject.Outstanding = CopyObject.Outstanding;
+            SelectedAccountDetailsObject.CompanyId = CopyObject.CompanyId;
+            SelectedAccountDetailsObject.ClientRowId = CopyObject.ClientRowId;
 
             SelectedAccountDetailsObject = await CompanyDbAccess.UpdateSmartflowAccountDetails(SelectedAccountDetailsObject).ConfigureAwait(false);
            

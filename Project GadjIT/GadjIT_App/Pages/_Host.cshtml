@@ -5,9 +5,11 @@
     Layout = null;
 }
 
+@using Microsoft.AspNetCore.Authorization
 @using Services.SessionState
 @inject IUserSessionState sessionState
 
+@attribute [Authorize]
 
 <script>
 

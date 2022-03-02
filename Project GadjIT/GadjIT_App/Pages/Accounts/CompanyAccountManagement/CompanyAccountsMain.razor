@@ -177,8 +177,10 @@
                     @if (SessionState.isAdminUser)
                     {
                         <div class="btn-group">
-                            <button @onclick='() => ExecuteConfirm()' class="btn btn-main btn-shadow" title="Add New Bill"><i class="fa fa-money-bill-wave"></i><span>Bill</span></button>
+                            <button @onclick='() => BillDraft()' class="btn btn-main btn-shadow" title="Add New Bill"><i class="fa fa-money-bill-wave"></i><span>Bill Draft</span></button>
+                            <button @onclick='() => BillNotDraft()' class="btn btn-main btn-shadow" title="Add New Bill"><i class="fa fa-money-bill-wave"></i><span>Bill</span></button>
                         </div>
+        
                     }
                 </div>
 

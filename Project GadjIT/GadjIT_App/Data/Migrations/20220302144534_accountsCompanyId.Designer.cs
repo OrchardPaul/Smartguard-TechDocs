@@ -4,14 +4,16 @@ using GadjIT_App.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GadjIT_App.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220302144534_accountsCompanyId")]
+    partial class accountsCompanyId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -104,6 +106,9 @@ namespace GadjIT_App.Data.Migrations
                         .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)");
 
+                    b.Property<int?>("SmartflowRecordId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
 
@@ -119,6 +124,8 @@ namespace GadjIT_App.Data.Migrations
                         .HasColumnType("money");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("SmartflowRecordId");
 
                     b.ToTable("AppCompanyAccountsSmartflowDetails");
                 });
@@ -632,6 +639,15 @@ namespace GadjIT_App.Data.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("GadjIT.AppContext.GadjIT_App.AppCompanyAccountsSmartflowDetails", b =>
+                {
+                    b.HasOne("GadjIT.AppContext.GadjIT_App.SmartflowRecords", "SmartflowRecord")
+                        .WithMany()
+                        .HasForeignKey("SmartflowRecordId");
+
+                    b.Navigation("SmartflowRecord");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
