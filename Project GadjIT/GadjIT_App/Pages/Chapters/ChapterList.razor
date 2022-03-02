@@ -878,19 +878,21 @@ else
 
                                         <ModalTooltip Direction="top" Text="@((context.ChapterObject.OptionalDocument == "Y" && !(string.IsNullOrEmpty(context.DocType) && context.ChapterObject.CustomItem == "N") ? "Optional " : "") + context.ChapterObject.Action)" Class="w-1">
                                             <span class="font-100 @(context.ChapterObject.OptionalDocument == "Y" && !(string.IsNullOrEmpty(context.DocType) && context.ChapterObject.CustomItem == "N") ? "optional-row" : "") ">
-                                                <span class="doc-icon @(context.ChapterObject.Action == "TAKE" ? "" : "invisible")"><span class="fa fa-running mr-2"></span></span>
+                                                <span class="invisible"></span>
                                                 <span class="doc-icon @(context.ChapterObject.Action == "INSERT" ? "" : "invisible")"><span class="fa fa-arrow-down mr-2"></span></span>
+                                                <span class="doc-icon @(context.ChapterObject.Action == "TAKE" ? "" : "invisible")"><span class="fa fa-running mr-2"></span></span>
                                             </span>
                                         </ModalTooltip>
                                     
                                         <ModalTooltip Direction="top" Text="@((context.ChapterObject.OptionalDocument  == "Y" && !(string.IsNullOrEmpty(context.DocType) && context.ChapterObject.CustomItem == "N") ? "Optional " : "")
                                          + (string.IsNullOrEmpty(context.DocType) && context.ChapterObject.CustomItem == "N" ? "Item not found" : context.DocType))" Class="w-1">
                                             <span class="font-100 @(context.ChapterObject.OptionalDocument == "Y" && !(string.IsNullOrEmpty(context.DocType) && context.ChapterObject.CustomItem == "N") ? "optional-row" : "") ">
-                                    
+                                                <span class="invisible"></span>
+                                
+                                                <span class="doc-icon @(context.DocType == "Doc" ? "" : "invisible")" title="Document"><span class="fa fa-file mr-2"></span></span>
                                                 <span class="doc-icon @(context.DocType == "Form" ? "" : "invisible")" title="Form"><span class=" fa fa-file-pdf mr-2"></span></span>
                                                 <span class="doc-icon @(context.DocType == "Email" ? "" : "invisible")" title="Email"><span class="fa fa-envelope mr-2"></span></span>
                                                 <span class="doc-icon @(context.DocType == "Step" ? "" : "invisible")" title="Step"><span class=" fa fa-list-ol mr-2"></span></span>
-                                                <span class="doc-icon @(context.DocType == "Doc" ? "" : "invisible")" title="Document"><span class="fa fa-file mr-2"></span></span>
                                                 <span class="doc-icon @(context.DocType == "Date" ? "" : "invisible")" title="Diary Item"><span class="fa fa-calendar mr-2"></span></span>
                                                 <span class="doc-icon @(string.IsNullOrEmpty(context.DocType) && context.ChapterObject.CustomItem == "N" ? "" : "invisible")" title="Missing Item"><span class="fas fa-exclamation col-red mr-2"></span></span>
                                                 <span class="doc-icon @(string.IsNullOrEmpty(context.DocType) && context.ChapterObject.CustomItem == "Y" ? "" : "invisible")" ><span class="mr-2"></span></span>
