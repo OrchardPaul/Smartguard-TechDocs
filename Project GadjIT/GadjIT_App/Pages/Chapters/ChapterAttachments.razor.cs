@@ -194,10 +194,10 @@ namespace GadjIT_App.Pages.Chapters
 
         private async void HandleValidSubmit()
         {
-            Dictionary<int?, string> docTypes = new Dictionary<int?, string> { { 1, "Doc" }, { 4, "Form" }, { 6, "Step" }, { 8, "Date" }, { 9, "Email" }, { 11, "Doc" }, { 12, "Email" } };
+            Dictionary<int?, string> docTypes = new Dictionary<int?, string> { { 1, "Doc" }, { 4, "Form" }, { 6, "Step" }, { 8, "Date" }, { 9, "Email" }, { 11, "Doc" }, { 12, "Email" }, { 13, "Csv" } };
 
             Attachment.DocType = dropDownChapterList.Where(D => D.Name.ToUpper() == Attachment.DocName.ToUpper())
-                                                                                        .Select(D => string.IsNullOrEmpty(docTypes[D.DocumentType]) ? "Doc" : docTypes[D.DocumentType])
+                                                                                        .Select(D => docTypes.ContainsKey(D.DocumentType) ? docTypes[D.DocumentType] : "Doc")
                                                                                         .FirstOrDefault();
 
             if (CopyObject.LinkedItems is null)

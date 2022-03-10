@@ -729,6 +729,7 @@ else
                                                                                     <span class="doc-icon @(attach.DocType == "Email" ? "" : "invisible")" title="Email"><span class="fa fa-envelope mr-2"></span></span>
                                                                                     <span class="doc-icon @(attach.DocType == "Step" ? "" : "invisible")" title="Step"><span class=" fa fa-list-ol mr-2"></span></span>
                                                                                     <span class="doc-icon @(attach.DocType == "Date" ? "" : "invisible")" title="Diary Item"><span class="fa fa-calendar mr-2"></span></span>
+                                                                                    <span class="doc-icon @(attach.DocType == "Csv" ? "" : "invisible")" title="Spread Sheet"><span class="fa fa-file-csv mr-2"></span></span>
                                                                                     <span class="doc-icon @(string.IsNullOrEmpty(attach.DocType) ? "" : "invisible")" title="Custom Item: will insert a step to run the current Smartflow"><span class="fa fa-retweet mr-2"></span></span>
                                                                                 </span>
                                                                                 <span class="attach-name" title="@(string.IsNullOrEmpty(attach.DocAsName) ? attach.DocName : attach.DocAsName)">
@@ -839,6 +840,7 @@ else
                                                                                         <span class="doc-icon @(attach.DocType == "Email" ? "" : "invisible")" title="Email"><span class="fa fa-envelope mr-2"></span></span>
                                                                                         <span class="doc-icon @(attach.DocType == "Step" ? "" : "invisible")" title="Step"><span class=" fa fa-list-ol mr-2"></span></span>
                                                                                         <span class="doc-icon @(attach.DocType == "Date" ? "" : "invisible")" title="Diary Item"><span class="fa fa-calendar mr-2"></span></span>
+                                                                                        <span class="doc-icon @(attach.DocType == "Csv" ? "" : "invisible")" title="Spread Sheet"><span class="fa fa-file-csv mr-2"></span></span>
                                                                                         <span class="doc-icon @(string.IsNullOrEmpty(attach.DocType) ? "" : "invisible")" title="Custom Item: will insert a step to run the current Smartflow"><span class="fa fa-retweet mr-2"></span></span>
                                                                                     </span>
                                                                                     <span class="attach-name" title="@(string.IsNullOrEmpty(attach.DocAsName) ? attach.DocName : attach.DocAsName)">
@@ -894,6 +896,7 @@ else
                                                 <span class="doc-icon @(context.DocType == "Email" ? "" : "invisible")" title="Email"><span class="fa fa-envelope mr-2"></span></span>
                                                 <span class="doc-icon @(context.DocType == "Step" ? "" : "invisible")" title="Step"><span class=" fa fa-list-ol mr-2"></span></span>
                                                 <span class="doc-icon @(context.DocType == "Date" ? "" : "invisible")" title="Diary Item"><span class="fa fa-calendar mr-2"></span></span>
+                                                <span class="doc-icon @(context.DocType == "Csv" ? "" : "invisible")" title="Spread Sheet"><span class="fa fa-file-csv mr-2"></span></span>
                                                 <span class="doc-icon @(string.IsNullOrEmpty(context.DocType) && context.ChapterObject.CustomItem == "N" ? "" : "invisible")" title="Missing Item"><span class="fas fa-exclamation col-red mr-2"></span></span>
                                                 <span class="doc-icon @(string.IsNullOrEmpty(context.DocType) && context.ChapterObject.CustomItem == "Y" ? "" : "invisible")" ><span class="mr-2"></span></span>
                                             </span>
@@ -1342,6 +1345,7 @@ else
                                                     <span class="@(doc.DocType == "Email" ? "" : "invisible")"><span class="fa fa-envelope mr-2"></span></span>
                                                     <span class="@(doc.DocType == "Step" ? "" : "invisible")"><span class=" fa fa-list-ol mr-2"></span></span>
                                                     <span class="@(doc.DocType == "Date" ? "" : "invisible")"><span class="fa fa-calendar mr-2"></span></span>
+                                                    <span class="@(doc.DocType == "Csv" ? "" : "invisible")"><span class="fa fa-file-csv mr-2"></span></span>
                                                 </span>
                                                 @doc.DocDisplayName
                                             </div>

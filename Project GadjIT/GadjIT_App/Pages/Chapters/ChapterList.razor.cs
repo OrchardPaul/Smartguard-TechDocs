@@ -242,63 +242,67 @@ namespace GadjIT_App.Pages.Chapters
 
             try
             {
-                var ChapterLastUpdated = appChapterState.GetLastUpdatedDate(UserSession, selectedChapter);
-
-                if (!(selectedChapter.Name == "" | selectedChapter.Name is null))
+                if (!(selectedChapter is null))
                 {
-                    if (UserSession.ChapterLastCompared != ChapterLastUpdated)
+                    if (!(selectedChapter.Name == "" | selectedChapter.Name is null))
                     {
-                        gotLock = CompanyDbAccess.Lock;
-                        while (gotLock)
+                        var ChapterLastUpdated = appChapterState.GetLastUpdatedDate(UserSession, selectedChapter);
+
+                        if (UserSession.ChapterLastCompared != ChapterLastUpdated)
                         {
-                            await Task.Yield();
                             gotLock = CompanyDbAccess.Lock;
-                        }
-
-
-                        var lstC = await chapterManagementService.GetAllChapters();
-
-                        await CompanyDbAccess.SyncAdminSysToClient(lstC, UserSession);
-
-                        var id = SelectedChapterObject.Id;
-
-                        var lsrSR = await CompanyDbAccess.GetAllSmartflowRecords(UserSession);
-                        lstChapters = lsrSR.Select(A => new VmUsrOrsfSmartflows { SmartflowObject = mapper.Map(A, new UsrOrsfSmartflows()) }).ToList();
-
-                        SelectedChapterObject = lstChapters.Where(C => C.SmartflowObject.Id == id).Select(C => C.SmartflowObject).FirstOrDefault();
-
-                        if (!(SelectedChapterObject.SmartflowData is null))
-                        {
-                            selectedChapter = JsonConvert.DeserializeObject<VmChapter>(SelectedChapterObject.SmartflowData);
-                        }
-                        else
-                        {
-                            //Initialise the VmChapter in case of null Json
-                            selectedChapter = new VmChapter
+                            while (gotLock)
                             {
-                                Items = new List<GenSmartflowItem>()
-                                                             ,
-                                DataViews = new List<DataViews>()
-                                                             ,
-                                TickerMessages = new List<TickerMessages>()
-                                                             ,
-                                Fees = new List<Fee>()
-                            };
-                            selectedChapter.CaseTypeGroup = SelectedChapterObject.CaseTypeGroup;
-                            selectedChapter.CaseType = SelectedChapterObject.CaseType;
-                            selectedChapter.Name = SelectedChapterObject.SmartflowName;
+                                await Task.Yield();
+                                gotLock = CompanyDbAccess.Lock;
+                            }
+
+
+                            var lstC = await chapterManagementService.GetAllChapters();
+
+                            await CompanyDbAccess.SyncAdminSysToClient(lstC, UserSession);
+
+                            var id = SelectedChapterObject.Id;
+
+                            var lsrSR = await CompanyDbAccess.GetAllSmartflowRecords(UserSession);
+                            lstChapters = lsrSR.Select(A => new VmUsrOrsfSmartflows { SmartflowObject = mapper.Map(A, new UsrOrsfSmartflows()) }).ToList();
+
+                            SelectedChapterObject = lstChapters.Where(C => C.SmartflowObject.Id == id).Select(C => C.SmartflowObject).FirstOrDefault();
+
+                            if (!(SelectedChapterObject.SmartflowData is null))
+                            {
+                                selectedChapter = JsonConvert.DeserializeObject<VmChapter>(SelectedChapterObject.SmartflowData);
+                            }
+                            else
+                            {
+                                //Initialise the VmChapter in case of null Json
+                                selectedChapter = new VmChapter
+                                {
+                                    Items = new List<GenSmartflowItem>()
+                                                                 ,
+                                    DataViews = new List<DataViews>()
+                                                                 ,
+                                    TickerMessages = new List<TickerMessages>()
+                                                                 ,
+                                    Fees = new List<Fee>()
+                                };
+                                selectedChapter.CaseTypeGroup = SelectedChapterObject.CaseTypeGroup;
+                                selectedChapter.CaseType = SelectedChapterObject.CaseType;
+                                selectedChapter.Name = SelectedChapterObject.SmartflowName;
+                            }
+
+
+                            await RefreshChapterItems("All");
+                            await InvokeAsync(() =>
+                            {
+                                StateHasChanged();
+                            });
+
+                            UserSession.ChapterLastCompared = ChapterLastUpdated;
                         }
-
-
-                        await RefreshChapterItems("All");
-                        await InvokeAsync(() =>
-                        {
-                            StateHasChanged();
-                        });
-
-                        UserSession.ChapterLastCompared = ChapterLastUpdated;
                     }
                 }
+
 
                 gotLock = appChapterState.Lock;
                 while (gotLock)
@@ -711,7 +715,7 @@ namespace GadjIT_App.Pages.Chapters
                                     ,new ChapterP4WStepAnswer {QNo = 4, GoToData= $"5 [SQL: UPDATE Usr_ORSF_ENT_Control SET Date_Schedule_For = isnull(Date_Schedule_For, Cast(getdate() as Date)) WHERE EntityRef = '[Entity.Code]']" }
                                     ,new ChapterP4WStepAnswer {QNo = 5, GoToData= $"8 [SQL: SELECT ScheduleCommand FROM fn_ORSF_GetScheduleItems('[Entity.Code]', 0)]" }
                                     ,new ChapterP4WStepAnswer {QNo = 6, GoToData= $"[SQL: UPDATE cm_caseitems set CompletionDate = GETDATE(), description = UPPER('[!Usr_ORSF_ENT_Control.Complete_AsName]') where itemid = [currentstep.stepid]] [SQL: exec up_ORSF_CompleteStep [currentStep.stepid], '', 'Y']" }
-                                    ,new ChapterP4WStepAnswer {QNo = 7, GoToData= $"3 [[SQL: SELECT CASE WHEN ISNULL(Do_Not_Reschedule,'N') = 'Y' THEN 'SQL: exec up_ORSF_DeleteDueStep '''', [currentstep.stepid], ''SF AoE - Estate Valuation - Financial Institutions Smartflow''' ELSE '' END FROM Usr_ORSF_MT_Control WHERE EntityRef = '[matters.entityref]' AND MatterNo = [matters.number]]]" }
+                                    ,new ChapterP4WStepAnswer {QNo = 7, GoToData= $"3 [[SQL: SELECT CASE WHEN ISNULL(Do_Not_Reschedule,'N') = 'Y' THEN 'SQL: exec up_ORSF_DeleteDueStep '''', [currentstep.stepid], ''{decodedChapter.Name}''' ELSE '' END FROM Usr_ORSF_MT_Control WHERE EntityRef = '[matters.entityref]' AND MatterNo = [matters.number]]]" }
                                     ,new ChapterP4WStepAnswer {QNo = 8, GoToData= $"[SQL: SELECT CASE WHEN ISNULL('[!Usr_ORSF_ENT_Control.Complete_AsName]','') <> '' THEN 6 ELSE 9 END]" }
                                     ,new ChapterP4WStepAnswer {QNo = 9, GoToData= $"[SQL: exec up_ORSF_DeleteStep [currentstep.stepid]]" }
                                     }
@@ -744,7 +748,7 @@ namespace GadjIT_App.Pages.Chapters
                                     ,new ChapterP4WStepAnswer {QNo = 4, GoToData= $"5 [SQL: UPDATE Usr_ORSF_MT_Control SET Date_Schedule_For = isnull(Date_Schedule_For, Cast(getdate() as Date)) WHERE EntityRef = '[matters.entityref]' AND MatterNo = [matters.number]]" }
                                     ,new ChapterP4WStepAnswer {QNo = 5, GoToData= $"8 [SQL: SELECT ScheduleCommand FROM fn_ORSF_GetScheduleItems('[matters.entityref]', [matters.number])]" }
                                     ,new ChapterP4WStepAnswer {QNo = 6, GoToData= $"[SQL: UPDATE cm_caseitems set CompletionDate = GETDATE(), description = UPPER('[!Usr_ORSF_MT_Control.Complete_AsName]') where itemid = [currentstep.stepid]] [SQL: exec up_ORSF_CompleteStep [currentStep.stepid], '', 'Y']" }
-                                    ,new ChapterP4WStepAnswer {QNo = 7, GoToData= $"3 [[SQL: SELECT CASE WHEN ISNULL(Do_Not_Reschedule,'N') = 'Y' THEN 'SQL: exec up_ORSF_DeleteDueStep '''', [currentstep.stepid], ''SF AoE - Estate Valuation - Financial Institutions Smartflow''' ELSE '' END FROM Usr_ORSF_MT_Control WHERE EntityRef = '[matters.entityref]' AND MatterNo = [matters.number]]]" }
+                                    ,new ChapterP4WStepAnswer {QNo = 7, GoToData= $"3 [[SQL: SELECT CASE WHEN ISNULL(Do_Not_Reschedule,'N') = 'Y' THEN 'SQL: exec up_ORSF_DeleteDueStep '''', [currentstep.stepid], ''{decodedChapter.Name}''' ELSE '' END FROM Usr_ORSF_MT_Control WHERE EntityRef = '[matters.entityref]' AND MatterNo = [matters.number]]]" }
                                     ,new ChapterP4WStepAnswer {QNo = 8, GoToData= $"[SQL: SELECT CASE WHEN ISNULL('[!Usr_ORSF_MT_Control.Complete_AsName]','') <> '' THEN 6 ELSE 9 END]" }
                                     ,new ChapterP4WStepAnswer {QNo = 9, GoToData= $"[SQL: exec up_ORSF_DeleteStep [currentstep.stepid]]" }
                                     }
@@ -1027,7 +1031,7 @@ namespace GadjIT_App.Pages.Chapters
                 else
                 {
                     var lst = selectedChapter.Items;
-                    Dictionary<int?, string> docTypes = new Dictionary<int?, string> { { 1, "Doc" }, { 4, "Form" }, { 6, "Step" }, { 8, "Date" }, { 9, "Email" }, { 11, "Doc" }, { 12, "Email" } };
+                    Dictionary<int?, string> docTypes = new Dictionary<int?, string> { { 1, "Doc" }, { 4, "Form" }, { 6, "Step" }, { 8, "Date" }, { 9, "Email" }, { 11, "Doc" }, { 12, "Email" }, { 13, "Csv" } };
 
                     lstAll = lst.Select(L => new VmUsrOrDefChapterManagement { ChapterObject = L })
                                     .ToList();
@@ -1054,7 +1058,7 @@ namespace GadjIT_App.Pages.Chapters
                                             .Select(A => {
                                             //Make sure all Items have the DocType set by comparing against dm_documents for matches
                                             A.DocType = dropDownChapterList.Where(D => D.Name.ToUpper() == A.ChapterObject.Name.ToUpper())
-                                                                                        .Select(D => string.IsNullOrEmpty(docTypes[D.DocumentType]) ? "Doc" : docTypes[D.DocumentType])
+                                                                                        .Select(D => docTypes.ContainsKey(D.DocumentType) ? docTypes[D.DocumentType] : "Doc")
                                                                                         .FirstOrDefault();
                                                 A.ChapterObject.RescheduleDays = !string.IsNullOrEmpty(A.ChapterObject.AsName) && A.ChapterObject.RescheduleDays is null ? 0 : A.ChapterObject.RescheduleDays;
                                                 A.ChapterObject.Action = (A.ChapterObject.Action == "" ? "INSERT" : A.ChapterObject.Action);
@@ -1065,7 +1069,7 @@ namespace GadjIT_App.Pages.Chapters
                                                                                                         .Select(L => {
                                                                                                             L.DocType = dropDownChapterList
                                                                                                                     .Where(D => D.Name.ToUpper() == L.DocName.ToUpper())
-                                                                                                                    .Select(D => string.IsNullOrEmpty(docTypes[D.DocumentType]) ? "Doc" : docTypes[D.DocumentType])
+                                                                                                                    .Select(D => docTypes.ContainsKey(D.DocumentType) ? docTypes[D.DocumentType] : "Doc")
                                                                                                                     .FirstOrDefault();
                                                                                                             return L;
                                                                                                         }
@@ -3948,7 +3952,7 @@ namespace GadjIT_App.Pages.Chapters
                                     ,new ChapterP4WStepAnswer {QNo = 4, GoToData= $"5 [SQL: UPDATE Usr_ORSF_ENT_Control SET Date_Schedule_For = isnull(Date_Schedule_For, Cast(getdate() as Date)) WHERE EntityRef = '[Entity.Code]']" }
                                     ,new ChapterP4WStepAnswer {QNo = 5, GoToData= $"8 [SQL: SELECT ScheduleCommand FROM fn_ORSF_GetScheduleItems('[Entity.Code]', 0)]" }
                                     ,new ChapterP4WStepAnswer {QNo = 6, GoToData= $"[SQL: UPDATE cm_caseitems set CompletionDate = GETDATE(), description = UPPER('[!Usr_ORSF_ENT_Control.Complete_AsName]') where itemid = [currentstep.stepid]] [SQL: exec up_ORSF_CompleteStep [currentStep.stepid], '', 'Y']" }
-                                    ,new ChapterP4WStepAnswer {QNo = 7, GoToData= $"3 [[SQL: SELECT CASE WHEN ISNULL(Do_Not_Reschedule,'N') = 'Y' THEN 'SQL: exec up_ORSF_DeleteDueStep '''', [currentstep.stepid], ''SF AoE - Estate Valuation - Financial Institutions Smartflow''' ELSE '' END FROM Usr_ORSF_MT_Control WHERE EntityRef = '[matters.entityref]' AND MatterNo = [matters.number]]]" }
+                                    ,new ChapterP4WStepAnswer {QNo = 7, GoToData= $"3 [[SQL: SELECT CASE WHEN ISNULL(Do_Not_Reschedule,'N') = 'Y' THEN 'SQL: exec up_ORSF_DeleteDueStep '''', [currentstep.stepid], ''{selectedChapter.Name}''' ELSE '' END FROM Usr_ORSF_MT_Control WHERE EntityRef = '[matters.entityref]' AND MatterNo = [matters.number]]]" }
                                     ,new ChapterP4WStepAnswer {QNo = 8, GoToData= $"[SQL: SELECT CASE WHEN ISNULL('[!Usr_ORSF_ENT_Control.Complete_AsName]','') <> '' THEN 6 ELSE 9 END]" }
                                     ,new ChapterP4WStepAnswer {QNo = 9, GoToData= $"[SQL: exec up_ORSF_DeleteStep [currentstep.stepid]]" }
                                     }
@@ -3981,7 +3985,7 @@ namespace GadjIT_App.Pages.Chapters
                                     ,new ChapterP4WStepAnswer {QNo = 4, GoToData= $"5 [SQL: UPDATE Usr_ORSF_MT_Control SET Date_Schedule_For = isnull(Date_Schedule_For, Cast(getdate() as Date)) WHERE EntityRef = '[matters.entityref]' AND MatterNo = [matters.number]]" }
                                     ,new ChapterP4WStepAnswer {QNo = 5, GoToData= $"8 [SQL: SELECT ScheduleCommand FROM fn_ORSF_GetScheduleItems('[matters.entityref]', [matters.number])]" }
                                     ,new ChapterP4WStepAnswer {QNo = 6, GoToData= $"[SQL: UPDATE cm_caseitems set CompletionDate = GETDATE(), description = UPPER('[!Usr_ORSF_MT_Control.Complete_AsName]') where itemid = [currentstep.stepid]] [SQL: exec up_ORSF_CompleteStep [currentStep.stepid], '', 'Y']" }
-                                    ,new ChapterP4WStepAnswer {QNo = 7, GoToData= $"3 [[SQL: SELECT CASE WHEN ISNULL(Do_Not_Reschedule,'N') = 'Y' THEN 'SQL: exec up_ORSF_DeleteDueStep '''', [currentstep.stepid], ''SF AoE - Estate Valuation - Financial Institutions Smartflow''' ELSE '' END FROM Usr_ORSF_MT_Control WHERE EntityRef = '[matters.entityref]' AND MatterNo = [matters.number]]]" }
+                                    ,new ChapterP4WStepAnswer {QNo = 7, GoToData= $"3 [[SQL: SELECT CASE WHEN ISNULL(Do_Not_Reschedule,'N') = 'Y' THEN 'SQL: exec up_ORSF_DeleteDueStep '''', [currentstep.stepid], ''{selectedChapter.Name}''' ELSE '' END FROM Usr_ORSF_MT_Control WHERE EntityRef = '[matters.entityref]' AND MatterNo = [matters.number]]]" }
                                     ,new ChapterP4WStepAnswer {QNo = 8, GoToData= $"[SQL: SELECT CASE WHEN ISNULL('[!Usr_ORSF_MT_Control.Complete_AsName]','') <> '' THEN 6 ELSE 9 END]" }
                                     ,new ChapterP4WStepAnswer {QNo = 9, GoToData= $"[SQL: exec up_ORSF_DeleteStep [currentstep.stepid]]" }
                                     }
