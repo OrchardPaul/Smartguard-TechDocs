@@ -160,7 +160,7 @@ else
 
 
                                             <div class="grid-row-md nav-row-3 no-border  @(rowChanged == context.SmartflowObject.SeqNo ? ToggleRowChangedClass() : "" )">
-                                                <div id="Smartflow-@context.SmartflowObject.Id" class="data-item @(context.SmartflowObject.SmartflowName.Length > 6 && context.SmartflowObject.SmartflowName.Substring(0,6) == "GROUP " ? "data-item-group" : "")">
+                                                <div id="Smartflow-@context.SmartflowObject.Id" class="data-item @(context.SmartflowObject.SmartflowName.Contains("GROUP ") ? "data-item-group" : "")">
 
                                                     @if (UserSession.isAdminUser)
                                                     {
