@@ -153,26 +153,27 @@ namespace GadjIT_App.Data.Dropzone_Objects
                 Swap(DragDropService.DragTargetItem, activeItem);
             }
 
-            DragDropService.ShouldRender = true;
+            //DragDropService.ShouldRender = true;
             StateHasChanged();
-            DragDropService.ShouldRender = false;
+            //DragDropService.ShouldRender = false;
         }
 
         public void OnDragLeave()
         {
             DragDropService.DragTargetItem = default;
-            DragDropService.ShouldRender = true;
+            //DragDropService.ShouldRender = true;
             StateHasChanged();
-            DragDropService.ShouldRender = false;
+            //DragDropService.ShouldRender = false;
         }
 
         public void OnDragStart(TItem item)
         {
-            DragDropService.ShouldRender = true;
+            //DragDropService.ShouldRender = true;
             DragDropService.ActiveItem = item;
             DragDropService.Items = Items;
+            OnDragStartParam.InvokeAsync(DragDropService.ActiveItem);
             StateHasChanged();
-            DragDropService.ShouldRender = false;
+            //DragDropService.ShouldRender = false;
         }
 
         public string CheckIfItemIsInTransit(TItem item)
@@ -265,6 +266,13 @@ namespace GadjIT_App.Data.Dropzone_Objects
         public EventCallback<TItem> OnItemDrop { get; set; }
 
         /// <summary>
+        /// Raises a callback with the dropped item as parameter
+        /// </summary>
+        [Parameter]
+        public EventCallback<TItem> OnDragStartParam { get; set; }
+
+
+        /// <summary>
         /// Raises a callback with the replaced item as parameter
         /// </summary>
         [Parameter]
@@ -349,7 +357,7 @@ namespace GadjIT_App.Data.Dropzone_Objects
 
         private void OnDrop()
         {
-            DragDropService.ShouldRender = true;
+            //DragDropService.ShouldRender = true;
             if (!IsDropAllowed())
             {
                 DragDropService.Reset();
@@ -469,7 +477,7 @@ namespace GadjIT_App.Data.Dropzone_Objects
             {
                 newIndex--;
                     
-                    }
+            }
 
             list.Insert(newIndex, item);
         }

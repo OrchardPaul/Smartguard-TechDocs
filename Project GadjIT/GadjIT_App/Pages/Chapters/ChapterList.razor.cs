@@ -816,99 +816,136 @@ namespace GadjIT_App.Pages.Chapters
 
         private async void SelectChapter(UsrOrsfSmartflows chapter)
         {
-            ScrollPosition = await jsRuntime.InvokeAsync<float>("getElementPosition");
-
-            displaySpinner = true;
-
-            lstAll = new List<VmUsrOrDefChapterManagement>();
-
-            SelectedChapterObject = chapter;
-
-            if (!(chapter.SmartflowData is null))
-            {
-                selectedChapter = JsonConvert.DeserializeObject<VmChapter>(chapter.SmartflowData);
-            }
-            else
-            {
-                //Initialise the VmChapter in case of null Json
-                selectedChapter = new VmChapter { Items = new List<GenSmartflowItem>()
-                                                 , DataViews = new List<DataViews>()
-                                                 , TickerMessages = new List<TickerMessages>()
-                                                 , Fees = new List<Fee>()};
-                selectedChapter.CaseTypeGroup = chapter.CaseTypeGroup;
-                selectedChapter.CaseType = chapter.CaseType;
-                selectedChapter.Name = chapter.SmartflowName;
-            }
-
-            selectedChapter.StepName = $"SF {chapter.SmartflowName} Smartflow";
-            selectedChapter.SelectedStep = selectedChapter.SelectedStep is null || selectedChapter.SelectedStep == "Create New" ? "" : selectedChapter.SelectedStep;
-            selectedChapter.Fees = selectedChapter.Fees is null ? new List<Fee>() : selectedChapter.Fees;
-            selectedChapter.Items = selectedChapter.Items is null ? new List<GenSmartflowItem>() : selectedChapter.Items;
-            selectedChapter.TickerMessages = selectedChapter.TickerMessages is null ? new List<TickerMessages>() : selectedChapter.TickerMessages;
-            selectedChapter.DataViews = selectedChapter.DataViews is null ? new List<DataViews>() : selectedChapter.DataViews;
-            selectedChapterId = chapter.Id;
-            compareSystems = false;
-            rowChanged = 0;
-            navDisplay = "Chapter";
-            showJSON = false;
-
-
             try
             {
-                dropDownChapterList = await chapterManagementService.GetDocumentList(selectedChapter.CaseType);
-                dropDownChapterList = dropDownChapterList.Where(D => !(D.Name is null)).ToList();
-                TableDates = await chapterManagementService.GetDatabaseTableDateFields();
+                ScrollPosition = await jsRuntime.InvokeAsync<float>("getElementPosition");
+
+                displaySpinner = true;
+
+                lstAll = new List<VmUsrOrDefChapterManagement>();
+
+                SelectedChapterObject = chapter;
+
+                if (!(chapter.SmartflowData is null))
+                {
+                    selectedChapter = JsonConvert.DeserializeObject<VmChapter>(chapter.SmartflowData);
+                }
+                else
+                {
+                    //Initialise the VmChapter in case of null Json
+                    selectedChapter = new VmChapter
+                    {
+                        Items = new List<GenSmartflowItem>()
+                                                     ,
+                        DataViews = new List<DataViews>()
+                                                     ,
+                        TickerMessages = new List<TickerMessages>()
+                                                     ,
+                        Fees = new List<Fee>()
+                    };
+                    selectedChapter.CaseTypeGroup = chapter.CaseTypeGroup;
+                    selectedChapter.CaseType = chapter.CaseType;
+                    selectedChapter.Name = chapter.SmartflowName;
+                }
+
+                selectedChapter.StepName = $"SF {chapter.SmartflowName} Smartflow";
+                selectedChapter.SelectedStep = selectedChapter.SelectedStep is null || selectedChapter.SelectedStep == "Create New" ? "" : selectedChapter.SelectedStep;
+                selectedChapter.Fees = selectedChapter.Fees is null ? new List<Fee>() : selectedChapter.Fees;
+                selectedChapter.Items = selectedChapter.Items is null ? new List<GenSmartflowItem>() : selectedChapter.Items;
+                selectedChapter.TickerMessages = selectedChapter.TickerMessages is null ? new List<TickerMessages>() : selectedChapter.TickerMessages;
+                selectedChapter.DataViews = selectedChapter.DataViews is null ? new List<DataViews>() : selectedChapter.DataViews;
+                selectedChapterId = chapter.Id;
+                compareSystems = false;
+                rowChanged = 0;
+                navDisplay = "Chapter";
+                showJSON = false;
+
+
+                try
+                {
+                    dropDownChapterList = await chapterManagementService.GetDocumentList(selectedChapter.CaseType);
+                    dropDownChapterList = dropDownChapterList.Where(D => !(D.Name is null)).ToList();
+                    TableDates = await chapterManagementService.GetDatabaseTableDateFields();
+                }
+                catch (Exception e)
+                {
+                    using (LogContext.PushProperty("SourceSystem", UserSession.selectedSystem))
+                    using (LogContext.PushProperty("SourceCompanyId", UserSession.Company.Id))
+                    using (LogContext.PushProperty("SourceUserId", UserSession.User.Id))
+                    using (LogContext.PushProperty("SourceContext", nameof(ChapterList)))
+                    {
+                        logger?.LogError(e, "Error retrieving document list");
+                    }
+
+                    DisplaySmartflowLoadError(e.Message);
+                    return;
+                }
+
+
+                await RefreshChapterItems("All");
+
+
+                //set path to point to the BackgroundImage path for the current company
+                FileHelper.CustomPath = $"wwwroot/images/Companies/{UserSession.Company.CompanyName}/BackgroundImages";
+                ListFilesForBgImages = FileHelper.GetFileList();
+
+                if (!string.IsNullOrEmpty(selectedChapter.BackgroundImage))
+                {
+                    UserSession.SetTempBackground(selectedChapter.BackgroundImage.Replace("/wwwroot", ""), NavigationManager.Uri);
+                    UserSession.RefreshHome?.Invoke();
+                }
+
+                SetSmartflowFilePath();
+                GetSeletedChapterFileList();
+
+
+                //set the session ChapterLastCompared to be the same as the Chapter State value to prevent an immediate 
+                // refresh of the page (by OnTimerInterval)
+                if (!(selectedChapter.Name == "" | selectedChapter.Name is null))
+                {
+
+                    bool gotLock = appChapterState.Lock;
+                    while (gotLock)
+                    {
+                        await Task.Yield();
+                        gotLock = appChapterState.Lock;
+                    }
+
+                    UserSession.ChapterLastCompared = appChapterState.GetLastUpdatedDate(UserSession, selectedChapter);
+                }
+
+                await jsRuntime.InvokeVoidAsync("moveToPosition", 0);
+
+                StateHasChanged();
             }
-            catch(Exception e)
+            catch (Exception ex)
             {
                 using (LogContext.PushProperty("SourceSystem", UserSession.selectedSystem))
                 using (LogContext.PushProperty("SourceCompanyId", UserSession.Company.Id))
                 using (LogContext.PushProperty("SourceUserId", UserSession.User.Id))
                 using (LogContext.PushProperty("SourceContext", nameof(ChapterList)))
                 {
-                    logger?.LogError(e, "Error retrieving document list");
-                }
-            }
-
-
-            await RefreshChapterItems("All");
-            
-            
-            //set path to point to the BackgroundImage path for the current company
-            FileHelper.CustomPath = $"wwwroot/images/Companies/{UserSession.Company.CompanyName}/BackgroundImages";
-            ListFilesForBgImages = FileHelper.GetFileList();
-
-            if (!string.IsNullOrEmpty(selectedChapter.BackgroundImage))
-            {
-                UserSession.SetTempBackground(selectedChapter.BackgroundImage.Replace("/wwwroot", ""), NavigationManager.Uri);
-                UserSession.RefreshHome?.Invoke();
-            }
-
-            SetSmartflowFilePath();
-            GetSeletedChapterFileList();
-
-
-            //set the session ChapterLastCompared to be the same as the Chapter State value to prevent an immediate 
-            // refresh of the page (by OnTimerInterval)
-            if (!(selectedChapter.Name == "" | selectedChapter.Name is null))
-            {
-
-                bool gotLock = appChapterState.Lock;
-                while (gotLock)
-                {
-                    await Task.Yield();
-                    gotLock = appChapterState.Lock;
+                    logger?.LogError(ex, "Error loading chapter");
                 }
 
-                UserSession.ChapterLastCompared = appChapterState.GetLastUpdatedDate(UserSession, selectedChapter);
+                DisplaySmartflowLoadError(ex.Message);
             }
 
-            await jsRuntime.InvokeVoidAsync("moveToPosition", 0);
-
-            StateHasChanged();
+        }
 
 
+        private void DisplaySmartflowLoadError(string Error)
+        {
+            var parameters = new ModalParameters();
+            parameters.Add("ErrorDesc", $"Error loading smartflow for the following reason: ");
+            parameters.Add("ErrorDetails", new List<string> {Error});
 
+            var options = new ModalOptions()
+            {
+                Class = "blazored-custom-modal modal-chapter-chapter"
+            };
+            string title = $"Smartflow Error";
+            Modal.Show<ModalErrorInfo>(title, parameters, options);
         }
 
         private async void RefreshDocList()
@@ -4229,6 +4266,109 @@ namespace GadjIT_App.Pages.Chapters
             * */
         }
         
+        public void ResetRowChanged()
+        {
+            rowChanged = 0;
+        }
+
+
+       public async Task ReSequenceSmartFlows(int seq)
+        {
+            rowChanged = seq;
+
+
+            lstSelectedChapters.Select(C => { C.SmartflowObject.SeqNo = lstSelectedChapters.IndexOf(C) + 1; return C; }).ToList();
+
+            foreach (var smartflowToChange in lstSelectedChapters)
+            {
+                await chapterManagementService.UpdateMainItem(smartflowToChange.SmartflowObject).ConfigureAwait(false);
+
+            }
+
+            await InvokeAsync(() =>
+            {
+                StateHasChanged();
+            });
+
+        }
+
+
+        public async Task ReSequenceDocs(int seq)
+        {
+            rowChanged = seq;
+
+            lstDocs.Select(C => { C.ChapterObject.SeqNo = lstDocs.IndexOf(C) + 1; return C; }).ToList();
+
+            SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(selectedChapter);
+            await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
+
+
+            await InvokeAsync(() =>
+            {
+                StateHasChanged();
+            });
+        }
+
+        public async Task ReSequenceStatus(int seq)
+        {
+            rowChanged = seq;
+
+            lstStatus.Select(C => { C.ChapterObject.SeqNo = lstStatus.IndexOf(C) + 1; return C; }).ToList();
+
+            SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(selectedChapter);
+            await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
+
+            await InvokeAsync(() =>
+            {
+                StateHasChanged();
+            });
+        }
+
+        public async Task ReSequenceFee(int seq)
+        {
+            rowChanged = seq;
+
+            lstFees.Select(C => { C.FeeObject.SeqNo = lstFees.IndexOf(C) + 1; return C; }).ToList();
+
+            SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(selectedChapter);
+            await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
+
+            await InvokeAsync(() =>
+            {
+                StateHasChanged();
+            });
+        }
+
+        public async Task ReSequenceDataViews(int seq)
+        {
+            rowChanged = seq;
+
+            ListVmDataViews.Select(C => { C.DataView.BlockNo = ListVmDataViews.IndexOf(C) + 1; return C; }).ToList();
+
+            SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(selectedChapter);
+            await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
+
+            await InvokeAsync(() =>
+            {
+                StateHasChanged();
+            });
+        }
+
+        public async Task ReSequenceMessages(int seq)
+        {
+            rowChanged = seq;
+
+            ListVmTickerMessages.Select(C => { C.Message.SeqNo = ListVmTickerMessages.IndexOf(C) + 1; return C; }).ToList();
+
+            SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(selectedChapter);
+            await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
+
+            await InvokeAsync(() =>
+            {
+                StateHasChanged();
+            });
+        }
+
 
     }
 }
