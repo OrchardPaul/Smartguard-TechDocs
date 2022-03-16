@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.Azure.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -34,14 +35,19 @@ using GadjIT_App.Services.AppState;
 using GadjIT_App.Pages.Accounts.CompanyAccountManagement;
 using Serilog;
 using GadjIT_App.Data.Dropzone_Objects;
+using Microsoft.AspNetCore.DataProtection;
 
 namespace GadjIT_App
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        private readonly IWebHostEnvironment environment;
+
+        public Startup(IConfiguration configuration,
+            IWebHostEnvironment environment)
         {
             Configuration = configuration;
+            this.environment = environment;
         }
 
         public IConfiguration Configuration { get; }
@@ -94,6 +100,17 @@ namespace GadjIT_App
 
             services.AddSingleton<IAppChapterState, AppChapterStateList>();
 
+            var keysFolder = Path.Combine(environment.ContentRootPath, "Keys");
+
+            services.AddDataProtection()
+                .PersistKeysToFileSystem(new DirectoryInfo(keysFolder))
+                .SetApplicationName("GadjIT")
+                .SetDefaultKeyLifetime(TimeSpan.FromDays(90));
+
+            services.ConfigureApplicationCookie(options => {
+                options.Cookie.Name = ".Orchard.SharedCookie";
+});    
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -121,11 +138,9 @@ namespace GadjIT_App
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-                endpoints.MapBlazorHub();
+                endpoints.MapBlazorHub(opts => opts.WebSockets.CloseTimeout = new TimeSpan(24, 0, 0));
                 endpoints.MapFallbackToPage("/_Host");
             });
-
-
 
             //app.UseStaticFiles(new StaticFileOptions
             //{

@@ -164,6 +164,7 @@ namespace GadjIT_App.Pages.Chapters
         {
             var authenticationState = await pageAuthorisationState.IsSignedIn();
 
+ 
             if (authenticationState)
             {
                 bool gotLock = UserSession.Lock;

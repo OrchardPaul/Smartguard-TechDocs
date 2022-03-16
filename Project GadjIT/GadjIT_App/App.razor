@@ -1,4 +1,5 @@
-﻿
+﻿@using GadjIT_App.Shared
+
 <CascadingBlazoredModal>
     <CascadingAuthenticationState>
         <Router AppAssembly="@typeof(Program).Assembly">
@@ -6,11 +7,7 @@
                 <AuthorizeRouteView RouteData="@routeData" 
                 DefaultLayout="@typeof(MainLayout)">
                 <NotAuthorized>
-                    <div class="tran-block rounded">
-                        <h1>Sorry</h1>
-                        <p>You're not authorized to reach this page.</p>
-                        <p>You may need to log in as a different user.</p>
-                    </div>
+                    **<RedirectToLogin> </RedirectToLogin>**
                 </NotAuthorized>
                 <Authorizing>
                     <h1>Authorization in progress</h1>

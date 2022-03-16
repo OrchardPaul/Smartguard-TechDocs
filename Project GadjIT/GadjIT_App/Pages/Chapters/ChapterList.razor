@@ -1225,7 +1225,7 @@ else
 
                     <div class="@(UserSession.isAdminUser ? "grid-can-edit" : "") ">
 
-                        @foreach (var agenda in lstAgendas)
+                        @foreach (var agenda in lstAgendas.OrderBy(A => A.ChapterObject.Name))
                         {
 
                             <div class="row grid-row">

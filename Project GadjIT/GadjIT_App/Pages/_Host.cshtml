@@ -8,6 +8,10 @@
 @using Microsoft.AspNetCore.Authorization
 @using Services.SessionState
 @inject IUserSessionState sessionState
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor _HttpContext
+@{
+    _HttpContext.HttpContext.Response.Headers["Cache-Control"] = "no-store";
+}
 
 @attribute [Authorize]
 
@@ -208,7 +212,6 @@
         <environment include="Development">
             <span>An unhandled exception has occurred. See browser dev tools for details.</span>
         </environment>
-
         <a href="" class="reload">Reload</a>
         <a class="dismiss">🗙</a>
     </div>
