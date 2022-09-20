@@ -71,6 +71,7 @@
     <PackageReference Include="Syncfusion.Blazor" Version="19.3.0.54"/>
     <PackageReference Include="System.Linq.Dynamic.Core" Version="1.2.14"/>
     <PackageReference Include="Microsoft.Azure.SignalR" Version="1.16.0"/>
+    <PackageReference Include="BlazorColorPicker" Version="2.0.1"/>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="FileManagement\FileStorage\Default\"/>

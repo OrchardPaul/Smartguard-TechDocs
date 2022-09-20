@@ -1,0 +1,6 @@
+- name: Articles
+  href: articles/
+  homepage: articles/intro.md
+- name: Support
+  href: articles/support/
+  homepage: articles/support/info.md

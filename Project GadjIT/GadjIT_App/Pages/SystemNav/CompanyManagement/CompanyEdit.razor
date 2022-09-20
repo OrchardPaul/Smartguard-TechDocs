@@ -1,4 +1,5 @@
-﻿<EditForm Model="@TaskObject" OnValidSubmit="@HandleValidSubmit">
+﻿@using Syncfusion.Blazor.Inputs.Internal
+<EditForm Model="@TaskObject" OnValidSubmit="@HandleValidSubmit">
     <div class="modal-body">
         <DataAnnotationsValidator />
         <ValidationSummary />
@@ -28,25 +29,28 @@
             <h5>Colours:</h5>
             <div class="float-left" style="width: 200px">
                 <div class="form-group">
-                    <label for="@TaskObject.CompCol1">Buttons</label>
-                    <InputText class="form-control" style="width: 100px" @bind-Value="TaskObject.CompCol1"></InputText>
+                    <label for="colButtons" style="width: 135px; display: inline-block">Buttons: @TaskObject.CompCol1</label>
+                    <input type="color" id="colButtons" name="Buttons" value="@TaskObject.CompCol1" @onchange="@colorChangeButtons">
+
                 </div>
 
                 <div class="form-group">
-                    <label for="@TaskObject.CompCol3">Links</label>
-                    <InputText class="form-control" style="width: 100px" @bind-Value="TaskObject.CompCol3"></InputText>
+                    <label for="colButtonsCont" style="width: 135px; display: inline-block">Links: @TaskObject.CompCol3</label>
+                    <input type="color" id="colButtonsCont" name="ButtonsCont" value="@TaskObject.CompCol3" @onchange="@colorChangeButtonsCont">
+
                 </div>
             </div>
 
             <div class="float-left" style="width: 200px">
 
                 <div class="form-group">
-                    <label for="@TaskObject.CompCol2">Contrast</label>
-                    <InputText class="form-control" style="width: 100px" @bind-Value="TaskObject.CompCol2"></InputText>
+                    <label for="colLinks" style="width: 135px; display: inline-block">Contrast: @TaskObject.CompCol2</label>
+                    <input type="color" id="colLinks" name="Links" value="@TaskObject.CompCol2" @onchange="@colorChangeLinks">
+
                 </div>
                 <div class="form-group">
-                    <label for="@TaskObject.CompCol4">Contrast</label>
-                    <InputText class="form-control" style="width: 100px" @bind-Value="TaskObject.CompCol4"></InputText>
+                    <label for="colLinksCont" style="width: 135px; display: inline-block">Contrast: @TaskObject.CompCol4</label>
+                    <input type="color" id="colLinksCont" name="LinksCont" value="@TaskObject.CompCol4" @onchange="@colorChangeLinksCont">
                 </div>
             </div>
         </div>

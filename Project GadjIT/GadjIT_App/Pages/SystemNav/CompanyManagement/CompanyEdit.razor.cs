@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+
 namespace GadjIT_App.Pages.SystemNav.CompanyManagement
 {
     public partial class CompanyEdit
@@ -23,12 +24,17 @@ namespace GadjIT_App.Pages.SystemNav.CompanyManagement
         [Parameter]
         public Action DataChanged { get; set; }
 
+        
+
+
         [Inject]
         private ICompanyDbAccess service { get; set; }
 
         [Inject]
         private IUserSessionState sessionState { get; set; }
 
+        [Parameter]
+         public EventCallback<string> ReturnedColor { get; set; }
 
         private async Task HandleValidSubmit()
         {
@@ -44,6 +50,13 @@ namespace GadjIT_App.Pages.SystemNav.CompanyManagement
         {
             await ModalInstance.CloseAsync();
         }
+
+        void colorChangeButtons(ChangeEventArgs e) => TaskObject.CompCol1 = e.Value.ToString().ToUpper();
+        void colorChangeButtonsCont(ChangeEventArgs e) => TaskObject.CompCol1 = e.Value.ToString().ToUpper();
+        void colorChangeLinks(ChangeEventArgs e) => TaskObject.CompCol1 = e.Value.ToString().ToUpper();
+        void colorChangeLinksCont(ChangeEventArgs e) => TaskObject.CompCol1 = e.Value.ToString().ToUpper();
+            
+
 
 
     }
