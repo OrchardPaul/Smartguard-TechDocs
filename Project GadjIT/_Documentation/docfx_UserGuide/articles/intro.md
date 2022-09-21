@@ -28,8 +28,8 @@ v1 | v2 | v3
 
 ```mermaid
 sequenceDiagram
-    participant Alice
-    participant John
+    actor Alice
+    actor John
 
     rect rgb(191, 223, 255)
     note right of Alice: Alice calls John.
@@ -44,5 +44,12 @@ sequenceDiagram
     John -->>- Alice: Yeah! See you there.
 ```
 
-> [!INFO]
-> <info content> some info
+
+## Another diagram
+
+<div class="mermaid">
+  graph LR
+      A[Client] --- B[Load Balancer]
+      B-->C[Server01]
+      B-->D(Server02)
+</div>
