@@ -72,6 +72,7 @@
     <PackageReference Include="System.Linq.Dynamic.Core" Version="1.2.14"/>
     <PackageReference Include="Microsoft.Azure.SignalR" Version="1.16.0"/>
     <PackageReference Include="BlazorColorPicker" Version="2.0.1"/>
+    <PackageReference Include="docfx.console" Version="2.59.4"/>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="FileManagement\FileStorage\Default\"/>

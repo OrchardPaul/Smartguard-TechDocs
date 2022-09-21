@@ -6,14 +6,14 @@ body {
 }
 button,
 a {
-  color: #7c33b7;
+  color: #5e17eb;
   cursor: pointer;
 }
 button:hover,
 button:focus,
 a:hover,
 a:focus {
-  color: #570897;
+  color: #5B2FB4;
   text-decoration: none;
 }
 a.disable,
@@ -518,11 +518,11 @@ body .toc{
   text-decoration: inherit;
 }
 .toc .nav > li.active > a {
-  color: #7c33b7;
+  color: #5e17eb;
 }
 .toc .nav > li.active > a:hover,
 .toc .nav > li.active > a:focus {
-  color: #570897;
+  color: #5B2FB4;
 }
 
 .toc .nav > li> .expand-stub {
@@ -679,7 +679,7 @@ body .toc{
 }
 .affix ul > li.active > a,
 .affix ul > li.active > a:before {
-  color: #7c33b7;
+  color: #5e17eb;
 }
 .affix ul > li > a {
   padding: 5px 12px;
@@ -696,7 +696,7 @@ body .toc{
 }
 .affix > ul > li.active > a,
 .affix > ul > li.active > a:before {
-  color: #7c33b7;
+  color: #5e17eb;
   font-weight: bold;
 }
 .affix ul ul > li > a {
@@ -880,7 +880,7 @@ code {
 }
 
 a code {
-  color: #7c33b7;
+  color: #5e17eb;
   background-color: #f1f2f3;
 }
 
