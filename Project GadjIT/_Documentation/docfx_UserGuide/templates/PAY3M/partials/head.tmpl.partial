@@ -21,6 +21,11 @@
   <!--FontAwesome-->
   <script src="css/FontAwesome/js/all.js"></script>
   <link href="css/FontAwesome/css/all.css" rel="stylesheet" />
+
+  <style>
+    .shadow { box-shadow: 0px 0px 8px #888; margin-top: 5px; margin-bottom: 5px;}
+
+  </style>
     
 </head>
 
