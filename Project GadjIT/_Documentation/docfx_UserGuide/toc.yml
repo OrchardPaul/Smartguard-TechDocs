@@ -4,8 +4,8 @@
   href: articles/smartflow/
   homepage: articles/smartflow/intro.md
 - name: Development
-  href: articles/development/
-  homepage: articles/development/intro.md
+  href: articles/gadjit/
+  homepage: articles/gadjit/intro.md
 - name: Administration
   href: articles/admin/
   homepage: articles/admin/intro.md
