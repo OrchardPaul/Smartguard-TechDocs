@@ -32,6 +32,7 @@ In addition to exporting a Smartflow to Excel, you can also import any changes b
         branch Excel
         checkout Excel
         commit id:"Add new document"
+        commit id:"Change fee amount"
         checkout GadjIT
         checkout Excel
         checkout GadjIT
@@ -42,7 +43,7 @@ In addition to exporting a Smartflow to Excel, you can also import any changes b
 ```
 **Chart 1** - Process: Updating a document and fee via Excel
 
-## Process: Updating Smartflows via GadjIT
+## Overview: Updating Smartflows via GadjIT
 The following chart details the process for updating a Smartflow via GadjIT. 
 
 > [!NOTE] 
@@ -58,7 +59,7 @@ sequenceDiagram
 ```
 **Chart 2** - Updating Smartflow in GadjIT
 
-## Process: Updating Smartflows via Excel
+## Overview: Updating Smartflows via Excel
 The following chart details the process for updating a Smartflow via Excel. 
 
 > [!NOTE] 
