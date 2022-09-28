@@ -1,9 +1,7 @@
 ﻿using Blazored.Modal;
-using GadjIT.AppContext.GadjIT_App;
-using GadjIT.AppContext.GadjIT_App.Custom;
+using GadjIT_AppContext.GadjIT_App;
 using GadjIT_App.Data.Admin;
 using Microsoft.AspNetCore.Components;
-using Microsoft.JSInterop;
 using System;
 using System.Threading.Tasks;
 

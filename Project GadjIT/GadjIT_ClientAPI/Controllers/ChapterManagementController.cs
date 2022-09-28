@@ -1,15 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using System.Net.Http;
-using GadjIT.ClientContext.P4W;
-using GadjIT.ClientContext.P4W.Custom;
-using GadjIT.ClientAPI.Repository.Chapters;
+using GadjIT_ClientContext.P4W;
+using GadjIT_ClientContext.P4W.Custom;
+using GadjIT_ClientAPI.Repository.Chapters;
 
-namespace GadjIT.ClientAPI.Controllers
+namespace GadjIT_ClientAPI.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
@@ -242,7 +240,7 @@ namespace GadjIT.ClientAPI.Controllers
 
 
 
-        [HttpPut()]
+        [HttpPost()]
         public async Task<ActionResult<bool>> CreateStep(VmChapterP4WStepSchemaJSONObject schemaJSONObject)
         {
             try

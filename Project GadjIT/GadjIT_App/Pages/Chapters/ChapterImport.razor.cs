@@ -1,7 +1,7 @@
 ﻿using Blazored.Modal;
 using BlazorInputFile;
-using GadjIT.ClientContext.P4W;
-using GadjIT.ClientContext.P4W.Custom;
+using GadjIT_ClientContext.P4W;
+using GadjIT_ClientContext.P4W.Custom;
 using GadjIT_App.FileManagement.FileClassObjects;
 using GadjIT_App.Services;
 using GadjIT_App.Services.AppState;

@@ -1,4 +1,4 @@
-﻿using GadjIT.ClientContext.P4W;
+﻿using GadjIT_ClientContext.P4W;
 using GadjIT_App.Services.SessionState;
 using Microsoft.AspNetCore.Components;
 using System.Collections.Generic;

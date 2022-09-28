@@ -1,4 +1,4 @@
-﻿using GadjIT.ClientAPI.Repository.Partner;
+﻿using GadjIT_ClientAPI.Repository.Partner;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace GadjIT.ClientAPI.Controllers
+namespace GadjIT_ClientAPI.Controllers
 {
     /*
      * Controller to access P4W default tables

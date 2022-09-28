@@ -1,9 +1,6 @@
-﻿using GadjIT.ClientContext.P4W;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using GadjIT_ClientContext.P4W;
 
-namespace GadjIT.AppContext.GadjIT_App.Custom
+namespace GadjIT_AppContext.GadjIT_App.Custom
 {
     public partial class CaseTypeAssignment
     {

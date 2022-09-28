@@ -1,6 +1,5 @@
-﻿using GadjIT.AppContext.GadjIT_App;
+﻿using GadjIT_AppContext.GadjIT_App;
 using GadjIT_App.Data.Admin;
-using GadjIT_App.Services.AppState;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.Extensions.Logging;

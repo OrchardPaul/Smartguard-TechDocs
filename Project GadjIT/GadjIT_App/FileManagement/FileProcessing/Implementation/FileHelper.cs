@@ -1,6 +1,6 @@
 ﻿using BlazorInputFile;
-using GadjIT.ClientContext.P4W;
-using GadjIT.ClientContext.P4W.Custom;
+using GadjIT_ClientContext.P4W;
+using GadjIT_ClientContext.P4W.Custom;
 using GadjIT_App.FileManagement.FileClassObjects;
 using GadjIT_App.FileManagement.FileProcessing.Interface;
 using GadjIT_App.Services.SessionState;

@@ -430,7 +430,6 @@ namespace GadjIT_App.Data.Migrations
 
                     b.HasIndex("NormalizedName")
                         .IsUnique()
-                        .HasDatabaseName("RoleNameIndex")
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles");
@@ -507,13 +506,9 @@ namespace GadjIT_App.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("NormalizedEmail")
-                        .HasDatabaseName("EmailIndex");
+                    
 
-                    b.HasIndex("NormalizedUserName")
-                        .IsUnique()
-                        .HasDatabaseName("UserNameIndex")
-                        .HasFilter("[NormalizedUserName] IS NOT NULL");
+                    
 
                     b.ToTable("AspNetUsers");
                 });
@@ -632,7 +627,6 @@ namespace GadjIT_App.Data.Migrations
                         .WithMany()
                         .HasForeignKey("SmartflowRecordId");
 
-                    b.Navigation("SmartflowRecord");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

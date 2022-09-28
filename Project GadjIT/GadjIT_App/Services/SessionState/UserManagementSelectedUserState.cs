@@ -1,5 +1,5 @@
-﻿using GadjIT.AppContext.GadjIT_App;
-using GadjIT.AppContext.GadjIT_App.Custom;
+﻿using GadjIT_AppContext.GadjIT_App;
+using GadjIT_AppContext.GadjIT_App.Custom;
 using System;
 using System.Collections.Generic;
 using System.Linq;

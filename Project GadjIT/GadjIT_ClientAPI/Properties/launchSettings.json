@@ -12,15 +12,15 @@
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
-      "launchUrl": "ChapterManagement",
+      "launchUrl": "GadjIT",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "GadjIT.ClientAPI": {
+    "GadjIT_ClientAPI": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "weatherforecast",
+      "launchUrl": "GadjIT",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },

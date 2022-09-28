@@ -1,8 +1,5 @@
-﻿using GadjIT.AppContext.GadjIT_App;
+﻿using GadjIT_AppContext.GadjIT_App;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace GadjIT_App.Services.SessionState
 {

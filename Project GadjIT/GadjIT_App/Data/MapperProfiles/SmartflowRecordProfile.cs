@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using GadjIT.ClientContext.P4W;
-using GadjIT.ClientContext.P4W.Custom;
-using GadjIT.AppContext.GadjIT_App;
+using GadjIT_ClientContext.P4W;
+using GadjIT_ClientContext.P4W.Custom;
+using GadjIT_AppContext.GadjIT_App;
 using System;
 using System.Collections.Generic;
 using System.Linq;

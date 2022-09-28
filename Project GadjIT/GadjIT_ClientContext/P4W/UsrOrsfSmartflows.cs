@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace GadjIT.ClientContext.P4W
+namespace GadjIT_ClientContext.P4W
 {
     [Table("Usr_ORSF_Smartflows")]
     public partial class UsrOrsfSmartflows

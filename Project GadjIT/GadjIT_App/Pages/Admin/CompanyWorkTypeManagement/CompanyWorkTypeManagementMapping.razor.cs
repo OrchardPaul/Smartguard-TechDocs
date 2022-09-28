@@ -1,6 +1,6 @@
-﻿using GadjIT.AppContext.GadjIT_App;
-using GadjIT.AppContext.GadjIT_App.Custom;
-using GadjIT.ClientContext.P4W;
+﻿using GadjIT_AppContext.GadjIT_App;
+using GadjIT_AppContext.GadjIT_App.Custom;
+using GadjIT_ClientContext.P4W;
 using GadjIT_App.Data.Admin;
 using GadjIT_App.Services;
 using GadjIT_App.Services.SessionState;

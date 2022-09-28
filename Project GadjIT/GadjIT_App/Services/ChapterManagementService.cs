@@ -1,15 +1,14 @@
-﻿using GadjIT.ClientContext.P4W;
-using GadjIT.ClientContext.P4W.Custom;
-using GadjIT.ClientContext.P4W.Functions;
+﻿using GadjIT_ClientContext.P4W;
+using GadjIT_ClientContext.P4W.Custom;
 using GadjIT_App.Data.Admin;
 using GadjIT_App.Services.SessionState;
-using Microsoft.AspNetCore.Components;
-using System;
+using Newtonsoft.Json;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
+using System.Text;
 using System.Threading.Tasks;
+
 
 namespace GadjIT_App.Services
 {
@@ -50,14 +49,17 @@ namespace GadjIT_App.Services
 
 
 
-        public async Task<UsrOrsfSmartflows> Add(UsrOrsfSmartflows item)
+        public async Task<UsrOrsfSmartflows> Add(UsrOrsfSmartflows _smartFlow)
         {
-            using var response = await httpClient.PostAsJsonAsync($"{userSession.baseUri}api/ChapterManagement/Add", item);
+            var content = new StringContent(JsonConvert.SerializeObject(_smartFlow), Encoding.UTF8, "application/json");  
+
+            using HttpResponseMessage response = await httpClient.PostAsync($"{userSession.baseUri}api/ChapterManagement/Add", content);
 
             return await response.Content.ReadFromJsonAsync<UsrOrsfSmartflows>();
+
         }
 
-        public async Task<UsrOrsfSmartflows> Update(UsrOrsfSmartflows item)
+        public async Task<UsrOrsfSmartflows> Update(UsrOrsfSmartflows _smartFlow)
         {
             bool gotLock = companyDbAccess.Lock;
             while (gotLock)
@@ -67,29 +69,37 @@ namespace GadjIT_App.Services
             }
 
 
-            await companyDbAccess.SaveSmartFlowRecordData(item, userSession);
+            await companyDbAccess.SaveSmartFlowRecordData(_smartFlow, userSession);
 
-            using var response = await httpClient.PutAsJsonAsync($"{userSession.baseUri}api/ChapterManagement/Update/{item.Id}", item);
+            var content = new StringContent(JsonConvert.SerializeObject(_smartFlow), Encoding.UTF8, "application/json");  
+
+            using var response = await httpClient.PutAsync($"{userSession.baseUri}api/ChapterManagement/Update/{_smartFlow.Id}", content);
 
             return await response.Content.ReadFromJsonAsync<UsrOrsfSmartflows>();
+
         }
 
-        public async Task<UsrOrsfSmartflows> UpdateMainItem(UsrOrsfSmartflows item)
+        public async Task<UsrOrsfSmartflows> UpdateMainItem(UsrOrsfSmartflows _smartFlow)
         {
-            await companyDbAccess.SaveSmartFlowRecord(item, userSession);
+            await companyDbAccess.SaveSmartFlowRecord(_smartFlow, userSession);
 
-            using var response = await httpClient.PutAsJsonAsync($"{userSession.baseUri}api/ChapterManagement/Update/{item.Id}", item);
+            var content = new StringContent(JsonConvert.SerializeObject(_smartFlow), Encoding.UTF8, "application/json");  
+
+            using var response = await httpClient.PutAsync($"{userSession.baseUri}api/ChapterManagement/Update/{_smartFlow.Id}", content);
 
             return await response.Content.ReadFromJsonAsync<UsrOrsfSmartflows>();
+
         }
 
 
 
         public async Task<List<UsrOrsfSmartflows>> UpdateCaseType(string newCaseTypeName, string originalCaseTypeName, string caseTypeGroup)
         {
-            var item = new UsrOrsfSmartflows();
+            var _smartFlow = new UsrOrsfSmartflows();
 
-            using var response = await httpClient.PutAsJsonAsync($"{userSession.baseUri}api/ChapterManagement/UpdateCaseType/{newCaseTypeName}/{originalCaseTypeName}/{caseTypeGroup}", item);
+            var content = new StringContent(JsonConvert.SerializeObject(_smartFlow), Encoding.UTF8, "application/json");  
+
+            using var response = await httpClient.PostAsync($"{userSession.baseUri}api/ChapterManagement/UpdateCaseType/{newCaseTypeName}/{originalCaseTypeName}/{caseTypeGroup}", content);
 
             return await response.Content.ReadFromJsonAsync<List<UsrOrsfSmartflows>>();
         }
@@ -97,9 +107,11 @@ namespace GadjIT_App.Services
 
         public async Task<List<UsrOrsfSmartflows>> UpdateCaseTypeGroups(string newCaseTypeGroupName, string originalCaseTypeGroupName)
         {
-            var item = new UsrOrsfSmartflows();
+            var _smartFlow = new UsrOrsfSmartflows();
 
-            using var response = await httpClient.PutAsJsonAsync($"{userSession.baseUri}api/ChapterManagement/UpdateCaseTypeGroups/{newCaseTypeGroupName}/{originalCaseTypeGroupName}", item);
+            var content = new StringContent(JsonConvert.SerializeObject(_smartFlow), Encoding.UTF8, "application/json");  
+
+            using var response = await httpClient.PostAsync($"{userSession.baseUri}api/ChapterManagement/UpdateCaseTypeGroups/{newCaseTypeGroupName}/{originalCaseTypeGroupName}", content);
 
             return await response.Content.ReadFromJsonAsync<List<UsrOrsfSmartflows>>();
         }
@@ -160,16 +172,22 @@ namespace GadjIT_App.Services
             return await httpClient.GetFromJsonAsync<List<UsrOrsfSmartflows>>($"{userSession.baseUri}api/ChapterManagement/GetChapterListByCaseType/{caseType}");
         }
 
-        public async Task<bool> CreateStep(VmChapterP4WStepSchemaJSONObject stepSchemaJSONObject)
+        public async Task<bool> CreateStep(VmChapterP4WStepSchemaJSONObject _stepSchemaJSONObject)
         {
             Lock = true;
 
-            using var response = await httpClient.PutAsJsonAsync($"{userSession.baseUri}api/ChapterManagement/CreateStep", stepSchemaJSONObject);
+            var content = new StringContent(JsonConvert.SerializeObject(_stepSchemaJSONObject), Encoding.UTF8, "application/json");  
+
+            using var response = await httpClient.PostAsync($"{userSession.baseUri}api/ChapterManagement/CreateStep", content);
 
             Lock = false;
 
             return await response.Content.ReadFromJsonAsync<bool>();
         }
 
+
+        
+
     }
+
 }

@@ -1,17 +1,8 @@
 ﻿using Blazored.Modal;
-using GadjIT.ClientContext.P4W;
-using GadjIT.ClientContext.P4W.Custom;
-using GadjIT.AppContext.GadjIT_App;
+using GadjIT_AppContext.GadjIT_App;
 using GadjIT_App.Data.Admin;
-using GadjIT_App.Services;
 using Microsoft.AspNetCore.Components;
-using Microsoft.JSInterop;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace GadjIT_App.Pages.Accounts.CompanyAccountManagement
 {

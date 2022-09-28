@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using GadjIT.AppContext.GadjIT_App;
+using GadjIT_AppContext.GadjIT_App;
 using Microsoft.AspNetCore.Identity;
 
 namespace GadjIT_App.Data.MapperProfiles

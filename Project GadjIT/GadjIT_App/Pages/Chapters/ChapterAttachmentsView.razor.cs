@@ -1,6 +1,6 @@
 ﻿using Blazored.Modal;
-using GadjIT.ClientContext.P4W;
-using GadjIT.ClientContext.P4W.Custom;
+using GadjIT_ClientContext.P4W;
+using GadjIT_ClientContext.P4W.Custom;
 using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;

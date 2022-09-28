@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 
-namespace GadjIT.ClientContext.P4W.Custom
+namespace GadjIT_ClientContext.P4W.Custom
 {
     public partial class VmUsrOrDefChapterManagement
     {

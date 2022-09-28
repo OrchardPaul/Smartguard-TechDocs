@@ -7,7 +7,7 @@ body {
 }
 
 a {
-    color: #AF00E3 !important;
+    color: #5e17eb !important;
 }
 
 h1, h2, h3, h4 {
@@ -37,7 +37,7 @@ label {
 .auth-block {
     padding: 20px;
     background: #fff;
-    border-radius: 25px;
+    border-radius: 0px;
     box-shadow: 0 8px 12px 0 rgba(0,0,0,0.5);
 }
 
@@ -65,8 +65,8 @@ label {
 }
 
 .btn-main {
-    background-color: #3E00E3;
-    border-color: #3E00E3 !important;
+    background-color: #5e17eb;
+    border-color: #5e17eb !important;
     color: #fff;
     width: 200px;
     box-shadow: 0 5px 8px 0 rgba(0,0,0,0.5);
@@ -74,8 +74,8 @@ label {
 
     .btn-main:hover {
         color: #fff;
-        background-color: #AF00E3;
-        border-color: #AF00E3 !important;
+        background-color: #5e17eb;
+        border-color: #5e17eb !important;
         box-shadow: 0 5px 8px 0 rgba(0,0,0,0);
     }
 

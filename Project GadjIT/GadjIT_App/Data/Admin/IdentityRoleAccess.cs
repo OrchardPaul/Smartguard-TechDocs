@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using GadjIT.AppContext.GadjIT_App;
+using GadjIT_AppContext.GadjIT_App;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;

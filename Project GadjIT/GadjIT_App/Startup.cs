@@ -1,26 +1,16 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.Azure.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using GadjIT_App.Areas.Identity;
 using GadjIT_App.Data;
-using GadjIT.ClientContext.P4W;
 using GadjIT_App.Services;
 using GadjIT_App.Data.Admin;
 using GadjIT_App.Data.MapperProfiles;
-using AutoMapper;
 using Plk.Blazor.DragDrop;
 using GadjIT_App.Services.Email;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -29,13 +19,12 @@ using Blazored.Modal;
 using GadjIT_App.Pages.Chapters;
 using GadjIT_App.FileManagement.FileProcessing.Interface;
 using GadjIT_App.FileManagement.FileProcessing.Implementation;
-using Microsoft.Extensions.FileProviders;
 using System.IO;
 using GadjIT_App.Services.AppState;
 using GadjIT_App.Pages.Accounts.CompanyAccountManagement;
-using Serilog;
 using GadjIT_App.Data.Dropzone_Objects;
 using Microsoft.AspNetCore.DataProtection;
+using GadjIT_App.Services.Email;
 
 namespace GadjIT_App
 {

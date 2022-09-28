@@ -1,11 +1,9 @@
-using GadjIT.ClientContext.P4W;
-using GadjIT.ClientContext.P4W.Custom;
-using GadjIT.ClientContext.P4W.Functions;
-using GadjIT_App.Data.Admin;
+
 using GadjIT_App.Services.SessionState;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
-using System;
+using Newtonsoft.Json;
+using System.Text;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -39,7 +37,9 @@ namespace GadjIT_App.Services
         {
             var sql = new SQLRequest { Query = _query};
 
-            using var response = await httpClient.PutAsJsonAsync($"{userSession.baseUri}api/GeneralAccess/GetListOfData", sql);
+            var content = new StringContent(JsonConvert.SerializeObject(sql), Encoding.UTF8, "application/json");  
+
+            using var response = await httpClient.PostAsync($"{userSession.baseUri}api/GeneralAccess/GetListOfData", content);
 
             List<Dictionary<string,dynamic>> results = new List<Dictionary<string, dynamic>>();
 

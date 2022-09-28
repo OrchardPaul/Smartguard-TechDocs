@@ -1,9 +1,9 @@
-﻿using GadjIT.ClientContext.P4W.Functions;
+﻿using GadjIT_ClientContext.P4W.Functions;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace GadjIT.ClientContext.P4W.Custom
+namespace GadjIT_ClientContext.P4W.Custom
 {
     public partial class VmChapterFee
     {

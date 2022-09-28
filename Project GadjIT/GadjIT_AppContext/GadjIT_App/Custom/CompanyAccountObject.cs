@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace GadjIT.AppContext.GadjIT_App.Custom
+namespace GadjIT_AppContext.GadjIT_App.Custom
 {
     public class CompanyAccountObject
     {

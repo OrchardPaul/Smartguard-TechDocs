@@ -1,21 +1,15 @@
 ﻿using AutoMapper;
-using GadjIT.AppContext.GadjIT_App;
-using GadjIT.AppContext.GadjIT_App.Custom;
-using GadjIT.ClientContext.P4W;
-using GadjIT_App.Services;
+using GadjIT_AppContext.GadjIT_App;
+using GadjIT_AppContext.GadjIT_App.Custom;
+using GadjIT_ClientContext.P4W;
 using GadjIT_App.Services.SessionState;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
-using GadjIT.ClientContext.P4W.Custom;
-using Newtonsoft.Json;
-using Serilog;
 using Microsoft.Extensions.Logging;
 using Serilog.Context;
 

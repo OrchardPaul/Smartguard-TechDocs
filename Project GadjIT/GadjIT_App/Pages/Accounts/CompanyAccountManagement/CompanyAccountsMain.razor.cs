@@ -1,7 +1,7 @@
 ﻿using Blazored.Modal;
 using Blazored.Modal.Services;
-using GadjIT.AppContext.GadjIT_App;
-using GadjIT.AppContext.GadjIT_App.Custom;
+using GadjIT_AppContext.GadjIT_App;
+using GadjIT_AppContext.GadjIT_App.Custom;
 using GadjIT_App.Data.Admin;
 using GadjIT_App.FileManagement.FileProcessing.Interface;
 using GadjIT_App.Services.SessionState;
@@ -13,7 +13,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Linq.Dynamic.Core;
 using Microsoft.Extensions.Logging;
-using Serilog.Context;
 using GadjIT_App.Pages.Shared.Modals;
 
 namespace GadjIT_App.Pages.Accounts.CompanyAccountManagement
@@ -38,7 +37,7 @@ namespace GadjIT_App.Pages.Accounts.CompanyAccountManagement
 
 
         [Inject]
-        IModalService Modal { get; set; }
+        public IModalService Modal { get; set; }
 
         [Inject]
         public IUserSessionState SessionState { get; set; }
@@ -100,6 +99,7 @@ namespace GadjIT_App.Pages.Accounts.CompanyAccountManagement
         /// Fixed by copying the code from the RefreshCompanyObjects but could do with figuring out why this happens
         /// </summary>
         /// <returns></returns>
+        
         protected override async Task OnInitializedAsync()
         {
             await RefreshCompanyAccounts();
@@ -260,8 +260,9 @@ namespace GadjIT_App.Pages.Accounts.CompanyAccountManagement
 
         public async Task ExportToPdf()
         {
-            var data = PDFHelper.GenerateReport(CompanyAccountObjects);
-            await FileHelper.DownloadFile("Accounts.pdf", data);
+            //TODO: Restore this method but with iText7 or alternative
+            // var data = PDFHelper.GenerateReport(CompanyAccountObjects);
+            // await FileHelper.DownloadFile("Accounts.pdf", data);
         }
 
         public async void Bill()

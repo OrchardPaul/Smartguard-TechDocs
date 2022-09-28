@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 // If you have enabled NRTs for your project, then un-comment the following line:
 // #nullable disable
 
-namespace GadjIT.ClientContext.P4W
+namespace GadjIT_ClientContext.P4W
 {
     [Table("Dm_Documents")]
     public partial class DmDocuments

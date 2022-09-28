@@ -1,14 +1,11 @@
-﻿using GadjIT.ClientContext.P4W;
-using GadjIT.ClientContext.P4W.Custom;
-using GadjIT.ClientContext.P4W.Functions;
-using Microsoft.Data.SqlClient;
+﻿using GadjIT_ClientContext.P4W;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace GadjIT.ClientAPI.Repository.Chapters
+namespace GadjIT_ClientAPI.Repository.Chapters
 {
     public interface IChapters_Service
     {

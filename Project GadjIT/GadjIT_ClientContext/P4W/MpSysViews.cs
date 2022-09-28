@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace GadjIT.ClientContext.P4W
+namespace GadjIT_ClientContext.P4W
 {
     [Table("Mp_Sys_Views")]
     public partial class MpSysViews

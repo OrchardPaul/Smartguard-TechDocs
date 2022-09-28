@@ -1,16 +1,13 @@
-﻿using GadjIT.AppContext.GadjIT_App;
-using GadjIT.AppContext.GadjIT_App.Custom;
+﻿using GadjIT_AppContext.GadjIT_App;
+using GadjIT_AppContext.GadjIT_App.Custom;
 using GadjIT_App.Data.Admin;
 using GadjIT_App.Services.SessionState;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.JSInterop;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using GadjIT_App.FileManagement.FileClassObjects;
-using GadjIT_App.FileManagement.FileClassObjects.FileOptions;
 using GadjIT_App.FileManagement.FileProcessing.Interface;
 
 

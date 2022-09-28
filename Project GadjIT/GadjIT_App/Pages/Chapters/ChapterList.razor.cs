@@ -1,4 +1,4 @@
-﻿using GadjIT.ClientContext.P4W;
+﻿using GadjIT_ClientContext.P4W;
 using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
@@ -10,24 +10,17 @@ using GadjIT_App.Services.SessionState;
 using Blazored.Modal.Services;
 using Blazored.Modal;
 using GadjIT_App.Pages.Shared.Modals;
-using GadjIT.ClientContext.P4W.Custom;
-using GadjIT.ClientContext.P4W.Functions;
-using Newtonsoft.Json.Linq;
+using GadjIT_ClientContext.P4W.Custom;
 using Newtonsoft.Json;
 using System.Text.RegularExpressions;
-using Newtonsoft.Json.Schema.Generation;
-using Newtonsoft.Json.Schema;
 using Microsoft.AspNetCore.Hosting;
 using BlazorInputFile;
-using System.IO;
 using GadjIT_App.FileManagement.FileClassObjects.FileOptions;
 using GadjIT_App.FileManagement.FileClassObjects;
-using System.Net;
 using Microsoft.JSInterop;
 using GadjIT_App.FileManagement.FileProcessing.Interface;
 using GadjIT_App.Data.Admin;
 using System.Globalization;
-using GadjIT.AppContext.GadjIT_App;
 using AutoMapper;
 using System.Timers;
 using GadjIT_App.Services.AppState;
@@ -81,7 +74,7 @@ namespace GadjIT_App.Pages.Chapters
         private ICompanyDbAccess CompanyDbAccess { get; set; }
 
         [Inject]
-        private ILogger<ChapterList> logger { get; set; }
+        private ILogger<ChapterList> Logger { get; set; }
 
 
         [Inject]
@@ -182,14 +175,6 @@ namespace GadjIT_App.Pages.Chapters
                     ListP4WViews = await partnerAccessService.GetPartnerViews();
                     UserSession.HomeActionSmartflow = SelectHome;
 
-                    using (LogContext.PushProperty("SourceSystem", UserSession.selectedSystem))
-                    using (LogContext.PushProperty("SourceCompanyId", UserSession.Company.Id))
-                    using (LogContext.PushProperty("SourceUserId", UserSession.User.Id))
-                    using (LogContext.PushProperty("SourceContext", nameof(ChapterList)))
-                    {
-                        logger.LogInformation("Starting up...");
-                    }
-
                 }
                 catch (Exception e)
                 {
@@ -199,7 +184,7 @@ namespace GadjIT_App.Pages.Chapters
                     using (LogContext.PushProperty("SourceUserId", UserSession.User.Id))
                     using (LogContext.PushProperty("SourceContext", nameof(ChapterList)))
                     {
-                        logger?.LogError(e, "Error on smartflow list startup");
+                        Logger.LogError(e, "Error: Loading initial Smartflow list");
                     }
                 }
             }
@@ -321,7 +306,7 @@ namespace GadjIT_App.Pages.Chapters
                 using (LogContext.PushProperty("SourceUserId", UserSession.User.Id))
                 using (LogContext.PushProperty("SourceContext", nameof(ChapterList)))
                 {
-                    logger?.LogError(D, "Smartflow timer error");
+                    Logger.LogError(D, "Refreshing Smartflow during interval event");
                 }
             }
 
@@ -340,25 +325,39 @@ namespace GadjIT_App.Pages.Chapters
 
         public async void SaveSelectedBackgroundColour (string colour)
         {
-            selectedChapter.BackgroundColour = ListChapterColours.Where(C => C.ColourName == colour).Select(C => C.ColourCode).FirstOrDefault();
-            selectedChapter.BackgroundColourName = colour;
+            try
+            {
+                selectedChapter.BackgroundColour = ListChapterColours.Where(C => C.ColourName == colour).Select(C => C.ColourCode).FirstOrDefault();
+                selectedChapter.BackgroundColourName = colour;
 
-            //if (ListFileImages.Select(I => I.FileName).ToList().Contains(colour))
-            //{
-            //    UserSession.SetTempBackground(ListFileImages.Where(I => I.FileName == colour).Select(F => F.FileDirectory.Replace("\\", "/").Replace("wwwroot/", "") + "/" + F.FileName).SingleOrDefault(), NavigationManager.Uri);
-            //}
-            //else
-            //{
-            //    UserSession.SetTempBackground(selectedChapter.BackgroundColour, NavigationManager.Uri);
-            //}
+                //if (ListFileImages.Select(I => I.FileName).ToList().Contains(colour))
+                //{
+                //    UserSession.SetTempBackground(ListFileImages.Where(I => I.FileName == colour).Select(F => F.FileDirectory.Replace("\\", "/").Replace("wwwroot/", "") + "/" + F.FileName).SingleOrDefault(), NavigationManager.Uri);
+                //}
+                //else
+                //{
+                //    UserSession.SetTempBackground(selectedChapter.BackgroundColour, NavigationManager.Uri);
+                //}
 
-            SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(selectedChapter);
+                SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(selectedChapter);
 
-            await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
+                await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
 
 
-            //keep track of time last updated ready for comparison by other sessions checking for updates
-            appChapterState.SetLastUpdated(UserSession, selectedChapter);
+                //keep track of time last updated ready for comparison by other sessions checking for updates
+                appChapterState.SetLastUpdated(UserSession, selectedChapter);
+            }
+            catch (Exception e)
+            {
+
+                using (LogContext.PushProperty("SourceSystem", UserSession.selectedSystem))
+                using (LogContext.PushProperty("SourceCompanyId", UserSession.Company.Id))
+                using (LogContext.PushProperty("SourceUserId", UserSession.User.Id))
+                using (LogContext.PushProperty("SourceContext", nameof(ChapterList)))
+                {
+                    Logger.LogError(e, "Error: Saving background colour");
+                }
+            }
         }
 
         public UsrOrsfSmartflows editChapter { get; set; }
@@ -543,12 +542,26 @@ namespace GadjIT_App.Pages.Chapters
 
         private async void SaveShowPartnerNotes()
         {
-            SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(selectedChapter);
+            try
+            {
+                SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(selectedChapter);
 
-            await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
+                await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
 
-            //keep track of time last updated ready for comparison by other sessions checking for updates
-            appChapterState.SetLastUpdated(UserSession, selectedChapter);
+                //keep track of time last updated ready for comparison by other sessions checking for updates
+                appChapterState.SetLastUpdated(UserSession, selectedChapter);
+            }
+            catch (Exception e)
+            {
+
+                using (LogContext.PushProperty("SourceSystem", UserSession.selectedSystem))
+                using (LogContext.PushProperty("SourceCompanyId", UserSession.Company.Id))
+                using (LogContext.PushProperty("SourceUserId", UserSession.User.Id))
+                using (LogContext.PushProperty("SourceContext", nameof(ChapterList)))
+                {
+                    Logger.LogError(e, "Error: Saving notes");
+                }
+            }
         }
 
         public bool ShowDocumentTracking
@@ -572,12 +585,26 @@ namespace GadjIT_App.Pages.Chapters
 
         private async void SaveAttachmentTracking()
         {
-            SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(selectedChapter);
+            try
+            {
+                SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(selectedChapter);
 
-            await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
+                await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
 
-            //keep track of time last updated ready for comparison by other sessions checking for updates
-            appChapterState.SetLastUpdated(UserSession, selectedChapter);
+                //keep track of time last updated ready for comparison by other sessions checking for updates
+                appChapterState.SetLastUpdated(UserSession, selectedChapter);
+            }
+            catch (Exception e)
+            {
+
+                using (LogContext.PushProperty("SourceSystem", UserSession.selectedSystem))
+                using (LogContext.PushProperty("SourceCompanyId", UserSession.Company.Id))
+                using (LogContext.PushProperty("SourceUserId", UserSession.User.Id))
+                using (LogContext.PushProperty("SourceContext", nameof(ChapterList)))
+                {
+                    Logger.LogError(e, "Error: Toggling document tracking");
+                }
+            }
         }
 
 
@@ -616,33 +643,61 @@ namespace GadjIT_App.Pages.Chapters
 
         void SelectCaseTypeGroup(string caseTypeGroup)
         {
-            selectedChapter.CaseTypeGroup = (selectedChapter.CaseTypeGroup == caseTypeGroup) ? "" : caseTypeGroup;
-            selectedChapter.CaseType = "";
-            selectedChapter.Name = "";
+            try
+            {
+                selectedChapter.CaseTypeGroup = (selectedChapter.CaseTypeGroup == caseTypeGroup) ? "" : caseTypeGroup;
+                selectedChapter.CaseType = "";
+                selectedChapter.Name = "";
+            }
+            catch (Exception e)
+            {
+
+                using (LogContext.PushProperty("SourceSystem", UserSession.selectedSystem))
+                using (LogContext.PushProperty("SourceCompanyId", UserSession.Company.Id))
+                using (LogContext.PushProperty("SourceUserId", UserSession.User.Id))
+                using (LogContext.PushProperty("SourceContext", nameof(ChapterList)))
+                {
+                    Logger.LogError(e, "Error: Selecting Case Type Group");
+                }
+            }
         }
 
         public void SelectCaseType(string caseType)
         {
-            selectedChapter.CaseType = (selectedChapter.CaseType == caseType) ? "" : caseType; 
-            
-            lstSelectedChapters = lstChapters.Where(C => C.SmartflowObject.CaseType == selectedChapter.CaseType)
-                                    .Where(C => C.SmartflowObject.CaseTypeGroup == selectedChapter.CaseTypeGroup)
-                                    .OrderBy(C => C.SmartflowObject.SeqNo)
-                                    .ToList(); 
-            
-
-            selectedChapter.Name = "";
-
-            if(lstSelectedChapters.Count > 0)
+            try
             {
-                if(!(SequenceIsValid("Chapters")))
-                {
-                    ReSeqSmartflows();
-                }
+                selectedChapter.CaseType = (selectedChapter.CaseType == caseType) ? "" : caseType; 
+                
+                lstSelectedChapters = lstChapters.Where(C => C.SmartflowObject.CaseType == selectedChapter.CaseType)
+                                        .Where(C => C.SmartflowObject.CaseTypeGroup == selectedChapter.CaseTypeGroup)
+                                        .OrderBy(C => C.SmartflowObject.SeqNo)
+                                        .ToList(); 
+                
 
-                if(SmartflowComparison)
+                selectedChapter.Name = "";
+
+                if(lstSelectedChapters.Count > 0)
                 {
-                    CompareAllChapters();
+                    if(!(SequenceIsValid("Chapters")))
+                    {
+                        ReSeqSmartflows();
+                    }
+
+                    if(SmartflowComparison)
+                    {
+                        CompareAllChapters();
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+
+                using (LogContext.PushProperty("SourceSystem", UserSession.selectedSystem))
+                using (LogContext.PushProperty("SourceCompanyId", UserSession.Company.Id))
+                using (LogContext.PushProperty("SourceUserId", UserSession.User.Id))
+                using (LogContext.PushProperty("SourceContext", nameof(ChapterList)))
+                {
+                    Logger.LogError(e, "Error: Selecting Case Type");
                 }
             }
 
@@ -651,10 +706,24 @@ namespace GadjIT_App.Pages.Chapters
 
         private async void ReSeqSmartflows()
         {
-            foreach(var smartflowSelected in lstSelectedChapters)
+            try
             {
-                smartflowSelected.SmartflowObject.SeqNo = lstSelectedChapters.IndexOf(smartflowSelected) + 1;
-                await chapterManagementService.UpdateMainItem(smartflowSelected.SmartflowObject).ConfigureAwait(false);
+                foreach(var smartflowSelected in lstSelectedChapters)
+                {
+                    smartflowSelected.SmartflowObject.SeqNo = lstSelectedChapters.IndexOf(smartflowSelected) + 1;
+                    await chapterManagementService.UpdateMainItem(smartflowSelected.SmartflowObject).ConfigureAwait(false);
+                }
+            }
+            catch (Exception e)
+            {
+
+                using (LogContext.PushProperty("SourceSystem", UserSession.selectedSystem))
+                using (LogContext.PushProperty("SourceCompanyId", UserSession.Company.Id))
+                using (LogContext.PushProperty("SourceUserId", UserSession.User.Id))
+                using (LogContext.PushProperty("SourceContext", nameof(ChapterList)))
+                {
+                    Logger.LogError(e, "Error: Refreshing the Smartflow sequence numbers");
+                }
             }
 
             await InvokeAsync(() =>
@@ -670,7 +739,128 @@ namespace GadjIT_App.Pages.Chapters
         }
 
 
+        /// <summary>
+        /// Update/Create P4W step
+        /// </summary>
+        /// <returns></returns>
+        private async void CreateStep()
+        {
+            try
+            {
+                if (selectedChapter.P4WCaseTypeGroup == "Entity Documents")
+                {
+                    ChapterP4WStep = new ChapterP4WStepSchema
+                    {
+                        StepName = selectedChapter.StepName,
+                        P4WCaseTypeGroup = selectedChapter.P4WCaseTypeGroup,
+                        GadjITCaseTypeGroup = selectedChapter.CaseTypeGroup,
+                        GadjITCaseType = selectedChapter.CaseType,
+                        Smartflow = selectedChapter.Name,
+                        Questions = new List<ChapterP4WStepQuestion>{
+                                        new ChapterP4WStepQuestion {QNo = 1, QText= "HQ - Set Current Chapter Details" }
+                                        ,new ChapterP4WStepQuestion {QNo = 2, QText= "HQ - Show View" }
+                                        ,new ChapterP4WStepQuestion {QNo = 3, QText= "HQ - Run Required Steps" }
+                                        ,new ChapterP4WStepQuestion {QNo = 4, QText= "HQ - Update reschedule date" }
+                                        ,new ChapterP4WStepQuestion {QNo = 5, QText= "HQ - Reinsert this step with asname" }
+                                        ,new ChapterP4WStepQuestion {QNo = 6, QText= "HQ - Rename Step" }
+                                        ,new ChapterP4WStepQuestion {QNo = 7, QText= "HQ - Delete Previous Instances if Suppressed Step" }
+                                        ,new ChapterP4WStepQuestion {QNo = 8, QText= "HQ - Check if completion name exists" }
+                                        ,new ChapterP4WStepQuestion {QNo = 9, QText= "HQ - Delete Step" }
+                                        },
+                        Answers = new List<ChapterP4WStepAnswer>{
+                                        new ChapterP4WStepAnswer {QNo = 1, GoToData= $"2 [SQL: EXEC Up_ORSF_MoveDocsToAgendas '[entity.code]', 0] [SQL: EXEC up_ORSF_CreateTableEntries '[entity.code]', 0] [SQL: UPDATE Usr_ORSF_ENT_Control SET Current_SF = '{selectedChapter.Name}', Current_Case_Type_Group = '{selectedChapter.CaseTypeGroup}', Current_Case_Type = '{selectedChapter.CaseType}', Default_Step = '{selectedChapter.StepName}', Date_Schedule_For = DATEADD(d, 7, getdate()), Steps_To_Run = '', Schedule_AsName = '{selectedChapter.StepName}|' + (SELECT CASE WHEN dbo.fn_ORSF_IsAllCap (Description) = 1 THEN '{selectedChapter.StepName}' + '|' + CONVERT(VARCHAR(20),ISNULL(Date_Schedule_For,DATEADD(d, 7, getdate())),103) ELSE Description + '|' + CONVERT(VARCHAR(20),ISNULL(s.DiaryDate, getdate()),103) END + '|' + '[CurrentUser.Code]' FROM Cm_CaseItems i INNER JOIN Cm_Steps s on s.ItemID = i.ItemID WHERE i.ItemID = [currentstep.stepid]), Complete_AsName = '' WHERE EntityRef = '[Entity.Code]'] [SQL: UPDATE Usr_ORSF_ENT_Control SET Screen_Opened_Via_Step = 'Y' WHERE EntityRef = '[Entity.Code]' ]" }
+                                        ,new ChapterP4WStepAnswer {QNo = 2, GoToData= $"7 [VIEW: '{selectedChapter.SelectedView}' UPDATE=Yes]" }
+                                        ,new ChapterP4WStepAnswer {QNo = 3, GoToData= $"4 [TAKE: 'SF-Admin Save Items for Agenda Management' INSERT=END]  [SQL: EXEC up_ORSF_GetStepsFromList '[entity.code]', 0] [SQL: UPDATE Usr_ORSF_ENT_Control SET Screen_Opened_Via_Step = null WHERE EntityRef='[entity.code]']" }
+                                        ,new ChapterP4WStepAnswer {QNo = 4, GoToData= $"5 [SQL: UPDATE Usr_ORSF_ENT_Control SET Date_Schedule_For = isnull(Date_Schedule_For, Cast(getdate() as Date)) WHERE EntityRef = '[Entity.Code]']" }
+                                        ,new ChapterP4WStepAnswer {QNo = 5, GoToData= $"8 [SQL: SELECT ScheduleCommand FROM fn_ORSF_GetScheduleItems('[Entity.Code]', 0)]" }
+                                        ,new ChapterP4WStepAnswer {QNo = 6, GoToData= $"[SQL: UPDATE cm_caseitems set CompletionDate = GETDATE(), description = UPPER('[!Usr_ORSF_ENT_Control.Complete_AsName]') where itemid = [currentstep.stepid]] [SQL: exec up_ORSF_CompleteStep [currentStep.stepid], '', 'Y']" }
+                                        ,new ChapterP4WStepAnswer {QNo = 7, GoToData= $"3 [[SQL: SELECT CASE WHEN ISNULL(Do_Not_Reschedule,'N') = 'Y' THEN 'SQL: exec up_ORSF_DeleteDueStep '''', [currentstep.stepid], ''{selectedChapter.Name}''' ELSE '' END FROM Usr_ORSF_MT_Control WHERE EntityRef = '[matters.entityref]' AND MatterNo = [matters.number]]]" }
+                                        ,new ChapterP4WStepAnswer {QNo = 8, GoToData= $"[SQL: SELECT CASE WHEN ISNULL('[!Usr_ORSF_ENT_Control.Complete_AsName]','') <> '' THEN 6 ELSE 9 END]" }
+                                        ,new ChapterP4WStepAnswer {QNo = 9, GoToData= $"[SQL: exec up_ORSF_DeleteStep [currentstep.stepid]]" }
+                                        }
+                    };
+                }
+                else
+                {
+                    ChapterP4WStep = new ChapterP4WStepSchema
+                    {
+                        StepName = selectedChapter.StepName,
+                        P4WCaseTypeGroup = selectedChapter.P4WCaseTypeGroup,
+                        GadjITCaseTypeGroup = selectedChapter.CaseTypeGroup,
+                        GadjITCaseType = selectedChapter.CaseType,
+                        Smartflow = selectedChapter.Name,
+                        Questions = new List<ChapterP4WStepQuestion>{
+                                        new ChapterP4WStepQuestion {QNo = 1, QText= "HQ - Set Current Chapter Details" }
+                                        ,new ChapterP4WStepQuestion {QNo = 2, QText= "HQ - Show View" }
+                                        ,new ChapterP4WStepQuestion {QNo = 3, QText= "HQ - Run Required Steps" }
+                                        ,new ChapterP4WStepQuestion {QNo = 4, QText= "HQ - Update reschedule date" }
+                                        ,new ChapterP4WStepQuestion {QNo = 5, QText= "HQ - Reinsert this step with asname" }
+                                        ,new ChapterP4WStepQuestion {QNo = 6, QText= "HQ - Rename Step" }
+                                        ,new ChapterP4WStepQuestion {QNo = 7, QText= "HQ - Delete Previous Instances if Suppressed Step" }
+                                        ,new ChapterP4WStepQuestion {QNo = 8, QText= "HQ - Check if completion name exists" }
+                                        ,new ChapterP4WStepQuestion {QNo = 9, QText= "HQ - Delete Step" }
+                                        },
+                        Answers = new List<ChapterP4WStepAnswer>{
+                                        new ChapterP4WStepAnswer {QNo = 1, GoToData= $"2 [SQL: EXEC Up_ORSF_MoveDocsToAgendas '[matters.entityref]', [matters.number]] [SQL: EXEC up_ORSF_CreateTableEntries '[matters.entityref]', [matters.number]] [SQL: UPDATE Usr_ORSF_MT_Control SET Current_SF = '{selectedChapter.Name}', Current_Case_Type_Group = '{selectedChapter.CaseTypeGroup}', Current_Case_Type = '{selectedChapter.CaseType}', Default_Step = '{selectedChapter.StepName}', Date_Schedule_For = DATEADD(d, 7, getdate()), Steps_To_Run = '', Schedule_AsName = '{selectedChapter.StepName}|' + (SELECT CASE WHEN dbo.fn_ORSF_IsAllCap (Description) = 1 THEN '{selectedChapter.StepName}' + '|' + CONVERT(VARCHAR(20),ISNULL(Date_Schedule_For,DATEADD(d, 7, getdate())),103) ELSE Description + '|' + CONVERT(VARCHAR(20),ISNULL(s.DiaryDate, getdate()),103) END + '|' + '[matters.feeearnerref]' FROM Cm_CaseItems i INNER JOIN Cm_Steps s on s.ItemID = i.ItemID WHERE i.ItemID = [currentstep.stepid]), Complete_AsName = '' WHERE EntityRef = '[matters.entityref]' AND MatterNo = [matters.number]] [SQL: UPDATE Usr_ORSF_MT_Control SET Screen_Opened_Via_Step = 'Y' WHERE EntityRef = '[matters.entityref]' AND matterNo =[matters.number]]" }
+                                        ,new ChapterP4WStepAnswer {QNo = 2, GoToData= $"7 [VIEW: '{selectedChapter.SelectedView}' UPDATE=Yes]" }
+                                        ,new ChapterP4WStepAnswer {QNo = 3, GoToData= $"4 [TAKE: 'SF-Admin Save Items for Agenda Management' INSERT=END]  [SQL: EXEC up_ORSF_GetStepsFromList '[matters.entityref]', [matters.number]] [SQL: UPDATE Usr_ORSF_MT_Control SET Screen_Opened_Via_Step = null WHERE EntityRef='[matters.entityref]' AND matterNo=[matters.number]]" }
+                                        ,new ChapterP4WStepAnswer {QNo = 4, GoToData= $"5 [SQL: UPDATE Usr_ORSF_MT_Control SET Date_Schedule_For = isnull(Date_Schedule_For, Cast(getdate() as Date)) WHERE EntityRef = '[matters.entityref]' AND MatterNo = [matters.number]]" }
+                                        ,new ChapterP4WStepAnswer {QNo = 5, GoToData= $"8 [SQL: SELECT ScheduleCommand FROM fn_ORSF_GetScheduleItems('[matters.entityref]', [matters.number])]" }
+                                        ,new ChapterP4WStepAnswer {QNo = 6, GoToData= $"[SQL: UPDATE cm_caseitems set CompletionDate = GETDATE(), description = UPPER('[!Usr_ORSF_MT_Control.Complete_AsName]') where itemid = [currentstep.stepid]] [SQL: exec up_ORSF_CompleteStep [currentStep.stepid], '', 'Y']" }
+                                        ,new ChapterP4WStepAnswer {QNo = 7, GoToData= $"3 [[SQL: SELECT CASE WHEN ISNULL(Do_Not_Reschedule,'N') = 'Y' THEN 'SQL: exec up_ORSF_DeleteDueStep '''', [currentstep.stepid], ''{selectedChapter.Name}''' ELSE '' END FROM Usr_ORSF_MT_Control WHERE EntityRef = '[matters.entityref]' AND MatterNo = [matters.number]]]" }
+                                        ,new ChapterP4WStepAnswer {QNo = 8, GoToData= $"[SQL: SELECT CASE WHEN ISNULL('[!Usr_ORSF_MT_Control.Complete_AsName]','') <> '' THEN 6 ELSE 9 END]" }
+                                        ,new ChapterP4WStepAnswer {QNo = 9, GoToData= $"[SQL: exec up_ORSF_DeleteStep [currentstep.stepid]]" }
+                                        }
+                    };
+                }
 
+                string stepJSON = JsonConvert.SerializeObject(ChapterP4WStep);
+
+                bool creationSuccess;
+
+                creationSuccess = await chapterManagementService.CreateStep(new VmChapterP4WStepSchemaJSONObject { StepSchemaJSON = stepJSON });
+
+                if (creationSuccess)
+                {
+                    dropDownChapterList = await chapterManagementService.GetDocumentList(selectedChapter.CaseType);
+                    TableDates = await chapterManagementService.GetDatabaseTableDateFields();
+
+                    selectedChapter.SelectedStep = selectedChapter.StepName;
+
+                    SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(selectedChapter);
+
+                    bool gotLock = chapterManagementService.Lock;
+                    while (gotLock)
+                    {
+                        await Task.Yield();
+                        gotLock = chapterManagementService.Lock;
+                    }
+
+                    await chapterManagementService.Update(SelectedChapterObject);
+
+                    //keep track of time last updated ready for comparison by other sessions checking for updates
+                    appChapterState.SetLastUpdated(UserSession, selectedChapter);
+
+                    StateHasChanged();
+                }
+            }
+            catch (Exception e)
+            {
+
+                using (LogContext.PushProperty("SourceSystem", UserSession.selectedSystem))
+                using (LogContext.PushProperty("SourceCompanyId", UserSession.Company.Id))
+                using (LogContext.PushProperty("SourceUserId", UserSession.User.Id))
+                using (LogContext.PushProperty("SourceContext", nameof(ChapterList)))
+                {
+                    Logger.LogError(e, "Error: Creating/Updating current P4W Smartflow step");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Update all P4W steps for the current system
+        /// </summary>
+        /// <returns></returns>
         private async Task UpdateSteps()
         {
             bool overAllCreationSuccess = true;
@@ -678,138 +868,153 @@ namespace GadjIT_App.Pages.Chapters
             int creationCount = 0;
             string stepJSON = "";
 
-            foreach (var chapter in lstChapters)
+            try
             {
-                var decodedChapter = JsonConvert.DeserializeObject<VmChapter>(chapter.SmartflowObject.SmartflowData);
-
-                if (!string.IsNullOrEmpty(decodedChapter.SelectedStep) 
-                    && !string.IsNullOrEmpty(decodedChapter.SelectedView)
-                    && !string.IsNullOrEmpty(decodedChapter.Name)
-                    && !string.IsNullOrEmpty(decodedChapter.StepName)
-                    && !string.IsNullOrEmpty(decodedChapter.P4WCaseTypeGroup)
-                    && !string.IsNullOrEmpty(decodedChapter.CaseTypeGroup))
+                foreach (var chapter in lstChapters)
                 {
-                    if (decodedChapter.P4WCaseTypeGroup == "Entity Documents")
+                    var decodedChapter = JsonConvert.DeserializeObject<VmChapter>(chapter.SmartflowObject.SmartflowData);
+
+                    if (!string.IsNullOrEmpty(decodedChapter.SelectedStep) 
+                        && !string.IsNullOrEmpty(decodedChapter.SelectedView)
+                        && !string.IsNullOrEmpty(decodedChapter.Name)
+                        && !string.IsNullOrEmpty(decodedChapter.StepName)
+                        && !string.IsNullOrEmpty(decodedChapter.P4WCaseTypeGroup)
+                        && !string.IsNullOrEmpty(decodedChapter.CaseTypeGroup))
                     {
-                        ChapterP4WStep = new ChapterP4WStepSchema
+                        if (decodedChapter.P4WCaseTypeGroup == "Entity Documents")
                         {
-                            StepName = decodedChapter.StepName,
-                            P4WCaseTypeGroup = decodedChapter.P4WCaseTypeGroup,
-                            GadjITCaseTypeGroup = decodedChapter.CaseTypeGroup,
-                            GadjITCaseType = decodedChapter.CaseType,
-                            Smartflow = decodedChapter.Name,
-                            Questions = new List<ChapterP4WStepQuestion>{
-                                    new ChapterP4WStepQuestion {QNo = 1, QText= "HQ - Set Current Chapter Details" }
-                                    ,new ChapterP4WStepQuestion {QNo = 2, QText= "HQ - Show View" }
-                                    ,new ChapterP4WStepQuestion {QNo = 3, QText= "HQ - Run Required Steps" }
-                                    ,new ChapterP4WStepQuestion {QNo = 4, QText= "HQ - Update reschedule date" }
-                                    ,new ChapterP4WStepQuestion {QNo = 5, QText= "HQ - Reinsert this step with asname" }
-                                    ,new ChapterP4WStepQuestion {QNo = 6, QText= "HQ - Rename Step" }
-                                    ,new ChapterP4WStepQuestion {QNo = 7, QText= "HQ - Delete Previous Instances if Suppressed Step" }
-                                    ,new ChapterP4WStepQuestion {QNo = 8, QText= "HQ - Check if completion name exists" }
-                                    ,new ChapterP4WStepQuestion {QNo = 9, QText= "HQ - Delete Step" }
-                                    },
-                            Answers = new List<ChapterP4WStepAnswer>{
-                                     new ChapterP4WStepAnswer {QNo = 1, GoToData= $"2 [SQL: EXEC Up_ORSF_MoveDocsToAgendas '[entity.code]', 0] [SQL: EXEC up_ORSF_CreateTableEntries '[entity.code]', 0] [SQL: UPDATE Usr_ORSF_ENT_Control SET Current_SF = '{decodedChapter.Name}', Current_Case_Type_Group = '{decodedChapter.CaseTypeGroup}', Current_Case_Type = '{decodedChapter.CaseType}', Default_Step = '{decodedChapter.StepName}', Date_Schedule_For = DATEADD(d, 7, getdate()), Steps_To_Run = '', Schedule_AsName = '{decodedChapter.StepName}|' + (SELECT CASE WHEN dbo.fn_ORSF_IsAllCap (Description) = 1 THEN '{decodedChapter.StepName}' + '|' + CONVERT(VARCHAR(20),ISNULL(Date_Schedule_For,DATEADD(d, 7, getdate())),103) ELSE Description + '|' + CONVERT(VARCHAR(20),ISNULL(s.DiaryDate, getdate()),103) END + '|' + '[CurrentUser.Code]' FROM Cm_CaseItems i INNER JOIN Cm_Steps s on s.ItemID = i.ItemID WHERE i.ItemID = [currentstep.stepid]), Complete_AsName = '' WHERE EntityRef = '[Entity.Code]'] [SQL: UPDATE Usr_ORSF_ENT_Control SET Screen_Opened_Via_Step = 'Y' WHERE EntityRef = '[Entity.Code]' ]" }
-                                    ,new ChapterP4WStepAnswer {QNo = 2, GoToData= $"7 [VIEW: '{decodedChapter.SelectedView}' UPDATE=Yes]" }
-                                    ,new ChapterP4WStepAnswer {QNo = 3, GoToData= $"4 [TAKE: 'SF-Admin Save Items for Agenda Management' INSERT=END]  [SQL: EXEC up_ORSF_GetStepsFromList '[entity.code]', 0] [SQL: UPDATE Usr_ORSF_ENT_Control SET Screen_Opened_Via_Step = null WHERE EntityRef='[entity.code]']" }
-                                    ,new ChapterP4WStepAnswer {QNo = 4, GoToData= $"5 [SQL: UPDATE Usr_ORSF_ENT_Control SET Date_Schedule_For = isnull(Date_Schedule_For, Cast(getdate() as Date)) WHERE EntityRef = '[Entity.Code]']" }
-                                    ,new ChapterP4WStepAnswer {QNo = 5, GoToData= $"8 [SQL: SELECT ScheduleCommand FROM fn_ORSF_GetScheduleItems('[Entity.Code]', 0)]" }
-                                    ,new ChapterP4WStepAnswer {QNo = 6, GoToData= $"[SQL: UPDATE cm_caseitems set CompletionDate = GETDATE(), description = UPPER('[!Usr_ORSF_ENT_Control.Complete_AsName]') where itemid = [currentstep.stepid]] [SQL: exec up_ORSF_CompleteStep [currentStep.stepid], '', 'Y']" }
-                                    ,new ChapterP4WStepAnswer {QNo = 7, GoToData= $"3 [[SQL: SELECT CASE WHEN ISNULL(Do_Not_Reschedule,'N') = 'Y' THEN 'SQL: exec up_ORSF_DeleteDueStep '''', [currentstep.stepid], ''{decodedChapter.Name}''' ELSE '' END FROM Usr_ORSF_MT_Control WHERE EntityRef = '[matters.entityref]' AND MatterNo = [matters.number]]]" }
-                                    ,new ChapterP4WStepAnswer {QNo = 8, GoToData= $"[SQL: SELECT CASE WHEN ISNULL('[!Usr_ORSF_ENT_Control.Complete_AsName]','') <> '' THEN 6 ELSE 9 END]" }
-                                    ,new ChapterP4WStepAnswer {QNo = 9, GoToData= $"[SQL: exec up_ORSF_DeleteStep [currentstep.stepid]]" }
-                                    }
-                        };
-                    }
-                    else
-                    {
-                        ChapterP4WStep = new ChapterP4WStepSchema
+                            ChapterP4WStep = new ChapterP4WStepSchema
+                            {
+                                StepName = decodedChapter.StepName,
+                                P4WCaseTypeGroup = decodedChapter.P4WCaseTypeGroup,
+                                GadjITCaseTypeGroup = decodedChapter.CaseTypeGroup,
+                                GadjITCaseType = decodedChapter.CaseType,
+                                Smartflow = decodedChapter.Name,
+                                Questions = new List<ChapterP4WStepQuestion>{
+                                        new ChapterP4WStepQuestion {QNo = 1, QText= "HQ - Set Current Chapter Details" }
+                                        ,new ChapterP4WStepQuestion {QNo = 2, QText= "HQ - Show View" }
+                                        ,new ChapterP4WStepQuestion {QNo = 3, QText= "HQ - Run Required Steps" }
+                                        ,new ChapterP4WStepQuestion {QNo = 4, QText= "HQ - Update reschedule date" }
+                                        ,new ChapterP4WStepQuestion {QNo = 5, QText= "HQ - Reinsert this step with asname" }
+                                        ,new ChapterP4WStepQuestion {QNo = 6, QText= "HQ - Rename Step" }
+                                        ,new ChapterP4WStepQuestion {QNo = 7, QText= "HQ - Delete Previous Instances if Suppressed Step" }
+                                        ,new ChapterP4WStepQuestion {QNo = 8, QText= "HQ - Check if completion name exists" }
+                                        ,new ChapterP4WStepQuestion {QNo = 9, QText= "HQ - Delete Step" }
+                                        },
+                                Answers = new List<ChapterP4WStepAnswer>{
+                                        new ChapterP4WStepAnswer {QNo = 1, GoToData= $"2 [SQL: EXEC Up_ORSF_MoveDocsToAgendas '[entity.code]', 0] [SQL: EXEC up_ORSF_CreateTableEntries '[entity.code]', 0] [SQL: UPDATE Usr_ORSF_ENT_Control SET Current_SF = '{decodedChapter.Name}', Current_Case_Type_Group = '{decodedChapter.CaseTypeGroup}', Current_Case_Type = '{decodedChapter.CaseType}', Default_Step = '{decodedChapter.StepName}', Date_Schedule_For = DATEADD(d, 7, getdate()), Steps_To_Run = '', Schedule_AsName = '{decodedChapter.StepName}|' + (SELECT CASE WHEN dbo.fn_ORSF_IsAllCap (Description) = 1 THEN '{decodedChapter.StepName}' + '|' + CONVERT(VARCHAR(20),ISNULL(Date_Schedule_For,DATEADD(d, 7, getdate())),103) ELSE Description + '|' + CONVERT(VARCHAR(20),ISNULL(s.DiaryDate, getdate()),103) END + '|' + '[CurrentUser.Code]' FROM Cm_CaseItems i INNER JOIN Cm_Steps s on s.ItemID = i.ItemID WHERE i.ItemID = [currentstep.stepid]), Complete_AsName = '' WHERE EntityRef = '[Entity.Code]'] [SQL: UPDATE Usr_ORSF_ENT_Control SET Screen_Opened_Via_Step = 'Y' WHERE EntityRef = '[Entity.Code]' ]" }
+                                        ,new ChapterP4WStepAnswer {QNo = 2, GoToData= $"7 [VIEW: '{decodedChapter.SelectedView}' UPDATE=Yes]" }
+                                        ,new ChapterP4WStepAnswer {QNo = 3, GoToData= $"4 [TAKE: 'SF-Admin Save Items for Agenda Management' INSERT=END]  [SQL: EXEC up_ORSF_GetStepsFromList '[entity.code]', 0] [SQL: UPDATE Usr_ORSF_ENT_Control SET Screen_Opened_Via_Step = null WHERE EntityRef='[entity.code]']" }
+                                        ,new ChapterP4WStepAnswer {QNo = 4, GoToData= $"5 [SQL: UPDATE Usr_ORSF_ENT_Control SET Date_Schedule_For = isnull(Date_Schedule_For, Cast(getdate() as Date)) WHERE EntityRef = '[Entity.Code]']" }
+                                        ,new ChapterP4WStepAnswer {QNo = 5, GoToData= $"8 [SQL: SELECT ScheduleCommand FROM fn_ORSF_GetScheduleItems('[Entity.Code]', 0)]" }
+                                        ,new ChapterP4WStepAnswer {QNo = 6, GoToData= $"[SQL: UPDATE cm_caseitems set CompletionDate = GETDATE(), description = UPPER('[!Usr_ORSF_ENT_Control.Complete_AsName]') where itemid = [currentstep.stepid]] [SQL: exec up_ORSF_CompleteStep [currentStep.stepid], '', 'Y']" }
+                                        ,new ChapterP4WStepAnswer {QNo = 7, GoToData= $"3 [[SQL: SELECT CASE WHEN ISNULL(Do_Not_Reschedule,'N') = 'Y' THEN 'SQL: exec up_ORSF_DeleteDueStep '''', [currentstep.stepid], ''{decodedChapter.Name}''' ELSE '' END FROM Usr_ORSF_MT_Control WHERE EntityRef = '[matters.entityref]' AND MatterNo = [matters.number]]]" }
+                                        ,new ChapterP4WStepAnswer {QNo = 8, GoToData= $"[SQL: SELECT CASE WHEN ISNULL('[!Usr_ORSF_ENT_Control.Complete_AsName]','') <> '' THEN 6 ELSE 9 END]" }
+                                        ,new ChapterP4WStepAnswer {QNo = 9, GoToData= $"[SQL: exec up_ORSF_DeleteStep [currentstep.stepid]]" }
+                                        }
+                            };
+                        }
+                        else
                         {
-                            StepName = decodedChapter.StepName,
-                            P4WCaseTypeGroup = decodedChapter.P4WCaseTypeGroup,
-                            GadjITCaseTypeGroup = decodedChapter.CaseTypeGroup,
-                            GadjITCaseType = decodedChapter.CaseType,
-                            Smartflow = decodedChapter.Name,
-                            Questions = new List<ChapterP4WStepQuestion>{
-                                    new ChapterP4WStepQuestion {QNo = 1, QText= "HQ - Set Current Chapter Details" }
-                                    ,new ChapterP4WStepQuestion {QNo = 2, QText= "HQ - Show View" }
-                                    ,new ChapterP4WStepQuestion {QNo = 3, QText= "HQ - Run Required Steps" }
-                                    ,new ChapterP4WStepQuestion {QNo = 4, QText= "HQ - Update reschedule date" }
-                                    ,new ChapterP4WStepQuestion {QNo = 5, QText= "HQ - Reinsert this step with asname" }
-                                    ,new ChapterP4WStepQuestion {QNo = 6, QText= "HQ - Rename Step" }
-                                    ,new ChapterP4WStepQuestion {QNo = 7, QText= "HQ - Delete Previous Instances if Suppressed Step" }
-                                    ,new ChapterP4WStepQuestion {QNo = 8, QText= "HQ - Check if completion name exists" }
-                                    ,new ChapterP4WStepQuestion {QNo = 9, QText= "HQ - Delete Step" }
-                                    },
-                            Answers = new List<ChapterP4WStepAnswer>{
-                                    new ChapterP4WStepAnswer {QNo = 1, GoToData= $"2 [SQL: EXEC Up_ORSF_MoveDocsToAgendas '[matters.entityref]', [matters.number]] [SQL: EXEC up_ORSF_CreateTableEntries '[matters.entityref]', [matters.number]] [SQL: UPDATE Usr_ORSF_MT_Control SET Current_SF = '{decodedChapter.Name}', Current_Case_Type_Group = '{decodedChapter.CaseTypeGroup}', Current_Case_Type = '{decodedChapter.CaseType}', Default_Step = '{decodedChapter.StepName}', Date_Schedule_For = DATEADD(d, 7, getdate()), Steps_To_Run = '', Schedule_AsName = '{decodedChapter.StepName}|' + (SELECT CASE WHEN dbo.fn_ORSF_IsAllCap (Description) = 1 THEN '{decodedChapter.StepName}' + '|' + CONVERT(VARCHAR(20),ISNULL(Date_Schedule_For,DATEADD(d, 7, getdate())),103) ELSE Description + '|' + CONVERT(VARCHAR(20),ISNULL(s.DiaryDate, getdate()),103) END + '|' + '[matters.feeearnerref]' FROM Cm_CaseItems i INNER JOIN Cm_Steps s on s.ItemID = i.ItemID WHERE i.ItemID = [currentstep.stepid]), Complete_AsName = '' WHERE EntityRef = '[matters.entityref]' AND MatterNo = [matters.number]] [SQL: UPDATE Usr_ORSF_MT_Control SET Screen_Opened_Via_Step = 'Y' WHERE EntityRef = '[matters.entityref]' AND matterNo =[matters.number]]" }
-                                    ,new ChapterP4WStepAnswer {QNo = 2, GoToData= $"7 [VIEW: '{decodedChapter.SelectedView}' UPDATE=Yes]" }
-                                    ,new ChapterP4WStepAnswer {QNo = 3, GoToData= $"4 [TAKE: 'SF-Admin Save Items for Agenda Management' INSERT=END]  [SQL: EXEC up_ORSF_GetStepsFromList '[matters.entityref]', [matters.number]] [SQL: UPDATE Usr_ORSF_MT_Control SET Screen_Opened_Via_Step = null WHERE EntityRef='[matters.entityref]' AND matterNo=[matters.number]]" }
-                                    ,new ChapterP4WStepAnswer {QNo = 4, GoToData= $"5 [SQL: UPDATE Usr_ORSF_MT_Control SET Date_Schedule_For = isnull(Date_Schedule_For, Cast(getdate() as Date)) WHERE EntityRef = '[matters.entityref]' AND MatterNo = [matters.number]]" }
-                                    ,new ChapterP4WStepAnswer {QNo = 5, GoToData= $"8 [SQL: SELECT ScheduleCommand FROM fn_ORSF_GetScheduleItems('[matters.entityref]', [matters.number])]" }
-                                    ,new ChapterP4WStepAnswer {QNo = 6, GoToData= $"[SQL: UPDATE cm_caseitems set CompletionDate = GETDATE(), description = UPPER('[!Usr_ORSF_MT_Control.Complete_AsName]') where itemid = [currentstep.stepid]] [SQL: exec up_ORSF_CompleteStep [currentStep.stepid], '', 'Y']" }
-                                    ,new ChapterP4WStepAnswer {QNo = 7, GoToData= $"3 [[SQL: SELECT CASE WHEN ISNULL(Do_Not_Reschedule,'N') = 'Y' THEN 'SQL: exec up_ORSF_DeleteDueStep '''', [currentstep.stepid], ''{decodedChapter.Name}''' ELSE '' END FROM Usr_ORSF_MT_Control WHERE EntityRef = '[matters.entityref]' AND MatterNo = [matters.number]]]" }
-                                    ,new ChapterP4WStepAnswer {QNo = 8, GoToData= $"[SQL: SELECT CASE WHEN ISNULL('[!Usr_ORSF_MT_Control.Complete_AsName]','') <> '' THEN 6 ELSE 9 END]" }
-                                    ,new ChapterP4WStepAnswer {QNo = 9, GoToData= $"[SQL: exec up_ORSF_DeleteStep [currentstep.stepid]]" }
-                                    }
-                        };
+                            ChapterP4WStep = new ChapterP4WStepSchema
+                            {
+                                StepName = decodedChapter.StepName,
+                                P4WCaseTypeGroup = decodedChapter.P4WCaseTypeGroup,
+                                GadjITCaseTypeGroup = decodedChapter.CaseTypeGroup,
+                                GadjITCaseType = decodedChapter.CaseType,
+                                Smartflow = decodedChapter.Name,
+                                Questions = new List<ChapterP4WStepQuestion>{
+                                        new ChapterP4WStepQuestion {QNo = 1, QText= "HQ - Set Current Chapter Details" }
+                                        ,new ChapterP4WStepQuestion {QNo = 2, QText= "HQ - Show View" }
+                                        ,new ChapterP4WStepQuestion {QNo = 3, QText= "HQ - Run Required Steps" }
+                                        ,new ChapterP4WStepQuestion {QNo = 4, QText= "HQ - Update reschedule date" }
+                                        ,new ChapterP4WStepQuestion {QNo = 5, QText= "HQ - Reinsert this step with asname" }
+                                        ,new ChapterP4WStepQuestion {QNo = 6, QText= "HQ - Rename Step" }
+                                        ,new ChapterP4WStepQuestion {QNo = 7, QText= "HQ - Delete Previous Instances if Suppressed Step" }
+                                        ,new ChapterP4WStepQuestion {QNo = 8, QText= "HQ - Check if completion name exists" }
+                                        ,new ChapterP4WStepQuestion {QNo = 9, QText= "HQ - Delete Step" }
+                                        },
+                                Answers = new List<ChapterP4WStepAnswer>{
+                                        new ChapterP4WStepAnswer {QNo = 1, GoToData= $"2 [SQL: EXEC Up_ORSF_MoveDocsToAgendas '[matters.entityref]', [matters.number]] [SQL: EXEC up_ORSF_CreateTableEntries '[matters.entityref]', [matters.number]] [SQL: UPDATE Usr_ORSF_MT_Control SET Current_SF = '{decodedChapter.Name}', Current_Case_Type_Group = '{decodedChapter.CaseTypeGroup}', Current_Case_Type = '{decodedChapter.CaseType}', Default_Step = '{decodedChapter.StepName}', Date_Schedule_For = DATEADD(d, 7, getdate()), Steps_To_Run = '', Schedule_AsName = '{decodedChapter.StepName}|' + (SELECT CASE WHEN dbo.fn_ORSF_IsAllCap (Description) = 1 THEN '{decodedChapter.StepName}' + '|' + CONVERT(VARCHAR(20),ISNULL(Date_Schedule_For,DATEADD(d, 7, getdate())),103) ELSE Description + '|' + CONVERT(VARCHAR(20),ISNULL(s.DiaryDate, getdate()),103) END + '|' + '[matters.feeearnerref]' FROM Cm_CaseItems i INNER JOIN Cm_Steps s on s.ItemID = i.ItemID WHERE i.ItemID = [currentstep.stepid]), Complete_AsName = '' WHERE EntityRef = '[matters.entityref]' AND MatterNo = [matters.number]] [SQL: UPDATE Usr_ORSF_MT_Control SET Screen_Opened_Via_Step = 'Y' WHERE EntityRef = '[matters.entityref]' AND matterNo =[matters.number]]" }
+                                        ,new ChapterP4WStepAnswer {QNo = 2, GoToData= $"7 [VIEW: '{decodedChapter.SelectedView}' UPDATE=Yes]" }
+                                        ,new ChapterP4WStepAnswer {QNo = 3, GoToData= $"4 [TAKE: 'SF-Admin Save Items for Agenda Management' INSERT=END]  [SQL: EXEC up_ORSF_GetStepsFromList '[matters.entityref]', [matters.number]] [SQL: UPDATE Usr_ORSF_MT_Control SET Screen_Opened_Via_Step = null WHERE EntityRef='[matters.entityref]' AND matterNo=[matters.number]]" }
+                                        ,new ChapterP4WStepAnswer {QNo = 4, GoToData= $"5 [SQL: UPDATE Usr_ORSF_MT_Control SET Date_Schedule_For = isnull(Date_Schedule_For, Cast(getdate() as Date)) WHERE EntityRef = '[matters.entityref]' AND MatterNo = [matters.number]]" }
+                                        ,new ChapterP4WStepAnswer {QNo = 5, GoToData= $"8 [SQL: SELECT ScheduleCommand FROM fn_ORSF_GetScheduleItems('[matters.entityref]', [matters.number])]" }
+                                        ,new ChapterP4WStepAnswer {QNo = 6, GoToData= $"[SQL: UPDATE cm_caseitems set CompletionDate = GETDATE(), description = UPPER('[!Usr_ORSF_MT_Control.Complete_AsName]') where itemid = [currentstep.stepid]] [SQL: exec up_ORSF_CompleteStep [currentStep.stepid], '', 'Y']" }
+                                        ,new ChapterP4WStepAnswer {QNo = 7, GoToData= $"3 [[SQL: SELECT CASE WHEN ISNULL(Do_Not_Reschedule,'N') = 'Y' THEN 'SQL: exec up_ORSF_DeleteDueStep '''', [currentstep.stepid], ''{decodedChapter.Name}''' ELSE '' END FROM Usr_ORSF_MT_Control WHERE EntityRef = '[matters.entityref]' AND MatterNo = [matters.number]]]" }
+                                        ,new ChapterP4WStepAnswer {QNo = 8, GoToData= $"[SQL: SELECT CASE WHEN ISNULL('[!Usr_ORSF_MT_Control.Complete_AsName]','') <> '' THEN 6 ELSE 9 END]" }
+                                        ,new ChapterP4WStepAnswer {QNo = 9, GoToData= $"[SQL: exec up_ORSF_DeleteStep [currentstep.stepid]]" }
+                                        }
+                            };
+                        }
+
+                        stepJSON = JsonConvert.SerializeObject(ChapterP4WStep);
+
+                        
+
+                        creationSuccess = await chapterManagementService.CreateStep(new VmChapterP4WStepSchemaJSONObject { StepSchemaJSON = stepJSON });
+
+                        if (!creationSuccess)
+                        {
+                            overAllCreationSuccess = false;
+                        }
+
+                        creationCount += 1;
+
                     }
-
-                    stepJSON = JsonConvert.SerializeObject(ChapterP4WStep);
-
-                    
-
-                    creationSuccess = await chapterManagementService.CreateStep(new VmChapterP4WStepSchemaJSONObject { StepSchemaJSON = stepJSON });
-
-                    if (!creationSuccess)
-                    {
-                        overAllCreationSuccess = false;
-                    }
-
-                    creationCount += 1;
 
                 }
 
+                //Refresh the global step that saves "Completed" docs into the relevant Agendas
+                //This step will be called by each Smartflow
+                ChapterP4WStep = new ChapterP4WStepSchema
+                {
+                    StepName = "SF-Admin Save Items for Agenda Management",
+                    P4WCaseTypeGroup = "Global Documents",
+                    GadjITCaseTypeGroup = "Global",
+                    GadjITCaseType = "Global Documents",
+                    Smartflow = "Admin Save Items for Agenda Management",
+                    Questions = new List<ChapterP4WStepQuestion>{
+                            new ChapterP4WStepQuestion {QNo = 1, QText= "HQ - Save Items for Agenda Management" }
+                            ,new ChapterP4WStepQuestion {QNo = 2, QText= "HQ - Delete Me" }
+                            },
+                    Answers = new List<ChapterP4WStepAnswer>{
+                            new ChapterP4WStepAnswer {QNo = 1, GoToData= $"2 [SQL: exec up_ORSF_Agenda_Control '[matters.entityref]', [matters.number], [currentstep.stepid] ]" }
+                            ,new ChapterP4WStepAnswer {QNo = 2, GoToData= $"[SQL: EXEC dbo.up_ORSF_DeleteStep [currentstep.stepid]]" }
+                            }
+                };
+
+                stepJSON = JsonConvert.SerializeObject(ChapterP4WStep);
+
+                creationSuccess = await chapterManagementService.CreateStep(new VmChapterP4WStepSchemaJSONObject { StepSchemaJSON = stepJSON });
+
+                if (!creationSuccess)
+                {
+                    overAllCreationSuccess = false;
+                }
+
+                var parameters = new ModalParameters();
+                var message = overAllCreationSuccess ? "Creation Successfull" : "Creation Unsuccessfull";
+                parameters.Add("InfoText", message);
+
+                var options = new ModalOptions()
+                {
+                    Class = "blazored-custom-modal modal-chapter-chapter"
+                };
+                string title = $"Updated {creationCount} Steps";
+                Modal.Show<ModalInfo>(title, parameters, options);
             }
-
-
-            ChapterP4WStep = new ChapterP4WStepSchema
+            catch (Exception e)
             {
-                StepName = "SF-Admin Save Items for Agenda Management",
-                P4WCaseTypeGroup = "Global Documents",
-                GadjITCaseTypeGroup = "Global",
-                GadjITCaseType = "Global Documents",
-                Smartflow = "Admin Save Items for Agenda Management",
-                Questions = new List<ChapterP4WStepQuestion>{
-                        new ChapterP4WStepQuestion {QNo = 1, QText= "HQ - Save Items for Agenda Management" }
-                        ,new ChapterP4WStepQuestion {QNo = 2, QText= "HQ - Delete Me" }
-                        },
-                Answers = new List<ChapterP4WStepAnswer>{
-                        new ChapterP4WStepAnswer {QNo = 1, GoToData= $"2 [SQL: exec up_ORSF_Agenda_Control '[matters.entityref]', [matters.number], [currentstep.stepid] ]" }
-                        ,new ChapterP4WStepAnswer {QNo = 2, GoToData= $"[SQL: EXEC dbo.up_ORSF_DeleteStep [currentstep.stepid]]" }
-                        }
-            };
 
-            stepJSON = JsonConvert.SerializeObject(ChapterP4WStep);
-
-            creationSuccess = await chapterManagementService.CreateStep(new VmChapterP4WStepSchemaJSONObject { StepSchemaJSON = stepJSON });
-
-            if (!creationSuccess)
-            {
-                overAllCreationSuccess = false;
+                using (LogContext.PushProperty("SourceSystem", UserSession.selectedSystem))
+                using (LogContext.PushProperty("SourceCompanyId", UserSession.Company.Id))
+                using (LogContext.PushProperty("SourceUserId", UserSession.User.Id))
+                using (LogContext.PushProperty("SourceContext", nameof(ChapterList)))
+                {
+                    Logger.LogError(e, "Error: Creating/Updating all P4W Smartflow steps");
+                }
             }
-
-            var parameters = new ModalParameters();
-            var message = overAllCreationSuccess ? "Creation Successfull" : "Creation Unsuccessfull";
-            parameters.Add("InfoText", message);
-
-            var options = new ModalOptions()
-            {
-                Class = "blazored-custom-modal modal-chapter-chapter"
-            };
-            string title = $"Updated {creationCount} Steps";
-            Modal.Show<ModalInfo>(title, parameters, options);
 
         }
 
@@ -875,10 +1080,10 @@ namespace GadjIT_App.Pages.Chapters
                     using (LogContext.PushProperty("SourceUserId", UserSession.User.Id))
                     using (LogContext.PushProperty("SourceContext", nameof(ChapterList)))
                     {
-                        logger?.LogError(e, "Error retrieving document list");
+                        Logger.LogError(e, "Error: Getting document list after Smartflow selected for edit");
                     }
 
-                    DisplaySmartflowLoadError(e.Message);
+                    //DisplaySmartflowLoadError(e.Message);
                     return;
                 }
 
@@ -926,10 +1131,10 @@ namespace GadjIT_App.Pages.Chapters
                 using (LogContext.PushProperty("SourceUserId", UserSession.User.Id))
                 using (LogContext.PushProperty("SourceContext", nameof(ChapterList)))
                 {
-                    logger?.LogError(ex, "Error loading chapter");
+                    Logger.LogError(ex, "Error: Loading selected Smartflow");
                 }
 
-                DisplaySmartflowLoadError(ex.Message);
+                //DisplaySmartflowLoadError(ex.Message);
             }
 
         }
@@ -951,34 +1156,83 @@ namespace GadjIT_App.Pages.Chapters
 
         private async void RefreshDocList()
         {
-            dropDownChapterList = await chapterManagementService.GetDocumentList(selectedChapter.CaseType);
-            dropDownChapterList = dropDownChapterList.Where(D => !(D.Name is null)).ToList();
-            StateHasChanged();
+            try
+            {
+                dropDownChapterList = await chapterManagementService.GetDocumentList(selectedChapter.CaseType);
+                dropDownChapterList = dropDownChapterList.Where(D => !(D.Name is null)).ToList();
+                StateHasChanged();
+            }
+            catch (Exception ex)
+            {
+                using (LogContext.PushProperty("SourceSystem", UserSession.selectedSystem))
+                using (LogContext.PushProperty("SourceCompanyId", UserSession.Company.Id))
+                using (LogContext.PushProperty("SourceUserId", UserSession.User.Id))
+                using (LogContext.PushProperty("SourceContext", nameof(ChapterList)))
+                {
+                    Logger.LogError(ex, "Error: Refreshing the document list");
+                }
+            }
         }
 
+        /// <summary>
+        /// TODO: Need to work out what this method does
+        /// </summary>
         private void SetSmartflowFilePath()
         {
-            ChapterFileOption = new ChapterFileOptions
+            try
             {
-                Company = UserSession.Company.CompanyName,
-                CaseTypeGroup = selectedChapter.CaseTypeGroup,
-                CaseType = selectedChapter.CaseType,
-                Chapter = selectedChapter.Name
-            };
+                ChapterFileOption = new ChapterFileOptions
+                {
+                    Company = UserSession.Company.CompanyName,
+                    CaseTypeGroup = selectedChapter.CaseTypeGroup,
+                    CaseType = selectedChapter.CaseType,
+                    Chapter = selectedChapter.Name
+                };
 
-            ChapterFileUpload.SetChapterOptions(ChapterFileOption);
+                ChapterFileUpload.SetChapterOptions(ChapterFileOption);
+            }
+            catch (Exception ex)
+            {
+                using (LogContext.PushProperty("SourceSystem", UserSession.selectedSystem))
+                using (LogContext.PushProperty("SourceCompanyId", UserSession.Company.Id))
+                using (LogContext.PushProperty("SourceUserId", UserSession.User.Id))
+                using (LogContext.PushProperty("SourceContext", nameof(ChapterList)))
+                {
+                    Logger.LogError(ex, "Error: Setting Smartflow file path");
+                }
+
+                //DisplaySmartflowLoadError(ex.Message);
+            }
         }
 
+        /// <summary>
+        /// Saves the Smartflow main details after changes to the Home tab
+        /// </summary>
+        /// <returns></returns>
         private async void SaveChapterDetails()
         {
-            SelectedChapterObject.SmartflowName = selectedChapter.Name;
+            try
+            {
+                SelectedChapterObject.SmartflowName = selectedChapter.Name;
 
-            SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(selectedChapter);
-            await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
+                SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(selectedChapter);
+                await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
 
 
-            //keep track of time last updated ready for comparison by other sessions checking for updates
-            appChapterState.SetLastUpdated(UserSession, selectedChapter);
+                //keep track of time last updated ready for comparison by other sessions checking for updates
+                appChapterState.SetLastUpdated(UserSession, selectedChapter);
+
+            }
+            catch (Exception ex)
+            {
+                using (LogContext.PushProperty("SourceSystem", UserSession.selectedSystem))
+                using (LogContext.PushProperty("SourceCompanyId", UserSession.Company.Id))
+                using (LogContext.PushProperty("SourceUserId", UserSession.User.Id))
+                using (LogContext.PushProperty("SourceContext", nameof(ChapterList)))
+                {
+                    Logger.LogError(ex, "Error: Saving Smartflow base details");
+                }
+            }
 
             await RefreshChapterItems("All");
             await InvokeAsync(() =>
@@ -1010,6 +1264,22 @@ namespace GadjIT_App.Pages.Chapters
                                         .Where(C => C.SmartflowObject.CaseTypeGroup == selectedChapter.CaseTypeGroup)
                                         .OrderBy(C => C.SmartflowObject.SeqNo)
                                         .ToList();
+            
+
+
+                if (!(selectedChapter.Name is null) & selectedChapter.Name != "")
+                {
+                    partnerCaseTypeGroups = await partnerAccessService.GetPartnerCaseTypeGroups();
+                    ListP4WViews = await partnerAccessService.GetPartnerViews();
+
+                    SelectChapter(lstSelectedChapters
+                                        .Where(C => C.SmartflowObject.CaseTypeGroup == selectedChapter.CaseTypeGroup)
+                                        .Where(C => C.SmartflowObject.CaseType == selectedChapter.CaseType)
+                                        .Where(C => C.SmartflowObject.SmartflowName == selectedChapter.Name)
+                                        .Select(C => C.SmartflowObject)
+                                        .SingleOrDefault());
+                }
+
             }
             catch(Exception e)
             {
@@ -1018,22 +1288,8 @@ namespace GadjIT_App.Pages.Chapters
                 using (LogContext.PushProperty("SourceUserId", UserSession.User.Id))
                 using (LogContext.PushProperty("SourceContext", nameof(ChapterList)))
                 {
-                    logger?.LogError(e, "Error retrieving smartflow records");
+                    Logger.LogError(e, "Error: Refreshing Smartflow list");
                 }
-            }
-
-
-            if (!(selectedChapter.Name is null) & selectedChapter.Name != "")
-            {
-                partnerCaseTypeGroups = await partnerAccessService.GetPartnerCaseTypeGroups();
-                ListP4WViews = await partnerAccessService.GetPartnerViews();
-
-                SelectChapter(lstSelectedChapters
-                                    .Where(C => C.SmartflowObject.CaseTypeGroup == selectedChapter.CaseTypeGroup)
-                                    .Where(C => C.SmartflowObject.CaseType == selectedChapter.CaseType)
-                                    .Where(C => C.SmartflowObject.SmartflowName == selectedChapter.Name)
-                                    .Select(C => C.SmartflowObject)
-                                    .SingleOrDefault());
             }
 
             ListChapterLoaded = true;
@@ -1163,7 +1419,7 @@ namespace GadjIT_App.Pages.Chapters
                 using (LogContext.PushProperty("SourceUserId", UserSession.User.Id))
                 using (LogContext.PushProperty("SourceContext", nameof(ChapterList)))
                 {
-                    logger?.LogError(e, "Error refreshing Smartflow List");
+                    Logger.LogError(e, "Error: Refreshing Smartflow tab items");
                 }
 
                 return false;
@@ -1176,12 +1432,14 @@ namespace GadjIT_App.Pages.Chapters
 
         private async void ToggleComparison()
         {
+           
             compareSystems = !compareSystems;
 
             if (compareSystems)
             {
                 await CompareSelectedChapterToAltSystem();
             }
+            
         }
 
 
@@ -1222,86 +1480,99 @@ namespace GadjIT_App.Pages.Chapters
         private async Task<bool> CompareSelectedChapterToAltSystem()
         {
 
-            var test = await RefreshChapterItems(navDisplay);
-
-            await RefreshAltSystemChaptersList();
-
-            AltChapterObject = lstAltSystemChapters
-                                    .Where(A => A.SmartflowObject.SmartflowName == SelectedChapterObject.SmartflowName)
-                                    .Where(A => A.SmartflowObject.CaseType == SelectedChapterObject.CaseType)
-                                    .Where(A => A.SmartflowObject.CaseTypeGroup == SelectedChapterObject.CaseTypeGroup)
-                                    .Select(A => A.SmartflowObject)
-                                    .SingleOrDefault();
-
-            CreateNewSmartflow = false;
-
-            if (!(AltChapterObject is null))
+            try
             {
-                altChapter = JsonConvert.DeserializeObject<VmChapter>(AltChapterObject.SmartflowData);
+                var test = await RefreshChapterItems(navDisplay);
 
-                var cItems = altChapter.Items;
+                await RefreshAltSystemChaptersList();
 
+                AltChapterObject = lstAltSystemChapters
+                                        .Where(A => A.SmartflowObject.SmartflowName == SelectedChapterObject.SmartflowName)
+                                        .Where(A => A.SmartflowObject.CaseType == SelectedChapterObject.CaseType)
+                                        .Where(A => A.SmartflowObject.CaseTypeGroup == SelectedChapterObject.CaseTypeGroup)
+                                        .Select(A => A.SmartflowObject)
+                                        .SingleOrDefault();
 
-                lstAltSystemChapterItems = cItems.Select(T => new VmUsrOrDefChapterManagement { ChapterObject = T, Compared = false }).ToList();
+                CreateNewSmartflow = false;
 
-                //Compare header items
-                CompareChapterToAltSytem();
-
-                foreach (var item in lstAgendas)
+                if (!(AltChapterObject is null))
                 {
-                    CompareChapterItemsToAltSytem(item);
-                }
+                    altChapter = JsonConvert.DeserializeObject<VmChapter>(AltChapterObject.SmartflowData);
 
-                foreach (var item in lstStatus)
+                    var cItems = altChapter.Items;
+
+
+                    lstAltSystemChapterItems = cItems.Select(T => new VmUsrOrDefChapterManagement { ChapterObject = T, Compared = false }).ToList();
+
+                    //Compare header items
+                    CompareChapterToAltSytem();
+
+                    foreach (var item in lstAgendas)
+                    {
+                        CompareChapterItemsToAltSytem(item);
+                    }
+
+                    foreach (var item in lstStatus)
+                    {
+                        CompareChapterItemsToAltSytem(item);
+                    }
+
+                    foreach (var item in lstDocs)
+                    {
+                        CompareChapterItemsToAltSytem(item);
+                    }
+
+                    var fItems = altChapter.Fees is null ? new List<Fee>() : altChapter.Fees;
+
+                    lstAltSystemFeeItems = fItems.Select(T => new VmFee { FeeObject = T, Compared = false }).ToList();
+
+                    foreach (var item in lstFees)
+                    {
+                        CompareFeeItemsToAltSytem(item);
+                    }
+
+                    var dItems = altChapter.DataViews is null ? new List<DataViews>() : altChapter.DataViews;
+
+                    lstAltSystemDataViews = dItems.Select(T => new VmDataViews { DataView = T, Compared = false }).ToList();
+
+                    foreach (var item in ListVmDataViews)
+                    {
+                        CompareDataViewsToAltSytem(item);
+                    }
+
+                    var tItems = altChapter.TickerMessages is null ? new List<TickerMessages>() : altChapter.TickerMessages;
+
+                    lstAltSystemTickerMessages = tItems.Select(T => new VmTickerMessages { Message = T, Compared = false }).ToList();
+
+                    foreach (var item in ListVmTickerMessages)
+                    {
+                        CompareTickerMessagesToAltSytem(item);
+                    }
+
+                }
+                else
                 {
-                    CompareChapterItemsToAltSytem(item);
+                    CreateNewSmartflow = true;
+
+                    ListVmTickerMessages = ListVmTickerMessages.Select(T => { T.ComparisonIcon = "times"; T.ComparisonResult = "No match"; return T; }).ToList();
+                    ListVmDataViews = ListVmDataViews.Select(T => { T.ComparisonIcon = "times"; T.ComparisonResult = "No match"; return T; }).ToList();
+                    lstFees = lstFees.Select(T => { T.ComparisonIcon = "times"; T.ComparisonResult = "No match"; return T; }).ToList();
+                    lstDocs = lstDocs.Select(T => { T.ComparisonIcon = "times"; T.ComparisonResult = "No match"; return T; }).ToList();
+                    lstStatus = lstStatus.Select(T => { T.ComparisonIcon = "times"; T.ComparisonResult = "No match"; return T; }).ToList();
+                    lstAgendas = lstAgendas.Select(T => { T.ComparisonIcon = "times"; T.ComparisonResult = "No match"; return T; }).ToList();
                 }
-
-                foreach (var item in lstDocs)
-                {
-                    CompareChapterItemsToAltSytem(item);
-                }
-
-                var fItems = altChapter.Fees is null ? new List<Fee>() : altChapter.Fees;
-
-                lstAltSystemFeeItems = fItems.Select(T => new VmFee { FeeObject = T, Compared = false }).ToList();
-
-                foreach (var item in lstFees)
-                {
-                    CompareFeeItemsToAltSytem(item);
-                }
-
-                var dItems = altChapter.DataViews is null ? new List<DataViews>() : altChapter.DataViews;
-
-                lstAltSystemDataViews = dItems.Select(T => new VmDataViews { DataView = T, Compared = false }).ToList();
-
-                foreach (var item in ListVmDataViews)
-                {
-                    CompareDataViewsToAltSytem(item);
-                }
-
-                var tItems = altChapter.TickerMessages is null ? new List<TickerMessages>() : altChapter.TickerMessages;
-
-                lstAltSystemTickerMessages = tItems.Select(T => new VmTickerMessages { Message = T, Compared = false }).ToList();
-
-                foreach (var item in ListVmTickerMessages)
-                {
-                    CompareTickerMessagesToAltSytem(item);
-                }
-
             }
-            else
+            catch(Exception e)
             {
-                CreateNewSmartflow = true;
-
-                ListVmTickerMessages = ListVmTickerMessages.Select(T => { T.ComparisonIcon = "times"; T.ComparisonResult = "No match"; return T; }).ToList();
-                ListVmDataViews = ListVmDataViews.Select(T => { T.ComparisonIcon = "times"; T.ComparisonResult = "No match"; return T; }).ToList();
-                lstFees = lstFees.Select(T => { T.ComparisonIcon = "times"; T.ComparisonResult = "No match"; return T; }).ToList();
-                lstDocs = lstDocs.Select(T => { T.ComparisonIcon = "times"; T.ComparisonResult = "No match"; return T; }).ToList();
-                lstStatus = lstStatus.Select(T => { T.ComparisonIcon = "times"; T.ComparisonResult = "No match"; return T; }).ToList();
-                lstAgendas = lstAgendas.Select(T => { T.ComparisonIcon = "times"; T.ComparisonResult = "No match"; return T; }).ToList();
+                using (LogContext.PushProperty("SourceSystem", UserSession.selectedSystem))
+                using (LogContext.PushProperty("SourceCompanyId", UserSession.Company.Id))
+                using (LogContext.PushProperty("SourceUserId", UserSession.User.Id))
+                using (LogContext.PushProperty("SourceContext", nameof(ChapterList)))
+                {
+                    Logger.LogError(e, "Error: Comparing systems");
+                }
+                return false;
             }
-
 
             await InvokeAsync(() =>
             {
@@ -1332,138 +1603,154 @@ namespace GadjIT_App.Pages.Chapters
 
         private async Task<bool> RefreshCompararisonAllChapters()
         {
-            if (compareSystems)
+            try
             {
-                await RefreshAltSystemChaptersList();
-
-                /*
-                 * for every chapter get list of chapter items from both current system and alt system
-                 * if any result returns false
-                 * 
-                 * 
-                 */
-                if(!(lstAltSystemChapters is null) && lstAltSystemChapters.Count > 0)
+                if (compareSystems)
                 {
-                    foreach (var chapter in lstSelectedChapters)
+                    await RefreshAltSystemChaptersList();
+
+                    /*
+                    * for every chapter get list of chapter items from both current system and alt system
+                    * if any result returns false
+                    * 
+                    * 
+                    */
+                    if(!(lstAltSystemChapters is null) && lstAltSystemChapters.Count > 0)
                     {
-                        var chapterItems = JsonConvert.DeserializeObject<VmChapter>(chapter.SmartflowObject.SmartflowData);
-
-                        AltChapterObject = lstAltSystemChapters
-                                            .Where(A => A.SmartflowObject.SmartflowName == chapter.SmartflowObject.SmartflowName)
-                                            .Where(A => A.SmartflowObject.CaseType == chapter.SmartflowObject.CaseType)
-                                            .Where(A => A.SmartflowObject.CaseTypeGroup == chapter.SmartflowObject.CaseTypeGroup)
-                                            .Select(C => C.SmartflowObject)
-                                            .SingleOrDefault();
-
-                        if (AltChapterObject is null)
+                        foreach (var chapter in lstSelectedChapters)
                         {
-                            chapter.ComparisonResult = "No match";
-                            chapter.ComparisonIcon = "times";
-                        }
-                        else
-                        {
-                            altChapter = JsonConvert.DeserializeObject<VmChapter>(AltChapterObject.SmartflowData);
-                            
-                            
-                            if (!(altChapter.Items is null)!)
+                            var chapterItems = JsonConvert.DeserializeObject<VmChapter>(chapter.SmartflowObject.SmartflowData);
+
+                            AltChapterObject = lstAltSystemChapters
+                                                .Where(A => A.SmartflowObject.SmartflowName == chapter.SmartflowObject.SmartflowName)
+                                                .Where(A => A.SmartflowObject.CaseType == chapter.SmartflowObject.CaseType)
+                                                .Where(A => A.SmartflowObject.CaseTypeGroup == chapter.SmartflowObject.CaseTypeGroup)
+                                                .Select(C => C.SmartflowObject)
+                                                .SingleOrDefault();
+
+                            if (AltChapterObject is null)
                             {
-                                lstAltSystemChapterItems = altChapter.Items.Select(T => new VmUsrOrDefChapterManagement { ChapterObject = T }).ToList();
-
-                                var vmChapterItems = chapterItems.Items is null 
-                                                    ? new List<VmUsrOrDefChapterManagement>() 
-                                                    : chapterItems.Items.Select(C => new VmUsrOrDefChapterManagement { ChapterObject = C }).ToList();
-
-                                foreach (var item in vmChapterItems)
-                                {
-                                    CompareChapterItemsToAltSytem(item);
-                                }
-
-
-                                var fItems = altChapter.Fees is null ? new List<Fee>() : altChapter.Fees;
-
-                                lstAltSystemFeeItems = fItems.Select(T => new VmFee { FeeObject = T, Compared = false }).ToList();
-
-                                lstFees = chapterItems.Fees is null
-                                                    ? new List<VmFee>()
-                                                    : chapterItems.Fees.Select(C => new VmFee { FeeObject = C }).ToList();
-
-                                foreach (var item in lstFees)
-                                {
-                                    CompareFeeItemsToAltSytem(item);
-                                }
-
-                                var dItems = altChapter.DataViews is null ? new List<DataViews>() : altChapter.DataViews;
-
-                                lstAltSystemDataViews = dItems.Select(T => new VmDataViews { DataView = T, Compared = false }).ToList();
-
-                                ListVmDataViews = chapterItems.DataViews is null
-                                                    ? new List<VmDataViews>()
-                                                    : chapterItems.DataViews.Select(C => new VmDataViews { DataView = C }).ToList();
-
-                                foreach (var item in ListVmDataViews)
-                                {
-                                    CompareDataViewsToAltSytem(item);
-                                }
-
-                                var tItems = altChapter.TickerMessages is null ? new List<TickerMessages>() : altChapter.TickerMessages;
-
-                                lstAltSystemTickerMessages = tItems.Select(T => new VmTickerMessages { Message = T, Compared = false }).ToList();
-
-                                ListVmTickerMessages = chapterItems.TickerMessages is null
-                                                    ? new List<VmTickerMessages>()
-                                                    : chapterItems.TickerMessages.Select(C => new VmTickerMessages { Message = C }).ToList();
-
-                                foreach (var item in ListVmTickerMessages)
-                                {
-                                    CompareTickerMessagesToAltSytem(item);
-                                }
-
-                                if (vmChapterItems.Where(C => C.ComparisonResult == "No match" | C.ComparisonResult == "Partial match").Count() > 0 | vmChapterItems.Count() != lstAltSystemChapterItems.Count())
-                                {
-                                    chapter.ComparisonResult = "Partial match";
-                                    chapter.ComparisonIcon = "exclamation";
-                                }
-                                else if (lstFees.Where(C => C.ComparisonResult == "No match" | C.ComparisonResult == "Partial match").Count() > 0 | lstFees.Count() != lstAltSystemFeeItems.Count())
-                                {
-                                    chapter.ComparisonResult = "Partial match";
-                                    chapter.ComparisonIcon = "exclamation";
-                                }
-                                else if (ListVmDataViews.Where(C => C.ComparisonResult == "No match" | C.ComparisonResult == "Partial match").Count() > 0 | ListVmDataViews.Count() != lstAltSystemDataViews.Count())
-                                {
-                                    chapter.ComparisonResult = "Partial match";
-                                    chapter.ComparisonIcon = "exclamation";
-                                }
-                                else if (ListVmTickerMessages.Where(C => C.ComparisonResult == "No match" | C.ComparisonResult == "Partial match").Count() > 0 | ListVmTickerMessages.Count() != lstAltSystemTickerMessages.Count())
-                                {
-                                    chapter.ComparisonResult = "Partial match";
-                                    chapter.ComparisonIcon = "exclamation";
-                                }
-                                else
-                                {
-                                    chapter.ComparisonResult = "Exact match";
-                                    chapter.ComparisonIcon = "check";
-                                }
-
+                                chapter.ComparisonResult = "No match";
+                                chapter.ComparisonIcon = "times";
                             }
                             else
                             {
-                                chapter.ComparisonResult = "Partial match";
-                                chapter.ComparisonIcon = "exclamation";
+                                altChapter = JsonConvert.DeserializeObject<VmChapter>(AltChapterObject.SmartflowData);
+                                
+                                
+                                if (!(altChapter.Items is null)!)
+                                {
+                                    lstAltSystemChapterItems = altChapter.Items.Select(T => new VmUsrOrDefChapterManagement { ChapterObject = T }).ToList();
+
+                                    var vmChapterItems = chapterItems.Items is null 
+                                                        ? new List<VmUsrOrDefChapterManagement>() 
+                                                        : chapterItems.Items.Select(C => new VmUsrOrDefChapterManagement { ChapterObject = C }).ToList();
+
+                                    foreach (var item in vmChapterItems)
+                                    {
+                                        CompareChapterItemsToAltSytem(item);
+                                    }
+
+
+                                    var fItems = altChapter.Fees is null ? new List<Fee>() : altChapter.Fees;
+
+                                    lstAltSystemFeeItems = fItems.Select(T => new VmFee { FeeObject = T, Compared = false }).ToList();
+
+                                    lstFees = chapterItems.Fees is null
+                                                        ? new List<VmFee>()
+                                                        : chapterItems.Fees.Select(C => new VmFee { FeeObject = C }).ToList();
+
+                                    foreach (var item in lstFees)
+                                    {
+                                        CompareFeeItemsToAltSytem(item);
+                                    }
+
+                                    var dItems = altChapter.DataViews is null ? new List<DataViews>() : altChapter.DataViews;
+
+                                    lstAltSystemDataViews = dItems.Select(T => new VmDataViews { DataView = T, Compared = false }).ToList();
+
+                                    ListVmDataViews = chapterItems.DataViews is null
+                                                        ? new List<VmDataViews>()
+                                                        : chapterItems.DataViews.Select(C => new VmDataViews { DataView = C }).ToList();
+
+                                    foreach (var item in ListVmDataViews)
+                                    {
+                                        CompareDataViewsToAltSytem(item);
+                                    }
+
+                                    var tItems = altChapter.TickerMessages is null ? new List<TickerMessages>() : altChapter.TickerMessages;
+
+                                    lstAltSystemTickerMessages = tItems.Select(T => new VmTickerMessages { Message = T, Compared = false }).ToList();
+
+                                    ListVmTickerMessages = chapterItems.TickerMessages is null
+                                                        ? new List<VmTickerMessages>()
+                                                        : chapterItems.TickerMessages.Select(C => new VmTickerMessages { Message = C }).ToList();
+
+                                    foreach (var item in ListVmTickerMessages)
+                                    {
+                                        CompareTickerMessagesToAltSytem(item);
+                                    }
+
+                                    if (vmChapterItems.Where(C => C.ComparisonResult == "No match" | C.ComparisonResult == "Partial match").Count() > 0 | vmChapterItems.Count() != lstAltSystemChapterItems.Count())
+                                    {
+                                        chapter.ComparisonResult = "Partial match";
+                                        chapter.ComparisonIcon = "exclamation";
+                                    }
+                                    else if (lstFees.Where(C => C.ComparisonResult == "No match" | C.ComparisonResult == "Partial match").Count() > 0 | lstFees.Count() != lstAltSystemFeeItems.Count())
+                                    {
+                                        chapter.ComparisonResult = "Partial match";
+                                        chapter.ComparisonIcon = "exclamation";
+                                    }
+                                    else if (ListVmDataViews.Where(C => C.ComparisonResult == "No match" | C.ComparisonResult == "Partial match").Count() > 0 | ListVmDataViews.Count() != lstAltSystemDataViews.Count())
+                                    {
+                                        chapter.ComparisonResult = "Partial match";
+                                        chapter.ComparisonIcon = "exclamation";
+                                    }
+                                    else if (ListVmTickerMessages.Where(C => C.ComparisonResult == "No match" | C.ComparisonResult == "Partial match").Count() > 0 | ListVmTickerMessages.Count() != lstAltSystemTickerMessages.Count())
+                                    {
+                                        chapter.ComparisonResult = "Partial match";
+                                        chapter.ComparisonIcon = "exclamation";
+                                    }
+                                    else
+                                    {
+                                        chapter.ComparisonResult = "Exact match";
+                                        chapter.ComparisonIcon = "check";
+                                    }
+
+                                }
+                                else
+                                {
+                                    chapter.ComparisonResult = "Partial match";
+                                    chapter.ComparisonIcon = "exclamation";
+                                }
+
+
+                                
+                                
                             }
-
-
-                            
-                            
                         }
                     }
+                    else
+                    {
+                        lstSelectedChapters.Select(T => { T.ComparisonIcon = "times"; T.ComparisonResult = "No match"; return T; }).ToList();
+                    }
+
+                
                 }
-                else
+            }
+            catch(Exception e)
+            {
+                using (LogContext.PushProperty("SourceSystem", UserSession.selectedSystem))
+                using (LogContext.PushProperty("SourceCompanyId", UserSession.Company.Id))
+                using (LogContext.PushProperty("SourceUserId", UserSession.User.Id))
+                using (LogContext.PushProperty("SourceContext", nameof(ChapterList)))
                 {
-                    lstSelectedChapters.Select(T => { T.ComparisonIcon = "times"; T.ComparisonResult = "No match"; return T; }).ToList();
+                    Logger.LogError(e, "Error: Comparing all Smartflows from current listing");
                 }
 
-               
+                return false;
             }
+
             return true;
         }
 
@@ -1948,7 +2235,7 @@ namespace GadjIT_App.Pages.Chapters
                 using (LogContext.PushProperty("SourceUserId", UserSession.User.Id))
                 using (LogContext.PushProperty("SourceContext", nameof(ChapterList)))
                 {
-                    logger?.LogError(e, $"Error moving smartflow : {selectobject.SeqNo}");
+                    Logger.LogError(e, $"Error: moving smartflow : {selectobject.SeqNo}");
                 }
             }
 
@@ -2254,7 +2541,7 @@ namespace GadjIT_App.Pages.Chapters
                 using (LogContext.PushProperty("SourceUserId", UserSession.User.Id))
                 using (LogContext.PushProperty("SourceContext", nameof(ChapterList)))
                 {
-                    logger?.LogError(e, "Error correcting smartflow seq numbers");
+                    Logger.LogError(e, "Error: Correcting Smartflow seq numbers");
                 }
             }
 
@@ -3961,105 +4248,7 @@ namespace GadjIT_App.Pages.Chapters
 
         }
 
-        private async void CreateStep()
-        {
-            if (selectedChapter.P4WCaseTypeGroup == "Entity Documents")
-            {
-                ChapterP4WStep = new ChapterP4WStepSchema
-                {
-                    StepName = selectedChapter.StepName,
-                    P4WCaseTypeGroup = selectedChapter.P4WCaseTypeGroup,
-                    GadjITCaseTypeGroup = selectedChapter.CaseTypeGroup,
-                    GadjITCaseType = selectedChapter.CaseType,
-                    Smartflow = selectedChapter.Name,
-                    Questions = new List<ChapterP4WStepQuestion>{
-                                    new ChapterP4WStepQuestion {QNo = 1, QText= "HQ - Set Current Chapter Details" }
-                                    ,new ChapterP4WStepQuestion {QNo = 2, QText= "HQ - Show View" }
-                                    ,new ChapterP4WStepQuestion {QNo = 3, QText= "HQ - Run Required Steps" }
-                                    ,new ChapterP4WStepQuestion {QNo = 4, QText= "HQ - Update reschedule date" }
-                                    ,new ChapterP4WStepQuestion {QNo = 5, QText= "HQ - Reinsert this step with asname" }
-                                    ,new ChapterP4WStepQuestion {QNo = 6, QText= "HQ - Rename Step" }
-                                    ,new ChapterP4WStepQuestion {QNo = 7, QText= "HQ - Delete Previous Instances if Suppressed Step" }
-                                    ,new ChapterP4WStepQuestion {QNo = 8, QText= "HQ - Check if completion name exists" }
-                                    ,new ChapterP4WStepQuestion {QNo = 9, QText= "HQ - Delete Step" }
-                                    },
-                    Answers = new List<ChapterP4WStepAnswer>{
-                                     new ChapterP4WStepAnswer {QNo = 1, GoToData= $"2 [SQL: EXEC Up_ORSF_MoveDocsToAgendas '[entity.code]', 0] [SQL: EXEC up_ORSF_CreateTableEntries '[entity.code]', 0] [SQL: UPDATE Usr_ORSF_ENT_Control SET Current_SF = '{selectedChapter.Name}', Current_Case_Type_Group = '{selectedChapter.CaseTypeGroup}', Current_Case_Type = '{selectedChapter.CaseType}', Default_Step = '{selectedChapter.StepName}', Date_Schedule_For = DATEADD(d, 7, getdate()), Steps_To_Run = '', Schedule_AsName = '{selectedChapter.StepName}|' + (SELECT CASE WHEN dbo.fn_ORSF_IsAllCap (Description) = 1 THEN '{selectedChapter.StepName}' + '|' + CONVERT(VARCHAR(20),ISNULL(Date_Schedule_For,DATEADD(d, 7, getdate())),103) ELSE Description + '|' + CONVERT(VARCHAR(20),ISNULL(s.DiaryDate, getdate()),103) END + '|' + '[CurrentUser.Code]' FROM Cm_CaseItems i INNER JOIN Cm_Steps s on s.ItemID = i.ItemID WHERE i.ItemID = [currentstep.stepid]), Complete_AsName = '' WHERE EntityRef = '[Entity.Code]'] [SQL: UPDATE Usr_ORSF_ENT_Control SET Screen_Opened_Via_Step = 'Y' WHERE EntityRef = '[Entity.Code]' ]" }
-                                    ,new ChapterP4WStepAnswer {QNo = 2, GoToData= $"7 [VIEW: '{selectedChapter.SelectedView}' UPDATE=Yes]" }
-                                    ,new ChapterP4WStepAnswer {QNo = 3, GoToData= $"4 [TAKE: 'SF-Admin Save Items for Agenda Management' INSERT=END]  [SQL: EXEC up_ORSF_GetStepsFromList '[entity.code]', 0] [SQL: UPDATE Usr_ORSF_ENT_Control SET Screen_Opened_Via_Step = null WHERE EntityRef='[entity.code]']" }
-                                    ,new ChapterP4WStepAnswer {QNo = 4, GoToData= $"5 [SQL: UPDATE Usr_ORSF_ENT_Control SET Date_Schedule_For = isnull(Date_Schedule_For, Cast(getdate() as Date)) WHERE EntityRef = '[Entity.Code]']" }
-                                    ,new ChapterP4WStepAnswer {QNo = 5, GoToData= $"8 [SQL: SELECT ScheduleCommand FROM fn_ORSF_GetScheduleItems('[Entity.Code]', 0)]" }
-                                    ,new ChapterP4WStepAnswer {QNo = 6, GoToData= $"[SQL: UPDATE cm_caseitems set CompletionDate = GETDATE(), description = UPPER('[!Usr_ORSF_ENT_Control.Complete_AsName]') where itemid = [currentstep.stepid]] [SQL: exec up_ORSF_CompleteStep [currentStep.stepid], '', 'Y']" }
-                                    ,new ChapterP4WStepAnswer {QNo = 7, GoToData= $"3 [[SQL: SELECT CASE WHEN ISNULL(Do_Not_Reschedule,'N') = 'Y' THEN 'SQL: exec up_ORSF_DeleteDueStep '''', [currentstep.stepid], ''{selectedChapter.Name}''' ELSE '' END FROM Usr_ORSF_MT_Control WHERE EntityRef = '[matters.entityref]' AND MatterNo = [matters.number]]]" }
-                                    ,new ChapterP4WStepAnswer {QNo = 8, GoToData= $"[SQL: SELECT CASE WHEN ISNULL('[!Usr_ORSF_ENT_Control.Complete_AsName]','') <> '' THEN 6 ELSE 9 END]" }
-                                    ,new ChapterP4WStepAnswer {QNo = 9, GoToData= $"[SQL: exec up_ORSF_DeleteStep [currentstep.stepid]]" }
-                                    }
-                };
-            }
-            else
-            {
-                ChapterP4WStep = new ChapterP4WStepSchema
-                {
-                    StepName = selectedChapter.StepName,
-                    P4WCaseTypeGroup = selectedChapter.P4WCaseTypeGroup,
-                    GadjITCaseTypeGroup = selectedChapter.CaseTypeGroup,
-                    GadjITCaseType = selectedChapter.CaseType,
-                    Smartflow = selectedChapter.Name,
-                    Questions = new List<ChapterP4WStepQuestion>{
-                                    new ChapterP4WStepQuestion {QNo = 1, QText= "HQ - Set Current Chapter Details" }
-                                    ,new ChapterP4WStepQuestion {QNo = 2, QText= "HQ - Show View" }
-                                    ,new ChapterP4WStepQuestion {QNo = 3, QText= "HQ - Run Required Steps" }
-                                    ,new ChapterP4WStepQuestion {QNo = 4, QText= "HQ - Update reschedule date" }
-                                    ,new ChapterP4WStepQuestion {QNo = 5, QText= "HQ - Reinsert this step with asname" }
-                                    ,new ChapterP4WStepQuestion {QNo = 6, QText= "HQ - Rename Step" }
-                                    ,new ChapterP4WStepQuestion {QNo = 7, QText= "HQ - Delete Previous Instances if Suppressed Step" }
-                                    ,new ChapterP4WStepQuestion {QNo = 8, QText= "HQ - Check if completion name exists" }
-                                    ,new ChapterP4WStepQuestion {QNo = 9, QText= "HQ - Delete Step" }
-                                    },
-                    Answers = new List<ChapterP4WStepAnswer>{
-                                    new ChapterP4WStepAnswer {QNo = 1, GoToData= $"2 [SQL: EXEC Up_ORSF_MoveDocsToAgendas '[matters.entityref]', [matters.number]] [SQL: EXEC up_ORSF_CreateTableEntries '[matters.entityref]', [matters.number]] [SQL: UPDATE Usr_ORSF_MT_Control SET Current_SF = '{selectedChapter.Name}', Current_Case_Type_Group = '{selectedChapter.CaseTypeGroup}', Current_Case_Type = '{selectedChapter.CaseType}', Default_Step = '{selectedChapter.StepName}', Date_Schedule_For = DATEADD(d, 7, getdate()), Steps_To_Run = '', Schedule_AsName = '{selectedChapter.StepName}|' + (SELECT CASE WHEN dbo.fn_ORSF_IsAllCap (Description) = 1 THEN '{selectedChapter.StepName}' + '|' + CONVERT(VARCHAR(20),ISNULL(Date_Schedule_For,DATEADD(d, 7, getdate())),103) ELSE Description + '|' + CONVERT(VARCHAR(20),ISNULL(s.DiaryDate, getdate()),103) END + '|' + '[matters.feeearnerref]' FROM Cm_CaseItems i INNER JOIN Cm_Steps s on s.ItemID = i.ItemID WHERE i.ItemID = [currentstep.stepid]), Complete_AsName = '' WHERE EntityRef = '[matters.entityref]' AND MatterNo = [matters.number]] [SQL: UPDATE Usr_ORSF_MT_Control SET Screen_Opened_Via_Step = 'Y' WHERE EntityRef = '[matters.entityref]' AND matterNo =[matters.number]]" }
-                                    ,new ChapterP4WStepAnswer {QNo = 2, GoToData= $"7 [VIEW: '{selectedChapter.SelectedView}' UPDATE=Yes]" }
-                                    ,new ChapterP4WStepAnswer {QNo = 3, GoToData= $"4 [TAKE: 'SF-Admin Save Items for Agenda Management' INSERT=END]  [SQL: EXEC up_ORSF_GetStepsFromList '[matters.entityref]', [matters.number]] [SQL: UPDATE Usr_ORSF_MT_Control SET Screen_Opened_Via_Step = null WHERE EntityRef='[matters.entityref]' AND matterNo=[matters.number]]" }
-                                    ,new ChapterP4WStepAnswer {QNo = 4, GoToData= $"5 [SQL: UPDATE Usr_ORSF_MT_Control SET Date_Schedule_For = isnull(Date_Schedule_For, Cast(getdate() as Date)) WHERE EntityRef = '[matters.entityref]' AND MatterNo = [matters.number]]" }
-                                    ,new ChapterP4WStepAnswer {QNo = 5, GoToData= $"8 [SQL: SELECT ScheduleCommand FROM fn_ORSF_GetScheduleItems('[matters.entityref]', [matters.number])]" }
-                                    ,new ChapterP4WStepAnswer {QNo = 6, GoToData= $"[SQL: UPDATE cm_caseitems set CompletionDate = GETDATE(), description = UPPER('[!Usr_ORSF_MT_Control.Complete_AsName]') where itemid = [currentstep.stepid]] [SQL: exec up_ORSF_CompleteStep [currentStep.stepid], '', 'Y']" }
-                                    ,new ChapterP4WStepAnswer {QNo = 7, GoToData= $"3 [[SQL: SELECT CASE WHEN ISNULL(Do_Not_Reschedule,'N') = 'Y' THEN 'SQL: exec up_ORSF_DeleteDueStep '''', [currentstep.stepid], ''{selectedChapter.Name}''' ELSE '' END FROM Usr_ORSF_MT_Control WHERE EntityRef = '[matters.entityref]' AND MatterNo = [matters.number]]]" }
-                                    ,new ChapterP4WStepAnswer {QNo = 8, GoToData= $"[SQL: SELECT CASE WHEN ISNULL('[!Usr_ORSF_MT_Control.Complete_AsName]','') <> '' THEN 6 ELSE 9 END]" }
-                                    ,new ChapterP4WStepAnswer {QNo = 9, GoToData= $"[SQL: exec up_ORSF_DeleteStep [currentstep.stepid]]" }
-                                    }
-                };
-            }
-
-            string stepJSON = JsonConvert.SerializeObject(ChapterP4WStep);
-
-            bool creationSuccess;
-
-            creationSuccess = await chapterManagementService.CreateStep(new VmChapterP4WStepSchemaJSONObject { StepSchemaJSON = stepJSON });
-
-            if (creationSuccess)
-            {
-                dropDownChapterList = await chapterManagementService.GetDocumentList(selectedChapter.CaseType);
-                TableDates = await chapterManagementService.GetDatabaseTableDateFields();
-
-                selectedChapter.SelectedStep = selectedChapter.StepName;
-
-                SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(selectedChapter);
-
-                bool gotLock = chapterManagementService.Lock;
-                while (gotLock)
-                {
-                    await Task.Yield();
-                    gotLock = chapterManagementService.Lock;
-                }
-
-                await chapterManagementService.Update(SelectedChapterObject);
-
-                //keep track of time last updated ready for comparison by other sessions checking for updates
-                appChapterState.SetLastUpdated(UserSession, selectedChapter);
-
-                StateHasChanged();
-            }
-        }
+        
 
 
         private void ShowModalConfirm(string infoText, string infoHeader, Action selectedAction)

@@ -1,13 +1,7 @@
-﻿using GadjIT.AppContext.GadjIT_App;
-using GadjIT.ClientContext.P4W;
-using GadjIT_App.Services;
+﻿using GadjIT_AppContext.GadjIT_App;
 using GadjIT_App.Services.SessionState;
 using Microsoft.AspNetCore.Components;
-using Microsoft.JSInterop;
 using System;
-
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Blazored.Modal;
 

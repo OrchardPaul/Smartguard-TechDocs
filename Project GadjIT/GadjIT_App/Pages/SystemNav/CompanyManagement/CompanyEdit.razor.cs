@@ -1,13 +1,9 @@
 ﻿using Blazored.Modal;
-using GadjIT.AppContext.GadjIT_App;
+using GadjIT_AppContext.GadjIT_App;
 using GadjIT_App.Data.Admin;
 using GadjIT_App.Services.SessionState;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.JSInterop;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 

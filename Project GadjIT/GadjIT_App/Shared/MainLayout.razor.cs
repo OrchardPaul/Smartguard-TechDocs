@@ -1,4 +1,4 @@
-﻿using GadjIT.AppContext.GadjIT_App;
+﻿using GadjIT_AppContext.GadjIT_App;
 using GadjIT_App.Data;
 using GadjIT_App.Services.SessionState;
 using Microsoft.AspNetCore.Components;

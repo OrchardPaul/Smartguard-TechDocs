@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace GadjIT.AppContext.GadjIT_App
+namespace GadjIT_AppContext.GadjIT_App
 {
     public partial class AppCompanyAccountsSmartflowDetails
     {

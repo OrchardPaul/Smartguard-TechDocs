@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using GadjIT.ClientContext.P4W.Functions;
+using GadjIT_ClientContext.P4W.Functions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 // If you have enabled NRTs for your project, then un-comment the following line:
 // #nullable disable
 
-namespace GadjIT.ClientContext.P4W
+namespace GadjIT_ClientContext.P4W
 {
     public partial class P4W_Context : DbContext
     {

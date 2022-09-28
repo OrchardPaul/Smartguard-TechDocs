@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace GadjIT.ClientContext.P4W.Functions
+namespace GadjIT_ClientContext.P4W.Functions
 {
     public partial class fnORCHAGetFeeDefinitions
     {

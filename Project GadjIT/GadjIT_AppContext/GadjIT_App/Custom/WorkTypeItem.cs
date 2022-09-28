@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace GadjIT.AppContext.GadjIT_App.Custom
+namespace GadjIT_AppContext.GadjIT_App.Custom
 {
     /*
      * Class for single work type along with all of its current assignments

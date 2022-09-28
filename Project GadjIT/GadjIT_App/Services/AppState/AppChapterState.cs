@@ -1,4 +1,4 @@
-﻿using GadjIT.ClientContext.P4W.Custom;
+﻿using GadjIT_ClientContext.P4W.Custom;
 using GadjIT_App.Services.SessionState;
 using Microsoft.AspNetCore.Components;
 using System;

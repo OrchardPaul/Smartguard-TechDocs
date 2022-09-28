@@ -1,24 +1,18 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using GadjIT.ClientAPI.Repository.Chapters;
-using GadjIT.ClientAPI.Repository.GeneralAccess;
-using GadjIT.ClientAPI.Repository.Partner;
-using GadjIT.ClientContext.P4W;
+using GadjIT_ClientAPI.Repository.Chapters;
+using GadjIT_ClientAPI.Repository.GeneralAccess;
+using GadjIT_ClientAPI.Repository.Partner;
+using GadjIT_ClientContext.P4W;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 
 
 
-namespace GadjIT.ClientAPI
+namespace GadjIT_ClientAPI
 {
     public class Startup
     {

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace GadjIT.ClientContext.P4W
+namespace GadjIT_ClientContext.P4W
 {
     public partial class GenSmartflowItem
     {

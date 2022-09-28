@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace GadjIT.AppContext.GadjIT_App.Custom
+namespace GadjIT_AppContext.GadjIT_App.Custom
 {
     /*
      * Class for single group with list of all of its assigned worktypes

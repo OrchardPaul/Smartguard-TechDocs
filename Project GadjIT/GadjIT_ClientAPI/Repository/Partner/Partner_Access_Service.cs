@@ -1,9 +1,9 @@
-﻿using GadjIT.ClientContext.P4W;
+﻿using GadjIT_ClientContext.P4W;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
-using System.Threading.Tasks;
+using System.Threading.Tasks; 
 
-namespace GadjIT.ClientAPI.Repository.Partner
+namespace GadjIT_ClientAPI.Repository.Partner
 {
     public interface IPartner_Access_Service
     {

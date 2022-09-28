@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace GadjIT.AppContext.GadjIT_App
+namespace GadjIT_AppContext.GadjIT_App
 {
     public partial class AppWorkTypeGroupsTypeAssignments
     {
