@@ -4,7 +4,7 @@
 - Data items
 - Message banners
 
-Additional features are configured by selecting the appropriate menu item from towards the top of the **Smartflow** page in **GadjIT**.
+Additional features are configured by selecting the appropriate menu item from the menu bar towards the top of the **Smartflow** page in **GadjIT**.
 
 <a href="/images/gadjIT_AdditionalFeatures.jpg" target="_blank" ><img src="/images/gadjIT_AdditionalFeatures.jpg" alt="Additional features" title="Menu" style="width: 250px;" class="shadow"/></a>         
 **Figure 1** - Adding additional features.

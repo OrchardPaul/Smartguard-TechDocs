@@ -8,7 +8,7 @@ There is no code required within GadjIT and almost all elements are selected via
 The following chart details the process for updating a Smartflow via GadjIT. 
 
 > [!NOTE] 
-> The **Case Management System**** is updated automatically and instantly as soon as any change within GadjIT is made.
+> The **Case Management System** is updated automatically and instantly as soon as any change within GadjIT is made.
 
 `
   ----> indicate activities that occur automatically
@@ -43,6 +43,7 @@ In addition to exporting a Smartflow to Excel, you can also import any changes b
         checkout Excel
         commit id:"Add new document"
         commit id:"Change fee amount"
+        commit id:"Import to GadjIT"
         checkout GadjIT
         checkout Excel
         checkout GadjIT
@@ -57,7 +58,7 @@ In addition to exporting a Smartflow to Excel, you can also import any changes b
 The following chart details the process for updating a Smartflow via Excel. 
 
 > [!NOTE] 
-> GadjIT and the CMS are both updated automatically as soon as the spreadsheet is imported back into GadjIT
+> GadjIT and the CMS are both updated automatically as soon as the spreadsheet is imported back into GadjIT. A backup of the Smartflow is automatically taken by GadjIT just before the Excel spreadsheet is imported.
 
 `
   ----> indicate activities that occur automatically

@@ -10,7 +10,7 @@ Smartflows are developed around existing documents within the case management da
 ## Creating your status list
 The ``status`` of the **Smartflow** can be changed on the selection of a document or step from within the ``Next Action`` area of the smartflow screen. It is therefore sensible to create your status list before you start to add documents to the flow so they are available to configure in the document properties. A ``status`` can also be configured to *end* a **Smartflow** so when that particular ``status`` is set (by processing the document) the **Smartflow** will not be rescheduled.  
 > [!TIP] 
-> It is advised that the user should be presented with an alternative course of action should the current **Smartlow** *end* as a consequence of the ``status`` change. 
+> It is advised that the user should be presented with an alternative course of action should the current **Smartlow** *end* as a consequence of the ``status`` change. For example, a Group Smartflow.
 
 To add or amend a ``status`` select the status menu item, click the purple **+NEW** button and simply type in your required status description. To amend and existing ``status`` select Edit from the ellipsis next to the ``status`` you wish to amend. 
 
@@ -26,6 +26,9 @@ Next, click the New button icon <img src="/images/gadjIT_NewIcon.jpg" alt="Add N
 
 <a href="/images/gadjIT_SelectDocument.jpg" target="_blank" ><img src="/images/gadjIT_SelectDocument.jpg" alt="Document Selection" title="Select Doc" style="width: 250px;" class="shadow"/></a>         
 **Figure 2** - Lists all available documents and workflow steps.
+
+> [!NOTE] 
+> The document list is populated in realtime directly from your case management system.   
 
 > [!TIP]  
 > If you know the name of the document you want to add, start typing its' name into the `Filter` field to reduce the list.

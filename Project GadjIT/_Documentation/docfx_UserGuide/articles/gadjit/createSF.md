@@ -37,7 +37,7 @@ Once created, the Smartflow will be initially positioned at the bottom of the **
 
 
 # Configure a Smartflow
-To complete the setup of a Smartflow you first have to enter the Smartflow for editing. Either click on the *pencil* icon or select `Edit` from the elipse menu (left hand side of the Smartflow item).
+To complete the setup of a Smartflow you first have to enter the Smartflow for editing. Either click on the *pencil* icon or select `Edit` from the ellipsis menu (left hand side of the Smartflow item).
 
 <img src="/images/GadjIT-MovingSmartflowInList.jpg" alt="Pencil icon for editing a Smartflow" title="Smartflow Editing" />  
 
@@ -48,7 +48,7 @@ Setup requires a few items to be set on the left hand side of the screen to atta
 
 ### Assign to CMS and Create Step
 1. **Case Type Group**  
-Select the appropriate document storage area on your **Case Management System** you wish the Smartflow to belong. This should be the same for all the Smartflows within the current **Case Type**. 
+Select the appropriate document storage area on your **Case Management System** to which you wish the Smartflow to belong. This should be the same for all the Smartflows within the current **Case Type**. 
 
     <a href="/images/GadjIT-SettingCaseTypeGroup.jpg" target="_blank" ><img src="/images/GadjIT-SettingCaseTypeGroup.jpg" alt="Assiging to CMS relevant document storage" title="Assign Smartflow to CMS" style="width: 200px;" class="shadow"/></a>  
     **Figure 5** - Assign Smartflow to **Case Management System**
@@ -56,10 +56,10 @@ Select the appropriate document storage area on your **Case Management System** 
 > [!NOTE]
 > The dropdown list will contain all available matter level document storage locations *(Case Type Groups)* including `Global Documents` from your own system.
 
-2. Select Smartflow
+2. **Select Smartflow**     
 This will be almost always the matter level Smartflow. Simply select the option `ORSF MT Smartflow`.
 
-3. Create the new Step
+3. **Create the new Step**   
 The final stage to creating a Smartflow on your **Case Management System** is to create a new step within the **Document Storage** area assigned above in *step 1*.
 
     Simply select the option `--- Create New ---` from the dropdown list. This will auto populate the text box with a relevant name, but this can be altered if required.
@@ -75,7 +75,7 @@ The final stage to creating a Smartflow on your **Case Management System** is to
   > For example, each **Case Type** may have a step for sending the Client Care Pack. But only one item named `SF Sending Client Care Pack Smartflow` can exist so add a few letters after the '*SF*' to indicate which **Case Type**. This is a restriction of your **Case Management System** and not Smartflow but it is good practice regardless.
 
 ### Complete Display Options
-Finally, there are a few seetings which control the display and type of Smartflow.
+Finally, there are a few settings which control the display and type of Smartflow.
 
 1. Click on either the background colour or image to navigate to the `Background` tab.
     <a href="/images/GadjIT-BGLinks.jpg" target="_blank" ><img src="/images/GadjIT-BGLinks.jpg" alt="Background Links" title="Links to Background" style="width: 150px;" class="shadow"/></a>  
@@ -87,7 +87,7 @@ Finally, there are a few seetings which control the display and type of Smartflo
 
 2. Select a background colour from the dropdown list.
 
-3. Select an image from the thumnail image list.  
+3. Select an image from the thumbnail image list.  
     <a href="/images/GadjIT-BGSeleted.jpg" target="_blank" ><img src="/images/GadjIT-BGSelected.jpg" alt="Background Settings Selected" title="Background Settings" style="width: 300px;" class="shadow"/></a>  
     **Figure 9** - Background Settings
 
