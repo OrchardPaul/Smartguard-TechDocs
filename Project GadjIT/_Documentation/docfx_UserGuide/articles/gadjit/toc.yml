@@ -4,5 +4,7 @@
   href: createSF.md
 - name: Add a Workflow
   href: addWorkflow.md
-- name: Smartflow Features and Options
+- name: Features and Options
   href: otherFeatures.md
+- name: Development Options
+  href: devOptions.md
