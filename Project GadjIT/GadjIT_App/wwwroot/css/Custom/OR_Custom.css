@@ -22,7 +22,10 @@ app {
     height: 100%;
 }
 
-
+.push-right
+{
+    margin-left: auto;
+}
 
 .main .top-row {
     justify-content: center;
@@ -390,166 +393,182 @@ app {
 .custom-file-input:active::before {
     background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
 }*/
-    /*-----------------------------*/
-    /*  BLOCKS                     */
-    /*-----------------------------*/
-    .tran-block .btn-edit {
-        background-color: rgba(245, 245, 245, 0) !important;
+/*-----------------------------*/
+/*  BLOCKS                     */
+/*-----------------------------*/
+.tran-block .btn-edit {
+    background-color: rgba(245, 245, 245, 0) !important;
+}
+
+.btn-shadow, .dt-button {
+    box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.5);
+}
+
+
+.btn-main:hover, .dt-button:hover {
+    background-color: #000;
+    border-color: #000 !important;
+    color: #FFF;
+}
+
+.grid-actions {
+    margin-bottom: 10px !important;
+    display: flex;
+    max-width: 800px;
+}
+
+.grid-actions .btn-group {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.grid-actions .btn {
+    margin-left: 20px !important;
+    font-size: 1.2rem;
+}
+
+    .grid-actions .btn:first-of-type {
+        margin-left: 0px;
     }
 
-    .btn-shadow, .dt-button {
-        box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.5);
-    }
+.btn span {
+    margin-left: 3px !important;
+    font-size: 0.85rem;
+}
 
+.grid-actions .spacer {
+    flex-grow: 1;
+}
 
-        .btn-main:hover, .dt-button:hover {
-            background-color: #000;
-            border-color: #000 !important;
-            color: #FFF;
-        }
+.grid-actions .sync-group {
+    padding-right: 10px !important;
+}
 
-    .grid-actions {
-        margin-bottom: 10px !important;
-        display: flex;
-        max-width: 800px;
-    }
+.grid-actions .sync-group {
+    margin-top: 4px;
+}
 
-    .grid-actions .btn-group {
-        margin: 0 !important;
-        padding: 0 !important;
-    }
+.grid-actions button {
+    margin-top: -4px;
+}
 
-    .grid-actions .btn {
-        margin-left: 20px !important;
-        font-size: 1.2rem;
-    }
+.data-item-edit {
+    padding: 0 !important;
+    background-color: rgba(245, 245, 245, 0) !important;
+}
 
-        .grid-actions .btn:first-of-type {
-            margin-left: 0px;
-        }
+.text-block {
+    background-color: rgba(245, 245, 245, 0.6);
+    padding: 10px;
+    margin-bottom: 20px;
+}
 
-    .btn span {
-        margin-left: 3px !important;
-        font-size: 0.85rem;
-    }
-
-    .grid-actions .spacer {
-        flex-grow: 1;
-    }
-
-    .grid-actions .sync-group {
-        padding-right: 10px !important;
-    }
-
-    .grid-actions .sync-group {
-        margin-top: 4px;
-    }
-
-    .grid-actions button {
-        margin-top: -4px;
-    }
-
-    .data-item-edit {
-        padding: 0 !important;
-        background-color: rgba(245, 245, 245, 0) !important;
-    }
-
-    .text-block {
-        background-color: rgba(245, 245, 245, 0.6);
-        padding: 10px;
-        margin-bottom: 20px;
-    }
-
-    .tran-block {
-        background-color: rgba(255, 255, 255, 0.8);
-        padding: 15px 15px 30px 15px;
-        margin-bottom: 20px;
-        margin-left: 20px;
-        margin-right: 20px;
-        border-radius: 5px;
-        width: auto;
-    }
-
-
-    .page-header-block {
-        padding: 5px 0 5px 20px;
-        margin: 0 0 20px 0 !important;
-        width: auto;
-        font-size: 0.8rem;
-        border-radius: 0px;
-        background-color: rgba(255, 255, 255, 0.9);
-        color: #555;
-    }
-
-        .page-header-block .page-header-title {
-            display: flex;
-            align-items: center;
-            margin: 5px 0 10px 0;
-        }
-
-            .page-header-block .page-header-title h3 {
-                margin: 0;
-            }
-
-    @media (max-width: 1199px) {
-        .tran-block {
-            margin-left: 0px !important;
-            margin-right: 0px !important;
-            padding: 10px;
-            width: 100% !important;
-        }
-
-        .page-header-block {
-            margin: 0px !important;
-            padding: 10px;
-        }
-    }
-
-    .page-header-block h3 {
-        margin: 10px 0 0 0;
-    }
-
-    @media (max-width: 991px) {
-        .page-header-block {
-            margin: 0;
-            color: #888;
-            text-align: center;
-        }
-
-            .page-header-block h3 {
-                margin: 0;
-                padding: 0;
-                font-size: 1.2rem;
-            }
-    }
-
-    @media (max-width: 767px) {
-        .page-header-block {
-            margin: 0;
-            color: #888;
-            text-align: center;
-        }
-    }
-
-    .page-header-block p {
-        color: #555;
-        margin: 5px 0 0 0 0;
-    }
-
-.page-header-block #right-block {
-    float: right;
-    margin-top: -60px;
+.tran-block {
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 15px 15px 30px 15px;
+    margin-bottom: 20px;
+    margin-left: 20px;
     margin-right: 20px;
-    height: 50px;
-    width: 300px;
+    border-radius: 5px;
+    width: auto;
+}
+
+
+.page-header-block {
+    padding: 5px 0 5px 20px;
+    margin: 0 0 20px 0 !important;
+    width: auto;
+    font-size: 0.8rem;
+    border-radius: 0px;
+    background-color: rgba(255, 255, 255, 0.9);
+    color: #555;
+    display: flex !important;
+    align-items: center;
+}
+
+.page-header-block>div:nth-of-type(1){
+    width: 70%;
+}
+.page-header-block>div:nth-of-type(2){
+    width: 25%;
     text-align: right;
 }
 
-@media (max-width: 1199px) {
-    .page-header-block #right-block {
+.page-header-block .page-header-title {
+    margin: 5px 0 10px 0;
+}
+.page-header-block .page-header-title p{
+    display: block;
+    margin: 5px 0 10px 0;
+}
+
+.page-header-block .page-header-title h3 {
+    margin: 0;
+} 
+
+ .page-header-block .user-guide
+{
+    margin-right: 10px;
+    text-align: right;
+} 
+
+ 
+.page-header-block .user-guide a{
+    color: #888 !important;
+}
+.page-header-block .user-guide span{
+    font-size: 30px;
+    margin-left: 7px;
+} 
+
+.page-header-block h3 {
+    margin: 10px 0 0 0;
+}
+
+@media (max-width: 991px) {
+    .page-header-block {
+        margin: 0;
+        color: #888;
+        text-align: center;
+    }
+
+    .page-header-block h3 {
+        margin: 0;
+        padding: 0;
+        font-size: 1.2rem;
+    }
+    
+    .page-header-block>div:nth-of-type(1){
+        width: 100%;
+    }
+    .page-header-block>div:nth-of-type(2){
+        width: 0%;
+        width: 0;
+        padding: 0;
+        margin: 0;
+        position: absolute;
+        top: -1000px;
+        left: -2000px;
         visibility: hidden;
     }
+
 }
+
+@media (max-width: 767px) {
+    .page-header-block {
+        margin: 0;
+        color: #888;
+        text-align: center;
+    }
+
+}
+
+.page-header-block p {
+    color: #555;
+    margin: 5px 0 0 0 0;
+}
+
+
 .detail-block {
     width: 100%;
     margin: 20px 10px 20px 0px;
@@ -1929,3 +1948,5 @@ app {
     user-select: none; /* Non-prefixed version, currently
                                   supported by Chrome, Edge, Opera and Firefox */
 }
+
+

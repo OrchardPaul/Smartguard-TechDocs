@@ -19,8 +19,17 @@ else
     @if (selectedChapter.Name == "" | selectedChapter.Name is null)
     {
         <div class="tran-block page-header-block ">
-            <h3>Smartflow</h3>
-            <p class="hidden-md-down">Create and maintain Smartflows for all case types. <em>Note: please make sure you are pointing to the appropriate system.</em></p>
+            <div class="page-header-title">
+                <div>
+                    <h3>Smartflow</h3>
+                    <p class="hidden-md-down">Create and maintain Smartflows for all case types. <em>Note: please make sure you are pointing to the appropriate system.</em></p>
+                </div>  
+                 
+            </div>
+            <div class="push-right user-guide">
+                <a href="@UserGuideURL" target="_blank" title="Link to Smartflow user guide">User Guide<span><i class="fa fa-circle-info"></i></span></a>
+            </div> 
+            
         </div>
 
         <div class="mb-4 grid-tran grid-chapter-nav">
@@ -253,33 +262,41 @@ else
 
     <div class="tran-block page-header-block ">
         <div class="page-header-title">
-            <div class="float-left back-link" @onclick="SelectHome">
-                <span class="col-alt fa fa-angle-double-left"></span>
+            <div>
+                <div class="float-left back-link" @onclick="SelectHome">
+                    <span class="col-alt fa fa-angle-double-left"></span>
+                </div>
+                <h3>Smartflow: @selectedChapter.Name</h3>
             </div>
-            <h3>Smartflow: @selectedChapter.Name</h3>
-        </div>
-        <p class="hidden-md-down">
-            Group: <span class="badge badge-grey mr-3">@selectedChapter.CaseTypeGroup</span>
-            Case Type: <span class="badge badge-grey mr-3">@selectedChapter.CaseType</span>
-            Smartflow: <span class="badge badge-grey mr-3"> @selectedChapter.Name</span>
+            <p class="hidden-md-down">
+                Group: <span class="badge badge-grey mr-3">@selectedChapter.CaseTypeGroup</span>
+                Case Type: <span class="badge badge-grey mr-3">@selectedChapter.CaseType</span>
+                Smartflow: <span class="badge badge-grey mr-3"> @selectedChapter.Name</span>
 
-            @{
-                if (appChapterState.GetChapterItemState(UserSession, selectedChapter).ActiveUsers.Where(U => U.UserName != UserSession.User.FullName).ToList().Count > 0)
-                {
-                    <span class="pl-5">Active Users: </span>
-                    string userClass = "active-user";
-                    foreach (var user in appChapterState.GetChapterItemState(UserSession, selectedChapter).ActiveUsers.Where(U => U.UserName != UserSession.User.FullName).ToList())
+                @{
+                    if (appChapterState.GetChapterItemState(UserSession, selectedChapter).ActiveUsers.Where(U => U.UserName != UserSession.User.FullName).ToList().Count > 0)
                     {
-                        <span class="ml-2 @userClass font-120"><li class="fa fa-user" title="@user.UserName - @user.LastActive.ToString()"></li></span>
-                        userClass = (userClass == "active-user" ? "active-user-alt" : "active-user");
+                        <span class="pl-5">Active Users: </span>
+                        string userClass = "active-user";
+                        foreach (var user in appChapterState.GetChapterItemState(UserSession, selectedChapter).ActiveUsers.Where(U => U.UserName != UserSession.User.FullName).ToList())
+                        {
+                            <span class="ml-2 @userClass font-120"><li class="fa fa-user" title="@user.UserName - @user.LastActive.ToString()"></li></span>
+                            userClass = (userClass == "active-user" ? "active-user-alt" : "active-user");
+                        }
+
+
                     }
-
-
                 }
-            }
 
 
-        </p>
+            </p>
+            
+        </div>
+        
+        <div class="push-right user-guide">
+            <a href="@UserGuideURL" target="_blank" title="Link to Smartflow user guide">User Guide<span><i class="fa fa-circle-info"></i></span></a>
+        </div>  
+        
     </div>
 
     <div class="tran-block rounded">
@@ -462,9 +479,9 @@ else
                                                                  ValueChanged="@((string value) => SaveSelectedStep(value))">
                                                         <option value="">Select</option>
                                                         <option value="Create New">--- Create New ---</option>
-                                                        @foreach (var step in dropDownChapterList
+                                                         @foreach (var step in dropDownChapterList
                                                       .Where(D => D.DocumentType == 6)
-                                                      .Where(D => D.Notes.Contains("Smartflow:"))
+                                                      .Where(D => D.Notes != null && D.Notes.Contains("Smartflow:"))
                                                       .Where(V => V.CaseTypeGroupRef == (string.IsNullOrEmpty(selectedChapter.P4WCaseTypeGroup)
                                                                                           ? -2
                                                                                           : selectedChapter.P4WCaseTypeGroup == "Global Documents"
@@ -481,7 +498,8 @@ else
                                                             <option value="@step.Name">
                                                                 @step.Name
                                                             </option>
-                                                        }
+                                                        } 
+                                                        
                                                     </InputSelect>
                                                 </div>
                                             }
@@ -2066,12 +2084,12 @@ else
                                                 </div>
                                             </div>
                                             <div class="data-item-right">
-                                                <ModalTooltip Direction="top" Text="@context.msgTooltip" Class="w-3">
-                                                    <span class="@(context.msgValidation == "Exceeded" ? "" : "invisible")"><span class="fa fa-comment mr-2 font-grey "></span></span>
-                                                    <span class="@(context.msgValidation == "Expired" ? "" : "invisible")"><span class="fa fa-comment mr-2 font-red "></span></span>
-                                                    <span class="@(context.msgValidation == "Future" ? "" : "invisible")"><span class="fa fa-comment mr-2 font-green "></span></span>
-                                                    <span class="@(context.msgValidation == "Invalid" ? "" : "invisible")"><span class="fa fa-exclamation-triangle mr-2 font-red "></span></span>
-                                                    <span class="@(context.msgValidation == "Valid" ? "" : "invisible")"><span class="fa fa-comment mr-2 font-blue "></span></span>
+                                                <ModalTooltip Direction="top" Text="@context.MsgTooltip" Class="w-3">
+                                                    <span class="@(context.MsgValidation == "Exceeded" ? "" : "invisible")"><span class="fa fa-comment mr-2 font-grey "></span></span>
+                                                    <span class="@(context.MsgValidation == "Expired" ? "" : "invisible")"><span class="fa fa-comment mr-2 font-red "></span></span>
+                                                    <span class="@(context.MsgValidation == "Future" ? "" : "invisible")"><span class="fa fa-comment mr-2 font-green "></span></span>
+                                                    <span class="@(context.MsgValidation == "Invalid" ? "" : "invisible")"><span class="fa fa-exclamation-triangle mr-2 font-red "></span></span>
+                                                    <span class="@(context.MsgValidation == "Valid" ? "" : "invisible")"><span class="fa fa-comment mr-2 font-blue "></span></span>
                                                 </ModalTooltip>
                                             </div>
                                             <div class="data-item-sub">

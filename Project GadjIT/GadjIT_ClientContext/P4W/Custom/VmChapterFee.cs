@@ -10,6 +10,6 @@ namespace GadjIT_ClientContext.P4W.Custom
         public Fee FeeItem { get; set; }
 
 
-        public bool selected { get; set; }
+        public bool Selected { get; set; }
     }
 }

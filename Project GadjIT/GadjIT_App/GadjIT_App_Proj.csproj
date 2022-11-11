@@ -43,7 +43,6 @@
     <PackageReference Include="entityframework" Version="6.4.4" />
     <PackageReference Include="EPPlus" Version="5.5.5" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="5.0.12" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.12" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="5.0.12" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.12" />
@@ -70,6 +69,7 @@
     <PackageReference Include="System.Linq.Dynamic.Core" Version="1.2.14" />
     <PackageReference Include="Microsoft.Azure.SignalR" Version="1.16.0" />
     <PackageReference Include="BlazorColorPicker" Version="2.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.1.0" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="FileManagement\FileStorage\Default\" />

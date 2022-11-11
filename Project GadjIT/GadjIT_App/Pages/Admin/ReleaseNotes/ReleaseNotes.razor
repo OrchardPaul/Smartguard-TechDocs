@@ -3,18 +3,20 @@
 @page "/Admin/Release"
 
 <div class="tran-block page-header-block ">
-    @if (CurrentVersion != "")
-    {
-        <div class="float-left back-link pt-3" @onclick="SelectHome">
-            <span class="col-alt fa fa-angle-double-left"></span>
-        </div>
-    }else{
-        <div class="float-left back-link pt-3" @onclick="SelectAdminHome">
-            <span class="col-alt fa fa-angle-double-left"></span>
-        </div>
-    }
-    <h3>Release Notes</h3>
-    <p class="hidden-md-down">GadjIT Release Notes and Product Updates</p>
+    <div>
+        @if (CurrentVersion != "")
+        {
+            <div class="float-left back-link pt-3" @onclick="SelectHome">
+                <span class="col-alt fa fa-angle-double-left"></span>
+            </div>
+        }else{
+            <div class="float-left back-link pt-3" @onclick="SelectAdminHome">
+                <span class="col-alt fa fa-angle-double-left"></span>
+            </div>
+        }
+        <h3>Release Notes</h3>
+        <p class="hidden-md-down">GadjIT Release Notes and Product Updates</p>
+    </div>
 </div>
 
 

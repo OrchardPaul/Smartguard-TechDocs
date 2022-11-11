@@ -20,7 +20,7 @@ namespace GadjIT_App.Pages.Chapters
         BlazoredModalInstance ModalInstance { get; set; }
 
         [Inject]
-        IChapterManagementService chapterManagementService { get; set; }
+        IChapterManagementService ChapterManagementService { get; set; }
 
         [Parameter]
         public IUserSessionState UserSession { get; set; }
@@ -84,7 +84,7 @@ namespace GadjIT_App.Pages.Chapters
                 taskObject.LinkedItems = Object.AltObject.LinkedItems;
 
                 CurrentChapterRow.SmartflowData = JsonConvert.SerializeObject(CurrentChapter);
-                await chapterManagementService.Update(CurrentChapterRow).ConfigureAwait(false);
+                await ChapterManagementService.Update(CurrentChapterRow).ConfigureAwait(false);
             }
             else
             {
@@ -118,7 +118,7 @@ namespace GadjIT_App.Pages.Chapters
 
                 await UserSession.SwitchSelectedSystem();
                 AltChapterRow.SmartflowData = JsonConvert.SerializeObject(AltChapter);
-                await chapterManagementService.Update(AltChapterRow);
+                await ChapterManagementService.Update(AltChapterRow);
                 await UserSession.ResetSelectedSystem();
             }
 
@@ -154,7 +154,7 @@ namespace GadjIT_App.Pages.Chapters
                 CurrentChapter.Items.Add(AltObject);
 
                 CurrentChapterRow.SmartflowData = JsonConvert.SerializeObject(CurrentChapter);
-                await chapterManagementService.Update(CurrentChapterRow).ConfigureAwait(false);
+                await ChapterManagementService.Update(CurrentChapterRow).ConfigureAwait(false);
             }
             else
             {
@@ -191,7 +191,7 @@ namespace GadjIT_App.Pages.Chapters
 
                     await UserSession.SwitchSelectedSystem();
                     AltChapterRow.SmartflowData = JsonConvert.SerializeObject(AltChapter);
-                    await chapterManagementService.Update(AltChapterRow);
+                    await ChapterManagementService.Update(AltChapterRow);
                     await UserSession.ResetSelectedSystem();
                 }
                 else
@@ -218,7 +218,7 @@ namespace GadjIT_App.Pages.Chapters
                         VariantNo = CurrentChapterRow.VariantNo
                     };
 
-                    var returnObject = await chapterManagementService.Add(AltChapterRow);
+                    var returnObject = await ChapterManagementService.Add(AltChapterRow);
                     AltChapterRow.Id = returnObject.Id;
                     await CompanyDbAccess.SaveSmartFlowRecord(AltChapterRow, UserSession);
                     await UserSession.ResetSelectedSystem();

@@ -1,0 +1,26 @@
+########################################################################
+###
+###Folder to contain a record of ALL migrations that have loaded onto Production
+###
+########################################################################
+
+dotnet ef migrations script [FromName]  --output  migrations\scripts\[ToName].txt
+
+e.g.
+dotnet ef migrations script 20220712113527_Initial122  --output  migrations\scripts\production\20220805110707_Initial123.txt
+dotnet ef migrations script 20220805110707_Initial123  --output  migrations\scripts\production\20221021123353_Initial127.txt
+
+
+
+
+##------------------------------------
+## Process for migrating changes to production
+##------------------------------------
+
+1.
+dotnet ef migrations add Initial123
+
+2.
+dotnet ef database update
+
+3. Script changes as per above

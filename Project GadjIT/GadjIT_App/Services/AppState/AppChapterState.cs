@@ -11,7 +11,7 @@ namespace GadjIT_App.Services.AppState
     
     public interface IAppChapterState
     {
-        List<IAppChapterItemState> lstAppChapterStateItems { get; }
+        List<IAppChapterItemState> LstAppChapterStateItems { get; }
 
         void SetLastUpdated(IUserSessionState sessionState, VmChapter selectedChapter);
 
@@ -58,7 +58,7 @@ namespace GadjIT_App.Services.AppState
     public class AppChapterStateList : IAppChapterState
     {
         
-        public List<IAppChapterItemState> lstAppChapterStateItems { get; set; } = new List<IAppChapterItemState>();
+        public List<IAppChapterItemState> LstAppChapterStateItems { get; set; } = new List<IAppChapterItemState>();
 
 
         public bool Lock { get; set; }
@@ -118,7 +118,7 @@ namespace GadjIT_App.Services.AppState
 
             IAppChapterItemState appChapterItemState;
 
-            appChapterItemState = lstAppChapterStateItems
+            appChapterItemState = LstAppChapterStateItems
                                         .Where(CI => CI.CompanyID == sessionState.Company.Id)
                                         .Where(CI => CI.SelectedSystem == sessionState.selectedSystem)
                                         .Where(CI => CI.CaseTypeGroup == selectedChapter.CaseTypeGroup)
@@ -139,7 +139,7 @@ namespace GadjIT_App.Services.AppState
                     ,ActiveUsers = new List<ActiveUsers> { new ActiveUsers { UserName= sessionState.User.FullName, LastActive = DateTime.Now} }
                 };
 
-                lstAppChapterStateItems.Add(appChapterItemState);
+                LstAppChapterStateItems.Add(appChapterItemState);
 
             }
 
@@ -194,10 +194,10 @@ namespace GadjIT_App.Services.AppState
             {
                 if(!(sessionState.User is null))
                 {
-                    lstAppChapterStateItems = lstAppChapterStateItems.Where(A => A.ActiveUsers.Select(U => U.UserName).Contains(sessionState.User.FullName))
+                    LstAppChapterStateItems = LstAppChapterStateItems.Where(A => A.ActiveUsers.Select(U => U.UserName).Contains(sessionState.User.FullName))
                                                                 .Select(A => { A.LastUpdated = DateTime.Now; return A; }).ToList();
 
-                    var ActiveUsers = lstAppChapterStateItems.Select(A => A.ActiveUsers).ToList();
+                    var ActiveUsers = LstAppChapterStateItems.Select(A => A.ActiveUsers).ToList();
 
                     foreach (var ActiveUserList in ActiveUsers)
                     {

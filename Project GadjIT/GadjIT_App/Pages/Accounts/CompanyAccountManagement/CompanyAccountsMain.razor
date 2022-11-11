@@ -4,23 +4,24 @@
 @attribute [Authorize(Roles ="Super User")]
 
 <div class="tran-block page-header-block ">
-    <div class="page-header-title">
-        <div class="float-left back-link">
-            <span class="col-alt fa fa-angle-double-left"></span>
+    <div>
+        <div class="page-header-title">
+            <div class="float-left back-link">
+                <span class="col-alt fa fa-angle-double-left"></span>
+            </div>
+            <h3>Accounts</h3>
         </div>
-        <h3>Accounts</h3>
+        @if (!(CompanyAccountObjects.Where(A => A.AccountObject.Id == SelectedCompanyAccount.Id).SingleOrDefault() is null))
+        {
+            <p class="hidden-md-down">
+                Selected Company: <span class="badge badge-grey mr-3">
+                    @(CompanyAccountObjects
+                                            .Where(A => A.AccountObject.Id == SelectedCompanyAccount.Id)
+                                            .SingleOrDefault().CompanyObject.CompanyName)
+                </span>
+            </p>
+        }
     </div>
-    @if (!(CompanyAccountObjects.Where(A => A.AccountObject.Id == SelectedCompanyAccount.Id).SingleOrDefault() is null))
-    {
-        <p class="hidden-md-down">
-            Selected Company: <span class="badge badge-grey mr-3">
-                @(CompanyAccountObjects
-                                        .Where(A => A.AccountObject.Id == SelectedCompanyAccount.Id)
-                                        .SingleOrDefault().CompanyObject.CompanyName)
-            </span>
-        </p>
-    }
-
 </div>
 
 <div class="tran-block rounded">

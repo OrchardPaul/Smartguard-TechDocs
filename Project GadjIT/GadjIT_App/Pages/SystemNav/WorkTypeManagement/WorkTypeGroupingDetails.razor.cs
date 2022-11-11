@@ -22,7 +22,7 @@ namespace GadjIT_App.Pages.SystemNav.WorkTypeManagement
         public Action DataChanged { get; set; }
 
         [Inject]
-        private ICompanyDbAccess service { get; set; }
+        private ICompanyDbAccess Service { get; set; }
 
         private async void Close()
         {
@@ -31,7 +31,7 @@ namespace GadjIT_App.Pages.SystemNav.WorkTypeManagement
 
         private async void HandleValidSubmit()
         {
-            await service.AssignWorkTypeToGroup(TaskObject, Assignments);
+            await Service.AssignWorkTypeToGroup(TaskObject, Assignments);
 
             DataChanged?.Invoke();
             Close();

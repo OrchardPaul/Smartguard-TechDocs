@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Configuration;
@@ -13,6 +14,7 @@ using Serilog;
 
 namespace GadjIT_App
 {
+
     public class Program
     {
         public static void Main(string[] args)
@@ -42,6 +44,14 @@ namespace GadjIT_App
 
 
             
+        }
+
+        public void ConfigureServices(IServiceCollection services)
+        {
+            services.AddRazorPages();
+            services.AddServerSideBlazor().AddCircuitOptions(e=> {
+                e.DetailedErrors = true;
+            });
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>

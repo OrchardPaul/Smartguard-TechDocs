@@ -24,10 +24,10 @@ namespace GadjIT_App.Pages.SystemNav.WorkTypeManagement
         public Action DataChanged { get; set; }
 
         [Inject]
-        private ICompanyDbAccess service { get; set; }
+        private ICompanyDbAccess Service { get; set; }
 
         [Inject]
-        private IUserSessionState sessionState { get; set; }
+        private IUserSessionState SessionState { get; set; }
 
         private async void Close()
         {
@@ -36,8 +36,8 @@ namespace GadjIT_App.Pages.SystemNav.WorkTypeManagement
 
         private async Task HandleValidSubmit()
         {
-            await service.SubmitWorkType(TaskObject);
-            await sessionState.SetSessionState();
+            await Service.SubmitWorkType(TaskObject);
+            await SessionState.SetSessionState();
 
             DataChanged?.Invoke();
             Close();

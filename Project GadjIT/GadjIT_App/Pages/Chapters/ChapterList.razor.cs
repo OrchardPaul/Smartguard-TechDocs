@@ -26,6 +26,7 @@ using System.Timers;
 using GadjIT_App.Services.AppState;
 using Microsoft.Extensions.Logging;
 using Serilog.Context;
+using Microsoft.Extensions.Configuration;
 
 namespace GadjIT_App.Pages.Chapters
 {
@@ -79,6 +80,9 @@ namespace GadjIT_App.Pages.Chapters
 
         [Inject]
         private IPageAuthorisationState pageAuthorisationState { get; set; }
+
+        [Inject]
+        public IConfiguration Configuration { get; set;}
 
         private ChapterFileOptions ChapterFileOption { get; set; }
 
@@ -152,6 +156,12 @@ namespace GadjIT_App.Pages.Chapters
                 }
             }
         }
+
+
+
+        public String UserGuideURL => Configuration["AppSettings:UserGuideURL"];
+        
+        
 
         protected override async Task OnInitializedAsync()
         {
@@ -756,6 +766,7 @@ namespace GadjIT_App.Pages.Chapters
                         GadjITCaseTypeGroup = selectedChapter.CaseTypeGroup,
                         GadjITCaseType = selectedChapter.CaseType,
                         Smartflow = selectedChapter.Name,
+                        SFVersion = Configuration["AppSettings:Version"],
                         Questions = new List<ChapterP4WStepQuestion>{
                                         new ChapterP4WStepQuestion {QNo = 1, QText= "HQ - Set Current Chapter Details" }
                                         ,new ChapterP4WStepQuestion {QNo = 2, QText= "HQ - Show View" }
@@ -789,6 +800,7 @@ namespace GadjIT_App.Pages.Chapters
                         GadjITCaseTypeGroup = selectedChapter.CaseTypeGroup,
                         GadjITCaseType = selectedChapter.CaseType,
                         Smartflow = selectedChapter.Name,
+                        SFVersion = Configuration["AppSettings:Version"],
                         Questions = new List<ChapterP4WStepQuestion>{
                                         new ChapterP4WStepQuestion {QNo = 1, QText= "HQ - Set Current Chapter Details" }
                                         ,new ChapterP4WStepQuestion {QNo = 2, QText= "HQ - Show View" }
@@ -890,6 +902,7 @@ namespace GadjIT_App.Pages.Chapters
                                 GadjITCaseTypeGroup = decodedChapter.CaseTypeGroup,
                                 GadjITCaseType = decodedChapter.CaseType,
                                 Smartflow = decodedChapter.Name,
+                                SFVersion = Configuration["AppSettings:Version"],
                                 Questions = new List<ChapterP4WStepQuestion>{
                                         new ChapterP4WStepQuestion {QNo = 1, QText= "HQ - Set Current Chapter Details" }
                                         ,new ChapterP4WStepQuestion {QNo = 2, QText= "HQ - Show View" }
@@ -923,6 +936,7 @@ namespace GadjIT_App.Pages.Chapters
                                 GadjITCaseTypeGroup = decodedChapter.CaseTypeGroup,
                                 GadjITCaseType = decodedChapter.CaseType,
                                 Smartflow = decodedChapter.Name,
+                                SFVersion = Configuration["AppSettings:Version"],
                                 Questions = new List<ChapterP4WStepQuestion>{
                                         new ChapterP4WStepQuestion {QNo = 1, QText= "HQ - Set Current Chapter Details" }
                                         ,new ChapterP4WStepQuestion {QNo = 2, QText= "HQ - Show View" }
@@ -974,6 +988,7 @@ namespace GadjIT_App.Pages.Chapters
                     GadjITCaseTypeGroup = "Global",
                     GadjITCaseType = "Global Documents",
                     Smartflow = "Admin Save Items for Agenda Management",
+                    SFVersion = Configuration["AppSettings:Version"],
                     Questions = new List<ChapterP4WStepQuestion>{
                             new ChapterP4WStepQuestion {QNo = 1, QText= "HQ - Save Items for Agenda Management" }
                             ,new ChapterP4WStepQuestion {QNo = 2, QText= "HQ - Delete Me" }
@@ -1024,6 +1039,7 @@ namespace GadjIT_App.Pages.Chapters
         {
             try
             {
+
                 ScrollPosition = await jsRuntime.InvokeAsync<float>("getElementPosition");
 
                 displaySpinner = true;
@@ -1035,9 +1051,11 @@ namespace GadjIT_App.Pages.Chapters
                 if (!(chapter.SmartflowData is null))
                 {
                     selectedChapter = JsonConvert.DeserializeObject<VmChapter>(chapter.SmartflowData);
+
                 }
                 else
                 {
+
                     //Initialise the VmChapter in case of null Json
                     selectedChapter = new VmChapter
                     {
@@ -1052,6 +1070,7 @@ namespace GadjIT_App.Pages.Chapters
                     selectedChapter.CaseTypeGroup = chapter.CaseTypeGroup;
                     selectedChapter.CaseType = chapter.CaseType;
                     selectedChapter.Name = chapter.SmartflowName;
+
                 }
 
                 selectedChapter.StepName = $"SF {chapter.SmartflowName} Smartflow";
@@ -1070,8 +1089,8 @@ namespace GadjIT_App.Pages.Chapters
                 try
                 {
                     dropDownChapterList = await chapterManagementService.GetDocumentList(selectedChapter.CaseType);
-                    dropDownChapterList = dropDownChapterList.Where(D => !(D.Name is null)).ToList();
-                    TableDates = await chapterManagementService.GetDatabaseTableDateFields();
+                    //dropDownChapterList = dropDownChapterList.Where(D => !(D.Name is null)).ToList();
+                    //TableDates = await chapterManagementService.GetDatabaseTableDateFields();
                 }
                 catch (Exception e)
                 {
@@ -1121,8 +1140,11 @@ namespace GadjIT_App.Pages.Chapters
                 }
 
                 await jsRuntime.InvokeVoidAsync("moveToPosition", 0);
+Logger.LogError("1");
 
                 StateHasChanged();
+Logger.LogError("2");
+
             }
             catch (Exception ex)
             {
@@ -1136,6 +1158,7 @@ namespace GadjIT_App.Pages.Chapters
 
                 //DisplaySmartflowLoadError(ex.Message);
             }
+Logger.LogError("3");
 
         }
 
@@ -4212,7 +4235,7 @@ namespace GadjIT_App.Pages.Chapters
             }
             else if(dropDownChapterList
                 .Where(D => D.DocumentType == 6)
-                .Where(D => D.Notes.Contains("Smartflow:"))
+                .Where(D => D.Notes != null && D.Notes.Contains("Smartflow:"))
                 .Where(V => V.CaseTypeGroupRef == (string.IsNullOrEmpty(selectedChapter.P4WCaseTypeGroup)
                                                     ? -2
                                                     : selectedChapter.P4WCaseTypeGroup == "Global Documents"
@@ -4316,29 +4339,29 @@ namespace GadjIT_App.Pages.Chapters
 
                 if (DateTime.ParseExact(msg.Message.ToDate, "yyyyMMdd", CultureInfo.InvariantCulture) < DateTime.ParseExact(msg.Message.FromDate, "yyyyMMdd", CultureInfo.InvariantCulture))
                 {
-                    msg.msgValidation = "Invalid";
-                    msg.msgTooltip = "Invalid date range.";
+                    msg.MsgValidation = "Invalid";
+                    msg.MsgTooltip = "Invalid date range.";
                 }
                 else if (DateTime.ParseExact(msg.Message.FromDate, "yyyyMMdd", CultureInfo.InvariantCulture) > currentDate)
                 {
-                    msg.msgValidation = "Future";
-                    msg.msgTooltip = "Message set for future date.";
+                    msg.MsgValidation = "Future";
+                    msg.MsgTooltip = "Message set for future date.";
                 }
                 else if (DateTime.ParseExact(msg.Message.ToDate, "yyyyMMdd", CultureInfo.InvariantCulture) < currentDate)
                 {
-                    msg.msgValidation = "Expired";
-                    msg.msgTooltip = "Message expired.";
+                    msg.MsgValidation = "Expired";
+                    msg.MsgTooltip = "Message expired.";
                 }
                 else if (ValidTicketMessageCount > 3)
                 {
-                    msg.msgValidation = "Exceeded";
-                    msg.msgTooltip = "The maximum number of valid ticker messages are three.";
+                    msg.MsgValidation = "Exceeded";
+                    msg.MsgTooltip = "The maximum number of valid ticker messages are three.";
                 }
                 else
                 {
                     ValidTicketMessageCount += 1;
-                    msg.msgValidation = "Valid";
-                    msg.msgTooltip = "Message will be shown on the Smarflow screen.";
+                    msg.MsgValidation = "Valid";
+                    msg.MsgTooltip = "Message will be shown on the Smarflow screen.";
                 }
             }
 

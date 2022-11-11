@@ -1,13 +1,12 @@
-﻿using System;
+﻿
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace GadjIT_App.Pages.Chapters
 {
     public class ChapterP4WStepSchema
     {
+
         [StringLength(200)]
         public string StepName { get; set; }
 
@@ -24,7 +23,7 @@ namespace GadjIT_App.Pages.Chapters
         public string Smartflow { get; set; }
 
         [StringLength(30)]
-        public string SFVersion { get; set; } = "V1.03";
+        public string SFVersion { get ; set;} = "";
 
 
         public List<ChapterP4WStepQuestion> Questions { get; set; }

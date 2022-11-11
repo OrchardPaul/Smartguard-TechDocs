@@ -24,11 +24,11 @@ namespace GadjIT_App.Pages.SystemNav.WorkTypeManagement
         public Action DataChanged { get; set; }
 
         [Inject]
-        private ICompanyDbAccess service { get; set; }
+        private ICompanyDbAccess Service { get; set; }
 
         private async Task HandleValidSubmit()
         {
-            await service.SubmitWorkTypeGroup(TaskObject.group);
+            await Service.SubmitWorkTypeGroup(TaskObject.group);
 
             Close();
             DataChanged?.Invoke();

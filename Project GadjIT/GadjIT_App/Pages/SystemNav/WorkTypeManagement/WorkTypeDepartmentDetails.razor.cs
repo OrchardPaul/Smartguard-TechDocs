@@ -19,7 +19,7 @@ namespace GadjIT_App.Pages.SystemNav.WorkTypeManagement
         public Action DataChanged { get; set; }
 
         [Inject]
-        private ICompanyDbAccess service { get; set; }
+        private ICompanyDbAccess Service { get; set; }
 
         private async void Close()
         {
@@ -28,7 +28,7 @@ namespace GadjIT_App.Pages.SystemNav.WorkTypeManagement
 
         private async Task HandleValidSubmit()
         {
-            await service.SubmitDepartment(TaskObject);
+            await Service.SubmitDepartment(TaskObject);
 
             DataChanged?.Invoke();
             Close();

@@ -18,7 +18,7 @@ namespace GadjIT_App.Pages.Chapters
 {
     public partial class ChapterAttachments
     {
-        public bool optionalDocument
+        public bool OptionalDocument
         {
             get { return (Attachment.OptionalDocument == "Y" ? true : false); }
             set

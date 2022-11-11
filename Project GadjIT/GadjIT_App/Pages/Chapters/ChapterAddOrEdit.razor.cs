@@ -22,7 +22,7 @@ namespace GadjIT_App.Pages.Chapters
         BlazoredModalInstance ModalInstance { get; set; }
 
         [Inject]
-        IChapterManagementService chapterManagementService { get; set; }
+        IChapterManagementService ChapterManagementService { get; set; }
 
         [Parameter]
         public UsrOrsfSmartflows TaskObject { get; set; }
@@ -83,13 +83,13 @@ namespace GadjIT_App.Pages.Chapters
                 });
 
 
-                var returnObject = await chapterManagementService.Add(TaskObject);
+                var returnObject = await ChapterManagementService.Add(TaskObject);
                 TaskObject.Id = returnObject.Id;
                 await CompanyDbAccess.SaveSmartFlowRecord(TaskObject, UserSession);
             }
             else
             {
-                await chapterManagementService.UpdateMainItem(TaskObject);
+                await ChapterManagementService.UpdateMainItem(TaskObject);
             }
 
             DataChanged?.Invoke();
@@ -117,7 +117,7 @@ namespace GadjIT_App.Pages.Chapters
 
         private async void HandleValidDelete()
         {
-            await chapterManagementService.DeleteChapter(TaskObject.Id);
+            await ChapterManagementService.DeleteChapter(TaskObject.Id);
 
             DataChanged?.Invoke();
             Close();

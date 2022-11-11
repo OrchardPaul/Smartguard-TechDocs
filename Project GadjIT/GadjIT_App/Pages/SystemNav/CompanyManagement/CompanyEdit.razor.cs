@@ -48,9 +48,9 @@ namespace GadjIT_App.Pages.SystemNav.CompanyManagement
         }
 
         void colorChangeButtons(ChangeEventArgs e) => TaskObject.CompCol1 = e.Value.ToString().ToUpper();
-        void colorChangeButtonsCont(ChangeEventArgs e) => TaskObject.CompCol1 = e.Value.ToString().ToUpper();
-        void colorChangeLinks(ChangeEventArgs e) => TaskObject.CompCol1 = e.Value.ToString().ToUpper();
-        void colorChangeLinksCont(ChangeEventArgs e) => TaskObject.CompCol1 = e.Value.ToString().ToUpper();
+        void colorChangeButtonsCont(ChangeEventArgs e) => TaskObject.CompCol3 = e.Value.ToString().ToUpper();
+        void colorChangeLinks(ChangeEventArgs e) => TaskObject.CompCol2 = e.Value.ToString().ToUpper();
+        void colorChangeLinksCont(ChangeEventArgs e) => TaskObject.CompCol4 = e.Value.ToString().ToUpper();
             
 
 

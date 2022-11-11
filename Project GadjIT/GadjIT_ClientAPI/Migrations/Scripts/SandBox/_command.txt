@@ -1,0 +1,12 @@
+########################################################################
+###
+###Folder to contain a record of ALL migrations that have loaded onto Test system
+###
+########################################################################
+
+dotnet ef migrations script [FromName]  --output  migrations\scripts\[ToName].txt
+
+e.g.
+dotnet ef migrations script 20220705195446_initial123  --output  migrations\scripts\SandBox\20220706113511_initial125.txt
+
+dotnet ef migrations script 20220912112839_Initial125  --output  migrations\scripts\SandBox\20221010105450_Initial126.txt
