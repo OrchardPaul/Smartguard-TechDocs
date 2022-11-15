@@ -430,6 +430,7 @@ else
                                                              Value="@selectedChapter.P4WCaseTypeGroup"
                                                              ValueChanged="@((string value) => SaveP4WCaseTypeGroup(value))">
                                                     <option value="">Select</option>
+                
                                                     @foreach (var group in partnerCaseTypeGroups.OrderBy(C => C.Name).ToList())
                                                     {
                                                         <option value="@group.Name">
@@ -1333,7 +1334,7 @@ else
                             {
 
                                 <div class="row grid-row">
-                                    <div class="col-12 data-item">
+                                    <div class="data-item">
 
                                         <div class="btn-ellipses float-left">
 
@@ -1644,7 +1645,7 @@ else
                             </div>
                         }
                     </div>
-                    <div class="@(UserSession.isAdminUser ? "grid-can-edit" : "") ">
+                    <div class="grid-data @(UserSession.isAdminUser ? "grid-can-edit" : "") ">
                         <Dropzone Items="lstStatus"
                             InstantReplace="true"
                             OnItemDrop="@((s)=>ReSequenceStatus(lstStatus.IndexOf(s) + 1))"
@@ -1653,7 +1654,7 @@ else
                             UseCustomImage="true"> 
 
                             <div class="row grid-row @(rowChanged == context.ChapterObject.SeqNo ? "row-changed" : "" )">
-                                <div class="col-12 data-item">
+                                <div class="data-item">
                                     @if (UserSession.isAdminUser)
                                     {
                                         @if (!compareSystems)
@@ -1762,7 +1763,7 @@ else
                             @foreach (var status in lstAltSystemChapterItems.Where(D => D.ChapterObject.Type == "Status").Where(D => !D.Compared).ToList())
                             {
                                 <div class="row grid-row @(rowChanged == status.ChapterObject.SeqNo ? "row-changed" : "" )">
-                                    <div class="col-12 data-item">
+                                    <div class="data-item">
                                         <div class="btn-ellipses float-left">
                                             <ModalTooltip Direction="right" Text=@("Exists on alternate system, Do you wish to delete?") Class="w-2">
                                                 <div class="btn-dashed" @onclick="() => PrepareDeleteAltObject(status)"><span class="fa fa-trash"></span></div>
@@ -1839,7 +1840,7 @@ else
                         }
                     </div>
 
-                    <div class="@(UserSession.isAdminUser ? "grid-can-edit" : "") ">
+                    <div class="grid-data @(UserSession.isAdminUser ? "grid-can-edit" : "") ">
                         <Dropzone Items="ListVmDataViews"
                             InstantReplace="true"
                             OnItemDrop="@((s)=>ReSequenceDataViews(ListVmDataViews.IndexOf(s) + 1))"
@@ -1848,7 +1849,7 @@ else
                             UseCustomImage="true">
 
                             <div class="row grid-row @(rowChanged == context.DataView.BlockNo ? "row-changed" : "" )">
-                                <div class="col-12 data-item">
+                                <div class="data-item">
                                     @if (UserSession.isAdminUser && !compareSystems)
                                     {
 
@@ -1924,7 +1925,7 @@ else
                                     @if (!string.IsNullOrEmpty(context.DataView.DisplayName))
                                     {
                                         <div class="data-item-right hidden-md-down">
-                                            <ModalTooltip Direction="top" Text=@("Template: " + context.DataView.ViewName) Class="w-3">
+                                            <ModalTooltip Direction="left" Text=@("Template: " + context.DataView.ViewName) Class="w-2">
                                                 <span class="fa fa-clone"></span>
                                             </ModalTooltip>
                                         </div>
@@ -2033,7 +2034,7 @@ else
                         }
                     </div>
 
-                    <div class="@(UserSession.isAdminUser ? "grid-can-edit" : "") ">
+                    <div class="grid-data @(UserSession.isAdminUser ? "grid-can-edit" : "") ">
                         <div class="row grid-header invisible-md-down">
                             <div class="data-item ">
                                 <div class="data-item-sub">

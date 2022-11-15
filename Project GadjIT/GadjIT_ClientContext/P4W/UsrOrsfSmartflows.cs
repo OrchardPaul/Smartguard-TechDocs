@@ -25,5 +25,6 @@ namespace GadjIT_ClientContext.P4W
         public int? VariantNo { get; set; }
         [StringLength(200)]
         public string VariantName { get; set; }
+
     }
 }
