@@ -36,6 +36,93 @@ app {
     padding-right: 0 !important;
 }
 
+/****************************************/
+/* PREVENT DOUBLE FIRST RENDER          */
+/*                                      */
+/* removed by showPageAfterFirstRender  */
+/****************************************/
+
+.hide-until-full-render{
+    visibility: hidden;
+}
+
+
+/****************************************/
+/* NOTIFICATIONS                        */
+/*                                      */
+/* Pop-up Notification / Animation      */
+/****************************************/
+
+.notification {
+    padding-right: 1rem;
+    position: fixed;
+    left: 50%;
+    transform: translatex(-50%);
+    background-color: #ffebeb;
+    border-radius: 1rem;
+    display: flex;
+    gap: 1rem;
+    color: black;
+    align-items: center !important;
+    justify-content: center;
+    min-height: 40px !important;
+  }
+  
+  #notification-inner, #notification-inner p {
+    color: #fff;
+  }
+  
+  #notification-icons{
+    width: 25px ;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    padding-left: 5px;
+}
+
+  
+  .notification-icon{
+    width: 25px ;
+    height: 100%;
+    display: none;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .notification-show {
+      animation: notifyShow 500ms ease-in-out forwards;
+      display:flex;
+      z-index: 9999999;
+    }
+
+  .notification-hide {
+    animation: notifyHide 500ms ease-in-out forwards;
+    z-index: 9999999;
+  }
+
+  @keyframes notifyShow {
+    0% {
+      opacity: 0;
+      top: 10px;
+    }
+    100% {
+      opacity: 1;
+      top: 70px;
+    }
+  }
+  
+  @keyframes notifyHide {
+    0% {
+      opacity: 1;
+      top: 70px;
+    }
+    100% {
+      opacity: 0;
+      top: 10px;
+    }
+  }
+
+
 
 .container, .container-fluid {
     padding: 0;

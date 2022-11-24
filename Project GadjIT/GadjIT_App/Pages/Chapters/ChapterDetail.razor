@@ -175,11 +175,14 @@
                         <InputSelect class="form-control form-control-xl"
                                      @bind-Value="CopyObject.RescheduleDataItem">
                             <option value=""></option>
-                            @foreach (var a in TableDates.Where(F => F.TableField.ToUpper().Contains(filterTextDataItem.ToUpper())))
+                            @if(TableDates != null)
                             {
-                                <option value="@a.TableField">
-                                    @a.TableField
-                                </option>
+                                @foreach (var a in TableDates.Where(F => F.TableField.ToUpper().Contains(filterTextDataItem.ToUpper())))
+                                {
+                                    <option value="@a.TableField">
+                                        @a.TableField
+                                    </option>
+                                }
                             }
                         </InputSelect>
                         <ValidationMessage For="@(() => CopyObject.RescheduleDataItem)" />

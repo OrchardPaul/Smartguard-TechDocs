@@ -15,6 +15,8 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Serilog.Context;
+using Microsoft.Extensions.Logging;
 
 namespace GadjIT_App.Pages.Chapters
 {
@@ -63,7 +65,12 @@ namespace GadjIT_App.Pages.Chapters
         }
 
         
+        [Inject]
+        ILogger<ChapterDetail> Logger {get; set;}
 
+        [Inject]
+        INotificationManager NotificationManager {get; set;}
+        
         [CascadingParameter]
         BlazoredModalInstance ModalInstance { get; set; }
 
@@ -173,46 +180,56 @@ namespace GadjIT_App.Pages.Chapters
         }
 
 
-        protected override void OnInitialized()
+        protected override async Task OnInitializedAsync()
         {
-            if (!(string.IsNullOrEmpty(SelectedChapter.P4WCaseTypeGroup)) && (SelectedChapter.P4WCaseTypeGroup != "Select"))
+            try
             {
-                selectedCaseTypeGroup = CaseTypeGroups.Where(CT => CT.Name == SelectedChapter.P4WCaseTypeGroup).Select(CT => CT.Id).FirstOrDefault();
 
-                if (SelectedChapter.P4WCaseTypeGroup == "Global Documents")
+            
+                if (!(string.IsNullOrEmpty(SelectedChapter.P4WCaseTypeGroup)) && (SelectedChapter.P4WCaseTypeGroup != "Select"))
                 {
-                    selectedCaseTypeGroup = 0;
+                    selectedCaseTypeGroup = CaseTypeGroups.Where(CT => CT.Name == SelectedChapter.P4WCaseTypeGroup).Select(CT => CT.Id).FirstOrDefault();
+
+                    if (SelectedChapter.P4WCaseTypeGroup == "Global Documents")
+                    {
+                        selectedCaseTypeGroup = 0;
+                    }
+
+                    if (SelectedChapter.P4WCaseTypeGroup == "Entity Documents")
+                    {
+                        selectedCaseTypeGroup = -1;
+                    }
                 }
 
-                if (SelectedChapter.P4WCaseTypeGroup == "Entity Documents")
+                /*
+                -- custom item check
+                if (!(dropDownChapterList.ToList() is null)
+                        && CopyObject.Name != ""
+                        && !(CopyObject.Name is null)
+                        && !dropDownChapterList.ToList().Select(D => D.Name).Contains(CopyObject.Name))
                 {
-                    selectedCaseTypeGroup = -1;
+                    useCustomItem = true;
+                }
+                else
+                {
+                    useCustomItem = false;
+                }
+                */
+
+                if (!string.IsNullOrEmpty(CopyObject.RescheduleDataItem)
+                        && TableDates.ToList().Select(D => D.TableField).Contains(CopyObject.RescheduleDataItem))
+                {
+                    useCustomReschedule = true;
+                }
+                else
+                {
+                    useCustomReschedule = false;
                 }
             }
-
-            /*
-            -- custom item check
-            if (!(dropDownChapterList.ToList() is null)
-                    && CopyObject.Name != ""
-                    && !(CopyObject.Name is null)
-                    && !dropDownChapterList.ToList().Select(D => D.Name).Contains(CopyObject.Name))
+            catch(Exception e)
             {
-                useCustomItem = true;
-            }
-            else
-            {
-                useCustomItem = false;
-            }
-            */
-
-            if (!string.IsNullOrEmpty(CopyObject.RescheduleDataItem)
-                    && TableDates.ToList().Select(D => D.TableField).Contains(CopyObject.RescheduleDataItem))
-            {
-                useCustomReschedule = true;
-            }
-            else
-            {
-                useCustomReschedule = false;
+                selectedCaseTypeGroup = 0; 
+                await GenericErrorLog(false, e, "OnInitialized", e.Message);
             }
 
         }
@@ -220,9 +237,17 @@ namespace GadjIT_App.Pages.Chapters
 
         private async void RefreshDocListOnModel()
         {
-            dropDownChapterList = await chapterManagementService.GetDocumentList(SelectedChapter.CaseType);
-            StateHasChanged();
-            RefreshDocList?.Invoke();
+            try
+            {
+                dropDownChapterList = await chapterManagementService.GetDocumentList(SelectedChapter.CaseType);
+                StateHasChanged();
+                RefreshDocList?.Invoke();
+            }
+            catch(Exception e)
+            {
+                dropDownChapterList = new List<DmDocuments>();
+                await GenericErrorLog(false, e, "RefreshDocListOnModel", e.Message);
+            }
         }
 
         private async void Close()
@@ -235,78 +260,112 @@ namespace GadjIT_App.Pages.Chapters
 
         private async void HandleValidSubmit()
         {
-            if (SelectedChapter.Items.Where(I => I.Name != CopyObject.Name).Select(I => I.Name).Contains(CopyObject.Name))
+            try
             {
-                Error = 1;
-                StateHasChanged();
+
+                
+                if (SelectedChapter.Items.Where(I => I.Name != CopyObject.Name).Select(I => I.Name).Contains(CopyObject.Name))
+                {
+                    Error = 1;
+                    StateHasChanged();
+                }
+                else
+                {
+
+                    if (!(new string[] { "Agenda", "Status" }.Any(s => TaskObject.Type.ToString().Contains(s))))
+                    {
+                        //clears lagacy value of "Letter" and revert it back to "Doc"
+                        TaskObject.Type = "Doc";
+                    }
+                    else
+                    {
+                        TaskObject.Type = CopyObject.Type;
+                    }
+
+                    if (TaskObject.Type == "Agenda")
+                    {
+                        TaskObject.Name = CopyObject.Name;
+                    }
+                    else
+                    {
+                        TaskObject.Name = Regex.Replace(CopyObject.Name, "[^0-9a-zA-Z-_ (){}!£$%^&*,./#?@<>`:]+", "");
+                    }
+
+
+                    TaskObject.EntityType = CopyObject.EntityType;
+                    TaskObject.SeqNo = CopyObject.SeqNo;
+                    TaskObject.SuppressStep = CopyObject.SuppressStep;
+                    TaskObject.CompleteName = CopyObject.CompleteName is null ? "" : Regex.Replace(CopyObject.CompleteName, "[^0-9a-zA-Z-_ (){}!£$%^&*,./#?@<>`:]+", "");
+                    TaskObject.AsName = CopyObject.AsName is null ? "" : Regex.Replace(CopyObject.AsName, "[^0-9a-zA-Z-_ (){}!£$%^&*,./#?@<>`:]+", "");
+                    TaskObject.RescheduleDays = CopyObject.RescheduleDays is null ? 0 : CopyObject.RescheduleDays;
+                    TaskObject.AltDisplayName = CopyObject.AltDisplayName is null ? "" : Regex.Replace(CopyObject.AltDisplayName, "[^0-9a-zA-Z-_ (){}!£$%^&*,./#?@<>`:]+", "");
+                    TaskObject.UserMessage = CopyObject.UserMessage;
+                    TaskObject.PopupAlert = CopyObject.PopupAlert;
+                    TaskObject.NextStatus = CopyObject.NextStatus;
+                    TaskObject.Action = CopyObject.Action;
+                    TaskObject.TrackingMethod = CopyObject.TrackingMethod;
+                    TaskObject.ChaserDesc = CopyObject.ChaserDesc;
+                    TaskObject.RescheduleDataItem = CopyObject.RescheduleDataItem;
+                    TaskObject.MilestoneStatus = CopyObject.MilestoneStatus;
+                    TaskObject.OptionalDocument = CopyObject.OptionalDocument;
+                    TaskObject.Agenda = CopyObject.Agenda;
+                    TaskObject.CustomItem = CopyObject.CustomItem;
+
+                    if (Option == "Insert")
+                    {
+                        SelectedChapter.Items.Add(TaskObject);
+                    }
+
+                    SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(SelectedChapter);
+                    await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
+
+                    TaskObject = new GenSmartflowItem();
+                    filterText = "";
+
+                    //keep track of time last updated ready for comparison by other sessions checking for updates
+                    appChapterState.SetLastUpdated(UserSession, SelectedChapter);
+
+                    DataChanged?.Invoke();
+                    
+                }
+
             }
-            else
+            catch(Exception e)
             {
-
-                if (!(new string[] { "Agenda", "Status" }.Any(s => TaskObject.Type.ToString().Contains(s))))
-                {
-                    //clears lagacy value of "Letter" and revert it back to "Doc"
-                    TaskObject.Type = "Doc";
-                }
-                else
-                {
-                    TaskObject.Type = CopyObject.Type;
-                }
-
-                if (TaskObject.Type == "Agenda")
-                {
-                    TaskObject.Name = CopyObject.Name;
-                }
-                else
-                {
-                    TaskObject.Name = Regex.Replace(CopyObject.Name, "[^0-9a-zA-Z-_ (){}!£$%^&*,./#?@<>`:]+", "");
-                }
-
-
-                TaskObject.EntityType = CopyObject.EntityType;
-                TaskObject.SeqNo = CopyObject.SeqNo;
-                TaskObject.SuppressStep = CopyObject.SuppressStep;
-                TaskObject.CompleteName = CopyObject.CompleteName is null ? "" : Regex.Replace(CopyObject.CompleteName, "[^0-9a-zA-Z-_ (){}!£$%^&*,./#?@<>`:]+", "");
-                TaskObject.AsName = CopyObject.AsName is null ? "" : Regex.Replace(CopyObject.AsName, "[^0-9a-zA-Z-_ (){}!£$%^&*,./#?@<>`:]+", "");
-                TaskObject.RescheduleDays = CopyObject.RescheduleDays is null ? 0 : CopyObject.RescheduleDays;
-                TaskObject.AltDisplayName = CopyObject.AltDisplayName is null ? "" : Regex.Replace(CopyObject.AltDisplayName, "[^0-9a-zA-Z-_ (){}!£$%^&*,./#?@<>`:]+", "");
-                TaskObject.UserMessage = CopyObject.UserMessage;
-                TaskObject.PopupAlert = CopyObject.PopupAlert;
-                TaskObject.NextStatus = CopyObject.NextStatus;
-                TaskObject.Action = CopyObject.Action;
-                TaskObject.TrackingMethod = CopyObject.TrackingMethod;
-                TaskObject.ChaserDesc = CopyObject.ChaserDesc;
-                TaskObject.RescheduleDataItem = CopyObject.RescheduleDataItem;
-                TaskObject.MilestoneStatus = CopyObject.MilestoneStatus;
-                TaskObject.OptionalDocument = CopyObject.OptionalDocument;
-                TaskObject.Agenda = CopyObject.Agenda;
-                TaskObject.CustomItem = CopyObject.CustomItem;
-
-                if (Option == "Insert")
-                {
-                    SelectedChapter.Items.Add(TaskObject);
-                }
-
-                SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(SelectedChapter);
-                await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
-
-                TaskObject = new GenSmartflowItem();
-                filterText = "";
-
-                //keep track of time last updated ready for comparison by other sessions checking for updates
-                appChapterState.SetLastUpdated(UserSession, SelectedChapter);
-
-                DataChanged?.Invoke();
+                await GenericErrorLog(true,e, "HandleValidSubmit", e.Message);
+            }
+            finally
+            {
                 Close();
             }
-
-
         }
 
-                private void ResetError()
+        private void ResetError()
         {
             Error = 0;
             StateHasChanged();
         }
+
+        /****************************************/
+        /* ERROR HANDLING */
+        /****************************************/
+        private async Task GenericErrorLog(bool showNotificationMsg, Exception e, string _method, string _message)
+        {
+            using (LogContext.PushProperty("SourceSystem", UserSession.selectedSystem))
+            using (LogContext.PushProperty("SourceCompanyId", UserSession.Company.Id))
+            using (LogContext.PushProperty("SourceUserId", UserSession.User.Id))
+            using (LogContext.PushProperty("SourceContext", nameof(ChapterDetail)))
+            {
+                Logger.LogError(e,"Error - Method: {0}, Message: {1}",_method, _message);
+            }
+
+            if(showNotificationMsg)
+            {
+                await NotificationManager.ShowNotification("Danger", $"Oops! Something went wrong.");
+            }
+        }
+
     }
+
+    
 }

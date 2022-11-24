@@ -3,7 +3,6 @@
 @page "/Smartflow/{UrlCaseTypeGroup}/{UrlCaseType}/{UrlChapter}"
 @page "/Smartflow/{UrlCaseTypeGroup}/{UrlCaseType}"
 
-@inject IJSRuntime jsRuntime
 @using GadjIT_App.Pages.Shared.Modals
 @using System.Globalization;
 @implements IDisposable
@@ -68,186 +67,189 @@ else
                 <div class="container-fluid">
 
                     <!-- SHOW ALL GROUPS -->
-                    @foreach (var caseTypeGroup in lstChapters
+                    @if(lstChapters != null)
+                    {
+                        foreach (var caseTypeGroup in lstChapters
                                                   .Where(C => !(C.SmartflowObject.CaseTypeGroup is null))
                                                   .OrderBy(C => C.SmartflowObject.CaseTypeGroup)
                                                   .Select(C => C.SmartflowObject.CaseTypeGroup)
                                                   .Distinct()
                                                   .ToList())
-                    {
+                        {
 
-                        <div class="grid-row-lg mt-3 nav-row-1">
-                            <div class="data-item" title="Group: click to see case types assigned to @caseTypeGroup">
-                                @if (UserSession.isAdminUser)
-                                {
-                                    <div class="btn-ellipses float-left">
-                                        <span class="fa fa-ellipsis-v"></span>
-                                        <div class="ellipsis-menu" style="margin-top: 20px">
-                                            <ul>
-                                                <li class="col-main" @onclick='() => PrepareCaseTypeForEdit(caseTypeGroup, "CaseTypeGroup")'>
-                                                    <span class="fa fa-font mr-2"></span>
-                                                    <span>Rename</span>
-                                                </li>
+                            <div class="grid-row-lg mt-3 nav-row-1">
+                                <div class="data-item" title="Group: click to see case types assigned to @caseTypeGroup">
+                                    @if (UserSession.isAdminUser)
+                                    {
+                                        <div class="btn-ellipses float-left">
+                                            <span class="fa fa-ellipsis-v"></span>
+                                            <div class="ellipsis-menu" style="margin-top: 20px">
+                                                <ul>
+                                                    <li class="col-main" @onclick='() => PrepareCaseTypeForEdit(caseTypeGroup, "CaseTypeGroup")'>
+                                                        <span class="fa fa-font mr-2"></span>
+                                                        <span>Rename</span>
+                                                    </li>
 
-                                            </ul>
+                                                </ul>
+                                            </div>
                                         </div>
-                                    </div>
-                                }
+                                    }
 
-                                <div class="data-item-nav" @onclick='() => SelectCaseTypeGroup(caseTypeGroup)'>
-                                    <div class="data-item-sub"><span class="fa fa-boxes mr-2"></span>@caseTypeGroup</div>
-                                    <div class="data-item-right col-alt"><div class="link-direction @(caseTypeGroup == selectedChapter.CaseTypeGroup ? "triangle-up " : "triangle-down")"></div></div>
+                                    <div class="data-item-nav" @onclick='() => SelectCaseTypeGroup(caseTypeGroup)'>
+                                        <div class="data-item-sub"><span class="fa fa-boxes mr-2"></span>@caseTypeGroup</div>
+                                        <div class="data-item-right col-alt"><div class="link-direction @(caseTypeGroup == selectedChapter.CaseTypeGroup ? "triangle-up " : "triangle-down")"></div></div>
+                                    </div>
                                 </div>
+
+
                             </div>
 
 
-                        </div>
 
-
-
-                        <!-- GROUP SELECTED SHOW CASE TYPES-->
-                        @if (caseTypeGroup == selectedChapter.CaseTypeGroup)
-                        {
-
-                            @foreach (var caseType in lstChapters
-                                                       .Where(C => !(C.SmartflowObject.CaseType is null))
-                                                       .Where(C => C.SmartflowObject.CaseTypeGroup == selectedChapter.CaseTypeGroup)
-                                                       .OrderBy(C => C.SmartflowObject.CaseType)
-                                                       .Select(C => C.SmartflowObject.CaseType)
-                                                       .Distinct()
-                                                       .ToList())
+                            <!-- GROUP SELECTED SHOW CASE TYPES-->
+                            @if (caseTypeGroup == selectedChapter.CaseTypeGroup)
                             {
 
-                                <div class="grid-row-md nav-row-2">
-                                    <div class="data-item" title="Case Type: click to see the Smartflows within @caseType">
-                                        @if (UserSession.isAdminUser)
-                                        {
-                                            <div class="btn-ellipses float-left">
-                                                <span class="fa fa-ellipsis-v"></span>
-                                                <div class="ellipsis-menu">
-                                                    <ul>
-                                                        <li class="col-main" @onclick='() => PrepareCaseTypeForEdit(caseType, "CaseType")'>
-
-                                                            <span class="fa fa-font mr-2"></span>
-                                                            <span>Rename</span>
-
-                                                        </li>
-
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        }
-                                        <div class="data-item-nav" @onclick='() => SelectCaseType(caseType)'>
-                                            @if (caseType == selectedChapter.CaseType)
-                                            {
-                                                <div class="data-item-sub">
-                                                    <span class="fa fa-folder-open mr-2"></span>@caseType
-                                                </div>
-                                            }
-                                            else
-                                            {
-                                                <div class="data-item-sub">
-                                                    <span class="fa fa-folder mr-2"></span>@caseType
-                                                </div>
-                                            }
-
-
-                                            <div class="data-item-right col-alt "><div class="link-direction @(caseType == selectedChapter.CaseType ? "triangle-up " : "triangle-down")"></div></div>
-                                        </div>
-                                    </div>
-
-                                </div>
-                                @if (caseType == selectedChapter.CaseType)
+                                @foreach (var caseType in lstChapters
+                                                        .Where(C => !(C.SmartflowObject.CaseType is null))
+                                                        .Where(C => C.SmartflowObject.CaseTypeGroup == selectedChapter.CaseTypeGroup)
+                                                        .OrderBy(C => C.SmartflowObject.CaseType)
+                                                        .Select(C => C.SmartflowObject.CaseType)
+                                                        .Distinct()
+                                                        .ToList())
                                 {
 
+                                    <div class="grid-row-md nav-row-2">
+                                        <div class="data-item" title="Case Type: click to see the Smartflows within @caseType">
+                                            @if (UserSession.isAdminUser)
+                                            {
+                                                <div class="btn-ellipses float-left">
+                                                    <span class="fa fa-ellipsis-v"></span>
+                                                    <div class="ellipsis-menu">
+                                                        <ul>
+                                                            <li class="col-main" @onclick='() => PrepareCaseTypeForEdit(caseType, "CaseType")'>
 
-                                    <div class="grid-nav">
-                                        <Dropzone Items="lstSelectedChapters"
-                                                  InstantReplace="true"
-                                                  OnItemDrop="@((sf)=>ReSequenceSmartFlows(lstSelectedChapters.IndexOf(sf) + 1))"
-                                                  OnDragStartParam="() => ResetRowChanged()"
-                                                  TItem="VmUsrOrsfSmartflows">
+                                                                <span class="fa fa-font mr-2"></span>
+                                                                <span>Rename</span>
+
+                                                            </li>
+
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            }
+                                            <div class="data-item-nav" @onclick='() => SelectCaseType(caseType)'>
+                                                @if (caseType == selectedChapter.CaseType)
+                                                {
+                                                    <div class="data-item-sub">
+                                                        <span class="fa fa-folder-open mr-2"></span>@caseType
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="data-item-sub">
+                                                        <span class="fa fa-folder mr-2"></span>@caseType
+                                                    </div>
+                                                }
 
 
-                                            <div class="grid-row-md nav-row-3 no-border  @(rowChanged == context.SmartflowObject.SeqNo ? ToggleRowChangedClass() : "" )">
-                                                <div id="Smartflow-@context.SmartflowObject.Id" class="data-item @(context.SmartflowObject.SmartflowName.Contains("GROUP ") ? "data-item-group" : "")">
+                                                <div class="data-item-right col-alt "><div class="link-direction @(caseType == selectedChapter.CaseType ? "triangle-up " : "triangle-down")"></div></div>
+                                            </div>
+                                        </div>
 
-                                                    @if (UserSession.isAdminUser)
-                                                    {
-                                                        @if (!compareSystems)
+                                    </div>
+                                    @if (caseType == selectedChapter.CaseType)
+                                    {
+
+
+                                        <div class="grid-nav">
+                                            <Dropzone Items="lstSelectedChapters"
+                                                    InstantReplace="true"
+                                                    OnItemDrop="@((sf)=>ReSequenceSmartFlows(lstSelectedChapters.IndexOf(sf) + 1))"
+                                                    OnDragStartParam="() => ResetRowChanged()"
+                                                    TItem="VmUsrOrsfSmartflows">
+
+
+                                                <div class="grid-row-md nav-row-3 no-border  @(rowChanged == context.SmartflowObject.SeqNo ? ToggleRowChangedClass() : "" )">
+                                                    <div id="Smartflow-@context.SmartflowObject.Id" class="data-item @(context.SmartflowObject.SmartflowName.Contains("GROUP ") ? "data-item-group" : "")">
+
+                                                        @if (UserSession.isAdminUser)
                                                         {
-                                                            <div class="btn-ellipses float-left ">
-                                                                <span class="fa fa-ellipsis-v"></span>
-                                                                <div class="ellipsis-menu">
-                                                                    <ul>
-                                                                        <li class="col-main" @onclick='() => PrepareChapterForEdit(context.SmartflowObject, "Chapter")' title="">
-                                                                            <span class="fa fa-font mr-2"></span>
-                                                                            <span>Rename</span>
-                                                                        </li>
-                                                                        <li class="col-main" @onclick="() => SelectChapter(context.SmartflowObject)" title="">
-                                                                            <span class="fa fa-pencil-alt mr-2"></span>
-                                                                            <span>Edit</span>
-                                                                        </li>
-                                                                        <li class="col-red" @onclick='() => PrepareChapterDelete(context)' title="">
-                                                                            <span class="fa fa-trash-alt mr-2"></span>
-                                                                            <span>Delete</span>
-                                                                        </li>
-                                                                    </ul>
+                                                            @if (!compareSystems)
+                                                            {
+                                                                <div class="btn-ellipses float-left ">
+                                                                    <span class="fa fa-ellipsis-v"></span>
+                                                                    <div class="ellipsis-menu">
+                                                                        <ul>
+                                                                            <li class="col-main" @onclick='() => PrepareChapterForEdit(context.SmartflowObject, "Chapter")' title="">
+                                                                                <span class="fa fa-font mr-2"></span>
+                                                                                <span>Rename</span>
+                                                                            </li>
+                                                                            <li class="col-main" @onclick="() => SelectChapter(context.SmartflowObject)" title="">
+                                                                                <span class="fa fa-pencil-alt mr-2"></span>
+                                                                                <span>Edit</span>
+                                                                            </li>
+                                                                            <li class="col-red" @onclick='() => PrepareChapterDelete(context)' title="">
+                                                                                <span class="fa fa-trash-alt mr-2"></span>
+                                                                                <span>Delete</span>
+                                                                            </li>
+                                                                        </ul>
+                                                                    </div>
                                                                 </div>
-                                                            </div>
-                                                        }
-                                                        else
-                                                        {
-                                                            <div class="btn-ellipses float-left">
-                                                                @if (!(context.ComparisonIcon is null))
-                                                                {
-                                                                    @if (!(context.ComparisonResult == "Exact match"))
+                                                            }
+                                                            else
+                                                            {
+                                                                <div class="btn-ellipses float-left">
+                                                                    @if (!(context.ComparisonIcon is null))
                                                                     {
-                                                                        <ModalTooltip Direction="right" Text=@(context.ComparisonResult == "Partial match" ? "Differences found, click to sync" : "Does not exist, click to create") Class="w-2">
-                                                                            <div class="btn-dashed" @onclick="() => PrepareChapterCreateOnAlt(context.SmartflowObject)"><span class="fa fa-@context.ComparisonIcon"></span></div>
-                                                                        </ModalTooltip>
+                                                                        @if (!(context.ComparisonResult == "Exact match"))
+                                                                        {
+                                                                            <ModalTooltip Direction="right" Text=@(context.ComparisonResult == "Partial match" ? "Differences found, click to sync" : "Does not exist, click to create") Class="w-2">
+                                                                                <div class="btn-dashed" @onclick="() => PrepareChapterCreateOnAlt(context.SmartflowObject)"><span class="fa fa-@context.ComparisonIcon"></span></div>
+                                                                            </ModalTooltip>
 
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <ModalTooltip Direction="right" Text="Exact Match" Class="w-1">
+                                                                                <span class="fa fa-@context.ComparisonIcon"></span>
+                                                                            </ModalTooltip>
+
+                                                                        }
                                                                     }
                                                                     else
                                                                     {
-                                                                        <ModalTooltip Direction="right" Text="Exact Match" Class="w-1">
-                                                                            <span class="fa fa-@context.ComparisonIcon"></span>
-                                                                        </ModalTooltip>
-
+                                                                        <div class="spinner"></div>
                                                                     }
-                                                                }
-                                                                else
-                                                                {
-                                                                    <div class="spinner"></div>
-                                                                }
+                                                                </div>
+                                                            }
+
+                                                        }
+                                                        <div class="data-item-sub">
+                                                            <span class="hidden-sm-down"><span class=" fa fa-share-alt-square mr-2"></span></span>
+                                                            @context.SmartflowObject.SmartflowName
+                                                        </div>
+                                                        @if (UserSession.isAdminUser)
+                                                        {
+                                                            <div class="data-item-right seq-change">
+                                                                <div @onclick='() => MoveSmartFlowSeq(context.SmartflowObject, "Chapters", "Up")'><span class="fa fa-angle-up"></span></div>
+                                                                <div class="seq-no">@context.SmartflowObject.SeqNo</div>
+                                                                <div @onclick='() => MoveSmartFlowSeq(context.SmartflowObject, "Chapters", "Down")'><span class="fa fa-angle-down"></span></div>
                                                             </div>
                                                         }
-
-                                                    }
-                                                    <div class="data-item-sub">
-                                                        <span class="hidden-sm-down"><span class=" fa fa-share-alt-square mr-2"></span></span>
-                                                        @context.SmartflowObject.SmartflowName
-                                                    </div>
-                                                    @if (UserSession.isAdminUser)
-                                                    {
-                                                        <div class="data-item-right seq-change">
-                                                            <div @onclick='() => MoveSmartFlowSeq(context.SmartflowObject, "Chapters", "Up")'><span class="fa fa-angle-up"></span></div>
-                                                            <div class="seq-no">@context.SmartflowObject.SeqNo</div>
-                                                            <div @onclick='() => MoveSmartFlowSeq(context.SmartflowObject, "Chapters", "Down")'><span class="fa fa-angle-down"></span></div>
+                                                        <div title="Click to edit @context.SmartflowObject.SmartflowName" class="data-item-right link-direction" @onclick="() => SelectChapter(context.SmartflowObject)">
+                                                            <div class="fa fa-pencil-alt"></div>
                                                         </div>
-                                                    }
-                                                    <div title="Click to edit @context.SmartflowObject.SmartflowName" class="data-item-right link-direction" @onclick="() => SelectChapter(context.SmartflowObject)">
-                                                        <div class="fa fa-pencil-alt"></div>
                                                     </div>
                                                 </div>
-                                            </div>
 
-                                        </Dropzone>
+                                            </Dropzone>
 
-                                    </div>
+                                        </div>
+
+                                    }
 
                                 }
-
                             }
                         }
                     }
@@ -273,7 +275,8 @@ else
                 Case Type: <span class="badge badge-grey mr-3">@selectedChapter.CaseType</span>
                 Smartflow: <span class="badge badge-grey mr-3"> @selectedChapter.Name</span>
 
-                @{
+                @if(appChapterState != null)
+                {
                     if (appChapterState.GetChapterItemState(UserSession, selectedChapter).ActiveUsers.Where(U => U.UserName != UserSession.User.FullName).ToList().Count > 0)
                     {
                         <span class="pl-5">Active Users: </span>
@@ -430,15 +433,18 @@ else
                                                              Value="@selectedChapter.P4WCaseTypeGroup"
                                                              ValueChanged="@((string value) => SaveP4WCaseTypeGroup(value))">
                                                     <option value="">Select</option>
-                
-                                                    @foreach (var group in partnerCaseTypeGroups.OrderBy(C => C.Name).ToList())
+                                                    @if(partnerCaseTypeGroups != null)
                                                     {
-                                                        <option value="@group.Name">
-                                                            @group.Name
-                                                        </option>
+                                                        foreach (var group in partnerCaseTypeGroups.OrderBy(C => C.Name).ToList())
+                                                        {
+                                                            <option value="@group.Name">
+                                                                @group.Name
+                                                            </option>
+                                                        }
+                                                        <option value="Global Documents">Global Documents</option>
+                                                        <option value="Entity Documents">Entity Documents</option>
                                                     }
-                                                    <option value="Global Documents">Global Documents</option>
-                                                    <option value="Entity Documents">Entity Documents</option>
+                                                    
                                                 </InputSelect>
                                             </div>
                                             <div class="form-group">
@@ -480,10 +486,12 @@ else
                                                                  ValueChanged="@((string value) => SaveSelectedStep(value))">
                                                         <option value="">Select</option>
                                                         <option value="Create New">--- Create New ---</option>
-                                                         @foreach (var step in dropDownChapterList
-                                                      .Where(D => D.DocumentType == 6)
-                                                      .Where(D => D.Notes != null && D.Notes.Contains("Smartflow:"))
-                                                      .Where(V => V.CaseTypeGroupRef == (string.IsNullOrEmpty(selectedChapter.P4WCaseTypeGroup)
+                                                        @if(dropDownChapterList != null & partnerCaseTypeGroups != null)
+                                                        {
+                                                            foreach (var step in dropDownChapterList
+                                                                .Where(D => D.DocumentType == 6)
+                                                                .Where(D => D.Notes != null && D.Notes.Contains("Smartflow:"))
+                                                                .Where(V => V.CaseTypeGroupRef == (string.IsNullOrEmpty(selectedChapter.P4WCaseTypeGroup)
                                                                                           ? -2
                                                                                           : selectedChapter.P4WCaseTypeGroup == "Global Documents"
                                                                                           ? 0
@@ -493,13 +501,15 @@ else
                                                                                               .Where(P => P.Name == selectedChapter.P4WCaseTypeGroup)
                                                                                               .Select(P => P.Id)
                                                                                               .FirstOrDefault()))
-                                                      .OrderBy(D => D.Name)
-                                                      .ToList())
-                                                        {
-                                                            <option value="@step.Name">
-                                                                @step.Name
-                                                            </option>
-                                                        } 
+                                                                .OrderBy(D => D.Name)
+                                                                .ToList())
+                                                            {
+                                                                <option value="@step.Name">
+                                                                    @step.Name
+                                                                </option>
+                                                            } 
+                                                        }
+                                                         
                                                         
                                                     </InputSelect>
                                                 </div>
@@ -2278,12 +2288,15 @@ else
                                 <select @bind="selectColour"
                                         style="background-color: @getHTMLColourFromAndroid(ListChapterColours.Where(C => C.ColourName == selectColour).Select(C => C.ColourCode).FirstOrDefault())"
                                         class="form-control form-control-lg">
-                                    @foreach (var colour in ListChapterColours)
+                                    @if(ListChapterColours != null)
                                     {
-                                        <option style="background-color: @getHTMLColourFromAndroid(colour.ColourCode)" value="@(colour.ColourCode.Contains("#") ? colour.ColourName : colour.ColourCode)">
-                                            @colour.ColourName
+                                        foreach (var colour in ListChapterColours)
+                                        {
+                                            <option style="background-color: @getHTMLColourFromAndroid(colour.ColourCode)" value="@(colour.ColourCode.Contains("#") ? colour.ColourName : colour.ColourCode)">
+                                                @colour.ColourName
 
-                                        </option>
+                                            </option>
+                                        }
                                     }
                                 </select>
 
@@ -2300,26 +2313,30 @@ else
 
                         <div class="grid-can-edit chapter-scroll-list">
                             <div class="thumbnail-list">
-                                @foreach (var fileDesc in ListFilesForBgImages.ToList().OrderBy(F => F.FileName))
+                                @if(ListFilesForBgImages != null)
                                 {
+                                    foreach (var fileDesc in ListFilesForBgImages.ToList().OrderBy(F => F.FileName))
+                                    {
 
-                                    <div class="thumbnail-item @(!string.IsNullOrEmpty(selectedChapter.BackgroundImageName) && fileDesc.FileName == selectedChapter.BackgroundImageName ? "active" : "")">
-                                        <img src="@fileDesc.FileURL.Replace("/wwwroot","")" alt="" class="img-thumbnail" />
-                                        <label title="@fileDesc.FileName">@fileDesc.FileName</label>
-                                        <div class="thumbnail-options">
-                                            <button @onclick='(() => PrepareBgImageForDelete(fileDesc))' class="btn col-grey" title="Delete this image"><i class="fa fa-trash"></i></button>
-                                            @if (!string.IsNullOrEmpty(selectedChapter.BackgroundImageName) && fileDesc.FileName == selectedChapter.BackgroundImageName)
-                                            {
-                                                <button @onclick='() => SelectBgImage(new FileManagement.FileClassObjects.FileDesc { FileName = "", FileURL = "" })' class="btn " title="Deselect this image"><i class="fa fa-times"></i></button>
-                                            }
-                                            else
-                                            {
-                                                <button @onclick='() => SelectBgImage(fileDesc)' class="btn " title="Use this image"><i class="fa fa-check"></i></button>
-                                            }
+                                        <div class="thumbnail-item @(!string.IsNullOrEmpty(selectedChapter.BackgroundImageName) && fileDesc.FileName == selectedChapter.BackgroundImageName ? "active" : "")">
+                                            <img src="@fileDesc.FileURL.Replace("/wwwroot","")" alt="" class="img-thumbnail" />
+                                            <label title="@fileDesc.FileName">@fileDesc.FileName</label>
+                                            <div class="thumbnail-options">
+                                                <button @onclick='(() => PrepareBgImageForDelete(fileDesc))' class="btn col-grey" title="Delete this image"><i class="fa fa-trash"></i></button>
+                                                @if (!string.IsNullOrEmpty(selectedChapter.BackgroundImageName) && fileDesc.FileName == selectedChapter.BackgroundImageName)
+                                                {
+                                                    <button @onclick='() => SelectBgImage(new FileManagement.FileClassObjects.FileDesc { FileName = "", FileURL = "" })' class="btn " title="Deselect this image"><i class="fa fa-times"></i></button>
+                                                }
+                                                else
+                                                {
+                                                    <button @onclick='() => SelectBgImage(fileDesc)' class="btn " title="Use this image"><i class="fa fa-check"></i></button>
+                                                }
+                                            </div>
                                         </div>
-                                    </div>
 
+                                    }
                                 }
+                                
                             </div>
                         </div>
 
@@ -2348,41 +2365,44 @@ else
 
 
                         <div class="grid-can-edit chapter-scroll-list">
-                            @foreach (var fileDesc in ListFilesForBackups.Where(F => F.FilePath.Contains(".txt") || F.FilePath.Contains(".JSON")).ToList().OrderByDescending(F => F.FileDate))
+                            @if(ListFilesForBackups != null)
                             {
-                                <div class="row grid-row grid-row-sm">
-                                    <div class="data-item">
-                                        <div class="btn-ellipses float-left">
-                                            <span class="fa fa-ellipsis-v"></span>
-                                            <div class="ellipsis-menu">
-                                                <ul>
-                                                    <li class="col-main" @onclick='(() => ReadBackUpFile(fileDesc.FilePath))'>
-                                                        <span class="fa fa-window-restore mr-2"></span>
-                                                        <span>Restore</span>
-                                                    </li>
-                                                    <li class="col-main" @onclick='(() => DownloadFile(fileDesc))'>
-                                                        <span class="fa fa-download mr-2"></span>
-                                                        <span>Download</span>
-                                                    </li>
-                                                    <li class="col-main" @onclick='(() => PrepareBackUpForDelete(fileDesc))'>
-                                                        <span class="fa fa-trash-alt mr-2"></span>
-                                                        <span>Delete</span>
-                                                    </li>
-                                                </ul>
+                                foreach (var fileDesc in ListFilesForBackups.Where(F => F.FilePath.Contains(".txt") || F.FilePath.Contains(".JSON")).ToList().OrderByDescending(F => F.FileDate))
+                                {
+                                    <div class="row grid-row grid-row-sm">
+                                        <div class="data-item">
+                                            <div class="btn-ellipses float-left">
+                                                <span class="fa fa-ellipsis-v"></span>
+                                                <div class="ellipsis-menu">
+                                                    <ul>
+                                                        <li class="col-main" @onclick='(() => ReadBackUpFile(fileDesc.FilePath))'>
+                                                            <span class="fa fa-window-restore mr-2"></span>
+                                                            <span>Restore</span>
+                                                        </li>
+                                                        <li class="col-main" @onclick='(() => DownloadFile(fileDesc))'>
+                                                            <span class="fa fa-download mr-2"></span>
+                                                            <span>Download</span>
+                                                        </li>
+                                                        <li class="col-main" @onclick='(() => PrepareBackUpForDelete(fileDesc))'>
+                                                            <span class="fa fa-trash-alt mr-2"></span>
+                                                            <span>Delete</span>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <div class="data-item-sub">
+                                                @fileDesc.FileName
                                             </div>
                                         </div>
-                                        <div class="data-item-sub">
-                                            @fileDesc.FileName
+                                        <div class="data-item ">
+                                            <div class="data-item-sub">
+                                                @fileDesc.FileDate.ToString("dd MMM yyyy")
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="data-item ">
-                                        <div class="data-item-sub">
-                                            @fileDesc.FileDate.ToString("dd MMM yyyy")
-                                        </div>
-                                    </div>
 
 
-                                </div>
+                                    </div>
+                                }
                             }
                         </div>
 

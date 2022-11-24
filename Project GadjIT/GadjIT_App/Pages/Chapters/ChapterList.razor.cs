@@ -27,6 +27,7 @@ using GadjIT_App.Services.AppState;
 using Microsoft.Extensions.Logging;
 using Serilog.Context;
 using Microsoft.Extensions.Configuration;
+using System.Net.Http;
 
 namespace GadjIT_App.Pages.Chapters
 {
@@ -45,6 +46,12 @@ namespace GadjIT_App.Pages.Chapters
 
         [Inject]
         public IMapper mapper { get; set; }
+
+        [Inject]
+        private IJSRuntime JSRuntime {get; set;}
+
+        [Inject]
+        public INotificationManager NotificationManager {get; set;}
 
         [Inject]
         private IChapterManagementService chapterManagementService { get; set; }
@@ -188,14 +195,9 @@ namespace GadjIT_App.Pages.Chapters
                 }
                 catch (Exception e)
                 {
-
-                    using (LogContext.PushProperty("SourceSystem", UserSession.selectedSystem))
-                    using (LogContext.PushProperty("SourceCompanyId", UserSession.Company.Id))
-                    using (LogContext.PushProperty("SourceUserId", UserSession.User.Id))
-                    using (LogContext.PushProperty("SourceContext", nameof(ChapterList)))
-                    {
-                        Logger.LogError(e, "Error: Loading initial Smartflow list");
-                    }
+                    //Note: do not show notification as JsRuntime is not available until After Render
+                    await GenericErrorLog(false,e, "OnInitializedAsync", $"Loading initial Smartflow list: {e.Message}");
+                    
                 }
             }
 
@@ -203,9 +205,13 @@ namespace GadjIT_App.Pages.Chapters
 
         private Timer timer;
 
-        protected override void OnAfterRender(bool firstRender)
+        protected override async Task OnAfterRenderAsync(bool firstRender)
         {
-            if (firstRender)
+            if (!firstRender)
+            {
+                await JSRuntime.InvokeVoidAsync("showPageAfterFirstRender");
+            }
+            else
             {
                 timer = new Timer();
                 timer.Interval = 10000; //10 seconds
@@ -217,7 +223,7 @@ namespace GadjIT_App.Pages.Chapters
             base.OnAfterRender(firstRender);
         }
 
-        private async void OnTimerInterval(object sender, ElapsedEventArgs e)
+        private async void OnTimerInterval(object sender, ElapsedEventArgs eventArgs)
         {
             //Compare current session with Chapter State to see if any other users have updated the Chapter
             //If an update is detected (ChapterLastUpdated is greater than session's ChapterLastCompared) then 
@@ -260,8 +266,8 @@ namespace GadjIT_App.Pages.Chapters
 
                             var id = SelectedChapterObject.Id;
 
-                            var lsrSR = await CompanyDbAccess.GetAllSmartflowRecords(UserSession);
-                            lstChapters = lsrSR.Select(A => new VmUsrOrsfSmartflows { SmartflowObject = mapper.Map(A, new UsrOrsfSmartflows()) }).ToList();
+                            var lstAllChapters = await CompanyDbAccess.GetAllSmartflowRecords(UserSession);
+                            lstChapters = lstAllChapters.Select(A => new VmUsrOrsfSmartflows { SmartflowObject = mapper.Map(A, new UsrOrsfSmartflows()) }).ToList();
 
                             SelectedChapterObject = lstChapters.Where(C => C.SmartflowObject.Id == id).Select(C => C.SmartflowObject).FirstOrDefault();
 
@@ -309,15 +315,13 @@ namespace GadjIT_App.Pages.Chapters
 
                 appChapterState.SetUsersCurrentChapter(UserSession, selectedChapter);
             }
-            catch (Exception D)
+            catch(HttpRequestException e)
             {
-                using (LogContext.PushProperty("SourceSystem", UserSession.selectedSystem))
-                using (LogContext.PushProperty("SourceCompanyId", UserSession.Company.Id))
-                using (LogContext.PushProperty("SourceUserId", UserSession.User.Id))
-                using (LogContext.PushProperty("SourceContext", nameof(ChapterList)))
-                {
-                    Logger.LogError(D, "Refreshing Smartflow during interval event");
-                }
+                //do nothing, already dealt with
+            }
+            catch (Exception e)
+            {
+                await GenericErrorLog(true,e, "OnTimerInterval", e.Message);
             }
 
 
@@ -359,14 +363,7 @@ namespace GadjIT_App.Pages.Chapters
             }
             catch (Exception e)
             {
-
-                using (LogContext.PushProperty("SourceSystem", UserSession.selectedSystem))
-                using (LogContext.PushProperty("SourceCompanyId", UserSession.Company.Id))
-                using (LogContext.PushProperty("SourceUserId", UserSession.User.Id))
-                using (LogContext.PushProperty("SourceContext", nameof(ChapterList)))
-                {
-                    Logger.LogError(e, "Error: Saving background colour");
-                }
+                await GenericErrorLog(true,e, "SaveSelectedBackgroundColour", $"Saving background colour: {e.Message}");
             }
         }
 
@@ -563,14 +560,7 @@ namespace GadjIT_App.Pages.Chapters
             }
             catch (Exception e)
             {
-
-                using (LogContext.PushProperty("SourceSystem", UserSession.selectedSystem))
-                using (LogContext.PushProperty("SourceCompanyId", UserSession.Company.Id))
-                using (LogContext.PushProperty("SourceUserId", UserSession.User.Id))
-                using (LogContext.PushProperty("SourceContext", nameof(ChapterList)))
-                {
-                    Logger.LogError(e, "Error: Saving notes");
-                }
+                await GenericErrorLog(true,e, "SaveShowPartnerNotes", $"Saving notes: {e.Message}");
             }
         }
 
@@ -607,13 +597,8 @@ namespace GadjIT_App.Pages.Chapters
             catch (Exception e)
             {
 
-                using (LogContext.PushProperty("SourceSystem", UserSession.selectedSystem))
-                using (LogContext.PushProperty("SourceCompanyId", UserSession.Company.Id))
-                using (LogContext.PushProperty("SourceUserId", UserSession.User.Id))
-                using (LogContext.PushProperty("SourceContext", nameof(ChapterList)))
-                {
-                    Logger.LogError(e, "Error: Toggling document tracking");
-                }
+                await GenericErrorLog(true,e, "SaveAttachmentTracking", $"Toggling document tracking: {e.Message}");
+
             }
         }
 
@@ -647,11 +632,11 @@ namespace GadjIT_App.Pages.Chapters
         public async Task MovePos()
         {
             await Task.Delay(1);
-            await jsRuntime.InvokeVoidAsync("moveToPosition", ScrollPosition);
+            await JSRuntime.InvokeVoidAsync("moveToPosition", ScrollPosition);
         }
        
 
-        void SelectCaseTypeGroup(string caseTypeGroup)
+        public async Task SelectCaseTypeGroup(string caseTypeGroup)
         {
             try
             {
@@ -661,14 +646,8 @@ namespace GadjIT_App.Pages.Chapters
             }
             catch (Exception e)
             {
-
-                using (LogContext.PushProperty("SourceSystem", UserSession.selectedSystem))
-                using (LogContext.PushProperty("SourceCompanyId", UserSession.Company.Id))
-                using (LogContext.PushProperty("SourceUserId", UserSession.User.Id))
-                using (LogContext.PushProperty("SourceContext", nameof(ChapterList)))
-                {
-                    Logger.LogError(e, "Error: Selecting Case Type Group");
-                }
+                await GenericErrorLog(true,e, "SelectCaseTypeGroup", $"Selecting Case Type Group: {e.Message}");
+                
             }
         }
 
@@ -858,14 +837,8 @@ namespace GadjIT_App.Pages.Chapters
             }
             catch (Exception e)
             {
-
-                using (LogContext.PushProperty("SourceSystem", UserSession.selectedSystem))
-                using (LogContext.PushProperty("SourceCompanyId", UserSession.Company.Id))
-                using (LogContext.PushProperty("SourceUserId", UserSession.User.Id))
-                using (LogContext.PushProperty("SourceContext", nameof(ChapterList)))
-                {
-                    Logger.LogError(e, "Error: Creating/Updating current P4W Smartflow step");
-                }
+                await GenericErrorLog(true,e, "CreateStep", $"Creating/Updating current P4W Smartflow step: {e.Message}");
+                
             }
         }
 
@@ -1021,14 +994,8 @@ namespace GadjIT_App.Pages.Chapters
             }
             catch (Exception e)
             {
+                await GenericErrorLog(true,e, "UpdateSteps", $"Creating/Updating all P4W Smartflow steps: {e.Message}");
 
-                using (LogContext.PushProperty("SourceSystem", UserSession.selectedSystem))
-                using (LogContext.PushProperty("SourceCompanyId", UserSession.Company.Id))
-                using (LogContext.PushProperty("SourceUserId", UserSession.User.Id))
-                using (LogContext.PushProperty("SourceContext", nameof(ChapterList)))
-                {
-                    Logger.LogError(e, "Error: Creating/Updating all P4W Smartflow steps");
-                }
             }
 
         }
@@ -1040,7 +1007,7 @@ namespace GadjIT_App.Pages.Chapters
             try
             {
 
-                ScrollPosition = await jsRuntime.InvokeAsync<float>("getElementPosition");
+                ScrollPosition = await JSRuntime.InvokeAsync<float>("getElementPosition");
 
                 displaySpinner = true;
 
@@ -1090,19 +1057,19 @@ namespace GadjIT_App.Pages.Chapters
                 {
                     dropDownChapterList = await chapterManagementService.GetDocumentList(selectedChapter.CaseType);
                     //dropDownChapterList = dropDownChapterList.Where(D => !(D.Name is null)).ToList();
-                    //TableDates = await chapterManagementService.GetDatabaseTableDateFields();
+                    TableDates = await chapterManagementService.GetDatabaseTableDateFields();
                 }
                 catch (Exception e)
                 {
-                    using (LogContext.PushProperty("SourceSystem", UserSession.selectedSystem))
-                    using (LogContext.PushProperty("SourceCompanyId", UserSession.Company.Id))
-                    using (LogContext.PushProperty("SourceUserId", UserSession.User.Id))
-                    using (LogContext.PushProperty("SourceContext", nameof(ChapterList)))
-                    {
-                        Logger.LogError(e, "Error: Getting document list after Smartflow selected for edit");
-                    }
+                    await NotificationManager.ShowNotification("Danger", $"Oops! Something went wrong accessing the Smartflow details");
 
-                    //DisplaySmartflowLoadError(e.Message);
+                    await GenericErrorLog(false,e, "SelectChapter", $"Getting document list after Smartflow selected for edit: {e.Message}");
+
+                    displaySpinner = false;
+
+                    //return user to the full list of Smartflows. Do not present the user with the details of the Smartflow as none of the features will work.
+                    SelectHome();
+                    
                     return;
                 }
 
@@ -1139,26 +1106,24 @@ namespace GadjIT_App.Pages.Chapters
                     UserSession.ChapterLastCompared = appChapterState.GetLastUpdatedDate(UserSession, selectedChapter);
                 }
 
-                await jsRuntime.InvokeVoidAsync("moveToPosition", 0);
-Logger.LogError("1");
-
-                StateHasChanged();
-Logger.LogError("2");
+                await JSRuntime.InvokeVoidAsync("moveToPosition", 0);
 
             }
             catch (Exception ex)
             {
-                using (LogContext.PushProperty("SourceSystem", UserSession.selectedSystem))
-                using (LogContext.PushProperty("SourceCompanyId", UserSession.Company.Id))
-                using (LogContext.PushProperty("SourceUserId", UserSession.User.Id))
-                using (LogContext.PushProperty("SourceContext", nameof(ChapterList)))
-                {
-                    Logger.LogError(ex, "Error: Loading selected Smartflow");
-                }
 
-                //DisplaySmartflowLoadError(ex.Message);
+                await GenericErrorLog(true,ex, "SelectChapter", $"Loading selected Smartflow: {ex.Message}");
+
             }
-Logger.LogError("3");
+            finally
+            {
+                displaySpinner = false;
+
+                StateHasChanged();
+
+
+            }
+
 
         }
 
@@ -1187,20 +1152,15 @@ Logger.LogError("3");
             }
             catch (Exception ex)
             {
-                using (LogContext.PushProperty("SourceSystem", UserSession.selectedSystem))
-                using (LogContext.PushProperty("SourceCompanyId", UserSession.Company.Id))
-                using (LogContext.PushProperty("SourceUserId", UserSession.User.Id))
-                using (LogContext.PushProperty("SourceContext", nameof(ChapterList)))
-                {
-                    Logger.LogError(ex, "Error: Refreshing the document list");
-                }
+                await GenericErrorLog(true,ex, "DisplaySmartflowLoadError", $"Refreshing the document list: {ex.Message}");
+
             }
         }
 
         /// <summary>
         /// TODO: Need to work out what this method does
         /// </summary>
-        private void SetSmartflowFilePath()
+        private async Task SetSmartflowFilePath()
         {
             try
             {
@@ -1216,15 +1176,7 @@ Logger.LogError("3");
             }
             catch (Exception ex)
             {
-                using (LogContext.PushProperty("SourceSystem", UserSession.selectedSystem))
-                using (LogContext.PushProperty("SourceCompanyId", UserSession.Company.Id))
-                using (LogContext.PushProperty("SourceUserId", UserSession.User.Id))
-                using (LogContext.PushProperty("SourceContext", nameof(ChapterList)))
-                {
-                    Logger.LogError(ex, "Error: Setting Smartflow file path");
-                }
-
-                //DisplaySmartflowLoadError(ex.Message);
+                await GenericErrorLog(true,ex, "SetSmartflowFilePath", $"Setting Smartflow file path: {ex.Message}");
             }
         }
 
@@ -1246,15 +1198,9 @@ Logger.LogError("3");
                 appChapterState.SetLastUpdated(UserSession, selectedChapter);
 
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                using (LogContext.PushProperty("SourceSystem", UserSession.selectedSystem))
-                using (LogContext.PushProperty("SourceCompanyId", UserSession.Company.Id))
-                using (LogContext.PushProperty("SourceUserId", UserSession.User.Id))
-                using (LogContext.PushProperty("SourceContext", nameof(ChapterList)))
-                {
-                    Logger.LogError(ex, "Error: Saving Smartflow base details");
-                }
+                await GenericErrorLog(true,e, "SaveChapterDetails", $"Saving Smartflow base details: {e.Message}");
             }
 
             await RefreshChapterItems("All");
@@ -1280,8 +1226,9 @@ Logger.LogError("3");
 
             try
             {
-                var lsrSR = await CompanyDbAccess.GetAllSmartflowRecords(UserSession);
-                lstChapters = lsrSR.Select(A => new VmUsrOrsfSmartflows { SmartflowObject = mapper.Map(A, new UsrOrsfSmartflows()) }).ToList();
+                var lstAllChapters = await CompanyDbAccess.GetAllSmartflowRecords(UserSession);
+                //generate a copy of the Smartflow Records but converted to VmUsrOrsfSmartflows 
+                lstChapters = lstAllChapters.Select(A => new VmUsrOrsfSmartflows { SmartflowObject = mapper.Map(A, new UsrOrsfSmartflows()) }).ToList();
 
                 lstSelectedChapters = lstChapters.Where(C => C.SmartflowObject.CaseType == selectedChapter.CaseType)
                                         .Where(C => C.SmartflowObject.CaseTypeGroup == selectedChapter.CaseTypeGroup)
@@ -1306,16 +1253,16 @@ Logger.LogError("3");
             }
             catch(Exception e)
             {
-                using (LogContext.PushProperty("SourceSystem", UserSession.selectedSystem))
-                using (LogContext.PushProperty("SourceCompanyId", UserSession.Company.Id))
-                using (LogContext.PushProperty("SourceUserId", UserSession.User.Id))
-                using (LogContext.PushProperty("SourceContext", nameof(ChapterList)))
-                {
-                    Logger.LogError(e, "Error: Refreshing Smartflow list");
-                }
+                lstChapters = new List<VmUsrOrsfSmartflows>();
+                lstSelectedChapters = new List<VmUsrOrsfSmartflows>();
+                partnerCaseTypeGroups = new List<CaseTypeGroups>();
+                ListP4WViews = new List<MpSysViews>();
+
+                await GenericErrorLog(true,e, "RefreshChapters", $"Refreshing Smartflow list: {e.Message}");
             }
 
             ListChapterLoaded = true;
+
             await InvokeAsync(() =>
             {
                 StateHasChanged();
@@ -1335,8 +1282,8 @@ Logger.LogError("3");
                         gotLock = CompanyDbAccess.Lock;
                     }
 
-                    var lsrSR = await CompanyDbAccess.GetAllSmartflowRecords(UserSession);
-                    lstChapters = lsrSR.Select(A => new VmUsrOrsfSmartflows { SmartflowObject = mapper.Map(A, new UsrOrsfSmartflows()) }).ToList();
+                    var lstAllChapters = await CompanyDbAccess.GetAllSmartflowRecords(UserSession);
+                    lstChapters = lstAllChapters.Select(A => new VmUsrOrsfSmartflows { SmartflowObject = mapper.Map(A, new UsrOrsfSmartflows()) }).ToList();
 
 
                     lstSelectedChapters = lstChapters.Where(C => C.SmartflowObject.CaseType == selectedChapter.CaseType)
@@ -1437,18 +1384,12 @@ Logger.LogError("3");
             }
             catch (Exception e)
             {
-                using (LogContext.PushProperty("SourceSystem", UserSession.selectedSystem))
-                using (LogContext.PushProperty("SourceCompanyId", UserSession.Company.Id))
-                using (LogContext.PushProperty("SourceUserId", UserSession.User.Id))
-                using (LogContext.PushProperty("SourceContext", nameof(ChapterList)))
-                {
-                    Logger.LogError(e, "Error: Refreshing Smartflow tab items");
-                }
+                await GenericErrorLog(true,e, "RefreshChapterItems", $"Refreshing Smartflow tab items: {e.Message}");
 
                 return false;
             }
             
-            displaySpinner = false;
+           
 
             return true;
         }
@@ -1480,11 +1421,11 @@ Logger.LogError("3");
                     gotLock = CompanyDbAccess.Lock;
                 }
 
-                var lsrSR = await CompanyDbAccess.GetAllSmartflowRecords(UserSession);
+                var lstAllChapters = await CompanyDbAccess.GetAllSmartflowRecords(UserSession);
 
-                if(!(lsrSR is null))
+                if(!(lstAllChapters is null))
                 {
-                    lstAltSystemChapters = lsrSR.Select(A => new VmUsrOrsfSmartflows { SmartflowObject = mapper.Map(A, new UsrOrsfSmartflows()) }).ToList();
+                    lstAltSystemChapters = lstAllChapters.Select(A => new VmUsrOrsfSmartflows { SmartflowObject = mapper.Map(A, new UsrOrsfSmartflows()) }).ToList();
                 }
                 
 
@@ -1587,13 +1528,8 @@ Logger.LogError("3");
             }
             catch(Exception e)
             {
-                using (LogContext.PushProperty("SourceSystem", UserSession.selectedSystem))
-                using (LogContext.PushProperty("SourceCompanyId", UserSession.Company.Id))
-                using (LogContext.PushProperty("SourceUserId", UserSession.User.Id))
-                using (LogContext.PushProperty("SourceContext", nameof(ChapterList)))
-                {
-                    Logger.LogError(e, "Error: Comparing systems");
-                }
+                await GenericErrorLog(true,e, "CompareSelectedChapterToAltSystem", $"Comparing systems: {e.Message}");
+                
                 return false;
             }
 
@@ -1763,13 +1699,7 @@ Logger.LogError("3");
             }
             catch(Exception e)
             {
-                using (LogContext.PushProperty("SourceSystem", UserSession.selectedSystem))
-                using (LogContext.PushProperty("SourceCompanyId", UserSession.Company.Id))
-                using (LogContext.PushProperty("SourceUserId", UserSession.User.Id))
-                using (LogContext.PushProperty("SourceContext", nameof(ChapterList)))
-                {
-                    Logger.LogError(e, "Error: Comparing all Smartflows from current listing");
-                }
+                await GenericErrorLog(true,e, "RefreshCompararisonAllChapters", $"Comparing all Smartflows from current listing: {e.Message}");
 
                 return false;
             }
@@ -1964,128 +1894,160 @@ Logger.LogError("3");
         }
 
 
-        private void PrepareForInsert(string header, string type)
+        private async void PrepareForInsert(string header, string type)
         {
-            selectedList = type;
+            try
+            {
+                selectedList = type;
 
-            editObject = new VmUsrOrDefChapterManagement { ChapterObject = new GenSmartflowItem() };
-            editObject.ChapterObject.Type = (type == "Steps and Documents") ? "Doc" : type;
-            editObject.ChapterObject.Action = "INSERT";
+                editObject = new VmUsrOrDefChapterManagement { ChapterObject = new GenSmartflowItem() };
+                editObject.ChapterObject.Type = (type == "Steps and Documents") ? "Doc" : type;
+                editObject.ChapterObject.Action = "INSERT";
+                
+                if (type == "Steps and Documents")
+                {
+                    editObject.ChapterObject.SeqNo = lstDocs
+                                                        .OrderByDescending(A => A.ChapterObject.SeqNo)
+                                                        .Select(A => A.ChapterObject.SeqNo)
+                                                        .FirstOrDefault() + 1;
+                }
+                else if (type == "Status")
+                {
+                    editObject.ChapterObject.SeqNo = lstStatus
+                                                        .OrderByDescending(A => A.ChapterObject.SeqNo)
+                                                        .Select(A => A.ChapterObject.SeqNo)
+                                                        .FirstOrDefault() + 1;
+
+                }
+                else
+                {
+                    editFeeObject.FeeObject.SeqNo = lstFees
+                                        .OrderByDescending(A => A.FeeObject.SeqNo)
+                                        .Select(A => A.FeeObject.SeqNo)
+                                        .FirstOrDefault() + 1;
+                }
+
+                editObject.ChapterObject.SeqNo = editObject.ChapterObject.SeqNo is null
+                                                            ? 1
+                                                            : editObject.ChapterObject.SeqNo;
+
+                editFeeObject.FeeObject.SeqNo = editFeeObject.FeeObject.SeqNo is null
+                                                            ? 1
+                                                            : editFeeObject.FeeObject.SeqNo;
+
+                ShowChapterDetailModal("Insert");
+            }
+            catch(Exception e)
+            {
+                await GenericErrorLog(false, e, "PrepareForInsert", e.Message);
+            }
             
-            if (type == "Steps and Documents")
-            {
-                editObject.ChapterObject.SeqNo = lstDocs
-                                                    .OrderByDescending(A => A.ChapterObject.SeqNo)
-                                                    .Select(A => A.ChapterObject.SeqNo)
-                                                    .FirstOrDefault() + 1;
-            }
-            else if (type == "Status")
-            {
-                editObject.ChapterObject.SeqNo = lstStatus
-                                                    .OrderByDescending(A => A.ChapterObject.SeqNo)
-                                                    .Select(A => A.ChapterObject.SeqNo)
-                                                    .FirstOrDefault() + 1;
-
-            }
-            else
-            {
-                editFeeObject.FeeObject.SeqNo = lstFees
-                                    .OrderByDescending(A => A.FeeObject.SeqNo)
-                                    .Select(A => A.FeeObject.SeqNo)
-                                    .FirstOrDefault() + 1;
-            }
-
-            editObject.ChapterObject.SeqNo = editObject.ChapterObject.SeqNo is null
-                                                        ? 1
-                                                        : editObject.ChapterObject.SeqNo;
-
-            editFeeObject.FeeObject.SeqNo = editFeeObject.FeeObject.SeqNo is null
-                                                        ? 1
-                                                        : editFeeObject.FeeObject.SeqNo;
-
-            ShowChapterDetailModal("Insert");
         }
 
-        private void PrepareDataViewForInsert(string header)
+        private async Task PrepareDataViewForInsert(string header)
         {
-            selectedList = header;
-            EditDataViewObject = new VmDataViews { DataView = new DataViews() } ;
-
-            if(ListVmDataViews.Count > 0)
+            try
             {
+                selectedList = header;
+                EditDataViewObject = new VmDataViews { DataView = new DataViews() } ;
 
-                EditDataViewObject.DataView.BlockNo = ListVmDataViews
-                                                       .OrderByDescending(D => D.DataView.BlockNo)
-                                                       .Select(D => D.DataView.BlockNo)
-                                                       .FirstOrDefault() + 1;
+                if(ListVmDataViews.Count > 0)
+                {
+
+                    EditDataViewObject.DataView.BlockNo = ListVmDataViews
+                                                        .OrderByDescending(D => D.DataView.BlockNo)
+                                                        .Select(D => D.DataView.BlockNo)
+                                                        .FirstOrDefault() + 1;
+                }
+                else
+                {
+                    EditDataViewObject.DataView.BlockNo = 1;
+                }
+
+
+                ShowDataViewDetailModal("Insert");
             }
-            else
+            catch(Exception e)
             {
-                EditDataViewObject.DataView.BlockNo = 1;
+                await GenericErrorLog(false, e, "PrepareDataViewForInsert", e.Message);
             }
-
-
-            ShowDataViewDetailModal("Insert");
         }
+
         //TODO: Change display to reflect the top 3 items and from-to dates
-        private void PrepareTickerMessageForInsert(string header)
+        private async Task PrepareTickerMessageForInsert(string header)
         {
-            selectedList = header;
-            EditTickerMessageObject = new VmTickerMessages { Message = new TickerMessages() };
+            try{
 
-            EditTickerMessageObject.Message.FromDate = DateTime.Now.ToString("yyyyMMdd");
-            EditTickerMessageObject.Message.ToDate = DateTime.Now.ToString("yyyyMMdd");
+                
+                selectedList = header;
+                EditTickerMessageObject = new VmTickerMessages { Message = new TickerMessages() };
 
-            if (ListVmTickerMessages.Count > 0)
-            {
+                EditTickerMessageObject.Message.FromDate = DateTime.Now.ToString("yyyyMMdd");
+                EditTickerMessageObject.Message.ToDate = DateTime.Now.ToString("yyyyMMdd");
 
-                EditTickerMessageObject.Message.SeqNo = ListVmTickerMessages
-                                                       .OrderByDescending(D => D.Message.SeqNo)
-                                                       .Select(D => D.Message.SeqNo)
-                                                       .FirstOrDefault() + 1;
+                if (ListVmTickerMessages.Count > 0)
+                {
+
+                    EditTickerMessageObject.Message.SeqNo = ListVmTickerMessages
+                                                        .OrderByDescending(D => D.Message.SeqNo)
+                                                        .Select(D => D.Message.SeqNo)
+                                                        .FirstOrDefault() + 1;
+                }
+                else
+                {
+                    EditTickerMessageObject.Message.SeqNo = 1;
+                }
+
+
+                ShowTickerMessageDetailModal("Insert");
             }
-            else
+            catch(Exception e)
             {
-                EditTickerMessageObject.Message.SeqNo = 1;
+                await GenericErrorLog(false, e, "PrepareTickerMessageForInsert", e.Message);
             }
-
-
-            ShowTickerMessageDetailModal("Insert");
         }
 
 
-        private void PrepNewChapter()
+        private async Task PrepNewChapter()
         {
-            editChapterObject = new UsrOrsfSmartflows();
+            try
+            {
 
-            if (!(SelectedChapterObject.CaseTypeGroup == ""))
-            {
-                editChapterObject.CaseTypeGroup = selectedChapter.CaseTypeGroup;
-            }
-            else
-            {
-                editChapterObject.CaseTypeGroup = "";
-            }
+                editChapterObject = new UsrOrsfSmartflows();
 
-            if (!(SelectedChapterObject.CaseType == ""))
-            {
-                editChapterObject.CaseType = selectedChapter.CaseType;
-            }
-            else
-            {
-                editChapterObject.CaseType = "";
-            }
+                if (!(SelectedChapterObject.CaseTypeGroup == ""))
+                {
+                    editChapterObject.CaseTypeGroup = selectedChapter.CaseTypeGroup;
+                }
+                else
+                {
+                    editChapterObject.CaseTypeGroup = "";
+                }
 
-            if (!string.IsNullOrWhiteSpace(selectedChapter.CaseTypeGroup) & !string.IsNullOrWhiteSpace(selectedChapter.CaseType))
-            {
-                editChapterObject.SeqNo = lstSelectedChapters
-                                                  .OrderByDescending(C => C.SmartflowObject.SeqNo)
-                                                  .Select(C => C.SmartflowObject.SeqNo)
-                                                  .FirstOrDefault() + 1;
+                if (!(SelectedChapterObject.CaseType == ""))
+                {
+                    editChapterObject.CaseType = selectedChapter.CaseType;
+                }
+                else
+                {
+                    editChapterObject.CaseType = "";
+                }
+
+                if (!string.IsNullOrWhiteSpace(selectedChapter.CaseTypeGroup) & !string.IsNullOrWhiteSpace(selectedChapter.CaseType))
+                {
+                    editChapterObject.SeqNo = lstSelectedChapters
+                                                    .OrderByDescending(C => C.SmartflowObject.SeqNo)
+                                                    .Select(C => C.SmartflowObject.SeqNo)
+                                                    .FirstOrDefault() + 1;
+                }
+                else
+                {
+                    editChapterObject.SeqNo = 1;
+                }
             }
-            else
+            catch(Exception e)
             {
-                editChapterObject.SeqNo = 1;
+                await GenericErrorLog(false, e, "PrepNewChapter", e.Message);
             }
         }
 
@@ -2119,11 +2081,19 @@ Logger.LogError("3");
 
         private async void PrepChapterList()
         {
-            if (!(selectedChapter.CaseType == ""))
+            try
             {
-                dropDownChapterList = await chapterManagementService.GetDocumentList(SelectedChapterObject.CaseType);
-                TableDates = await chapterManagementService.GetDatabaseTableDateFields();
-                StateHasChanged();
+                if (!(selectedChapter.CaseType == ""))
+                {
+                    dropDownChapterList = await chapterManagementService.GetDocumentList(SelectedChapterObject.CaseType);
+                    TableDates = await chapterManagementService.GetDatabaseTableDateFields();
+                    StateHasChanged();
+                }
+
+            }
+            catch(Exception e)
+            {
+                await GenericErrorLog(false, e, "PrepChapterList", e.Message);
             }
         }
 
@@ -2150,65 +2120,73 @@ Logger.LogError("3");
         /// <returns>No return</returns>
         protected async void MoveSeq(GenSmartflowItem selectobject, string listType, string direction)
         {
-            seqMoving = true; //prevents changes to the form whilst process of changing seq is carried out
-
-            var lstItems = new List<VmUsrOrDefChapterManagement>();
-            int incrementBy;
-
-            incrementBy = (direction.ToLower() == "up" ? -1 : 1);
-
-            rowChanged = (int)(selectobject.SeqNo + incrementBy);
-
-            switch (listType)
+            try
             {
-                case "Docs":
-                    lstItems = lstDocs;
-                    break;
-                //case "Fees":
-                //    lstItems = lstFees;
-                //    break;
-                case "Status":
-                    lstItems = lstStatus;
-                    break;
+                seqMoving = true; //prevents changes to the form whilst process of changing seq is carried out
 
-                //case "Chapters":
-                //    lstItems = lstChapters
-                //                        .Where(A => A.ChapterObject.CaseTypeGroup == selectedChapter.CaseTypeGroup)
-                //                        .Where(A => A.ChapterObject.CaseType == selectedChapter.CaseType)
-                //                        .OrderBy(A => A.ChapterObject.SeqNo)
-                //                        .ToList();
-                //    break;
+                var lstItems = new List<VmUsrOrDefChapterManagement>();
+                int incrementBy;
+
+                incrementBy = (direction.ToLower() == "up" ? -1 : 1);
+
+                rowChanged = (int)(selectobject.SeqNo + incrementBy);
+
+                switch (listType)
+                {
+                    case "Docs":
+                        lstItems = lstDocs;
+                        break;
+                    //case "Fees":
+                    //    lstItems = lstFees;
+                    //    break;
+                    case "Status":
+                        lstItems = lstStatus;
+                        break;
+
+                    //case "Chapters":
+                    //    lstItems = lstChapters
+                    //                        .Where(A => A.ChapterObject.CaseTypeGroup == selectedChapter.CaseTypeGroup)
+                    //                        .Where(A => A.ChapterObject.CaseType == selectedChapter.CaseType)
+                    //                        .OrderBy(A => A.ChapterObject.SeqNo)
+                    //                        .ToList();
+                    //    break;
+                }
+
+                var swapItem = lstItems.Where(D => D.ChapterObject.SeqNo == (selectobject.SeqNo + incrementBy)).SingleOrDefault();
+                if (!(swapItem is null))
+                {
+                    selectobject.SeqNo += incrementBy;
+                    swapItem.ChapterObject.SeqNo = swapItem.ChapterObject.SeqNo + (incrementBy * -1);
+
+                    //if (listType == "Chapters")
+                    //{
+                    //    await chapterManagementService.UpdateMainItem(selectobject).ConfigureAwait(false);
+                    //    await chapterManagementService.UpdateMainItem(swapItem.ChapterObject).ConfigureAwait(false);
+                    //}
+
+                    SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(selectedChapter);
+                    await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
+
+
+                    //keep track of time last updated ready for comparison by other sessions checking for updates
+                    appChapterState.SetLastUpdated(UserSession, selectedChapter);
+
+                }
+
+                await RefreshChapterItems(listType);
+                await InvokeAsync(() =>
+                {
+                    StateHasChanged();
+                });
             }
-
-            var swapItem = lstItems.Where(D => D.ChapterObject.SeqNo == (selectobject.SeqNo + incrementBy)).SingleOrDefault();
-            if (!(swapItem is null))
+            catch(Exception e)
             {
-                selectobject.SeqNo += incrementBy;
-                swapItem.ChapterObject.SeqNo = swapItem.ChapterObject.SeqNo + (incrementBy * -1);
-
-                //if (listType == "Chapters")
-                //{
-                //    await chapterManagementService.UpdateMainItem(selectobject).ConfigureAwait(false);
-                //    await chapterManagementService.UpdateMainItem(swapItem.ChapterObject).ConfigureAwait(false);
-                //}
-
-                SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(selectedChapter);
-                await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
-
-
-                //keep track of time last updated ready for comparison by other sessions checking for updates
-                appChapterState.SetLastUpdated(UserSession, selectedChapter);
-
+                await GenericErrorLog(false, e, "MoveSeq", e.Message);
             }
-
-            await RefreshChapterItems(listType);
-            await InvokeAsync(() =>
+            finally
             {
-                StateHasChanged();
-            });
-
-
-            seqMoving = false;
+                seqMoving = false;
+            }
 
         }
 
@@ -2248,18 +2226,15 @@ Logger.LogError("3");
                     StateHasChanged();
                 });
 
-                seqMoving = false;
-
             }
             catch (Exception e)
             {
-                using (LogContext.PushProperty("SourceSystem", UserSession.selectedSystem))
-                using (LogContext.PushProperty("SourceCompanyId", UserSession.Company.Id))
-                using (LogContext.PushProperty("SourceUserId", UserSession.User.Id))
-                using (LogContext.PushProperty("SourceContext", nameof(ChapterList)))
-                {
-                    Logger.LogError(e, $"Error: moving smartflow : {selectobject.SeqNo}");
-                }
+                await GenericErrorLog(true,e, "MoveSmartFlowSeq", $"Moving smartflow: {e.Message}");
+
+            }
+            finally
+            {
+                seqMoving = false;
             }
 
 
@@ -2267,111 +2242,144 @@ Logger.LogError("3");
         }
 
 
-        protected async void MoveBlockNo(DataViews selectobject, string listType, string direction)
+        protected async Task MoveBlockNo(DataViews selectobject, string listType, string direction) //Dataviews
         {
-            seqMoving = true; //prevents changes to the form whilst process of changing seq is carried out
-
-            int incrementBy;
-
-            incrementBy = (direction.ToLower() == "up" ? -1 : 1);
-
-            rowChanged = (int)(selectobject.BlockNo + incrementBy);
-
-            var swapItem = ListVmDataViews.Where(D => D.DataView.BlockNo == (selectobject.BlockNo + incrementBy)).SingleOrDefault();
-            if (!(swapItem is null))
+            try
             {
-                selectobject.BlockNo += incrementBy;
-                swapItem.DataView.BlockNo = swapItem.DataView.BlockNo + (incrementBy * -1);
 
-                SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(selectedChapter);
-                await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
+                seqMoving = true; //prevents changes to the form whilst process of changing seq is carried out
+
+                int incrementBy;
+
+                incrementBy = (direction.ToLower() == "up" ? -1 : 1);
+
+                rowChanged = (int)(selectobject.BlockNo + incrementBy);
+
+                var swapItem = ListVmDataViews.Where(D => D.DataView.BlockNo == (selectobject.BlockNo + incrementBy)).SingleOrDefault();
+                if (!(swapItem is null))
+                {
+                    selectobject.BlockNo += incrementBy;
+                    swapItem.DataView.BlockNo = swapItem.DataView.BlockNo + (incrementBy * -1);
+
+                    SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(selectedChapter);
+                    await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
 
 
-                //keep track of time last updated ready for comparison by other sessions checking for updates
-                appChapterState.SetLastUpdated(UserSession, selectedChapter);
+                    //keep track of time last updated ready for comparison by other sessions checking for updates
+                    appChapterState.SetLastUpdated(UserSession, selectedChapter);
+
+                }
+
+                await RefreshChapterItems(listType);
+                await InvokeAsync(() =>
+                {
+                    StateHasChanged();
+                });
 
             }
-
-            await RefreshChapterItems(listType);
-            await InvokeAsync(() =>
+            catch (Exception e)
             {
-                StateHasChanged();
-            });
+                await GenericErrorLog(true,e, "MoveBlockNo", $"Moving Dataview: {e.Message}");
 
-
-            seqMoving = false;
+            }
+            finally
+            {
+                seqMoving = false;
+            }
 
         }
 
         protected async void MoveMessageSeqNo(TickerMessages selectobject, string listType, string direction)
         {
-            seqMoving = true; //prevents changes to the form whilst process of changing seq is carried out
-
-            int incrementBy;
-
-            incrementBy = (direction.ToLower() == "up" ? -1 : 1);
-
-            rowChanged = (int)(selectobject.SeqNo + incrementBy);
-
-            var swapItem = ListVmTickerMessages.Where(D => D.Message.SeqNo == (selectobject.SeqNo + incrementBy)).SingleOrDefault();
-            if (!(swapItem is null))
+            try
             {
-                selectobject.SeqNo += incrementBy;
-                swapItem.Message.SeqNo = swapItem.Message.SeqNo + (incrementBy * -1);
 
-                SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(selectedChapter);
-                await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
+                seqMoving = true; //prevents changes to the form whilst process of changing seq is carried out
+
+                int incrementBy;
+
+                incrementBy = (direction.ToLower() == "up" ? -1 : 1);
+
+                rowChanged = (int)(selectobject.SeqNo + incrementBy);
+
+                var swapItem = ListVmTickerMessages.Where(D => D.Message.SeqNo == (selectobject.SeqNo + incrementBy)).SingleOrDefault();
+                if (!(swapItem is null))
+                {
+                    selectobject.SeqNo += incrementBy;
+                    swapItem.Message.SeqNo = swapItem.Message.SeqNo + (incrementBy * -1);
+
+                    SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(selectedChapter);
+                    await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
 
 
-                //keep track of time last updated ready for comparison by other sessions checking for updates
-                appChapterState.SetLastUpdated(UserSession, selectedChapter);
+                    //keep track of time last updated ready for comparison by other sessions checking for updates
+                    appChapterState.SetLastUpdated(UserSession, selectedChapter);
+
+                }
+
+                await RefreshChapterItems(listType);
+                await InvokeAsync(() =>
+                {
+                    StateHasChanged();
+                });
+            }
+            catch (Exception e)
+            {
+                await GenericErrorLog(true,e, "MoveMessageSeqNo", $"Moving message: {e.Message}");
 
             }
-
-            await RefreshChapterItems(listType);
-            await InvokeAsync(() =>
+            finally
             {
-                StateHasChanged();
-            });
-
-
-            seqMoving = false;
+                seqMoving = false;
+            }
+            
 
         }
 
         protected async void MoveFeeSeqNo(Fee selectobject, string listType, string direction)
         {
-            seqMoving = true; //prevents changes to the form whilst process of changing seq is carried out
-
-            int incrementBy;
-
-            incrementBy = (direction.ToLower() == "up" ? -1 : 1);
-
-            rowChanged = (int)(selectobject.SeqNo + incrementBy);
-
-            var swapItem = lstFees.Where(D => D.FeeObject.SeqNo == (selectobject.SeqNo + incrementBy)).SingleOrDefault();
-            if (!(swapItem is null))
+            try
             {
-                selectobject.SeqNo += incrementBy;
-                swapItem.FeeObject.SeqNo = swapItem.FeeObject.SeqNo + (incrementBy * -1);
+                    
+                seqMoving = true; //prevents changes to the form whilst process of changing seq is carried out
 
-                SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(selectedChapter);
-                await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
+                int incrementBy;
+
+                incrementBy = (direction.ToLower() == "up" ? -1 : 1);
+
+                rowChanged = (int)(selectobject.SeqNo + incrementBy);
+
+                var swapItem = lstFees.Where(D => D.FeeObject.SeqNo == (selectobject.SeqNo + incrementBy)).SingleOrDefault();
+                if (!(swapItem is null))
+                {
+                    selectobject.SeqNo += incrementBy;
+                    swapItem.FeeObject.SeqNo = swapItem.FeeObject.SeqNo + (incrementBy * -1);
+
+                    SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(selectedChapter);
+                    await chapterManagementService.Update(SelectedChapterObject).ConfigureAwait(false);
 
 
-                //keep track of time last updated ready for comparison by other sessions checking for updates
-                appChapterState.SetLastUpdated(UserSession, selectedChapter);
+                    //keep track of time last updated ready for comparison by other sessions checking for updates
+                    appChapterState.SetLastUpdated(UserSession, selectedChapter);
+
+                }
+
+                await RefreshChapterItems(listType);
+                await InvokeAsync(() =>
+                {
+                    StateHasChanged();
+                });
+            }
+            catch (Exception e)
+            {
+                await GenericErrorLog(true,e, "MoveFeeSeqNo", $"Moving fee: {e.Message}");
 
             }
-
-            await RefreshChapterItems(listType);
-            await InvokeAsync(() =>
+            finally
             {
-                StateHasChanged();
-            });
+                seqMoving = false;
+            }
 
-
-            seqMoving = false;
 
         }
 
@@ -2559,13 +2567,7 @@ Logger.LogError("3");
             }
             catch(Exception e)
             {
-                using (LogContext.PushProperty("SourceSystem", UserSession.selectedSystem))
-                using (LogContext.PushProperty("SourceCompanyId", UserSession.Company.Id))
-                using (LogContext.PushProperty("SourceUserId", UserSession.User.Id))
-                using (LogContext.PushProperty("SourceContext", nameof(ChapterList)))
-                {
-                    Logger.LogError(e, "Error: Correcting Smartflow seq numbers");
-                }
+                await GenericErrorLog(true,e, "CondenseChapterSeq", $"Correcting Smartflow seq numbers: {e.Message}");
             }
 
 
@@ -2617,171 +2619,216 @@ Logger.LogError("3");
             Modal.Show<ChapterAddOrEdit>("Smartflow", parameters, options);
         }
 
-        protected void ShowCaseTypeEditModal()
+        protected async Task ShowCaseTypeEditModal()
         {
-            Action Action = RefreshChapters;
-
-            var parameters = new ModalParameters();
-            parameters.Add("TaskObject", (isCaseTypeOrGroup == "Chapter") ? editChapter.SmartflowData : editCaseType);
-            parameters.Add("originalName", (isCaseTypeOrGroup == "Chapter") ? editChapter.SmartflowData : editCaseType);
-            if (isCaseTypeOrGroup == "Chapter")
+            try
             {
-                parameters.Add("Chapter", editChapter);
+                Action Action = RefreshChapters;
+
+                var parameters = new ModalParameters();
+                parameters.Add("TaskObject", (isCaseTypeOrGroup == "Chapter") ? editChapter.SmartflowData : editCaseType);
+                parameters.Add("originalName", (isCaseTypeOrGroup == "Chapter") ? editChapter.SmartflowData : editCaseType);
+                if (isCaseTypeOrGroup == "Chapter")
+                {
+                    parameters.Add("Chapter", editChapter);
+                }
+                parameters.Add("DataChanged", Action);
+                parameters.Add("isCaseTypeOrGroup", isCaseTypeOrGroup);
+                parameters.Add("caseTypeGroupName", selectedChapter.CaseTypeGroup);
+                parameters.Add("ListChapters", lstChapters);
+                parameters.Add("CompanyDbAccess", CompanyDbAccess);
+                parameters.Add("UserSession", UserSession);
+
+                var options = new ModalOptions()
+                {
+                    Class = "blazored-custom-modal modal-chapter-casetype"
+                };
+
+                Modal.Show<ChapterCaseTypeEdit>("Smartflow", parameters, options);
             }
-            parameters.Add("DataChanged", Action);
-            parameters.Add("isCaseTypeOrGroup", isCaseTypeOrGroup);
-            parameters.Add("caseTypeGroupName", selectedChapter.CaseTypeGroup);
-            parameters.Add("ListChapters", lstChapters);
-            parameters.Add("CompanyDbAccess", CompanyDbAccess);
-            parameters.Add("UserSession", UserSession);
-
-            var options = new ModalOptions()
+            catch(Exception e)
             {
-                Class = "blazored-custom-modal modal-chapter-casetype"
-            };
-
-            Modal.Show<ChapterCaseTypeEdit>("Smartflow", parameters, options);
+                await GenericErrorLog(false,e, "ShowCaseTypeEditModal", e.Message);
+            }
         }
 
 
-        protected void ShowChapterDetailViewModal(VmUsrOrDefChapterManagement selectedObject, string type)
+        protected async Task ShowChapterDetailViewModal(VmUsrOrDefChapterManagement selectedObject, string type)
         {
-            selectedList = type;
-
-            var parameters = new ModalParameters();
-            parameters.Add("Object", selectedObject);
-            parameters.Add("SelectedList", selectedList);
-
-            var options = new ModalOptions()
+            try
             {
-                Class = "blazored-custom-modal modal-chapter-comparison"
-            };
+                selectedList = type;
 
-            Modal.Show<ChapterDetailView>(selectedList, parameters, options);
+                var parameters = new ModalParameters();
+                parameters.Add("Object", selectedObject);
+                parameters.Add("SelectedList", selectedList);
+
+                var options = new ModalOptions()
+                {
+                    Class = "blazored-custom-modal modal-chapter-comparison"
+                };
+
+                Modal.Show<ChapterDetailView>(selectedList, parameters, options);
+            }
+            catch(Exception e)
+            {
+                await GenericErrorLog(false,e, "ShowChapterDetailViewModal", e.Message);
+            }
         }
 
 
-        protected void ShowChapterDetailModal(string option)
+        protected async Task ShowChapterDetailModal(string option)
         {
-            Action action = RefreshSelectedList;
-            Action RefreshDocList = this.RefreshDocList;
-
-            var copyObject = new GenSmartflowItem
+            try
             {
-                Type = editObject.ChapterObject.Type,
-                Name = editObject.ChapterObject.Name,
-                EntityType = editObject.ChapterObject.EntityType,
-                SeqNo = editObject.ChapterObject.SeqNo,
-                SuppressStep = editObject.ChapterObject.SuppressStep,
-                CompleteName = editObject.ChapterObject.CompleteName,
-                AsName = editObject.ChapterObject.AsName,
-                RescheduleDays = editObject.ChapterObject.RescheduleDays,
-                AltDisplayName = editObject.ChapterObject.AltDisplayName,
-                UserMessage = editObject.ChapterObject.UserMessage,
-                PopupAlert = editObject.ChapterObject.PopupAlert,
-                NextStatus = editObject.ChapterObject.NextStatus,
-                Action = editObject.ChapterObject.Action,
-                TrackingMethod = editObject.ChapterObject.TrackingMethod,
-                ChaserDesc = editObject.ChapterObject.ChaserDesc,
-                RescheduleDataItem = editObject.ChapterObject.RescheduleDataItem,
-                MilestoneStatus = editObject.ChapterObject.MilestoneStatus,
-                OptionalDocument = editObject.ChapterObject.OptionalDocument,
-                Agenda = editObject.ChapterObject.Agenda,
-                CustomItem = editObject.ChapterObject.CustomItem
-        };
 
-            var parameters = new ModalParameters();
-            parameters.Add("TaskObject", editObject.ChapterObject);
-            parameters.Add("RefreshDocList", RefreshDocList);
-            parameters.Add("CopyObject", copyObject);
-            parameters.Add("DataChanged", action);
-            parameters.Add("selectedList", selectedList);
-            parameters.Add("dropDownChapterList", dropDownChapterList);
-            parameters.Add("TableDates", TableDates);
-            parameters.Add("CaseTypeGroups", partnerCaseTypeGroups);
-            parameters.Add("ListOfStatus", lstStatus);
-            parameters.Add("ListOfAgenda", lstAgendas);
-            parameters.Add("SelectedChapter", selectedChapter);
-            parameters.Add("SelectedChapterObject", SelectedChapterObject);
-            parameters.Add("Option", option);
+                Action action = RefreshSelectedList;
+                Action RefreshDocList = this.RefreshDocList;
 
-            string className = "modal-chapter-item";
-
-            if (selectedList == "Steps and Documents")
-            {
-                className = "modal-chapter-doc";
-            }
-            var options = new ModalOptions()
-            {
-                Class = "blazored-custom-modal " + className
+                var copyObject = new GenSmartflowItem
+                {
+                    Type = editObject.ChapterObject.Type,
+                    Name = editObject.ChapterObject.Name,
+                    EntityType = editObject.ChapterObject.EntityType,
+                    SeqNo = editObject.ChapterObject.SeqNo,
+                    SuppressStep = editObject.ChapterObject.SuppressStep,
+                    CompleteName = editObject.ChapterObject.CompleteName,
+                    AsName = editObject.ChapterObject.AsName,
+                    RescheduleDays = editObject.ChapterObject.RescheduleDays,
+                    AltDisplayName = editObject.ChapterObject.AltDisplayName,
+                    UserMessage = editObject.ChapterObject.UserMessage,
+                    PopupAlert = editObject.ChapterObject.PopupAlert,
+                    NextStatus = editObject.ChapterObject.NextStatus,
+                    Action = editObject.ChapterObject.Action,
+                    TrackingMethod = editObject.ChapterObject.TrackingMethod,
+                    ChaserDesc = editObject.ChapterObject.ChaserDesc,
+                    RescheduleDataItem = editObject.ChapterObject.RescheduleDataItem,
+                    MilestoneStatus = editObject.ChapterObject.MilestoneStatus,
+                    OptionalDocument = editObject.ChapterObject.OptionalDocument,
+                    Agenda = editObject.ChapterObject.Agenda,
+                    CustomItem = editObject.ChapterObject.CustomItem
             };
 
-            Modal.Show<ChapterDetail>(selectedList, parameters, options);
+                var parameters = new ModalParameters();
+                parameters.Add("TaskObject", editObject.ChapterObject);
+                parameters.Add("RefreshDocList", RefreshDocList);
+                parameters.Add("CopyObject", copyObject);
+                parameters.Add("DataChanged", action);
+                parameters.Add("selectedList", selectedList);
+                parameters.Add("dropDownChapterList", dropDownChapterList);
+                parameters.Add("TableDates", TableDates);
+                parameters.Add("CaseTypeGroups", partnerCaseTypeGroups);
+                parameters.Add("ListOfStatus", lstStatus);
+                parameters.Add("ListOfAgenda", lstAgendas);
+                parameters.Add("SelectedChapter", selectedChapter);
+                parameters.Add("SelectedChapterObject", SelectedChapterObject);
+                parameters.Add("Option", option);
+
+                string className = "modal-chapter-item";
+
+                if (selectedList == "Steps and Documents")
+                {
+                    className = "modal-chapter-doc";
+                }
+                var options = new ModalOptions()
+                {
+                    Class = "blazored-custom-modal " + className
+                };
+
+                Modal.Show<ChapterDetail>(selectedList, parameters, options);
+            }
+            catch(Exception e)
+            {
+                await GenericErrorLog(false,e, "ShowChapterDetailModal", e.Message);
+            }
+
         }
 
         public async void RefreshViewList()
         {
-            ListP4WViews = await partnerAccessService.GetPartnerViews();
-            StateHasChanged();
+            try
+            {
+                ListP4WViews = await partnerAccessService.GetPartnerViews();
+                StateHasChanged();
+            }
+            catch(Exception e)
+            {
+                await GenericErrorLog(false,e, "RefreshViewList", e.Message);
+            }
         }
 
-        protected void ShowDataViewDetailModal(string option)
+        protected async Task ShowDataViewDetailModal(string option)
         {
-            Action action = RefreshSelectedList;
-            Action refreshViewList = RefreshViewList; 
-
-            var copyObject = new DataViews
+            try
             {
-                BlockNo = EditDataViewObject.DataView.BlockNo,
-                DisplayName = EditDataViewObject.DataView.DisplayName,
-                ViewName = EditDataViewObject.DataView.ViewName
-            };
 
-            var parameters = new ModalParameters();
-            parameters.Add("TaskObject", EditDataViewObject.DataView);
-            parameters.Add("ListPartnerViews", ListP4WViews);
-            parameters.Add("CopyObject", copyObject);
-            parameters.Add("DataChanged", action);
-            parameters.Add("SelectedChapter", selectedChapter);
-            parameters.Add("SelectedChapterObject", SelectedChapterObject);
-            parameters.Add("Option", option);
-            parameters.Add("PartnerAccessService", partnerAccessService);
-            parameters.Add("RefreshViewList", refreshViewList);
+                Action action = RefreshSelectedList;
+                Action refreshViewList = RefreshViewList; 
 
-            var options = new ModalOptions()
+                var copyObject = new DataViews
+                {
+                    BlockNo = EditDataViewObject.DataView.BlockNo,
+                    DisplayName = EditDataViewObject.DataView.DisplayName,
+                    ViewName = EditDataViewObject.DataView.ViewName
+                };
+
+                var parameters = new ModalParameters();
+                parameters.Add("TaskObject", EditDataViewObject.DataView);
+                parameters.Add("ListPartnerViews", ListP4WViews);
+                parameters.Add("CopyObject", copyObject);
+                parameters.Add("DataChanged", action);
+                parameters.Add("SelectedChapter", selectedChapter);
+                parameters.Add("SelectedChapterObject", SelectedChapterObject);
+                parameters.Add("Option", option);
+                parameters.Add("PartnerAccessService", partnerAccessService);
+                parameters.Add("RefreshViewList", refreshViewList);
+
+                var options = new ModalOptions()
+                {
+                    Class = "blazored-custom-modal modal-chapter-data"
+                };
+
+                Modal.Show<DataViewDetail>("Data View", parameters, options);
+            }
+            catch(Exception e)
             {
-                Class = "blazored-custom-modal modal-chapter-data"
-            };
-
-            Modal.Show<DataViewDetail>("Data View", parameters, options);
+                await GenericErrorLog(false,e, "ShowDataViewDetailModal", e.Message);
+            }
         }
 
-        protected void ShowTickerMessageDetailModal(string option)
+        protected async Task ShowTickerMessageDetailModal(string option)
         {
-            Action action = RefreshSelectedList;
-
-            var copyObject = new TickerMessages
+            try
             {
-                SeqNo = EditTickerMessageObject.Message.SeqNo,
-                Message = EditTickerMessageObject.Message.Message,
-                FromDate = EditTickerMessageObject.Message.FromDate,
-                ToDate = EditTickerMessageObject.Message.ToDate
-            };
+                Action action = RefreshSelectedList;
 
-            var parameters = new ModalParameters();
-            parameters.Add("TaskObject", EditTickerMessageObject.Message);
-            parameters.Add("CopyObject", copyObject);
-            parameters.Add("DataChanged", action);
-            parameters.Add("SelectedChapter", selectedChapter);
-            parameters.Add("SelectedChapterObject", SelectedChapterObject);
-            parameters.Add("Option", option);
+                var copyObject = new TickerMessages
+                {
+                    SeqNo = EditTickerMessageObject.Message.SeqNo,
+                    Message = EditTickerMessageObject.Message.Message,
+                    FromDate = EditTickerMessageObject.Message.FromDate,
+                    ToDate = EditTickerMessageObject.Message.ToDate
+                };
 
-            var options = new ModalOptions()
+                var parameters = new ModalParameters();
+                parameters.Add("TaskObject", EditTickerMessageObject.Message);
+                parameters.Add("CopyObject", copyObject);
+                parameters.Add("DataChanged", action);
+                parameters.Add("SelectedChapter", selectedChapter);
+                parameters.Add("SelectedChapterObject", SelectedChapterObject);
+                parameters.Add("Option", option);
+
+                var options = new ModalOptions()
+                {
+                    Class = "blazored-custom-modal modal-chapter-item"
+                };
+
+                Modal.Show<TickerMessageDetail>("Ticker Messages", parameters, options);
+            }
+            catch(Exception e)
             {
-                Class = "blazored-custom-modal modal-chapter-item"
-            };
-
-            Modal.Show<TickerMessageDetail>("Ticker Messages", parameters, options);
+                await GenericErrorLog(false,e, "ShowTickerMessageDetailModal", e.Message);
+            }
         }
 
         private void PrepareAttachmentForAdd(VmUsrOrDefChapterManagement item)
@@ -4075,7 +4122,7 @@ Logger.LogError("3");
         {
             var data = ChapterFileUpload.ReadFileToByteArray(file.FilePath);
 
-            await jsRuntime.InvokeAsync<object>(
+            await JSRuntime.InvokeAsync<object>(
                  "DownloadTextFile",
                  file.FileName,
                  Convert.ToBase64String(data));
@@ -4369,25 +4416,56 @@ Logger.LogError("3");
 
         public async void SyncSmartFlowSystems()
         {
-            var lstC = await chapterManagementService.GetAllChapters();
-
-            await CompanyDbAccess.SyncAdminSysToClient(lstC, UserSession);
-
-            RefreshChapters();
-
-            var parameters = new ModalParameters();
-            parameters.Add("InfoText", "Systems synced successfully");
-
-            var options = new ModalOptions()
+            try
             {
-                Class = "blazored-custom-modal modal-chapter-chapter"
-            };
-            string title = $"Systems Synced";
-            Modal.Show<ModalInfo>(title, parameters, options);
+                var lstC = await chapterManagementService.GetAllChapters();
+
+                await CompanyDbAccess.SyncAdminSysToClient(lstC, UserSession);
+
+                RefreshChapters();
+
+                var parameters = new ModalParameters();
+                parameters.Add("InfoText", "Systems synced successfully");
+
+                var options = new ModalOptions()
+                {
+                    Class = "blazored-custom-modal modal-chapter-chapter"
+                };
+                string title = $"Systems Synced";
+                Modal.Show<ModalInfo>(title, parameters, options);
+            }
+            catch(HttpRequestException e)
+            {
+                //do nothing, already dealt with
+            }
+            catch(Exception e)
+            {
+                await GenericErrorLog(true,e, "SyncSmartFlowSystems", e.Message);
+            }
+                
+            
         }
 
+        /****************************************/
+        /* ERROR HANDLING */
+        /****************************************/
+        private async Task GenericErrorLog(bool showNotificationMsg, Exception e, string _method, string _message)
+        {
+            using (LogContext.PushProperty("SourceSystem", UserSession.selectedSystem))
+            using (LogContext.PushProperty("SourceCompanyId", UserSession.Company.Id))
+            using (LogContext.PushProperty("SourceUserId", UserSession.User.Id))
+            using (LogContext.PushProperty("SourceContext", nameof(ChapterList)))
+            {
+                Logger.LogError(e,"Error - Method: {0}, Message: {1}",_method, _message);
+            }
 
-/****************************************/
+            if(showNotificationMsg)
+            {
+                await NotificationManager.ShowNotification("Danger", $"Oops! Something went wrong.");
+            }
+        }
+
+        /****************************************/
         /* DRAG DROP EVENTS */
         /****************************************/
         private int? droppedItem = 0;

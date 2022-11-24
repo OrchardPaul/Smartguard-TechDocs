@@ -84,6 +84,8 @@ namespace GadjIT_App
             services.AddScoped<IPDFHelper, PDFHelper>();
             services.AddScoped<IExcelHelper, ExcelHelper>();
             services.AddScoped<IChapterFileUpload, ChapterFileUpload>();
+            services.AddScoped<INotificationManager,NotificationManager>();
+
             services.AddScoped<JsConsole>();
             services.AddScoped(typeof(DragDropService<>));
 

@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
+using System;
+using Microsoft.Extensions.Logging;
 
 namespace GadjIT_App.Services
 {
@@ -19,6 +21,9 @@ namespace GadjIT_App.Services
     {
         private readonly HttpClient httpClient;
         private readonly IUserSessionState userSession;
+        
+        [Inject]
+        private ILogger<PartnerAccessService> Logger {get; set;}
 
         public PartnerAccessService(HttpClient httpClient, IUserSessionState userSession)
         {
@@ -28,9 +33,28 @@ namespace GadjIT_App.Services
 
         public async Task<List<CaseTypes>> GetPartnerCaseTypes()
         {
-            var result = await httpClient.GetFromJsonAsync<List<CaseTypes>>($"{userSession.baseUri}api/PartnerAccess/GetAllCaseTypes");
+            List<CaseTypes> caseTypes = new List<CaseTypes>();
+            try
+            {
+                HttpResponseMessage result = await httpClient.GetAsync($"{userSession.baseUri}api/PartnerAccess/GetAllCaseTypes");
 
-            return result;
+                if(result.IsSuccessStatusCode)
+                {
+                    caseTypes = await result.Content.ReadFromJsonAsync<List<CaseTypes>>();
+                }
+                else
+                {
+                    var errMsg = await result.Content.ReadAsStringAsync();
+                    Logger.LogError($"GetPartnerCaseTypes: {errMsg}");
+                }
+            }
+            catch (Exception e)
+            {
+                Logger.LogError($"GetPartnerCaseTypes: {e.Message}");
+            }
+            
+
+            return caseTypes;
         }
 
         public Task<List<CaseTypeGroups>> GetPartnerCaseTypeGroups()
