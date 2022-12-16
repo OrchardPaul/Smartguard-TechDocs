@@ -33,7 +33,7 @@
 
                                 <label for="@TaskObject.PasswordHash">Password</label>
 
-                                @if ((selectedOption == "Insert") | (enablePasswordSet))
+                                @if ((SelectedOption == "Insert") | (EnablePasswordSet))
                                 {
                                     <InputText class="form-control" style="display: inline; width: 250px;" @bind-Value="@TaskObject.PasswordHash" type="password"></InputText>
                                 }
@@ -62,18 +62,18 @@
                     <div class="col-6 detail-box">
                         <h5>Company Details</h5>
                         <div class="detail-group-box">
-                            @if (sessionState.Company.CompanyName == "Orchard Rock" & (selectedOption == "Edit"))
+                            @if (SessionState.Company.CompanyName == "Orchard Rock" & (SelectedOption == "Edit"))
                             {
-                                @if (!(companyItems is null))
+                                @if (!(CompanyItems is null))
                                 {
                                     <div class="form-group">
                                         <label for="@TaskObject.SelectedUri">Selected Company</label>
                                         <InputSelectInteger class="form-control" style="width: 300px;" ValueExpression="@(() => TaskObject.SelectedCompanyId)"
                                                             Value="@TaskObject.SelectedCompanyId"
                                                             ValueChanged="@((int value) => ToggleCompany(value))">
-                                            @if (companyItems.Count() > 0)
+                                            @if (CompanyItems.Count() > 0)
                                             {
-                                                @foreach (var company in companyItems)
+                                                @foreach (var company in CompanyItems)
                                                 {
                                                     <option value="@company.Company.Id">
                                                         @company.Company.CompanyName
@@ -88,13 +88,13 @@
 
 
                             <div class="form-group">
-                                @if (companyItems is null)
+                                @if (CompanyItems is null)
                                 {
                                     <div class="spinner"></div>
                                 }
                                 else
                                 {
-                                    @if (!(companyItems.Where(C => C.IsSubscribed) is null))
+                                    @if (!(CompanyItems.Where(C => C.IsSubscribed) is null))
                                     {
 
                                         <label for="@TaskObject.SelectedUri">System</label>
@@ -115,18 +115,18 @@
                             <div class="form-group">
                                 <div class="container-fluid">
                                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-6 p-2">
-                                        @if (selectedRoles is null)
+                                        @if (SelectedRoles is null)
                                         {
                                             <div class="spinner"></div>
                                         }
                                         else
                                         {
-                                            @if (sessionState.Company.CompanyName == "Orchard Rock")
+                                            @if (SessionState.Company.CompanyName == "Orchard Rock")
                                             {
-                                                @if (sessionState.isSuperUser)
+                                                @if (SessionState.IsSuperUser)
                                                 {
                                                     <ul class="ul-simple">
-                                                        @foreach (var role in selectedRoles)
+                                                        @foreach (var role in SelectedRoles)
                                                         {
                                                             <li><InputCheckbox class="mr-2" @bind-Value="role.IsSubscribed"></InputCheckbox><label>@role.RoleName</label></li>
                                                         }
@@ -136,7 +136,7 @@
                                             else
                                             {
                                                 <ul class="ul-simple">
-                                                    @foreach (var role in selectedRoles
+                                                    @foreach (var role in SelectedRoles
                                                                  .Where(R => R.RoleName != "Super User")
                                                                  .ToList())
                                                     {

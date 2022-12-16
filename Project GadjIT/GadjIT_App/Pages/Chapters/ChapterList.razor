@@ -15,7 +15,7 @@
 else
 {
 
-    @if (selectedChapter.Name == "" | selectedChapter.Name is null)
+    @if (SelectedChapter.Name == "" | SelectedChapter.Name is null)
     {
         <div class="tran-block page-header-block ">
             <div class="page-header-title">
@@ -33,12 +33,12 @@ else
 
         <div class="mb-4 grid-tran grid-chapter-nav">
             <div class="tran-block rounded">
-                @if (UserSession.isAdminUser)
+                @if (UserSession.IsAdminUser)
                 {
                     <div class="grid-actions">
                         <div class="btn-group">
                             <button @onclick='PrepareChapterForInsert' class="btn btn-main btn-shadow" title="Add new Smartflow"><i class="fa fa-plus pr-1"></i><span>New</span></button>
-                            @if (!(string.IsNullOrEmpty(selectedChapter.CaseType)))
+                            @if (!(string.IsNullOrEmpty(SelectedChapter.CaseType)))
                             {
                                 @if (!(SequenceIsValid("Chapters")))
                                 {
@@ -47,17 +47,17 @@ else
                                 }
                             }
                         </div>
-                        @if (UserSession.isSuperUser)
+                        @if (UserSession.IsSuperUser)
                         {
                             <button @onclick='SyncSmartFlowSystems' class="btn btn-main btn-shadow" title="Sync Systems"><i class="fa fa-sync pr-1"></i><span>Sync</span></button>
                             <button @onclick='UpdateSteps' class="btn btn-main btn-shadow" title="Update Steps"><i class="fa fa-download pr-1"></i><span>Update Steps</span></button>
                         }
 
                         <div class="spacer"></div>
-                        @if (UserSession.isAdminUser)
+                        @if (UserSession.IsAdminUser)
                         {
                             <div class="btn-group sync-group invisible-sm-down">
-                                <input type="checkbox" class="ml-1 mt-1" @bind-value="SmartflowComparison"/><span class="ml-2 font-75">Compare to @(UserSession.selectedSystem == "Dev" ? "Live" : "Dev") </span>
+                                <input type="checkbox" class="ml-1 mt-1" @bind-value="SmartflowComparison"/><span class="ml-2 font-75">Compare to @(UserSession.SelectedSystem == "Dev" ? "Live" : "Dev") </span>
                             </div>
 
                         }
@@ -67,9 +67,9 @@ else
                 <div class="container-fluid">
 
                     <!-- SHOW ALL GROUPS -->
-                    @if(lstChapters != null)
+                    @if(LstChapters != null)
                     {
-                        foreach (var caseTypeGroup in lstChapters
+                        foreach (var caseTypeGroup in LstChapters
                                                   .Where(C => !(C.SmartflowObject.CaseTypeGroup is null))
                                                   .OrderBy(C => C.SmartflowObject.CaseTypeGroup)
                                                   .Select(C => C.SmartflowObject.CaseTypeGroup)
@@ -79,7 +79,7 @@ else
 
                             <div class="grid-row-lg mt-3 nav-row-1">
                                 <div class="data-item" title="Group: click to see case types assigned to @caseTypeGroup">
-                                    @if (UserSession.isAdminUser)
+                                    @if (UserSession.IsAdminUser)
                                     {
                                         <div class="btn-ellipses float-left">
                                             <span class="fa fa-ellipsis-v"></span>
@@ -97,7 +97,7 @@ else
 
                                     <div class="data-item-nav" @onclick='() => SelectCaseTypeGroup(caseTypeGroup)'>
                                         <div class="data-item-sub"><span class="fa fa-boxes mr-2"></span>@caseTypeGroup</div>
-                                        <div class="data-item-right col-alt"><div class="link-direction @(caseTypeGroup == selectedChapter.CaseTypeGroup ? "triangle-up " : "triangle-down")"></div></div>
+                                        <div class="data-item-right col-alt"><div class="link-direction @(caseTypeGroup == SelectedChapter.CaseTypeGroup ? "triangle-up " : "triangle-down")"></div></div>
                                     </div>
                                 </div>
 
@@ -107,12 +107,12 @@ else
 
 
                             <!-- GROUP SELECTED SHOW CASE TYPES-->
-                            @if (caseTypeGroup == selectedChapter.CaseTypeGroup)
+                            @if (caseTypeGroup == SelectedChapter.CaseTypeGroup)
                             {
 
-                                @foreach (var caseType in lstChapters
+                                @foreach (var caseType in LstChapters
                                                         .Where(C => !(C.SmartflowObject.CaseType is null))
-                                                        .Where(C => C.SmartflowObject.CaseTypeGroup == selectedChapter.CaseTypeGroup)
+                                                        .Where(C => C.SmartflowObject.CaseTypeGroup == SelectedChapter.CaseTypeGroup)
                                                         .OrderBy(C => C.SmartflowObject.CaseType)
                                                         .Select(C => C.SmartflowObject.CaseType)
                                                         .Distinct()
@@ -121,7 +121,7 @@ else
 
                                     <div class="grid-row-md nav-row-2">
                                         <div class="data-item" title="Case Type: click to see the Smartflows within @caseType">
-                                            @if (UserSession.isAdminUser)
+                                            @if (UserSession.IsAdminUser)
                                             {
                                                 <div class="btn-ellipses float-left">
                                                     <span class="fa fa-ellipsis-v"></span>
@@ -139,7 +139,7 @@ else
                                                 </div>
                                             }
                                             <div class="data-item-nav" @onclick='() => SelectCaseType(caseType)'>
-                                                @if (caseType == selectedChapter.CaseType)
+                                                @if (caseType == SelectedChapter.CaseType)
                                                 {
                                                     <div class="data-item-sub">
                                                         <span class="fa fa-folder-open mr-2"></span>@caseType
@@ -153,29 +153,29 @@ else
                                                 }
 
 
-                                                <div class="data-item-right col-alt "><div class="link-direction @(caseType == selectedChapter.CaseType ? "triangle-up " : "triangle-down")"></div></div>
+                                                <div class="data-item-right col-alt "><div class="link-direction @(caseType == SelectedChapter.CaseType ? "triangle-up " : "triangle-down")"></div></div>
                                             </div>
                                         </div>
 
                                     </div>
-                                    @if (caseType == selectedChapter.CaseType)
+                                    @if (caseType == SelectedChapter.CaseType)
                                     {
 
 
                                         <div class="grid-nav">
-                                            <Dropzone Items="lstSelectedChapters"
+                                            <Dropzone Items="LstSelectedChapters"
                                                     InstantReplace="true"
-                                                    OnItemDrop="@((sf)=>ReSequenceSmartFlows(lstSelectedChapters.IndexOf(sf) + 1))"
+                                                    OnItemDrop="@((sf)=>ReSequenceSmartFlows(LstSelectedChapters.IndexOf(sf) + 1))"
                                                     OnDragStartParam="() => ResetRowChanged()"
                                                     TItem="VmUsrOrsfSmartflows">
 
 
-                                                <div class="grid-row-md nav-row-3 no-border  @(rowChanged == context.SmartflowObject.SeqNo ? ToggleRowChangedClass() : "" )">
+                                                <div class="grid-row-md nav-row-3 no-border  @(RowChanged == context.SmartflowObject.SeqNo ? ToggleRowChangedClass() : "" )">
                                                     <div id="Smartflow-@context.SmartflowObject.Id" class="data-item @(context.SmartflowObject.SmartflowName.Contains("GROUP ") ? "data-item-group" : "")">
 
-                                                        @if (UserSession.isAdminUser)
+                                                        @if (UserSession.IsAdminUser)
                                                         {
-                                                            @if (!compareSystems)
+                                                            @if (!CompareSystems)
                                                             {
                                                                 <div class="btn-ellipses float-left ">
                                                                     <span class="fa fa-ellipsis-v"></span>
@@ -225,11 +225,27 @@ else
                                                             }
 
                                                         }
-                                                        <div class="data-item-sub">
-                                                            <span class="hidden-sm-down"><span class=" fa fa-share-alt-square mr-2"></span></span>
-                                                            @context.SmartflowObject.SmartflowName
+                                                        <div class="data-item-sub draggable">
+                                                            @if(CompareSystems || context.ComparisonList.Count == 0) //no issues
+                                                            {
+                                                                <span class="hidden-sm-down">
+                                                                    <span class=" fa fa-share-alt-square mr-2"></span>
+                                                                </span>
+                                                                @context.SmartflowObject.SmartflowName
+                                                            }
+                                                            else
+                                                            {
+                                                                <span class="font-red" title="@context.ComparisonResult">
+                                                                    <span class="hidden-sm-down " >
+                                                                        <span class=" fa-solid fa-triangle-exclamation mr-2"></span>
+                                                                    </span>
+                                                                    @context.SmartflowObject.SmartflowName
+                                                                </span>
+                                                            }
+                                                            
+                                                            
                                                         </div>
-                                                        @if (UserSession.isAdminUser)
+                                                        @if (UserSession.IsAdminUser)
                                                         {
                                                             <div class="data-item-right seq-change">
                                                                 <div @onclick='() => MoveSmartFlowSeq(context.SmartflowObject, "Chapters", "Up")'><span class="fa fa-angle-up"></span></div>
@@ -259,7 +275,7 @@ else
     }
 }
 
-@if (selectedChapter.Name != "" & !(selectedChapter.Name is null))
+@if (SelectedChapter.Name != "" & !(SelectedChapter.Name is null))
 {
 
     <div class="tran-block page-header-block ">
@@ -268,20 +284,20 @@ else
                 <div class="float-left back-link" @onclick="SelectHome">
                     <span class="col-alt fa fa-angle-double-left"></span>
                 </div>
-                <h3>Smartflow: @selectedChapter.Name</h3>
+                <h3>Smartflow: @SelectedChapter.Name</h3>
             </div>
             <p class="hidden-md-down">
-                Group: <span class="badge badge-grey mr-3">@selectedChapter.CaseTypeGroup</span>
-                Case Type: <span class="badge badge-grey mr-3">@selectedChapter.CaseType</span>
-                Smartflow: <span class="badge badge-grey mr-3"> @selectedChapter.Name</span>
+                Group: <span class="badge badge-grey mr-3">@SelectedChapter.CaseTypeGroup</span>
+                Case Type: <span class="badge badge-grey mr-3">@SelectedChapter.CaseType</span>
+                Smartflow: <span class="badge badge-grey mr-3"> @SelectedChapter.Name</span>
 
-                @if(appChapterState != null)
+                @if(AppChapterState != null)
                 {
-                    if (appChapterState.GetChapterItemState(UserSession, selectedChapter).ActiveUsers.Where(U => U.UserName != UserSession.User.FullName).ToList().Count > 0)
+                    if (AppChapterState.GetChapterItemState(UserSession, SelectedChapter).ActiveUsers.Where(U => U.UserName != UserSession.User.FullName).ToList().Count > 0)
                     {
                         <span class="pl-5">Active Users: </span>
                         string userClass = "active-user";
-                        foreach (var user in appChapterState.GetChapterItemState(UserSession, selectedChapter).ActiveUsers.Where(U => U.UserName != UserSession.User.FullName).ToList())
+                        foreach (var user in AppChapterState.GetChapterItemState(UserSession, SelectedChapter).ActiveUsers.Where(U => U.UserName != UserSession.User.FullName).ToList())
                         {
                             <span class="ml-2 @userClass font-120"><li class="fa fa-user" title="@user.UserName - @user.LastActive.ToString()"></li></span>
                             userClass = (userClass == "active-user" ? "active-user-alt" : "active-user");
@@ -307,42 +323,42 @@ else
             <nav class="navbar navbar-expand ">
 
                 <ul class="navbar-nav">
-                    <li class="nav-item @(navDisplay == "Chapter" ? "active" : "")" @onclick='() => ShowNav("Chapter")'>
+                    <li class="nav-item @(NavDisplay == "Chapter" ? "active" : "")" @onclick='() => ShowNav("Chapter")'>
                         <span class="font-120"><span class="fa fa-home" Title="Home - main Smartflow settings"></span></span>
 
                     </li>
-                    <li class="nav-item @(navDisplay == "Agenda" ? "active" : "")" @onclick='() => ShowNav("Agenda")'>
+                    <li class="nav-item @(NavDisplay == "Agenda" ? "active" : "")" @onclick='() => ShowNav("Agenda")'>
                         <span class="font-120"><span class="fa fa-folder-open" Title="Agenda (Progress Files) - make available documents from file history"></span></span>
                         <div class="subtitle">Agenda</div>
                     </li>
-                    <li class="nav-item  @(navDisplay == "Status" ? "active" : "")" @onclick='() => ShowNav("Status")'>
+                    <li class="nav-item  @(NavDisplay == "Status" ? "active" : "")" @onclick='() => ShowNav("Status")'>
                         <span class="font-120"><span class="fa fa-battery-half" Title="Status - Smartflow status options to track progress"></span></span>
                         <div class="subtitle">Status</div>
                     </li>
-                    <li class="nav-item @(navDisplay == "Docs" ? "active" : "")" @onclick='() => ShowNav("Docs")'>
+                    <li class="nav-item @(NavDisplay == "Docs" ? "active" : "")" @onclick='() => ShowNav("Docs")'>
                         <span class="font-120"><span class="fa fa-file" Title="Documents and Steps - list documents and create workflow"></span></span>
                         <div class="subtitle">Docs</div>
                     </li>
-                    <li class="nav-item @(navDisplay == "Fees" ? "active" : "")" @onclick='() => ShowNav("Fees")'>
+                    <li class="nav-item @(NavDisplay == "Fees" ? "active" : "")" @onclick='() => ShowNav("Fees")'>
                         <span class="font-120"><span class="fa fa-pound-sign" Title="Fees and Disbursements"></span></span>
                         <div class="subtitle">Fees</div>
                     </li>
-                    <li class="nav-item @(navDisplay == "DataViews" ? "active" : "")" @onclick='() => ShowNav("DataViews")'>
+                    <li class="nav-item @(NavDisplay == "DataViews" ? "active" : "")" @onclick='() => ShowNav("DataViews")'>
                         <span class="font-120"><span class="fa fa-database" Title="Data Views - Managing Partner views to be available on Smartflow screen"></span></span>
                         <div class="subtitle">Data</div>
                     </li>
-                    <li class="nav-item @(navDisplay == "TickerMessages" ? "active" : "")" @onclick='() => ShowNav("TickerMessages")'>
+                    <li class="nav-item @(NavDisplay == "TickerMessages" ? "active" : "")" @onclick='() => ShowNav("TickerMessages")'>
                         <span class="font-120"><span class="fa fa-comment" Title="Messages - create ticker messages to inform users of updates or pending changes"></span></span>
                         <div class="subtitle">Messages</div>
                     </li>
-                    @if ((UserSession.isAdminUser))
+                    @if ((UserSession.IsAdminUser))
                     {
-                        <li class="nav-item @(navDisplay == "Background" ? "active" : "")" @onclick='() => ShowNav("Background")'>
+                        <li class="nav-item @(NavDisplay == "Background" ? "active" : "")" @onclick='() => ShowNav("Background")'>
                             <span class="font-120"><span class="fa fa-image" Title="Background - set background colour or image"></span></span>
                             <div class="subtitle">Background</div>
                         </li>
 
-                        <li class="nav-item @(navDisplay == "Backups" ? "active" : "")" @onclick='() => ShowNav("Backups")'>
+                        <li class="nav-item @(NavDisplay == "Backups" ? "active" : "")" @onclick='() => ShowNav("Backups")'>
                             <span class="font-120"><span class="fa fa-save" Title="Backups - save, download and restore"></span></span>
                             <div class="subtitle">Backups</div>
                         </li>
@@ -355,31 +371,31 @@ else
 
         <div class="page-navbar hidden-xl-up">
             <ul class="nav nav-pills tran-tabs">
-                <li class="nav-item @(navDisplay == "Chapter" ? "active" : "")" @onclick='() => ShowNav("Chapter")'>
+                <li class="nav-item @(NavDisplay == "Chapter" ? "active" : "")" @onclick='() => ShowNav("Chapter")'>
                     <span class="font-120"><span class="fa fa-home" Title="Home - main Smartflow settings"></span></span>
                     <div class="subtitle">Home</div>
                 </li>
-                <li class="nav-item @(navDisplay == "Agenda" ? "active" : "")" @onclick='() => ShowNav("Agenda")'>
+                <li class="nav-item @(NavDisplay == "Agenda" ? "active" : "")" @onclick='() => ShowNav("Agenda")'>
                     <span class="font-120"><span class="fa fa-folder-open" Title="Agenda (Progress Files) - make available documents from file history"></span></span>
                     <div class="subtitle">Agenda</div>
                 </li>
-                <li class="nav-item  @(navDisplay == "Status" ? "active" : "")" @onclick='() => ShowNav("Status")'>
+                <li class="nav-item  @(NavDisplay == "Status" ? "active" : "")" @onclick='() => ShowNav("Status")'>
                     <span class="font-120"><span class="fa fa-battery-half" Title="Status - Smartflow status options to track progress"></span></span>
                     <div class="subtitle">Status</div>
                 </li>
-                <li class="nav-item @(navDisplay == "Docs" ? "active" : "")" @onclick='() => ShowNav("Docs")'>
+                <li class="nav-item @(NavDisplay == "Docs" ? "active" : "")" @onclick='() => ShowNav("Docs")'>
                     <span class="font-120"><span class="fa fa-file" Title="Documents and Steps - list documents and create workflow"></span></span>
                     <div class="subtitle">Docs</div>
                 </li>
-                <li class="nav-item @(navDisplay == "Fees" ? "active" : "")" @onclick='() => ShowNav("Fees")'>
+                <li class="nav-item @(NavDisplay == "Fees" ? "active" : "")" @onclick='() => ShowNav("Fees")'>
                     <span class="font-120"><span class="fa fa-pound-sign" Title="Fees and Disbursements"></span></span>
                     <div class="subtitle">Fees</div>
                 </li>
-                <li class="nav-item @(navDisplay == "DataViews" ? "active" : "")" @onclick='() => ShowNav("DataViews")'>
+                <li class="nav-item @(NavDisplay == "DataViews" ? "active" : "")" @onclick='() => ShowNav("DataViews")'>
                     <span class="font-120"><span class="fa fa-database" Title="Data Views - Managing Partner views to be available on Smartflow screen"></span></span>
                     <div class="subtitle">Data</div>
                 </li>
-                <li class="nav-item @(navDisplay == "TickerMessages" ? "active" : "")" @onclick='() => ShowNav("TickerMessages")'>
+                <li class="nav-item @(NavDisplay == "TickerMessages" ? "active" : "")" @onclick='() => ShowNav("TickerMessages")'>
                     <span class="font-120"><span class="fa fa-comment" Title="Messages - create ticker messages to inform users of updates or pending changes"></span></span>
                     <div class="subtitle">Msg</div>
                 </li>
@@ -388,14 +404,14 @@ else
 
         </div>
 
-        @if (displaySpinner)
+        @if (DisplaySpinner)
         {
             <div class="spinner"></div>
         }
         else
         {
 
-            @if (navDisplay == "Chapter")
+            @if (NavDisplay == "Chapter")
             {
 
                 <div class="grid-chapter grid-chapter-chapter">
@@ -404,12 +420,12 @@ else
                         <div class="btn-group">
                             <button @onclick='(() => ExportSmartflowToExcel())' class="btn btn-main btn-shadow" title="Export Smartflow Details"><i class="fa fa-file-export"></i><span>Export</span></button>
                         </div>
-                        @if ((UserSession.isAdminUser))
+                        @if ((UserSession.IsAdminUser))
                         {
                             <div class="invisible-md-down btn-group">
-                                <button @onclick='(() => ShowChapterImportModel())' class="btn btn-main btn-shadow" title="Import Smartflow Details"><i class="fa fa-file-import"></i><span>Import</span></button>
+                                <button @onclick='(() => ShowChapterImportModal())' class="btn btn-main btn-shadow" title="Import Smartflow Details"><i class="fa fa-file-import"></i><span>Import</span></button>
                                 @*<button @onclick='PrepareChapterForCopy' class="btn btn-main btn-shadow" title="Copy Smartflow"><i class="fa fa-paste"></i><span>Copy</span></button>*@
-                                <button @onclick="() => PrepareHeaderForComparison()" class="btn btn-main btn-shadow" title="Sync To @(UserSession.selectedSystem == "Dev" ? "Live" : "Dev")"><i class="fa fa-sync"></i><span>Sync</span></button>
+                                <button @onclick="() => PrepareHeaderForComparison()" class="btn btn-main btn-shadow" title="Sync To @(UserSession.SelectedSystem == "Dev" ? "Live" : "Dev")"><i class="fa fa-sync"></i><span>Sync</span></button>
                             </div>
                         }
 
@@ -420,22 +436,22 @@ else
 
                         <div class="detail-group-box">
 
-                            @if ((UserSession.isAdminUser))
+                            @if ((UserSession.IsAdminUser))
                             {
 
-                                <EditForm Model="selectedChapter" OnValidSubmit="SaveChapterDetails">
+                                <EditForm Model="SelectedChapter" OnValidSubmit="SaveChapterDetails">
                                     <div class="row">
                                         <div class="col-12 col-xl-6">
                                             <div class="form-group">
                                                 <label for="P4WCTG">P4W Case Type Group</label>
                                                 <InputSelect class="form-control form-control-xxl"
-                                                             ValueExpression="@(() => selectedChapter.P4WCaseTypeGroup)"
-                                                             Value="@selectedChapter.P4WCaseTypeGroup"
+                                                             ValueExpression="@(() => SelectedChapter.P4WCaseTypeGroup)"
+                                                             Value="@SelectedChapter.P4WCaseTypeGroup"
                                                              ValueChanged="@((string value) => SaveP4WCaseTypeGroup(value))">
                                                     <option value="">Select</option>
-                                                    @if(partnerCaseTypeGroups != null)
+                                                    @if(PartnerCaseTypeGroups != null)
                                                     {
-                                                        foreach (var group in partnerCaseTypeGroups.OrderBy(C => C.Name).ToList())
+                                                        foreach (var group in PartnerCaseTypeGroups.OrderBy(C => C.Name).ToList())
                                                         {
                                                             <option value="@group.Name">
                                                                 @group.Name
@@ -459,8 +475,8 @@ else
                                                 else
                                                 {
                                                     <InputSelect class="form-control form-control-xxl"
-                                                                 ValueExpression="@(() => selectedChapter.SelectedView)"
-                                                                 Value="@selectedChapter.SelectedView"
+                                                                 ValueExpression="@(() => SelectedChapter.SelectedView)"
+                                                                 Value="@SelectedChapter.SelectedView"
                                                                  ValueChanged="@((string value) => SaveSelectedView(value))">
                                                         <option value="">Select</option>
                                                         @foreach (var view in ListP4WViews
@@ -476,29 +492,29 @@ else
                                                 }
 
                                             </div>
-                                            @if (!(selectedChapter.SelectedStep is null) && selectedChapter.SelectedStep != "Create New")
+                                            @if (!(SelectedChapter.SelectedStep is null) && SelectedChapter.SelectedStep != "Create New")
                                             {
                                                 <div class="form-group">
                                                     <label for="SelectedStep">Smartflow Step</label>
                                                     <InputSelect class="form-control form-control-xxl"
-                                                                 ValueExpression="@(() => selectedChapter.SelectedStep)"
-                                                                 Value="@selectedChapter.SelectedStep"
+                                                                 ValueExpression="@(() => SelectedChapter.SelectedStep)"
+                                                                 Value="@SelectedChapter.SelectedStep"
                                                                  ValueChanged="@((string value) => SaveSelectedStep(value))">
                                                         <option value="">Select</option>
                                                         <option value="Create New">--- Create New ---</option>
-                                                        @if(dropDownChapterList != null & partnerCaseTypeGroups != null)
+                                                        @if(DropDownChapterList != null & PartnerCaseTypeGroups != null)
                                                         {
-                                                            foreach (var step in dropDownChapterList
+                                                            foreach (var step in DropDownChapterList
                                                                 .Where(D => D.DocumentType == 6)
                                                                 .Where(D => D.Notes != null && D.Notes.Contains("Smartflow:"))
-                                                                .Where(V => V.CaseTypeGroupRef == (string.IsNullOrEmpty(selectedChapter.P4WCaseTypeGroup)
+                                                                .Where(V => V.CaseTypeGroupRef == (string.IsNullOrEmpty(SelectedChapter.P4WCaseTypeGroup)
                                                                                           ? -2
-                                                                                          : selectedChapter.P4WCaseTypeGroup == "Global Documents"
+                                                                                          : SelectedChapter.P4WCaseTypeGroup == "Global Documents"
                                                                                           ? 0
-                                                                                          : selectedChapter.P4WCaseTypeGroup == "Entity Documents"
+                                                                                          : SelectedChapter.P4WCaseTypeGroup == "Entity Documents"
                                                                                           ? -1
-                                                                                          : partnerCaseTypeGroups
-                                                                                              .Where(P => P.Name == selectedChapter.P4WCaseTypeGroup)
+                                                                                          : PartnerCaseTypeGroups
+                                                                                              .Where(P => P.Name == SelectedChapter.P4WCaseTypeGroup)
                                                                                               .Select(P => P.Id)
                                                                                               .FirstOrDefault()))
                                                                 .OrderBy(D => D.Name)
@@ -518,7 +534,7 @@ else
                                             {
                                                 <div class="form-group">
                                                     <label>Enter Smartflow Step Name</label>
-                                                    <InputText @bind-Value="selectedChapter.StepName" class="form-control form-control-xxl" />
+                                                    <InputText @bind-Value="SelectedChapter.StepName" class="form-control form-control-xxl" />
                                                 </div>
                                                 <button @onclick='(() => CreateP4WSmartflowStep())' class="btn btn-main btn-shadow" title="Create Step"><span>Create</span></button>
                                                 <button @onclick='(() => CancelCreateP4WStep())' class="btn btn-main btn-shadow" title="Cancel"><span>Cancel</span></button>
@@ -529,10 +545,10 @@ else
                                             <div class="form-group">
                                                 <label>Background Colour</label>
 
-                                                @if (!string.IsNullOrEmpty(selectedChapter.BackgroundColourName))
+                                                @if (!string.IsNullOrEmpty(SelectedChapter.BackgroundColourName))
                                                 {
-                                                    <div @onclick='() => ShowNav("Background")' class="thumbnail-item rounded nav-link" style="height: 35px; background-color: @getHTMLColourFromAndroid(selectedChapter.BackgroundColour)">
-                                                        @selectedChapter.BackgroundColourName
+                                                    <div @onclick='() => ShowNav("Background")' class="thumbnail-item rounded nav-link" style="height: 35px; background-color: @getHTMLColourFromAndroid(SelectedChapter.BackgroundColour)">
+                                                        @SelectedChapter.BackgroundColourName
                                                     </div>
 
 
@@ -547,10 +563,10 @@ else
                                                 }
                                                 <div class="mt-3 link-item" style="height: 100px; margin: 0; padding: 0;" @onclick='() => ShowNav("Background")'>
 
-                                                    @if (!string.IsNullOrEmpty(selectedChapter.BackgroundImageName))
+                                                    @if (!string.IsNullOrEmpty(SelectedChapter.BackgroundImageName))
                                                     {
                                                         <label class="d-block">Selected Background Image</label>
-                                                        <img src="@selectedChapter.BackgroundImage.Replace("/wwwroot","")" alt="" class="img-thumbnail ml-2" />
+                                                        <img src="@SelectedChapter.BackgroundImage.Replace("/wwwroot","")" alt="" class="img-thumbnail ml-2" />
                                                     }
                                                     else
                                                     {
@@ -596,25 +612,25 @@ else
 
                                 <div class="form-group">
                                     <label>Smartflow Name: </label>
-                                    <label class="form-control-value">@selectedChapter.Name</label>
+                                    <label class="form-control-value">@SelectedChapter.Name</label>
                                 </div>
                                 <div class="form-group">
                                     <label>Smartflow Step Name: </label>
-                                    <label class="form-control-value">@selectedChapter.StepName</label>
+                                    <label class="form-control-value">@SelectedChapter.StepName</label>
                                 </div>
                                 <div class="form-group">
                                     <label>Background Colour:</label>
-                                    <label class="thumbnail-item rounded" style="height: 35px; background-color: @getHTMLColourFromAndroid(selectedChapter.BackgroundColour)">
-                                        @ListChapterColours.Where(C => C.ColourCode == @selectedChapter.BackgroundColour).Select(C => C.ColourName).SingleOrDefault()
+                                    <label class="thumbnail-item rounded" style="height: 35px; background-color: @getHTMLColourFromAndroid(SelectedChapter.BackgroundColour)">
+                                        @ListChapterColours.Where(C => C.ColourCode == @SelectedChapter.BackgroundColour).Select(C => C.ColourName).SingleOrDefault()
                                     </label>
                                 </div>
                                 <div class="form-group" style="height: 100px; margin: 0; padding: 0;">
 
-                                    @if (!string.IsNullOrEmpty(selectedChapter.BackgroundImageName))
+                                    @if (!string.IsNullOrEmpty(SelectedChapter.BackgroundImageName))
                                     {
 
                                         <label class="d-block">Selected Background Image</label>
-                                        <img src="@selectedChapter.BackgroundImage.Replace("/wwwroot","")" alt="" class="img-thumbnail ml-2" />
+                                        <img src="@SelectedChapter.BackgroundImage.Replace("/wwwroot","")" alt="" class="img-thumbnail ml-2" />
 
 
                                     }
@@ -641,7 +657,7 @@ else
                 </div>
             }
 
-            @if (navDisplay == "Docs")
+            @if (NavDisplay == "Docs")
             {
 
 
@@ -652,12 +668,12 @@ else
 
                     <div class="grid-actions">
 
-                        @if (!compareSystems)
+                        @if (!CompareSystems)
                         {
-                            @if (UserSession.isAdminUser)
+                            @if (UserSession.IsAdminUser)
                             {
                                 <div class="btn-group">
-                                    <button @onclick='() => PrepareForInsert(navDisplay, "Steps and Documents")' class="btn btn-main btn-shadow" title="Add new document/step"><i class="fa fa-plus"></i><span>New</span></button>
+                                    <button @onclick='() => PrepareForInsert(NavDisplay, "Steps and Documents")' class="btn btn-main btn-shadow" title="Add new document/step"><i class="fa fa-plus"></i><span>New</span></button>
 
                                     <button @onclick='() => CondenseSeq("Docs")' class="btn btn-main btn-shadow @(SequenceIsValid("Docs") ? "invisible" : "")" title="Re-order Sequence Numbers"><i class="fa fa-sort-numeric-down"></i></button>
                                 </div>
@@ -671,18 +687,18 @@ else
                         </ModalTooltip>
                         <div class="spacer">
                         </div>
-                        @if (UserSession.isAdminUser)
+                        @if (UserSession.IsAdminUser)
                         {
                             <div class="btn-group sync-group invisible-md-down">
-                                <button type="button" @onclick="() => PrepareChapterSync()" class="btn btn-main btn-shadow @(!compareSystems ? "hidden" : "")" title="Sync To @(UserSession.selectedSystem == "Dev" ? "Live" : "Dev")"><i class="fa fa-sync"></i><span>Sync</span></button>
-                                <input type="checkbox" class="ml-1 mt-1" @onchange="() => ToggleComparison()" /><span class="ml-2 font-75 ">Compare to @(UserSession.selectedSystem == "Dev" ? "Live" : "Dev") </span>
+                                <button type="button" @onclick="() => PrepareChapterSync()" class="btn btn-main btn-shadow @(!CompareSystems ? "hidden" : "")" title="Sync To @(UserSession.SelectedSystem == "Dev" ? "Live" : "Dev")"><i class="fa fa-sync"></i><span>Sync</span></button>
+                                <input type="checkbox" class="ml-1 mt-1" @onchange="() => ToggleComparison()" /><span class="ml-2 font-75 ">Compare to @(UserSession.SelectedSystem == "Dev" ? "Live" : "Dev") </span>
                             </div>
                         }
                     </div>
 
 
 
-                    <div class="@(UserSession.isAdminUser ? "grid-can-edit" : "") ">
+                    <div class="@(UserSession.IsAdminUser ? "grid-can-edit" : "") ">
                         <div class="row grid-header invisible-md-down">
                             <div class="data-item ">
                                 <div class="data-item-sub">
@@ -702,16 +718,16 @@ else
                         </div>
                         <div class="grid-data">
 
-                            <Dropzone Items="lstDocs"
+                            <Dropzone Items="LstDocs"
                                         InstantReplace="true"
-                                        OnItemDrop="@((d)=>ReSequenceDocs(lstDocs.IndexOf(d) + 1))"
+                                        OnItemDrop="@((d)=>ReSequenceDocs(LstDocs.IndexOf(d) + 1))"
                                         OnDragStartParam="() => ResetRowChanged()"
                                         TItem="VmUsrOrDefChapterManagement"
                                         UseCustomImage="true">
-                                <div class="row grid-row grid-row-lg @(rowChanged == context.ChapterObject.SeqNo ? "row-changed" : "" )">
+                                <div class="row grid-row grid-row-lg @(RowChanged == context.ChapterObject.SeqNo ? "row-changed" : "" )">
                                     <div class="data-item">
 
-                                        @if (UserSession.isAdminUser && !compareSystems)
+                                        @if (UserSession.IsAdminUser && !CompareSystems)
                                         {
                                             <div class="btn-ellipses float-left">
                                                 <span class="fa fa-ellipsis-v"></span>
@@ -737,7 +753,7 @@ else
                                                             
                                                             
                                                             <span>Links</span>
-                                                            <div class="menu-toggle @(selectedChapter.ShowDocumentTracking == "Y" ? "tracking" : "")">
+                                                            <div class="menu-toggle @(SelectedChapter.ShowDocumentTracking == "Y" ? "tracking" : "")">
                                                                 
                                                                 <span class="fa fa-chevron-right fa-sm"></span>
                                                                 
@@ -772,7 +788,7 @@ else
                                                                                 </span>
 
 
-                                                                                <span class="doc-icon hidden-sm-down @(@selectedChapter.ShowDocumentTracking == "Y" && !(string.IsNullOrEmpty(attach.TrackingMethod)) && "Send Only|Response Required".Contains(attach.TrackingMethod) ? "" : "invisible")">
+                                                                                <span class="doc-icon hidden-sm-down @(@SelectedChapter.ShowDocumentTracking == "Y" && !(string.IsNullOrEmpty(attach.TrackingMethod)) && "Send Only|Response Required".Contains(attach.TrackingMethod) ? "" : "invisible")">
 
                                                                                     <span title="@($"This item is tracked: {attach.TrackingMethod}")" class="fa fa-map-marker-alt"></span>
                                                                                 </span>
@@ -808,7 +824,7 @@ else
                                                 </div>
                                             </div>
                                         }
-                                        else if (UserSession.isAdminUser && compareSystems)
+                                        else if (UserSession.IsAdminUser && CompareSystems)
                                         {
                                             <div class="btn-ellipses float-left">
                                                 @if (!(context.ComparisonIcon is null))
@@ -851,7 +867,7 @@ else
                                                             <li class="col-main">
                                                                 <span class="fa fa-paperclip mr-2"></span>
                                                                 <span>Links</span>
-                                                                <div class="menu-toggle @(selectedChapter.ShowDocumentTracking == "Y" ? "tracking" : "")">
+                                                                <div class="menu-toggle @(SelectedChapter.ShowDocumentTracking == "Y" ? "tracking" : "")">
                                                                     <span class="fa fa-chevron-right"></span>
                                                                     <ul class="attach-list">
                                                                             @foreach (var attach in context.ChapterObject.LinkedItems)
@@ -883,7 +899,7 @@ else
                                                                                     </span>
 
 
-                                                                                    <span class="doc-icon hidden-sm-down @(@selectedChapter.ShowDocumentTracking == "Y" && !(string.IsNullOrEmpty(attach.TrackingMethod)) && "Send Only|Response Required".Contains(attach.TrackingMethod) ? "" : "invisible")">
+                                                                                    <span class="doc-icon hidden-sm-down @(@SelectedChapter.ShowDocumentTracking == "Y" && !(string.IsNullOrEmpty(attach.TrackingMethod)) && "Send Only|Response Required".Contains(attach.TrackingMethod) ? "" : "invisible")">
 
                                                                                         <span title="@($"This item is tracked: {attach.TrackingMethod}")" class="fa fa-map-marker-alt"></span>
                                                                                     </span>
@@ -932,7 +948,7 @@ else
                                                 <span class="doc-icon @(string.IsNullOrEmpty(context.DocType) && context.ChapterObject.CustomItem == "Y" ? "" : "invisible")" ><span class="mr-2"></span></span>
                                             </span>
                                         </ModalTooltip>
-                                        <div class="data-item-sub">
+                                        <div class="data-item-sub draggable">
                                             @context.DocDisplayName
                                             @if(!(string.IsNullOrEmpty(context.ChapterObject.Agenda)))
                                             {
@@ -982,7 +998,7 @@ else
                                             </div>
                                         }
 
-                                        @if (@selectedChapter.ShowDocumentTracking == "Y" && !(string.IsNullOrEmpty(context.ChapterObject.TrackingMethod)) && "Send Only|Response Required".Contains(context.ChapterObject.TrackingMethod))
+                                        @if (@SelectedChapter.ShowDocumentTracking == "Y" && !(string.IsNullOrEmpty(context.ChapterObject.TrackingMethod)) && "Send Only|Response Required".Contains(context.ChapterObject.TrackingMethod))
                                         {
                                             <div class="data-item-right hidden-md-down">
                                                 <ModalTooltip Direction="left" Text=@($"This item is tracked: {context.ChapterObject.TrackingMethod}") Class="w-2">
@@ -991,7 +1007,7 @@ else
                                             </div>
                                         }
 
-                                        @if (UserSession.isAdminUser && !compareSystems)
+                                        @if (UserSession.IsAdminUser && !CompareSystems)
                                         {
                                             <div class="data-item-right seq-change">
                                                 <div @onclick='() => MoveSeq(context.ChapterObject, "Docs", "Up")'><span class="fa fa-angle-up"></span></div>
@@ -1036,7 +1052,7 @@ else
 
                                         @if (!(string.IsNullOrEmpty(context.ChapterObject.NextStatus)))
                                         {
-                                            @if (lstStatus.Where(S => S.ChapterObject.Name == context.ChapterObject.NextStatus).Select(S => S.ChapterObject.SuppressStep).SingleOrDefault() == "Y")
+                                            @if (LstStatus.Where(S => S.ChapterObject.Name == context.ChapterObject.NextStatus).Select(S => S.ChapterObject.SuppressStep).SingleOrDefault() == "Y")
                                             {
                                                 <div class="data-item-right suppress-step">
                                                     <ModalTooltip Direction="left" Text="This document will end the Smartflow when taken." Class="w-2">
@@ -1048,7 +1064,7 @@ else
 
                                            <div class="data-item-right suppress-step">
 
-                                                    @if (lstStatus.Select(s => s.ChapterObject.Name).Contains(context.ChapterObject.NextStatus))
+                                                    @if (LstStatus.Select(s => s.ChapterObject.Name).Contains(context.ChapterObject.NextStatus))
 
                                                     {
 
@@ -1078,12 +1094,12 @@ else
                                 </div>
                             </Dropzone>
 
-                            @if (compareSystems && !(lstAltSystemChapterItems is null))
+                            @if (CompareSystems && !(LstAltSystemChapterItems is null))
                             {
-                                @foreach (var doc in lstAltSystemChapterItems.Where(D => D.ChapterObject.Type == "Doc").Where(D => !D.Compared).ToList())
+                                @foreach (var doc in LstAltSystemChapterItems.Where(D => D.ChapterObject.Type == "Doc").Where(D => !D.Compared).ToList())
                                 {
 
-                                    <div class="row grid-row grid-row-lg @(rowChanged == doc.ChapterObject.SeqNo ? "row-changed" : "" )">
+                                    <div class="row grid-row grid-row-lg @(RowChanged == doc.ChapterObject.SeqNo ? "row-changed" : "" )">
                                         <div class="data-item ">
 
                                             <div class="btn-ellipses float-left">
@@ -1187,7 +1203,7 @@ else
 
                                             @if (!(string.IsNullOrEmpty(doc.ChapterObject.NextStatus)))
                                             {
-                                                @if (lstStatus.Where(S => S.ChapterObject.Name == doc.ChapterObject.NextStatus).Select(S => S.ChapterObject.SuppressStep).SingleOrDefault() == "Y")
+                                                @if (LstStatus.Where(S => S.ChapterObject.Name == doc.ChapterObject.NextStatus).Select(S => S.ChapterObject.SuppressStep).SingleOrDefault() == "Y")
                                                 {
                                                     <div class="data-item-right suppress-step">
                                                         <ModalTooltip Direction="left" Text="This document will end the Smartflow when taken." Class="w-2">
@@ -1219,7 +1235,7 @@ else
 
             }
 
-            @if (navDisplay == "Agenda")
+            @if (NavDisplay == "Agenda")
             {
 
                 <div class="grid-chapter grid-chapter-agenda">
@@ -1227,12 +1243,12 @@ else
 
                     <div class="grid-actions">
 
-                        @if (!compareSystems)
+                        @if (!CompareSystems)
                         {
                             <div class="btn-group">
-                                @if (UserSession.isAdminUser)
+                                @if (UserSession.IsAdminUser)
                                 {
-                                    <button @onclick='() => PrepareForInsert(navDisplay, "Agenda")' class="btn btn-main btn-shadow" title="Add new agenda"><i class="fa fa-plus"></i><span>New</span></button>
+                                    <button @onclick='() => PrepareForInsert(NavDisplay, "Agenda")' class="btn btn-main btn-shadow" title="Add new agenda"><i class="fa fa-plus"></i><span>New</span></button>
                                 }
                             </div>
                         }
@@ -1243,26 +1259,26 @@ else
                         </ModalTooltip>
                         <div class="spacer">
                         </div>
-                        @if (UserSession.isAdminUser)
+                        @if (UserSession.IsAdminUser)
                         {
                             <div class="btn-group sync-group invisible-md-down">
-                                <button type="button" @onclick="() => PrepareChapterSync()" class="btn btn-main btn-shadow @(!compareSystems ? "hidden" : "")" title="Sync To @(UserSession.selectedSystem == "Dev" ? "Live" : "Dev")"><i class="fa fa-sync"></i><span>Sync</span></button>
-                                <input type="checkbox" class="ml-1 mt-1" @onchange="() => ToggleComparison()" /><span class="ml-2 font-75 ">Compare to @(UserSession.selectedSystem == "Dev" ? "Live" : "Dev") </span>
+                                <button type="button" @onclick="() => PrepareChapterSync()" class="btn btn-main btn-shadow @(!CompareSystems ? "hidden" : "")" title="Sync To @(UserSession.SelectedSystem == "Dev" ? "Live" : "Dev")"><i class="fa fa-sync"></i><span>Sync</span></button>
+                                <input type="checkbox" class="ml-1 mt-1" @onchange="() => ToggleComparison()" /><span class="ml-2 font-75 ">Compare to @(UserSession.SelectedSystem == "Dev" ? "Live" : "Dev") </span>
                             </div>
                         }
                     </div>
 
-                    <div class="@(UserSession.isAdminUser ? "grid-can-edit" : "") ">
+                    <div class="@(UserSession.IsAdminUser ? "grid-can-edit" : "") ">
 
-                        @foreach (var agenda in lstAgendas.OrderBy(A => A.ChapterObject.Name))
+                        @foreach (var agenda in LstAgendas.OrderBy(A => A.ChapterObject.Name))
                         {
 
                             <div class="row grid-row">
                                 <div class="col-12 data-item">
-                                    @if (UserSession.isAdminUser)
+                                    @if (UserSession.IsAdminUser)
                                     {
 
-                                        @if (!compareSystems)
+                                        @if (!CompareSystems)
                                         {
                                             <div class="btn-ellipses float-left">
                                                 <span class="fa fa-ellipsis-v"></span>
@@ -1329,7 +1345,7 @@ else
                                             </div>
                                         </div>
                                     }
-                                    <div class="data-item-sub">
+                                    <div class="data-item-sub draggable">
                                         <span class="font-100"><span class="fa fa-folder-open mr-2"></span></span>@agenda.ChapterObject.Name
                                     </div>
                                 </div>
@@ -1338,9 +1354,9 @@ else
 
                         }
 
-                        @if (compareSystems && !(lstAltSystemChapterItems is null))
+                        @if (CompareSystems && !(LstAltSystemChapterItems is null))
                         {
-                            @foreach (var agenda in lstAltSystemChapterItems.Where(D => D.ChapterObject.Type == "Agenda").Where(D => !D.Compared).ToList())
+                            @foreach (var agenda in LstAltSystemChapterItems.Where(D => D.ChapterObject.Type == "Agenda").Where(D => !D.Compared).ToList())
                             {
 
                                 <div class="row grid-row">
@@ -1369,16 +1385,16 @@ else
 
             }
 
-            @if (navDisplay == "Fees")
+            @if (NavDisplay == "Fees")
             {
 
                 <div class="grid-chapter grid-chapter-fees">
 
                     <div class="grid-actions">
 
-                        @if (!compareSystems)
+                        @if (!CompareSystems)
                         {
-                            @if (UserSession.isAdminUser)
+                            @if (UserSession.IsAdminUser)
                             {
                                 <div class="btn-group">
                                     <button @onclick='() => PrepareFeeForInsert("Insert")' class="btn btn-main btn-shadow" title="Add new fee"><i class="fa fa-plus"></i><span>New</span></button>
@@ -1394,16 +1410,16 @@ else
                         </ModalTooltip>
                         <div class="spacer">
                         </div>
-                        @if (UserSession.isAdminUser)
+                        @if (UserSession.IsAdminUser)
                         {
                             <div class="btn-group sync-group invisible-md-down">
-                                <button type="button" @onclick="() => PrepareChapterSync()" class="btn btn-main btn-shadow @(!compareSystems ? "hidden" : "")" title="Sync To @(UserSession.selectedSystem == "Dev" ? "Live" : "Dev")"><i class="fa fa-sync"></i><span>Sync</span></button>
-                                <input type="checkbox" class="ml-1 mt-1" @onchange="() => ToggleComparison()" /><span class="ml-2 font-75 ">Compare to @(UserSession.selectedSystem == "Dev" ? "Live" : "Dev") </span>
+                                <button type="button" @onclick="() => PrepareChapterSync()" class="btn btn-main btn-shadow @(!CompareSystems ? "hidden" : "")" title="Sync To @(UserSession.SelectedSystem == "Dev" ? "Live" : "Dev")"><i class="fa fa-sync"></i><span>Sync</span></button>
+                                <input type="checkbox" class="ml-1 mt-1" @onchange="() => ToggleComparison()" /><span class="ml-2 font-75 ">Compare to @(UserSession.SelectedSystem == "Dev" ? "Live" : "Dev") </span>
                             </div>
                         }
                     </div>
 
-                    <div class="@(UserSession.isAdminUser ? "grid-can-edit" : "") ">
+                    <div class="@(UserSession.IsAdminUser ? "grid-can-edit" : "") ">
                         <div class="row grid-header invisible-md-down">
                             <div class="data-item ">
                                 <div class="data-item-sub">
@@ -1427,18 +1443,18 @@ else
                             </div>
                         </div>
                         <div class="grid-data">
-                            <Dropzone Items="lstFees"
+                            <Dropzone Items="LstFees"
                                 InstantReplace="true"
-                                OnItemDrop="@((s)=>ReSequenceFee(lstFees.IndexOf(s) + 1))"
+                                OnItemDrop="@((s)=>ReSequenceFee(LstFees.IndexOf(s) + 1))"
                                 OnDragStartParam="() => ResetRowChanged()"
                                 TItem="VmFee"
                                 UseCustomImage="true"> 
 
-                                <div class="row grid-row grid-row-lg @(rowChanged == context.FeeObject.SeqNo ? "row-changed" : "" )">
+                                <div class="row grid-row grid-row-lg @(RowChanged == context.FeeObject.SeqNo ? "row-changed" : "" )">
                                     <div class="data-item">
-                                        @if (UserSession.isAdminUser)
+                                        @if (UserSession.IsAdminUser)
                                         {
-                                            @if (!compareSystems)
+                                            @if (!CompareSystems)
                                             {
                                                 <div class="btn-ellipses float-left">
                                                     <span class="fa fa-ellipsis-v"></span>
@@ -1459,7 +1475,7 @@ else
                                                         </ul>
                                                     </div>
                                                 </div>
-                                                <div class="data-item-sub">
+                                                <div class="data-item-sub draggable">
                                                     <span class="fa fa-pound-sign mr-2"></span> @context.FeeObject.FeeName
                                                 </div>
 
@@ -1567,12 +1583,12 @@ else
                                 </div>
                             </Dropzone>
 
-                            @if (compareSystems && !(lstAltSystemFeeItems is null))
+                            @if (CompareSystems && !(LstAltSystemFeeItems is null))
                             {
-                                @foreach (var fee in lstAltSystemFeeItems.Where(F => !F.Compared).ToList())
+                                @foreach (var fee in LstAltSystemFeeItems.Where(F => !F.Compared).ToList())
                                 {
 
-                                    <div class="row grid-row grid-row-lg @(rowChanged == fee.FeeObject.SeqNo ? "row-changed" : "" )">
+                                    <div class="row grid-row grid-row-lg @(RowChanged == fee.FeeObject.SeqNo ? "row-changed" : "" )">
                                         <div class="data-item">
 
 
@@ -1623,18 +1639,18 @@ else
 
             }
 
-            @if (navDisplay == "Status")
+            @if (NavDisplay == "Status")
             {
 
                 <div class="grid-chapter grid-chapter-status">
                     <div class="grid-actions">
 
-                        @if (!compareSystems)
+                        @if (!CompareSystems)
                         {
-                            @if (UserSession.isAdminUser)
+                            @if (UserSession.IsAdminUser)
                             {
                                 <div class="btn-group">
-                                    <button @onclick='() => PrepareForInsert(navDisplay, "Status")' class="btn btn-main btn-shadow" title="Add new status"><i class="fa fa-plus"></i><span>New</span></button>
+                                    <button @onclick='() => PrepareForInsert(NavDisplay, "Status")' class="btn btn-main btn-shadow" title="Add new status"><i class="fa fa-plus"></i><span>New</span></button>
                                     <button @onclick='() => CondenseSeq("Status")' class="btn btn-main btn-shadow @(SequenceIsValid("Status") ? "invisible" : "")" title="Re-order Sequence Numbers"><i class="fa fa-sort-numeric-down"></i></button>
                                 </div>
                             }
@@ -1647,27 +1663,27 @@ else
                         </ModalTooltip>
                         <div class="spacer">
                         </div>
-                        @if (UserSession.isAdminUser)
+                        @if (UserSession.IsAdminUser)
                         {
                             <div class="btn-group sync-group invisible-md-down">
-                                <button type="button" @onclick="() => PrepareChapterSync()" class="btn btn-main btn-shadow @(!compareSystems ? "hidden" : "")" title="Sync To @(UserSession.selectedSystem == "Dev" ? "Live" : "Dev")"><i class="fa fa-sync"></i><span>Sync</span></button>
-                                <input type="checkbox" class="ml-1 mt-1" @onchange="() => ToggleComparison()" /><span class="ml-2 font-75 ">Compare to @(UserSession.selectedSystem == "Dev" ? "Live" : "Dev") </span>
+                                <button type="button" @onclick="() => PrepareChapterSync()" class="btn btn-main btn-shadow @(!CompareSystems ? "hidden" : "")" title="Sync To @(UserSession.SelectedSystem == "Dev" ? "Live" : "Dev")"><i class="fa fa-sync"></i><span>Sync</span></button>
+                                <input type="checkbox" class="ml-1 mt-1" @onchange="() => ToggleComparison()" /><span class="ml-2 font-75 ">Compare to @(UserSession.SelectedSystem == "Dev" ? "Live" : "Dev") </span>
                             </div>
                         }
                     </div>
-                    <div class="grid-data @(UserSession.isAdminUser ? "grid-can-edit" : "") ">
-                        <Dropzone Items="lstStatus"
+                    <div class="grid-data @(UserSession.IsAdminUser ? "grid-can-edit" : "") ">
+                        <Dropzone Items="LstStatus"
                             InstantReplace="true"
-                            OnItemDrop="@((s)=>ReSequenceStatus(lstStatus.IndexOf(s) + 1))"
+                            OnItemDrop="@((s)=>ReSequenceStatus(LstStatus.IndexOf(s) + 1))"
                             OnDragStartParam="() => ResetRowChanged()"
                             TItem="VmUsrOrDefChapterManagement"
                             UseCustomImage="true"> 
 
-                            <div class="row grid-row @(rowChanged == context.ChapterObject.SeqNo ? "row-changed" : "" )">
+                            <div class="row grid-row @(RowChanged == context.ChapterObject.SeqNo ? "row-changed" : "" )">
                                 <div class="data-item">
-                                    @if (UserSession.isAdminUser)
+                                    @if (UserSession.IsAdminUser)
                                     {
-                                        @if (!compareSystems)
+                                        @if (!CompareSystems)
                                         {
                                             <div class="btn-ellipses float-left">
                                                 <span class="fa fa-ellipsis-v"></span>
@@ -1733,7 +1749,7 @@ else
                                             </div>
                                         </div>
                                     }
-                                    <div class="data-item-sub">
+                                    <div class="data-item-sub draggable">
                                         <span class="font-100"><span class="fa fa-battery-half mr-2"></span></span>@context.ChapterObject.Name
                                     </div>
 
@@ -1746,7 +1762,7 @@ else
                                         </div>
                                     }
 
-                                    @if (UserSession.isAdminUser && !compareSystems)
+                                    @if (UserSession.IsAdminUser && !CompareSystems)
                                     {
 
                                         <div class="data-item-right seq-change">
@@ -1768,11 +1784,11 @@ else
                             </div>
                         </Dropzone>
 
-                        @if (compareSystems && !(lstAltSystemChapterItems is null))
+                        @if (CompareSystems && !(LstAltSystemChapterItems is null))
                         {
-                            @foreach (var status in lstAltSystemChapterItems.Where(D => D.ChapterObject.Type == "Status").Where(D => !D.Compared).ToList())
+                            @foreach (var status in LstAltSystemChapterItems.Where(D => D.ChapterObject.Type == "Status").Where(D => !D.Compared).ToList())
                             {
-                                <div class="row grid-row @(rowChanged == status.ChapterObject.SeqNo ? "row-changed" : "" )">
+                                <div class="row grid-row @(RowChanged == status.ChapterObject.SeqNo ? "row-changed" : "" )">
                                     <div class="data-item">
                                         <div class="btn-ellipses float-left">
                                             <ModalTooltip Direction="right" Text=@("Exists on alternate system, Do you wish to delete?") Class="w-2">
@@ -1808,21 +1824,21 @@ else
 
             }
 
-            @if (navDisplay == "DataViews")
+            @if (NavDisplay == "DataViews")
             {
 
                 <div class="grid-chapter grid-chapter-dataviews">
 
                     <div class="grid-actions">
 
-                        @if (!compareSystems)
+                        @if (!CompareSystems)
                         {
-                            @if (UserSession.isAdminUser)
+                            @if (UserSession.IsAdminUser)
                             {
                                 <div class="btn-group">
                                     @if (ListVmDataViews.Count() < 6)
                                     {
-                                        <button @onclick='() => PrepareDataViewForInsert(navDisplay)' class="btn btn-main btn-shadow" title="Add new data view"><i class="fa fa-plus"></i><span>New</span></button>
+                                        <button @onclick='() => PrepareDataViewForInsert(NavDisplay)' class="btn btn-main btn-shadow" title="Add new data view"><i class="fa fa-plus"></i><span>New</span></button>
                                     }
                                     else
                                     {
@@ -1841,16 +1857,16 @@ else
 
                         <div class="spacer">
                         </div>
-                        @if (UserSession.isAdminUser)
+                        @if (UserSession.IsAdminUser)
                         {
                             <div class="btn-group sync-group invisible-md-down">
-                                <button type="button" @onclick="() => PrepareChapterSync()" class="btn btn-main btn-shadow @(!compareSystems ? "hidden" : "")" title="Sync To @(UserSession.selectedSystem == "Dev" ? "Live" : "Dev")"><i class="fa fa-sync"></i><span>Sync</span></button>
-                                <input type="checkbox" class="ml-1 mt-1" @onchange="() => ToggleComparison()" /><span class="ml-2 font-75 ">Compare to @(UserSession.selectedSystem == "Dev" ? "Live" : "Dev") </span>
+                                <button type="button" @onclick="() => PrepareChapterSync()" class="btn btn-main btn-shadow @(!CompareSystems ? "hidden" : "")" title="Sync To @(UserSession.SelectedSystem == "Dev" ? "Live" : "Dev")"><i class="fa fa-sync"></i><span>Sync</span></button>
+                                <input type="checkbox" class="ml-1 mt-1" @onchange="() => ToggleComparison()" /><span class="ml-2 font-75 ">Compare to @(UserSession.SelectedSystem == "Dev" ? "Live" : "Dev") </span>
                             </div>
                         }
                     </div>
 
-                    <div class="grid-data @(UserSession.isAdminUser ? "grid-can-edit" : "") ">
+                    <div class="grid-data @(UserSession.IsAdminUser ? "grid-can-edit" : "") ">
                         <Dropzone Items="ListVmDataViews"
                             InstantReplace="true"
                             OnItemDrop="@((s)=>ReSequenceDataViews(ListVmDataViews.IndexOf(s) + 1))"
@@ -1858,16 +1874,16 @@ else
                             TItem="VmDataViews"
                             UseCustomImage="true">
 
-                            <div class="row grid-row @(rowChanged == context.DataView.BlockNo ? "row-changed" : "" )">
+                            <div class="row grid-row @(RowChanged == context.DataView.BlockNo ? "row-changed" : "" )">
                                 <div class="data-item">
-                                    @if (UserSession.isAdminUser && !compareSystems)
+                                    @if (UserSession.IsAdminUser && !CompareSystems)
                                     {
 
                                         <div class="btn-ellipses float-left">
                                             <span class="fa fa-ellipsis-v"></span>
                                             <div class="ellipsis-menu">
                                                 <ul>
-                                                    <li class="col-main" @onclick='() => PrepareDataViewForEdit(context, navDisplay)'>
+                                                    <li class="col-main" @onclick='() => PrepareDataViewForEdit(context, NavDisplay)'>
                                                         <span class="fa fa-pencil-alt mr-2"></span>
                                                         <span>Edit</span>
                                                     </li>
@@ -1882,11 +1898,11 @@ else
                                                 </ul>
                                             </div>
                                         </div>
-                                        <div class="data-item-sub">
+                                        <div class="data-item-sub draggable">
                                             <span class="fa fa-database mr-2"></span> @context.DataViewDisplayName
                                         </div>
                                     }
-                                    else if (UserSession.isAdminUser && compareSystems)
+                                    else if (UserSession.IsAdminUser && CompareSystems)
                                     {
                                         <div class="btn-ellipses float-left">
                                             @if (!(context.ComparisonIcon is null))
@@ -1941,7 +1957,7 @@ else
                                         </div>
                                     }
 
-                                    @if (UserSession.isAdminUser && !compareSystems)
+                                    @if (UserSession.IsAdminUser && !CompareSystems)
                                     {
 
                                         <div class="data-item-right seq-change">
@@ -1964,11 +1980,11 @@ else
                         </Dropzone>
 
 
-                        @if (compareSystems && !(lstAltSystemDataViews is null))
+                        @if (CompareSystems && !(LstAltSystemDataViews is null))
                         {
-                            @foreach (var vmdataView in lstAltSystemDataViews.Where(F => !F.Compared).ToList())
+                            @foreach (var vmdataView in LstAltSystemDataViews.Where(F => !F.Compared).ToList())
                             {
-                                <div class="row grid-row @(rowChanged == vmdataView.DataView.BlockNo ? "row-changed" : "" )">
+                                <div class="row grid-row @(RowChanged == vmdataView.DataView.BlockNo ? "row-changed" : "" )">
                                     <div class="col-12 data-item">
 
                                         <div class="btn-ellipses float-left">
@@ -2009,19 +2025,19 @@ else
 
             }
 
-            @if (navDisplay == "TickerMessages")
+            @if (NavDisplay == "TickerMessages")
             {
 
                 <div class="grid-chapter grid-chapter-messages">
 
                     <div class="grid-actions">
 
-                        @if (!compareSystems)
+                        @if (!CompareSystems)
                         {
-                            @if (UserSession.isAdminUser)
+                            @if (UserSession.IsAdminUser)
                             {
                                 <div class="btn-group">
-                                    <button @onclick='() => PrepareTickerMessageForInsert(navDisplay)' class="btn btn-main btn-shadow" title="Add new ticker message"><i class="fa fa-plus"></i><span>New</span></button>
+                                    <button @onclick='() => PrepareTickerMessageForInsert(NavDisplay)' class="btn btn-main btn-shadow" title="Add new ticker message"><i class="fa fa-plus"></i><span>New</span></button>
                                     <button @onclick='() => CondenseMessageSeqNo("TickerMessages")' class="btn btn-main btn-shadow @(MessagesSeqNoIsValid() ? "invisible" : "")" title="Re-order Sequence Numbers"><i class="fa fa-sort-numeric-down"></i></button>
                                 </div>
                             }
@@ -2035,16 +2051,16 @@ else
 
                         <div class="spacer">
                         </div>
-                        @if (UserSession.isAdminUser)
+                        @if (UserSession.IsAdminUser)
                         {
                             <div class="btn-group sync-group invisible-md-down">
-                                <button type="button" @onclick="() => PrepareChapterSync()" class="btn btn-main btn-shadow @(!compareSystems ? "hidden" : "")" title="Sync To @(UserSession.selectedSystem == "Dev" ? "Live" : "Dev")"><i class="fa fa-sync"></i><span>Sync</span></button>
-                                <input type="checkbox" class="ml-1 mt-1" @onchange="() => ToggleComparison()" /><span class="ml-2 font-75 ">Compare to @(UserSession.selectedSystem == "Dev" ? "Live" : "Dev") </span>
+                                <button type="button" @onclick="() => PrepareChapterSync()" class="btn btn-main btn-shadow @(!CompareSystems ? "hidden" : "")" title="Sync To @(UserSession.SelectedSystem == "Dev" ? "Live" : "Dev")"><i class="fa fa-sync"></i><span>Sync</span></button>
+                                <input type="checkbox" class="ml-1 mt-1" @onchange="() => ToggleComparison()" /><span class="ml-2 font-75 ">Compare to @(UserSession.SelectedSystem == "Dev" ? "Live" : "Dev") </span>
                             </div>
                         }
                     </div>
 
-                    <div class="grid-data @(UserSession.isAdminUser ? "grid-can-edit" : "") ">
+                    <div class="grid-data @(UserSession.IsAdminUser ? "grid-can-edit" : "") ">
                         <div class="row grid-header invisible-md-down">
                             <div class="data-item ">
                                 <div class="data-item-sub">
@@ -2070,16 +2086,16 @@ else
                                 TItem="VmTickerMessages"
                                 UseCustomImage="true">
 
-                                <div class="row grid-row @(rowChanged == context.Message.SeqNo ? "row-changed" : "" )">
+                                <div class="row grid-row @(RowChanged == context.Message.SeqNo ? "row-changed" : "" )">
                                     <div class="data-item">
-                                        @if (UserSession.isAdminUser && !compareSystems)
+                                        @if (UserSession.IsAdminUser && !CompareSystems)
                                         {
 
                                             <div class="btn-ellipses float-left">
                                                 <span class="fa fa-ellipsis-v"></span>
                                                 <div class="ellipsis-menu">
                                                     <ul>
-                                                        <li class="col-main" @onclick='() => PrepareTickerMessageForEdit(context, navDisplay)'>
+                                                        <li class="col-main" @onclick='() => PrepareTickerMessageForEdit(context, NavDisplay)'>
                                                             <span class="fa fa-pencil-alt mr-2"></span>
                                                             <span>Edit</span>
                                                         </li>
@@ -2103,11 +2119,11 @@ else
                                                     <span class="@(context.MsgValidation == "Valid" ? "" : "invisible")"><span class="fa fa-comment mr-2 font-blue "></span></span>
                                                 </ModalTooltip>
                                             </div>
-                                            <div class="data-item-sub">
+                                            <div class="data-item-sub draggable">
                                                 @context.Message.Message
                                             </div>
                                         }
-                                        else if (UserSession.isAdminUser && compareSystems)
+                                        else if (UserSession.IsAdminUser && CompareSystems)
                                         {
                                             <div class="btn-ellipses float-left">
                                                 @if (!(context.ComparisonIcon is null))
@@ -2150,7 +2166,7 @@ else
                                             </div>
                                         }
 
-                                        @if (UserSession.isAdminUser && !compareSystems)
+                                        @if (UserSession.IsAdminUser && !CompareSystems)
                                         {
 
                                             <div class="data-item-right seq-change">
@@ -2197,11 +2213,11 @@ else
                             </Dropzone>
 
 
-                            @if (compareSystems && !(lstAltSystemTickerMessages is null))
+                            @if (CompareSystems && !(LstAltSystemTickerMessages is null))
                             {
-                                @foreach (var vmtickerMessages in lstAltSystemTickerMessages.Where(F => !F.Compared).ToList())
+                                @foreach (var vmtickerMessages in LstAltSystemTickerMessages.Where(F => !F.Compared).ToList())
                                 {
-                                    <div class="row grid-row @(rowChanged == vmtickerMessages.Message.SeqNo ? "row-changed" : "" )">
+                                    <div class="row grid-row @(RowChanged == vmtickerMessages.Message.SeqNo ? "row-changed" : "" )">
                                         <div class="data-item">
 
                                             <div class="btn-ellipses float-left">
@@ -2254,7 +2270,7 @@ else
 
             }
 
-            @if (navDisplay == "Background")
+            @if (NavDisplay == "Background")
             {
                 <div class="grid-chapter grid-chapter-background">
 
@@ -2262,10 +2278,10 @@ else
                         <div id="selected-bg-items">
                             <div id="selected-image">
                                 <div class="selected-thumbnail ">
-                                    @if (!string.IsNullOrEmpty(selectedChapter.BackgroundImageName))
+                                    @if (!string.IsNullOrEmpty(SelectedChapter.BackgroundImageName))
                                     {
-                                        <div>Selected Image: <span class="font-85">@selectedChapter.BackgroundImageName</span></div>
-                                        <img src="@selectedChapter.BackgroundImage.Replace("/wwwroot","")" alt="" class="img-thumbnail ml-2" />
+                                        <div>Selected Image: <span class="font-85">@SelectedChapter.BackgroundImageName</span></div>
+                                        <img src="@SelectedChapter.BackgroundImage.Replace("/wwwroot","")" alt="" class="img-thumbnail ml-2" />
                                     }
                                     else
                                     {
@@ -2285,8 +2301,8 @@ else
 
                             <div style="margin-left: 50px">
                                 <label>Background Colour</label>
-                                <select @bind="selectColour"
-                                        style="background-color: @getHTMLColourFromAndroid(ListChapterColours.Where(C => C.ColourName == selectColour).Select(C => C.ColourCode).FirstOrDefault())"
+                                <select @bind="SelectColour"
+                                        style="background-color: @getHTMLColourFromAndroid(ListChapterColours.Where(C => C.ColourName == SelectColour).Select(C => C.ColourCode).FirstOrDefault())"
                                         class="form-control form-control-lg">
                                     @if(ListChapterColours != null)
                                     {
@@ -2318,12 +2334,12 @@ else
                                     foreach (var fileDesc in ListFilesForBgImages.ToList().OrderBy(F => F.FileName))
                                     {
 
-                                        <div class="thumbnail-item @(!string.IsNullOrEmpty(selectedChapter.BackgroundImageName) && fileDesc.FileName == selectedChapter.BackgroundImageName ? "active" : "")">
+                                        <div class="thumbnail-item @(!string.IsNullOrEmpty(SelectedChapter.BackgroundImageName) && fileDesc.FileName == SelectedChapter.BackgroundImageName ? "active" : "")">
                                             <img src="@fileDesc.FileURL.Replace("/wwwroot","")" alt="" class="img-thumbnail" />
                                             <label title="@fileDesc.FileName">@fileDesc.FileName</label>
                                             <div class="thumbnail-options">
                                                 <button @onclick='(() => PrepareBgImageForDelete(fileDesc))' class="btn col-grey" title="Delete this image"><i class="fa fa-trash"></i></button>
-                                                @if (!string.IsNullOrEmpty(selectedChapter.BackgroundImageName) && fileDesc.FileName == selectedChapter.BackgroundImageName)
+                                                @if (!string.IsNullOrEmpty(SelectedChapter.BackgroundImageName) && fileDesc.FileName == SelectedChapter.BackgroundImageName)
                                                 {
                                                     <button @onclick='() => SelectBgImage(new FileManagement.FileClassObjects.FileDesc { FileName = "", FileURL = "" })' class="btn " title="Deselect this image"><i class="fa fa-times"></i></button>
                                                 }
@@ -2347,15 +2363,15 @@ else
 
             }
 
-            @if (navDisplay == "Backups")
+            @if (NavDisplay == "Backups")
             {
                 <div class="grid-chapter grid-chapter-backups">
                     <div class="detail-group-box" id="form-controls-json">
-                        <h5>Backup and Recovery: @selectedChapter.Name</h5>
+                        <h5>Backup and Recovery: @SelectedChapter.Name</h5>
                         <div class="btn-group mt-2">
                             <button @onclick="WriteChapterJSONToFile" class="btn btn-main btn-shadow"><i class="fa fa-save"></i><span>New Backup</span></button>
                         </div>
-                        <div class="alert alert-danger mt-3 @(string.IsNullOrEmpty(alertMsgJSOM) ? "hidden" : "")">@alertMsgJSOM</div>
+                        <div class="alert alert-danger mt-3 @(string.IsNullOrEmpty(AlertMsgJSOM) ? "hidden" : "")">@AlertMsgJSOM</div>
 
                         <div class="custom-file">
                             <BlazorInputFile.InputFile multiple OnChange="HandleBackupFileSelection" class="custom-file-input" id="customFileInput"></BlazorInputFile.InputFile>

@@ -22,13 +22,13 @@ namespace GadjIT_App.Data.Admin
     public class IdentityRoleAccess : IIdentityRoleAccess
     {
         private readonly RoleManager<ApplicationRole> roleManager;
-        private readonly IDbContextFactory<AuthorisationDBContext> contextFactory;
+        private readonly IDbContextFactory<ApplicationDbContext> contextFactory;
 
 
         private ApplicationRole selectedRole { get; set; }
 
         public IdentityRoleAccess(RoleManager<ApplicationRole> roleManager
-                                    , IDbContextFactory<AuthorisationDBContext> contextFactory)
+                                    , IDbContextFactory<ApplicationDbContext> contextFactory)
         {
             this.roleManager = roleManager;
             this.contextFactory = contextFactory;

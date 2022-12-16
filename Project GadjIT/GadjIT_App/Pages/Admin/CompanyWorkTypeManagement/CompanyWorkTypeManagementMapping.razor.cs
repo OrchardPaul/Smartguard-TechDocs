@@ -15,20 +15,20 @@ namespace GadjIT_App.Pages.Admin.CompanyWorkTypeManagement
     public partial class CompanyWorkTypeManagementMapping
     {
         [Inject]
-        private IPartnerAccessService apiConnection { get; set; }
+        private IPartnerAccessService ApiConnection { get; set; }
 
         [Inject]
-        private IUserSessionState sessionState { get; set; }
+        private IUserSessionState SessionState { get; set; }
 
         [Inject]
-        private ICompanyDbAccess dbAccess { get; set; }
+        private ICompanyDbAccess DbAccess { get; set; }
 
         [Inject]
-        private IMappingSessionState mappingSessionState { get; set; }
+        private IMappingSessionState MappingSessionState { get; set; }
 
-        private WorkTypeMapping workTypeMapping { get; set; } = new WorkTypeMapping();
+        private WorkTypeMapping WorkTypeMapping { get; set; } = new WorkTypeMapping();
 
-        private AppWorkTypes selectedWorkType { get; set; }
+        private AppWorkTypes SelectedWorkType { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
@@ -37,36 +37,36 @@ namespace GadjIT_App.Pages.Admin.CompanyWorkTypeManagement
 
         public async Task<WorkTypeMapping> setWorkTypeMapping()
         {
-            workTypeMapping.workType = mappingSessionState.selectedWorkType;
+            WorkTypeMapping.workType = MappingSessionState.selectedWorkType;
 
-            var allCaseTypes = await apiConnection.GetPartnerCaseTypes();
-            workTypeMapping = await dbAccess.GetWorkTypeMappingsByCompany(sessionState.Company
+            var allCaseTypes = await ApiConnection.GetPartnerCaseTypes();
+            WorkTypeMapping = await DbAccess.GetWorkTypeMappingsByCompany(SessionState.Company
                                                                                , allCaseTypes
-                                                                               , workTypeMapping.workType
-                                                                               , sessionState.selectedSystem);
+                                                                               , WorkTypeMapping.workType
+                                                                               , SessionState.SelectedSystem);
 
-            return workTypeMapping;
+            return WorkTypeMapping;
         }
 
         protected async Task<WorkTypeMapping> UpdateMapping(CaseTypeAssignment selectedAssignment)
         {
             selectedAssignment.IsAssigned = !selectedAssignment.IsAssigned;
 
-            await dbAccess.UpdateWorkTypeMapping(workTypeMapping
-                                                    , sessionState.Company
-                                                    , sessionState.selectedSystem);
-            return workTypeMapping;
+            await DbAccess.UpdateWorkTypeMapping(WorkTypeMapping
+                                                    , SessionState.Company
+                                                    , SessionState.SelectedSystem);
+            return WorkTypeMapping;
         }
 
         protected void OpenWorkTypeMappingOverview()
         {
-            var action = mappingSessionState.ToggleMapping;
+            var action = MappingSessionState.ToggleMapping;
             action?.Invoke();
         }
 
         protected void ReturnToDetailsScreen()
         {
-            var action = mappingSessionState.ToggleMappingOverviewScreen;
+            var action = MappingSessionState.ToggleMappingOverviewScreen;
             action?.Invoke();
         }
 

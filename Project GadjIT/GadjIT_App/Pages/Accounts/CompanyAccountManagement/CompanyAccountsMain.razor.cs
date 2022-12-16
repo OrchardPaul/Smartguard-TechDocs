@@ -43,7 +43,7 @@ namespace GadjIT_App.Pages.Accounts.CompanyAccountManagement
         public IUserSessionState SessionState { get; set; }
         
         [Inject]
-        public JsConsole jsConsole { get; set; }
+        public JsConsole JsConsole { get; set; }
 
         [Inject]
         public IFileHelper FileHelper { get; set; }
@@ -60,9 +60,9 @@ namespace GadjIT_App.Pages.Accounts.CompanyAccountManagement
         [Inject]
         private ILogger<CompanyAccountsMain> Logger { get; set; }
 
-        public string navDisplay = "Companies";
+        public string NavDisplay = "Companies";
 
-        public bool displaySpinner = true;
+        public bool DisplaySpinner = true;
 
         public List<AppCompanyDetails> AppCompanyDetails { get; set; }
 
@@ -109,7 +109,7 @@ namespace GadjIT_App.Pages.Accounts.CompanyAccountManagement
         {
             try
             {
-                displaySpinner = true;
+                DisplaySpinner = true;
 
                 bool gotLock = SessionState.Lock;
                 while (gotLock)
@@ -150,7 +150,7 @@ namespace GadjIT_App.Pages.Accounts.CompanyAccountManagement
                     StateHasChanged();
                 });
 
-                displaySpinner = false;
+                DisplaySpinner = false;
 
                 StateHasChanged();
             }
@@ -193,7 +193,7 @@ namespace GadjIT_App.Pages.Accounts.CompanyAccountManagement
 
         protected void ShowNav(string displayChange)
         {
-            navDisplay = displayChange;
+            NavDisplay = displayChange;
         }
 
         protected async Task RefreshCompanyAccounts()
@@ -214,7 +214,7 @@ namespace GadjIT_App.Pages.Accounts.CompanyAccountManagement
         {
             SelectedCompanyAccount = selectedCompany;
             
-            navDisplay = "Accounts";
+            NavDisplay = "Accounts";
 
             StateHasChanged();
         }

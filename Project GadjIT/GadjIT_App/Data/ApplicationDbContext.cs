@@ -2,17 +2,20 @@
 using System.Collections.Generic;
 using System.Text;
 using GadjIT_AppContext.GadjIT_App;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace GadjIT_App.Data
 {
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser,ApplicationRole,string>
+
+    public class ApplicationDbContext : DbContext
     {
+        
+        
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
         }
+
 
         public virtual DbSet<AppCompanyAccountsSmartflow> AppCompanyAccountsSmartflow { get; set; }
         public virtual DbSet<AppCompanyAccountsSmartflowDetails> AppCompanyAccountsSmartflowDetails { get; set; }

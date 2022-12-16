@@ -61,14 +61,14 @@ namespace GadjIT_App.Data.Admin
     public class CompanyDbAccess : ICompanyDbAccess
     {
 
-        private readonly IDbContextFactory<AuthorisationDBContext> contextFactory;
+        private readonly IDbContextFactory<ApplicationDbContext> contextFactory;
         private readonly AuthenticationStateProvider authenticationStateProvider;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IIdentityUserAccess identityUserAccess;
         private readonly IMapper mapper;
         private readonly ILogger<CompanyDbAccess> logger;
 
-        public CompanyDbAccess(IDbContextFactory<AuthorisationDBContext> contextFactory
+        public CompanyDbAccess(IDbContextFactory<ApplicationDbContext> contextFactory
                                 , AuthenticationStateProvider authenticationStateProvider
                                 , UserManager<ApplicationUser> userManager
                                 , IIdentityUserAccess identityUserAccess
@@ -720,12 +720,12 @@ namespace GadjIT_App.Data.Admin
                 var currentRecords = await context
                                                 .SmartflowRecords
                                                 .Where(R => R.CompanyId == sessionState.Company.Id)
-                                                .Where(R => R.System == sessionState.selectedSystem)
+                                                .Where(R => R.System == sessionState.SelectedSystem)
                                                 .ToListAsync();
 
                 var accountsDeleted = await context.AppCompanyAccountsSmartflowDetails
                                             .Where(A => A.CompanyId == sessionState.Company.Id
-                                                        && A.System == sessionState.selectedSystem)
+                                                        && A.System == sessionState.SelectedSystem)
                                             .Where(A => !clientObjects.Select(C => C.Id).Contains(A.ClientRowId))
                                             .ToListAsync();            
 
@@ -747,7 +747,7 @@ namespace GadjIT_App.Data.Admin
                     var record = new SmartflowRecords { CompanyId = sessionState.Company.Id };
                     mapper.Map(clientRow, record);
 
-                    record.System = sessionState.selectedSystem;
+                    record.System = sessionState.SelectedSystem;
                     record.CreatedByUserId = sessionState.User.Id;
                     record.CreatedDate = DateTime.Now;
                     record.LastModifiedByUserId = sessionState.User.Id;
@@ -775,7 +775,7 @@ namespace GadjIT_App.Data.Admin
                     Lock = true;
 
                     returnValues = await context.SmartflowRecords.Where(S => S.CompanyId == sessionState.Company.Id)
-                                    .Where(S => S.System == sessionState.selectedSystem)
+                                    .Where(S => S.System == sessionState.SelectedSystem)
                                     .ToListAsync();
 
                 }
@@ -823,14 +823,14 @@ namespace GadjIT_App.Data.Admin
                 
                 var existingRecord = await context.SmartflowRecords
                                                     .Where(R => R.RowId == chapter.Id && R.CompanyId == sessionState.Company.Id)
-                                                    .Where(R => R.System == sessionState.selectedSystem)
+                                                    .Where(R => R.System == sessionState.SelectedSystem)
                                                     .SingleOrDefaultAsync();
 
                 if (existingRecord is null)
                 {
                     mapper.Map(chapter, record);
 
-                    record.System = sessionState.selectedSystem;
+                    record.System = sessionState.SelectedSystem;
                     record.CreatedByUserId = sessionState.User.Id;
                     record.CreatedDate = DateTime.Now;
                     record.LastModifiedByUserId = sessionState.User.Id;
@@ -864,14 +864,14 @@ namespace GadjIT_App.Data.Admin
 
                 var existingRecord = await context.SmartflowRecords
                                                     .Where(R => R.RowId == chapter.Id && R.CompanyId == sessionState.Company.Id)
-                                                    .Where(R => R.System == sessionState.selectedSystem)
+                                                    .Where(R => R.System == sessionState.SelectedSystem)
                                                     .SingleOrDefaultAsync();
 
                 if (existingRecord is null)
                 {
                     record.SmartflowData = chapter.SmartflowData;
 
-                    record.System = sessionState.selectedSystem;
+                    record.System = sessionState.SelectedSystem;
                     record.CreatedByUserId = sessionState.User.Id;
                     record.CreatedDate = DateTime.Now;
                     record.LastModifiedByUserId = sessionState.User.Id;
@@ -900,7 +900,7 @@ namespace GadjIT_App.Data.Admin
             {
                 var existingRecord = await context.SmartflowRecords
                                                     .Where(R => R.RowId == id && R.CompanyId == sessionState.Company.Id)
-                                                    .Where(R => R.System == sessionState.selectedSystem)
+                                                    .Where(R => R.System == sessionState.SelectedSystem)
                                                     .SingleOrDefaultAsync();
 
                 if (!(existingRecord is null))

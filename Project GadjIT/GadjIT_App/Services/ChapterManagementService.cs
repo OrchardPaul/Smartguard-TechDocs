@@ -59,7 +59,7 @@ namespace GadjIT_App.Services
             string respContent = await response.Content.ReadAsStringAsync();
             ExceptionModel exResponse = JsonConvert.DeserializeObject<ExceptionModel>(respContent);
 
-            using (LogContext.PushProperty("SourceSystem", UserSession.selectedSystem))
+            using (LogContext.PushProperty("SourceSystem", UserSession.SelectedSystem))
             using (LogContext.PushProperty("SourceCompanyId", UserSession.Company.Id))
             using (LogContext.PushProperty("SourceUserId", UserSession.User.Id))
             {
@@ -71,7 +71,7 @@ namespace GadjIT_App.Services
         {
             var content = new StringContent(JsonConvert.SerializeObject(_smartFlow), Encoding.UTF8, "application/json");  
 
-            using HttpResponseMessage response = await HttpClient.PostAsync($"{UserSession.baseUri}api/Smartflow/Add", content);
+            using HttpResponseMessage response = await HttpClient.PostAsync($"{UserSession.BaseUri}api/Smartflow/Add", content);
 
             if(response.IsSuccessStatusCode)
             {
@@ -99,7 +99,7 @@ namespace GadjIT_App.Services
 
             var content = new StringContent(JsonConvert.SerializeObject(_smartFlow), Encoding.UTF8, "application/json");  
 
-            using var response = await HttpClient.PutAsync($"{UserSession.baseUri}api/Smartflow/Update/{_smartFlow.Id}", content);
+            using var response = await HttpClient.PutAsync($"{UserSession.BaseUri}api/Smartflow/Update/{_smartFlow.Id}", content);
 
             return await response.Content.ReadFromJsonAsync<UsrOrsfSmartflows>();
 
@@ -111,7 +111,7 @@ namespace GadjIT_App.Services
 
             var content = new StringContent(JsonConvert.SerializeObject(_smartFlow), Encoding.UTF8, "application/json");  
 
-            using var response = await HttpClient.PutAsync($"{UserSession.baseUri}api/Smartflow/Update/{_smartFlow.Id}", content);
+            using var response = await HttpClient.PutAsync($"{UserSession.BaseUri}api/Smartflow/Update/{_smartFlow.Id}", content);
 
             return await response.Content.ReadFromJsonAsync<UsrOrsfSmartflows>();
 
@@ -125,7 +125,7 @@ namespace GadjIT_App.Services
 
             var content = new StringContent(JsonConvert.SerializeObject(_smartFlow), Encoding.UTF8, "application/json");  
 
-            using var response = await HttpClient.PostAsync($"{UserSession.baseUri}api/Smartflow/UpdateCaseType/{newCaseTypeName}/{originalCaseTypeName}/{caseTypeGroup}", content);
+            using var response = await HttpClient.PostAsync($"{UserSession.BaseUri}api/Smartflow/UpdateCaseType/{newCaseTypeName}/{originalCaseTypeName}/{caseTypeGroup}", content);
 
             return await response.Content.ReadFromJsonAsync<List<UsrOrsfSmartflows>>();
         }
@@ -137,7 +137,7 @@ namespace GadjIT_App.Services
 
             var content = new StringContent(JsonConvert.SerializeObject(_smartFlow), Encoding.UTF8, "application/json");  
 
-            using var response = await HttpClient.PostAsync($"{UserSession.baseUri}api/Smartflow/UpdateCaseTypeGroups/{newCaseTypeGroupName}/{originalCaseTypeGroupName}", content);
+            using var response = await HttpClient.PostAsync($"{UserSession.BaseUri}api/Smartflow/UpdateCaseTypeGroups/{newCaseTypeGroupName}/{originalCaseTypeGroupName}", content);
 
             return await response.Content.ReadFromJsonAsync<List<UsrOrsfSmartflows>>();
         }
@@ -146,20 +146,20 @@ namespace GadjIT_App.Services
         {
             await CompanyDbAccess.RemoveSmartFlowRecord(id, UserSession);
 
-            return HttpClient.DeleteAsync($"{UserSession.baseUri}api/Smartflow/Delete/{id}");
+            return HttpClient.DeleteAsync($"{UserSession.BaseUri}api/Smartflow/Delete/{id}");
         }
 
         public async Task<Task<HttpResponseMessage>> DeleteChapter(int id)
         {
             await CompanyDbAccess.RemoveSmartFlowRecord(id, UserSession);
 
-            return HttpClient.DeleteAsync($"{UserSession.baseUri}api/Smartflow/DeleteChapter/{id}");
+            return HttpClient.DeleteAsync($"{UserSession.BaseUri}api/Smartflow/DeleteChapter/{id}");
         }
 
         public async Task<List<UsrOrsfSmartflows>> GetAllChapters()
         {
 
-            var response = await HttpClient.GetAsync($"{UserSession.baseUri}api/Smartflow/GetAllChapters");
+            var response = await HttpClient.GetAsync($"{UserSession.BaseUri}api/Smartflow/GetAllChapters");
 
             if(response.IsSuccessStatusCode)
             {
@@ -174,14 +174,14 @@ namespace GadjIT_App.Services
         }
         public async Task<List<TableDate>> GetDatabaseTableDateFields()
         {
-            return await HttpClient.GetFromJsonAsync<List<TableDate>>($"{UserSession.baseUri}api/Smartflow/GetDatabaseTableDateFields");
+            return await HttpClient.GetFromJsonAsync<List<TableDate>>($"{UserSession.BaseUri}api/Smartflow/GetDatabaseTableDateFields");
         }
 
         public async Task<List<DmDocuments>> GetDocumentList(string caseType)
         {
             Lock = true;
             
-            var returnValue = await HttpClient.GetFromJsonAsync<List<DmDocuments>>($"{UserSession.baseUri}api/Smartflow/GetDocumentList/{caseType}");
+            var returnValue = await HttpClient.GetFromJsonAsync<List<DmDocuments>>($"{UserSession.BaseUri}api/Smartflow/GetDocumentList/{caseType}");
             
             Lock = false;
 
@@ -190,22 +190,22 @@ namespace GadjIT_App.Services
 
         public async Task<List<DmDocuments>> GetDocumentListByCaseTypeGroup(int caseTypeGroupRef)
         {
-            return await HttpClient.GetFromJsonAsync<List<DmDocuments>>($"{UserSession.baseUri}api/Smartflow/GetDocumentListByCaseTypeGroupRef/{caseTypeGroupRef}");
+            return await HttpClient.GetFromJsonAsync<List<DmDocuments>>($"{UserSession.BaseUri}api/Smartflow/GetDocumentListByCaseTypeGroupRef/{caseTypeGroupRef}");
         }
 
         public async Task<List<string>> GetCaseTypeGroup()
         {
-            return await HttpClient.GetFromJsonAsync<List<string>>($"{UserSession.baseUri}api/Smartflow/GetCaseTypeGroup");
+            return await HttpClient.GetFromJsonAsync<List<string>>($"{UserSession.BaseUri}api/Smartflow/GetCaseTypeGroup");
         }
 
         public async Task<List<string>> GetCaseTypes()
         {
-            return await HttpClient.GetFromJsonAsync<List<string>>($"{UserSession.baseUri}api/Smartflow/GetCaseTypes");
+            return await HttpClient.GetFromJsonAsync<List<string>>($"{UserSession.BaseUri}api/Smartflow/GetCaseTypes");
         }
 
         public async Task<List<UsrOrsfSmartflows>> GetChapterListByCaseType(string caseType)
         {
-            return await HttpClient.GetFromJsonAsync<List<UsrOrsfSmartflows>>($"{UserSession.baseUri}api/Smartflow/GetChapterListByCaseType/{caseType}");
+            return await HttpClient.GetFromJsonAsync<List<UsrOrsfSmartflows>>($"{UserSession.BaseUri}api/Smartflow/GetChapterListByCaseType/{caseType}");
         }
 
         public async Task<bool> CreateStep(VmChapterP4WStepSchemaJSONObject _stepSchemaJSONObject)
@@ -214,7 +214,7 @@ namespace GadjIT_App.Services
 
             var content = new StringContent(JsonConvert.SerializeObject(_stepSchemaJSONObject), Encoding.UTF8, "application/json");  
 
-            using var response = await HttpClient.PostAsync($"{UserSession.baseUri}api/Smartflow/CreateStep", content);
+            using var response = await HttpClient.PostAsync($"{UserSession.BaseUri}api/Smartflow/CreateStep", content);
 
             Lock = false;
 

@@ -39,7 +39,7 @@ namespace GadjIT_App.Services
 
             var content = new StringContent(JsonConvert.SerializeObject(sql), Encoding.UTF8, "application/json");  
 
-            using var response = await httpClient.PostAsync($"{userSession.baseUri}api/GeneralAccess/GetListOfData", content);
+            using var response = await httpClient.PostAsync($"{userSession.BaseUri}api/GeneralAccess/GetListOfData", content);
 
             List<Dictionary<string,dynamic>> results = new List<Dictionary<string, dynamic>>();
 

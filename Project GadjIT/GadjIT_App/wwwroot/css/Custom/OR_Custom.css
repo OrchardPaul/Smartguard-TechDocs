@@ -1943,8 +1943,19 @@ app {
 
 
 /*---------------------------------------*/
-/*   Blazor DragDrop                     */
+/*    DragDrop                     */
 /*---------------------------------------*/
+
+.draggable {
+    cursor: move; /* fallback: no `url()` support or images disabled */
+    cursor: url(images/grab.cur); /* fallback: Chrome 1-21, Firefox 1.5-26, Safari 4+, IE, Edge 12-14, Android 2.1-4.4.4 */
+    cursor: grab; /* W3C standards syntax, all modern browser */
+}
+
+.draggable:active {
+    cursor: url(images/grabbing.cur);
+    cursor: grabbing;
+}
 
 /*dropzone style style*/
 .plk-dd-dropzone {

@@ -22,13 +22,13 @@ namespace GadjIT_App.Shared
         IModalService Modal { get; set; }
 
         [Parameter]
-        public string userFullName { get; set; }
+        public string UserFullName { get; set; }
 
         [Inject]
-        public IUserSessionState userSession { get; set; }
+        public IUserSessionState UserSession { get; set; }
 
         [Inject]
-        public NavigationManager navigationManager { get; set; }
+        public NavigationManager NavigationManager { get; set; }
 
         public string ModalInfoHeader { get; set; }
         public string ModalHeight { get; set; }
@@ -40,18 +40,18 @@ namespace GadjIT_App.Shared
         {
             RefreshBackGround();
             //set Return URI
-            userSession.SetUserProfileReturnURI(navigationManager.Uri);
-            navigationManager.NavigateTo("/userprofile");
+            UserSession.SetUserProfileReturnURI(NavigationManager.Uri);
+            NavigationManager.NavigateTo("/userprofile");
         }
 
 
 
         private void RefreshBackGround()
         {
-            if (!string.IsNullOrEmpty(userSession.TempBackGroundImage))
+            if (!string.IsNullOrEmpty(UserSession.TempBackGroundImage))
             {
-                userSession.TempBackGroundImage = "";
-                userSession.RefreshHome?.Invoke();
+                UserSession.TempBackGroundImage = "";
+                UserSession.RefreshHome?.Invoke();
             }
 
         }
@@ -59,11 +59,11 @@ namespace GadjIT_App.Shared
 
         protected override async Task OnInitializedAsync()
         {
-            bool gotLock = userSession.Lock;
+            bool gotLock = UserSession.Lock;
             while (gotLock)
             {
                 await Task.Yield();
-                gotLock = userSession.Lock;
+                gotLock = UserSession.Lock;
             }
 
             StateHasChanged();
@@ -81,7 +81,7 @@ namespace GadjIT_App.Shared
         protected void ShowSystemSelectModel()
         {
             var parameters = new ModalParameters();
-            parameters.Add("currentUser", userSession.User);
+            parameters.Add("currentUser", UserSession.User);
 
             var options = new ModalOptions()
             {

@@ -1,4 +1,5 @@
 ﻿using GadjIT_AppContext.GadjIT_App;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -10,15 +11,17 @@ namespace GadjIT_App.Data
     /*
      * Duplicate of ApplicationDbContext
      * To avoid concurrency errors on company managament screens with the setup of the session state on refresh
+     *
+     * Identity is safer with its own Context especially as it expects a standard Context inherited from IdentityDbContext, and not a factory
      */
 
-    public class AuthorisationDBContext : DbContext
+    public class AuthorisationDbContext : IdentityDbContext<ApplicationUser,ApplicationRole,string>
     {
-        
-        public AuthorisationDBContext(DbContextOptions<AuthorisationDBContext> options)
+        public AuthorisationDbContext(DbContextOptions<AuthorisationDbContext> options)
             : base(options)
         {
         }
+        
 
         public virtual DbSet<AppCompanyAccountsSmartflow> AppCompanyAccountsSmartflow { get; set; }
         public virtual DbSet<AppCompanyAccountsSmartflowDetails> AppCompanyAccountsSmartflowDetails { get; set; }

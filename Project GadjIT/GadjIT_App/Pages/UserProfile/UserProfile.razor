@@ -3,7 +3,7 @@
 
 @using GadjIT_App.Data.CustomFormObjects
 
-@if (!(sessionState is null) && !(sessionState.User is null))
+@if (!(SessionState is null) && !(SessionState.User is null))
 {
 
     <div class="tran-block page-header-block ">
@@ -11,9 +11,9 @@
             <div class="page-header-title">
                 <h3>Profile Details</h3>
             </div>
-            @if (!(sessionState.User.FullName is null))
+            @if (!(SessionState.User.FullName is null))
             {
-                <p>@sessionState.User.FullName</p>
+                <p>@SessionState.User.FullName</p>
             }
         </div>
     </div>
@@ -36,7 +36,7 @@
                             <div class="form-group">
                                 <label for="@TaskObject.PasswordHash">Password</label>
 
-                                @if (enablePasswordSet)
+                                @if (EnablePasswordSet)
                                 {
                                     <InputText class="form-control" style="display: inline; width: 250px;" @bind-Value="@TaskObject.PasswordHash" type="password"></InputText>
                                 }
@@ -63,18 +63,18 @@
                     <div class="col-6 detail-box">
                         <h5>Company Details</h5>
                         <div class="detail-group-box">
-                            @if (sessionState.Company.CompanyName == "Orchard Rock")
+                            @if (SessionState.Company.CompanyName == "Orchard Rock")
                             {
-                                @if (!(companyItems is null))
+                                @if (!(CompanyItems is null))
                                 {
                                     <div class="form-group">
                                         <label for="@TaskObject.SelectedUri">Selected Company</label>
                                         <InputSelectInteger class="form-control" style="width: 300px;" ValueExpression="@(() => TaskObject.SelectedCompanyId)"
                                                             Value="@TaskObject.SelectedCompanyId"
                                                             ValueChanged="@((int value) => ToggleCompany(value))">
-                                            @if (companyItems.Where(C => C.IsSubscribed).Count() > 0)
+                                            @if (CompanyItems.Where(C => C.IsSubscribed).Count() > 0)
                                             {
-                                                @foreach (var company in companyItems.Where(C => C.IsSubscribed))
+                                                @foreach (var company in CompanyItems.Where(C => C.IsSubscribed))
                                                 {
                                                     <option value="@company.Company.Id">
                                                         @company.Company.CompanyName
@@ -89,13 +89,13 @@
 
 
                             <div class="form-group">
-                                @if (companyItems is null)
+                                @if (CompanyItems is null)
                                 {
                                     <div class="spinner"></div>
                                 }
                                 else
                                 {
-                                    @if (!(companyItems.Where(C => C.IsSubscribed) is null))
+                                    @if (!(CompanyItems.Where(C => C.IsSubscribed) is null))
                                     {
 
                                         <label for="@TaskObject.SelectedUri">System</label>
@@ -117,18 +117,18 @@
                             <div class="form-group">
                                 <div class="container-fluid">
                                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-6 p-2">
-                                        @if (selectedRoles is null)
+                                        @if (SelectedRoles is null)
                                         {
                                             <div class="spinner"></div>
                                         }
                                         else
                                         {
-                                            @if (sessionState.Company.CompanyName == "Orchard Rock")
+                                            @if (SessionState.Company.CompanyName == "Orchard Rock")
                                             {
-                                                @if (sessionState.isSuperUser)
+                                                @if (SessionState.IsSuperUser)
                                                 {
                                                     <ul class="ul-simple">
-                                                        @foreach (var role in selectedRoles)
+                                                        @foreach (var role in SelectedRoles)
                                                         {
                                                             <li><InputCheckbox class="mr-2" @bind-Value="role.IsSubscribed"></InputCheckbox><label>@role.RoleName</label></li>
                                                         }
@@ -138,7 +138,7 @@
                                             else
                                             {
                                                 <ul class="ul-simple">
-                                                    @foreach (var role in selectedRoles
+                                                    @foreach (var role in SelectedRoles
                                                           .Where(R => R.RoleName != "Super User")
                                                           .ToList())
                                                     {
@@ -188,7 +188,7 @@
                             <div class="form-group">
                                 <label>Preview Smartflow Image</label>
                                 <label class="switch">
-                                    <input type="checkbox" @bind="sessionState.User.DisplaySmartflowPreviewImage">
+                                    <input type="checkbox" @bind="SessionState.User.DisplaySmartflowPreviewImage">
                                     <span class="slider round"></span>
                                 </label>
                             </div>

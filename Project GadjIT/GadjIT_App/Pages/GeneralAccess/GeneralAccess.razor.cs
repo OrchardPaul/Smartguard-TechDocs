@@ -140,7 +140,7 @@ namespace GadjIT_App.Pages.GeneralAccess
 
                     FirstRun = false;
 
-                    using (LogContext.PushProperty("SourceSystem", UserSession.selectedSystem))
+                    using (LogContext.PushProperty("SourceSystem", UserSession.SelectedSystem))
                     using (LogContext.PushProperty("SourceCompanyId", UserSession.Company.Id))
                     using (LogContext.PushProperty("SourceUserId", UserSession.User.Id))
                     using (LogContext.PushProperty("SourceContext", nameof(GeneralAccess)))
@@ -150,7 +150,7 @@ namespace GadjIT_App.Pages.GeneralAccess
                 }
                 else if(procedureSuccess)
                 {
-                    using (LogContext.PushProperty("SourceSystem", UserSession.selectedSystem))
+                    using (LogContext.PushProperty("SourceSystem", UserSession.SelectedSystem))
                     using (LogContext.PushProperty("SourceCompanyId", UserSession.Company.Id))
                     using (LogContext.PushProperty("SourceUserId", UserSession.User.Id))
                     using (LogContext.PushProperty("SourceContext", nameof(GeneralAccess)))
@@ -160,7 +160,7 @@ namespace GadjIT_App.Pages.GeneralAccess
                 }
                 else
                 {
-                    using (LogContext.PushProperty("SourceSystem", UserSession.selectedSystem))
+                    using (LogContext.PushProperty("SourceSystem", UserSession.SelectedSystem))
                     using (LogContext.PushProperty("SourceCompanyId", UserSession.Company.Id))
                     using (LogContext.PushProperty("SourceUserId", UserSession.User.Id))
                     using (LogContext.PushProperty("SourceContext", nameof(GeneralAccess)))
@@ -173,7 +173,7 @@ namespace GadjIT_App.Pages.GeneralAccess
             {
                 ShowErrorModal("Critical error from API, check if API is working or is the latest version");
 
-                using (LogContext.PushProperty("SourceSystem", UserSession.selectedSystem))
+                using (LogContext.PushProperty("SourceSystem", UserSession.SelectedSystem))
                 using (LogContext.PushProperty("SourceCompanyId", UserSession.Company.Id))
                 using (LogContext.PushProperty("SourceUserId", UserSession.User.Id))
                 using (LogContext.PushProperty("SourceContext", nameof(GeneralAccess)))

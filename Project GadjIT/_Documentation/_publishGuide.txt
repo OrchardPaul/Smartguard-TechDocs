@@ -1,0 +1,7 @@
+
+cd _documentation
+
+#cd docfx_TechGuide
+#cd docfx_UserGuide
+
+docfx docfx.json --serve

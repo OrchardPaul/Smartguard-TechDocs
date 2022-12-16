@@ -7,6 +7,10 @@
 <p>Any document or letter can be assigend to and Agenda. If assigned then the document will be moved (saved) in the relevant agenda after the document has been completed. The actual moving will take place either when the next Smartflow is run (by any user on any case) or by an overnight process.</p>
 <p>This solves a few issues from doing this via Qs and As. Most notibly if a user is creating a bundle from documents that are to be saved in different agendas this solution allows for the documents to be bundled, saved to .pdf and attached to an email all from the same main agenda, the documents (including generated .pdf files) are not moved until later.</p>
 <br />
+<h3>UPGRADE: API Logging</h3>
+<p>The API now has better error handling and logging to SQL Server on the Client site.</p>
+<p>This will assist us fix any issues with transporing information between the application and the client as well as any issues arrising from the local database.</p>
+<br />
 <h3>ISSUE: Sync Systems only for Expanded Case Type</h3>
 <p>When Sync Systems is checked, a user cannot sync another Case Type without first unchecking and checking the Sync check box.</p>
 <h4>SOLUTION: Expand Sync display to all Case Types</h4>

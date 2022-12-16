@@ -120,7 +120,7 @@ namespace GadjIT_App.Services.AppState
 
             appChapterItemState = LstAppChapterStateItems
                                         .Where(CI => CI.CompanyID == sessionState.Company.Id)
-                                        .Where(CI => CI.SelectedSystem == sessionState.selectedSystem)
+                                        .Where(CI => CI.SelectedSystem == sessionState.SelectedSystem)
                                         .Where(CI => CI.CaseTypeGroup == selectedChapter.CaseTypeGroup)
                                         .Where(CI => CI.CaseType == selectedChapter.CaseType)
                                         .Where(CI => CI.ChapterName == selectedChapter.Name)
@@ -131,7 +131,7 @@ namespace GadjIT_App.Services.AppState
                 appChapterItemState = new AppChapterItemState
                 {
                     CompanyID = sessionState.Company.Id
-                    ,SelectedSystem = sessionState.selectedSystem
+                    ,SelectedSystem = sessionState.SelectedSystem
                     ,CaseTypeGroup = selectedChapter.CaseTypeGroup
                     ,CaseType = selectedChapter.CaseType
                     ,ChapterName = selectedChapter.Name

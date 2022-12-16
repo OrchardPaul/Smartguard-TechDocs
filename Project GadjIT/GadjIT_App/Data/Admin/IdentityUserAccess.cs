@@ -39,7 +39,7 @@ namespace GadjIT_App.Data.Admin
         private readonly UserManager<ApplicationUser> userManager;
         private readonly RoleManager<ApplicationRole> roleManager;
         private readonly AuthenticationStateProvider authenticationStateProvider;
-        private readonly ApplicationDbContext context;
+        private readonly AuthorisationDbContext context;
         private readonly IMapper mapper;
         private readonly ILogger<IdentityUserAccess> logger;
 
@@ -56,7 +56,7 @@ namespace GadjIT_App.Data.Admin
         public IdentityUserAccess(UserManager<ApplicationUser> userManager
             , RoleManager<ApplicationRole> roleManager
             , AuthenticationStateProvider authenticationStateProvider
-            , ApplicationDbContext context
+            , AuthorisationDbContext context
             , IMapper mapper
             , ILogger<IdentityUserAccess> logger)
         {

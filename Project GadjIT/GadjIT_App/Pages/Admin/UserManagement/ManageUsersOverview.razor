@@ -17,7 +17,7 @@
 
 
 
-@if (lstUserDataItems is null)
+@if (LstUserDataItems is null)
 {
     <div class="spinner"></div>
 }
@@ -33,10 +33,10 @@ else
                 </div>
                 <div class="col-3 form-group">
                     <label>Role</label>
-                    <EditForm Model="selectedRole">
-                        <InputSelect class="form-control" @bind-Value="selectedRole">
+                    <EditForm Model="SelectedRole">
+                        <InputSelect class="form-control" @bind-Value="SelectedRole">
                             <option value="None"></option>
-                            @foreach (var r in lstRoles)
+                            @foreach (var r in LstRoles)
                                 {
                                 <option value="@r.Id">
                                     @r.Name
@@ -46,7 +46,7 @@ else
                 </div>
                 <div class="col-4 form-group">
                     <label>Name</label>
-                    <input type="text" class="form-control" value="@filterName" @oninput="changeNameFilter" />
+                    <input type="text" class="form-control" value="@FilterName" @oninput="changeNameFilter" />
                 </div>
             </div>
 
@@ -62,15 +62,15 @@ else
                     <div class="col-6 hidden-lg-down data-item"><div class="data-item-sub">Email</div></div>
                 </div>
 
-                @foreach (var userDataItem in lstUserDataItems
-                                          .Where(U => selectedRole == "None" ? true : U.UserRoles
+                @foreach (var userDataItem in LstUserDataItems
+                                          .Where(U => SelectedRole == "None" ? true : U.UserRoles
                                                                                           .Select(R => R.RoleId)
                                                                                           .ToList()
-                                                                                          .Contains(selectedRole))
-                                          .Where(U => filterName == "" ? true : U.User
+                                                                                          .Contains(SelectedRole))
+                                          .Where(U => FilterName == "" ? true : U.User
                                                                                   .FullName
                                                                                   .ToUpper()
-                                                                                  .StartsWith(filterName.ToUpper()))
+                                                                                  .StartsWith(FilterName.ToUpper()))
                                           .ToList())
                 {
                     <div class="row grid-row">
@@ -84,7 +84,7 @@ else
                                             <span>Edit</span>
                                         </li>
 
-                                        @if (!(userDataItem.User.UserName == sessionState.User.UserName))
+                                        @if (!(userDataItem.User.UserName == SessionState.User.UserName))
                                         {
                                             <li class="col-red" @onclick="() => PrepareModalForDelete(userDataItem.User)">
                                                 <span class="fa fa-trash-alt mr-2"></span>

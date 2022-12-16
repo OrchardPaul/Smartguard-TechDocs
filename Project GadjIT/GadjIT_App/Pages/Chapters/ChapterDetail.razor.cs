@@ -351,7 +351,7 @@ namespace GadjIT_App.Pages.Chapters
         /****************************************/
         private async Task GenericErrorLog(bool showNotificationMsg, Exception e, string _method, string _message)
         {
-            using (LogContext.PushProperty("SourceSystem", UserSession.selectedSystem))
+            using (LogContext.PushProperty("SourceSystem", UserSession.SelectedSystem))
             using (LogContext.PushProperty("SourceCompanyId", UserSession.Company.Id))
             using (LogContext.PushProperty("SourceUserId", UserSession.User.Id))
             using (LogContext.PushProperty("SourceContext", nameof(ChapterDetail)))

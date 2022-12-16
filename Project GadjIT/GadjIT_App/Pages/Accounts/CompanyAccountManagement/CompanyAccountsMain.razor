@@ -29,11 +29,11 @@
         <nav class="navbar navbar-expand ">
 
             <ul class="navbar-nav">
-                <li class="nav-item @(navDisplay == "Companies" ? "active" : "")" @onclick='() => ShowNav("Companies")'>
+                <li class="nav-item @(NavDisplay == "Companies" ? "active" : "")" @onclick='() => ShowNav("Companies")'>
                     <span class="font-120"><span class="fa fa-building" Title="Company List"></span></span>
                     <div class="subtitle">Companies</div>
                 </li>
-                <li class="nav-item @(navDisplay == "Accounts" ? "active" : "")" @onclick='() => ShowNav("Accounts")'>
+                <li class="nav-item @(NavDisplay == "Accounts" ? "active" : "")" @onclick='() => ShowNav("Accounts")'>
                     <span class="font-120"><span class="fa fa-sitemap" Title="Smartflow Breakdown"></span></span>
                     <div class="subtitle">Smartflows</div>
                 </li>
@@ -44,11 +44,11 @@
 
     <div class="page-navbar hidden-xl-up">
         <ul class="nav nav-pills tran-tabs">
-            <li class="nav-item @(navDisplay == "Companies" ? "active" : "")" @onclick='() => ShowNav("Companies")'>
+            <li class="nav-item @(NavDisplay == "Companies" ? "active" : "")" @onclick='() => ShowNav("Companies")'>
                 <span class="font-120"><span class="fa fa-home" Title="Home - main Smartflow settings"></span></span>
                 <div class="subtitle">Home</div>
             </li>
-            <li class="nav-item @(navDisplay == "Accounts" ? "active" : "")" @onclick='() => ShowNav("Accounts")'>
+            <li class="nav-item @(NavDisplay == "Accounts" ? "active" : "")" @onclick='() => ShowNav("Accounts")'>
                 <span class="font-120"><span class="fa fa-home" Title="Home - main Smartflow settings"></span></span>
                 <div class="subtitle">Accounts</div>
             </li>
@@ -56,20 +56,20 @@
 
     </div>
 
-    @if (displaySpinner)
+    @if (DisplaySpinner)
     {
         <div class="spinner"></div>
     }
     else
     {
 
-        @if (navDisplay == "Companies")
+        @if (NavDisplay == "Companies")
         {
 
             <div class="grid-chapter grid-accounts-companies">
 
                 <div class="grid-actions">
-                    @if (SessionState.isAdminUser)
+                    @if (SessionState.IsAdminUser)
                     {
                         <div class="btn-group">
                             <button @onclick='() => RefreshCompanyAccounts()' class="btn btn-main btn-shadow" title="Refresh"><i class="fa fa-redo"></i><span>Refresh</span></button>
@@ -78,7 +78,7 @@
                     }
                 </div>
 
-                <div class="@(SessionState.isAdminUser ? "grid-can-edit" : "") ">
+                <div class="@(SessionState.IsAdminUser ? "grid-can-edit" : "") ">
                     <div class="row grid-header invisible-md-down">
                         <div class="data-item">
                             <div class="data-item-sub" >
@@ -169,13 +169,13 @@
         }
 
 
-        @if (navDisplay == "Accounts")
+        @if (NavDisplay == "Accounts")
         {
 
             <div class="grid-chapter grid-accounts-company">
 
                 <div class="grid-actions">
-                    @if (SessionState.isAdminUser)
+                    @if (SessionState.IsAdminUser)
                     {
                         <div class="btn-group">
                             <button @onclick='() => BillDraft()' class="btn btn-main btn-shadow" title="Add New Bill"><i class="fa fa-money-bill-wave"></i><span>Bill Draft</span></button>
@@ -198,7 +198,7 @@
                     </select>
                 </div>
 
-                <div class="@(SessionState.isAdminUser ? "grid-can-edit" : "") ">
+                <div class="@(SessionState.IsAdminUser ? "grid-can-edit" : "") ">
                     <div class="row grid-header invisible-md-down">
                         <div class="data-item ">
                             <div class="data-item-sub">

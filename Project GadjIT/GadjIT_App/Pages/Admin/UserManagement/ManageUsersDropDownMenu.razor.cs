@@ -14,21 +14,21 @@ namespace GadjIT_App.Pages.Admin.UserManagement
         public Action ToggleDetail { get; set; }
 
         [Parameter]
-        public AspNetUsers selectedUser { get; set; }
+        public AspNetUsers SelectedUser { get; set; }
 
         [Inject]
-        public IUserSessionState sessionState { get; set; }
+        public IUserSessionState SessionState { get; set; }
 
         [Inject]
-        private IUserManagementSelectedUserState selectedUserState { get; set; }
+        private IUserManagementSelectedUserState SelectedUserState { get; set; }
 
         protected void PrepareForEdit()
         {
-            selectedUser.SelectedUri = (sessionState.selectedSystem is null) ? "Live" : sessionState.selectedSystem;
-            selectedUser.PasswordHash = "PasswordNotChanged115592!";
+            SelectedUser.SelectedUri = (SessionState.SelectedSystem is null) ? "Live" : SessionState.SelectedSystem;
+            SelectedUser.PasswordHash = "PasswordNotChanged115592!";
 
-            selectedUserState.TaskObject = selectedUser;
-            selectedUserState.selectedOption = "Edit";
+            SelectedUserState.TaskObject = SelectedUser;
+            SelectedUserState.selectedOption = "Edit";
 
             ToggleDetail?.Invoke();
         }

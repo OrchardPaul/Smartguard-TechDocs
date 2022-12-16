@@ -11,7 +11,7 @@
                                     Value="@currentUser.SelectedCompanyId"
                                     ValueChanged="@((int value) => ToggleCompany(value))"
                                     id="Summary" class="form-control">
-                    @foreach (var company in sessionState.allAssignedCompanies)
+                    @foreach (var company in sessionState.AllAssignedCompanies)
                     {
                         <option value="@company.Id">
                             @company.CompanyName

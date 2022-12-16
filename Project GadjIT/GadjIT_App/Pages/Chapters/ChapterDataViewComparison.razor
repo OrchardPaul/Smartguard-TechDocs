@@ -9,12 +9,12 @@
                     </td>
                     <td style="width: 250px">
                         <div class=" d-flex justify-content-center">
-                            @(UserSession.selectedSystem == "Dev" ? "Dev" : "Live")
+                            @(UserSession.SelectedSystem == "Dev" ? "Dev" : "Live")
                         </div>
                     </td>
                     <td style="width: 250px">
                         <div class=" d-flex justify-content-center">
-                            @(UserSession.selectedSystem == "Dev" ? "Live" : "Dev")
+                            @(UserSession.SelectedSystem == "Dev" ? "Live" : "Dev")
                         </div>
                     </td>
                     <td style="width: 30px">
@@ -72,12 +72,12 @@
                     </td>
                     <td>
                         <div class=" d-flex justify-content-center">
-                            <button type="submit" autofocus class="btn btn-main" @onclick="() => HandleValidSubmit(false)">@(UserSession.selectedSystem == "Dev" ? ">> Live" : ">> Dev")</button>
+                            <button type="submit" autofocus class="btn btn-main" @onclick="() => HandleValidSubmit(false)">@(UserSession.SelectedSystem == "Dev" ? ">> Live" : ">> Dev")</button>
                         </div>
                     </td>
                     <td>
                         <div class=" d-flex justify-content-center">
-                            <button type="submit" autofocus class="btn btn-main" @onclick="() => HandleValidSubmit(true)">@(UserSession.selectedSystem == "Dev" ? "Dev <<" : "Live <<")</button>
+                            <button type="submit" autofocus class="btn btn-main" @onclick="() => HandleValidSubmit(true)">@(UserSession.SelectedSystem == "Dev" ? "Dev <<" : "Live <<")</button>
                         </div>
                     </td>
                     <td>
@@ -95,11 +95,11 @@ else
 
     @if (Object.AltDataView is null)
     {
-        curSystem = (UserSession.selectedSystem == "Dev" ? "Live" : "Dev");
+        curSystem = (UserSession.SelectedSystem == "Dev" ? "Live" : "Dev");
     }
     else
     {
-        curSystem = (UserSession.selectedSystem == "Dev" ? "Dev" : "Live");
+        curSystem = (UserSession.SelectedSystem == "Dev" ? "Dev" : "Live");
 
     }
 

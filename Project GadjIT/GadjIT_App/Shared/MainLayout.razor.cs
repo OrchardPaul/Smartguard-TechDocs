@@ -22,45 +22,45 @@ namespace GadjIT_App.Shared
     {
 
         [Inject]
-        private ILogger<MainLayout> logger { get; set; }
+        private ILogger<MainLayout> Logger { get; set; }
 
 
 
         [Inject]
-        protected IUserSessionState sessionState { get; set; }
+        protected IUserSessionState SessionState { get; set; }
 
         [Inject]
         public NavigationManager NavigationManager { get; set; }
 
-        public AspNetUsers currentUser { get; set; }
+        public AspNetUsers CurrentUser { get; set; }
 
-        public int selectedCompanyId { get; set; }
+        public int SelectedCompanyId { get; set; }
 
-        public bool hideTopbar { get; set; } = false;
-        public bool hideSidebar { get; set; } = false;
+        public bool HideTopbar { get; set; } = false;
+        public bool HideSidebar { get; set; } = false;
 
-        public string parallax { get; set; } = "";
+        public string Parallax { get; set; } = "";
 
         protected override async Task OnInitializedAsync()
         {
             try
             {
-                bool gotLock = sessionState.Lock;
+                bool gotLock = SessionState.Lock;
                 while (gotLock)
                 {
                     await Task.Yield();
-                    gotLock = sessionState.Lock;
+                    gotLock = SessionState.Lock;
                 }
 
-                if (sessionState.User is null)
+                if (SessionState.User is null)
                 {
-                    await sessionState.SetSessionState();
-                    currentUser = sessionState.User;
+                    await SessionState.SetSessionState();
+                    CurrentUser = SessionState.User;
                 }
 
-                sessionState.RefreshHome = Refresh;
+                SessionState.RefreshHome = Refresh;
 
-                if (currentUser is null)
+                if (CurrentUser is null)
                 {
                     string returnUrl = HttpUtility.UrlEncode("/" + HttpUtility.UrlDecode(NavigationManager.Uri.Replace(NavigationManager.BaseUri, "")));
                     NavigationManager.NavigateTo($"Identity/Account/Login?returnUrl={returnUrl}", true);
@@ -78,8 +78,8 @@ namespace GadjIT_App.Shared
 
                     if (dExport != null)
                     {
-                        hideTopbar = true;
-                        hideSidebar = true;
+                        HideTopbar = true;
+                        HideSidebar = true;
                     }
                 }
 
@@ -87,7 +87,7 @@ namespace GadjIT_App.Shared
             }
             catch (Exception e)
             {
-                logger.LogError(e,$"Error caught on main layout");
+                Logger.LogError(e,$"Error caught on main layout");
             }
 
 
@@ -103,43 +103,43 @@ namespace GadjIT_App.Shared
                 }
                 catch(Exception e)
                 {
-                    logger.LogError(e, "Error setting parallax");
+                    Logger.LogError(e, "Error setting parallax");
                 }
             }
         }
 
         public async void setParallax()
         {
-            if (!(sessionState.User is null))
+            if (!(SessionState.User is null))
             {
-                if (!string.IsNullOrEmpty(sessionState.TempBackGroundImage) && sessionState.User.DisplaySmartflowPreviewImage)
+                if (!string.IsNullOrEmpty(SessionState.TempBackGroundImage) && SessionState.User.DisplaySmartflowPreviewImage)
                 {
                     //if normal bg is to be overridden with a temp image i.e. Smartflow preview image
-                    parallax = ".parallax { background-image: url('" + sessionState.TempBackGroundImage + "');  } .inner-content{ background-image: none;}";
+                    Parallax = ".parallax { background-image: url('" + SessionState.TempBackGroundImage + "');  } .inner-content{ background-image: none;}";
                 }
-                else if (!(sessionState.User is null) && !string.IsNullOrEmpty(sessionState.User.MainBackgroundImage))
+                else if (!(SessionState.User is null) && !string.IsNullOrEmpty(SessionState.User.MainBackgroundImage))
                 {
-                    if (sessionState.selectedSystem == "Live")
+                    if (SessionState.SelectedSystem == "Live")
                     {
-                        parallax = ".parallax {  background-color: #DDDDDD }";
+                        Parallax = ".parallax {  background-color: #DDDDDD }";
                     }
                     else
                     {
-                        parallax = ".parallax {  background-color: #555555 }";
+                        Parallax = ".parallax {  background-color: #555555 }";
                     }
-                    //if (sessionState.User.MainBackgroundImage.Contains("#"))
+                    //if (SessionState.User.MainBackgroundImage.Contains("#"))
                     //{
 
                     //}
 
                     //else
                     //{
-                    //    parallax = ".parallax { background-image: url('" + sessionState.User.MainBackgroundImage + "');  } .inner-content{ background-image: none;}";
+                    //    parallax = ".parallax { background-image: url('" + SessionState.User.MainBackgroundImage + "');  } .inner-content{ background-image: none;}";
                     //}
                 }
                 else
                 {
-                    parallax = ".parallax {  background-color: #666666 }";
+                    Parallax = ".parallax {  background-color: #666666 }";
                 }
                 await InvokeAsync(() =>
                 {
@@ -151,8 +151,8 @@ namespace GadjIT_App.Shared
 
         private void ToggleCompany(int companyId)
         {
-            currentUser.SelectedCompanyId = companyId;
-            //await sessionState.switchSelectedCompany(companyId);
+            CurrentUser.SelectedCompanyId = companyId;
+            //await SessionState.switchSelectedCompany(companyId);
 
             /*
              * Need to redirect to Identity Section
@@ -172,7 +172,7 @@ namespace GadjIT_App.Shared
             }
             catch(Exception e)
             {
-                logger.LogError(e, "Error refreshing parallax");
+                Logger.LogError(e, "Error refreshing parallax");
             }
         }
 

@@ -15,21 +15,21 @@ namespace GadjIT_App.Services.SessionState
     public interface IUserSessionState
     {
         AspNetUsers User { get; }
-        IList<Claim> allClaims { get; }
-        string userProfileReturnURI { get; }
+        IList<Claim> AllClaims { get; }
+        string UserProfileReturnURI { get; }
         string CompCol1 { get; set; }
         string CompCol2 { get; set; }
         string CompCol3 { get; set; }
         string CompCol4 { get; set; }
-        string baseUri { get; }
+        string BaseUri { get; }
         AppCompanyDetails Company { get; }
-        List<AppCompanyDetails> allAssignedCompanies { get; }
-        bool isSuperUser { get; }
-        bool isAdminUser { get; }
+        List<AppCompanyDetails> AllAssignedCompanies { get; }
+        bool IsSuperUser { get; }
+        bool IsAdminUser { get; }
         string FullName { get; }
         SpinLock IdentityLock { get; set; }
         bool Lock { get; set; }
-        string selectedSystem { get; }
+        string SelectedSystem { get; }
         string TempBackGroundImage { get; set; }
 
         DateTime ChapterLastCompared { get; set; }     //keeps a record of the last time a Chapter of list of Chapters was compared for updates by another user
@@ -64,15 +64,15 @@ namespace GadjIT_App.Services.SessionState
 
     public class UserSessionState : IUserSessionState
     {
-        private readonly AuthenticationStateProvider authenticationStateProvider;
-        private readonly IIdentityUserAccess userAccess;
-        private readonly ICompanyDbAccess companyDbAccess;
-        private readonly NavigationManager navigationManager;
-        private readonly ILogger<UserSessionState> logger;
+        private readonly AuthenticationStateProvider AuthenticationStateProvider;
+        private readonly IIdentityUserAccess UserAccess;
+        private readonly ICompanyDbAccess CompanyDbAccess;
+        private readonly NavigationManager NavigationManager;
+        private readonly ILogger<UserSessionState> Logger;
 
         public AspNetUsers User { get; protected set; }
 
-        public IList<Claim> allClaims { get; protected set; }
+        public IList<Claim> AllClaims { get; protected set; }
 
         public string FullName { get; protected set; }
 
@@ -88,27 +88,27 @@ namespace GadjIT_App.Services.SessionState
 
         public AppCompanyDetails Company { get; protected set; }
 
-        public List<AppCompanyDetails> allAssignedCompanies { get; protected set; }
+        public List<AppCompanyDetails> AllAssignedCompanies { get; protected set; }
 
-        public string baseUri { get; protected set; }
+        public string BaseUri { get; protected set; }
 
-        public string selectedSystem { get; protected set; }
+        public string SelectedSystem { get; protected set; }
 
-        public string userProfileReturnURI { get; protected set; }
+        public string UserProfileReturnURI { get; protected set; }
 
         public SpinLock IdentityLock { get; set; }
 
         public bool SuppressChangeSystemError { get; set; } = false;
 
-        public bool isSuperUser { get; protected set; } = false;
+        public bool IsSuperUser { get; protected set; } = false;
 
-        public bool isAdminUser { get; protected set; } = false;
+        public bool IsAdminUser { get; protected set; } = false;
 
         public bool Lock { get; set; }
 
         public event Action OnChange;
 
-        private string sessionStateSet;
+        private string SessionStateSet;
 
         public string TempBackGroundImage { get; set; }
 
@@ -122,17 +122,17 @@ namespace GadjIT_App.Services.SessionState
 
         public Action HomeActionSmartflow { get; set; }
 
-        public UserSessionState(AuthenticationStateProvider authenticationStateProvider
-                                , IIdentityUserAccess userAccess
-                                , ICompanyDbAccess companyDbAccess
-                                , NavigationManager navigationManager
-                                , ILogger<UserSessionState> logger)
+        public UserSessionState(AuthenticationStateProvider _authenticationStateProvider
+                                , IIdentityUserAccess _userAccess
+                                , ICompanyDbAccess _companyDbAccess
+                                , NavigationManager _navigationManager
+                                , ILogger<UserSessionState> _logger)
         {
-            this.authenticationStateProvider = authenticationStateProvider;
-            this.userAccess = userAccess;
-            this.companyDbAccess = companyDbAccess;
-            this.navigationManager = navigationManager;
-            this.logger = logger;
+            AuthenticationStateProvider = _authenticationStateProvider;
+            UserAccess = _userAccess;
+            CompanyDbAccess = _companyDbAccess;
+            NavigationManager = _navigationManager;
+            Logger = _logger;
         }
 
 
@@ -150,7 +150,7 @@ namespace GadjIT_App.Services.SessionState
 
         public void SetUserProfileReturnURI(string returnURI)
         {
-            userProfileReturnURI = returnURI;
+            UserProfileReturnURI = returnURI;
             NotifyStateChanged();
         }
 
@@ -173,19 +173,19 @@ namespace GadjIT_App.Services.SessionState
 
         public void SetBaseUri(string baseUri)
         {
-            this.baseUri = baseUri;
+            BaseUri = baseUri;
             NotifyStateChanged();
         }
 
         public void SetSelectedSystem(string selectedSystem)
         {
-            this.selectedSystem = selectedSystem;
+            SelectedSystem = selectedSystem;
             NotifyStateChanged();
         }
 
         public void SetClaims(IList<Claim> claims)
         {
-            allClaims = claims;
+            AllClaims = claims;
             NotifyStateChanged();
         }
 
@@ -197,19 +197,19 @@ namespace GadjIT_App.Services.SessionState
 
         public void SetAllAssignedCompanies(List<AppCompanyDetails> allAssignedCompanies)
         {
-            this.allAssignedCompanies = allAssignedCompanies;
+            AllAssignedCompanies = allAssignedCompanies;
             NotifyStateChanged();
         }
 
         public Claim getCompanyClaim()
         {
-            if (allClaims is null)
+            if (AllClaims is null)
             {
                 return null;
             }
             else
             {
-                var companyClaim = allClaims.Where(A => A.Type == "Company").SingleOrDefault();
+                var companyClaim = AllClaims.Where(A => A.Type == "Company").SingleOrDefault();
 
                 return (companyClaim is null) ? null : companyClaim;
             }
@@ -218,10 +218,10 @@ namespace GadjIT_App.Services.SessionState
         public async Task<AppCompanyDetails> switchSelectedCompany()
         {
             //Get new 
-            var selectedCompany = await companyDbAccess.GetCompanyById(User.SelectedCompanyId);
+            var selectedCompany = await CompanyDbAccess.GetCompanyById(User.SelectedCompanyId);
             SetCompany(selectedCompany);
 
-            User = await userAccess.SwitchSelectedCompany(User);
+            User = await UserAccess.SwitchSelectedCompany(User);
 
             await SetSessionState();
             return selectedCompany;
@@ -231,9 +231,9 @@ namespace GadjIT_App.Services.SessionState
         {
             Lock = true;
             //Get new 
-            var baseUri = await companyDbAccess.GetCompanyBaseUri(Company.Id, (User.SelectedUri == "Live") ? "Dev" : "Live");
-            this.baseUri = baseUri;
-            selectedSystem = (User.SelectedUri == "Live") ? "Dev" : "Live";
+            var baseUri = await CompanyDbAccess.GetCompanyBaseUri(Company.Id, (User.SelectedUri == "Live") ? "Dev" : "Live");
+            this.BaseUri = baseUri;
+            SelectedSystem = (User.SelectedUri == "Live") ? "Dev" : "Live";
 
             Lock = false;
             return baseUri;
@@ -243,9 +243,9 @@ namespace GadjIT_App.Services.SessionState
         {
             Lock = true;
             //Get new 
-            var baseUri = await companyDbAccess.GetCompanyBaseUri(Company.Id, User.SelectedUri);
-            this.baseUri = baseUri;
-            selectedSystem = User.SelectedUri;
+            var baseUri = await CompanyDbAccess.GetCompanyBaseUri(Company.Id, User.SelectedUri);
+            this.BaseUri = baseUri;
+            SelectedSystem = User.SelectedUri;
 
             Lock = false;
             return baseUri;
@@ -258,9 +258,9 @@ namespace GadjIT_App.Services.SessionState
 
             try
             {
-                var auth = await authenticationStateProvider.GetAuthenticationStateAsync();
+                var auth = await AuthenticationStateProvider.GetAuthenticationStateAsync();
 
-                sessionStateSet = "Not Set";
+                SessionStateSet = "Not Set";
                 SetBaseUri("Not Set");
 
                 if (!(auth is null))
@@ -270,7 +270,7 @@ namespace GadjIT_App.Services.SessionState
 
                     if (!(userName is null))
                     {
-                        var currentUser = await userAccess.GetUserByName(userName);
+                        var currentUser = await UserAccess.GetUserByName(userName);
                         
                         if (!(currentUser is null))
                         {
@@ -278,7 +278,7 @@ namespace GadjIT_App.Services.SessionState
                             SetFullName(currentUser.FullName);
                             SetSelectedSystem(currentUser.SelectedUri);
 
-                            isSuperUser = auth.User.IsInRole("Super User");
+                            IsSuperUser = auth.User.IsInRole("Super User");
 
                             List<string> adminRoles = new List<string>()
                             {
@@ -290,22 +290,22 @@ namespace GadjIT_App.Services.SessionState
                             {
                                 if (auth.User.IsInRole(role))
                                 {
-                                    isAdminUser = true;
+                                    IsAdminUser = true;
                                     break;
                                 }
                             }
                             
-                            var allClaims = await userAccess.GetSignedInUserClaims();
+                            var allClaims = await UserAccess.GetSignedInUserClaims();
 
                             if (!(allClaims.Count() == 0))
                             {
                                 SetClaims(allClaims);
 
-                                var companies = await companyDbAccess.GetCompanies();
+                                var companies = await CompanyDbAccess.GetCompanies();
                                 SetAllAssignedCompanies(companies);
                             }
 
-                            var selectedCompany = await companyDbAccess.GetSelectedCompanyOfUser(currentUser);
+                            var selectedCompany = await CompanyDbAccess.GetSelectedCompanyOfUser(currentUser);
 
                             if (!(selectedCompany is null))
                             {
@@ -316,7 +316,7 @@ namespace GadjIT_App.Services.SessionState
                                 CompCol3 = selectedCompany.CompCol3;
                                 CompCol4 = selectedCompany.CompCol4;
 
-                                var baseUri = await companyDbAccess.GetCompanyBaseUri(selectedCompany.Id
+                                var baseUri = await CompanyDbAccess.GetCompanyBaseUri(selectedCompany.Id
                                                                                     , (currentUser.SelectedUri is null) ? "" : currentUser.SelectedUri);
                                 
                                 if (!(baseUri is null))
@@ -324,7 +324,7 @@ namespace GadjIT_App.Services.SessionState
                                     
                                     SetBaseUri(baseUri);
                                     
-                                    sessionStateSet = "Success";
+                                    SessionStateSet = "Success";
                                 }
                             }
 
@@ -342,7 +342,7 @@ namespace GadjIT_App.Services.SessionState
             }
 
             NotifyStateChanged();
-            return sessionStateSet;
+            return SessionStateSet;
 
         }
 

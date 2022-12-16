@@ -36,7 +36,7 @@ namespace GadjIT_App.Services
             List<CaseTypes> caseTypes = new List<CaseTypes>();
             try
             {
-                HttpResponseMessage result = await httpClient.GetAsync($"{userSession.baseUri}api/PartnerAccess/GetAllCaseTypes");
+                HttpResponseMessage result = await httpClient.GetAsync($"{userSession.BaseUri}api/PartnerAccess/GetAllCaseTypes");
 
                 if(result.IsSuccessStatusCode)
                 {
@@ -59,14 +59,14 @@ namespace GadjIT_App.Services
 
         public Task<List<CaseTypeGroups>> GetPartnerCaseTypeGroups()
         {
-            var result = httpClient.GetFromJsonAsync<List<CaseTypeGroups>>($"{userSession.baseUri}api/PartnerAccess/GetAllCaseTypeGroups");
+            var result = httpClient.GetFromJsonAsync<List<CaseTypeGroups>>($"{userSession.BaseUri}api/PartnerAccess/GetAllCaseTypeGroups");
 
             return result;
         }
 
         public Task<List<MpSysViews>> GetPartnerViews()
         {
-            var result = httpClient.GetFromJsonAsync<List<MpSysViews>>($"{userSession.baseUri}api/PartnerAccess/GetAllP4WViews");
+            var result = httpClient.GetFromJsonAsync<List<MpSysViews>>($"{userSession.BaseUri}api/PartnerAccess/GetAllP4WViews");
 
             return result;
         }

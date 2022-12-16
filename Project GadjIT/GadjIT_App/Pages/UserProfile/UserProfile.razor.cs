@@ -22,39 +22,39 @@ namespace GadjIT_App.Pages.UserProfile
         public AspNetUsers TaskObject { get; set; }
 
         [Parameter]
-        public List<CompanyItem> companyItems { get; set; }
+        public List<CompanyItem> CompanyItems { get; set; }
 
         [Parameter]
-        public List<RoleItem> selectedRoles { get; set; }
+        public List<RoleItem> SelectedRoles { get; set; }
 
         [Parameter]
-        public string selectedOption { get; set; }
+        public string SelectedOption { get; set; }
 
         [Parameter]
-        public bool enablePasswordSet { get; set; } = false;
+        public bool EnablePasswordSet { get; set; } = false;
 
         [Inject]
-        private IIdentityUserAccess service { get; set; }
+        private IIdentityUserAccess UserAccess { get; set; }
 
         [Inject]
-        private IIdentityRoleAccess roleAccess { get; set; }
+        private IIdentityRoleAccess RoleAccess { get; set; }
 
         [Inject]
-        private IUserSessionState sessionState { get; set; }
+        private IUserSessionState SessionState { get; set; }
 
         [Inject]
-        private NavigationManager navigationManager { get; set; }
+        private NavigationManager NavigationManager { get; set; }
 
         [Inject]
-        private ICompanyDbAccess companyDbAccess { get; set; }
+        private ICompanyDbAccess CompanyDbAccess { get; set; }
 
-        private IList<string> editObjectRoles { get; set; }
+        private IList<string> EditObjectRoles { get; set; }
 
-        private List<AppCompanyDetails> companies { get; set; }
+        private List<AppCompanyDetails> LstCompanies { get; set; }
 
-        private List<AspNetRoles> lstRoles { get; set; }
+        private List<AspNetRoles> LstRoles { get; set; }
 
-        private List<string> usersClaimId { get; set; }
+        private List<string> UsersClaimId { get; set; }
         
         [Inject]
         public IFileHelper FileHelper { get; set; }
@@ -67,38 +67,38 @@ namespace GadjIT_App.Pages.UserProfile
         {
 
             //Wait for session state to finish to prevent concurrency error on refresh
-            bool gotLock = sessionState.Lock;
+            bool gotLock = SessionState.Lock;
             while (gotLock)
             {
                 await Task.Yield();
-                gotLock = sessionState.Lock;
+                gotLock = SessionState.Lock;
             }
-            sessionState.OnChange += StateHasChanged;
+            SessionState.OnChange += StateHasChanged;
 
-            TaskObject = sessionState.User;
+            TaskObject = SessionState.User;
             TaskObject.PasswordHash = "PasswordNotChanged115592!";
 
 
-            companies = await companyDbAccess.GetCompanies();
-            lstRoles = await roleAccess.GetUserRoles();
+            LstCompanies = await CompanyDbAccess.GetCompanies();
+            LstRoles = await RoleAccess.GetUserRoles();
 
-            editObjectRoles = await roleAccess.GetCurrentUserRolesForCompany(TaskObject, TaskObject.SelectedCompanyId);
+            EditObjectRoles = await RoleAccess.GetCurrentUserRolesForCompany(TaskObject, TaskObject.SelectedCompanyId);
 
-            //editObjectRoles = await service.GetSelectedUserRoles(selectedUser);
-            var userCliams = await service.GetCompanyClaims(TaskObject);
-            usersClaimId = userCliams.Select(U => U.Value).ToList();
+            //EditObjectRoles = await UserAccess.GetSelectedUserRoles(selectedUser);
+            var userCliams = await UserAccess.GetCompanyClaims(TaskObject);
+            UsersClaimId = userCliams.Select(U => U.Value).ToList();
 
-            companyItems = companies.Select(C => new CompanyItem
+            CompanyItems = LstCompanies.Select(C => new CompanyItem
             {
                 Id = C.Id,
                 Company = C,
-                IsSubscribed = (usersClaimId.Contains(C.Id.ToString())) ? true : false
+                IsSubscribed = (UsersClaimId.Contains(C.Id.ToString())) ? true : false
             }).ToList();
 
-            selectedRoles = lstRoles
+            SelectedRoles = LstRoles
                 .Select(L => new RoleItem
                 {
-                    IsSubscribed = (editObjectRoles.Contains(L.Name)) ? true : L.Name == "Super User" && sessionState.isSuperUser ? true : false,
+                    IsSubscribed = (EditObjectRoles.Contains(L.Name)) ? true : L.Name == "Super User" && SessionState.IsSuperUser ? true : false,
                     RoleName = L.Name,
                     RoleId = L.Id
                 })
@@ -111,15 +111,15 @@ namespace GadjIT_App.Pages.UserProfile
 
         public void Dispose()
         {
-            sessionState.OnChange -= StateHasChanged;
+            SessionState.OnChange -= StateHasChanged;
         }
 
 
         private void TogglePasswordSet()
         {
-            enablePasswordSet = !enablePasswordSet;
+            EnablePasswordSet = !EnablePasswordSet;
 
-            if (enablePasswordSet)
+            if (EnablePasswordSet)
             {
                 TaskObject.PasswordHash = "************";
             }
@@ -135,12 +135,12 @@ namespace GadjIT_App.Pages.UserProfile
         {
             TaskObject.SelectedCompanyId = selectedId;
 
-            editObjectRoles = await roleAccess.GetCurrentUserRolesForCompany(TaskObject, TaskObject.SelectedCompanyId);
+            EditObjectRoles = await RoleAccess.GetCurrentUserRolesForCompany(TaskObject, TaskObject.SelectedCompanyId);
 
-            selectedRoles = lstRoles
+            SelectedRoles = LstRoles
                 .Select(L => new RoleItem
                 {
-                    IsSubscribed = (editObjectRoles.Contains(L.Name)) ? true : false,
+                    IsSubscribed = (EditObjectRoles.Contains(L.Name)) ? true : false,
                     RoleName = L.Name,
                     RoleId = L.Id
                 })
@@ -158,16 +158,16 @@ namespace GadjIT_App.Pages.UserProfile
 
         public void NavigateBack()
         {
-            navigationManager.NavigateTo(sessionState.userProfileReturnURI, true);
+            NavigationManager.NavigateTo(SessionState.UserProfileReturnURI, true);
         }
 
         private async Task<AspNetUsers> SubmitChange()
         {
 
-            var returnObject = await service.SubmitChanges(TaskObject, selectedRoles);
-            await service.SubmitCompanyCliams(companyItems, returnObject);
+            var returnObject = await UserAccess.SubmitChanges(TaskObject, SelectedRoles);
+            await UserAccess.SubmitCompanyCliams(CompanyItems, returnObject);
 
-            await sessionState.SetSessionState();
+            await SessionState.SetSessionState();
 
             return returnObject;
         }

@@ -25,96 +25,96 @@ namespace GadjIT_App.Pages.Admin.UserManagement
         public Action ToggleDetail { get; set; }
 
         [Inject]
-        private IUserManagementSelectedUserState selectedUserState { get; set; }
+        private IUserManagementSelectedUserState SelectedUserState { get; set; }
 
         [Inject]
-        private IIdentityUserAccess userAccess { get; set; }
+        private IIdentityUserAccess UserAccess { get; set; }
 
         [Inject]
-        private IIdentityRoleAccess roleAccess { get; set; }
+        private IIdentityRoleAccess RoleAccess { get; set; }
 
         [Inject]
-        private ICompanyDbAccess companyDbAccess { get; set; }
+        private ICompanyDbAccess CompanyDbAccess { get; set; }
 
         [Inject]
-        private IUserSessionState sessionState { get; set; }
+        private IUserSessionState SessionState { get; set; }
 
-        public AspNetUsers editObject { get; set; } = new AspNetUsers();
+        public AspNetUsers EditObject { get; set; } = new AspNetUsers();
 
-        protected IList<string> editObjectRoles { get; set; }
+        protected IList<string> EditObjectRoles { get; set; }
 
-        public string editOption { get; set; }
+        public string EditOption { get; set; }
 
-        public List<RoleItem> roles { get; set; } = new List<RoleItem>();
+        public List<RoleItem> Roles { get; set; } = new List<RoleItem>();
 
-        public List<AspNetRoles> lstRoles { get; set; }
+        public List<AspNetRoles> LstRoles { get; set; }
 
-        protected List<UserDataCollectionItem> lstUserDataItems { get; set; }
+        protected List<UserDataCollectionItem> LstUserDataItems { get; set; }
 
-        public List<AppCompanyDetails> companies { get; set; }
+        public List<AppCompanyDetails> Companies { get; set; }
 
-        public string selectedRole { get; set; } = "None";
+        public string SelectedRole { get; set; } = "None";
 
-        public string filterName { get; set; } = "";
+        public string FilterName { get; set; } = "";
 
         protected override async Task OnInitializedAsync()
         {
 
             //Wait for session state to finish to prevent concurrency error on refresh
-            bool gotLock = sessionState.Lock;
+            bool gotLock = SessionState.Lock;
             while (gotLock)
             {
                 await Task.Yield();
-                gotLock = sessionState.Lock;
+                gotLock = SessionState.Lock;
             }
 
-            lstUserDataItems = await userAccess.GetUsersWithCompanyInfo();
-            lstRoles = await roleAccess.GetUserRoles();
-            companies = await companyDbAccess.GetCompanies();
+            LstUserDataItems = await UserAccess.GetUsersWithCompanyInfo();
+            LstRoles = await RoleAccess.GetUserRoles();
+            Companies = await CompanyDbAccess.GetCompanies();
 
-            selectedUserState.DataChanged = DataChanged;
-            selectedUserState.allCompanies = companies;
-            selectedUserState.allRoles = lstRoles;
+            SelectedUserState.DataChanged = DataChanged;
+            SelectedUserState.allCompanies = Companies;
+            SelectedUserState.allRoles = LstRoles;
         }
 
 
         protected void PrepareForEdit(AspNetUsers selectedUser)
         {
-            editOption = "Edit";
-            editObject = selectedUser;
-            editObject.SelectedUri = (sessionState.selectedSystem is null) ? "Live" : sessionState.selectedSystem;
-            editObject.PasswordHash = "PasswordNotChanged115592!";
+            EditOption = "Edit";
+            EditObject = selectedUser;
+            EditObject.SelectedUri = (SessionState.SelectedSystem is null) ? "Live" : SessionState.SelectedSystem;
+            EditObject.PasswordHash = "PasswordNotChanged115592!";
 
-            selectedUserState.TaskObject = editObject;
-            selectedUserState.selectedOption = editOption;
+            SelectedUserState.TaskObject = EditObject;
+            SelectedUserState.selectedOption = EditOption;
 
             ToggleDetail?.Invoke();
         }
 
         protected void PrepareForInsert()
         {
-            editOption = "Insert";
-            editObject = new AspNetUsers();
-            editObject.SelectedUri = "Live";
-            editObject.SelectedCompanyId = sessionState.User.SelectedCompanyId;
+            EditOption = "Insert";
+            EditObject = new AspNetUsers();
+            EditObject.SelectedUri = "Live";
+            EditObject.SelectedCompanyId = SessionState.User.SelectedCompanyId;
 
-            selectedUserState.TaskObject = editObject;
-            selectedUserState.selectedOption = editOption;
+            SelectedUserState.TaskObject = EditObject;
+            SelectedUserState.selectedOption = EditOption;
 
             ToggleDetail?.Invoke();
         }
 
         private async void DataChanged()
         {
-            lstUserDataItems = await userAccess.GetUsersWithCompanyInfo();
-            lstRoles = await roleAccess.GetUserRoles();
+            LstUserDataItems = await UserAccess.GetUsersWithCompanyInfo();
+            LstRoles = await RoleAccess.GetUserRoles();
 
             StateHasChanged();
         }
 
         private void changeNameFilter(ChangeEventArgs eventArgs)
         {
-            filterName = eventArgs.Value.ToString();
+            FilterName = eventArgs.Value.ToString();
         }
 
         private void ToggleMoreOption(UserDataCollectionItem hoveredItem)
@@ -124,7 +124,7 @@ namespace GadjIT_App.Pages.Admin.UserManagement
 
         protected void PrepareModalForDelete(AspNetUsers selectedUser)
         {
-            editObject = selectedUser;
+            EditObject = selectedUser;
 
             Action SelectedDeleteAction = HandleValidDelete;
             var parameters = new ModalParameters();
@@ -143,7 +143,7 @@ namespace GadjIT_App.Pages.Admin.UserManagement
 
         private async void HandleValidDelete()
         {
-            await userAccess.Delete(editObject);
+            await UserAccess.Delete(EditObject);
 
             DataChanged();
         }
