@@ -1,0 +1,90 @@
+
+
+<div class="grid-chapter grid-chapter-background">
+
+    <div class="detail-group-box">
+        <div id="selected-bg-items">
+            <div id="selected-image">
+                <div class="selected-thumbnail ">
+                    @if (!string.IsNullOrEmpty(_SelectedChapter.BackgroundImageName))
+                    {
+                        <div>Selected Image: <span class="font-85">@_SelectedChapter.BackgroundImageName</span></div>
+                        <img src="@_SelectedChapter.BackgroundImage.Replace("/wwwroot","")" alt="" class="img-thumbnail ml-2" />
+                    }
+                    else
+                    {
+                        <label class="d-block col-grey">No Image Selected</label>
+                        <img src="/images/BackgroundImages/NoImage.jpg" alt="" class="img-thumbnail ml-2" />
+
+                    }
+                </div>
+                <div class="hidden-lg-down form-group-inline">
+                    <label style="margin-right: 10px">Preview Image</label>
+                    <label class="switch">
+                        <input type="checkbox" @bind="PreviewChapterImage">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div style="margin-left: 50px">
+                <label>Background Colour</label>
+                <select @bind="SelectColour"
+                        style="background-color: @getHTMLColourFromAndroid(ListChapterColours.Where(C => C.ColourName == SelectColour).Select(C => C.ColourCode).FirstOrDefault())"
+                        class="form-control form-control-lg">
+                    @if(ListChapterColours != null)
+                    {
+                        foreach (var colour in ListChapterColours)
+                        {
+                            <option style="background-color: @getHTMLColourFromAndroid(colour.ColourCode)" value="@(colour.ColourCode.Contains("#") ? colour.ColourName : colour.ColourCode)">
+                                @colour.ColourName
+
+                            </option>
+                        }
+                    }
+                </select>
+
+
+            </div>
+        </div>
+
+        <div class="custom-file">
+            <BlazorInputFile.InputFile multiple OnChange="HandleBgImageFileSelection" class="custom-file-input" id="customFileInput"></BlazorInputFile.InputFile>
+            <label class="custom-file-label" for="customInput">Upload images</label>
+        </div>
+
+
+
+        <div class="grid-can-edit chapter-scroll-list">
+            <div class="thumbnail-list">
+                @if(ListFilesForBgImages != null)
+                {
+                    foreach (var fileDesc in ListFilesForBgImages.ToList().OrderBy(F => F.FileName))
+                    {
+
+                        <div class="thumbnail-item @(!string.IsNullOrEmpty(_SelectedChapter.BackgroundImageName) && fileDesc.FileName == _SelectedChapter.BackgroundImageName ? "active" : "")">
+                            <img src="@fileDesc.FileURL.Replace("/wwwroot","")" alt="" class="img-thumbnail" />
+                            <label title="@fileDesc.FileName">@fileDesc.FileName</label>
+                            <div class="thumbnail-options">
+                                <button @onclick='(() => PrepareBgImageForDelete(fileDesc))' class="btn col-grey" title="Delete this image"><i class="fa fa-trash"></i></button>
+                                @if (!string.IsNullOrEmpty(_SelectedChapter.BackgroundImageName) && fileDesc.FileName == _SelectedChapter.BackgroundImageName)
+                                {
+                                    <button @onclick='() => SelectBgImage(new FileManagement.FileClassObjects.FileDesc { FileName = "", FileURL = "" })' class="btn " title="Deselect this image"><i class="fa fa-times"></i></button>
+                                }
+                                else
+                                {
+                                    <button @onclick='() => SelectBgImage(fileDesc)' class="btn " title="Use this image"><i class="fa fa-check"></i></button>
+                                }
+                            </div>
+                        </div>
+
+                    }
+                }
+                
+            </div>
+        </div>
+
+
+
+    </div>
+</div>

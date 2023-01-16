@@ -30,6 +30,7 @@ namespace GadjIT_App.Services.SessionState
         SpinLock IdentityLock { get; set; }
         bool Lock { get; set; }
         string SelectedSystem { get; }
+        string AltSystem { get; }
         string TempBackGroundImage { get; set; }
 
         DateTime ChapterLastCompared { get; set; }     //keeps a record of the last time a Chapter of list of Chapters was compared for updates by another user
@@ -93,6 +94,7 @@ namespace GadjIT_App.Services.SessionState
         public string BaseUri { get; protected set; }
 
         public string SelectedSystem { get; protected set; }
+        public string AltSystem => SelectedSystem == "Live" ? "Dev" : "Live";
 
         public string UserProfileReturnURI { get; protected set; }
 

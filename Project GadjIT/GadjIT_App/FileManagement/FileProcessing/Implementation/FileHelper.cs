@@ -921,7 +921,7 @@ namespace GadjIT_App.FileManagement.FileProcessing.Implementation
 
             //Body of table
             recordIndex = 3;
-            foreach (var viewItem in selectedChapter.DataViews.OrderBy(C => C.BlockNo).ToList())
+            foreach (var viewItem in selectedChapter.DataViews.OrderBy(C => C.SeqNo).ToList())
             {
                 workSheetDataViews.Cells[recordIndex, 1].Value = string.IsNullOrEmpty(viewItem.ViewName) ? "" : viewItem.ViewName;
                 workSheetDataViews.Cells[recordIndex, 2].Value = string.IsNullOrEmpty(viewItem.DisplayName) ? "" : viewItem.DisplayName;
@@ -1022,10 +1022,10 @@ namespace GadjIT_App.FileManagement.FileProcessing.Implementation
 
         public VmChapter ReadChapterDataFromExcel(string FilePath)
         {
-            VmChapter readChapters = new VmChapter { Items = new List<GenSmartflowItem>(), Fees = new List<Fee>(), DataViews = new List<DataViews>() };
+            VmChapter readChapters = new VmChapter { Items = new List<GenSmartflowItem>(), Fees = new List<Fee>(), DataViews = new List<DataView>() };
             GenSmartflowItem readObject;
             Fee feeObject;
-            DataViews readView;
+            DataView readView;
 
             FileInfo fileInfo = new FileInfo(FilePath);
 
@@ -1469,7 +1469,7 @@ namespace GadjIT_App.FileManagement.FileProcessing.Implementation
 
                 for (int row = 3; row <= totalRows; row++)
                 {
-                    readView = new DataViews();
+                    readView = new DataView();
 
                     for (int column = 1; column <= totalColumns; column++)
                     {
@@ -1485,7 +1485,7 @@ namespace GadjIT_App.FileManagement.FileProcessing.Implementation
                                             : worksheetDataViews.Cells[row, column].Value.ToString();
                     }
 
-                    readView.BlockNo = row - 2;
+                    readView.SeqNo = row - 2;
 
                     readChapters.DataViews.Add(readView);
                 }

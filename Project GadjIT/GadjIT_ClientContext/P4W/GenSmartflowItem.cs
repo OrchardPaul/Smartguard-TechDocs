@@ -6,13 +6,16 @@ namespace GadjIT_ClientContext.P4W
     public partial class GenSmartflowItem
     {
         [StringLength(100)]
-        [Required(ErrorMessage = "Item type must be set")]
+        [Required(ErrorMessage = "Item type must be set")] //Agenda, Status, Doc, Fee, TickerMessage
         public string Type { get; set; }
+
         [StringLength(250)]
         [Required]
         public string Name { get; set; }
+
         [Required]
         public int? SeqNo { get; set; }
+
         [StringLength(1)]
         public string SuppressStep { get; set; }
 

@@ -494,6 +494,10 @@
     }
 }
 
+.not-link-item {
+    cursor: default !important;
+}
+
 .link-item {
     cursor: pointer;
 }

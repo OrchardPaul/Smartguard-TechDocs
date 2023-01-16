@@ -1,0 +1,256 @@
+﻿@if (!(_Object.AltObject is null | _Object.ChapterObject is null))
+{
+    <div class="modal-body" tabindex="0">
+        <table class="table-basic table-top-header table-left-header table-borderless">
+            <thead>
+
+                <tr>
+                    <td style="width: 150px">
+                    </td>
+                    <td style="width: 250px">
+                        <div class=" d-flex justify-content-center">
+                            @(UserSession.SelectedSystem == "Dev" ? "Dev" : "Live")
+                        </div>
+                    </td>
+                    <td style="width: 250px">
+                        <div class=" d-flex justify-content-center">
+                            @UserSession.AltSystem
+                        </div>
+                    </td>
+                    <td style="width: 30px">
+                    </td>
+
+                </tr>
+            </thead>
+            <tbody>
+
+                <tr>
+                    <td>
+                        Seq Number
+                    </td>
+                    <td>
+                        @_Object.ChapterObject.SeqNo
+                    </td>
+                    <td>
+                        @_Object.AltObject.SeqNo
+                    </td>
+                    <td>
+                        <span class="fa fa-@(_Object.ComparisonList.Contains("SeqNo") ? "exclamation" : "check")"></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        @_Object.ChapterObject.Type Name:
+                    </td>
+                    <td>
+                        <input type="text" class="read-only" readonly value="@_Object.ChapterObject.Name" />
+                    </td>
+                    <td>
+                        <input type="text" class="read-only" value="@_Object.AltObject.Name" />
+                    </td>
+                    <td>
+                        <span class="fa fa-@(_Object.ComparisonList.Contains("Name") ? "exclamation" : "check")"></span>
+                    </td>
+                </tr>
+
+
+                @if (_Object.ChapterObject.Type != "Status")
+                {
+                    <tr>
+                        <td>
+                            Display Name:
+                        </td>
+                        <td>
+                            <input type="text" class="read-only" readonly value="@_Object.ChapterObject.AltDisplayName" />
+                        </td>
+                        <td>
+                            <input type="text" class="read-only" value="@_Object.AltObject.AltDisplayName" />
+                        </td>
+                        <td>
+                            <span class="fa fa-@(_Object.ComparisonList.Contains("AltDisplayName") ? "exclamation" : "check")"></span>
+                        </td>
+                    </tr>
+
+
+                    <tr>
+                        <td>
+                            Schedule As Name:
+                        </td>
+                        <td>
+                            <input type="text" class="read-only" value="@_Object.ChapterObject.AsName" />
+                        </td>
+                        <td>
+                            <input type="text" class="read-only" value="@_Object.AltObject.AsName" />
+                        </td>
+                        <td>
+                            <span class="fa fa-@(_Object.ComparisonList.Contains("AsName") ? "exclamation" : "check")"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Complete As Name
+                        </td>
+                        <td>
+                            <input type="text" class="read-only" value="@_Object.ChapterObject.CompleteName" />
+                        </td>
+                        <td>
+                            <input type="text" class="read-only" value="@_Object.AltObject.CompleteName" />
+                        </td>
+                        <td>
+                            <span class="fa fa-@(_Object.ComparisonList.Contains("CompleteName") ? "exclamation" : "check")"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Next Status
+                        </td>
+                        <td>
+                            <input type="text" class="read-only" value="@_Object.ChapterObject.NextStatus" />
+                        </td>
+                        <td>
+                            <input type="text" class="read-only" value="@_Object.AltObject.NextStatus" />
+                        </td>
+                        <td>
+                            <span class="fa fa-@(_Object.ComparisonList.Contains("NextStatus") ? "exclamation" : "check")"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Action
+                        </td>
+                        <td>
+                            <input type="text" class="read-only" value="@_Object.ChapterObject.Action" />
+                        </td>
+                        <td>
+                            <input type="text" class="read-only" value="@_Object.AltObject.Action" />
+                        </td>
+                        <td>
+                            <span class="fa fa-@(_Object.ComparisonList.Contains("Action") ? "exclamation" : "check")"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Reschedule Days
+                        </td>
+                        <td>
+                            @_Object.ChapterObject.RescheduleDays
+                        </td>
+                        <td>
+                            @_Object.AltObject.RescheduleDays
+                        </td>
+                        <td>
+                            <span class="fa fa-@(_Object.ComparisonList.Contains("RescheduleDays") ? "exclamation" : "check")"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Reschedule Data Item
+                        </td>
+                        <td>
+                            <input type="text" class="read-only" value="@_Object.ChapterObject.RescheduleDataItem" />
+                        </td>
+                        <td>
+                            <input type="text" class="read-only" value="@_Object.AltObject.RescheduleDataItem" />
+                        </td>
+                        <td>
+                            <span class="fa fa-@(_Object.ComparisonList.Contains("RescheduleDataItem") ? "exclamation" : "check")"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            User Message
+                        </td>
+                        <td>
+                            <input type="text" class="read-only" value="@_Object.ChapterObject.UserMessage" />
+                        </td>
+                        <td>
+                            <input type="text" class="read-only" value="@_Object.AltObject.UserMessage" />
+                        </td>
+                        <td>
+                            <span class="fa fa-@(_Object.ComparisonList.Contains("UserMessage") ? "exclamation" : "check")"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Popup Alert
+                        </td>
+                        <td>
+                            <input type="text" class="read-only" value="@_Object.ChapterObject.PopupAlert" />
+                        </td>
+                        <td>
+                            <input type="text" class="read-only" value="@_Object.AltObject.PopupAlert" />
+                        </td>
+                        <td>
+                            <span class="fa fa-@(_Object.ComparisonList.Contains("PopupAlert") ? "exclamation" : "check")"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Attachments
+                        </td>
+                        <td>
+                            <input type="text" class="read-only" value="@(_Object.ChapterObject.LinkedItems is null ? "0" : _Object.ChapterObject.LinkedItems.Count().ToString())" />
+                        </td>
+                        <td>
+                            <input type="text" class="read-only" value="@(_Object.AltObject.LinkedItems is null ? "0" : _Object.AltObject.LinkedItems.Count().ToString())" />
+                        </td>
+                        <td>
+                            <span class="fa fa-@(_Object.ComparisonList.Contains("LinkedItems") ? "exclamation" : "check")"></span>
+                        </td>
+                    </tr>
+                }
+                @if (_Object.ChapterObject.Type == "Status")
+                {
+                    <tr>
+                        <td>
+                            Suppress Step:
+                        </td>
+                        <td>
+                            <input type="text" class="read-only" value="@_Object.ChapterObject.SuppressStep" />
+                        </td>
+                        <td>
+                            <input type="text" class="read-only" value="@_Object.AltObject.SuppressStep" />
+                        </td>
+                        <td>
+                            <span class="fa fa-@(_Object.ComparisonList.Contains("SuppressStep") ? "exclamation" : "check")"></span>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td>
+                    </td>
+                    <td>
+                        <div class=" d-flex justify-content-center">
+                            <button type="submit" autofocus class="btn btn-main" @onclick="() => HandleSyncItem()">Copy to @UserSession.AltSystem</button>
+                        </div>
+                    </td>
+                    <td>
+                        @* <div class=" d-flex justify-content-center">
+                            <button type="submit" autofocus class="btn btn-main" @onclick="() => HandleValidSubmit(true)">@(UserSession.SelectedSystem == "Dev" ? "Dev <<" : "Live <<")</button>
+                        </div> *@
+                    </td>
+                    <td>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+}
+else
+{
+    
+    <div class="modal-body">
+        <p>Smartflow item does not exist on @UserSession.AltSystem</p>
+        <p>Do you wish create this object on @UserSession.AltSystem?</p>
+    </div>
+    
+    <div class="button-container">
+        <button type="submit" autofocus class="btn btn-main" @onclick="() => HandleAddItem()">Create on @UserSession.AltSystem</button>
+        <button type="button" class="btn btn-secondary" @onclick="() => Close()">Cancel</button>
+    </div>
+}
+
+

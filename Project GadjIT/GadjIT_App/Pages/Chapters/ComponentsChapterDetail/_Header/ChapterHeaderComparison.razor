@@ -1,0 +1,192 @@
+﻿@if (_AltChapter != null)
+{
+    <div class="modal-body" tabindex="0">
+        <table class="table-basic table-left-header table-borderless">
+            <thead>
+
+                <tr>
+                    <td style="width: 150px">
+                    </td>
+                    <td style="width: 250px">
+                        <div class=" d-flex justify-content-center">
+                            @(UserSession.SelectedSystem == "Dev" ? "Dev" : "Live")
+                        </div>
+                    </td>
+                    <td style="width: 250px">
+                        <div class=" d-flex justify-content-center">
+                            @UserSession.AltSystem
+                        </div>
+                    </td>
+                    <td style="width: 30px">
+                    </td>
+                    <td></td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        Case Type Group
+                    </td>
+                    <td>
+                        @_SelectedChapter.P4WCaseTypeGroup
+                    </td>
+                    <td>
+                        @_AltChapter.P4WCaseTypeGroup
+                    </td>
+                    <td>
+                        <span class="fa fa-@(_SelectedChapter.P4WCaseTypeGroup != @_AltChapter.P4WCaseTypeGroup ? "exclamation" : "check")"></span>
+                    </td>
+                    <td>
+                        @if (_SelectedChapter.P4WCaseTypeGroup != @_AltChapter.P4WCaseTypeGroup)
+                        {
+                            <input type="checkbox" class="ml-1 mt-1" @bind="@syncCaseTypeGroup" />
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Smartflow View
+                    </td>
+                    <td>
+                        @_SelectedChapter.SelectedView
+                    </td>
+                    <td>
+                        @_AltChapter.SelectedView
+                    </td>
+                    <td>
+                        <span class="fa fa-@(_SelectedChapter.SelectedView != @_AltChapter.SelectedView ? "exclamation" : "check")"></span>
+                    </td>
+                    <td>
+                        @if (_SelectedChapter.SelectedView != @_AltChapter.SelectedView)
+                        {
+                            <input type="checkbox" class="ml-1 mt-1" @bind="@syncView" />
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Step Name
+                    </td>
+                    <td>
+                        @_SelectedChapter.StepName
+                    </td>
+                    <td>
+                        @_AltChapter.StepName
+                    </td>
+                    <td>
+                        <span class="fa fa-@(_SelectedChapter.StepName != @_AltChapter.StepName ? "exclamation" : "check")"></span>
+                    </td>
+                    <td>
+                        @if (_SelectedChapter.StepName != @_AltChapter.StepName)
+                        {
+                            <input type="checkbox" class="ml-1 mt-1" @bind="@syncStepName" />
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Background Colour
+                    </td>
+                    <td>
+                        @_SelectedChapter.BackgroundColour
+                    </td>
+                    <td>
+                        @_AltChapter.BackgroundColour
+                    </td>
+                    <td>
+                        <span class="fa fa-@(_SelectedChapter.BackgroundColour != @_AltChapter.BackgroundColour ? "exclamation" : "check")"></span>
+                    </td>
+                    <td>
+                        @if (_SelectedChapter.BackgroundColour != @_AltChapter.BackgroundColour)
+                        {
+                            <input type="checkbox" class="ml-1 mt-1" @bind="@syncBgColour" />
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Background Image
+                    </td>
+                    <td>
+                        @_SelectedChapter.BackgroundImageName
+                    </td>
+                    <td>
+                        @_AltChapter.BackgroundImageName
+                    </td>
+                    <td>
+                        <span class="fa fa-@(_SelectedChapter.BackgroundImage != @_AltChapter.BackgroundImage ? "exclamation" : "check")"></span>
+                    </td>
+                    <td>
+                        @if (_SelectedChapter.BackgroundImage != @_AltChapter.BackgroundImage)
+                        {
+                            <input type="checkbox" class="ml-1 mt-1" @bind="@syncBgImage" />
+                        }
+
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Show Notes
+                    </td>
+                    <td>
+                        @_SelectedChapter.ShowPartnerNotes
+                    </td>
+                    <td>
+                        @_AltChapter.ShowPartnerNotes
+                    </td>
+                    <td>
+                        <span class="fa fa-@(_SelectedChapter.ShowPartnerNotes != @_AltChapter.ShowPartnerNotes ? "exclamation" : "check")"></span>
+                    </td>
+                    <td>
+                        @if (_SelectedChapter.ShowPartnerNotes != @_AltChapter.ShowPartnerNotes)
+                        {
+                            <input type="checkbox" class="ml-1 mt-1" @bind="@syncShowPartnerNotes" />
+                        }
+
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Track Documents
+                    </td>
+                    <td>
+                        @_SelectedChapter.ShowDocumentTracking
+                    </td>
+                    <td>
+                        @_AltChapter.ShowDocumentTracking
+                    </td>
+                    <td>
+                        <span class="fa fa-@(_SelectedChapter.ShowDocumentTracking != @_AltChapter.ShowDocumentTracking ? "exclamation" : "check")"></span>
+                    </td>
+                    <td>
+                        @if (_SelectedChapter.ShowDocumentTracking != @_AltChapter.ShowDocumentTracking)
+                        {
+                            <input type="checkbox" class="ml-1 mt-1" @bind="@syncShowDocumentTracking" />
+                        }
+
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td>
+                    </td>
+                    <td>
+                        <div class=" d-flex justify-content-center">
+                            <button type="submit" autofocus class="btn btn-main" @onclick="() => HandleValidSubmit()">@(UserSession.SelectedSystem == "Dev" ? ">> Live" : ">> Dev")</button>
+                        </div>
+                    </td>
+                    <td>
+                        @* <div class=" d-flex justify-content-center">
+                            <button type="submit" autofocus class="btn btn-main" @onclick="() => HandleValidSubmit(true)">@(UserSession.SelectedSystem == "Dev" ? "Dev <<" : "Live <<")</button>
+                        </div> *@
+                    </td>
+                    <td>
+                    </td>
+                    <td>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+}

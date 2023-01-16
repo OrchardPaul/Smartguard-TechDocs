@@ -1,6 +1,6 @@
 ﻿using Blazored.Modal;
 using Blazored.Modal.Services;
-using GadjIT_App.Pages.Shared.Modals;
+using GadjIT_App.Pages._Shared.Modals;
 using GadjIT_App.Services.SessionState;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;

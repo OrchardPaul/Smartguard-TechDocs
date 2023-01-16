@@ -23,8 +23,8 @@ namespace GadjIT_ClientContext.P4W.Custom
         public string SelectedView { get; set; }
         public string SelectedStep { get; set; }
         public List<GenSmartflowItem> Items { get; set; }
-        public List<DataViews> DataViews { get; set; }
-        public List<TickerMessages> TickerMessages { get; set; }
+        public List<DataView> DataViews { get; set; }
+        public List<TickerMessage> TickerMessages { get; set; }
         public List<Fee> Fees { get; set; }
     }
 }

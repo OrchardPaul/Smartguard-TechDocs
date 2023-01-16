@@ -1436,7 +1436,7 @@ app {
     animation: pulse-light-change 5s infinite;
 }
 
-.optional-row{
+.data-item.optional .doc-icon, .attach-list .optional-row .doc-icon{
     opacity: 0.40 !important;
 }
 
@@ -1774,13 +1774,14 @@ app {
 
     .invisible {
         visibility: hidden;
-        position: absolute !important;
-        left: -9999px !important;
-        width: 0px;
+        width: 0;
     }
 
     .hidden {
         visibility: hidden;
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
     }
 
     .visible {

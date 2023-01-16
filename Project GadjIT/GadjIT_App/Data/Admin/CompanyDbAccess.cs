@@ -49,6 +49,7 @@ namespace GadjIT_App.Data.Admin
         Task<List<SmartflowRecords>> SyncAdminSysToClient(List<UsrOrsfSmartflows> clientObjects, IUserSessionState sessionState);
         Task<List<SmartflowRecords>> GetAllSmartflowRecords(IUserSessionState sessionState);
         Task<List<SmartflowRecords>> GetAllSmartflowRecordsForAllCompanies();
+        Task<SmartflowRecords> GetSmartflow(IUserSessionState _sessionState, string _caseTypeGroup, string _caseType, string _smartflowName);
         bool Lock { get; set; }
 
         Task<List<AppCompanyAccountsSmartflowDetails>> GetCompanyAccountDetailsByAccountId(int accountId);
@@ -813,6 +814,34 @@ namespace GadjIT_App.Data.Admin
 
         }
 
+        public async Task<SmartflowRecords> GetSmartflow(IUserSessionState _sessionState, string _caseTypeGroup, string _caseType, string _smartflowName)
+        {
+            using (var context = contextFactory.CreateDbContext())
+            {
+                var returnValue = new SmartflowRecords();
+
+                try
+                {
+                    Lock = true;
+
+                    returnValue = await context.SmartflowRecords.Where(S => S.CompanyId == _sessionState.Company.Id)
+                                    .Where(S => S.System == _sessionState.SelectedSystem)
+                                    .Where(S => S.CaseTypeGroup == _caseTypeGroup)
+                                    .Where(S => S.CaseType == _caseType)
+                                    .Where(S => S.SmartflowName == _smartflowName)
+                                    .FirstOrDefaultAsync();
+
+                }
+                finally
+                {
+                    Lock = false;
+                }
+
+                return returnValue;
+            }
+
+        }
+
 
         public async Task<SmartflowRecords> SaveSmartFlowRecord(UsrOrsfSmartflows chapter, IUserSessionState sessionState)
         {
@@ -901,7 +930,7 @@ namespace GadjIT_App.Data.Admin
                 var existingRecord = await context.SmartflowRecords
                                                     .Where(R => R.RowId == id && R.CompanyId == sessionState.Company.Id)
                                                     .Where(R => R.System == sessionState.SelectedSystem)
-                                                    .SingleOrDefaultAsync();
+                                                    .FirstOrDefaultAsync();
 
                 if (!(existingRecord is null))
                 {

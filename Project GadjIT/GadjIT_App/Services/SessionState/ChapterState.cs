@@ -8,13 +8,13 @@ namespace GadjIT_App.Services.SessionState
 {
     public interface IChapterState
     {
-        List<VmUsrOrDefChapterManagement> lstChapterItems { get; set; }
+        List<VmGenSmartflowItem> lstChapterItems { get; set; }
         
     }
 
     public class ChapterState : IChapterState
     {
-        public List<VmUsrOrDefChapterManagement> lstChapterItems { get; set; } = new List<VmUsrOrDefChapterManagement>();
+        public List<VmGenSmartflowItem> lstChapterItems { get; set; } = new List<VmGenSmartflowItem>();
 
 
     }

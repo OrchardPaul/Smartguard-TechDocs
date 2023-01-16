@@ -174,8 +174,15 @@ function showPageAfterFirstRender() {
   //fncCloseResponsiveMenu();
 }
 
+
+
 function addClassById(objId, className) {
 
+  var items = document.getElementsByClassName(className);
+  while (items.length) {
+    items[0].classList.remove(className);
+    
+  }
   var obj = document.getElementById(objId);
   if(obj != null){
     obj.classList.add(className);

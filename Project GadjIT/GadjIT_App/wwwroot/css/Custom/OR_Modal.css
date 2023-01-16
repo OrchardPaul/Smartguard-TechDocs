@@ -410,13 +410,16 @@
     width: 350px;
 }
 
-.modal-chapter-doc, .modal-chapter-data {
+.modal-chapter-doc, .modal-chapter-status, .modal-chapter-data {
     width: 550px;
 }
 
 .modal-chapter-doc .modal-body {
     height: 400px;
     overflow-y: scroll;
+}
+.modal-chapter-status .modal-body {
+    height: 200px;
 }
 
 .modal-chapter-import .modal-body {
@@ -438,7 +441,7 @@
 }
 
 @media (max-width: 768px) {
-    .modal-chapter-item, .modal-chapter-data, .modal-chapter-doc, .modal-chapter-fees, .modal-chapter-comparison {
+    .modal-chapter-item, .modal-chapter-data, .modal-chapter-doc, .modal-chapter-status, .modal-chapter-fees, .modal-chapter-comparison {
         width: calc(100% - 20px);
     }
 

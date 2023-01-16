@@ -1,0 +1,122 @@
+﻿@using System.Globalization;
+
+
+@if (!(_Object.AltMessage is null | _Object.Message is null))
+{
+    <div class="modal-body" tabindex="0">
+        <table class="table-basic table-top-header table-left-header table-borderless">
+            <thead>
+
+                <tr>
+                    <td style="width: 150px">
+                    </td>
+                    <td style="width: 250px">
+                        <div class=" d-flex justify-content-center">
+                            @(UserSession.SelectedSystem == "Dev" ? "Dev" : "Live")
+                        </div>
+                    </td>
+                    <td style="width: 250px">
+                        <div class=" d-flex justify-content-center">
+                            @UserSession.AltSystem
+                        </div>
+                    </td>
+                    <td style="width: 30px">
+                    </td>
+
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        Seq Number
+                    </td>
+                    <td>
+                        @_Object.Message.SeqNo
+                    </td>
+                    <td>
+                        @_Object.AltMessage.SeqNo
+                    </td>
+                    <td>
+                        <span class="fa fa-@(_Object.ComparisonList.Contains("SeqNo") ? "exclamation" : "check")"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Message:
+                    </td>
+                    <td>
+                        <input type="text" class="read-only" readonly value="@_Object.Message.Message" />
+                    </td>
+                    <td>
+                        <input type="text" class="read-only" value="@_Object.AltMessage.Message" />
+                    </td>
+                    <td>
+                        <span class="fa fa-@(_Object.ComparisonList.Contains("Message") ? "exclamation" : "check")"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        From Date:
+                    </td>
+                    <td>
+                        <input type="text" class="read-only" readonly value="@DateTime.ParseExact(_Object.Message.FromDate, "yyyyMMdd", CultureInfo.InvariantCulture).ToString("dd/MM/yyyy")" />
+                    </td>
+                    <td>
+                        <input type="text" class="read-only" value="@DateTime.ParseExact(_Object.AltMessage.FromDate, "yyyyMMdd", CultureInfo.InvariantCulture).ToString("dd/MM/yyyy")" />
+                    </td>
+                    <td>
+                        <span class="fa fa-@(_Object.ComparisonList.Contains("FromDate") ? "exclamation" : "check")"></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        To Date
+                    </td>
+                    <td>
+                        <input type="text" class="read-only" readonly value="@DateTime.ParseExact(_Object.Message.ToDate, "yyyyMMdd", CultureInfo.InvariantCulture).ToString("dd/MM/yyyy")" />
+                    </td>
+                    <td>
+                        <input type="text" class="read-only" value="@DateTime.ParseExact(_Object.AltMessage.ToDate, "yyyyMMdd", CultureInfo.InvariantCulture).ToString("dd/MM/yyyy")" />
+                    </td>
+                    <td>
+                        <span class="fa fa-@(_Object.ComparisonList.Contains("ToDate") ? "exclamation" : "check")"></span>
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td>
+                    </td>
+                    <td>
+                        <div class=" d-flex justify-content-center">
+                            <button type="submit" autofocus class="btn btn-main" @onclick="() => HandleSyncItem()">Copy to @UserSession.AltSystem</button>
+                        </div>
+                    </td>
+                    <td>
+                        @* <div class=" d-flex justify-content-center">
+                            <button type="submit" autofocus class="btn btn-main" @onclick="() => HandleValidSubmit(true)">@(UserSession.SelectedSystem == "Dev" ? "Dev <<" : "Live <<")</button>
+                        </div> *@
+                    </td>
+                    <td>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+}
+else
+{
+    <div class="modal-body">
+        <p>Smartflow item does not exist on @UserSession.AltSystem</p>
+        <p>Do you wish create this object on @UserSession.AltSystem</p>
+    </div>
+    
+
+    <div class="button-container">
+        <button type="submit" autofocus class="btn btn-main" @onclick="() => HandleAddItem()">Create on @UserSession.AltSystem</button>
+        <button type="button" class="btn btn-secondary" @onclick="() => Close()">Cancel</button>
+    </div>
+}
+
+

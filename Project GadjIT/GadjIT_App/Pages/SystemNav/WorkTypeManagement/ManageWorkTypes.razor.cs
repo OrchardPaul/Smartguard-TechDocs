@@ -3,7 +3,7 @@ using Blazored.Modal.Services;
 using GadjIT_AppContext.GadjIT_App;
 using GadjIT_AppContext.GadjIT_App.Custom;
 using GadjIT_App.Data.Admin;
-using GadjIT_App.Pages.Shared.Modals;
+using GadjIT_App.Pages._Shared.Modals;
 using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;

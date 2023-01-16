@@ -63,23 +63,23 @@ namespace Gizmo_V1_02.Archive
 
         private FileDesc SelectedFileDescription { get; set; }
 
-        private List<VmUsrOrDefChapterManagement> lstChapters { get; set; } = new List<VmUsrOrDefChapterManagement>();
+        private List<VmGenSmartflowItem> lstChapters { get; set; } = new List<VmGenSmartflowItem>();
 
-        private List<VmUsrOrDefChapterManagement> lstAltSystemChapters { get; set; } = new List<VmUsrOrDefChapterManagement>();
+        private List<VmGenSmartflowItem> lstAltSystemChapters { get; set; } = new List<VmGenSmartflowItem>();
 
-        private List<VmUsrOrDefChapterManagement> lstAll { get; set; } = new List<VmUsrOrDefChapterManagement>();
-        private List<VmUsrOrDefChapterManagement> lstAltSystemChapterItems { get; set; } = new List<VmUsrOrDefChapterManagement>();
+        private List<VmGenSmartflowItem> lstAll { get; set; } = new List<VmGenSmartflowItem>();
+        private List<VmGenSmartflowItem> lstAltSystemChapterItems { get; set; } = new List<VmGenSmartflowItem>();
 
-        private List<VmUsrOrDefChapterManagement> lstAgendas { get; set; } = new List<VmUsrOrDefChapterManagement>();
+        private List<VmGenSmartflowItem> lstAgendas { get; set; } = new List<VmGenSmartflowItem>();
         private List<VmFee> lstFees { get; set; } = new List<VmFee>();
         private List<VmChapterFee> lstVmFeeModalItems { get; set; } = new List<VmChapterFee>();
-        private List<VmUsrOrDefChapterManagement> lstDocs { get; set; } = new List<VmUsrOrDefChapterManagement>();
-        private List<VmUsrOrDefChapterManagement> lstStatus { get; set; } = new List<VmUsrOrDefChapterManagement>();
+        private List<VmGenSmartflowItem> lstDocs { get; set; } = new List<VmGenSmartflowItem>();
+        private List<VmGenSmartflowItem> lstStatus { get; set; } = new List<VmGenSmartflowItem>();
 
-        private List<VmDataViews> ListVmDataViews { get; set; } = new List<VmDataViews>();
+        private List<VmDataView> ListVmDataView { get; set; } = new List<VmDataView>();
 
         public List<MpSysViews> ListP4WViews;
-        public List<DmDocuments> dropDownChapterList;
+        public List<DmDocuments> LibraryDocumentsAndSteps;
         public List<CaseTypeGroups> partnerCaseTypeGroups;
         public List<fnORCHAGetFeeDefinitions> feeDefinitions;
 
@@ -101,10 +101,10 @@ namespace Gizmo_V1_02.Archive
         public UsrOrDefChapterManagement editChapter { get; set; }
         public string isCaseTypeOrGroup { get; set; } = "";
 
-        public VmDataViews EditDataViewObject = new VmDataViews { DataView = new DataViews() };
-        public VmUsrOrDefChapterManagement editObject = new VmUsrOrDefChapterManagement { ChapterObject = new UsrOrDefChapterManagement() };
+        public VmDataView EditDataViewObject = new VmDataView { DataView = new DataViews() };
+        public VmGenSmartflowItem editObject = new VmGenSmartflowItem { ChapterObject = new UsrOrDefChapterManagement() };
         public VmFee editFeeObject = new VmFee { FeeObject = new Fee() };
-        public VmUsrOrDefChapterManagement editChapterObject = new VmUsrOrDefChapterManagement { ChapterObject = new UsrOrDefChapterManagement() };
+        public VmGenSmartflowItem editChapterObject = new VmGenSmartflowItem { ChapterObject = new UsrOrDefChapterManagement() };
 
 
         string selectedList = string.Empty;
@@ -145,7 +145,7 @@ namespace Gizmo_V1_02.Archive
 
         private bool seqMoving = false;
 
-        public bool compareSystems = false;
+        protected bool CompareSystems = false;
 
         private string RowChangedClass { get; set; } = "row-changed-nav3";
 
@@ -258,7 +258,7 @@ namespace Gizmo_V1_02.Archive
         {
             displaySpinner = true;
 
-            lstAll = new List<VmUsrOrDefChapterManagement>();
+            lstAll = new List<VmGenSmartflowItem>();
 
             SelectedChapterObject = chapter;
 
@@ -322,7 +322,7 @@ namespace Gizmo_V1_02.Archive
             ListChapterLoaded = false;
 
             var lstC = await chapterManagementService.GetAllChapters();
-            lstChapters = lstC.Select(A => new VmUsrOrDefChapterManagement { ChapterObject = A }).ToList();
+            lstChapters = lstC.Select(A => new VmGenSmartflowItem { ChapterObject = A }).ToList();
 
             if (!(selectedChapter.Name is null) & selectedChapter.Name != "")
             {
@@ -347,7 +347,7 @@ namespace Gizmo_V1_02.Archive
             if (listType == "Chapters")
             {
                 var lstC = await chapterManagementService.GetAllChapters();
-                lstChapters = lstC.Select(A => new VmUsrOrDefChapterManagement { ChapterObject = A }).ToList();
+                lstChapters = lstC.Select(A => new VmGenSmartflowItem { ChapterObject = A }).ToList();
 
             }
             else
@@ -355,7 +355,7 @@ namespace Gizmo_V1_02.Archive
                 var lst = selectedChapter.ChapterItems;
                 Dictionary<int?, string> docTypes = new Dictionary<int?, string> { { 1, "Doc" },{ 4, "Form" }, {6, "Step" }, { 8, "Date" }, { 9, "Email" }, {11,"Doc" } , { 12, "Email" } };
 
-                lstAll = lst.Select(L => new VmUsrOrDefChapterManagement { ChapterObject = L })
+                lstAll = lst.Select(L => new VmGenSmartflowItem { ChapterObject = L })
                                 .Select(L => {
                                     L.ChapterObject.CaseTypeGroup = selectedChapter.CaseTypeGroup;
                                     L.ChapterObject.CaseType = selectedChapter.CaseType;
@@ -384,7 +384,7 @@ namespace Gizmo_V1_02.Archive
                                         .OrderBy(A => A.ChapterObject.SeqNo)
                                         .Where(A => lstDocTypes.Contains(A.ChapterObject.Type))
                                         .Select(A => {
-                                            A.DocType = dropDownChapterList.Where(D => D.Name.ToUpper() == A.ChapterObject.Name.ToUpper())
+                                            A.DocType = LibraryDocumentsAndSteps.Where(D => D.Name.ToUpper() == A.ChapterObject.Name.ToUpper())
                                                                                         .Select(D => string.IsNullOrEmpty(docTypes[D.DocumentType]) ? "Doc" : docTypes[D.DocumentType])
                                                                                         .FirstOrDefault();
                                                         return A;
@@ -433,11 +433,11 @@ namespace Gizmo_V1_02.Archive
                 }
                 if(listType == "DataViews" | listType == "All")
                 {
-                    ListVmDataViews = (selectedChapter.DataViews is null) 
-                                                    ? new List<VmDataViews>() 
+                    ListVmDataView = (selectedChapter.DataViews is null) 
+                                                    ? new List<VmDataView>() 
                                                     : selectedChapter
                                                             .DataViews
-                                                            .Select(D => new VmDataViews { DataView = D })
+                                                            .Select(D => new VmDataView { DataView = D })
                                                             .OrderBy(D => D.DataView.BlockNo)
                                                             .ToList();
                 }
@@ -465,7 +465,7 @@ namespace Gizmo_V1_02.Archive
                 await sessionState.SwitchSelectedSystem();
 
                 var lstC = await chapterManagementService.GetAllChapters();
-                lstAltSystemChapters = lstC.Select(A => new VmUsrOrDefChapterManagement { ChapterObject = A }).ToList();
+                lstAltSystemChapters = lstC.Select(A => new VmGenSmartflowItem { ChapterObject = A }).ToList();
 
                 await sessionState.ResetSelectedSystem();
 
@@ -500,7 +500,7 @@ namespace Gizmo_V1_02.Archive
                     var temp = altChapter.ChapterItems;
 
 
-                    lstAltSystemChapterItems = temp.Select(T => new VmUsrOrDefChapterManagement { ChapterObject = T }).ToList();
+                    lstAltSystemChapterItems = temp.Select(T => new VmGenSmartflowItem { ChapterObject = T }).ToList();
 
                     foreach (var item in lstDocs)
                     {
@@ -540,7 +540,7 @@ namespace Gizmo_V1_02.Archive
 
             var test = new string(SelectedChapterObject.ChapterData);
 
-            lstAltSystemChapters = new List<VmUsrOrDefChapterManagement>();
+            lstAltSystemChapters = new List<VmGenSmartflowItem>();
             AltChapterObject = new UsrOrDefChapterManagement();
             compareSystems = !compareSystems;
             await RefreshCompararisonAllChapters();
@@ -569,7 +569,7 @@ namespace Gizmo_V1_02.Archive
                 {
                     var chapterItems = JsonConvert.DeserializeObject<VmChapter>(chapter.ChapterObject.ChapterData);
 
-                    var vmChapterItems = chapterItems.ChapterItems.Select(C => new VmUsrOrDefChapterManagement { ChapterObject = C }).ToList();
+                    var vmChapterItems = chapterItems.ChapterItems.Select(C => new VmGenSmartflowItem { ChapterObject = C }).ToList();
 
                     AltChapterObject = lstAltSystemChapters
                                         .Where(A => A.ChapterObject.Name == chapter.ChapterObject.Name)
@@ -587,7 +587,7 @@ namespace Gizmo_V1_02.Archive
                     {
                         altChapter = JsonConvert.DeserializeObject<VmChapter>(AltChapterObject.ChapterData);
 
-                        lstAltSystemChapterItems = altChapter.ChapterItems.Select(T => new VmUsrOrDefChapterManagement { ChapterObject = T }).ToList();
+                        lstAltSystemChapterItems = altChapter.ChapterItems.Select(T => new VmGenSmartflowItem { ChapterObject = T }).ToList();
 
                         foreach (var item in vmChapterItems)
                         {
@@ -610,7 +610,7 @@ namespace Gizmo_V1_02.Archive
             return true;
         }
 
-        private VmUsrOrDefChapterManagement CompareChapterItemsToAltSytem(VmUsrOrDefChapterManagement chapterItem)
+        private VmGenSmartflowItem CompareChapterItemsToAltSytem(VmGenSmartflowItem chapterItem)
         {
             var altObject = lstAltSystemChapterItems
                                 .Where(A => A.ChapterObject.Name == chapterItem.ChapterObject.Name)
@@ -646,13 +646,13 @@ namespace Gizmo_V1_02.Archive
             await CompareSelectedChapterToAltSystem();
         }
 
-        private void PrepareForExport(List<VmUsrOrDefChapterManagement> items, string header)
+        private void PrepareForExport(List<VmGenSmartflowItem> items, string header)
         {
             var parameters = new ModalParameters();
 
             if (items is null)
             {
-                items = new List<VmUsrOrDefChapterManagement> ();
+                items = new List<VmGenSmartflowItem> ();
             }
 
             parameters.Add("lstChapterItems", items);
@@ -665,7 +665,7 @@ namespace Gizmo_V1_02.Archive
             Modal.Show<ChapterExport>("Smartflow Export", parameters, options);
         }
 
-        private void PrepareForEdit(VmUsrOrDefChapterManagement item, string header)
+        private void PrepareForEdit(VmGenSmartflowItem item, string header)
         {
             selectedList = header;
             editObject = item;
@@ -673,7 +673,7 @@ namespace Gizmo_V1_02.Archive
             ShowChapterDetailModal("Edit");
         }
 
-        private void PrepareDataViewForEdit(VmDataViews item, string header)
+        private void PrepareDataViewForEdit(VmDataView item, string header)
         {
             selectedList = header;
             EditDataViewObject = item;
@@ -682,7 +682,7 @@ namespace Gizmo_V1_02.Archive
         }
 
 
-        private void PrepareAttachmentForEdit(VmUsrOrDefChapterManagement item, string header)
+        private void PrepareAttachmentForEdit(VmGenSmartflowItem item, string header)
         {
             selectedList = header;
             editObject = item;
@@ -700,7 +700,7 @@ namespace Gizmo_V1_02.Archive
         {
             selectedList = type;
 
-            editObject = new VmUsrOrDefChapterManagement { ChapterObject = new UsrOrDefChapterManagement() };
+            editObject = new VmGenSmartflowItem { ChapterObject = new UsrOrDefChapterManagement() };
             editObject.ChapterObject.CaseType = "";
             editObject.ChapterObject.Type = (type == "Steps and Documents") ? "Doc" : type;
             editObject.ChapterObject.CaseTypeGroup = "";
@@ -744,12 +744,12 @@ namespace Gizmo_V1_02.Archive
         private void PrepareDataViewForInsert(string header)
         {
             selectedList = header;
-            EditDataViewObject = new VmDataViews { DataView = new DataViews() } ;
+            EditDataViewObject = new VmDataView { DataView = new DataViews() } ;
 
-            if(ListVmDataViews.Count > 0)
+            if(ListVmDataView.Count > 0)
             {
 
-                EditDataViewObject.DataView.BlockNo = ListVmDataViews
+                EditDataViewObject.DataView.BlockNo = ListVmDataView
                                                        .OrderByDescending(D => D.DataView.BlockNo)
                                                        .Select(D => D.DataView.BlockNo)
                                                        .FirstOrDefault() + 1;
@@ -768,7 +768,7 @@ namespace Gizmo_V1_02.Archive
 
         private void PrepNewChapter()
         {
-            editChapterObject = new VmUsrOrDefChapterManagement { ChapterObject = new UsrOrDefChapterManagement() };
+            editChapterObject = new VmGenSmartflowItem { ChapterObject = new UsrOrDefChapterManagement() };
 
             if (!(selectedChapter.CaseTypeGroup == ""))
             {
@@ -844,7 +844,7 @@ namespace Gizmo_V1_02.Archive
         {
             if (!(selectedChapter.CaseType == ""))
             {
-                dropDownChapterList = await chapterManagementService.GetDocumentList(selectedChapter.CaseType);
+                LibraryDocumentsAndSteps = await chapterManagementService.GetDocumentList(selectedChapter.CaseType);
                 StateHasChanged();
             }
         }
@@ -874,7 +874,7 @@ namespace Gizmo_V1_02.Archive
         {
             seqMoving = true; //prevents changes to the form whilst process of changing seq is carried out
 
-            var lstItems = new List<VmUsrOrDefChapterManagement>();
+            var lstItems = new List<VmGenSmartflowItem>();
             int incrementBy;
 
             incrementBy = (direction.ToLower() == "up" ? -1 : 1);
@@ -944,7 +944,7 @@ namespace Gizmo_V1_02.Archive
 
             rowChanged = (int)(selectobject.BlockNo + incrementBy);
 
-            var swapItem = ListVmDataViews.Where(D => D.DataView.BlockNo == (selectobject.BlockNo + incrementBy)).SingleOrDefault();
+            var swapItem = ListVmDataView.Where(D => D.DataView.BlockNo == (selectobject.BlockNo + incrementBy)).SingleOrDefault();
             if (!(swapItem is null))
             {
                 selectobject.BlockNo += incrementBy;
@@ -967,9 +967,9 @@ namespace Gizmo_V1_02.Archive
         }
 
 
-        private List<VmUsrOrDefChapterManagement> GetRelevantChapterList(string listType)
+        private List<VmGenSmartflowItem> GetRelevantChapterList(string listType)
         {
-            var listItems = new List<VmUsrOrDefChapterManagement>();
+            var listItems = new List<VmGenSmartflowItem>();
 
             switch (listType)
             {
@@ -1014,7 +1014,7 @@ namespace Gizmo_V1_02.Archive
 
             int seqNo = 0;
 
-            foreach (VmUsrOrDefChapterManagement item in ListItems.OrderBy(A => A.ChapterObject.SeqNo))
+            foreach (VmGenSmartflowItem item in ListItems.OrderBy(A => A.ChapterObject.SeqNo))
             {
                 seqNo += 1;
                 item.ChapterObject.SeqNo = seqNo;
@@ -1037,7 +1037,7 @@ namespace Gizmo_V1_02.Archive
 
             int seqNo = 0;
 
-            foreach (var item in ListVmDataViews.OrderBy(A => A.DataView.BlockNo))
+            foreach (var item in ListVmDataView.OrderBy(A => A.DataView.BlockNo))
             {
                 seqNo += 1;
                 item.DataView.BlockNo = seqNo;
@@ -1060,7 +1060,7 @@ namespace Gizmo_V1_02.Archive
 
             int seqNo = 0;
 
-            foreach (VmUsrOrDefChapterManagement item in ListItems.OrderBy(A => A.ChapterObject.SeqNo))
+            foreach (VmGenSmartflowItem item in ListItems.OrderBy(A => A.ChapterObject.SeqNo))
             {
                 seqNo += 1;
                 item.ChapterObject.SeqNo = seqNo;
@@ -1181,7 +1181,7 @@ namespace Gizmo_V1_02.Archive
             parameters.Add("CopyObject", copyObject);
             parameters.Add("DataChanged", action);
             parameters.Add("selectedList", selectedList);
-            parameters.Add("dropDownChapterList", dropDownChapterList);
+            parameters.Add("LibraryDocumentsAndSteps", LibraryDocumentsAndSteps);
             parameters.Add("CaseTypeGroups", partnerCaseTypeGroups);
             parameters.Add("ListOfStatus", lstStatus);
             parameters.Add("SelectedChapter", selectedChapter);
@@ -1199,7 +1199,7 @@ namespace Gizmo_V1_02.Archive
                 Class = "blazored-custom-modal " + className
             };
 
-            Modal.Show<ChapterDetail>(selectedList, parameters, options);
+            Modal.Show<ModalChapterDetail>(selectedList, parameters, options);
         }
 
         protected void ShowDataViewDetailModal(string option)
@@ -1262,7 +1262,7 @@ namespace Gizmo_V1_02.Archive
             parameters.Add("CopyObject", copyObject);
             parameters.Add("DataChanged", action);
             parameters.Add("selectedList", selectedList);
-            parameters.Add("dropDownChapterList", dropDownChapterList);
+            parameters.Add("LibraryDocumentsAndSteps", LibraryDocumentsAndSteps);
             parameters.Add("CaseTypeGroups", partnerCaseTypeGroups);
             parameters.Add("ListOfStatus", lstStatus);
             parameters.Add("SelectedChapter", selectedChapter);
@@ -1305,7 +1305,7 @@ namespace Gizmo_V1_02.Archive
         }
 
 
-        protected void PrepareChapterDetailDelete(VmUsrOrDefChapterManagement selectedChapterItem)
+        protected void PrepareChapterDetailDelete(VmGenSmartflowItem selectedChapterItem)
         {
             editObject = selectedChapterItem;
 
@@ -1326,7 +1326,7 @@ namespace Gizmo_V1_02.Archive
 
 
 
-        protected void PrepareDataViewDelete(VmDataViews selectedDataView)
+        protected void PrepareDataViewDelete(VmDataView selectedDataView)
         {
             EditDataViewObject = selectedDataView;
 
@@ -1345,7 +1345,7 @@ namespace Gizmo_V1_02.Archive
             Modal.Show<ModalDelete>("Delete?", parameters, options);
         }
 
-        protected void PrepareChapterDelete(VmUsrOrDefChapterManagement selectedChapterItem)
+        protected void PrepareChapterDelete(VmGenSmartflowItem selectedChapterItem)
         {
             editObject = selectedChapterItem;
 
@@ -1385,7 +1385,7 @@ namespace Gizmo_V1_02.Archive
             Modal.Show<ModalDelete>("Delete?", parameters, options);
         }
 
-        private void PrepareForComparison(VmUsrOrDefChapterManagement selectedItem)
+        private void PrepareForComparison(VmGenSmartflowItem selectedItem)
         {
             editObject = selectedItem;
 
@@ -1652,7 +1652,7 @@ namespace Gizmo_V1_02.Archive
         {
             if (seqMoving == false | compareSystems == true)
             {
-                List<VmUsrOrDefChapterManagement> listItems = GetRelevantChapterList(listType);
+                List<VmGenSmartflowItem> listItems = GetRelevantChapterList(listType);
 
                 bool isValid = true;
 
@@ -1680,9 +1680,9 @@ namespace Gizmo_V1_02.Archive
 
                 bool isValid = true;
 
-                for (int i = 0; i < ListVmDataViews.Count; i++)
+                for (int i = 0; i < ListVmDataView.Count; i++)
                 {
-                    if (ListVmDataViews[i].DataView.BlockNo != i + 1)
+                    if (ListVmDataView[i].DataView.BlockNo != i + 1)
                     {
                         isValid = false;
                     }
@@ -1920,7 +1920,7 @@ namespace Gizmo_V1_02.Archive
             parameters.Add("ListFileDescriptions", ListFileDescriptions);
             parameters.Add("DataChanged", SelectedAction);
             parameters.Add("WriteBackUp", WriteBackUp);
-            parameters.Add("OriginalDataViews", ListVmDataViews);
+            parameters.Add("OriginalDataViews", ListVmDataView);
 
             var options = new ModalOptions()
             {

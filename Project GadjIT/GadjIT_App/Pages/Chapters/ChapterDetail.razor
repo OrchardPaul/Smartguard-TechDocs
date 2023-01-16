@@ -1,359 +1,334 @@
-﻿@using GadjIT_App.Data.CustomFormObjects;
+﻿
 
-<EditForm Model="@CopyObject" OnValidSubmit="HandleValidSubmit">
-    <div class="modal-body">
-
-        <DataAnnotationsValidator />
-        @if (Error == 0)
-        {
-            @if (selectedList == "Steps and Documents")
-            {
-                @if (dropDownChapterList is null)
-                {
-                    <div class="spinner"></div>
-                }
-                else
-                {
-                    <div class="form-group">
-                        <label for="DocType">P4W Case Type Group</label>
-                        <InputSelectInteger class="form-control form-control-lg"
-                                            @bind-Value="selectedCaseTypeGroup">
-                            <option value="-2">Select</option>
-                            @foreach (var group in CaseTypeGroups.Where(C => C.Name == SelectedChapter.P4WCaseTypeGroup).ToList())
-                            {
-                                <option value="@group.Id">
-                                    @group.Name
-                                </option>
-                            }
-                            <option value="0">Global Documents</option>
-                            @if (SelectedChapter.P4WCaseTypeGroup == "Entity Documents")
-                            {
-                                <option value="-1">Entity Documents</option>
-                            }
-                        </InputSelectInteger>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="DocName">Document / Step</label>
-
-                        @if (selectedCaseTypeGroup == -2 & CopyObject.Name is null)
-                        {
-                            <select class="form-control form-control-xl" disabled />
-                        }
-                        else
-                        {
-                            <div class="form-label-check" style="margin-right: 13px">
-                                @if (useCustomItem)
-                                {
-                                    <label>Custom Item</label><input type="checkbox" checked="checked" @bind-value="@useCustomItem" />
-                                }
-                                else
-                                {
-                                    <label>Custom Item</label><input type="checkbox" @bind-value="@useCustomItem" />
-                                }
-
-                            </div>
-                            @if (!useCustomItem)
-                            {
+@using GadjIT_App.Pages.Chapters.ComponentsChapterDetail._Agenda
+@using GadjIT_App.Pages.Chapters.ComponentsChapterDetail._Background
+@using GadjIT_App.Pages.Chapters.ComponentsChapterDetail._DataView
+@using GadjIT_App.Pages.Chapters.ComponentsChapterDetail._Documents
+@using GadjIT_App.Pages.Chapters.ComponentsChapterDetail._Fees
+@using GadjIT_App.Pages.Chapters.ComponentsChapterDetail._Header
+@using GadjIT_App.Pages.Chapters.ComponentsChapterDetail._Messages
+@using GadjIT_App.Pages.Chapters.ComponentsChapterDetail._Status
+@implements IDisposable
 
 
-                                <div class="form-group">
-                                    <label for="AltDisplayName">Filter</label>
-                                    <InputText class="form-control form-control-md form-control-filter" @bind-Value="@filterText" />
-                                </div>
-
-
-                                <div class="form-group control-with-button">
-                                    <div class="control-main">
-                                        <InputSelect class="form-control form-control-xl" @bind-Value="CopyObject.Name">
-                                            @if (CopyObject.Name is null)
-                                            {
-                                                <option value="">Select</option>
-                                            }
-                                            else
-                                            {
-                                                <option value="@CopyObject.Name">@CopyObject.Name</option>
-                                            }
-
-
-                                            @foreach (var doc in dropDownChapterList.Where(D => D.CaseTypeGroupRef == selectedCaseTypeGroup).Where(C => C.Name.ToUpper().Contains(filterText.ToUpper())).OrderBy(D => D.Name).ToList())
-                                            {
-                                                <option value="@doc.Name">
-                                                    @doc.Name
-                                                </option>
-                                            }
-                                        </InputSelect>
-                                    </div>
-                                    <div class="control-button btn" @onclick="() => RefreshDocListOnModel()" title="Refresh List">
-                                        <i class="fa fa-sync"></i>
-                                    </div>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="AltDisplayName">Display Name</label>
-                                    <InputText class="form-control form-control-xl" @bind-Value="@CopyObject.AltDisplayName" />
-                                </div>
-                            }
-                            else
-                            {
-
-                                <InputText class="form-control form-control-xl" @bind-Value="@CopyObject.Name"></InputText>
-                            }
-                            <ValidationMessage For="@(() => CopyObject.Name)" />
-
-                        }
-
-                    </div>
-                }
-
-            }
-            else
-            {
-                <div class="form-group">
-                    <label for="Name">@CustomHeader Name</label>
-                    <InputText class="form-control" @bind-Value="@CopyObject.Name" />
+    <div class="tran-block page-header-block ">
+        <div class="page-header-title">
+            <div>
+                <div class="float-left back-link" @onclick="SelectHome">
+                    <span class="col-alt fa fa-angle-double-left"></span>
                 </div>
-            }
-
-
-
-            @if (selectedList == "Steps and Documents")
-            {
-
-
-                <div class="form-group">
-                    <label for="Action">Action</label>
-                    <InputSelect class="form-control form-control-sm"
-                                 @bind-Value="CopyObject.Action">
-                        <option value=""></option>
-                        @foreach (var a in Actions)
-                        {
-                            <option value="@a">
-                                @a
-                            </option>
-                        }
-                    </InputSelect>
-                    <ValidationMessage For="@(() => CopyObject.Action)" />
-                </div>
-
-
-                <div class="form-group">
-                    <label for="AsName">Schedule As Name</label>
-                    <InputText class="form-control form-control-xl" @bind-Value="@CopyObject.AsName" />
-                </div>
-
-                <div class="form-group">
-                    <label for="RescheduleDays">Reschedule Days</label>
-
-                    <div class="form-label-check" style="margin-right: 13px">
-                        @if (useCustomReschedule)
-                        {
-
-                            <label>From Data Item</label>
-                            <input type="checkbox" checked="checked" @bind-value="@useCustomReschedule" />
-
-                        }
-                        else
-                        {
-                            <label>From Data Item</label>
-                            <input type="checkbox" @bind-value="@useCustomReschedule" />
-                        }
-
-                    </div>
-                    <InputNumber class="form-control form-control-xs" @bind-Value="RescheduleDays" />
-                </div>
-
-                @if (useCustomReschedule)
-                {
-                    <div class="form-group">
-                        <label>Reschedule From Data Item</label><br>
-                        <label>Filter</label>
-                        <InputText class="form-control form-control-md form-control-filter" @bind-Value="@filterTextDataItem" />
-                    </div>
-
-                    <div class="form-group mb-3">
-                        <InputSelect class="form-control form-control-xl"
-                                     @bind-Value="CopyObject.RescheduleDataItem">
-                            <option value=""></option>
-                            @if(TableDates != null)
-                            {
-                                @foreach (var a in TableDates.Where(F => F.TableField.ToUpper().Contains(filterTextDataItem.ToUpper())))
-                                {
-                                    <option value="@a.TableField">
-                                        @a.TableField
-                                    </option>
-                                }
-                            }
-                        </InputSelect>
-                        <ValidationMessage For="@(() => CopyObject.RescheduleDataItem)" />
-                    </div>
-                }
-
-
-                <div class="form-group">
-                    <label for="CompleteName">Complete As Name</label>
-                    <InputText class="form-control form-control-xl" @bind-Value="@CopyObject.CompleteName" />
-                </div>
-
-
-
-                <div class="form-group">
-                    <label for="NextStatus">Next Status</label>
-                    <InputSelect class="form-control form-control-lg"
-                                 @bind-Value="CopyObject.NextStatus">
-                        <option value=""></option>
-                        @foreach (var s in ListOfStatus)
-                        {
-                            <option value="@s.ChapterObject.Name">
-                                @s.ChapterObject.Name
-                            </option>
-                        }
-                    </InputSelect>
-                    <ValidationMessage For="@(() => CopyObject.NextStatus)" />
-                </div>
-
-                if(!useCustomItem)
-                {
-                    <div class="form-group">        
-                        <label for="Agenda">Agenda</label>
-                        <InputSelect class="form-control form-control-lg"
-                                    @bind-Value="CopyObject.Agenda">
-                            <option value=""></option>
-                            @foreach (var a in ListOfAgenda)
-                            {
-                                <option value="@a.ChapterObject.Name">
-                                    @a.ChapterObject.Name
-                                </option>
-                            }
-                        </InputSelect>
-                        <ValidationMessage For="@(() => CopyObject.Agenda)" />
-                    </div>
-                }
-                
-
-
-                <div class="form-group">
-                    <label for="UserMessage">User Message</label>
-                    <InputTextArea class="form-control form-control-xl" @bind-Value="@CopyObject.UserMessage" />
-                </div>
-
-                <div class="form-group">
-                    <label for="PopupAlert">Pop Up Message(Alert)</label>
-                    <InputTextArea class="form-control form-control-xl" @bind-Value="@CopyObject.PopupAlert" />
-                </div>
-
-                <div class="form-group">
-                    <label for="Suppress">Is an Optional Document?</label>
-                    <InputCheckbox class="form-control" @bind-Value="optionalDocument" />
-                </div>
-
-                @if (SelectedChapter.ShowDocumentTracking == "Y")
-                {
-                    <div class="form-group">
-                        <label for="TrackMethod">Tracking Method</label>
-                        <InputSelect class="form-control form-control-md"
-                                     @bind-Value="CopyObject.TrackingMethod">
-                            <option value=""></option>
-                            @foreach (var s in TrackMethodList)
-                            {
-                                <option value="@s">
-                                    @s
-                                </option>
-                            }
-                        </InputSelect>
-                        <ValidationMessage For="@(() => CopyObject.TrackingMethod)" />
-                    </div>
-                    @if (CopyObject.TrackingMethod == "Response Required")
-                    {
-                        <div class="form-group">
-                            <label for="ChaserDesc">Chaser Description</label>
-                            <InputText class="form-control form-control-xl" @bind-Value="@CopyObject.ChaserDesc" />
-                        </div>
-                    }
-
-
-                }
-
-
-
-            }
-            else if (selectedList == "Status")
-            {
-                if (SelectedChapter.P4WCaseTypeGroup != "Entity Documents")
-                {
-            <div class="form-group">
-                <label>Select Milestone</label>
-                <div class="form-label-check" style="margin-right: 13px">
-                    @if (useCustomMilestone)
-                    {
-                        <label>Custom Milestone</label><input type="checkbox" checked="checked" @bind-value="@useCustomMilestone" />
-                    }
-                    else
-                    {
-                        <label>Custom Milestone</label><input type="checkbox" @bind-value="@useCustomMilestone" />
-                    }
-
-                    </div>
-                    <div class="form-group">
-                        @if (useCustomMilestone)
-                        {
-                            <InputText class="form-control" @bind-Value="@CopyObject.MilestoneStatus" />
-
-                        }
-                        else
-                        {
-                <InputSelect class="form-control"
-                             @bind-Value="CopyObject.MilestoneStatus">
-                    <option value=""></option>
-                    @foreach (var s in ListOfStatus
-                    .Where(S => !string.IsNullOrEmpty(S.ChapterObject.MilestoneStatus))
-                    .Where(S => !ListOfStatus.Select(L => L.ChapterObject.Name).Contains(S.ChapterObject.MilestoneStatus))
-                    .GroupBy(S => S.ChapterObject.MilestoneStatus.ToLower())
-                    .Select(S => S.First())
-                    .ToList()
-                    )
-                    {
-                        <option value="@s.ChapterObject.MilestoneStatus">
-                            @s.ChapterObject.MilestoneStatus
-                        </option>
-                    }
-                    @foreach (var s in ListOfStatus)
-                    {
-                        <option value="@s.ChapterObject.Name">
-                            @s.ChapterObject.Name
-                        </option>
-                    }
-                </InputSelect>
-                        }
-                </div>
+                <h3>Smartflow: @SelectedChapter.Name</h3>
             </div>
+            <p class="hidden-md-down">
+                Group: <span class="badge badge-grey mr-3">@SelectedChapter.CaseTypeGroup</span>
+                Case Type: <span class="badge badge-grey mr-3">@SelectedChapter.CaseType</span>
+                Smartflow: <span class="badge badge-grey mr-3"> @SelectedChapter.Name</span>
+
+                @if(AppChapterState != null)
+                {
+                    if (AppChapterState.GetChapterItemState(UserSession, SelectedChapter).ActiveUsers.Where(U => U.UserName != UserSession.User.FullName).ToList().Count > 0)
+                    {
+                        <span class="pl-5">Active Users: </span>
+                        string userClass = "active-user";
+                        foreach (var user in AppChapterState.GetChapterItemState(UserSession, SelectedChapter).ActiveUsers.Where(U => U.UserName != UserSession.User.FullName).ToList())
+                        {
+                            <span class="ml-2 @userClass font-120"><li class="fa fa-user" title="@user.UserName - @user.LastActive.ToString()"></li></span>
+                            userClass = (userClass == "active-user" ? "active-user-alt" : "active-user");
+                        }
+
+
+                    }
                 }
-            <div class="form-group">
-                <label for="Suppress">Suppress Step</label>
-                <InputCheckbox class="form-control" @bind-Value="suppressStep" />
-            </div>
 
-            }
-        }else
-        {
-            <div class="form-group">
-                <label>A Status already exists with this name.</label>
-            </div>
-        }
 
+            </p>
+            
+        </div>
+        
+        <div class="push-right user-guide">
+            <a href="@UserGuideURL" target="_blank" title="Link to Smartflow user guide">User Guide<span><i class="fa fa-circle-info"></i></span></a>
+        </div>  
+        
     </div>
 
-    <div class="button-container">
-        @if (Error == 0)
+    <div class="tran-block rounded">
+        <div class="tran-navbar hidden-lg-down">
+            <nav class="navbar navbar-expand ">
+
+                <ul class="navbar-nav">
+                    <li class="nav-item @(NavDisplay == "Chapter" ? "active" : "")" @onclick='() => ShowNav("Chapter")'>
+                        <span class="font-120"><span class="fa fa-home" Title="Home - main Smartflow settings"></span></span>
+
+                    </li>
+                    <li class="nav-item @(NavDisplay == "Agenda" ? "active" : "")" @onclick='() => ShowNav("Agenda")'>
+                        <span class="font-120"><span class="fa fa-folder-open" Title="Agenda (Progress Files) - make available documents from file history"></span></span>
+                        <div class="subtitle">Agenda</div>
+                    </li>
+                    <li class="nav-item  @(NavDisplay == "Status" ? "active" : "")" @onclick='() => ShowNav("Status")'>
+                        <span class="font-120"><span class="fa fa-battery-half" Title="Status - Smartflow status options to track progress"></span></span>
+                        <div class="subtitle">Status</div>
+                    </li>
+                    <li class="nav-item @(NavDisplay == "Docs" ? "active" : "")" @onclick='() => ShowNav("Docs")'>
+                        <span class="font-120"><span class="fa fa-file" Title="Documents and Steps - list documents and create workflow"></span></span>
+                        <div class="subtitle">Docs</div>
+                    </li>
+                    <li class="nav-item @(NavDisplay == "Fees" ? "active" : "")" @onclick='() => ShowNav("Fees")'>
+                        <span class="font-120"><span class="fa fa-pound-sign" Title="Fees and Disbursements"></span></span>
+                        <div class="subtitle">Fees</div>
+                    </li>
+                    <li class="nav-item @(NavDisplay == "DataViews" ? "active" : "")" @onclick='() => ShowNav("DataViews")'>
+                        <span class="font-120"><span class="fa fa-database" Title="Data Views - Managing Partner views to be available on Smartflow screen"></span></span>
+                        <div class="subtitle">Data</div>
+                    </li>
+                    <li class="nav-item @(NavDisplay == "TickerMessages" ? "active" : "")" @onclick='() => ShowNav("TickerMessages")'>
+                        <span class="font-120"><span class="fa fa-comment" Title="Messages - create ticker messages to inform users of updates or pending changes"></span></span>
+                        <div class="subtitle">Messages</div>
+                    </li>
+                    @if ((UserSession.IsAdminUser))
+                    {
+                        <li class="nav-item @(NavDisplay == "Background" ? "active" : "")" @onclick='() => ShowNav("Background")'>
+                            <span class="font-120"><span class="fa fa-image" Title="Background - set background colour or image"></span></span>
+                            <div class="subtitle">Background</div>
+                        </li>
+
+                        <li class="nav-item @(NavDisplay == "Backups" ? "active" : "")" @onclick='() => ShowNav("Backups")'>
+                            <span class="font-120"><span class="fa fa-save" Title="Backups - save, download and restore"></span></span>
+                            <div class="subtitle">Backups</div>
+                        </li>
+                    }
+
+                </ul>
+
+            </nav>
+        </div>
+
+        <div class="page-navbar hidden-xl-up">
+            <ul class="nav nav-pills tran-tabs">
+                <li class="nav-item @(NavDisplay == "Chapter" ? "active" : "")" @onclick='() => ShowNav("Chapter")'>
+                    <span class="font-120"><span class="fa fa-home" Title="Home - main Smartflow settings"></span></span>
+                    <div class="subtitle">Home</div>
+                </li>
+                <li class="nav-item @(NavDisplay == "Agenda" ? "active" : "")" @onclick='() => ShowNav("Agenda")'>
+                    <span class="font-120"><span class="fa fa-folder-open" Title="Agenda (Progress Files) - make available documents from file history"></span></span>
+                    <div class="subtitle">Agenda</div>
+                </li>
+                <li class="nav-item  @(NavDisplay == "Status" ? "active" : "")" @onclick='() => ShowNav("Status")'>
+                    <span class="font-120"><span class="fa fa-battery-half" Title="Status - Smartflow status options to track progress"></span></span>
+                    <div class="subtitle">Status</div>
+                </li>
+                <li class="nav-item @(NavDisplay == "Docs" ? "active" : "")" @onclick='() => ShowNav("Docs")'>
+                    <span class="font-120"><span class="fa fa-file" Title="Documents and Steps - list documents and create workflow"></span></span>
+                    <div class="subtitle">Docs</div>
+                </li>
+                <li class="nav-item @(NavDisplay == "Fees" ? "active" : "")" @onclick='() => ShowNav("Fees")'>
+                    <span class="font-120"><span class="fa fa-pound-sign" Title="Fees and Disbursements"></span></span>
+                    <div class="subtitle">Fees</div>
+                </li>
+                <li class="nav-item @(NavDisplay == "DataViews" ? "active" : "")" @onclick='() => ShowNav("DataViews")'>
+                    <span class="font-120"><span class="fa fa-database" Title="Data Views - Managing Partner views to be available on Smartflow screen"></span></span>
+                    <div class="subtitle">Data</div>
+                </li>
+                <li class="nav-item @(NavDisplay == "TickerMessages" ? "active" : "")" @onclick='() => ShowNav("TickerMessages")'>
+                    <span class="font-120"><span class="fa fa-comment" Title="Messages - create ticker messages to inform users of updates or pending changes"></span></span>
+                    <div class="subtitle">Msg</div>
+                </li>
+
+            </ul>
+
+        </div>
+
+        @if (DisplaySpinner)
         {
-            <button type="submit" class="btn btn-main">Save</button>
-            <button type="button" class="btn btn-secondary" @onclick="Close">Cancel</button>
+            <div class="spinner"></div>
         }
         else
         {
-            <button type="button" class="btn btn-main" @onclick="ResetError">Return</button>
-            <button type="button" class="btn btn-secondary" @onclick="Close">Cancel</button>
-        }
 
+            @if (NavDisplay == "Chapter")
+            {
+
+                <ChapterHeaderDetail    
+                                        _SelectedChapterObject=@_SelectedChapterObject.SmartflowObject
+                                        _SelectedChapter=@SelectedChapter
+                                        _P4WCaseTypeGroups=@P4WCaseTypeGroups
+                                        _ListP4WViews=@ListP4WViews
+                                        _LibraryDocumentsAndSteps=@LibraryDocumentsAndSteps
+                                        _PreviewChapterImage=@PreviewChapterImage
+                                        _ShowNav=@ShowNav
+                                        _UpdatePreviewImage=@UpdatePreviewImage
+                                        >
+                </ChapterHeaderDetail>
+                
+            }
+
+            @if (NavDisplay == "Agenda")
+            {
+                <ChapterAgendaDetail    _LstAgendas=@LstAgendas
+                                        _SelectedChapterObject=@_SelectedChapterObject.SmartflowObject
+                                        _SelectedChapter=@SelectedChapter
+                                        _RefreshChapterItems=@RefreshChapterItems  
+                                        >
+                </ChapterAgendaDetail>
+
+                
+
+            }
+
+            
+            @if (NavDisplay == "Status")
+            {
+
+                <ChapterStatusDetail    _LstStatus=@LstStatus
+                                        _SelectedChapterObject=@_SelectedChapterObject.SmartflowObject
+                                        _SelectedChapter=@SelectedChapter
+                                        _SeqMoving=@SeqMoving
+                                        _RefreshChapterItems=@RefreshChapterItems  
+                                        >
+                </ChapterStatusDetail>
+
+            }
+
+            
+            @if (NavDisplay == "Docs")
+            {
+
+                <ChapterDocumentDetail  _LstDocs=@LstDocs
+                                        _LstStatus=@LstStatus
+                                        _LstAgendas=@LstAgendas
+                                        _LibraryDocumentsAndSteps=@LibraryDocumentsAndSteps
+                                        _TableDates=@TableDates
+                                        _P4WCaseTypeGroups=@P4WCaseTypeGroups
+                                        _SelectedChapterObject=@_SelectedChapterObject.SmartflowObject
+                                        _SelectedChapter=@SelectedChapter
+                                        _SeqMoving=@SeqMoving
+                                        _RefreshChapterItems=@RefreshChapterItems       
+                                        _AttachObject=@AttachObject
+                                        >
+                </ChapterDocumentDetail>
+
+            }
+
+
+            @if (NavDisplay == "Fees")
+            {
+
+                <ChapterFeeDetail      _LstFees=@LstFees
+                                        _SelectedChapterObject=@_SelectedChapterObject.SmartflowObject
+                                        _SelectedChapter=@SelectedChapter
+                                        _SeqMoving=@SeqMoving
+                                        _RefreshChapterItems=@RefreshChapterItems  
+                                        >
+                </ChapterFeeDetail>
+
+            }
+
+            
+
+            @if (NavDisplay == "DataViews")
+            {
+
+                <ChapterDataViewDetail  _LstDataViews=@LstDataViews
+                                        _SelectedChapterObject=@_SelectedChapterObject.SmartflowObject
+                                        _SelectedChapter=@SelectedChapter
+                                        _SeqMoving=@SeqMoving
+                                        _RefreshChapterItems=@RefreshChapterItems
+                                        _ListP4WViews=@ListP4WViews
+                                        >
+                </ChapterDataViewDetail>
+
+            }
+
+            
+
+            @if (NavDisplay == "TickerMessages")
+            {
+
+                <ChapterMessageDetail   _LstTickerMessages=@LstTickerMessages
+                                        _SelectedChapterObject=@_SelectedChapterObject.SmartflowObject
+                                        _SelectedChapter=@SelectedChapter
+                                        _SeqMoving=@SeqMoving
+                                        _RefreshChapterItems=@RefreshChapterItems
+                                        >
+                </ChapterMessageDetail>
+
+            } 
+
+            @if (NavDisplay == "Background")
+            {
+                <ChapterBackgroundDetail    _SelectedChapterObject=@_SelectedChapterObject.SmartflowObject
+                                            _SelectedChapter=@SelectedChapter
+                                            >
+                </ChapterBackgroundDetail>
+            }
+
+            @if (NavDisplay == "Backups")
+            {
+                <div class="grid-chapter grid-chapter-backups">
+                    <div class="detail-group-box" id="form-controls-json">
+                        <h5>Backup and Recovery: @SelectedChapter.Name</h5>
+                        <div class="btn-group mt-2">
+                            <button @onclick="WriteChapterJSONToFile" class="btn btn-main btn-shadow"><i class="fa fa-save"></i><span>New Backup</span></button>
+                        </div>
+                        <div class="alert alert-danger mt-3 @(string.IsNullOrEmpty(AlertMsgJSOM) ? "hidden" : "")">@AlertMsgJSOM</div>
+
+                        <div class="custom-file">
+                            <BlazorInputFile.InputFile multiple OnChange="HandleBackupFileSelection" class="custom-file-input" id="customFileInput"></BlazorInputFile.InputFile>
+                            <label class="custom-file-label" for="customInput">Upload backup files</label>
+                        </div>
+
+
+
+                        <div class="grid-can-edit chapter-scroll-list">
+                            @if(ListFilesForBackups != null)
+                            {
+                                foreach (var fileDesc in ListFilesForBackups.Where(F => F.FilePath.Contains(".txt") || F.FilePath.Contains(".JSON")).ToList().OrderByDescending(F => F.FileDate))
+                                {
+                                    <div class="row grid-row grid-row-sm">
+                                        <div class="data-item">
+                                            <div class="btn-ellipses float-left">
+                                                <span class="fa fa-ellipsis-v"></span>
+                                                <div class="ellipsis-menu">
+                                                    <ul>
+                                                        <li class="col-main" @onclick='(() => ReadBackUpFile(fileDesc.FilePath))'>
+                                                            <span class="fa fa-window-restore mr-2"></span>
+                                                            <span>Restore</span>
+                                                        </li>
+                                                        <li class="col-main" @onclick='(() => DownloadFile(fileDesc))'>
+                                                            <span class="fa fa-download mr-2"></span>
+                                                            <span>Download</span>
+                                                        </li>
+                                                        <li class="col-main" @onclick='(() => PrepareBackUpForDelete(fileDesc))'>
+                                                            <span class="fa fa-trash-alt mr-2"></span>
+                                                            <span>Delete</span>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <div class="data-item-sub">
+                                                @fileDesc.FileName
+                                            </div>
+                                        </div>
+                                        <div class="data-item ">
+                                            <div class="data-item-sub">
+                                                @fileDesc.FileDate.ToString("dd MMM yyyy")
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                }
+                            }
+                        </div>
+
+
+
+                    </div>
+                </div>
+
+            }
+
+        }
     </div>
-</EditForm>
+
+
+<div id="exp"></div>

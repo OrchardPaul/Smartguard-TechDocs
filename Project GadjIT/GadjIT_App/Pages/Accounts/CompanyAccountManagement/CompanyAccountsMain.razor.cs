@@ -13,7 +13,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Linq.Dynamic.Core;
 using Microsoft.Extensions.Logging;
-using GadjIT_App.Pages.Shared.Modals;
+using GadjIT_App.Pages._Shared.Modals;
 
 namespace GadjIT_App.Pages.Accounts.CompanyAccountManagement
 {

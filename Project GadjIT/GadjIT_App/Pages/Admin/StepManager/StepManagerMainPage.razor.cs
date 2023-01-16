@@ -40,7 +40,7 @@ namespace GadjIT_App.Pages.Admin.StepManager
 
         public List<CaseTypeGroups> PartnerCaseTypes { get; set; } = new List<CaseTypeGroups>();
 
-        public List<DmDocuments> DropDownChapterList { get; set; } = new List<DmDocuments>();
+        public List<DmDocuments> LibraryDocumentsAndSteps { get; set; } = new List<DmDocuments>();
 
         public List<StepObject> StepObjects { get; set; } = new List<StepObject>();
 
@@ -49,12 +49,12 @@ namespace GadjIT_App.Pages.Admin.StepManager
         protected override async Task OnInitializedAsync()
         {
             PartnerCaseTypes = await partnerAccessService.GetPartnerCaseTypeGroups();
-            DropDownChapterList = await chapterManagementService.GetDocumentList("Case");
+            LibraryDocumentsAndSteps = await chapterManagementService.GetDocumentList("Case");
         }
 
         protected void LoadSteps()
         {
-            StepObjects = DropDownChapterList
+            StepObjects = LibraryDocumentsAndSteps
                             .Select(D => new StepObject
                             {
                                 IsSelected = false

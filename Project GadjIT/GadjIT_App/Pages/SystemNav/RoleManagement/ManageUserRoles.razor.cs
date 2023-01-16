@@ -2,7 +2,7 @@
 using Blazored.Modal.Services;
 using GadjIT_AppContext.GadjIT_App;
 using GadjIT_App.Data.Admin;
-using GadjIT_App.Pages.Shared.Modals;
+using GadjIT_App.Pages._Shared.Modals;
 using GadjIT_App.Services.SessionState;
 using Microsoft.AspNetCore.Components;
 using System;
