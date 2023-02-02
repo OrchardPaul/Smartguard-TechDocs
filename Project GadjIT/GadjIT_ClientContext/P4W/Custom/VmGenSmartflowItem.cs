@@ -19,6 +19,8 @@ namespace GadjIT_ClientContext.P4W.Custom
 
         public bool Compared { get; set; }
 
+        
+
         public List<string> ComparisonList { get; set; } = new List<string>();
 
         public string DocDisplayName
@@ -134,6 +136,12 @@ namespace GadjIT_ClientContext.P4W.Custom
                 ComparisonList.Add("Action");
             }
 
+            if ((ChapterObject.MilestoneStatus ?? "") != (compItem.MilestoneStatus ?? ""))
+            {
+                isSame = false;
+                ComparisonList.Add("MilestoneStatus");
+            }
+
             if(!(ChapterObject.LinkedItems is null) && !(compItem.LinkedItems is null))
             {
                 if(!(ChapterObject.LinkedItems is null))
@@ -194,11 +202,6 @@ namespace GadjIT_ClientContext.P4W.Custom
                     ComparisonList.Add("LinkedItems");
                 }
             }
-
-
-
-
-
 
             return isSame;
         }

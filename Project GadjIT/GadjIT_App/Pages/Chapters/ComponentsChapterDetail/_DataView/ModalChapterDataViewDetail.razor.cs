@@ -31,7 +31,7 @@ namespace GadjIT_App.Pages.Chapters.ComponentsChapterDetail._DataView
         public UsrOrsfSmartflows _SelectedChapterObject { get; set; }
 
         [Parameter]
-        public VmChapter _SelectedChapter { get; set; }
+        public VmSmartflow _SelectedChapter { get; set; }
 
         [Parameter]
         public DataView _TaskObject { get; set; }

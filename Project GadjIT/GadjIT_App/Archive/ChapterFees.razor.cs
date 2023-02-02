@@ -25,13 +25,13 @@ namespace Gizmo_V1_02.Archive
 
 
         [Parameter]
-        public List<VmChapterFee> feeItems { get; set; }
+        public List<VmSmartflowFee> feeItems { get; set; }
 
         [Parameter]
         public UsrOrDefChapterManagement SelectedChapterObject { get; set; }
 
         [Parameter]
-        public VmChapter SelectedChapter { get; set; }
+        public VmSmartflow SelectedChapter { get; set; }
 
 
 
@@ -43,7 +43,7 @@ namespace Gizmo_V1_02.Archive
             await ModalInstance.CloseAsync();
         }
 
-        private void ToggleSelectedFee(VmChapterFee selectedFee)
+        private void ToggleSelectedFee(VmSmartflowFee selectedFee)
         {
             selectedFee.selected = !selectedFee.selected;
         }

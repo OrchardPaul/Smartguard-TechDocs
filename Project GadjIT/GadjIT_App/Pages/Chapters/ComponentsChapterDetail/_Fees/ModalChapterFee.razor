@@ -65,7 +65,15 @@
     </div>
 
     <div class="button-container">
-        <button type="submit" class="btn btn-main">Save</button>
-        <button type="button" class="btn btn-secondary" @onclick="Close">Cancel</button>
+        @if (Error == 0)
+        {
+            <button type="submit" class="btn btn-main">Save</button>
+            <button type="button" class="btn btn-secondary" @onclick="Close">Cancel</button>
+        }
+        else
+        {
+            <button type="button" class="btn btn-main" @onclick="ResetError">Return</button>
+            <button type="button" class="btn btn-secondary" @onclick="Close">Cancel</button>
+        }
     </div>
 </EditForm>

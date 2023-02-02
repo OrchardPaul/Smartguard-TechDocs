@@ -16,6 +16,7 @@ using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Schema;
 using Newtonsoft.Json.Schema.Generation;
 using GadjIT_App.Pages.Chapters.FileUpload;
+using GadjIT_App.Shared.StaticObjects;
 
 namespace GadjIT_App.Pages.Chapters
 {
@@ -23,6 +24,7 @@ namespace GadjIT_App.Pages.Chapters
     {
         public IFileHelper FileHelper { get; set; }
 
+        
         public ChapterFileUpload(IFileHelper fileUpload)
         {
             FileHelper = fileUpload;
@@ -33,9 +35,23 @@ namespace GadjIT_App.Pages.Chapters
             return FileHelper.ValidateChapterExcel(filePath);
         }
 
-        public void SetChapterOptions(ChapterFileOptions chapterFileOptions)
+        public void SetFileHelperCustomPath(ChapterFileOptions chapterFileOptions, FileStorageType _storageType)
         {
-            FileHelper.CustomPath = $"FileManagement/FileStorage/{chapterFileOptions.Company}/Chapters/{chapterFileOptions.CaseTypeGroup}/{chapterFileOptions.CaseType}/{chapterFileOptions.Chapter}";
+            switch(_storageType)
+            {
+                case (FileStorageType)FileStorageType.BackupsCaseType:
+                    FileHelper.CustomPath = $"FileManagement/FileStorage/{chapterFileOptions.Company}/Smartflows/{chapterFileOptions.CaseTypeGroup}/{chapterFileOptions.CaseType}/{chapterFileOptions.SelectedSystem}";
+                    break;
+                case (FileStorageType)FileStorageType.BackupsSmartflow:
+                    FileHelper.CustomPath = $"FileManagement/FileStorage/{chapterFileOptions.Company}/Smartflows/{chapterFileOptions.CaseTypeGroup}/{chapterFileOptions.CaseType}/{chapterFileOptions.Chapter}/{chapterFileOptions.SelectedSystem}";
+                    break;
+                case (FileStorageType)FileStorageType.BackgroundImages:
+                    FileHelper.CustomPath = $"wwwroot/images/Companies/{chapterFileOptions.Company}/BackgroundImages";
+                    break;
+                default:
+                    FileHelper.CustomPath = $"";
+                    break;
+            }
         }
 
         public async Task<bool> UploadChapterFiles(IFileListEntry files)
@@ -81,12 +97,12 @@ namespace GadjIT_App.Pages.Chapters
             return FileHelper.DeleteFile(path);
         }
 
-        public async Task<string> WriteChapterDataToExcel(VmChapter selectedChapter, List<DmDocuments> documents, List<CaseTypeGroups> caseTypeGroups)
+        public async Task<string> WriteChapterDataToExcel(VmSmartflow selectedChapter, List<DmDocuments> documents, List<CaseTypeGroups> caseTypeGroups)
         {
             return await FileHelper.WriteChapterDataToExcel(selectedChapter, documents, caseTypeGroups);
         }
 
-        public VmChapter readChapterItemsFromExcel(string path)
+        public VmSmartflow readChapterItemsFromExcel(string path)
         {
             return FileHelper.ReadChapterDataFromExcel(path);
         }

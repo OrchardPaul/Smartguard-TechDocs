@@ -204,6 +204,20 @@
                 {
                     <tr>
                         <td>
+                            Milestone Status:
+                        </td>
+                        <td>
+                            <input type="text" class="read-only" value="@_Object.ChapterObject.MilestoneStatus" />
+                        </td>
+                        <td>
+                            <input type="text" class="read-only" value="@_Object.AltObject.MilestoneStatus" />
+                        </td>
+                        <td>
+                            <span class="fa fa-@(_Object.ComparisonList.Contains("MilestoneStatus") ? "exclamation" : "check")"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
                             Suppress Step:
                         </td>
                         <td>

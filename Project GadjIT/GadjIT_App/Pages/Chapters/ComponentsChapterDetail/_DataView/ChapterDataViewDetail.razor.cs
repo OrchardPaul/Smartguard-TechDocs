@@ -31,13 +31,14 @@ namespace GadjIT_App.Pages.Chapters.ComponentsChapterDetail._DataView
         public UsrOrsfSmartflows _SelectedChapterObject { get; set; }
 
         [Parameter]
-        public VmChapter _SelectedChapter { get; set; }
+        public VmSmartflow _SelectedChapter { get; set; }
+
+        [Parameter]
+        public EventCallback<VmSmartflow> _ChapterUpdated {get; set;}
 
         [Parameter]
         public EventCallback<string> _RefreshChapterItems {get; set;}
 
-        [Parameter]
-        public bool _SeqMoving {get; set;}
 
         [Parameter]
         public List<MpSysViews> _ListP4WViews {get; set;}
@@ -71,15 +72,16 @@ namespace GadjIT_App.Pages.Chapters.ComponentsChapterDetail._DataView
 
         private SmartflowRecords AltChapterRecord {get; set;} //as saved on Company
 
-        private UsrOrsfSmartflows AltChapterObject { get; set; } = new UsrOrsfSmartflows(); //as saved on client site with serialised VmChapter
+        private UsrOrsfSmartflows AltChapterObject { get; set; } = new UsrOrsfSmartflows(); //as saved on client site with serialised VmSmartflow
 
-        private VmChapter AltChapter {get; set;} //Smartflow Schema
+        private VmSmartflow AltChapter {get; set;} //Smartflow Schema
 
         public List<VmDataView> LstAltSystemItems { get; set; } 
 
 
         public VmDataView EditObject = new VmDataView { DataView = new DataView() };
 
+        public bool SeqMoving {get; set;}
 
         private int RowChanged = 0;
         private bool compareSystems;
@@ -99,11 +101,7 @@ namespace GadjIT_App.Pages.Chapters.ComponentsChapterDetail._DataView
         //     ListP4WViews = await PartnerAccessService.GetPartnerViews();
         // }
 
-        protected override void OnParametersSet()
-        {
-            ReSequence();
-        }
-
+        
         protected void PrepareForInsert ()
         {
             try
@@ -181,7 +179,7 @@ namespace GadjIT_App.Pages.Chapters.ComponentsChapterDetail._DataView
 
         private async void HandleUpdate()
         {
-            await RefreshSelectedList();
+            await ChapterItemsUpdated();
         }
 
         protected void ShowChapterDataViewDisplayModal(VmDataView _selectedObject)//moved partial
@@ -228,25 +226,17 @@ namespace GadjIT_App.Pages.Chapters.ComponentsChapterDetail._DataView
 
         private async void HandleDelete()
         {
-            await DeleteItem();
-        }
-
-        private async Task DeleteItem()
-        {
+            
             //<ModalDelete> simply invokes this method when user clicks OK. No need for the modal to handle this action as we do not require any details from the Modal. 
             _SelectedChapter.DataViews.Remove(EditObject.DataView);
-            _SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(_SelectedChapter);
-            await ChapterManagementService.Update(_SelectedChapterObject);
-
-            //keep track of time last updated ready for comparison by other sessions checking for updates
-            AppChapterState.SetLastUpdated(UserSession, _SelectedChapter);
-
-            await RefreshSelectedList();
+           
+            await ChapterItemsUpdated();
 
         }
         
-        private async Task RefreshSelectedList()
+        private async Task ChapterItemsUpdated()
         {
+            await _ChapterUpdated.InvokeAsync(_SelectedChapter);
             await _RefreshChapterItems.InvokeAsync("DataViews");
         }
 
@@ -295,7 +285,7 @@ namespace GadjIT_App.Pages.Chapters.ComponentsChapterDetail._DataView
                 }
                 else
                 {
-                    AltChapter = JsonConvert.DeserializeObject<VmChapter>(AltChapterRecord.SmartflowData);
+                    AltChapter = JsonConvert.DeserializeObject<VmSmartflow>(AltChapterRecord.SmartflowData);
 
                     AltChapterRecord.SmartflowData = JsonConvert.SerializeObject(AltChapter);
                     AltChapterObject = new UsrOrsfSmartflows {
@@ -349,16 +339,10 @@ namespace GadjIT_App.Pages.Chapters.ComponentsChapterDetail._DataView
             {
                 GenericErrorLog(true,e, "CompareToAltSystem", $"Comparing systems: {e.Message}");
                 
-                //return false;
             }
 
-            await InvokeAsync(() =>
-            {
-                StateHasChanged();
-            });
+            StateHasChanged();
 
-
-            //return true;
         }
 
         protected void PrepareChapterSync()
@@ -527,16 +511,11 @@ namespace GadjIT_App.Pages.Chapters.ComponentsChapterDetail._DataView
         /// <param name="selectobject">: current list item</param>
         /// <param name="direction">: Up or Down</param>
         /// <returns>No return</returns>
-        protected async void MoveSeq(DataView _selectobject, string _direction)
-        {
-            await MoveSeqTask(_selectobject, _direction);
-        }
-
-        protected async Task MoveSeqTask(DataView _selectobject, string _direction)
+        protected async Task MoveSeq(DataView _selectobject, string _direction)
         {
             try
             {
-                _SeqMoving = true; //prevents changes to the form whilst process of changing seq is carried out
+                SeqMoving = true; //prevents changes to the form whilst process of changing seq is carried out
 
                 int incrementBy;
 
@@ -551,16 +530,12 @@ namespace GadjIT_App.Pages.Chapters.ComponentsChapterDetail._DataView
                     _selectobject.SeqNo += incrementBy;
                     swapItem.DataView.SeqNo = swapItem.DataView.SeqNo + (incrementBy * -1);
 
-                    _SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(_SelectedChapter);
-                    await ChapterManagementService.Update(_SelectedChapterObject);
-
-
-                    //keep track of time last updated ready for comparison by other sessions checking for updates
-                    AppChapterState.SetLastUpdated(UserSession, _SelectedChapter);
-
                 }
 
-                await _RefreshChapterItems.InvokeAsync("DataViews");
+                SeqMoving = false;
+
+                await ChapterItemsUpdated();
+
                 
             }
             catch(Exception e)
@@ -569,41 +544,26 @@ namespace GadjIT_App.Pages.Chapters.ComponentsChapterDetail._DataView
             }
             finally
             {
-                _SeqMoving = false;
+                SeqMoving = false;
             }
 
         }
 
-        public void ReSequence(int _seq)
+        public async Task ReSequence(int _seq)
         {
             RowChanged = _seq;
 
-            ReSequence();
+            _LstDataViews.Select(C => { C.DataView.SeqNo = _LstDataViews.IndexOf(C) + 1; return C; }).ToList(); //update all SeqNo by setting to the Index (+1)
+
+            await ChapterItemsUpdated();
         }
-
-        public void ReSequence()
-        {
-            try
-            {
-                if(_LstDataViews.Select(C => C.DataView.SeqNo != _LstDataViews.IndexOf(C) + 1).Count() > 0) //If any SeqNos are out of sequence
-                { 
-                    _LstDataViews.Select(C => { C.DataView.SeqNo = _LstDataViews.IndexOf(C) + 1; return C; }).ToList(); //update all SeqNo by setting to the Index (+1)
-
-                    _SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(_SelectedChapter);
-                    ChapterManagementService.Update(_SelectedChapterObject).ConfigureAwait(false);
-
-                    StateHasChanged();
-                }
-            }
-            catch
-            {
-                
-            }
-        }      
+   
 
         public void ResetRowChanged() 
         {
             RowChanged = 0;
+            SeqMoving = false;
+
         }  
 
 

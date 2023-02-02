@@ -55,12 +55,12 @@ namespace GadjIT_ClientContext.P4W
         public string OptionalDocument { get; set; } = "N";
         public string CustomItem { get; set; } = "N";
         public string Agenda { get; set; } = "";
-        public List<LinkedItems> LinkedItems { get; set; }
+        public List<LinkedItem> LinkedItems { get; set; }
 
 
     }
 
-    public class LinkedItems
+    public class LinkedItem
     {
         [Required (ErrorMessage = "Name field is required")]
         public string DocName { get; set; }

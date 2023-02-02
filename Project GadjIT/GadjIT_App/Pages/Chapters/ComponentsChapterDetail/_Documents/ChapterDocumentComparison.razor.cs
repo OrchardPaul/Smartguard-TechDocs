@@ -36,7 +36,7 @@ namespace GadjIT_App.Pages.Chapters.ComponentsChapterDetail._Documents
         public UsrOrsfSmartflows _AltChapterRow { get; set; }
 
         [Parameter]
-        public VmChapter _AltChapter { get; set; }
+        public VmSmartflow _AltChapter { get; set; }
 
        
 

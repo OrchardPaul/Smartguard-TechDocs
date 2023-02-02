@@ -24,7 +24,6 @@ using GadjIT_App.Services.AppState;
 using GadjIT_App.Pages.Accounts.CompanyAccountManagement;
 using GadjIT_App.Data.Dropzone_Objects;
 using Microsoft.AspNetCore.DataProtection;
-using GadjIT_App.Services.Email;
 using GadjIT_App.Pages.Chapters.FileUpload;
 
 namespace GadjIT_App

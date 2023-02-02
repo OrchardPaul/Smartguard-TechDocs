@@ -179,7 +179,7 @@ public class SmartflowController : ControllerBase
 
 
     [HttpPost()]
-    public async Task<ActionResult<bool>> CreateStep(VmChapterP4WStepSchemaJSONObject schemaJSONObject)
+    public async Task<ActionResult<bool>> CreateStep(VmSmartflowP4WStepSchemaJSONObject schemaJSONObject)
     {
         if (schemaJSONObject is null || string.IsNullOrEmpty(schemaJSONObject.StepSchemaJSON))
         {

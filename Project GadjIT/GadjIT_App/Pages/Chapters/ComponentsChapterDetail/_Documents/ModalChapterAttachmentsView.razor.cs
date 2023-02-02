@@ -15,10 +15,10 @@ namespace GadjIT_App.Pages.Chapters.ComponentsChapterDetail._Documents
         BlazoredModalInstance ModalInstance { get; set; }
 
         [Parameter]
-        public LinkedItems _Attachment { get; set; }
+        public LinkedItem _Attachment { get; set; }
 
         [Parameter]
-        public VmChapter _SelectedChapter { get; set; }
+        public VmSmartflow _SelectedChapter { get; set; }
 
         private async Task Close()
         {

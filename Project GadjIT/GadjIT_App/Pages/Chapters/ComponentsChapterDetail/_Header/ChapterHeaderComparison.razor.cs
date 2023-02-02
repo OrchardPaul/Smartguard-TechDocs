@@ -22,10 +22,10 @@ namespace GadjIT_App.Pages.Chapters.ComponentsChapterDetail._Header
 
 
         [Parameter]
-        public VmChapter _SelectedChapter { get; set; }
+        public VmSmartflow _SelectedChapter { get; set; }
 
         [Parameter]
-        public VmChapter _AltChapter { get; set; }
+        public VmSmartflow _AltChapter { get; set; }
 
         [Parameter]
         public SmartflowRecords _AltChapterRecord {get; set;} //as saved on Company

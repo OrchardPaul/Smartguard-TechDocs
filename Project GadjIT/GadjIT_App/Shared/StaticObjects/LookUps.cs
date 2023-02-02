@@ -61,4 +61,15 @@ namespace GadjIT_App.Shared.StaticObjects
         }
     }
 
+    public enum FileStorageType
+    {
+        
+        BackupsSystem = 1
+        , BackupsCaseTypeGroup = 2
+        , BackupsCaseType = 3
+        , BackupsSmartflow = 4
+        , BackgroundImages = 20
+        
+    }
+
 }

@@ -2,6 +2,7 @@
 
 @using GadjIT_App.Pages.Chapters.ComponentsChapterDetail._Agenda
 @using GadjIT_App.Pages.Chapters.ComponentsChapterDetail._Background
+@using GadjIT_App.Pages.Chapters.ComponentsChapterDetail._Backup
 @using GadjIT_App.Pages.Chapters.ComponentsChapterDetail._DataView
 @using GadjIT_App.Pages.Chapters.ComponentsChapterDetail._Documents
 @using GadjIT_App.Pages.Chapters.ComponentsChapterDetail._Fees
@@ -137,197 +138,139 @@
 
         </div>
 
-        @if (DisplaySpinner)
+        
+
+        @if (NavDisplay == "Chapter")
         {
-            <div class="spinner"></div>
+            
+            <ChapterHeaderDetail    
+                                    _SelectedChapterObject=@_SelectedChapterObject.SmartflowObject
+                                    _SelectedChapter=@SelectedChapter
+                                    _P4WCaseTypeGroups=@P4WCaseTypeGroups
+                                    _ListP4WViews=@ListP4WViews
+                                    _LibraryDocumentsAndSteps=@LibraryDocumentsAndSteps
+                                    _PreviewChapterImage=@PreviewChapterImage
+                                    _UpdatePreviewImage=@UpdatePreviewImage
+                                    _ShowNav=@ShowNav
+                                    >
+            </ChapterHeaderDetail>
+            
+                
         }
-        else
+
+        @if (NavDisplay == "Agenda")
         {
-
-            @if (NavDisplay == "Chapter")
-            {
-
-                <ChapterHeaderDetail    
-                                        _SelectedChapterObject=@_SelectedChapterObject.SmartflowObject
-                                        _SelectedChapter=@SelectedChapter
-                                        _P4WCaseTypeGroups=@P4WCaseTypeGroups
-                                        _ListP4WViews=@ListP4WViews
-                                        _LibraryDocumentsAndSteps=@LibraryDocumentsAndSteps
-                                        _PreviewChapterImage=@PreviewChapterImage
-                                        _ShowNav=@ShowNav
-                                        _UpdatePreviewImage=@UpdatePreviewImage
-                                        >
-                </ChapterHeaderDetail>
-                
-            }
-
-            @if (NavDisplay == "Agenda")
-            {
-                <ChapterAgendaDetail    _LstAgendas=@LstAgendas
-                                        _SelectedChapterObject=@_SelectedChapterObject.SmartflowObject
-                                        _SelectedChapter=@SelectedChapter
-                                        _RefreshChapterItems=@RefreshChapterItems  
-                                        >
-                </ChapterAgendaDetail>
-
-                
-
-            }
+            
+            <ChapterAgendaDetail    _LstAgendas=@LstAgendas
+                                    _SelectedChapterObject=@_SelectedChapterObject.SmartflowObject
+                                    _SelectedChapter=@SelectedChapter
+                                    _ChapterUpdated=@ChapterUpdated  
+                                    _RefreshChapterItems=@RefreshChapterItems
+                                    >
+            </ChapterAgendaDetail>
 
             
-            @if (NavDisplay == "Status")
-            {
-
-                <ChapterStatusDetail    _LstStatus=@LstStatus
-                                        _SelectedChapterObject=@_SelectedChapterObject.SmartflowObject
-                                        _SelectedChapter=@SelectedChapter
-                                        _SeqMoving=@SeqMoving
-                                        _RefreshChapterItems=@RefreshChapterItems  
-                                        >
-                </ChapterStatusDetail>
-
-            }
-
-            
-            @if (NavDisplay == "Docs")
-            {
-
-                <ChapterDocumentDetail  _LstDocs=@LstDocs
-                                        _LstStatus=@LstStatus
-                                        _LstAgendas=@LstAgendas
-                                        _LibraryDocumentsAndSteps=@LibraryDocumentsAndSteps
-                                        _TableDates=@TableDates
-                                        _P4WCaseTypeGroups=@P4WCaseTypeGroups
-                                        _SelectedChapterObject=@_SelectedChapterObject.SmartflowObject
-                                        _SelectedChapter=@SelectedChapter
-                                        _SeqMoving=@SeqMoving
-                                        _RefreshChapterItems=@RefreshChapterItems       
-                                        _AttachObject=@AttachObject
-                                        >
-                </ChapterDocumentDetail>
-
-            }
-
-
-            @if (NavDisplay == "Fees")
-            {
-
-                <ChapterFeeDetail      _LstFees=@LstFees
-                                        _SelectedChapterObject=@_SelectedChapterObject.SmartflowObject
-                                        _SelectedChapter=@SelectedChapter
-                                        _SeqMoving=@SeqMoving
-                                        _RefreshChapterItems=@RefreshChapterItems  
-                                        >
-                </ChapterFeeDetail>
-
-            }
-
-            
-
-            @if (NavDisplay == "DataViews")
-            {
-
-                <ChapterDataViewDetail  _LstDataViews=@LstDataViews
-                                        _SelectedChapterObject=@_SelectedChapterObject.SmartflowObject
-                                        _SelectedChapter=@SelectedChapter
-                                        _SeqMoving=@SeqMoving
-                                        _RefreshChapterItems=@RefreshChapterItems
-                                        _ListP4WViews=@ListP4WViews
-                                        >
-                </ChapterDataViewDetail>
-
-            }
-
-            
-
-            @if (NavDisplay == "TickerMessages")
-            {
-
-                <ChapterMessageDetail   _LstTickerMessages=@LstTickerMessages
-                                        _SelectedChapterObject=@_SelectedChapterObject.SmartflowObject
-                                        _SelectedChapter=@SelectedChapter
-                                        _SeqMoving=@SeqMoving
-                                        _RefreshChapterItems=@RefreshChapterItems
-                                        >
-                </ChapterMessageDetail>
-
-            } 
-
-            @if (NavDisplay == "Background")
-            {
-                <ChapterBackgroundDetail    _SelectedChapterObject=@_SelectedChapterObject.SmartflowObject
-                                            _SelectedChapter=@SelectedChapter
-                                            >
-                </ChapterBackgroundDetail>
-            }
-
-            @if (NavDisplay == "Backups")
-            {
-                <div class="grid-chapter grid-chapter-backups">
-                    <div class="detail-group-box" id="form-controls-json">
-                        <h5>Backup and Recovery: @SelectedChapter.Name</h5>
-                        <div class="btn-group mt-2">
-                            <button @onclick="WriteChapterJSONToFile" class="btn btn-main btn-shadow"><i class="fa fa-save"></i><span>New Backup</span></button>
-                        </div>
-                        <div class="alert alert-danger mt-3 @(string.IsNullOrEmpty(AlertMsgJSOM) ? "hidden" : "")">@AlertMsgJSOM</div>
-
-                        <div class="custom-file">
-                            <BlazorInputFile.InputFile multiple OnChange="HandleBackupFileSelection" class="custom-file-input" id="customFileInput"></BlazorInputFile.InputFile>
-                            <label class="custom-file-label" for="customInput">Upload backup files</label>
-                        </div>
-
-
-
-                        <div class="grid-can-edit chapter-scroll-list">
-                            @if(ListFilesForBackups != null)
-                            {
-                                foreach (var fileDesc in ListFilesForBackups.Where(F => F.FilePath.Contains(".txt") || F.FilePath.Contains(".JSON")).ToList().OrderByDescending(F => F.FileDate))
-                                {
-                                    <div class="row grid-row grid-row-sm">
-                                        <div class="data-item">
-                                            <div class="btn-ellipses float-left">
-                                                <span class="fa fa-ellipsis-v"></span>
-                                                <div class="ellipsis-menu">
-                                                    <ul>
-                                                        <li class="col-main" @onclick='(() => ReadBackUpFile(fileDesc.FilePath))'>
-                                                            <span class="fa fa-window-restore mr-2"></span>
-                                                            <span>Restore</span>
-                                                        </li>
-                                                        <li class="col-main" @onclick='(() => DownloadFile(fileDesc))'>
-                                                            <span class="fa fa-download mr-2"></span>
-                                                            <span>Download</span>
-                                                        </li>
-                                                        <li class="col-main" @onclick='(() => PrepareBackUpForDelete(fileDesc))'>
-                                                            <span class="fa fa-trash-alt mr-2"></span>
-                                                            <span>Delete</span>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div class="data-item-sub">
-                                                @fileDesc.FileName
-                                            </div>
-                                        </div>
-                                        <div class="data-item ">
-                                            <div class="data-item-sub">
-                                                @fileDesc.FileDate.ToString("dd MMM yyyy")
-                                            </div>
-                                        </div>
-
-
-                                    </div>
-                                }
-                            }
-                        </div>
-
-
-
-                    </div>
-                </div>
-
-            }
 
         }
+
+        
+        @if (NavDisplay == "Status")
+        {
+
+            <ChapterStatusDetail    _LstStatus=@LstStatus
+                                    _SelectedChapterObject=@_SelectedChapterObject.SmartflowObject
+                                    _SelectedChapter=@SelectedChapter
+                                    _ChapterUpdated=@ChapterUpdated
+                                    _RefreshChapterItems=@RefreshChapterItems
+                                    >
+            </ChapterStatusDetail>
+
+        }
+
+        
+        @if (NavDisplay == "Docs")
+        {
+
+            <ChapterDocumentDetail  _LstDocs=@LstDocs
+                                    _LstStatus=@LstStatus
+                                    _LstAgendas=@LstAgendas
+                                    _LibraryDocumentsAndSteps=@LibraryDocumentsAndSteps
+                                    _TableDates=@TableDates
+                                    _P4WCaseTypeGroups=@P4WCaseTypeGroups
+                                    _SelectedChapterObject=@_SelectedChapterObject.SmartflowObject
+                                    _SelectedChapter=@SelectedChapter
+                                    _ChapterUpdated=@ChapterUpdated  
+                                    _RefreshChapterItems=@RefreshChapterItems
+                                    _AttachObject=@AttachObject
+                                    >
+            </ChapterDocumentDetail>
+
+        }
+
+
+        @if (NavDisplay == "Fees")
+        {
+
+            <ChapterFeeDetail      _LstFees=@LstFees
+                                    _SelectedChapterObject=@_SelectedChapterObject.SmartflowObject
+                                    _SelectedChapter=@SelectedChapter
+                                    _ChapterUpdated=@ChapterUpdated
+                                    _RefreshChapterItems=@RefreshChapterItems
+                                    >
+            </ChapterFeeDetail>
+
+        }
+
+        
+
+        @if (NavDisplay == "DataViews")
+        {
+
+            <ChapterDataViewDetail  _LstDataViews=@LstDataViews
+                                    _SelectedChapterObject=@_SelectedChapterObject.SmartflowObject
+                                    _SelectedChapter=@SelectedChapter
+                                    _ChapterUpdated=@ChapterUpdated
+                                    _RefreshChapterItems=@RefreshChapterItems
+                                    _ListP4WViews=@ListP4WViews
+                                    >
+            </ChapterDataViewDetail>
+
+        }
+
+        
+
+        @if (NavDisplay == "TickerMessages")
+        {
+
+            <ChapterMessageDetail   _LstTickerMessages=@LstTickerMessages
+                                    _SelectedChapterObject=@_SelectedChapterObject.SmartflowObject
+                                    _SelectedChapter=@SelectedChapter
+                                    _ChapterUpdated=@ChapterUpdated
+                                    _RefreshChapterItems=@RefreshChapterItems
+                                    >
+            </ChapterMessageDetail>
+
+        } 
+
+        @if (NavDisplay == "Background")
+        {
+            <ChapterBackgroundDetail    _SelectedChapterObject=@_SelectedChapterObject.SmartflowObject
+                                        _SelectedChapter=@SelectedChapter
+                                        >
+            </ChapterBackgroundDetail>
+        }
+
+        @if (NavDisplay == "Backups")
+        {
+            <ChapterBackupDetail    _SelectedChapterObject=@_SelectedChapterObject.SmartflowObject
+                                    _SelectedChapter=@SelectedChapter
+                                    _ChapterUpdated=@ChapterUpdated
+                                        >
+            </ChapterBackupDetail>
+            
+        }
+
+    
     </div>
 
 

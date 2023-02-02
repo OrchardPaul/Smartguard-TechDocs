@@ -31,17 +31,15 @@ namespace GadjIT_App.Pages.Chapters.ComponentsChapterDetail._Fees
         public UsrOrsfSmartflows _SelectedChapterObject { get; set; }
 
         [Parameter]
-        public VmChapter _SelectedChapter { get; set; }
+        public VmSmartflow _SelectedChapter { get; set; }
 
+
+        [Parameter]
+        public EventCallback<VmSmartflow> _ChapterUpdated {get; set;}
 
         [Parameter]
         public EventCallback<string> _RefreshChapterItems {get; set;}
-
-        [Parameter]
-        public bool _SeqMoving {get; set;}
-
         
-
 
 
         [Inject]
@@ -56,8 +54,6 @@ namespace GadjIT_App.Pages.Chapters.ComponentsChapterDetail._Fees
         [Inject]
         private ICompanyDbAccess CompanyDbAccess { get; set; }
 
-        [Inject]
-        public IAppChapterState AppChapterState { get; set; }
 
         [Inject]
         public IUserSessionState UserSession { get; set; }
@@ -68,13 +64,15 @@ namespace GadjIT_App.Pages.Chapters.ComponentsChapterDetail._Fees
 
         private SmartflowRecords AltChapterRecord {get; set;} //as saved on Company
 
-        private UsrOrsfSmartflows AltChapterObject { get; set; } = new UsrOrsfSmartflows(); //as saved on client site with serialised VmChapter
+        private UsrOrsfSmartflows AltChapterObject { get; set; } = new UsrOrsfSmartflows(); //as saved on client site with serialised VmSmartflow
 
-        private VmChapter AltChapter {get; set;} //Smartflow Schema
+        private VmSmartflow AltChapter {get; set;} //Smartflow Schema
 
         public List<VmFee> LstAltSystemItems { get; set; } 
 
         public VmFee EditObject = new VmFee { FeeObject = new Fee() };
+
+        public bool SeqMoving {get; set;}
 
         private int RowChanged = 0;
 
@@ -90,10 +88,6 @@ namespace GadjIT_App.Pages.Chapters.ComponentsChapterDetail._Fees
                 }
 
 
-        protected override void OnParametersSet()
-        {
-            ReSequence();
-        }
 
         protected void PrepareForInsert ()
         {
@@ -172,7 +166,7 @@ namespace GadjIT_App.Pages.Chapters.ComponentsChapterDetail._Fees
 
         private async void HandleUpdate()
         {
-            await RefreshSelectedList();
+            await ChapterItemsUpdated();
         }
 
         protected void ShowChapterFeesViewModal(VmFee _selectedObject)//moved partial
@@ -220,25 +214,17 @@ namespace GadjIT_App.Pages.Chapters.ComponentsChapterDetail._Fees
 
         private async void HandleDelete() 
         {
-            await DeleteItem();
-        }
 
-        private async Task DeleteItem()
-        {
             //<ModalDelete> simply invokes this method when user clicks OK. No need for the modal to handle this action as we do not require any details from the Modal. 
             _SelectedChapter.Fees.Remove(EditObject.FeeObject);
-            _SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(_SelectedChapter);
-            await ChapterManagementService.Update(_SelectedChapterObject);
-
-            //keep track of time last updated ready for comparison by other sessions checking for updates
-            AppChapterState.SetLastUpdated(UserSession, _SelectedChapter);
-
-            await RefreshSelectedList();
+            
+            await ChapterItemsUpdated();
 
         }
         
-        private async Task RefreshSelectedList()
+        private async Task ChapterItemsUpdated()
         {
+            await _ChapterUpdated.InvokeAsync(_SelectedChapter);
             await _RefreshChapterItems.InvokeAsync("Fees");
         }
 
@@ -283,7 +269,7 @@ namespace GadjIT_App.Pages.Chapters.ComponentsChapterDetail._Fees
                 }
                 else
                 {
-                    AltChapter = JsonConvert.DeserializeObject<VmChapter>(AltChapterRecord.SmartflowData);
+                    AltChapter = JsonConvert.DeserializeObject<VmSmartflow>(AltChapterRecord.SmartflowData);
 
                     AltChapterRecord.SmartflowData = JsonConvert.SerializeObject(AltChapter);
                     AltChapterObject = new UsrOrsfSmartflows {
@@ -338,16 +324,10 @@ namespace GadjIT_App.Pages.Chapters.ComponentsChapterDetail._Fees
             {
                 GenericErrorLog(true,e, "CompareToAltSystem", $"Comparing systems: {e.Message}");
                 
-                //return false;
             }
 
-            await InvokeAsync(() =>
-            {
-                StateHasChanged();
-            });
+            StateHasChanged();
 
-
-           // return true;
         }
 
         protected void PrepareChapterSync()
@@ -517,44 +497,30 @@ namespace GadjIT_App.Pages.Chapters.ComponentsChapterDetail._Fees
         /// <param name="selectobject">: current list item</param>
         /// <param name="direction">: Up or Down</param>
         /// <returns>No return</returns>
-        protected async void MoveSeq(Fee _selectobject, string _direction)
-        {
-            await MoveSeqTask(_selectobject, _direction);
-        }
-
-        protected async Task MoveSeqTask(Fee _selectobject, string _direction)
+        protected async Task MoveSeq(Fee _selectobject, string _direction)
         {
             try
             {
-                _SeqMoving = true; //prevents changes to the form whilst process of changing seq is carried out
+                SeqMoving = true; //prevents changes to the form whilst process of changing seq is carried out
 
                 int incrementBy;
 
                 incrementBy = (_direction.ToLower() == "up" ? -1 : 1);
 
                 RowChanged = (int)(_selectobject.SeqNo + incrementBy);
-
-                
+                                
                 var swapItem = _LstFees.Where(D => D.FeeObject.SeqNo == (_selectobject.SeqNo + incrementBy)).SingleOrDefault();
                 if (!(swapItem is null))
                 {
                     _selectobject.SeqNo += incrementBy;
                     swapItem.FeeObject.SeqNo = swapItem.FeeObject.SeqNo + (incrementBy * -1);
 
-                    _SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(_SelectedChapter);
-                    await ChapterManagementService.Update(_SelectedChapterObject);
-
-
-                    //keep track of time last updated ready for comparison by other sessions checking for updates
-                    AppChapterState.SetLastUpdated(UserSession, _SelectedChapter);
-
                 }
 
-                await _RefreshChapterItems.InvokeAsync("Fees");
-                await InvokeAsync(() =>
-                {
-                    StateHasChanged();
-                });
+                SeqMoving = false;
+
+                await ChapterItemsUpdated();
+
             }
             catch(Exception e)
             {
@@ -562,49 +528,41 @@ namespace GadjIT_App.Pages.Chapters.ComponentsChapterDetail._Fees
             }
             finally
             {
-                _SeqMoving = false;
+                SeqMoving = false;
             }
 
         }
 
-        public void ReSequence(int _seq)
+        public async Task ReSequence(int _seq)
         {
             RowChanged = _seq;
 
-            ReSequence();
+            _LstFees.Select(C => { C.FeeObject.SeqNo = _LstFees.IndexOf(C) + 1; return C; }).ToList();
+
+            await ChapterItemsUpdated();
         }
 
-        public void ReSequence()
-        {
-            try
-            {
-                if(_LstFees.Count(C => C.FeeObject.SeqNo != (_LstFees.IndexOf(C) + 1)) > 0) //If any SeqNos are out of sequence
-                { 
-                    _LstFees.Select(C => { C.FeeObject.SeqNo = _LstFees.IndexOf(C) + 1; return C; }).ToList();
-
-                    _SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(_SelectedChapter);
-                    ChapterManagementService.Update(_SelectedChapterObject).ConfigureAwait(false);
-
-                    StateHasChanged();
-                }
-            }
-            catch
-            {
-                
-            }
-        }      
-
+        
         public void ResetRowChanged() 
         {
             RowChanged = 0;
+            SeqMoving = false;
+
+            StateHasChanged();
+
         }  
 
 
         /****************************************/
         /* ERROR HANDLING */
         /****************************************/
-        private void GenericErrorLog(bool _showNotificationMsg, Exception e, string _method, string _message)
+        private async void GenericErrorLog(bool _showNotificationMsg, Exception e, string _method, string _message)
         {
+            if(_showNotificationMsg)
+            {
+                await NotificationManager.ShowNotification("Danger", $"Oops! Something went wrong.");
+            }
+            
             using (LogContext.PushProperty("SourceSystem", UserSession.SelectedSystem))
             using (LogContext.PushProperty("SourceCompanyId", UserSession.Company.Id))
             using (LogContext.PushProperty("SourceUserId", UserSession.User.Id))
@@ -613,10 +571,6 @@ namespace GadjIT_App.Pages.Chapters.ComponentsChapterDetail._Fees
                 Logger.LogError(e,"Error - Method: {0}, Message: {1}",_method, _message);
             }
 
-            if(_showNotificationMsg)
-            {
-                NotificationManager.ShowNotification("Danger", $"Oops! Something went wrong.");
-            }
         }
 
         

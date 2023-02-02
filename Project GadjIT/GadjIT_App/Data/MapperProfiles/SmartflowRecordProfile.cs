@@ -20,7 +20,7 @@ namespace GadjIT_App.Data.MapperProfiles
                 .ForMember(dest => dest.RowId, act => act.MapFrom(scr => scr.Id))
                 .ForMember(dest => dest.Id, act => act.Ignore());
 
-            CreateMap<VmChapter, VmChapter>();
+            CreateMap<VmSmartflow, VmSmartflow>();
 
         }
     }

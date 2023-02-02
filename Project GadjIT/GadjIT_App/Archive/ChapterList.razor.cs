@@ -72,7 +72,7 @@ namespace Gizmo_V1_02.Archive
 
         private List<VmGenSmartflowItem> lstAgendas { get; set; } = new List<VmGenSmartflowItem>();
         private List<VmFee> lstFees { get; set; } = new List<VmFee>();
-        private List<VmChapterFee> lstVmFeeModalItems { get; set; } = new List<VmChapterFee>();
+        private List<VmSmartflowFee> lstVmFeeModalItems { get; set; } = new List<VmSmartflowFee>();
         private List<VmGenSmartflowItem> lstDocs { get; set; } = new List<VmGenSmartflowItem>();
         private List<VmGenSmartflowItem> lstStatus { get; set; } = new List<VmGenSmartflowItem>();
 
@@ -121,9 +121,9 @@ namespace Gizmo_V1_02.Archive
         public string UrlChapter { set { selectedChapter.Name = value; } }
 
         [Parameter]
-        public VmChapter selectedChapter { get; set; } = new VmChapter { ChapterItems = new List<UsrOrDefChapterManagement>() };
+        public VmSmartflow selectedChapter { get; set; } = new VmSmartflow { ChapterItems = new List<UsrOrDefChapterManagement>() };
 
-        public VmChapter altChapter { get; set; } = new VmChapter();
+        public VmSmartflow altChapter { get; set; } = new VmSmartflow();
 
         public UsrOrDefChapterManagement SelectedChapterObject { get; set; } = new UsrOrDefChapterManagement();
 
@@ -264,12 +264,12 @@ namespace Gizmo_V1_02.Archive
 
             if (!(chapter.ChapterData is null))
             {
-                selectedChapter = JsonConvert.DeserializeObject<VmChapter>(chapter.ChapterData);
+                selectedChapter = JsonConvert.DeserializeObject<VmSmartflow>(chapter.ChapterData);
             }
             else
             {
-                //Initialise the VmChapter in case of null Json
-                selectedChapter = new VmChapter { ChapterItems = new List<UsrOrDefChapterManagement>(), DataViews = new List<DataViews>() };
+                //Initialise the VmSmartflow in case of null Json
+                selectedChapter = new VmSmartflow { ChapterItems = new List<UsrOrDefChapterManagement>(), DataViews = new List<DataViews>() };
                 selectedChapter.CaseTypeGroup = chapter.CaseTypeGroup;
                 selectedChapter.CaseType = chapter.CaseType;
                 selectedChapter.Name = chapter.Name;
@@ -397,7 +397,7 @@ namespace Gizmo_V1_02.Archive
                     lstFees = selectedChapter.Fees.Select(F => new VmFee { FeeObject = F }).ToList();
 
                     lstVmFeeModalItems = feeDefinitions
-                                            .Select(FD => new VmChapterFee
+                                            .Select(FD => new VmSmartflowFee
                                             {
                                                 FeeItem = lstFees
                                                                 .Where(F => FD.FeeDesc == F.FeeObject.FeeName)
@@ -495,7 +495,7 @@ namespace Gizmo_V1_02.Archive
 
                 if (!(AltChapterObject is null))
                 {
-                    altChapter = JsonConvert.DeserializeObject<VmChapter>(AltChapterObject.ChapterData);
+                    altChapter = JsonConvert.DeserializeObject<VmSmartflow>(AltChapterObject.ChapterData);
 
                     var temp = altChapter.ChapterItems;
 
@@ -567,9 +567,9 @@ namespace Gizmo_V1_02.Archive
                  */
                 foreach (var chapter in lstChapters)
                 {
-                    var chapterItems = JsonConvert.DeserializeObject<VmChapter>(chapter.ChapterObject.ChapterData);
+                    var chapterItems = JsonConvert.DeserializeObject<VmSmartflow>(chapter.ChapterObject.ChapterData);
 
-                    var vmChapterItems = chapterItems.ChapterItems.Select(C => new VmGenSmartflowItem { ChapterObject = C }).ToList();
+                    var VmSmartflowItems = chapterItems.ChapterItems.Select(C => new VmGenSmartflowItem { ChapterObject = C }).ToList();
 
                     AltChapterObject = lstAltSystemChapters
                                         .Where(A => A.ChapterObject.Name == chapter.ChapterObject.Name)
@@ -585,16 +585,16 @@ namespace Gizmo_V1_02.Archive
                     }
                     else
                     {
-                        altChapter = JsonConvert.DeserializeObject<VmChapter>(AltChapterObject.ChapterData);
+                        altChapter = JsonConvert.DeserializeObject<VmSmartflow>(AltChapterObject.ChapterData);
 
                         lstAltSystemChapterItems = altChapter.ChapterItems.Select(T => new VmGenSmartflowItem { ChapterObject = T }).ToList();
 
-                        foreach (var item in vmChapterItems)
+                        foreach (var item in VmSmartflowItems)
                         {
                             CompareChapterItemsToAltSytem(item);
                         }
 
-                        if (vmChapterItems.Where(C => C.ComparisonResult == "No match" | C.ComparisonResult == "Partial match").Count() > 0 | vmChapterItems.Count() != lstAltSystemChapterItems.Count())
+                        if (VmSmartflowItems.Where(C => C.ComparisonResult == "No match" | C.ComparisonResult == "Partial match").Count() > 0 | VmSmartflowItems.Count() != lstAltSystemChapterItems.Count())
                         {
                             chapter.ComparisonResult = "Partial match";
                             chapter.ComparisonIcon = "exclamation";
@@ -1734,13 +1734,13 @@ namespace Gizmo_V1_02.Archive
 
         private async void SyncToAltSystem(string option)
         {
-            var selectedCopyItems = new VmChapter { ChapterItems = new List<UsrOrDefChapterManagement>() };
+            var selectedCopyItems = new VmSmartflow { ChapterItems = new List<UsrOrDefChapterManagement>() };
 
             if (!(AltChapterObject is null))
             {
                 if (!string.IsNullOrEmpty(AltChapterObject.ChapterData))
                 {
-                    selectedCopyItems = JsonConvert.DeserializeObject<VmChapter>(AltChapterObject.ChapterData);
+                    selectedCopyItems = JsonConvert.DeserializeObject<VmSmartflow>(AltChapterObject.ChapterData);
                 }
             }
             else
@@ -1794,7 +1794,7 @@ namespace Gizmo_V1_02.Archive
                 selectedCopyItems.ChapterItems.AddRange(selectedChapter.ChapterItems.Where(C => C.Type == "Fee").ToList());
             }
 
-            AltChapterObject.ChapterData = JsonConvert.SerializeObject(new VmChapter
+            AltChapterObject.ChapterData = JsonConvert.SerializeObject(new VmSmartflow
             {
                 CaseTypeGroup = AltChapterObject.CaseTypeGroup,
                 CaseType = AltChapterObject.CaseType,
@@ -1859,7 +1859,7 @@ namespace Gizmo_V1_02.Archive
 
             if (JSONErrors.Count == 0)
             {
-                var chapterData = JsonConvert.DeserializeObject<VmChapter>(Json);
+                var chapterData = JsonConvert.DeserializeObject<VmSmartflow>(Json);
                 selectedChapter.ChapterItems = chapterData.ChapterItems;
                 selectedChapter.DataViews = chapterData.DataViews;
                 SelectedChapterObject.ChapterData = JsonConvert.SerializeObject(selectedChapter);

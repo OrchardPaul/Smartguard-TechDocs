@@ -5,7 +5,7 @@ using System.Text;
 
 namespace GadjIT_ClientContext.P4W.Custom
 {
-    public partial class VmChapterFee
+    public partial class VmSmartflowFee
     {
         public Fee FeeItem { get; set; }
 

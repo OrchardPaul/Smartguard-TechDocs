@@ -35,19 +35,20 @@ namespace GadjIT_App.Pages.Chapters.ComponentsChapterDetail._Documents
         public UsrOrsfSmartflows _SelectedChapterObject { get; set; }
 
         [Parameter]
-        public VmChapter _SelectedChapter { get; set; }
+        public VmSmartflow _SelectedChapter { get; set; }
 
 
         [Parameter]
-        public LinkedItems _AttachObject {get; set;}
+        public LinkedItem _AttachObject {get; set;}
 
+        [Parameter]
+        public EventCallback<VmSmartflow> _ChapterUpdated {get; set;}
 
         [Parameter]
         public EventCallback<string> _RefreshChapterItems {get; set;}
 
-        [Parameter]
-        public bool _SeqMoving {get; set;}
-
+       
+        
         [Parameter]
         public List<CaseTypeGroups> _P4WCaseTypeGroups {get; set;}
 
@@ -87,13 +88,18 @@ namespace GadjIT_App.Pages.Chapters.ComponentsChapterDetail._Documents
 
         private SmartflowRecords AltChapterRecord {get; set;} //as saved on Company
 
-        private UsrOrsfSmartflows AltChapterObject { get; set; } = new UsrOrsfSmartflows(); //as saved on client site with serialised VmChapter
+        private UsrOrsfSmartflows AltChapterObject { get; set; } = new UsrOrsfSmartflows(); //as saved on client site with serialised VmSmartflow
 
-        private VmChapter AltChapter {get; set;} //Smartflow Schema
+        private VmSmartflow AltChapter {get; set;} //Smartflow Schema
 
         public List<VmGenSmartflowItem> LstAltSystemItems { get; set; } 
 
         private VmGenSmartflowItem EditObject {get; set;}
+
+        public bool SeqMoving {get; set;}
+
+        private string RowChangedClass { get; set; } = "row-changed-nav3";
+
         private int RowChanged = 0;
         private bool compareSystems;
         protected bool CompareSystems 
@@ -108,11 +114,7 @@ namespace GadjIT_App.Pages.Chapters.ComponentsChapterDetail._Documents
         
         private string SelectedList = "";
 
-        
-        protected override void OnParametersSet()
-        {
-            ReSequence();
-        }
+       
 
         
         protected void PrepareForInsert() 
@@ -217,10 +219,10 @@ namespace GadjIT_App.Pages.Chapters.ComponentsChapterDetail._Documents
 
         private async void HandleUpdate()
         {
-            await RefreshSelectedList();
+            await ChapterItemsUpdated();
         }
 
-        protected void ShowChapterDetailViewModal(VmGenSmartflowItem _selectedObject)//moved partial
+        protected void ShowChapterDetailViewModal(VmGenSmartflowItem _selectedObject)
         {
             try
             {
@@ -264,27 +266,17 @@ namespace GadjIT_App.Pages.Chapters.ComponentsChapterDetail._Documents
 
         private async void HandleDelete() 
         {
-            await DeleteItem();
-        }
-
-        private async Task DeleteItem()
-        {
             //<ModalDelete> simply invokes this method when user cicks OK. No need for the modal to handle this action as we do not require any details from the Modal. 
             _SelectedChapter.Items.Remove(EditObject.ChapterObject);
-            _SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(_SelectedChapter);
-            await ChapterManagementService.Update(_SelectedChapterObject);
-
-            //keep track of time last updated ready for comparison by other sessions checking for updates
-            AppChapterState.SetLastUpdated(UserSession, _SelectedChapter);
-
-            await RefreshSelectedList();
+            
+            await ChapterItemsUpdated();
 
         }
 
-        private async Task RefreshSelectedList()
+        private async Task ChapterItemsUpdated()
         {
+            await _ChapterUpdated.InvokeAsync(_SelectedChapter);
             await _RefreshChapterItems.InvokeAsync("Docs");
-
         }
 
         
@@ -303,7 +295,7 @@ namespace GadjIT_App.Pages.Chapters.ComponentsChapterDetail._Documents
             ShowChapterAttachmentModal();
         }
 
-        private void PrepareAttachmentForEdit(VmGenSmartflowItem _item, LinkedItems _linkedItems)
+        private void PrepareAttachmentForEdit(VmGenSmartflowItem _item, LinkedItem _linkedItems)
         {
             SelectedList = "Edit Attachement";
             EditObject = _item;
@@ -312,7 +304,7 @@ namespace GadjIT_App.Pages.Chapters.ComponentsChapterDetail._Documents
             ShowChapterAttachmentModal();
         }
 
-        private void PrepareAttachmentForView(VmGenSmartflowItem _item, LinkedItems _linkedItems)
+        private void PrepareAttachmentForView(VmGenSmartflowItem _item, LinkedItem _linkedItems)
         {
             SelectedList = "Edit Attachement";
             EditObject = _item;
@@ -341,12 +333,12 @@ namespace GadjIT_App.Pages.Chapters.ComponentsChapterDetail._Documents
                 UserMessage = EditObject.ChapterObject.UserMessage,
                 PopupAlert = EditObject.ChapterObject.PopupAlert,
                 NextStatus = EditObject.ChapterObject.NextStatus,
-                LinkedItems = EditObject.ChapterObject.LinkedItems is null ? new List<LinkedItems>() : EditObject.ChapterObject.LinkedItems
+                LinkedItems = EditObject.ChapterObject.LinkedItems is null ? new List<LinkedItem>() : EditObject.ChapterObject.LinkedItems
             };
 
             
             var attachment = _AttachObject is null 
-                ? new LinkedItems 
+                ? new LinkedItem
                 {
                     Action = "INSERT",
                     ChaserDesc = "",
@@ -383,7 +375,7 @@ namespace GadjIT_App.Pages.Chapters.ComponentsChapterDetail._Documents
 
         protected void ShowChapterAttachmentViewModal()
         {
-            var attachment = _AttachObject is null ? new LinkedItems { Action = "INSERT" } : _AttachObject;
+            var attachment = _AttachObject is null ? new LinkedItem { Action = "INSERT" } : _AttachObject;
 
             var parameters = new ModalParameters();
             parameters.Add("_Attachment", attachment);
@@ -412,7 +404,7 @@ namespace GadjIT_App.Pages.Chapters.ComponentsChapterDetail._Documents
             }
             catch (Exception ex)
             {
-                GenericErrorLog(true,ex, "DisplaySmartflowLoadError", $"Refreshing the document list: {ex.Message}");
+                GenericErrorLog(true,ex, "RefreshLibraryDocumentsAndStepsTask", $"Refreshing the document list: {ex.Message}");
 
             }
         }
@@ -457,7 +449,7 @@ namespace GadjIT_App.Pages.Chapters.ComponentsChapterDetail._Documents
                 }
                 else
                 {
-                    AltChapter = JsonConvert.DeserializeObject<VmChapter>(AltChapterRecord.SmartflowData);
+                    AltChapter = JsonConvert.DeserializeObject<VmSmartflow>(AltChapterRecord.SmartflowData);
 
                     AltChapterRecord.SmartflowData = JsonConvert.SerializeObject(AltChapter);
                     AltChapterObject = new UsrOrsfSmartflows {
@@ -690,16 +682,11 @@ namespace GadjIT_App.Pages.Chapters.ComponentsChapterDetail._Documents
         /// <param name="listType">: Docs or Fees</param>
         /// <param name="direction">: Up or Down</param>
         /// <returns>No return</returns>
-        protected async void MoveSeq(GenSmartflowItem _selectobject, string _direction)
-        {
-            await MoveSeqTask(_selectobject, _direction);
-        }
-
-        protected async Task MoveSeqTask(GenSmartflowItem _selectobject, string _direction)
+        protected async Task MoveSeq(GenSmartflowItem _selectobject, string _direction)
         {
             try
             {
-                _SeqMoving = true; //prevents changes to the form whilst process of changing seq is carried out
+                SeqMoving = true; //prevents changes to the form whilst process of changing seq is carried out
 
                 int incrementBy;
 
@@ -714,20 +701,12 @@ namespace GadjIT_App.Pages.Chapters.ComponentsChapterDetail._Documents
                     _selectobject.SeqNo += incrementBy;
                     swapItem.ChapterObject.SeqNo = swapItem.ChapterObject.SeqNo + (incrementBy * -1);
 
-                    _SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(_SelectedChapter);
-                    await ChapterManagementService.Update(_SelectedChapterObject);
-
-
-                    //keep track of time last updated ready for comparison by other sessions checking for updates
-                    AppChapterState.SetLastUpdated(UserSession, _SelectedChapter);
-
                 }
 
-                await _RefreshChapterItems.InvokeAsync("Docs");
-                await InvokeAsync(() =>
-                {
-                    StateHasChanged();
-                });
+                SeqMoving = false;
+
+                await ChapterItemsUpdated();
+
             }
             catch(Exception e)
             {
@@ -735,42 +714,31 @@ namespace GadjIT_App.Pages.Chapters.ComponentsChapterDetail._Documents
             }
             finally
             {
-                _SeqMoving = false;
+                SeqMoving = false;
             }
 
         }
 
-        public void ReSequence(int _seq)
+        public async Task ReSequence(int _seq)
         {
             RowChanged = _seq;
 
-            ReSequence();
+            _LstDocs.Select(C => { C.ChapterObject.SeqNo = _LstDocs.IndexOf(C) + 1; return C; }).ToList();
+
+            await ChapterItemsUpdated();
         }
-
-        public void ReSequence()
-        {
-            try
-            {
-                if(_LstDocs.Select(C => C.ChapterObject.SeqNo != _LstDocs.IndexOf(C) + 1).Count() > 0) //If any SeqNos are out of sequence
-                { 
-                    _LstDocs.Select(C => { C.ChapterObject.SeqNo = _LstDocs.IndexOf(C) + 1; return C; }).ToList();
-
-                    _SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(_SelectedChapter);
-                    ChapterManagementService.Update(_SelectedChapterObject).ConfigureAwait(false);
-
-                    StateHasChanged();
-                }
-            }
-            catch
-            {
-                
-            }
-        }      
+    
 
         public void ResetRowChanged() 
         {
             RowChanged = 0;
+            SeqMoving = false;
+
+            StateHasChanged();
+
         }  
+
+        
 
 
         /****************************************/

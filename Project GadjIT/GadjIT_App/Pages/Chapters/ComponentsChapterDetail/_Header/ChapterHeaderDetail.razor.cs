@@ -26,7 +26,7 @@ using GadjIT_App.FileManagement.FileClassObjects;
 using GadjIT_App.Pages.Chapters.FileUpload;
 using GadjIT_App.FileManagement.FileClassObjects.FileOptions;
 using Microsoft.Extensions.Configuration;
-
+using GadjIT_App.Shared.StaticObjects;
 
 namespace GadjIT_App.Pages.Chapters.ComponentsChapterDetail._Header
 {
@@ -36,7 +36,7 @@ namespace GadjIT_App.Pages.Chapters.ComponentsChapterDetail._Header
         public UsrOrsfSmartflows _SelectedChapterObject { get; set; }
 
         [Parameter]
-        public VmChapter _SelectedChapter { get; set; }
+        public VmSmartflow _SelectedChapter { get; set; }
 
         [Parameter]
         public List<CaseTypeGroups> _P4WCaseTypeGroups {get; set;}
@@ -63,12 +63,7 @@ namespace GadjIT_App.Pages.Chapters.ComponentsChapterDetail._Header
         [Inject]
         public IUserSessionState UserSession { get; set; }
 
-        [Inject]
-        public NavigationManager NavigationManager { get; set; }
-
-        [Inject]
-        private IIdentityUserAccess UserAccess { get; set; }
-
+       
         [Inject]
         public INotificationManager NotificationManager {get; set;}
 
@@ -97,7 +92,6 @@ namespace GadjIT_App.Pages.Chapters.ComponentsChapterDetail._Header
 
         private List<FileDesc> ListFilesForBgImages { get; set; }
 
-        private FileDesc SelectedFileDescription { get; set; }
 
         private List<FileDesc> ListFilesForBackups { get; set; }
 
@@ -128,7 +122,7 @@ namespace GadjIT_App.Pages.Chapters.ComponentsChapterDetail._Header
                     _SelectedChapter.ShowPartnerNotes = "N";
                 }
                 
-                SaveChapterDetails(true);
+                SaveChapterDetails(true).ConfigureAwait(false);
             }
 
         }
@@ -147,7 +141,7 @@ namespace GadjIT_App.Pages.Chapters.ComponentsChapterDetail._Header
                     _SelectedChapter.ShowDocumentTracking = "N";
                 }
 
-                SaveChapterDetails(true);
+                SaveChapterDetails(true).ConfigureAwait(false);
             }
 
         }
@@ -168,6 +162,29 @@ namespace GadjIT_App.Pages.Chapters.ComponentsChapterDetail._Header
         protected async Task ShowNav(string navItem)
         {
             await _ShowNav.InvokeAsync(navItem);
+        }
+
+        private void SetSmartflowFilePath()
+        {
+            try
+            {
+                ChapterFileOptions chapterFileOption;
+
+                chapterFileOption = new ChapterFileOptions
+                {
+                    Company = UserSession.Company.CompanyName,
+                    SelectedSystem = UserSession.SelectedSystem,
+                    CaseTypeGroup = _SelectedChapter.CaseTypeGroup,
+                    CaseType = _SelectedChapter.CaseType,
+                    Chapter = _SelectedChapter.Name
+                };
+
+                ChapterFileUpload.SetFileHelperCustomPath(chapterFileOption,FileStorageType.BackupsSmartflow);
+            }
+            catch (Exception ex)
+            {
+                GenericErrorLog(true,ex, "SetSmartflowFilePath", $"Setting Smartflow file path: {ex.Message}");
+            }
         }
 
 
@@ -440,7 +457,7 @@ namespace GadjIT_App.Pages.Chapters.ComponentsChapterDetail._Header
 
                 bool creationSuccess;
 
-                creationSuccess = await ChapterManagementService.CreateStep(new VmChapterP4WStepSchemaJSONObject { StepSchemaJSON = stepJSON });
+                creationSuccess = await ChapterManagementService.CreateStep(new VmSmartflowP4WStepSchemaJSONObject { StepSchemaJSON = stepJSON });
 
                 if (creationSuccess)
                 {
@@ -507,12 +524,12 @@ namespace GadjIT_App.Pages.Chapters.ComponentsChapterDetail._Header
                 if(altChapterRecord == null || altChapterRecord.SmartflowData == null)
                 {
                     //Smartflow does not exist on Alt System 
-                    NotificationManager.ShowNotification("Warning", $"A corresponding Smartflow must exist on the {UserSession.AltSystem} system.");
+                    await NotificationManager.ShowNotification("Warning", $"A corresponding Smartflow must exist on the {UserSession.AltSystem} system.");
                 }
                 else
                 {
 
-                    var altChapter = JsonConvert.DeserializeObject<VmChapter>(altChapterRecord.SmartflowData);
+                    var altChapter = JsonConvert.DeserializeObject<VmSmartflow>(altChapterRecord.SmartflowData);
 
                     var parameters = new ModalParameters();
                     parameters.Add("_SelectedChapter", _SelectedChapter);
@@ -556,34 +573,53 @@ namespace GadjIT_App.Pages.Chapters.ComponentsChapterDetail._Header
         protected void ShowChapterImportModal()
         {
 
-            SetSmartflowFilePath();
-
-            while (!(ListFilesForBackups.Where(F => F.FilePath.Contains(".xlsx")).FirstOrDefault() is null))
+            try
             {
-                ChapterFileUpload.DeleteFile(ListFilesForBackups.Where(F => F.FilePath.Contains(".xlsx")).FirstOrDefault().FilePath);
+
+                SetSmartflowFilePath();
+                GetSeletedChapterFileList(); //populates ListFilesForBackups
+
+                //clear all existing spreadsheets to make way for the new instance
+                //in case a spreadsheet is locked and can't be deleted, work through a list of docs
+                //report error if any remain.
+                ListFilesForBackups.Where(F => F.FilePath.Contains(".xlsx")).ToList();
+                foreach(var fileItem in ListFilesForBackups)
+                {
+                    ChapterFileUpload.DeleteFile(fileItem.FilePath);
+                }
+
                 GetSeletedChapterFileList();
+                
+                if(ListFilesForBackups.Where(F => F.FilePath.Contains(".xlsx")).Count() > 0)
+                {
+                    throw new Exception("Excel Spreadsheet deletion failed");
+                }
+
+
+                Action WriteBackUp = WriteChapterJSONToFile;
+
+                Action SelectedAction = RefreshJson;
+                var parameters = new ModalParameters();
+                parameters.Add("TaskObject", _SelectedChapterObject);
+                parameters.Add("ListFileDescriptions", ListFilesForBackups);
+                parameters.Add("DataChanged", SelectedAction);
+                parameters.Add("WriteBackUp", WriteBackUp);
+                //parameters.Add("OriginalDataViews", LstDataViews);
+
+                var options = new ModalOptions()
+                {
+                    Class = "blazored-custom-modal modal-chapter-import"
+                };
+
+                Modal.Show<ModalChapterImport>("Excel Import", parameters, options);
             }
-
-
-            Action WriteBackUp = WriteChapterJSONToFile;
-
-            Action SelectedAction = RefreshJson;
-            var parameters = new ModalParameters();
-            parameters.Add("TaskObject", _SelectedChapterObject);
-            parameters.Add("ListFileDescriptions", ListFilesForBackups);
-            parameters.Add("DataChanged", SelectedAction);
-            parameters.Add("WriteBackUp", WriteBackUp);
-            //parameters.Add("OriginalDataViews", LstDataViews);
-
-            var options = new ModalOptions()
+            catch(Exception e)
             {
-                Class = "blazored-custom-modal modal-chapter-import"
-            };
-
-            Modal.Show<ModalChapterImport>("Excel Import", parameters, options);
+                GenericErrorLog(true,e, "ShowChapterImportModal", e.Message);
+            }
         }
 
-        public async void WriteChapterJSONToFile()
+        public void WriteChapterJSONToFile()
         {
             try
             {
@@ -632,7 +668,7 @@ namespace GadjIT_App.Pages.Chapters.ComponentsChapterDetail._Header
             {
                 try
                 {
-                    var chapterData = JsonConvert.DeserializeObject<VmChapter>(Json);
+                    var chapterData = JsonConvert.DeserializeObject<VmSmartflow>(Json);
                     _SelectedChapter.Items = chapterData.Items;
                     _SelectedChapter.DataViews = chapterData.DataViews;
                     _SelectedChapter.Fees = chapterData.Fees;
@@ -673,30 +709,8 @@ namespace GadjIT_App.Pages.Chapters.ComponentsChapterDetail._Header
             }
         }
 
-        /// <summary>
-        /// TODO: Need to work out what this method does
-        /// </summary>
-        private async Task SetSmartflowFilePath()
-        {
-            try
-            {
-                ChapterFileOptions chapterFileOption;
+       
 
-                chapterFileOption = new ChapterFileOptions
-                {
-                    Company = UserSession.Company.CompanyName,
-                    CaseTypeGroup = _SelectedChapter.CaseTypeGroup,
-                    CaseType = _SelectedChapter.CaseType,
-                    Chapter = _SelectedChapter.Name
-                };
-
-                ChapterFileUpload.SetChapterOptions(chapterFileOption);
-            }
-            catch (Exception ex)
-            {
-                GenericErrorLog(true,ex, "SetSmartflowFilePath", $"Setting Smartflow file path: {ex.Message}");
-            }
-        }
 
 
         

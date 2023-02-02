@@ -44,7 +44,7 @@ namespace GadjIT_App.Pages.Chapters.ComponentsChapterDetail._Documents
 
 
         [Parameter]
-        public LinkedItems _Attachment { get; set; }
+        public LinkedItem _Attachment { get; set; }
 
         [Parameter]
         public RenderFragment _CustomHeader { get; set; }
@@ -62,7 +62,7 @@ namespace GadjIT_App.Pages.Chapters.ComponentsChapterDetail._Documents
         public UsrOrsfSmartflows _SelectedChapterObject { get; set; }
 
         [Parameter]
-        public VmChapter _SelectedChapter { get; set; }
+        public VmSmartflow _SelectedChapter { get; set; }
 
         [Parameter]
         public GenSmartflowItem _TaskObject { get; set; }
@@ -225,7 +225,7 @@ namespace GadjIT_App.Pages.Chapters.ComponentsChapterDetail._Documents
 
                 if (_CopyObject.LinkedItems is null)
                 {
-                    _CopyObject.LinkedItems = new List<LinkedItems> { _Attachment };
+                    _CopyObject.LinkedItems = new List<LinkedItem> { _Attachment };
                 }
                 else
                 {

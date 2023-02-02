@@ -40,7 +40,7 @@ namespace GadjIT_App.Pages.Chapters.ComponentsChapterList
         public List<VmUsrOrsfSmartflows> AllChapters { get; set; }
 
         [Parameter]
-        public VmChapter currentChapter { get; set; }
+        public VmSmartflow currentChapter { get; set; }
 
         [Parameter]
         public bool addNewCaseTypeGroupOption { get; set; } = false;
@@ -126,7 +126,7 @@ namespace GadjIT_App.Pages.Chapters.ComponentsChapterList
 
         private async Task HandleValidSubmit()
         {
-            var copyToChapter = new VmChapter {
+            var copyToChapter = new VmSmartflow {
                 Items = new List<GenSmartflowItem>(),
                 Fees = new List<Fee>(),
                 DataViews = new List<DataView>(),
@@ -135,7 +135,7 @@ namespace GadjIT_App.Pages.Chapters.ComponentsChapterList
 
             if (!(TaskObject.SmartflowData is null))
             {
-                copyToChapter = JsonConvert.DeserializeObject<VmChapter>(TaskObject.SmartflowData);
+                copyToChapter = JsonConvert.DeserializeObject<VmSmartflow>(TaskObject.SmartflowData);
             }
 
 
@@ -241,7 +241,7 @@ namespace GadjIT_App.Pages.Chapters.ComponentsChapterList
                 copyToChapter.TickerMessages.AddRange(currentChapter.TickerMessages.ToList());
             }
 
-            TaskObject.SmartflowData = JsonConvert.SerializeObject(new VmChapter
+            TaskObject.SmartflowData = JsonConvert.SerializeObject(new VmSmartflow
             {
                 CaseTypeGroup = TaskObject.CaseTypeGroup,
                 CaseType = TaskObject.CaseType,

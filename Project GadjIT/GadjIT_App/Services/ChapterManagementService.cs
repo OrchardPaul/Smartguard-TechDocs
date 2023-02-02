@@ -29,7 +29,7 @@ namespace GadjIT_App.Services
         Task<UsrOrsfSmartflows> UpdateMainItem(UsrOrsfSmartflows item);
         Task<List<UsrOrsfSmartflows>> UpdateCaseType(string newCaseTypeName, string originalCaseTypeName, string caseTypeGroup);
         Task<List<UsrOrsfSmartflows>> UpdateCaseTypeGroups(string newCaseTypeGroupName, string originalCaseTypeGroupName);
-        Task<bool> CreateStep(VmChapterP4WStepSchemaJSONObject stepSchemaJSONObject);
+        Task<bool> CreateStep(VmSmartflowP4WStepSchemaJSONObject stepSchemaJSONObject);
         Task<List<TableDate>> GetDatabaseTableDateFields();
         bool Lock { get; set; }
 
@@ -208,7 +208,7 @@ namespace GadjIT_App.Services
             return await HttpClient.GetFromJsonAsync<List<UsrOrsfSmartflows>>($"{UserSession.BaseUri}api/Smartflow/GetChapterListByCaseType/{caseType}");
         }
 
-        public async Task<bool> CreateStep(VmChapterP4WStepSchemaJSONObject _stepSchemaJSONObject)
+        public async Task<bool> CreateStep(VmSmartflowP4WStepSchemaJSONObject _stepSchemaJSONObject)
         {
             Lock = true;
 

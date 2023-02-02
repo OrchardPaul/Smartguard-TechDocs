@@ -4,7 +4,7 @@ using System.Text;
 
 namespace GadjIT_ClientContext.P4W.Custom
 {
-    public class VmChapter
+    public class VmSmartflow
     {
         public string CaseTypeGroup { get; set; }
         public string CaseType { get; set; }
@@ -22,9 +22,9 @@ namespace GadjIT_ClientContext.P4W.Custom
         public string DeveloperNotes { get; set; }
         public string SelectedView { get; set; }
         public string SelectedStep { get; set; }
-        public List<GenSmartflowItem> Items { get; set; }
-        public List<DataView> DataViews { get; set; }
-        public List<TickerMessage> TickerMessages { get; set; }
-        public List<Fee> Fees { get; set; }
+        public List<GenSmartflowItem> Items { get; set; } = new List<GenSmartflowItem>();
+        public List<DataView> DataViews { get; set; } = new List<DataView>();
+        public List<Fee> Fees { get; set; } = new List<Fee>();
+        public List<TickerMessage> TickerMessages { get; set; } = new List<TickerMessage>();
     }
 }

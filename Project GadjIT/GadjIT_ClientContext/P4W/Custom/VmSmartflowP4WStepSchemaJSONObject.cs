@@ -4,7 +4,7 @@ using System.Text;
 
 namespace GadjIT_ClientContext.P4W.Custom
 {
-    public class VmChapterP4WStepSchemaJSONObject
+    public class VmSmartflowP4WStepSchemaJSONObject
     {
         public string StepSchemaJSON { get; set; }
     }

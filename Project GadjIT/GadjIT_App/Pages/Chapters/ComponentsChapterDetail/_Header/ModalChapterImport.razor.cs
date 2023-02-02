@@ -64,7 +64,7 @@ namespace GadjIT_App.Pages.Chapters.ComponentsChapterDetail._Header
 
         private string ImportedJSON { get; set; }
 
-        private VmChapter ChapterItems { get; set; }
+        private VmSmartflow ChapterItems { get; set; }
 
         [Parameter]
         public List<VmDataView> OriginalDataViews { get; set; }
@@ -161,13 +161,13 @@ namespace GadjIT_App.Pages.Chapters.ComponentsChapterDetail._Header
         private async Task HandleValidSubmit()
         {
             var originalJson = new string(TaskObject.SmartflowData);
-            var SelectedCopyItems = new VmChapter { Items = new List<GenSmartflowItem>(), Fees = new List<Fee>(), DataViews = new List<DataView>() };
+            var SelectedCopyItems = new VmSmartflow { Items = new List<GenSmartflowItem>(), Fees = new List<Fee>(), DataViews = new List<DataView>() };
 
             ToggleSuccess = false;
 
             if (!(TaskObject.SmartflowData is null))
             {
-                SelectedCopyItems = JsonConvert.DeserializeObject<VmChapter>(TaskObject.SmartflowData);
+                SelectedCopyItems = JsonConvert.DeserializeObject<VmSmartflow>(TaskObject.SmartflowData);
             }
 
 
@@ -231,7 +231,7 @@ namespace GadjIT_App.Pages.Chapters.ComponentsChapterDetail._Header
                 SelectedCopyItems.DataViews.AddRange(ChapterItems.DataViews);
             }
 
-            ImportedJSON = JsonConvert.SerializeObject(new VmChapter
+            ImportedJSON = JsonConvert.SerializeObject(new VmSmartflow
             {
                 CaseTypeGroup = TaskObject.CaseTypeGroup,
                 CaseType = TaskObject.CaseType,

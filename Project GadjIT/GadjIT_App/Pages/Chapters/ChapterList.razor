@@ -3,7 +3,6 @@
 @* @page "/Smartflow/{UrlCaseTypeGroup}/{UrlCaseType}/{UrlChapter}"
 @page "/Smartflow/{UrlCaseTypeGroup}/{UrlCaseType}" *@
 
-@using GadjIT_App.Pages._Shared.Modals
 @using GadjIT_ClientContext.P4W.Custom
 @implements IDisposable
 
@@ -14,7 +13,7 @@
 else
 {
 
-    @if (SelectedChapter.Name == null || SelectedChapter.Name == "")
+    @if ((SelectedChapter.Name == null || SelectedChapter.Name == "") && SelectedCaseType == "")
     {
         <div class="tran-block page-header-block ">
             <div class="page-header-title">
@@ -126,18 +125,25 @@ else
                                                     <span class="fa fa-ellipsis-v"></span>
                                                     <div class="ellipsis-menu">
                                                         <ul>
+                                                            <li class="col-main invisible-lg-down" @onclick='() => ShowCaseTypeDetail(caseTypeGroup,caseType)'>
+
+                                                                <span class="fa fa-pencil-alt mr-2"></span>
+                                                                <span>Details</span>
+
+                                                            </li>
                                                             <li class="col-main" @onclick='() => PrepareCaseTypeForEdit(caseType, "CaseType")'>
 
                                                                 <span class="fa fa-font mr-2"></span>
                                                                 <span>Rename</span>
 
                                                             </li>
+                                                            
 
                                                         </ul>
                                                     </div>
                                                 </div>
                                             }
-                                            <div class="data-item-nav" @onclick='() => SelectCaseType(caseType)'>
+                                            <div class="data-item-nav " @onclick='() => SelectCaseType(caseType)'>
                                                 @if (caseType == SelectedChapter.CaseType)
                                                 {
                                                     <div class="data-item-sub">
@@ -153,8 +159,17 @@ else
 
 
                                                 <div class="data-item-right col-alt "><div class="link-direction @(caseType == SelectedChapter.CaseType ? "triangle-up " : "triangle-down")"></div></div>
+
+                                                
                                             </div>
+                                            @if (UserSession.IsAdminUser)
+                                            {
+                                                <div title="Click to edit " class="data-item-right link-direction invisible-lg-down" @onclick="() =>  ShowCaseTypeDetail(caseTypeGroup,caseType)">
+                                                    <div class="fa fa-pencil-alt"></div>
+                                                </div>
+                                            }
                                         </div>
+                                    
 
                                     </div>
                                     @if (caseType == SelectedChapter.CaseType)
@@ -252,7 +267,7 @@ else
                                                                 <div @onclick='() => MoveSmartFlowSeq(context.SmartflowObject, "Chapters", "Down")'><span class="fa fa-angle-down"></span></div>
                                                             </div>
                                                         }
-                                                        <div title="Click to edit @context.SmartflowObject.SmartflowName" class="data-item-right link-direction" @onclick="() => SelectChapter(context.SmartflowObject)">
+                                                        <div title="Click to edit @context.SmartflowObject.SmartflowName" class="data-item-right link-direction" @onclick="() => SelectChapterFromHome(context.SmartflowObject)">
                                                             <div class="fa fa-pencil-alt"></div>
                                                         </div>
                                                     </div>
@@ -272,6 +287,20 @@ else
             </div>
         </div>
     }
+}
+
+@if (SelectedCaseType != "")
+{
+
+    <CaseTypeDetail
+        _SelectedCaseTypeGroup=@SelectedCaseTypeGroup
+        _SelectedCaseType=@SelectedCaseType
+        _LstChapters=@LstChapters
+        _SelectHome=@SelectHome
+        _RefreshChapters=@RefreshChapters
+        _SelectChapter=@SelectChapter
+    ></CaseTypeDetail>
+
 }
 
 @if (SelectedChapter.Name != "" & !(SelectedChapter.Name is null))

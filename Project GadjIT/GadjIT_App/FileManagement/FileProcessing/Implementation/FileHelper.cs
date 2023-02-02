@@ -488,7 +488,7 @@ namespace GadjIT_App.FileManagement.FileProcessing.Implementation
             return isExcelValid;
         }
 
-        public async Task<string> WriteChapterDataToExcel(VmChapter selectedChapter, List<DmDocuments> documents, List<CaseTypeGroups> caseTypeGroups)
+        public async Task<string> WriteChapterDataToExcel(VmSmartflow selectedChapter, List<DmDocuments> documents, List<CaseTypeGroups> caseTypeGroups)
         {
             List<string> docTypes = new List<string> { "Doc", "Letter", "Form", "Step", "Date", "Email" };
             Dictionary<int?, string> docP4WTypes = new Dictionary<int?, string> { { 1, "Doc" }, { 4, "Form" }, { 6, "Step" }, { 8, "Date" }, { 9, "Email" }, { 11, "Doc" }, { 12, "Email" }, { 13, "Doc" }, { 19, "Doc" } };
@@ -1020,9 +1020,9 @@ namespace GadjIT_App.FileManagement.FileProcessing.Implementation
         }
 
 
-        public VmChapter ReadChapterDataFromExcel(string FilePath)
+        public VmSmartflow ReadChapterDataFromExcel(string FilePath)
         {
-            VmChapter readChapters = new VmChapter { Items = new List<GenSmartflowItem>(), Fees = new List<Fee>(), DataViews = new List<DataView>() };
+            VmSmartflow readChapters = new VmSmartflow { Items = new List<GenSmartflowItem>(), Fees = new List<Fee>(), DataViews = new List<DataView>() };
             GenSmartflowItem readObject;
             Fee feeObject;
             DataView readView;
@@ -1338,7 +1338,7 @@ namespace GadjIT_App.FileManagement.FileProcessing.Implementation
                 for (int row = 3; row <= totalRows; row++)
                 {
                     readObject = null;
-                    LinkedItems newAttachment = new LinkedItems();
+                    LinkedItem newAttachment = new LinkedItem();
 
                     for (int column = 1; column <= totalColumns; column++)
                     {
@@ -1456,7 +1456,7 @@ namespace GadjIT_App.FileManagement.FileProcessing.Implementation
 
                         if (readObject.LinkedItems is null)
                         {
-                            readObject.LinkedItems = new List<LinkedItems>();
+                            readObject.LinkedItems = new List<LinkedItem>();
                         }
                         readObject.LinkedItems.Add(newAttachment);
                     }

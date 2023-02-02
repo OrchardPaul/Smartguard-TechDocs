@@ -12,6 +12,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using Serilog.Context;
 
 namespace GadjIT_App.Pages.Chapters.ComponentsChapterDetail._Fees
 {
@@ -31,7 +33,7 @@ namespace GadjIT_App.Pages.Chapters.ComponentsChapterDetail._Fees
         public UsrOrsfSmartflows _SelectedChapterObject { get; set; }
 
         [Parameter]
-        public VmChapter _SelectedChapter { get; set; }
+        public VmSmartflow _SelectedChapter { get; set; }
 
         [Parameter]
         public Fee _TaskObject { get; set; }
@@ -43,16 +45,22 @@ namespace GadjIT_App.Pages.Chapters.ComponentsChapterDetail._Fees
         public Action _DataChanged { get; set; }
 
 
-        
+        [Inject]
+        ILogger<ModalChapterFee> Logger {get; set;}
+
+        [Inject]
+        INotificationManager NotificationManager {get; set;}
+
+
         [Inject]
         IChapterManagementService ChapterManagementService { get; set; }
 
-        [Inject]
-        IAppChapterState AppChapterState { get; set; }
-
+        
         [Inject]
         IUserSessionState UserSession { get; set; }
 
+
+        public int Error { get; set; } = 0;
 
         private class PostingType
         {
@@ -114,28 +122,58 @@ namespace GadjIT_App.Pages.Chapters.ComponentsChapterDetail._Fees
 
         private void HandleValidSubmit()
         {
-            _TaskObject.FeeName = _CopyObject.FeeName;
-            _TaskObject.FeeCategory = _CopyObject.FeeCategory;
-            _TaskObject.SeqNo = _CopyObject.SeqNo;
-            _TaskObject.Amount = _CopyObject.Amount;
-            _TaskObject.VATable = _CopyObject.VATable;
-            _TaskObject.PostingType = _CopyObject.PostingType;
-            
-            if (_Option == "Insert")
+            try
             {
-                _SelectedChapter.Fees.Add(_TaskObject);
+                _TaskObject.FeeName = _CopyObject.FeeName;
+                _TaskObject.FeeCategory = _CopyObject.FeeCategory;
+                _TaskObject.SeqNo = _CopyObject.SeqNo;
+                _TaskObject.Amount = _CopyObject.Amount;
+                _TaskObject.VATable = _CopyObject.VATable;
+                _TaskObject.PostingType = _CopyObject.PostingType;
+                
+                if (_Option == "Insert")
+                {
+                    _SelectedChapter.Fees.Add(_TaskObject);
+                }
+
+                _TaskObject = new Fee();
+
+                _DataChanged?.Invoke();
+                Close();
+            }
+            catch(Exception e)
+            {
+                GenericErrorLog(true,e, "HandleValidSubmit", e.Message);
+            }
+            finally
+            {
+                Close();
+            }
+        }
+
+        private void ResetError()
+        {
+            Error = 0;
+            StateHasChanged();
+        }
+
+        /****************************************/
+        /* ERROR HANDLING */
+        /****************************************/
+        private async void GenericErrorLog(bool showNotificationMsg, Exception e, string _method, string _message)
+        {
+            if(showNotificationMsg)
+            {
+                await NotificationManager.ShowNotification("Danger", $"Oops! Something went wrong.").ConfigureAwait(false);
             }
 
-            _SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(_SelectedChapter);
-            var returnChapterObject = ChapterManagementService.Update(_SelectedChapterObject);
-
-            _TaskObject = new Fee();
-
-            //keep track of time last updated ready for comparison by other sessions checking for updates
-            AppChapterState.SetLastUpdated(UserSession, _SelectedChapter);
-
-            _DataChanged?.Invoke();
-            Close();
+            using (LogContext.PushProperty("SourceSystem", UserSession.SelectedSystem))
+            using (LogContext.PushProperty("SourceCompanyId", UserSession.Company.Id))
+            using (LogContext.PushProperty("SourceUserId", UserSession.User.Id))
+            using (LogContext.PushProperty("SourceContext", nameof(ModalChapterFee)))
+            {
+                Logger.LogError(e,"Error - Method: {0}, Message: {1}",_method, _message);
+            }
 
         }
 

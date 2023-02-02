@@ -31,7 +31,10 @@ namespace GadjIT_App.Pages.Chapters.ComponentsChapterDetail._Agenda
         public UsrOrsfSmartflows _SelectedChapterObject { get; set; }
 
         [Parameter]
-        public VmChapter _SelectedChapter { get; set; }
+        public VmSmartflow _SelectedChapter { get; set; }
+
+        [Parameter]
+        public EventCallback<VmSmartflow> _ChapterUpdated {get; set;}
 
         [Parameter]
         public EventCallback<string> _RefreshChapterItems {get; set;}
@@ -62,15 +65,14 @@ namespace GadjIT_App.Pages.Chapters.ComponentsChapterDetail._Agenda
 
         private SmartflowRecords AltChapterRecord {get; set;} //as saved on Company
 
-        private UsrOrsfSmartflows AltChapterObject { get; set; } = new UsrOrsfSmartflows(); //as saved on client site with serialised VmChapter
+        private UsrOrsfSmartflows AltChapterObject { get; set; } = new UsrOrsfSmartflows(); //as saved on client site with serialised VmSmartflow
 
-        private VmChapter AltChapter {get; set;} //Smartflow Schema
+        private VmSmartflow AltChapter {get; set;} //Smartflow Schema
 
         public List<VmGenSmartflowItem> LstAltSystemItems { get; set; } 
 
         public VmGenSmartflowItem EditObject = new VmGenSmartflowItem { ChapterObject = new GenSmartflowItem() };
 
-        private int RowChanged = 0;
 
         private bool compareSystems;
         protected bool CompareSystems 
@@ -153,11 +155,9 @@ namespace GadjIT_App.Pages.Chapters.ComponentsChapterDetail._Agenda
 
         }
 
-        private void HandleUpdate()
+        private async void HandleUpdate()
         {
-            //RefreshSelectedList();
-
-            _RefreshChapterItems.InvokeAsync("Agenda");
+            await ChapterItemsUpdated();
 
         }
 
@@ -206,25 +206,16 @@ namespace GadjIT_App.Pages.Chapters.ComponentsChapterDetail._Agenda
 
         private async void HandleDelete() 
         {
-            await DeleteItem();
-        }
-
-        private async Task DeleteItem()
-        {
             //<ModalDelete> simply invokes this method when user cicks OK. No need for the modal to handle this action as we do not require any details from the Modal. 
             _SelectedChapter.Items.Remove(EditObject.ChapterObject);
-            _SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(_SelectedChapter);
-            await ChapterManagementService.Update(_SelectedChapterObject);
-
-            //keep track of time last updated ready for comparison by other sessions checking for updates
-            AppChapterState.SetLastUpdated(UserSession, _SelectedChapter);
-
-            await RefreshSelectedList();
+           
+            await ChapterItemsUpdated();
 
         }
         
-        private async Task RefreshSelectedList()
+        private async Task ChapterItemsUpdated()
         {
+            await _ChapterUpdated.InvokeAsync(_SelectedChapter);
             await _RefreshChapterItems.InvokeAsync("Agenda");
         }
         
@@ -269,7 +260,7 @@ namespace GadjIT_App.Pages.Chapters.ComponentsChapterDetail._Agenda
                 }
                 else
                 {
-                    AltChapter = JsonConvert.DeserializeObject<VmChapter>(AltChapterRecord.SmartflowData);
+                    AltChapter = JsonConvert.DeserializeObject<VmSmartflow>(AltChapterRecord.SmartflowData);
 
                     AltChapterRecord.SmartflowData = JsonConvert.SerializeObject(AltChapter);
                     AltChapterObject = new UsrOrsfSmartflows {

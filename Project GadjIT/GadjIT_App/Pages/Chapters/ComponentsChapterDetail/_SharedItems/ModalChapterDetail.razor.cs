@@ -32,7 +32,7 @@ namespace GadjIT_App.Pages.Chapters.ComponentsChapterDetail._SharedItems
         public UsrOrsfSmartflows _SelectedChapterObject { get; set; }
 
         [Parameter]
-        public VmChapter _SelectedChapter { get; set; }
+        public VmSmartflow _SelectedChapter { get; set; }
 
         [Parameter]
         public GenSmartflowItem _TaskObject { get; set; }
@@ -72,8 +72,6 @@ namespace GadjIT_App.Pages.Chapters.ComponentsChapterDetail._SharedItems
         [Inject]
         IChapterManagementService ChapterManagementService { get; set; }
 
-        [Inject]
-        IAppChapterState AppChapterState { get; set; }
 
         [Inject]
         IUserSessionState UserSession { get; set; }
@@ -297,16 +295,11 @@ namespace GadjIT_App.Pages.Chapters.ComponentsChapterDetail._SharedItems
                         _SelectedChapter.Items.Add(_TaskObject);
                     }
 
-                    _SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(_SelectedChapter);
-                    var returnChapterObject = ChapterManagementService.Update(_SelectedChapterObject);
-
                     _TaskObject = new GenSmartflowItem();
                     FilterText = "";
 
-                    //keep track of time last updated ready for comparison by other sessions checking for updates
-                    AppChapterState.SetLastUpdated(UserSession, _SelectedChapter);
-
                     _DataChanged.Invoke();
+                    Close();
                     
                 }
 
@@ -332,6 +325,11 @@ namespace GadjIT_App.Pages.Chapters.ComponentsChapterDetail._SharedItems
         /****************************************/
         private async void GenericErrorLog(bool showNotificationMsg, Exception e, string _method, string _message)
         {
+            if(showNotificationMsg)
+            {
+                await NotificationManager.ShowNotification("Danger", $"Oops! Something went wrong.").ConfigureAwait(false);
+            }
+            
             using (LogContext.PushProperty("SourceSystem", UserSession.SelectedSystem))
             using (LogContext.PushProperty("SourceCompanyId", UserSession.Company.Id))
             using (LogContext.PushProperty("SourceUserId", UserSession.User.Id))
@@ -340,10 +338,6 @@ namespace GadjIT_App.Pages.Chapters.ComponentsChapterDetail._SharedItems
                 Logger.LogError(e,"Error - Method: {0}, Message: {1}",_method, _message);
             }
 
-            if(showNotificationMsg)
-            {
-                await NotificationManager.ShowNotification("Danger", $"Oops! Something went wrong.").ConfigureAwait(false);
-            }
         }
 
     }

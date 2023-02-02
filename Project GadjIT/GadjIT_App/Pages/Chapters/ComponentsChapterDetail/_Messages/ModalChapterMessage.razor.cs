@@ -40,7 +40,7 @@ namespace GadjIT_App.Pages.Chapters.ComponentsChapterDetail._Messages
         public UsrOrsfSmartflows _SelectedChapterObject { get; set; }
 
         [Parameter]
-        public VmChapter _SelectedChapter { get; set; }
+        public VmSmartflow _SelectedChapter { get; set; }
 
         [Parameter]
         public TickerMessage _TaskObject { get; set; }
@@ -100,11 +100,6 @@ namespace GadjIT_App.Pages.Chapters.ComponentsChapterDetail._Messages
                 _SelectedChapter.TickerMessages.Add(_TaskObject);
             }
 
-            _SelectedChapterObject.SmartflowData = JsonConvert.SerializeObject(_SelectedChapter);
-            var returnChapterObject = ChapterManagementService.Update(_SelectedChapterObject);
-
-            //keep track of time last updated ready for comparison by other sessions checking for updates
-            AppChapterState.SetLastUpdated(UserSession, _SelectedChapter);
 
             _CopyObject = new TickerMessage();
             FilterText = "";

@@ -241,7 +241,7 @@ namespace GadjIT_ClientAPI.Controllers
 
 
         [HttpPost()]
-        public async Task<ActionResult<bool>> CreateStep(VmChapterP4WStepSchemaJSONObject schemaJSONObject)
+        public async Task<ActionResult<bool>> CreateStep(VmSmartflowP4WStepSchemaJSONObject schemaJSONObject)
         {
             try
             {

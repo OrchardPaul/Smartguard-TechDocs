@@ -395,7 +395,7 @@
 
 .grid-nav .row-changed-nav3 .data-item, .grid-nav .row-changed-nav3xx .data-item {
     animation-name: rowChangednav3;
-    animation-duration: 2s;
+    animation-duration: 1s;
     animation-iteration-count: 1;
     animation-direction: normal;
     animation-fill-mode: forwards; /* or: backwards, both, none */
@@ -403,7 +403,7 @@
 
 .grid-nav .row-changed-nav3x .data-item {
     animation-name: rowChangednav3x;
-    animation-duration: 2s;
+    animation-duration: 1s;
     animation-iteration-count: 1;
     animation-direction: normal;
     animation-fill-mode: forwards; /* or: backwards, both, none */
@@ -446,7 +446,7 @@
 /*Groups*/
 .grid-nav .row-changed-nav3 .data-item-group, .grid-nav .row-changed-nav3xx .data-item-group {
     animation-name: rowChangednav3Group;
-    animation-duration: 2s;
+    animation-duration: 1s;
     animation-iteration-count: 1;
     animation-direction: normal;
     animation-fill-mode: forwards; /* or: backwards, both, none */
@@ -454,7 +454,7 @@
 
 .grid-nav .row-changed-nav3x .data-item-group {
     animation-name: rowChangednav3xGroup;
-    animation-duration: 2s;
+    animation-duration: 1s;
     animation-iteration-count: 1;
     animation-direction: normal;
     animation-fill-mode: forwards; /* or: backwards, both, none */

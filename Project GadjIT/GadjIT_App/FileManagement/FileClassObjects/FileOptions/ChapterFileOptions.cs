@@ -9,6 +9,8 @@ namespace GadjIT_App.FileManagement.FileClassObjects.FileOptions
     {
         public string Company { get; set; }
 
+        public string SelectedSystem { get; set; }
+
         public string CaseTypeGroup { get; set; }
 
         public string CaseType { get; set; }

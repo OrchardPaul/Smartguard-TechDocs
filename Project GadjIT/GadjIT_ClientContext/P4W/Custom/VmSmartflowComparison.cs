@@ -4,24 +4,24 @@ using System.Text;
 
 namespace GadjIT_ClientContext.P4W.Custom
 {
-    public partial class VmChapterComparison
+    public partial class VmSmartflowComparison
     {
-        public VmChapter CurrentChapter { get; set; }
+        public VmSmartflow CurrentChapter { get; set; }
 
-        public VmChapter AltChapter { get; set; }
+        public VmSmartflow AltChapter { get; set; }
 
       
         public string ComparisonResult { get; set; }
         public string ComparisonIcon { get; set; }
         public List<string> ComparisonList { get; set; } = new List<string>();
 
-        public bool IsChapterMatch(VmChapter vmCompItem)
+        public bool IsChapterMatch(VmSmartflow vmCompItem)
         {
             AltChapter = vmCompItem;
 
             ComparisonList = new List<string>();
             bool isSame = true;
-            VmChapter compItem = vmCompItem;
+            VmSmartflow compItem = vmCompItem;
 
             if (CurrentChapter.CaseTypeGroup != compItem.CaseTypeGroup)
             {

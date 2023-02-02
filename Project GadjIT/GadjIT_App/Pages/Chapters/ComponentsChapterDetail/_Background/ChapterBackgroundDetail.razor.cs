@@ -24,17 +24,18 @@ using BlazorInputFile;
 using GadjIT_App.FileManagement.FileProcessing.Interface;
 using GadjIT_App.FileManagement.FileClassObjects;
 using GadjIT_App.Pages.Chapters.FileUpload;
+using GadjIT_App.FileManagement.FileClassObjects.FileOptions;
+using GadjIT_App.Shared.StaticObjects;
 
 namespace GadjIT_App.Pages.Chapters.ComponentsChapterDetail._Background
 {
     public partial class ChapterBackgroundDetail
     {
         [Parameter]
-        public UsrOrsfSmartflows _SelectedChapterObject { get; set; }
+        public UsrOrsfSmartflows _SelectedChapterObject { get; set; } 
 
         [Parameter]
-        public VmChapter _SelectedChapter { get; set; }
-
+        public VmSmartflow _SelectedChapter { get; set; } 
             
         [Inject]
         IModalService Modal { get; set; }
@@ -70,12 +71,36 @@ namespace GadjIT_App.Pages.Chapters.ComponentsChapterDetail._Background
 
         private FileDesc SelectedFileDescription { get; set; }
 
+        protected bool SmartflowIsSelected {get; set;}
+
         private class ChapterColour
         {
             public string ColourName { get; set; }
             public string ColourCode { get; set; }
         }
 
+        protected override void OnInitialized()
+        {
+            //If used outside of a selected Smartflow
+            //the following objects are not required but need to exist 
+            //to prevent issues within the page
+            if(_SelectedChapterObject == null)
+            {
+                _SelectedChapterObject = new UsrOrsfSmartflows();
+                _SelectedChapter = new VmSmartflow();
+                SmartflowIsSelected = false;
+            }
+            else
+            {
+                SmartflowIsSelected = true;
+            }
+
+            SetSmartflowFilePath();
+            
+            ListFilesForBgImages = FileHelper.GetFileList();
+        }
+
+        
 
         public bool PreviewChapterImage
         {
@@ -119,12 +144,32 @@ namespace GadjIT_App.Pages.Chapters.ComponentsChapterDetail._Background
             }
         }
 
-        protected override async Task OnInitializedAsync()
+        
+
+        private void SetSmartflowFilePath()
         {
-            //set path to point to the BackgroundImage path for the current company
-            FileHelper.CustomPath = $"wwwroot/images/Companies/{UserSession.Company.CompanyName}/BackgroundImages";
-            ListFilesForBgImages = FileHelper.GetFileList();
+            try
+            {
+                ChapterFileOptions chapterFileOption;
+
+                chapterFileOption = new ChapterFileOptions
+                {
+                    Company = UserSession.Company.CompanyName,
+                    SelectedSystem = UserSession.SelectedSystem
+                    // CaseTypeGroup = _SelectedChapter.CaseTypeGroup,
+                    // CaseType = _SelectedChapter.CaseType,
+                    // Chapter = _SelectedChapter.Name
+                };
+
+                ChapterFileUpload.SetFileHelperCustomPath(chapterFileOption, FileStorageType.BackgroundImages);
+            }
+            catch (Exception ex)
+            {
+                GenericErrorLog(true,ex, "SetSmartflowFilePath", $"Setting Smartflow file path: {ex.Message}");
+            }
         }
+
+        
 
         private async void SavePreviewChapterImage()
         {
@@ -145,11 +190,10 @@ namespace GadjIT_App.Pages.Chapters.ComponentsChapterDetail._Background
             }
         }
 
-        private async void HandleBgImageFileSelection(IFileListEntry[] entryFiles)
+        private async Task HandleBgImageFileSelection(IFileListEntry[] entryFiles)
         {
             try
             {
-                FileHelper.CustomPath = $"wwwroot/images/Companies/{UserSession.Company.CompanyName}/BackgroundImages";
                 ListFilesForBgImages = FileHelper.GetFileList();
 
                 var files = new List<IFileListEntry>();
@@ -202,12 +246,11 @@ namespace GadjIT_App.Pages.Chapters.ComponentsChapterDetail._Background
             
         }
 
-        protected async Task PrepareBgImageForDelete(FileDesc selectedFile)
+        protected void PrepareBgImageForDelete(FileDesc selectedFile)
         {
             try
             {
-                FileHelper.CustomPath = $"wwwroot/images/Companies/{UserSession.Company.CompanyName}/BackgroundImages";
-
+                
                 SelectedFileDescription = selectedFile;
 
                 string itemName = selectedFile.FileName;
@@ -271,7 +314,7 @@ namespace GadjIT_App.Pages.Chapters.ComponentsChapterDetail._Background
             }
         }
 
-        private async Task DeleteBgImageFile(FileDesc file)
+        private void DeleteBgImageFile(FileDesc file)
         {
             try
             {
@@ -333,7 +376,7 @@ namespace GadjIT_App.Pages.Chapters.ComponentsChapterDetail._Background
             }
         } 
 
-        public async Task<string> getHTMLColourFromAndroid(string colAndroid)
+        public string getHTMLColourFromAndroid(string colAndroid)
         {
             string colHTML = "#FFFFFFFF";
 

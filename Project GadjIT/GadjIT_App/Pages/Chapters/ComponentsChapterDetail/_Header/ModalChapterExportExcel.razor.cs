@@ -21,7 +21,7 @@ namespace GadjIT_App.Pages.Chapters.ComponentsChapterDetail._Header
         public IChapterFileUpload ChapterFileUpload { get; set; }
 
         [Parameter]
-        public VmChapter SelectedChapter { get; set; }
+        public VmSmartflow SelectedChapter { get; set; }
 
         [Parameter]
         public List<DmDocuments> Documents { get; set; }

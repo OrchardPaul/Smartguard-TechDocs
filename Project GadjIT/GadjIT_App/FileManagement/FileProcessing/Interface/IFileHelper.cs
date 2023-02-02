@@ -19,7 +19,7 @@ namespace GadjIT_App.FileManagement.FileProcessing.Interface
         List<FileDesc> GetFileList();
         string MoveFile(string oldPath, string newPath);
         string MoveFolder(string oldPath, string newPath);
-        VmChapter ReadChapterDataFromExcel(string FilePath);
+        VmSmartflow ReadChapterDataFromExcel(string FilePath);
         string ReadFileIntoString(string path);
         string RenameFile(string path, string oldName, string newName);
         string RenameFolder(string path, string oldName, string newName);
@@ -29,6 +29,6 @@ namespace GadjIT_App.FileManagement.FileProcessing.Interface
         void Write(List<string> output, string fileName);
         Task<bool> DownloadFile(string FileName, byte[] data);
 
-        Task<string> WriteChapterDataToExcel(VmChapter selectedChapter, List<DmDocuments> documents, List<CaseTypeGroups> caseTypeGroups);
+        Task<string> WriteChapterDataToExcel(VmSmartflow selectedChapter, List<DmDocuments> documents, List<CaseTypeGroups> caseTypeGroups);
     }
 }

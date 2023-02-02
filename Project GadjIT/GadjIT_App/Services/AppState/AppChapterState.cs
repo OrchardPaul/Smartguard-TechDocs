@@ -13,13 +13,13 @@ namespace GadjIT_App.Services.AppState
     {
         List<IAppChapterItemState> LstAppChapterStateItems { get; }
 
-        void SetLastUpdated(IUserSessionState sessionState, VmChapter selectedChapter);
+        void SetLastUpdated(IUserSessionState sessionState, VmSmartflow selectedChapter);
 
-        DateTime GetLastUpdatedDate(IUserSessionState sessionState, VmChapter selectedChapter);
+        DateTime GetLastUpdatedDate(IUserSessionState sessionState, VmSmartflow selectedChapter);
 
-        IAppChapterItemState GetChapterItemState(IUserSessionState sessionState, VmChapter selectedChapter);
+        IAppChapterItemState GetChapterItemState(IUserSessionState sessionState, VmSmartflow selectedChapter);
 
-        void SetUsersCurrentChapter(IUserSessionState sessionState, VmChapter selectedChapter);
+        void SetUsersCurrentChapter(IUserSessionState sessionState, VmSmartflow selectedChapter);
 
         void DisposeUser(IUserSessionState sessionState);
 
@@ -85,7 +85,7 @@ namespace GadjIT_App.Services.AppState
 
         }
 
-        public DateTime GetLastUpdatedDate(IUserSessionState sessionState,VmChapter selectedChapter)
+        public DateTime GetLastUpdatedDate(IUserSessionState sessionState,VmSmartflow selectedChapter)
         {
             Lock = true;
 
@@ -99,7 +99,7 @@ namespace GadjIT_App.Services.AppState
 
         }
 
-        public void SetLastUpdated(IUserSessionState sessionState, VmChapter selectedChapter)
+        public void SetLastUpdated(IUserSessionState sessionState, VmSmartflow selectedChapter)
         {
             IAppChapterItemState appChapterItemState;
             DateTime currentDate = DateTime.Now;
@@ -113,7 +113,7 @@ namespace GadjIT_App.Services.AppState
 
         }
 
-        public IAppChapterItemState GetChapterItemState(IUserSessionState sessionState, VmChapter selectedChapter)
+        public IAppChapterItemState GetChapterItemState(IUserSessionState sessionState, VmSmartflow selectedChapter)
         {
 
             IAppChapterItemState appChapterItemState;
@@ -146,7 +146,7 @@ namespace GadjIT_App.Services.AppState
             return appChapterItemState;
         }
 
-        public void SetUsersCurrentChapter(IUserSessionState sessionState, VmChapter selectedChapter)
+        public void SetUsersCurrentChapter(IUserSessionState sessionState, VmSmartflow selectedChapter)
         {
             Lock = true;
 
@@ -172,7 +172,7 @@ namespace GadjIT_App.Services.AppState
             Lock = false;
         }
 
-        public void FlushInactiveUsers(IUserSessionState sessionState, VmChapter selectedChapter)
+        public void FlushInactiveUsers(IUserSessionState sessionState, VmSmartflow selectedChapter)
         {
             IAppChapterItemState appChapterItemState;
 

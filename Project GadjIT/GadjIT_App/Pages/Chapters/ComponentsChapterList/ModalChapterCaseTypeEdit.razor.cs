@@ -63,7 +63,7 @@ namespace GadjIT_App.Pages.Chapters.ComponentsChapterList
 
                 foreach (var chapter in chapters)
                 {
-                    var updateJson = JsonConvert.DeserializeObject<VmChapter>(chapter.SmartflowObject.SmartflowData);
+                    var updateJson = JsonConvert.DeserializeObject<VmSmartflow>(chapter.SmartflowObject.SmartflowData);
                     updateJson.CaseType = TaskObject;
                     chapter.SmartflowObject.CaseType = TaskObject;
                     chapter.SmartflowObject.SmartflowData = JsonConvert.SerializeObject(updateJson);
@@ -76,7 +76,7 @@ namespace GadjIT_App.Pages.Chapters.ComponentsChapterList
 
                 foreach (var chapter in chapters)
                 {
-                    var updateJson = JsonConvert.DeserializeObject<VmChapter>(chapter.SmartflowObject.SmartflowData);
+                    var updateJson = JsonConvert.DeserializeObject<VmSmartflow>(chapter.SmartflowObject.SmartflowData);
                     updateJson.CaseTypeGroup = TaskObject;
                     chapter.SmartflowObject.CaseTypeGroup = TaskObject;
                     chapter.SmartflowObject.SmartflowData = JsonConvert.SerializeObject(updateJson);
@@ -85,7 +85,7 @@ namespace GadjIT_App.Pages.Chapters.ComponentsChapterList
             }
             else
             {
-                var updateJson = JsonConvert.DeserializeObject<VmChapter>(Chapter.SmartflowData);
+                var updateJson = JsonConvert.DeserializeObject<VmSmartflow>(Chapter.SmartflowData);
                 updateJson.Name = Chapter.SmartflowName;
                 Chapter.SmartflowData = JsonConvert.SerializeObject(updateJson);
                 await chapterManagementService.UpdateMainItem(Chapter).ConfigureAwait(false);

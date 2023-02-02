@@ -68,7 +68,7 @@ namespace GadjIT_App.Pages.Chapters.ComponentsChapterList
                 TaskObject.SmartflowName = name;
                 TaskObject.CaseType = caseType;
                 TaskObject.CaseTypeGroup = caseTypeGroup;
-                TaskObject.SmartflowData = JsonConvert.SerializeObject(new VmChapter
+                TaskObject.SmartflowData = JsonConvert.SerializeObject(new VmSmartflow
                 {
                     CaseTypeGroup = caseTypeGroup,
                     CaseType = caseType,

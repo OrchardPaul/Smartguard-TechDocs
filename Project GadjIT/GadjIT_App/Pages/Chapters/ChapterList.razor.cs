@@ -109,17 +109,21 @@ namespace GadjIT_App.Pages.Chapters
         public VmUsrOrsfSmartflows AltChapterObject { get; set; } = new VmUsrOrsfSmartflows();
 
 
-        public VmChapter SelectedChapter { get; set; } = new VmChapter { Items = new List<GenSmartflowItem>() }; //SmartflowData
+        public VmSmartflow SelectedChapter { get; set; } = new VmSmartflow { Items = new List<GenSmartflowItem>() }; //SmartflowData
+
+        protected string SelectedCaseTypeGroup { get; set;} = "";
+        protected string SelectedCaseType { get; set;} = "";
+        protected string SelectedCaseTypeGroupPrev { get; set;} = "";
+        protected string SelectedCaseTypePrev { get; set;} = "";
 
 
-        int RowChanged { get; set; } = 0; //moved partial
-
+        int RowChanged { get; set; } = 0; 
 
         private bool SeqMoving = false;
+        private string RowChangedClass { get; set; } = "row-changed-nav3";
 
         protected bool CompareSystems = false;
 
-        private string RowChangedClass { get; set; } = "row-changed-nav3";
        
         public bool ListChapterLoaded = false;
 
@@ -254,6 +258,18 @@ namespace GadjIT_App.Pages.Chapters
                 CompareSystems = false;
                 SelectedChapterObject.SmartflowObject = null;
                 SelectedChapter.Name = "";
+                if(SelectedCaseTypeGroup == "" && SelectedCaseTypeGroupPrev != "")
+                {
+                    SelectedCaseTypeGroup = SelectedCaseTypeGroupPrev;
+                    SelectedCaseType = SelectedCaseTypePrev;
+                }
+                else
+                {
+                    SelectedCaseTypeGroup = "";
+                    SelectedCaseType = "";
+                }
+                
+
                 ResetRowChanged();
 
                 StateHasChanged();
@@ -608,7 +624,17 @@ namespace GadjIT_App.Pages.Chapters
         }
 
 
-        private async void SelectChapter(UsrOrsfSmartflows chapter)
+        private async Task SelectChapterFromHome(UsrOrsfSmartflows chapter)
+        {
+            
+            SelectedCaseTypeGroupPrev = "";
+            SelectedCaseTypePrev = "";
+
+            await SelectChapter(chapter);
+
+        }
+
+        private async Task SelectChapter(UsrOrsfSmartflows chapter)
         {
             try
             {
@@ -618,6 +644,10 @@ namespace GadjIT_App.Pages.Chapters
                 SelectedChapterObject.SmartflowObject = chapter;
 
                 SelectedChapter.Name = chapter.SmartflowName;
+
+                SelectedCaseTypeGroup = "";
+                SelectedCaseType = "";
+
 
             }
             catch (Exception ex)
@@ -698,6 +728,30 @@ namespace GadjIT_App.Pages.Chapters
             ShowCaseTypeEditModal();
         }
 
+        protected async void ShowCaseTypeDetail(string caseTypeGroup, string caseType)
+        {
+            try
+            {
+
+                ScrollPosition = await JSRuntime.InvokeAsync<float>("getElementPosition");
+
+                SelectedCaseTypeGroup = caseTypeGroup;
+                SelectedCaseType = caseType;
+                SelectedCaseTypeGroupPrev = caseTypeGroup;
+                SelectedCaseTypePrev = caseType;
+
+            }
+            catch (Exception ex)
+            {
+
+                await GenericErrorLog(true,ex, "SelectChapter", $"Loading selected Smartflow: {ex.Message}");
+
+            }
+            finally
+            {
+                StateHasChanged();
+            }
+        }
 
 
 #endregion
@@ -848,7 +902,7 @@ namespace GadjIT_App.Pages.Chapters
                     {
                         foreach (var chapter in LstSelectedChapters)
                         {
-                            var chapterItems = JsonConvert.DeserializeObject<VmChapter>(chapter.SmartflowObject.SmartflowData);
+                            var chapterItems = JsonConvert.DeserializeObject<VmSmartflow>(chapter.SmartflowObject.SmartflowData);
 
                             AltChapterObject.SmartflowObject = LstAltSystemChapters
                                                 .Where(A => A.SmartflowObject.SmartflowName == chapter.SmartflowObject.SmartflowName)
@@ -1083,7 +1137,7 @@ namespace GadjIT_App.Pages.Chapters
                 foreach (var chapter in LstChapters)
                 {
 
-                    var decodedChapter = JsonConvert.DeserializeObject<VmChapter>(chapter.SmartflowObject.SmartflowData);
+                    var decodedChapter = JsonConvert.DeserializeObject<VmSmartflow>(chapter.SmartflowObject.SmartflowData);
 
                     if (!string.IsNullOrEmpty(decodedChapter.SelectedStep) 
                         && !string.IsNullOrEmpty(decodedChapter.SelectedView)
@@ -1165,7 +1219,7 @@ namespace GadjIT_App.Pages.Chapters
 
                         
 
-                        creationSuccess = await ChapterManagementService.CreateStep(new VmChapterP4WStepSchemaJSONObject { StepSchemaJSON = stepJSON });
+                        creationSuccess = await ChapterManagementService.CreateStep(new VmSmartflowP4WStepSchemaJSONObject { StepSchemaJSON = stepJSON });
 
                         if (!creationSuccess)
                         {
@@ -1200,7 +1254,7 @@ namespace GadjIT_App.Pages.Chapters
 
                 stepJSON = JsonConvert.SerializeObject(chapterP4WStep);
 
-                creationSuccess = await ChapterManagementService.CreateStep(new VmChapterP4WStepSchemaJSONObject { StepSchemaJSON = stepJSON });
+                creationSuccess = await ChapterManagementService.CreateStep(new VmSmartflowP4WStepSchemaJSONObject { StepSchemaJSON = stepJSON });
 
                 if (!creationSuccess)
                 {
