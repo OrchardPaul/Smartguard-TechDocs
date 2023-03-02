@@ -19,7 +19,3 @@ The main purpose of Smartflow is to provide an environment that is always famili
 
 ## Flexibility
 Smartflow allows users to customise workflows as they progress through a case should the need require. Tasks can be altered to display alternative names in the history, schedule details can be amended and/or assigned to other users.
-
-
-
-
