@@ -6,7 +6,7 @@ namespace GadjIT_AppContext.GadjIT_App.Custom
 {
     public partial class UserDataCollectionItem
     {
-        public AspNetUsers User { get; set; }
+        public AspNetUser User { get; set; }
 
         public List<AppCompanyUserRoles> UserRoles { get; set; }
 

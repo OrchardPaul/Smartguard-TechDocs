@@ -18,7 +18,7 @@ namespace GadjIT_AppContext.GadjIT_App
         public string UserId { get; set; }
 
         [ForeignKey(nameof(UserId))]
-        [InverseProperty(nameof(AspNetUsers.AspNetUserLogins))]
-        public virtual AspNetUsers User { get; set; }
+        [InverseProperty(nameof(AspNetUser.AspNetUserLogins))]
+        public virtual AspNetUser User { get; set; }
     }
 }

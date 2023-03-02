@@ -16,7 +16,7 @@ namespace GadjIT_AppContext.GadjIT_App
         [InverseProperty(nameof(AspNetRoles.AspNetUserRoles))]
         public virtual AspNetRoles Role { get; set; }
         [ForeignKey(nameof(UserId))]
-        [InverseProperty(nameof(AspNetUsers.AspNetUserRoles))]
-        public virtual AspNetUsers User { get; set; }
+        [InverseProperty(nameof(AspNetUser.AspNetUserRoles))]
+        public virtual AspNetUser User { get; set; }
     }
 }

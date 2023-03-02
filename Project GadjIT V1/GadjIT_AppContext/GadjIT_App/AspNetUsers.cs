@@ -5,9 +5,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GadjIT_AppContext.GadjIT_App
 {
-    public partial class AspNetUsers
+    [Table("AspNetUsers")]
+    public partial class AspNetUser
     {
-        public AspNetUsers()
+        public AspNetUser()
         {
             AspNetUserClaims = new HashSet<AspNetUserClaims>();
             AspNetUserLogins = new HashSet<AspNetUserLogins>();

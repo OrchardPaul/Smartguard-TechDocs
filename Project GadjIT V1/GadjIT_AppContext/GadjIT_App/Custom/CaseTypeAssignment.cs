@@ -1,10 +1,10 @@
-﻿using GadjIT_ClientContext.P4W;
+﻿using GadjIT_ClientContext.Models.P4W;
 
 namespace GadjIT_AppContext.GadjIT_App.Custom
 {
     public partial class CaseTypeAssignment
     {
-        public CaseTypes CaseType { get; set; }
+        public P4W_CaseTypes CaseType { get; set; }
 
         public bool IsAssigned { get; set; }
     }
