@@ -1,5 +1,4 @@
-﻿using GadjIT_ClientContext.P4W;
-using GadjIT_App.Services.SessionState;
+﻿using GadjIT_App.Services.SessionState;
 using Microsoft.AspNetCore.Components;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -7,14 +6,15 @@ using System.Net.Http.Json;
 using System.Threading.Tasks;
 using System;
 using Microsoft.Extensions.Logging;
+using GadjIT_ClientContext.Models.P4W;
 
 namespace GadjIT_App.Services
 {
     public interface IPartnerAccessService
     {
-        Task<List<CaseTypes>> GetPartnerCaseTypes();
-        Task<List<CaseTypeGroups>> GetPartnerCaseTypeGroups();
-        Task<List<MpSysViews>> GetPartnerViews();
+        Task<List<P4W_CaseTypes>> GetPartnerCaseTypes();
+        Task<List<P4W_CaseTypeGroups>> GetPartnerCaseTypeGroups();
+        Task<List<P4W_MpSysViews>> GetPartnerViews();
     }
 
     public class PartnerAccessService : IPartnerAccessService
@@ -31,16 +31,16 @@ namespace GadjIT_App.Services
             this.userSession = userSession;
         }
 
-        public async Task<List<CaseTypes>> GetPartnerCaseTypes()
+        public async Task<List<P4W_CaseTypes>> GetPartnerCaseTypes()
         {
-            List<CaseTypes> caseTypes = new List<CaseTypes>();
+            List<P4W_CaseTypes> caseTypes = new List<P4W_CaseTypes>();
             try
             {
                 HttpResponseMessage result = await httpClient.GetAsync($"{userSession.BaseUri}api/PartnerAccess/GetAllCaseTypes");
 
                 if(result.IsSuccessStatusCode)
                 {
-                    caseTypes = await result.Content.ReadFromJsonAsync<List<CaseTypes>>();
+                    caseTypes = await result.Content.ReadFromJsonAsync<List<P4W_CaseTypes>>();
                 }
                 else
                 {
@@ -57,16 +57,16 @@ namespace GadjIT_App.Services
             return caseTypes;
         }
 
-        public Task<List<CaseTypeGroups>> GetPartnerCaseTypeGroups()
+        public Task<List<P4W_CaseTypeGroups>> GetPartnerCaseTypeGroups()
         {
-            var result = httpClient.GetFromJsonAsync<List<CaseTypeGroups>>($"{userSession.BaseUri}api/PartnerAccess/GetAllCaseTypeGroups");
+            var result = httpClient.GetFromJsonAsync<List<P4W_CaseTypeGroups>>($"{userSession.BaseUri}api/PartnerAccess/GetAllCaseTypeGroups");
 
             return result;
         }
 
-        public Task<List<MpSysViews>> GetPartnerViews()
+        public Task<List<P4W_MpSysViews>> GetPartnerViews()
         {
-            var result = httpClient.GetFromJsonAsync<List<MpSysViews>>($"{userSession.BaseUri}api/PartnerAccess/GetAllP4WViews");
+            var result = httpClient.GetFromJsonAsync<List<P4W_MpSysViews>>($"{userSession.BaseUri}api/PartnerAccess/GetAllP4WViews");
 
             return result;
         }

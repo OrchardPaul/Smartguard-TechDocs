@@ -20,18 +20,18 @@ namespace GadjIT_App.Pages.SystemNav.CompanyManagement
         {
             public VmCompanyDetails Company { get; set; }
 
-            public List<AspNetUsers> Users { get; set; }
+            public List<AspNetUser> Users { get; set; }
 
-            public List<SmartflowRecords> SmartflowsDev { get; set; }
+            public List<App_SmartflowRecord> SmartflowsDev { get; set; }
 
-            public List<SmartflowRecords> SmartflowsLive { get; set; }
+            public List<App_SmartflowRecord> SmartflowsLive { get; set; }
 
             public string LastUpdated { get; set; }
         }
 
         public class userInfo
         {
-            public AspNetUsers user { get; set; }
+            public AspNetUser user { get; set; }
 
             public IList<Claim> claims { get; set; }
         }
@@ -53,11 +53,11 @@ namespace GadjIT_App.Pages.SystemNav.CompanyManagement
 
         private List<companyInfo> AllCompanies { get; set; }
 
-        private List<AspNetUsers> AllUsers { get; set; }
+        private List<AspNetUser> AllUsers { get; set; }
 
         private List<userInfo> AllUserinfo { get; set; }
 
-        private List<SmartflowRecords> AllSmartflows { get; set; }
+        private List<App_SmartflowRecord> AllSmartflows { get; set; }
 
         public AppCompanyDetails editCompany = new AppCompanyDetails();
 
@@ -101,7 +101,7 @@ namespace GadjIT_App.Pages.SystemNav.CompanyManagement
 
 
 
-            AllSmartflows = await companyDbAccess.GetAllSmartflowRecordsForAllCompanies();
+            AllSmartflows = await companyDbAccess.GetAllAppSmartflowRecordsForAllCompanies();
 
 
 
@@ -199,7 +199,7 @@ namespace GadjIT_App.Pages.SystemNav.CompanyManagement
 
                 var options = new ModalOptions()
                 {
-                    Class = "blazored-custom-modal modal-chapter-import"
+                    Class = "blazored-custom-modal modal-smartflow-import"
                 };
 
                 Modal.Show<ModalErrorInfo>("Delete Company Issue", parameters, options);
@@ -218,7 +218,7 @@ namespace GadjIT_App.Pages.SystemNav.CompanyManagement
 
                 var options = new ModalOptions()
                 {
-                    Class = "blazored-custom-modal modal-chapter-import"
+                    Class = "blazored-custom-modal modal-smartflow-import"
                 };
 
                 Modal.Show<ModalDelete>("Delete?", parameters, options);

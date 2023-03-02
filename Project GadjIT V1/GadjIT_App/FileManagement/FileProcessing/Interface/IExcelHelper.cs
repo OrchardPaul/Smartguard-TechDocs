@@ -6,6 +6,6 @@ namespace GadjIT_App.FileManagement.FileProcessing.Interface
 {
     public interface IExcelHelper
     {
-        Task<string> WriteChapterDataToExcel(CompanyAccountObject companyAccount, List<BillingItem> billingItems);
+        Task<string> WriteSmartflowDataToExcel(CompanyAccountObject companyAccount, List<BillingItem> billingItems);
     }
 }

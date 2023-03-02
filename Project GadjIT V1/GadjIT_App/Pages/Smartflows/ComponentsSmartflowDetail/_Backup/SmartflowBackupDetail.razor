@@ -1,0 +1,63 @@
+<div class="grid-chapter grid-chapter-backups">
+    <div class="detail-group-box" id="form-controls-json">
+        <h5>Backup and Recovery: @_SelectedSmartflow.Name</h5>
+        <div class="btn-group mt-2">
+            <button @onclick="WriteChapterJSONToFile" class="btn btn-main btn-shadow"><i class="fa fa-save"></i><span>New Backup</span></button>
+        </div>
+        
+        <div class="custom-file">
+            <BlazorInputFile.InputFile multiple OnChange="HandleBackupFileSelection" class="custom-file-input" id="customFileInput"></BlazorInputFile.InputFile>
+            <label class="custom-file-label" for="customInput">Upload backup files</label>
+        </div>
+
+
+
+        <div class="grid-can-edit chapter-scroll-list">
+            @if(ListFilesForBackups != null)
+            {
+                foreach (var fileDesc in ListFilesForBackups.Where(F => F.FilePath.Contains(".txt") || F.FilePath.Contains(".JSON")).ToList().OrderByDescending(F => F.FileDate))
+                {
+                    <div class="row grid-row grid-row-sm">
+                        <div class="data-item">
+                            <div class="btn-ellipses float-left">
+                                <span class="fa fa-ellipsis-v"></span>
+                                <div class="ellipsis-menu">
+                                    <ul>
+                                        <li class="col-main" @onclick='(() => DownloadFile(fileDesc))'>
+                                            <span class="fa fa-download mr-2"></span>
+                                            <span>Download</span>
+                                        </li>
+                                        @if(_SmartflowLockedForEdit)
+                                        {
+                                            <li class="col-main" @onclick='(() => ReadBackUpFile(fileDesc.FilePath))'>
+                                                <span class="fa fa-window-restore mr-2"></span>
+                                                <span>Restore</span>
+                                            </li>
+                                            <li class="col-main" @onclick='(() => PrepareBackUpForDelete(fileDesc))'>
+                                                <span class="fa fa-trash-alt mr-2"></span>
+                                                <span>Delete</span>
+                                            </li>
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="data-item-sub">
+                                @fileDesc.FileName
+                            </div>
+                        </div>
+                        <div class="data-item ">
+                            <div class="data-item-sub">
+                                @fileDesc.FileDate.ToString("dd MMM yyyy")
+                            </div>
+                        </div>
+
+
+                    </div>
+                }
+            }
+        </div>
+
+
+
+    </div>
+</div>

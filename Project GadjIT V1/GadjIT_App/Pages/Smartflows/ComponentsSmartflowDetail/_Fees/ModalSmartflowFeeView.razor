@@ -1,0 +1,73 @@
+﻿
+<div class="modal-body" tabindex="0">
+    <table class="table-basic table-top-header table-left-header table-borderless">
+        <thead>
+
+            <tr>
+                <td style="width: 150px">
+                </td>
+                <td style="width: 500px">
+                </td>
+
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    Seq Number
+                </td>
+                <td>
+                    @_Object.FeeObject.SeqNo
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Fee Name:
+                </td>
+                <td>
+                    <input type="text" class="read-only" readonly value="@_Object.FeeObject.FeeName" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Fee Category
+                </td>
+                <td>
+                    <input type="text" class="read-only" readonly value="@_Object.FeeObject.FeeCategory" />
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    Amount
+                </td>
+                <td>
+                    @_Object.FeeObject.Amount
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    VATable
+                </td>
+                <td>
+                    <input type="text" class="read-only" value="@_Object.FeeObject.VATable" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Posting Type
+                </td>
+                <td>
+                    <input type="text" class="read-only" value="@_Object.FeeObject.PostingType" />
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="button-container">
+    <button type="button" class="btn btn-secondary" @onclick="() => Close()">Close</button>
+</div>
+
+
+

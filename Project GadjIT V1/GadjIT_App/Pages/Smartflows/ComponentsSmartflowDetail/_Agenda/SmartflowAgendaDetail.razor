@@ -1,0 +1,154 @@
+@using GadjIT_App.Pages._Shared.Modals
+@using GadjIT_ClientContext.Models.Smartflow
+
+
+<div class="grid-chapter grid-chapter-agenda">
+
+    @if (_LstAgendas == null)
+    {
+        <div class="spinner"></div>
+    }
+    else
+    {
+        <div class="grid-actions">
+
+            @if (!CompareSystems)
+            {
+                <div class="btn-group">
+                    @if (UserSession.IsAdminUser && _SmartflowLockedForEdit)
+                    {
+                        <button @onclick='() => PrepareForInsert()' class="btn btn-main btn-shadow" title="Add new agenda"><i class="fa fa-plus"></i><span>New</span></button>
+                    }
+                </div>
+            }
+            <ModalTooltip Direction="top" Text="Correspondence stored in these agendas will be made avalible on the History tab." Class="w-2">
+                <span class="info-icon">
+                    <span class=" fa fa-info-circle fa-2x "></span>
+                </span>
+            </ModalTooltip>
+            <div class="spacer">
+            </div>
+            @if (UserSession.IsAdminUser && _SmartflowLockedForEdit)
+            {
+                <div class="btn-group sync-group invisible-md-down">
+                    <button type="button" @onclick="() => PrepareChapterSync()" class="btn btn-main btn-shadow @(!CompareSystems ? "hidden" : "")" title="Sync To @UserSession.AltSystem"><i class="fa fa-sync"></i><span>Sync</span></button>
+                    <input type="checkbox" class="ml-1 mt-1" @bind=CompareSystems /><span class="ml-2 font-75 ">Compare to @UserSession.AltSystem </span>
+                </div>
+            }
+        </div>
+
+        <div class="@((UserSession.IsAdminUser && _SmartflowLockedForEdit) ? "grid-can-edit" : "") ">
+
+            @foreach (var agenda in _LstAgendas.OrderBy(A => A.ChapterObject.Name))
+            {
+
+                <div class="row grid-row">
+                    <div class="col-12 data-item">
+                        @if (UserSession.IsAdminUser && _SmartflowLockedForEdit)
+                        {
+
+                            @if (!CompareSystems)
+                            {
+                                <div class="btn-ellipses float-left">
+                                    <span class="fa fa-ellipsis-v"></span>
+                                    <div class="ellipsis-menu">
+                                        <ul>
+                                            <li class="col-main" @onclick='(() => PrepareForEdit(agenda))'>
+                                                <span class="fa fa-pencil-alt mr-2"></span>
+                                                <span>Edit</span>
+                                            </li>
+                                            <li class="col-main" @onclick='(() => ShowSmartflowDetailViewModal(agenda))'>
+                                                <span class="fa fa-binoculars mr-2"></span>
+                                                <span>View</span>
+                                            </li>
+                                            <li class="col-red" @onclick="() => ShowSmartflowDetailDelete(agenda)">
+                                                <span class="fa fa-trash-alt mr-2"></span>
+                                                <span>Delete</span>
+                                            </li>
+
+                                        </ul>
+
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+
+                                <div class="btn-ellipses float-left">
+                                    @if (!(agenda.ComparisonIcon is null))
+                                    {
+                                        @if (!(agenda.ComparisonResult == "Exact match"))
+                                        {
+                                            <ModalTooltip Direction="right" Text=@(agenda.ComparisonResult == "Partial match" ? "Differences found, click to sync" : "Does not exist, click to create") Class="w-2">
+                                                <div class="btn-dashed" @onclick="() => ShowSmartflowComparisonModal(agenda)"><span class="fa fa-@agenda.ComparisonIcon"></span></div>
+                                            </ModalTooltip>
+
+                                        }
+                                        else
+                                        {
+                                            <ModalTooltip Direction="right" Text="Exact Match" Class="w-1">
+                                                <span class="fa fa-@agenda.ComparisonIcon"></span>
+                                            </ModalTooltip>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <div class="spinner"></div>
+                                    }
+
+                                </div>
+                            }
+
+                        }
+                        else
+                        {
+                            <div class="btn-ellipses float-left">
+                                <span class="fa fa-ellipsis-v"></span>
+                                <div class="ellipsis-menu">
+                                    <ul>
+                                        <li class="col-main" @onclick='(() => ShowSmartflowDetailViewModal(agenda))'>
+                                            <span class="fa fa-binoculars mr-2"></span>
+                                            <span>View</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        }
+                        <div class="data-item-sub ">
+                            <span class="font-100"><span class="fa fa-folder-open mr-2"></span></span>@agenda.ChapterObject.Name
+                        </div>
+                    </div>
+
+                </div>
+
+            }
+
+            @if (CompareSystems && !(LstAltSystemItems is null))
+            {
+                @foreach (var agenda in LstAltSystemItems.Where(D => D.ChapterObject.Type == "Agenda").Where(D => !D.Compared).ToList())
+                {
+
+                    <div class="row grid-row">
+                        <div class="data-item">
+
+                            <div class="btn-ellipses float-left">
+
+                                <ModalTooltip Direction="right" Text=@("Exists on alternate system, Do you wish to delete?") Class="w-2">
+                                    <div class="btn-dashed" @onclick="() => ShowSmartflowDeleteAlt(agenda)"><span class="fa fa-trash"></span></div>
+                                </ModalTooltip>
+
+                            </div>
+
+
+                            <div class="data-item-sub">
+                                <span class="font-100"><span class="fa fa-folder-open mr-2"></span></span>@agenda.ChapterObject.Name
+                            </div>
+                        </div>
+
+                    </div>
+
+                }
+            }
+        </div>
+    }
+</div>

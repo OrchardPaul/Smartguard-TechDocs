@@ -1,22 +1,9 @@
 ﻿using BlazorInputFile;
-using GadjIT_ClientContext.P4W;
-using GadjIT_ClientContext.P4W.Custom;
 using GadjIT_AppContext.GadjIT_App.Custom;
-using GadjIT_App.FileManagement.FileClassObjects;
 using GadjIT_App.FileManagement.FileProcessing.Interface;
-using GadjIT_App.Services.SessionState;
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.JSInterop;
-using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Net;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading;
 using System.Threading.Tasks;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
@@ -32,7 +19,7 @@ namespace GadjIT_App.FileManagement.FileProcessing.Implementation
             this.jsRuntime = jsRuntime;
         }
 
-        public async Task<string> WriteChapterDataToExcel(CompanyAccountObject companyAccount, List<BillingItem> billingItems)
+        public async Task<string> WriteSmartflowDataToExcel(CompanyAccountObject companyAccount, List<BillingItem> billingItems)
         {
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             ExcelPackage excel = new ExcelPackage();

@@ -18,8 +18,8 @@ namespace GadjIT_App.Data.MapperProfiles
             CreateMap<ApplicationRole, AspNetRoles>();
             CreateMap<AspNetRoles, ApplicationRole>();
 
-            CreateMap<ApplicationUser, AspNetUsers>();
-            CreateMap<AspNetUsers, ApplicationUser>();
+            CreateMap<ApplicationUser, AspNetUser>();
+            CreateMap<AspNetUser, ApplicationUser>();
 
         }
 

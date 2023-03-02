@@ -39,7 +39,7 @@ namespace GadjIT_App.Pages.Admin.UserManagement
         [Inject]
         private IUserSessionState SessionState { get; set; }
 
-        public AspNetUsers EditObject { get; set; } = new AspNetUsers();
+        public AspNetUser EditObject { get; set; } = new AspNetUser();
 
         protected IList<string> EditObjectRoles { get; set; }
 
@@ -78,7 +78,7 @@ namespace GadjIT_App.Pages.Admin.UserManagement
         }
 
 
-        protected void PrepareForEdit(AspNetUsers selectedUser)
+        protected void PrepareForEdit(AspNetUser selectedUser)
         {
             EditOption = "Edit";
             EditObject = selectedUser;
@@ -94,7 +94,7 @@ namespace GadjIT_App.Pages.Admin.UserManagement
         protected void PrepareForInsert()
         {
             EditOption = "Insert";
-            EditObject = new AspNetUsers();
+            EditObject = new AspNetUser();
             EditObject.SelectedUri = "Live";
             EditObject.SelectedCompanyId = SessionState.User.SelectedCompanyId;
 
@@ -122,7 +122,7 @@ namespace GadjIT_App.Pages.Admin.UserManagement
             hoveredItem.OnHover = !hoveredItem.OnHover;
         }
 
-        protected void PrepareModalForDelete(AspNetUsers selectedUser)
+        protected void PrepareModalForDelete(AspNetUser selectedUser)
         {
             EditObject = selectedUser;
 

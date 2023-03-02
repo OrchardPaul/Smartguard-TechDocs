@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using GadjIT_AppContext.GadjIT_App;
 using GadjIT_AppContext.GadjIT_App.Custom;
-using GadjIT_ClientContext.P4W;
 using GadjIT_App.Services.SessionState;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -12,6 +11,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Serilog.Context;
+using GadjIT_ClientContext.Models.P4W;
+using GadjIT_ClientContext.Models.Smartflow.Client;
 
 namespace GadjIT_App.Data.Admin
 {
@@ -20,7 +21,7 @@ namespace GadjIT_App.Data.Admin
         Task<List<AppDepartments>> GetDepartments();
         Task<List<AppWorkTypeGroups>> GetWorkTypeGroups();
         Task<List<AppWorkTypes>> GetWorkTypes();
-        Task<WorkTypeMapping> GetWorkTypeMappingsByCompany(AppCompanyDetails company, List<CaseTypes> allCaseTypes, AppWorkTypes workType, string system);
+        Task<WorkTypeMapping> GetWorkTypeMappingsByCompany(AppCompanyDetails company, List<P4W_CaseTypes> allCaseTypes, AppWorkTypes workType, string system);
         Task<List<AppCompanyWorkTypeMapping>> UpdateWorkTypeMapping(WorkTypeMapping typeMapping, AppCompanyDetails company, string system);
         Task<List<WorkTypeGroupItem>> GetGroupsWithWorkTypes();
         Task<List<AppWorkTypeGroups>> GetWorkTypeGroupsByCompany(int companyId);
@@ -37,26 +38,26 @@ namespace GadjIT_App.Data.Admin
 
         Task<List<AppCompanyDetails>> GetCompanies();
         Task<AppCompanyDetails> GetCompanyById(int id);
-        Task<AppCompanyDetails> GetSelectedCompanyOfUser(AspNetUsers user);
+        Task<AppCompanyDetails> GetSelectedCompanyOfUser(AspNetUser user);
         Task<string> GetCompanyBaseUri(int id, string selectedUri);
         Task<AppCompanyDetails> SubmitChanges(AppCompanyDetails company);
         Task<AppCompanyDetails> DeleteCompany(AppCompanyDetails company);
         Task<AppCompanyDetails> AssignWorkTypeGroupToCompany(AppCompanyDetails company, AppWorkTypeGroups workTypeGroup);
         Task<AppCompanyDetails> RemoveWorkTypeGroupFromCompany(AppCompanyDetails company, AppWorkTypeGroups workTypeGroup);
-        Task<SmartflowRecords> SaveSmartFlowRecord(UsrOrsfSmartflows chapter, IUserSessionState sessionState);
-        Task<SmartflowRecords> SaveSmartFlowRecordData(UsrOrsfSmartflows chapter, IUserSessionState sessionState);
-        Task<SmartflowRecords> RemoveSmartFlowRecord(int id, IUserSessionState sessionState);
-        Task<List<SmartflowRecords>> SyncAdminSysToClient(List<UsrOrsfSmartflows> clientObjects, IUserSessionState sessionState);
-        Task<List<SmartflowRecords>> GetAllSmartflowRecords(IUserSessionState sessionState);
-        Task<List<SmartflowRecords>> GetAllSmartflowRecordsForAllCompanies();
-        Task<SmartflowRecords> GetSmartflow(IUserSessionState _sessionState, string _caseTypeGroup, string _caseType, string _smartflowName);
+        Task<App_SmartflowRecord> SaveSmartFlowRecord(Client_SmartflowRecord chapter, IUserSessionState sessionState);
+        Task<App_SmartflowRecord> SaveSmartFlowRecordData(Client_SmartflowRecord chapter, IUserSessionState sessionState);
+        Task<App_SmartflowRecord> RemoveSmartFlowRecord(int id, IUserSessionState sessionState);
+        Task<List<App_SmartflowRecord>> SyncAdminSysToClient(List<Client_SmartflowRecord> clientObjects, IUserSessionState sessionState);
+        Task<List<App_SmartflowRecord>> GetAllAppSmartflowRecords(IUserSessionState sessionState);
+        Task<List<App_SmartflowRecord>> GetAllAppSmartflowRecordsForAllCompanies();
+        Task<App_SmartflowRecord> GetSmartflow(IUserSessionState _sessionState, string _caseTypeGroup, string _caseType, string _smartflowName);
         bool Lock { get; set; }
 
         Task<List<AppCompanyAccountsSmartflowDetails>> GetCompanyAccountDetailsByAccountId(int accountId);
         Task<List<AppCompanyAccountsSmartflow>> GetCompanyAccounts();
         Task<bool> RefreshAccounts();
         Task<AppCompanyAccountsSmartflowDetails> UpdateSmartflowAccountDetails(AppCompanyAccountsSmartflowDetails appCompanyAccountsSmartflow);
-        Task<List<BillingItem>> BillCompany(CompanyAccountObject companyAccount, List<SmartflowRecords> smartflowRecords, bool draft);
+        Task<List<BillingItem>> BillCompany(CompanyAccountObject companyAccount, List<App_SmartflowRecord> App_SmartflowRecord, bool draft);
     }
 
     public class CompanyDbAccess : ICompanyDbAccess
@@ -119,7 +120,7 @@ namespace GadjIT_App.Data.Admin
         }
 
         public async Task<WorkTypeMapping> GetWorkTypeMappingsByCompany(AppCompanyDetails company
-                                                                                , List<CaseTypes> allCaseTypes
+                                                                                , List<P4W_CaseTypes> allCaseTypes
                                                                                 , AppWorkTypes workType
                                                                                 , string system)
         {
@@ -540,7 +541,7 @@ namespace GadjIT_App.Data.Admin
             {
                 var signedInUserState = await authenticationStateProvider.GetAuthenticationStateAsync();
                 var signedInUserAsp = await userManager.FindByNameAsync(signedInUserState.User.Identity.Name);
-                var signedInUser = mapper.Map(signedInUserAsp, new AspNetUsers());
+                var signedInUser = mapper.Map(signedInUserAsp, new AspNetUser());
 
                 if (signedInUserState.User.IsInRole("Super User"))
                 {
@@ -571,7 +572,7 @@ namespace GadjIT_App.Data.Admin
             
         }
 
-        public async Task<AppCompanyDetails> GetSelectedCompanyOfUser(AspNetUsers user)
+        public async Task<AppCompanyDetails> GetSelectedCompanyOfUser(AspNetUser user)
         {
             using (var context = contextFactory.CreateDbContext())
             {
@@ -714,12 +715,12 @@ namespace GadjIT_App.Data.Admin
         }
 
 
-        public async Task<List<SmartflowRecords>> SyncAdminSysToClient(List<UsrOrsfSmartflows> clientObjects, IUserSessionState sessionState)
+        public async Task<List<App_SmartflowRecord>> SyncAdminSysToClient(List<Client_SmartflowRecord> clientObjects, IUserSessionState sessionState)
         {
             using (var context = contextFactory.CreateDbContext())
             {
                 var currentRecords = await context
-                                                .SmartflowRecords
+                                                .App_SmartflowRecord
                                                 .Where(R => R.CompanyId == sessionState.Company.Id)
                                                 .Where(R => R.System == sessionState.SelectedSystem)
                                                 .ToListAsync();
@@ -738,15 +739,15 @@ namespace GadjIT_App.Data.Admin
 
                 foreach(var record in currentRecords)
                 {
-                    context.SmartflowRecords.Remove(record);
+                    context.App_SmartflowRecord.Remove(record);
                 }
 
                 await context.SaveChangesAsync();
 
-                foreach (var clientRow in clientObjects)
+                foreach (Client_SmartflowRecord clientRecord in clientObjects)
                 {
-                    var record = new SmartflowRecords { CompanyId = sessionState.Company.Id };
-                    mapper.Map(clientRow, record);
+                    var record = new App_SmartflowRecord { CompanyId = sessionState.Company.Id };
+                    mapper.Map(clientRecord, record);
 
                     record.System = sessionState.SelectedSystem;
                     record.CreatedByUserId = sessionState.User.Id;
@@ -754,7 +755,7 @@ namespace GadjIT_App.Data.Admin
                     record.LastModifiedByUserId = sessionState.User.Id;
                     record.LastModifiedDate = DateTime.Now;
 
-                    context.SmartflowRecords.Add(record);
+                    context.App_SmartflowRecord.Add(record);
 
                     await context.SaveChangesAsync();
                 }
@@ -765,17 +766,17 @@ namespace GadjIT_App.Data.Admin
         }
 
 
-        public async Task<List<SmartflowRecords>> GetAllSmartflowRecords(IUserSessionState sessionState)
+        public async Task<List<App_SmartflowRecord>> GetAllAppSmartflowRecords(IUserSessionState sessionState)
         {
             using (var context = contextFactory.CreateDbContext())
             {
-                var returnValues = new List<SmartflowRecords>();
+                var returnValues = new List<App_SmartflowRecord>();
 
                 try
                 {
                     Lock = true;
 
-                    returnValues = await context.SmartflowRecords.Where(S => S.CompanyId == sessionState.Company.Id)
+                    returnValues = await context.App_SmartflowRecord.Where(S => S.CompanyId == sessionState.Company.Id)
                                     .Where(S => S.System == sessionState.SelectedSystem)
                                     .ToListAsync();
 
@@ -790,17 +791,17 @@ namespace GadjIT_App.Data.Admin
 
         }
 
-        public async Task<List<SmartflowRecords>> GetAllSmartflowRecordsForAllCompanies()
+        public async Task<List<App_SmartflowRecord>> GetAllAppSmartflowRecordsForAllCompanies()
         {
             using (var context = contextFactory.CreateDbContext())
             {
-                var returnValues = new List<SmartflowRecords>();
+                var returnValues = new List<App_SmartflowRecord>();
 
                 try
                 {
                     Lock = true;
 
-                    returnValues = await context.SmartflowRecords
+                    returnValues = await context.App_SmartflowRecord
                                     .ToListAsync();
 
                 }
@@ -814,17 +815,17 @@ namespace GadjIT_App.Data.Admin
 
         }
 
-        public async Task<SmartflowRecords> GetSmartflow(IUserSessionState _sessionState, string _caseTypeGroup, string _caseType, string _smartflowName)
+        public async Task<App_SmartflowRecord> GetSmartflow(IUserSessionState _sessionState, string _caseTypeGroup, string _caseType, string _smartflowName)
         {
             using (var context = contextFactory.CreateDbContext())
             {
-                var returnValue = new SmartflowRecords();
+                var returnValue = new App_SmartflowRecord();
 
                 try
                 {
                     Lock = true;
 
-                    returnValue = await context.SmartflowRecords.Where(S => S.CompanyId == _sessionState.Company.Id)
+                    returnValue = await context.App_SmartflowRecord.Where(S => S.CompanyId == _sessionState.Company.Id)
                                     .Where(S => S.System == _sessionState.SelectedSystem)
                                     .Where(S => S.CaseTypeGroup == _caseTypeGroup)
                                     .Where(S => S.CaseType == _caseType)
@@ -843,14 +844,14 @@ namespace GadjIT_App.Data.Admin
         }
 
 
-        public async Task<SmartflowRecords> SaveSmartFlowRecord(UsrOrsfSmartflows chapter, IUserSessionState sessionState)
+        public async Task<App_SmartflowRecord> SaveSmartFlowRecord(Client_SmartflowRecord chapter, IUserSessionState sessionState)
         {
             using (var context = contextFactory.CreateDbContext())
             {
-                SmartflowRecords record = new SmartflowRecords { CompanyId = sessionState.Company.Id };
+                App_SmartflowRecord record = new App_SmartflowRecord { CompanyId = sessionState.Company.Id };
 
                 
-                var existingRecord = await context.SmartflowRecords
+                var existingRecord = await context.App_SmartflowRecord
                                                     .Where(R => R.RowId == chapter.Id && R.CompanyId == sessionState.Company.Id)
                                                     .Where(R => R.System == sessionState.SelectedSystem)
                                                     .SingleOrDefaultAsync();
@@ -865,7 +866,7 @@ namespace GadjIT_App.Data.Admin
                     record.LastModifiedByUserId = sessionState.User.Id;
                     record.LastModifiedDate = DateTime.Now;
 
-                    context.SmartflowRecords.Add(record);            
+                    context.App_SmartflowRecord.Add(record);            
                 }
                 else
                 {
@@ -882,16 +883,16 @@ namespace GadjIT_App.Data.Admin
 
         }
 
-        public async Task<SmartflowRecords> SaveSmartFlowRecordData(UsrOrsfSmartflows chapter, IUserSessionState sessionState)
+        public async Task<App_SmartflowRecord> SaveSmartFlowRecordData(Client_SmartflowRecord chapter, IUserSessionState sessionState)
         {
             using (var context = contextFactory.CreateDbContext())
             {
                 Lock = true;
 
-                SmartflowRecords record = new SmartflowRecords { CompanyId = sessionState.Company.Id };
+                App_SmartflowRecord record = new App_SmartflowRecord { CompanyId = sessionState.Company.Id };
 
 
-                var existingRecord = await context.SmartflowRecords
+                var existingRecord = await context.App_SmartflowRecord
                                                     .Where(R => R.RowId == chapter.Id && R.CompanyId == sessionState.Company.Id)
                                                     .Where(R => R.System == sessionState.SelectedSystem)
                                                     .SingleOrDefaultAsync();
@@ -906,7 +907,7 @@ namespace GadjIT_App.Data.Admin
                     record.LastModifiedByUserId = sessionState.User.Id;
                     record.LastModifiedDate = DateTime.Now;
 
-                    context.SmartflowRecords.Add(record);
+                    context.App_SmartflowRecord.Add(record);
                 }
                 else
                 {
@@ -923,11 +924,11 @@ namespace GadjIT_App.Data.Admin
             }
         }
 
-        public async Task<SmartflowRecords> RemoveSmartFlowRecord(int id, IUserSessionState sessionState)
+        public async Task<App_SmartflowRecord> RemoveSmartFlowRecord(int id, IUserSessionState sessionState)
         {
             using (var context = contextFactory.CreateDbContext())
             {
-                var existingRecord = await context.SmartflowRecords
+                var existingRecord = await context.App_SmartflowRecord
                                                     .Where(R => R.RowId == id && R.CompanyId == sessionState.Company.Id)
                                                     .Where(R => R.System == sessionState.SelectedSystem)
                                                     .FirstOrDefaultAsync();
@@ -950,7 +951,7 @@ namespace GadjIT_App.Data.Admin
                     }
 
 
-                    context.SmartflowRecords.Remove(existingRecord);
+                    context.App_SmartflowRecord.Remove(existingRecord);
                     await context.SaveChangesAsync();
                 }
 
@@ -992,11 +993,11 @@ namespace GadjIT_App.Data.Admin
 
                     existingAccounts = await context.AppCompanyAccountsSmartflow.ToListAsync();
                     var existingAccountDetails = await context.AppCompanyAccountsSmartflowDetails.ToListAsync();
-                    var existingSmartflowRecords = await context.SmartflowRecords.ToListAsync();
+                    var existingApp_SmartflowRecord = await context.App_SmartflowRecord.ToListAsync();
 
                     foreach(var companyId in existingAccounts.Select(A => A.CompanyId))
                     {
-                        var newAccountDetails = existingSmartflowRecords
+                        var newAccountDetails = existingApp_SmartflowRecord
                                                                         .Where(R => R.CompanyId == companyId)
                                                                         .Where(R => !existingAccountDetails
                                                                                     .Select(D => D.ClientRowId)
@@ -1145,12 +1146,12 @@ namespace GadjIT_App.Data.Admin
         {
             public AppCompanyAccountsSmartflowDetails AccountObject { get; set; }
 
-            public SmartflowRecords RecordObject { get; set; }
+            public App_SmartflowRecord RecordObject { get; set; }
 
         }
 
         public async Task<List<BillingItem>> BillCompany(CompanyAccountObject companyAccount
-                                                        , List<SmartflowRecords> smartflowRecords
+                                                        , List<App_SmartflowRecord> App_SmartflowRecord
                                                         , bool draft)
         {
             try
@@ -1175,7 +1176,7 @@ namespace GadjIT_App.Data.Admin
                     companyBillingSmartflowAccounts = companyBillingSmartflowAccounts
                     .Select(A =>
                     {
-                        A.RecordObject = smartflowRecords
+                        A.RecordObject = App_SmartflowRecord
                                         .Where(S => A.AccountObject.ClientRowId == S.RowId 
                                                     && A.AccountObject.CompanyId == S.CompanyId
                                                     && A.AccountObject.System == S.System)

@@ -1,0 +1,110 @@
+﻿
+<div class="modal-body" tabindex="0">
+    <table class="table-basic table-top-header table-left-header table-borderless">
+        <thead>
+
+            <tr>
+                <td style="width: 150px">
+                </td>
+                <td style="width: 500px">
+                </td>
+            </tr>
+        </thead>
+        <tbody>
+            @if (_SelectedList != "Agenda")
+            {
+                <tr>
+                    <td>
+                        Seq Number
+                    </td>
+                    <td>
+                        @_Object.ChapterObject.SeqNo
+                    </td>
+                </tr>
+            }
+
+            <tr>
+                <td>
+                    @(_SelectedList == "Steps and Documents" ? "Document" : @_SelectedList) Name:
+                </td>
+                <td>
+                    <input type="text" class="read-only" readonly value="@_Object.ChapterObject.Name" />
+                </td>
+
+            </tr>
+            @if (_SelectedList == "Steps and Documents")
+            {
+                <tr>
+                    <td>
+                        Display Name:
+                    </td>
+                    <td>
+                        <input type="text" class="read-only" readonly value="@_Object.ChapterObject.AltDisplayName" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Reschedule Days
+                    </td>
+                    <td>
+                        @_Object.ChapterObject.RescheduleDays
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Schedule As Name:
+                    </td>
+                    <td>
+                        <input type="text" class="read-only" value="@_Object.ChapterObject.AsName" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Complete As Name
+                    </td>
+                    <td>
+                        <input type="text" class="read-only" value="@_Object.ChapterObject.CompleteName" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Next Status
+                    </td>
+                    <td>
+                        <input type="text" class="read-only" value="@_Object.ChapterObject.NextStatus" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Action
+                    </td>
+                    <td>
+                        <input type="text" class="read-only" value="@_Object.ChapterObject.Action" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        User Message
+                    </td>
+                    <td>
+                        <input type="text" class="read-only" value="@_Object.ChapterObject.UserMessage" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Popup Alert
+                    </td>
+                    <td>
+                        <input type="text" class="read-only" value="@_Object.ChapterObject.PopupAlert" />
+                    </td>
+                </tr>
+
+            }
+
+        </tbody>
+    </table>
+</div>
+
+<div class="button-container">
+    <button type="button" class="btn btn-secondary" @onclick="() => Close()">Close</button>
+</div>

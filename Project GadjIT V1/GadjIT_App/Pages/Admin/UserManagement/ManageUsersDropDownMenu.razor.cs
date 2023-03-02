@@ -14,7 +14,7 @@ namespace GadjIT_App.Pages.Admin.UserManagement
         public Action ToggleDetail { get; set; }
 
         [Parameter]
-        public AspNetUsers SelectedUser { get; set; }
+        public AspNetUser SelectedUser { get; set; }
 
         [Inject]
         public IUserSessionState SessionState { get; set; }

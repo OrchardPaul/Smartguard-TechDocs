@@ -1,0 +1,85 @@
+﻿@inject IJSRuntime jsRuntime
+
+
+<div class="modal-body">
+    
+
+    @if (!ToggleError && !ToggleSuccess)
+    {
+        @if (!(ListFileDescriptions is null) && ListFileDescriptions.Where(F => F.FilePath.Contains(".xlsx")).ToList().Count() > 0)
+        {
+            <div class="form-group alert alert-secondary " role="alert">
+                <div class="font-75">
+                    @ListFileDescriptions.Where(F => F.FilePath.Contains(".xlsx")).FirstOrDefault().FileName
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="font-weight-bold">Copy Options</label>
+                @foreach (var option in CopyOptions)
+                {
+                    <div class="ml-2 mr-1">
+                        <label>@option.Option (@option.OptionCount)</label>
+                        <input class="float-right" type="checkbox" @bind-value="option.Selected" />
+                    </div>
+                }
+            </div>
+
+
+            <div class="button-container">
+                <button type="submit" class="btn btn-main" @onclick='() => HandleValidSubmit()'>Import</button>
+                <button type="button" class="btn btn-secondary" @onclick="Close">Cancel</button>
+            </div>
+
+        }
+        else
+        {
+            <div class="form-group">
+                <div>
+                    <label>
+                        Please select an excel file to import
+                    </label>
+                </div>
+                
+
+                <div class="custom-file">
+                    <BlazorInputFile.InputFile OnChange="HandleFileSelection" class="custom-file-input" id="customFileInput"></BlazorInputFile.InputFile>
+                    <label class="custom-file-label" for="customInput">Upload Excel file</label>
+                </div>
+            </div>
+
+            <div class="button-container">
+                <button type="button" class="btn btn-secondary" @onclick="Close">Cancel</button>
+            </div>
+        }
+    }
+    else
+    {
+        <div class="form-group">
+            @if (ToggleError)
+            {
+                <div class="alert alert-danger " role="alert">Errors occured when uploading excel spreadsheet, Import was not completed:</div>
+                <ul>
+                    @foreach (var error in ErrorList)
+                    {
+                        <li class="font-85">@((MarkupString)error)</li>
+                    }
+                </ul>
+            }
+            @if (ToggleSuccess)
+            {
+                <div class="alert alert-info " role="alert">Import was successful!</div>
+            }
+
+        </div>
+
+        <div class="button-container">
+            <button type="button" class="btn btn-secondary" @onclick="Close">Close</button>
+        </div>
+    }
+
+
+
+
+</div>
+

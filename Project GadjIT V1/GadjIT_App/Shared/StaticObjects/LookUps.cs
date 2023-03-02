@@ -69,6 +69,7 @@ namespace GadjIT_App.Shared.StaticObjects
         , BackupsCaseType = 3
         , BackupsSmartflow = 4
         , BackgroundImages = 20
+        , TempUploads = 30
         
     }
 

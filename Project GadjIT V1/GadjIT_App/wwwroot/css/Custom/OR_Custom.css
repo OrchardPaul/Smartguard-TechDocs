@@ -434,6 +434,11 @@ app {
     background-color: rgba(245, 245, 245, 0.5) !important;
 }
 
+.btn-warning{
+    border-color: #fff !important;
+    color: #fff !important;
+}
+
 
 /*-----------------------------*/
 /*  FILE INPUTS                */
@@ -740,6 +745,7 @@ app {
         font-size: 0.9rem !important;
         display: flex;
         align-items: center;
+
     }
 
     @media (max-width: 767px) {
@@ -764,6 +770,7 @@ app {
         overflow: hidden;
         text-overflow: ellipsis !important;
         margin-right: auto;
+
     }
 
     .data-item-sub .secondary-item

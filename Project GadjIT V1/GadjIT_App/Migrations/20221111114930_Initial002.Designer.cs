@@ -131,7 +131,7 @@ namespace GadjIT_App.Migrations
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
-                    b.ToTable("AspNetUsers");
+                    b.ToTable("AspNetUser");
                 });
 
             modelBuilder.Entity("GadjIT_AppContext.GadjIT_App.AppCompanyAccountsSmartflow", b =>
@@ -469,7 +469,7 @@ namespace GadjIT_App.Migrations
                     b.ToTable("GadjIT_Log");
                 });
 
-            modelBuilder.Entity("GadjIT_AppContext.GadjIT_App.SmartflowRecords", b =>
+            modelBuilder.Entity("GadjIT_AppContext.GadjIT_App.App_SmartflowRecord", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -525,7 +525,7 @@ namespace GadjIT_App.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("SmartflowRecords");
+                    b.ToTable("App_SmartflowRecord");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

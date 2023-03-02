@@ -16,7 +16,6 @@ using GadjIT_App.Services.Email;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using GadjIT_App.Services.SessionState;
 using Blazored.Modal;
-using GadjIT_App.Pages.Chapters;
 using GadjIT_App.FileManagement.FileProcessing.Interface;
 using GadjIT_App.FileManagement.FileProcessing.Implementation;
 using System.IO;
@@ -24,7 +23,7 @@ using GadjIT_App.Services.AppState;
 using GadjIT_App.Pages.Accounts.CompanyAccountManagement;
 using GadjIT_App.Data.Dropzone_Objects;
 using Microsoft.AspNetCore.DataProtection;
-using GadjIT_App.Pages.Chapters.FileUpload;
+using GadjIT_App.Pages.Smartflows.FileHandling;
 
 namespace GadjIT_App
 {
@@ -61,7 +60,7 @@ namespace GadjIT_App
             services.AddServerSideBlazor();
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<ApplicationUser>>();
 
-            services.AddHttpClient<IChapterManagementService, ChapterManagementService>();
+            services.AddHttpClient<IClientApiManagementService, ClientApiManagementService>();
             services.AddHttpClient<IPartnerAccessService, PartnerAccessService>();
             services.AddHttpClient<IGeneralAccessService, GeneralAccessService>();
 
@@ -85,13 +84,13 @@ namespace GadjIT_App
             services.AddScoped<IFileHelper, FileHelper>();
             services.AddScoped<IPDFHelper, PDFHelper>();
             services.AddScoped<IExcelHelper, ExcelHelper>();
-            services.AddScoped<IChapterFileUpload, ChapterFileUpload>();
+            services.AddScoped<ISmartflowFileHelper, SmartflowFileHelper>();
             services.AddScoped<INotificationManager,NotificationManager>();
 
             services.AddScoped<JsConsole>();
             services.AddScoped(typeof(DragDropService<>));
 
-            services.AddSingleton<IAppChapterState, AppChapterStateList>();
+            services.AddSingleton<IAppSmartflowsState, AppSmartflowsStateList>();
 
             var keysFolder = Path.Combine(environment.ContentRootPath, "Keys");
 

@@ -7,7 +7,7 @@ namespace GadjIT_App.Services.SessionState
 {
     public interface IPageAuthorisationState
     {
-        Task<bool> ChapterListAuthorisation();
+        Task<bool> SmartflowListAuthorisation();
         Task<string> AdminNavAuthorisation();
         Task<string> SystemNavAuthorisation();
         Task<string> UserManagementAuthorisation();
@@ -35,7 +35,7 @@ namespace GadjIT_App.Services.SessionState
             return false;
         }
 
-        public async Task<bool> ChapterListAuthorisation()
+        public async Task<bool> SmartflowListAuthorisation()
         {
             var authenticationState = await stateProvider.GetAuthenticationStateAsync();
 

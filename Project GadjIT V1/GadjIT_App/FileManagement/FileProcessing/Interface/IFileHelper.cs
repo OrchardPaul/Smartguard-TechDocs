@@ -1,10 +1,10 @@
 ﻿using BlazorInputFile;
-using GadjIT_ClientContext.P4W;
-using GadjIT_ClientContext.P4W.Custom;
 using GadjIT_App.FileManagement.FileClassObjects;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using GadjIT_ClientContext.Models.P4W;
+using GadjIT_ClientContext.Models.Smartflow;
 
 namespace GadjIT_App.FileManagement.FileProcessing.Interface
 {
@@ -19,16 +19,16 @@ namespace GadjIT_App.FileManagement.FileProcessing.Interface
         List<FileDesc> GetFileList();
         string MoveFile(string oldPath, string newPath);
         string MoveFolder(string oldPath, string newPath);
-        VmSmartflow ReadChapterDataFromExcel(string FilePath);
+        Smartflow ReadChapterDataFromExcel(string FilePath);
         string ReadFileIntoString(string path);
         string RenameFile(string path, string oldName, string newName);
         string RenameFolder(string path, string oldName, string newName);
         Task<bool> Upload(IFileListEntry file);
-        List<string> ValidateChapterExcel(string FilePath);
+        List<string> ValidateSmartflowExcel(string FilePath);
         byte[] ReadFileIntoByteArray(string path);
         void Write(List<string> output, string fileName);
         Task<bool> DownloadFile(string FileName, byte[] data);
 
-        Task<string> WriteChapterDataToExcel(VmSmartflow selectedChapter, List<DmDocuments> documents, List<CaseTypeGroups> caseTypeGroups);
+        Task<string> WriteSmartflowDataToExcel(Smartflow selectedChapter, List<P4W_DmDocuments> documents, List<P4W_CaseTypeGroups> caseTypeGroups);
     }
 }

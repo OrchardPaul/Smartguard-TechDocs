@@ -1,11 +1,11 @@
-﻿using GadjIT_ClientContext.P4W;
-using GadjIT_App.Data.CustomFormObjects;
+﻿
 using GadjIT_App.Services;
 using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using GadjIT_ClientContext.Models.P4W;
 
 namespace GadjIT_App.Pages.Admin.StepManager
 {
@@ -13,7 +13,7 @@ namespace GadjIT_App.Pages.Admin.StepManager
     {
         public bool IsSelected { get; set; } = false;
 
-        public DmDocuments Step { get; set; }
+        public P4W_DmDocuments Step { get; set; }
     }
 
     public partial class StepManagerMainPage
@@ -22,7 +22,7 @@ namespace GadjIT_App.Pages.Admin.StepManager
 
 
         [Inject]
-        private IChapterManagementService chapterManagementService { get; set; }
+        private IClientApiManagementService ClientApiManagementService { get; set; }
 
         [Inject]
         private IPartnerAccessService partnerAccessService { get; set; }
@@ -38,9 +38,9 @@ namespace GadjIT_App.Pages.Admin.StepManager
                 LoadSteps();
             } }
 
-        public List<CaseTypeGroups> PartnerCaseTypes { get; set; } = new List<CaseTypeGroups>();
+        public List<P4W_CaseTypeGroups> PartnerCaseTypes { get; set; } = new List<P4W_CaseTypeGroups>();
 
-        public List<DmDocuments> LibraryDocumentsAndSteps { get; set; } = new List<DmDocuments>();
+        public List<P4W_DmDocuments> LibraryDocumentsAndSteps { get; set; } = new List<P4W_DmDocuments>();
 
         public List<StepObject> StepObjects { get; set; } = new List<StepObject>();
 
@@ -49,7 +49,7 @@ namespace GadjIT_App.Pages.Admin.StepManager
         protected override async Task OnInitializedAsync()
         {
             PartnerCaseTypes = await partnerAccessService.GetPartnerCaseTypeGroups();
-            LibraryDocumentsAndSteps = await chapterManagementService.GetDocumentList("Case");
+            LibraryDocumentsAndSteps = await ClientApiManagementService.GetDocumentList("Case");
         }
 
         protected void LoadSteps()

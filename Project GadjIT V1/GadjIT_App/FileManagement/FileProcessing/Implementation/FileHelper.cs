@@ -1,10 +1,6 @@
 ﻿using BlazorInputFile;
-using GadjIT_ClientContext.P4W;
-using GadjIT_ClientContext.P4W.Custom;
 using GadjIT_App.FileManagement.FileClassObjects;
 using GadjIT_App.FileManagement.FileProcessing.Interface;
-using GadjIT_App.Services.SessionState;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.JSInterop;
@@ -14,11 +10,10 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading;
 using System.Threading.Tasks;
+using GadjIT_ClientContext.Models.P4W;
+using GadjIT_ClientContext.Models.Smartflow;
 
 namespace GadjIT_App.FileManagement.FileProcessing.Implementation
 {
@@ -47,6 +42,15 @@ namespace GadjIT_App.FileManagement.FileProcessing.Implementation
         public Action<string> ValidationAction { get; set; }
 
         public string CustomPath { get; set; }
+        private string CustomFullPath => string.IsNullOrEmpty(CustomPath) ?
+                                                Path.Combine(webHostEnvironment.ContentRootPath, "FileManagement\\FileStorage\\Default")
+                                                :
+                                                Path.Combine(webHostEnvironment.ContentRootPath, CustomPath);
+        private string CustomURLPath => string.IsNullOrEmpty(CustomPath) ?
+                                                "/FileManagement/FileStorage/Default"
+                                                :
+                                                '/' + CustomPath.Replace("\\","/") + "/";
+        
 
         public List<FeeDefinition> FeeDefinitions = new List<FeeDefinition>
         {
@@ -99,22 +103,28 @@ namespace GadjIT_App.FileManagement.FileProcessing.Implementation
 
         public async Task<bool> Upload(IFileListEntry file)
         {
-            var path = string.IsNullOrEmpty(CustomPath) ?
-                                    Path.Combine(webHostEnvironment.ContentRootPath, "FileManagement/FileStorage/Default", file.Name)
-                                    :
-                                    Path.Combine(webHostEnvironment.ContentRootPath, CustomPath, file.Name);
+            var filePath = Path.Combine(CustomFullPath, file.Name);
 
             var MemStream = new MemoryStream();
 
-            await file.Data.CopyToAsync(MemStream);
+            try
+            {
+                await file.Data.CopyToAsync(MemStream);
 
-            ValidationAction.Invoke(path);
+                ValidationAction.Invoke(filePath);
+
+            }
+            catch
+            {
+                return false;
+            }
+
 
             if (IsFileValid)
             {
                 try
                 {
-                    using (FileStream fs = new FileStream(path, FileMode.Create, FileAccess.Write))
+                    using (FileStream fs = new FileStream(filePath, FileMode.Create, FileAccess.Write))
                     {
                         MemStream.WriteTo(fs);
                     }
@@ -123,18 +133,19 @@ namespace GadjIT_App.FileManagement.FileProcessing.Implementation
                 }
                 catch
                 {
-                    Directory.CreateDirectory(Path.GetDirectoryName(path));
 
                     try
                     {
-                        using (FileStream fs = new FileStream(path, FileMode.Create, FileAccess.Write))
+                        Directory.CreateDirectory(CustomFullPath);
+
+                        using (FileStream fs = new FileStream(filePath, FileMode.Create, FileAccess.Write))
                         {
                             MemStream.WriteTo(fs);
                         }
 
                         return true;
                     }
-                    catch
+                    catch(Exception e)
                     {
                         return false;
                     }
@@ -151,14 +162,14 @@ namespace GadjIT_App.FileManagement.FileProcessing.Implementation
             try
             {
                 fileList.AddRange(Directory
-                    .GetFiles(CustomPath)
+                    .GetFiles(CustomFullPath)                                                                                                             
                     .Select(F => new FileDesc
                     {
                         FileName = Path.GetFileName(F)
                     ,
                         FilePath = Path.GetFullPath(F)
                     ,
-                        FileURL = '/' + CustomPath + '/' + Path.GetFileName(F)
+                        FileURL = CustomURLPath + Path.GetFileName(F)
                     ,
                         FileDirectory = Path.GetDirectoryName(F)
                     ,
@@ -348,7 +359,7 @@ namespace GadjIT_App.FileManagement.FileProcessing.Implementation
 
         public void Write(List<string> output, string fileName)
         {
-            // Write the string array to a new file named "WriteLines.txt".
+            // Write the string array to a new file 
             try
             {
                 using (StreamWriter outputFile = new StreamWriter(Path.Combine(CustomPath, fileName)))
@@ -370,7 +381,7 @@ namespace GadjIT_App.FileManagement.FileProcessing.Implementation
 
         }
 
-        public List<string> ValidateChapterExcel(string FilePath)
+        public List<string> ValidateSmartflowExcel(string FilePath)
         {
             var isExcelValid = new List<string>();
 
@@ -488,7 +499,7 @@ namespace GadjIT_App.FileManagement.FileProcessing.Implementation
             return isExcelValid;
         }
 
-        public async Task<string> WriteChapterDataToExcel(VmSmartflow selectedChapter, List<DmDocuments> documents, List<CaseTypeGroups> caseTypeGroups)
+        public async Task<string> WriteSmartflowDataToExcel(Smartflow selectedChapter, List<P4W_DmDocuments> documents, List<P4W_CaseTypeGroups> caseTypeGroups)
         {
             List<string> docTypes = new List<string> { "Doc", "Letter", "Form", "Step", "Date", "Email" };
             Dictionary<int?, string> docP4WTypes = new Dictionary<int?, string> { { 1, "Doc" }, { 4, "Form" }, { 6, "Step" }, { 8, "Date" }, { 9, "Email" }, { 11, "Doc" }, { 12, "Email" }, { 13, "Doc" }, { 19, "Doc" } };
@@ -1020,12 +1031,12 @@ namespace GadjIT_App.FileManagement.FileProcessing.Implementation
         }
 
 
-        public VmSmartflow ReadChapterDataFromExcel(string FilePath)
+        public Smartflow ReadChapterDataFromExcel(string FilePath)
         {
-            VmSmartflow readChapters = new VmSmartflow { Items = new List<GenSmartflowItem>(), Fees = new List<Fee>(), DataViews = new List<DataView>() };
+            Smartflow readChapters = new Smartflow { Items = new List<GenSmartflowItem>(), Fees = new List<SmartflowFee>(), DataViews = new List<SmartflowDataView>() };
             GenSmartflowItem readObject;
-            Fee feeObject;
-            DataView readView;
+            SmartflowFee feeObject;
+            SmartflowDataView readView;
 
             FileInfo fileInfo = new FileInfo(FilePath);
 
@@ -1128,7 +1139,7 @@ namespace GadjIT_App.FileManagement.FileProcessing.Implementation
 
                 for (int row = 3; row <= totalRows; row++)
                 {
-                    feeObject = new Fee();
+                    feeObject = new SmartflowFee();
 
                     for (int column = 1; column <= totalColumns; column++)
                     {
@@ -1469,7 +1480,7 @@ namespace GadjIT_App.FileManagement.FileProcessing.Implementation
 
                 for (int row = 3; row <= totalRows; row++)
                 {
-                    readView = new DataView();
+                    readView = new SmartflowDataView();
 
                     for (int column = 1; column <= totalColumns; column++)
                     {

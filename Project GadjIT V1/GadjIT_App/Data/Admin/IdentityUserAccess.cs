@@ -18,18 +18,18 @@ namespace GadjIT_App.Data.Admin
 {
     public interface IIdentityUserAccess
     {
-        Task<AspNetUsers> SwitchSelectedCompany(AspNetUsers user);
-        Task<IdentityResult> Delete(AspNetUsers item);
-        Task<IList<Claim>> GetCompanyClaims(AspNetUsers user);
-        Task<IList<string>> GetSelectedUserRoles(AspNetUsers item);
+        Task<AspNetUser> SwitchSelectedCompany(AspNetUser user);
+        Task<IdentityResult> Delete(AspNetUser item);
+        Task<IList<Claim>> GetCompanyClaims(AspNetUser user);
+        Task<IList<string>> GetSelectedUserRoles(AspNetUser item);
         Task<IList<Claim>> GetSignedInUserClaims();
         Task<IList<Claim>> GetSignedInUserClaimViaType(string Type);
-        Task<AspNetUsers> GetUserByName(string userName);
-        Task<List<AspNetUsers>> GetUsers();
+        Task<AspNetUser> GetUserByName(string userName);
+        Task<List<AspNetUser>> GetUsers();
         Task<List<UserDataCollectionItem>> GetUsersWithCompanyInfo();
-        Task<AspNetUsers> SubmitChanges(AspNetUsers item, List<RoleItem> selectedRoles);
-        Task<AspNetUsers> SubmitCompanyCliams(List<CompanyItem> companies, AspNetUsers user);
-        Task<AspNetUsers> UpdateUserDetails(AspNetUsers user);
+        Task<AspNetUser> SubmitChanges(AspNetUser item, List<RoleItem> selectedRoles);
+        Task<AspNetUser> SubmitCompanyCliams(List<CompanyItem> companies, AspNetUser user);
+        Task<AspNetUser> UpdateUserDetails(AspNetUser user);
 
         bool Lock { get; set; }
     }
@@ -68,7 +68,7 @@ namespace GadjIT_App.Data.Admin
             this.logger = logger;
         }
 
-        public async Task<AspNetUsers> SwitchSelectedCompany(AspNetUsers user)
+        public async Task<AspNetUser> SwitchSelectedCompany(AspNetUser user)
         {
             try
             {
@@ -109,7 +109,7 @@ namespace GadjIT_App.Data.Admin
 
                 await userManager.UpdateAsync(selectedUser);
 
-                return mapper.Map(selectedUser, new AspNetUsers());
+                return mapper.Map(selectedUser, new AspNetUser());
             }
             catch(Exception e)
             {
@@ -119,7 +119,7 @@ namespace GadjIT_App.Data.Admin
             return user;
         }
 
-        public async Task<AspNetUsers> SubmitCompanyCliams(List<CompanyItem> companies, AspNetUsers user)
+        public async Task<AspNetUser> SubmitCompanyCliams(List<CompanyItem> companies, AspNetUser user)
         {
             try
             {
@@ -217,7 +217,7 @@ namespace GadjIT_App.Data.Admin
             return null;
         }
 
-        public async Task<IList<Claim>> GetCompanyClaims(AspNetUsers user)
+        public async Task<IList<Claim>> GetCompanyClaims(AspNetUser user)
         {
             selectedUser = new ApplicationUser();
 
@@ -229,7 +229,7 @@ namespace GadjIT_App.Data.Admin
             return claimsReturn;
         }
 
-        public async Task<IList<string>> GetSelectedUserRoles(AspNetUsers item)
+        public async Task<IList<string>> GetSelectedUserRoles(AspNetUser item)
         {
             selectedUser = new ApplicationUser();
 
@@ -238,19 +238,19 @@ namespace GadjIT_App.Data.Admin
             return await userManager.GetRolesAsync(selectedUser);
         }
 
-        public async Task<List<AspNetUsers>> GetUsers()
+        public async Task<List<AspNetUser>> GetUsers()
         {
             //Get signed in user in proper format
             var signedInUserState = await authenticationStateProvider.GetAuthenticationStateAsync();
             var signedInUserAsp = await userManager.FindByNameAsync(signedInUserState.User.Identity.Name);
-            var signedInUser = mapper.Map(signedInUserAsp, new AspNetUsers());
+            var signedInUser = mapper.Map(signedInUserAsp, new AspNetUser());
 
-            var returnedUsers = new List<AspNetUsers>();
+            var returnedUsers = new List<AspNetUser>();
 
             if (signedInUserState.User.IsInRole("Super User"))
             {
                 return await userManager.Users
-                            .Select(U => mapper.Map(U, new AspNetUsers()))
+                            .Select(U => mapper.Map(U, new AspNetUser()))
                             .ToListAsync(); 
             }
             else
@@ -261,13 +261,13 @@ namespace GadjIT_App.Data.Admin
                 {
                     /*
                      * 1. Grab all users in company
-                     * 2. format returned applicationusers into usefull aspnetusers
+                     * 2. format returned applicationusers into usefull AspNetUser
                      * 3. check if users exist in return list
                      * 4. add any applicable return users to list
                      */
 
                     var usersInCompanyUnformatted = await userManager.GetUsersForClaimAsync(company);
-                    var usersInCompanyFormatted = usersInCompanyUnformatted.Select(U => mapper.Map(U, new AspNetUsers())).ToList();
+                    var usersInCompanyFormatted = usersInCompanyUnformatted.Select(U => mapper.Map(U, new AspNetUser())).ToList();
                     var usersInCompanySorted = usersInCompanyFormatted.Where(U => !returnedUsers.Contains(U)).ToList();
 
                     returnedUsers.AddRange(usersInCompanySorted);
@@ -290,12 +290,12 @@ namespace GadjIT_App.Data.Admin
             //Can't get from session state (Circular dependany error)
             var signedInUserState = await authenticationStateProvider.GetAuthenticationStateAsync();
             var signedInUserAsp = await userManager.FindByNameAsync(signedInUserState.User.Identity.Name);
-            var signedInUser = mapper.Map(signedInUserAsp, new AspNetUsers());
+            var signedInUser = mapper.Map(signedInUserAsp, new AspNetUser());
 
             var UserInFormat = await userManager.FindByNameAsync(signedInUser.UserName); 
 
             var allUsers = await userManager.Users
-                                        .Select(U => mapper.Map(U, new AspNetUsers()))
+                                        .Select(U => mapper.Map(U, new AspNetUser()))
                                         .ToListAsync();
 
             var allCompanies = await context
@@ -370,13 +370,13 @@ namespace GadjIT_App.Data.Admin
 
         }
 
-        public async Task<AspNetUsers> GetUserByName(string userName)
+        public async Task<AspNetUser> GetUserByName(string userName)
         {
             try
             {
                 return await userManager.Users
                     .Where(U => U.UserName == userName)
-                    .Select(U => mapper.Map(U, new AspNetUsers()))
+                    .Select(U => mapper.Map(U, new AspNetUser()))
                     .SingleAsync();
             }
             catch(Exception e)
@@ -390,7 +390,7 @@ namespace GadjIT_App.Data.Admin
             return null;
         }
 
-        public async Task<AspNetUsers> UpdateUserDetails(AspNetUsers user)
+        public async Task<AspNetUser> UpdateUserDetails(AspNetUser user)
         {
             Lock = true;
 
@@ -431,7 +431,7 @@ namespace GadjIT_App.Data.Admin
         }
 
 
-        public async Task<AspNetUsers> SubmitChanges(AspNetUsers item, List<RoleItem> selectedRoles)
+        public async Task<AspNetUser> SubmitChanges(AspNetUser item, List<RoleItem> selectedRoles)
         {
             selectedUser = await userManager.FindByIdAsync(item.Id);
 
@@ -593,7 +593,7 @@ namespace GadjIT_App.Data.Admin
             }
         }
 
-        public async Task<IdentityResult> Delete(AspNetUsers item)
+        public async Task<IdentityResult> Delete(AspNetUser item)
         {
             selectedUser = await userManager.FindByIdAsync(item.Id);
 

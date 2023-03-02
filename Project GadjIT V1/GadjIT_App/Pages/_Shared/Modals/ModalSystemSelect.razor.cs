@@ -28,7 +28,7 @@ namespace GadjIT_App.Pages._Shared.Modals
         protected IUserSessionState sessionState { get; set; }
 
         [Parameter]
-        public AspNetUsers currentUser { get; set; }
+        public AspNetUser currentUser { get; set; }
 
         private void ToggleCompany(int selectedId)
         {

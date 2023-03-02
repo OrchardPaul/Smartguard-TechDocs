@@ -16,7 +16,7 @@ namespace GadjIT_App.Services.SessionState
         bool enablePasswordSet { get; set; }
         string selectedOption { get; set; }
         List<RoleItem> selectedRoles { get; set; }
-        AspNetUsers TaskObject { get; set; }
+        AspNetUser TaskObject { get; set; }
 
         event Action OnChange;
 
@@ -27,14 +27,14 @@ namespace GadjIT_App.Services.SessionState
         void SetenablePasswordSet(bool enablePasswordSet);
         void SetselectedOption(string selectedOption);
         void SetselectedRoles(List<RoleItem> selectedRoles);
-        void SetTaskObject(AspNetUsers TaskObject);
+        void SetTaskObject(AspNetUser TaskObject);
     }
 
     public class UserManagementSelectedUserState : IUserManagementSelectedUserState
     {
         public event Action OnChange;
 
-        public AspNetUsers TaskObject { get; set; }
+        public AspNetUser TaskObject { get; set; }
 
         public Action DataChanged { get; set; }
 
@@ -50,7 +50,7 @@ namespace GadjIT_App.Services.SessionState
 
         public bool enablePasswordSet { get; set; } = false;
 
-        public void SetTaskObject(AspNetUsers TaskObject)
+        public void SetTaskObject(AspNetUser TaskObject)
         {
             this.TaskObject = TaskObject;
             NotifyStateChanged();

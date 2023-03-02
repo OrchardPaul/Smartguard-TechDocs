@@ -1,11 +1,7 @@
 ﻿using AutoMapper;
-using GadjIT_ClientContext.P4W;
-using GadjIT_ClientContext.P4W.Custom;
 using GadjIT_AppContext.GadjIT_App;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using GadjIT_ClientContext.Models.Smartflow;
+using GadjIT_ClientContext.Models.Smartflow.Client;
 
 namespace GadjIT_App.Data.MapperProfiles
 {
@@ -13,14 +9,14 @@ namespace GadjIT_App.Data.MapperProfiles
     {
         public SmartflowRecordProfile()
         {
-            CreateMap<SmartflowRecords, UsrOrsfSmartflows>()
+            CreateMap<App_SmartflowRecord, Client_SmartflowRecord>()
                 .ForMember(dest => dest.Id, act => act.MapFrom(scr => scr.RowId));
             
-            CreateMap<UsrOrsfSmartflows, SmartflowRecords>()
+            CreateMap<Client_SmartflowRecord, App_SmartflowRecord>()
                 .ForMember(dest => dest.RowId, act => act.MapFrom(scr => scr.Id))
                 .ForMember(dest => dest.Id, act => act.Ignore());
 
-            CreateMap<VmSmartflow, VmSmartflow>();
+            CreateMap<Smartflow, Smartflow>();
 
         }
     }

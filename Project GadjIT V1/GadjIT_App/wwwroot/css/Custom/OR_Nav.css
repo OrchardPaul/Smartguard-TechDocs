@@ -55,7 +55,7 @@
 }
 
 .topbar #company-login-dets {
-    width: 130px;
+    width: 180px;
 }
 
 .topbar .nav-login-dets {
@@ -64,6 +64,7 @@
 
 
 .topbar .nav-dets-top {
+    font-size: 0.85rem;
 }
 
 .topbar .nav-dets-bottom {
@@ -368,8 +369,8 @@
     border-radius: 2px;
 }
 
-.nav-row-3 .data-item-group {
-    background-color: rgba(180, 180, 180, 0.9);
+.nav-row-3 .data-item-group, .grid-smartflow-list .data-item-group .data-item {
+    background-color: rgba(180, 180, 180, 0.9) !important;
 } 
 
 .data-item-nav {

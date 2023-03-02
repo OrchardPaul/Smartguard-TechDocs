@@ -18,7 +18,7 @@ namespace GadjIT_App.Pages.Admin.UserManagement
         public Action ToggleDetail { get; set; }
 
         [Parameter]
-        public AspNetUsers TaskObject { get; set; }
+        public AspNetUser TaskObject { get; set; }
 
         [Parameter]
         public List<CompanyItem> CompanyItems { get; set; }
@@ -52,7 +52,7 @@ namespace GadjIT_App.Pages.Admin.UserManagement
 
         private List<string> UsersClaimId { get; set; }
 
-        private AspNetUsers CurrentUser { get; set; }
+        private AspNetUser CurrentUser { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
@@ -165,7 +165,7 @@ namespace GadjIT_App.Pages.Admin.UserManagement
             NavigateBack();
         }
 
-        private async Task<AspNetUsers> SubmitChange()
+        private async Task<AspNetUser> SubmitChange()
         {
 
             var returnObject = await Service.SubmitChanges(TaskObject, SelectedRoles);

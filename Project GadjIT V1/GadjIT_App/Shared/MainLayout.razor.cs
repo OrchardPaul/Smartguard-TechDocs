@@ -32,7 +32,7 @@ namespace GadjIT_App.Shared
         [Inject]
         public NavigationManager NavigationManager { get; set; }
 
-        public AspNetUsers CurrentUser { get; set; }
+        public AspNetUser CurrentUser { get; set; }
 
         public int SelectedCompanyId { get; set; }
 
@@ -92,6 +92,7 @@ namespace GadjIT_App.Shared
 
 
         }
+
 
         protected override void OnAfterRender(bool firstRender)
         {

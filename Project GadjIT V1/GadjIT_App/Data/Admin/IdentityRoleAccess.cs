@@ -13,7 +13,7 @@ namespace GadjIT_App.Data.Admin
     {
         Task<IdentityResult> Delete(AspNetRoles item);
         Task<List<AspNetRoles>> GetUserRoles();
-        Task<IList<string>> GetCurrentUserRolesForCompany(AspNetUsers user, int selectedCompany);
+        Task<IList<string>> GetCurrentUserRolesForCompany(AspNetUser user, int selectedCompany);
         Task<AspNetRoles> SubmitChanges(AspNetRoles item);
 
         void Dispose();
@@ -49,7 +49,7 @@ namespace GadjIT_App.Data.Admin
                 .ToListAsync();
         }
 
-        public async Task<IList<string>> GetCurrentUserRolesForCompany(AspNetUsers user, int selectedCompany)
+        public async Task<IList<string>> GetCurrentUserRolesForCompany(AspNetUser user, int selectedCompany)
         {
             using (var context = contextFactory.CreateDbContext())
             {

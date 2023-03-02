@@ -19,7 +19,7 @@ namespace GadjIT_App.Pages.UserProfile
         public Action ToggleDetail { get; set; }
 
         [Parameter]
-        public AspNetUsers TaskObject { get; set; }
+        public AspNetUser TaskObject { get; set; }
 
         [Parameter]
         public List<CompanyItem> CompanyItems { get; set; }
@@ -105,7 +105,7 @@ namespace GadjIT_App.Pages.UserProfile
                 .ToList();
 
 
-            GetBackgroundFileList();
+            //GetBackgroundFileList();
 
         }
 
@@ -161,7 +161,7 @@ namespace GadjIT_App.Pages.UserProfile
             NavigationManager.NavigateTo(SessionState.UserProfileReturnURI, true);
         }
 
-        private async Task<AspNetUsers> SubmitChange()
+        private async Task<AspNetUser> SubmitChange()
         {
 
             var returnObject = await UserAccess.SubmitChanges(TaskObject, SelectedRoles);
@@ -172,14 +172,23 @@ namespace GadjIT_App.Pages.UserProfile
             return returnObject;
         }
 
-        private void GetBackgroundFileList()
-        {
-            FileHelper.CustomPath = $"wwwroot/images/BackgroundImages";
+        // private void GetBackgroundFileList()
+        // {
 
-            ListFileDescriptions = FileHelper.GetFileList();
+        //     FileOptions chapterFileOption;
+
+        //     chapterFileOption = new FileOptions
+        //     {
+        //         Company = UserSession.Company.CompanyName,
+        //     };
+
+        //     SmartflowFileHelper.SetFileHelperCustomPath(chapterFileOption,FileStorageType.TempUploads);
+        //     FileHelper.CustomPath = $"wwwroot/images/BackgroundImages";
+
+        //     ListFileDescriptions = FileHelper.GetFileList();
 
 
-        }
+        // }
 
     }
 }

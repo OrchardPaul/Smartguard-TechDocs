@@ -9,12 +9,13 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
+using GadjIT_App.Services.AppState;
 
 namespace GadjIT_App.Services.SessionState
 {
     public interface IUserSessionState
     {
-        AspNetUsers User { get; }
+        AspNetUser User { get; }
         IList<Claim> AllClaims { get; }
         string UserProfileReturnURI { get; }
         string CompCol1 { get; set; }
@@ -33,15 +34,15 @@ namespace GadjIT_App.Services.SessionState
         string AltSystem { get; }
         string TempBackGroundImage { get; set; }
 
-        DateTime ChapterLastCompared { get; set; }     //keeps a record of the last time a Chapter of list of Chapters was compared for updates by another user
-                                                       //each time a user navigates within Smartflow this is set to the ChapterLastUpdated value from the local store
+        DateTime SmartflowLastCompared { get; set; }     //keeps a record of the last time a Chapter of list of Chapters was compared for updates by another user
+                                                       //each time a user navigates within Smartflow this is set to the SmartflowLastUpdated value from the local store
                                                        //if the values are not the same the StateHasChanged method is invoked.
 
         event Action OnChange;
 
         Claim getCompanyClaim();
         bool GetLock();
-        void SetCurrentUser(AspNetUsers user);
+        void SetCurrentUser(AspNetUser user);
         void SetUserProfileReturnURI(string returnURI);
         void SetBaseUri(string baseUri);
         void SetClaims(IList<Claim> claims);
@@ -63,15 +64,16 @@ namespace GadjIT_App.Services.SessionState
     }
         
 
-    public class UserSessionState : IUserSessionState
+    public class UserSessionState : IUserSessionState, IDisposable
     {
         private readonly AuthenticationStateProvider AuthenticationStateProvider;
         private readonly IIdentityUserAccess UserAccess;
         private readonly ICompanyDbAccess CompanyDbAccess;
         private readonly NavigationManager NavigationManager;
         private readonly ILogger<UserSessionState> Logger;
+        private readonly IAppSmartflowsState AppSmartflowsState;
 
-        public AspNetUsers User { get; protected set; }
+        public AspNetUser User { get; protected set; }
 
         public IList<Claim> AllClaims { get; protected set; }
 
@@ -116,11 +118,10 @@ namespace GadjIT_App.Services.SessionState
 
         public string TempBackGroundImageAppliedUri { get; protected set; }
 
-        public string SelectedChapter { get; protected set; }
+        public string SelectedSmartflow { get; protected set; }
 
-        public DateTime ChapterLastCompared { get; set; }     
-                                                                        
-                                                                        
+        public DateTime SmartflowLastCompared { get; set; }     
+                                                                                                                          
 
         public Action HomeActionSmartflow { get; set; }
 
@@ -128,19 +129,36 @@ namespace GadjIT_App.Services.SessionState
                                 , IIdentityUserAccess _userAccess
                                 , ICompanyDbAccess _companyDbAccess
                                 , NavigationManager _navigationManager
-                                , ILogger<UserSessionState> _logger)
+                                , ILogger<UserSessionState> _logger
+                                , IAppSmartflowsState _appSmartflowState)
         {
             AuthenticationStateProvider = _authenticationStateProvider;
             UserAccess = _userAccess;
             CompanyDbAccess = _companyDbAccess;
             NavigationManager = _navigationManager;
             Logger = _logger;
+            AppSmartflowsState = _appSmartflowState;
+        }
+
+        public void Dispose()
+        {
+            try
+            {
+                if(User != null)
+                {
+                    AppSmartflowsState.DisposeUser(User); //Unlock any Smartflows the current User has open (should only be one).
+                }
+            }
+            catch(Exception)
+            {
+
+            }
         }
 
 
-        public void SetChapterLastCompared(DateTime chapterLastCompared)
+        public void SetSmartflowLastCompared(DateTime SmartflowLastCompared)
         {
-            ChapterLastCompared = chapterLastCompared;
+            SmartflowLastCompared = SmartflowLastCompared;
         }
 
         public void SetTempBackground(string image, string Uri)
@@ -156,7 +174,7 @@ namespace GadjIT_App.Services.SessionState
             NotifyStateChanged();
         }
 
-        public void SetCurrentUser(AspNetUsers user)
+        public void SetCurrentUser(AspNetUser user)
         {
             User = user;
             NotifyStateChanged();

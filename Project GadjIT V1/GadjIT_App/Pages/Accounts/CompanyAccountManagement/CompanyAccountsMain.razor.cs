@@ -72,7 +72,7 @@ namespace GadjIT_App.Pages.Accounts.CompanyAccountManagement
 
         public List<CompanyAccountObject> CompanyAccountObjects { get; set; } = new List<CompanyAccountObject>();
 
-        public List<SmartflowRecords> AllRecords { get; set; } = new List<SmartflowRecords>();
+        public List<App_SmartflowRecord> AllRecords { get; set; } = new List<App_SmartflowRecord>();
 
         public AppCompanyAccountsSmartflow SelectedCompanyAccount { get; set; }
 
@@ -122,7 +122,7 @@ namespace GadjIT_App.Pages.Accounts.CompanyAccountManagement
 
                 AppCompanyAccounts = await CompanyDbAccess.GetCompanyAccounts();
 
-                AllRecords = await CompanyDbAccess.GetAllSmartflowRecordsForAllCompanies();
+                AllRecords = await CompanyDbAccess.GetAllAppSmartflowRecordsForAllCompanies();
 
                 SelectedCompanyAccount = AppCompanyAccounts.Where(A => A.CompanyId == SessionState.Company.Id).FirstOrDefault();
 
@@ -251,7 +251,7 @@ namespace GadjIT_App.Pages.Accounts.CompanyAccountManagement
 
             var options = new ModalOptions()
             {
-                Class = "blazored-custom-modal modal-chapter-fees"
+                Class = "blazored-custom-modal modal-smartflow-fees"
             };
 
 
@@ -275,7 +275,7 @@ namespace GadjIT_App.Pages.Accounts.CompanyAccountManagement
                                                                     , AllRecords
                                                                     , Draft);
 
-            await ExcelHelper.WriteChapterDataToExcel(selectedAccountObject, billingItems);
+            await ExcelHelper.WriteSmartflowDataToExcel(selectedAccountObject, billingItems);
 
             RefreshCompanyObjects();
         }
