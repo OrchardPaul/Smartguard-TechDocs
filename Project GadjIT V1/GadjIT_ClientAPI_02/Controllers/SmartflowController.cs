@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using GadjIT_ClientAPI.Services.Smartflow;
-using GadjIT_ClientContext.P4W;
-using GadjIT_ClientContext.P4W.Custom;
-
+using GadjIT_ClientContext.Models.Smartflow.Client;
+using GadjIT_ClientContext.Models.P4W;
 
 namespace GadjIT_ClientAPI.Controllers;
 
@@ -68,18 +67,18 @@ public class SmartflowController : ControllerBase
         
     }
 
+
     [HttpGet]
-    public async Task<ActionResult> GetAllChapters()
+    public async Task<ActionResult> GetAllSmartflows()
     {
-        return Ok(await SmartflowService.GetAllChapters());
+        return Ok(await SmartflowService.GetAllSmartflows());
     }
 
 
-
     [HttpGet("{caseType}")]
-    public async Task<ActionResult> GetChapterListByCaseType(string caseType)
+    public async Task<ActionResult> GetSmartflowListByCaseType(string caseType)
     {
-        return Ok(await SmartflowService.GetChapterListByCaseType(caseType));
+        return Ok(await SmartflowService.GetSmartflowListByCaseType(caseType));
         
     }
 
@@ -98,7 +97,7 @@ public class SmartflowController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult> Add(UsrOrsfSmartflows item)
+    public async Task<ActionResult> Add(Client_SmartflowRecord item)
     {
 
         
@@ -114,7 +113,7 @@ public class SmartflowController : ControllerBase
     }
 
     [HttpPut("{id:int}")]
-    public async Task<ActionResult<UsrOrsfSmartflows>> Update(int Id, UsrOrsfSmartflows item)
+    public async Task<ActionResult<Client_SmartflowRecord>> Update(int Id, Client_SmartflowRecord item)
     {
         if (Id != item.Id)
         {
@@ -134,14 +133,14 @@ public class SmartflowController : ControllerBase
 
 
     [HttpPut("{newCaseType}/{originalCaseType}/{caseTypeGroup}")]
-    public async Task<ActionResult<List<UsrOrsfSmartflows>>> UpdateCaseType(string newCaseType, string originalCaseType, string caseTypeGroup)
+    public async Task<ActionResult<List<Client_SmartflowRecord>>> UpdateCaseType(string newCaseType, string originalCaseType, string caseTypeGroup)
     {
         return await SmartflowService.UpdateCaseType(newCaseType, originalCaseType,caseTypeGroup);
         
     }
 
     [HttpPut("{newCaseTypeGroup}/{originalCaseTypeGroup}")]
-    public async Task<ActionResult<List<UsrOrsfSmartflows>>> UpdateCaseTypeGroups(string newCaseTypeGroup, string originalCaseTypeGroup)
+    public async Task<ActionResult<List<Client_SmartflowRecord>>> UpdateCaseTypeGroups(string newCaseTypeGroup, string originalCaseTypeGroup)
     {
         return await SmartflowService.UpdateCaseTypeGroups(newCaseTypeGroup, originalCaseTypeGroup);
         
@@ -179,7 +178,7 @@ public class SmartflowController : ControllerBase
 
 
     [HttpPost()]
-    public async Task<ActionResult<bool>> CreateStep(VmSmartflowP4WStepSchemaJSONObject schemaJSONObject)
+    public async Task<ActionResult<bool>> CreateStep(P4W_SmartflowStepSchemaJSONObject schemaJSONObject)
     {
         if (schemaJSONObject is null || string.IsNullOrEmpty(schemaJSONObject.StepSchemaJSON))
         {

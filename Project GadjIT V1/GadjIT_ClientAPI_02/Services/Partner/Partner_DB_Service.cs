@@ -1,16 +1,17 @@
 ﻿
 
 
-using GadjIT_ClientContext.P4W;
+using GadjIT_ClientContext.Data;
+using GadjIT_ClientContext.Models.P4W;
 using Microsoft.EntityFrameworkCore;
 
 namespace GadjIT_ClientAPI.Services.Partner
 {
     public interface IPartner_DB_Service
     {
-        Task<List<CaseTypes>> GetAllCaseTypes();
-        Task<List<CaseTypeGroups>> GetAllCaseTypeGroups();
-        Task<List<MpSysViews>> GetAllP4WViews();
+        Task<List<P4W_CaseTypes>> GetAllCaseTypes();
+        Task<List<P4W_CaseTypeGroups>> GetAllCaseTypeGroups();
+        Task<List<P4W_MpSysViews>> GetAllP4WViews();
     }
 
     public class Partner_DB_Service : IPartner_DB_Service
@@ -22,17 +23,17 @@ namespace GadjIT_ClientAPI.Services.Partner
             this.context = context;
         }
 
-        public async Task<List<CaseTypes>> GetAllCaseTypes()
+        public async Task<List<P4W_CaseTypes>> GetAllCaseTypes()
         {
             return await context.CaseTypes.ToListAsync();
         }
 
-        public async Task<List<CaseTypeGroups>> GetAllCaseTypeGroups()
+        public async Task<List<P4W_CaseTypeGroups>> GetAllCaseTypeGroups()
         {
             return await context.CaseTypeGroups.ToListAsync();
         }
 
-        public async Task<List<MpSysViews>> GetAllP4WViews()
+        public async Task<List<P4W_MpSysViews>> GetAllP4WViews()
         {
             return await context.MpSysViews.ToListAsync();
         }

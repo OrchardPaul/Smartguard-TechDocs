@@ -310,9 +310,9 @@ System.Exception: dummy exception
    at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
    at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
    at GadjIT_ClientAPI_02.Middlewares.ExceptionMiddleware.InvokeAsync(HttpContext context) in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI_02\Middlewares\ExceptionMiddleware.cs:line 24
-2022-11-17 16:44:26.562 +00:00 [ERR] Controller Error - method: GadjIT_ClientAPI.Controllers.SmartflowController+<GetAllChapters>d__7; message: bad error
+2022-11-17 16:44:26.562 +00:00 [ERR] Controller Error - method: GadjIT_ClientAPI.Controllers.SmartflowController+<GetAllSmartflows>d__7; message: bad error
 System.Exception: bad error
-   at GadjIT_ClientAPI.Controllers.SmartflowController.GetAllChapters() in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI_02\Controllers\SmartflowController.cs:line 68
+   at GadjIT_ClientAPI.Controllers.SmartflowController.GetAllSmartflows() in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI_02\Controllers\SmartflowController.cs:line 68
    at lambda_method6(Closure , Object )
    at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
@@ -326,9 +326,9 @@ System.Exception: bad error
    at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
    at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
    at GadjIT_ClientAPI_02.Middlewares.ExceptionMiddleware.InvokeAsync(HttpContext context) in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI_02\Middlewares\ExceptionMiddleware.cs:line 24
-2022-11-17 16:45:53.061 +00:00 [ERR] Controller Error - method: GadjIT_ClientAPI.Controllers.SmartflowController+<GetAllChapters>d__7; message: bad error
+2022-11-17 16:45:53.061 +00:00 [ERR] Controller Error - method: GadjIT_ClientAPI.Controllers.SmartflowController+<GetAllSmartflows>d__7; message: bad error
 System.Exception: bad error
-   at GadjIT_ClientAPI.Controllers.SmartflowController.GetAllChapters() in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI_02\Controllers\SmartflowController.cs:line 68
+   at GadjIT_ClientAPI.Controllers.SmartflowController.GetAllSmartflows() in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI_02\Controllers\SmartflowController.cs:line 68
    at lambda_method6(Closure , Object )
    at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
@@ -342,7 +342,7 @@ System.Exception: bad error
    at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
    at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
    at GadjIT_ClientAPI_02.Middlewares.ExceptionMiddleware.InvokeAsync(HttpContext context) in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI_02\Middlewares\ExceptionMiddleware.cs:line 24
-2022-11-17 16:51:07.368 +00:00 [ERR] Controller Error - method: GadjIT_ClientAPI.Controllers.SmartflowController+<GetAllChapters>d__7; message: bad error; stack trace:    at GadjIT_ClientAPI.Controllers.SmartflowController.GetAllChapters() in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI_02\Controllers\SmartflowController.cs:line 68
+2022-11-17 16:51:07.368 +00:00 [ERR] Controller Error - method: GadjIT_ClientAPI.Controllers.SmartflowController+<GetAllSmartflows>d__7; message: bad error; stack trace:    at GadjIT_ClientAPI.Controllers.SmartflowController.GetAllSmartflows() in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI_02\Controllers\SmartflowController.cs:line 68
    at lambda_method166(Closure , Object )
    at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
@@ -357,7 +357,7 @@ System.Exception: bad error
    at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
    at GadjIT_ClientAPI_02.Middlewares.ExceptionMiddleware.InvokeAsync(HttpContext context) in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI_02\Middlewares\ExceptionMiddleware.cs:line 24
 System.Exception: bad error
-   at GadjIT_ClientAPI.Controllers.SmartflowController.GetAllChapters() in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI_02\Controllers\SmartflowController.cs:line 68
+   at GadjIT_ClientAPI.Controllers.SmartflowController.GetAllSmartflows() in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI_02\Controllers\SmartflowController.cs:line 68
    at lambda_method166(Closure , Object )
    at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
@@ -371,36 +371,7 @@ System.Exception: bad error
    at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
    at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
    at GadjIT_ClientAPI_02.Middlewares.ExceptionMiddleware.InvokeAsync(HttpContext context) in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI_02\Middlewares\ExceptionMiddleware.cs:line 24
-2022-11-17 16:53:39.351 +00:00 [ERR] Controller Error - method: GadjIT_ClientAPI.Controllers.SmartflowController+<GetAllChapters>d__7; message: bad error; stack trace:    at GadjIT_ClientAPI.Controllers.SmartflowController.GetAllChapters() in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI_02\Controllers\SmartflowController.cs:line 68
-   at lambda_method166(Closure , Object )
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
---- End of stack trace from previous location ---
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
-   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
-   at GadjIT_ClientAPI_02.Middlewares.ExceptionMiddleware.InvokeAsync(HttpContext context) in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI_02\Middlewares\ExceptionMiddleware.cs:line 24
-System.Exception: bad error
-   at GadjIT_ClientAPI.Controllers.SmartflowController.GetAllChapters() in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI_02\Controllers\SmartflowController.cs:line 68
-   at lambda_method166(Closure , Object )
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
---- End of stack trace from previous location ---
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
-   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
-   at GadjIT_ClientAPI_02.Middlewares.ExceptionMiddleware.InvokeAsync(HttpContext context) in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI_02\Middlewares\ExceptionMiddleware.cs:line 24
-2022-11-17 17:02:07.913 +00:00 [ERR] Controller Error - method: GadjIT_ClientAPI.Controllers.SmartflowController+<GetAllChapters>d__7; message: bad error; stack trace:    at GadjIT_ClientAPI.Controllers.SmartflowController.GetAllChapters() in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI_02\Controllers\SmartflowController.cs:line 68
+2022-11-17 16:53:39.351 +00:00 [ERR] Controller Error - method: GadjIT_ClientAPI.Controllers.SmartflowController+<GetAllSmartflows>d__7; message: bad error; stack trace:    at GadjIT_ClientAPI.Controllers.SmartflowController.GetAllSmartflows() in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI_02\Controllers\SmartflowController.cs:line 68
    at lambda_method166(Closure , Object )
    at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
@@ -415,7 +386,7 @@ System.Exception: bad error
    at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
    at GadjIT_ClientAPI_02.Middlewares.ExceptionMiddleware.InvokeAsync(HttpContext context) in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI_02\Middlewares\ExceptionMiddleware.cs:line 24
 System.Exception: bad error
-   at GadjIT_ClientAPI.Controllers.SmartflowController.GetAllChapters() in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI_02\Controllers\SmartflowController.cs:line 68
+   at GadjIT_ClientAPI.Controllers.SmartflowController.GetAllSmartflows() in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI_02\Controllers\SmartflowController.cs:line 68
    at lambda_method166(Closure , Object )
    at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
@@ -429,36 +400,7 @@ System.Exception: bad error
    at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
    at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
    at GadjIT_ClientAPI_02.Middlewares.ExceptionMiddleware.InvokeAsync(HttpContext context) in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI_02\Middlewares\ExceptionMiddleware.cs:line 24
-2022-11-17 17:25:30.839 +00:00 [ERR] Controller Error - method: GadjIT_ClientAPI.Controllers.SmartflowController+<GetAllChapters>d__7; message: bad error; stack trace:    at GadjIT_ClientAPI.Controllers.SmartflowController.GetAllChapters() in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI_02\Controllers\SmartflowController.cs:line 68
-   at lambda_method166(Closure , Object )
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
---- End of stack trace from previous location ---
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
-   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
-   at GadjIT_ClientAPI_02.Middlewares.ExceptionMiddleware.InvokeAsync(HttpContext context) in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI_02\Middlewares\ExceptionMiddleware.cs:line 24
-System.Exception: bad error
-   at GadjIT_ClientAPI.Controllers.SmartflowController.GetAllChapters() in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI_02\Controllers\SmartflowController.cs:line 68
-   at lambda_method166(Closure , Object )
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
---- End of stack trace from previous location ---
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
-   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
-   at GadjIT_ClientAPI_02.Middlewares.ExceptionMiddleware.InvokeAsync(HttpContext context) in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI_02\Middlewares\ExceptionMiddleware.cs:line 24
-2022-11-17 17:31:45.499 +00:00 [ERR] Controller Error - method: GadjIT_ClientAPI.Controllers.SmartflowController+<GetAllChapters>d__7; message: bad error; stack trace:    at GadjIT_ClientAPI.Controllers.SmartflowController.GetAllChapters() in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI_02\Controllers\SmartflowController.cs:line 68
+2022-11-17 17:02:07.913 +00:00 [ERR] Controller Error - method: GadjIT_ClientAPI.Controllers.SmartflowController+<GetAllSmartflows>d__7; message: bad error; stack trace:    at GadjIT_ClientAPI.Controllers.SmartflowController.GetAllSmartflows() in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI_02\Controllers\SmartflowController.cs:line 68
    at lambda_method166(Closure , Object )
    at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
@@ -473,7 +415,7 @@ System.Exception: bad error
    at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
    at GadjIT_ClientAPI_02.Middlewares.ExceptionMiddleware.InvokeAsync(HttpContext context) in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI_02\Middlewares\ExceptionMiddleware.cs:line 24
 System.Exception: bad error
-   at GadjIT_ClientAPI.Controllers.SmartflowController.GetAllChapters() in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI_02\Controllers\SmartflowController.cs:line 68
+   at GadjIT_ClientAPI.Controllers.SmartflowController.GetAllSmartflows() in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI_02\Controllers\SmartflowController.cs:line 68
    at lambda_method166(Closure , Object )
    at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
@@ -487,36 +429,7 @@ System.Exception: bad error
    at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
    at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
    at GadjIT_ClientAPI_02.Middlewares.ExceptionMiddleware.InvokeAsync(HttpContext context) in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI_02\Middlewares\ExceptionMiddleware.cs:line 24
-2022-11-17 17:33:26.156 +00:00 [ERR] Controller Error - method: GadjIT_ClientAPI.Controllers.SmartflowController+<GetAllChapters>d__7; message: bad error; stack trace:    at GadjIT_ClientAPI.Controllers.SmartflowController.GetAllChapters() in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI_02\Controllers\SmartflowController.cs:line 68
-   at lambda_method166(Closure , Object )
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
---- End of stack trace from previous location ---
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
-   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
-   at GadjIT_ClientAPI_02.Middlewares.ExceptionMiddleware.InvokeAsync(HttpContext context) in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI_02\Middlewares\ExceptionMiddleware.cs:line 24
-System.Exception: bad error
-   at GadjIT_ClientAPI.Controllers.SmartflowController.GetAllChapters() in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI_02\Controllers\SmartflowController.cs:line 68
-   at lambda_method166(Closure , Object )
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
---- End of stack trace from previous location ---
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
-   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
-   at GadjIT_ClientAPI_02.Middlewares.ExceptionMiddleware.InvokeAsync(HttpContext context) in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI_02\Middlewares\ExceptionMiddleware.cs:line 24
-2022-11-17 18:02:03.338 +00:00 [ERR] Controller Error - method: GadjIT_ClientAPI.Controllers.SmartflowController+<GetAllChapters>d__7; message: bad error; stack trace:    at GadjIT_ClientAPI.Controllers.SmartflowController.GetAllChapters() in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI_02\Controllers\SmartflowController.cs:line 68
+2022-11-17 17:25:30.839 +00:00 [ERR] Controller Error - method: GadjIT_ClientAPI.Controllers.SmartflowController+<GetAllSmartflows>d__7; message: bad error; stack trace:    at GadjIT_ClientAPI.Controllers.SmartflowController.GetAllSmartflows() in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI_02\Controllers\SmartflowController.cs:line 68
    at lambda_method166(Closure , Object )
    at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
@@ -531,7 +444,7 @@ System.Exception: bad error
    at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
    at GadjIT_ClientAPI_02.Middlewares.ExceptionMiddleware.InvokeAsync(HttpContext context) in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI_02\Middlewares\ExceptionMiddleware.cs:line 24
 System.Exception: bad error
-   at GadjIT_ClientAPI.Controllers.SmartflowController.GetAllChapters() in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI_02\Controllers\SmartflowController.cs:line 68
+   at GadjIT_ClientAPI.Controllers.SmartflowController.GetAllSmartflows() in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI_02\Controllers\SmartflowController.cs:line 68
    at lambda_method166(Closure , Object )
    at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
@@ -545,36 +458,7 @@ System.Exception: bad error
    at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
    at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
    at GadjIT_ClientAPI_02.Middlewares.ExceptionMiddleware.InvokeAsync(HttpContext context) in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI_02\Middlewares\ExceptionMiddleware.cs:line 24
-2022-11-17 18:03:35.540 +00:00 [ERR] Controller Error - method: GadjIT_ClientAPI.Controllers.SmartflowController+<GetAllChapters>d__7; message: bad error; stack trace:    at GadjIT_ClientAPI.Controllers.SmartflowController.GetAllChapters() in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI_02\Controllers\SmartflowController.cs:line 68
-   at lambda_method166(Closure , Object )
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
---- End of stack trace from previous location ---
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
-   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
-   at GadjIT_ClientAPI_02.Middlewares.ExceptionMiddleware.InvokeAsync(HttpContext context) in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI_02\Middlewares\ExceptionMiddleware.cs:line 24
-System.Exception: bad error
-   at GadjIT_ClientAPI.Controllers.SmartflowController.GetAllChapters() in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI_02\Controllers\SmartflowController.cs:line 68
-   at lambda_method166(Closure , Object )
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
---- End of stack trace from previous location ---
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
-   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
-   at GadjIT_ClientAPI_02.Middlewares.ExceptionMiddleware.InvokeAsync(HttpContext context) in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI_02\Middlewares\ExceptionMiddleware.cs:line 24
-2022-11-17 18:14:39.590 +00:00 [ERR] Controller Error - method: GadjIT_ClientAPI.Controllers.SmartflowController+<GetAllChapters>d__7; message: bad error; stack trace:    at GadjIT_ClientAPI.Controllers.SmartflowController.GetAllChapters() in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI_02\Controllers\SmartflowController.cs:line 68
+2022-11-17 17:31:45.499 +00:00 [ERR] Controller Error - method: GadjIT_ClientAPI.Controllers.SmartflowController+<GetAllSmartflows>d__7; message: bad error; stack trace:    at GadjIT_ClientAPI.Controllers.SmartflowController.GetAllSmartflows() in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI_02\Controllers\SmartflowController.cs:line 68
    at lambda_method166(Closure , Object )
    at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
@@ -589,7 +473,123 @@ System.Exception: bad error
    at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
    at GadjIT_ClientAPI_02.Middlewares.ExceptionMiddleware.InvokeAsync(HttpContext context) in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI_02\Middlewares\ExceptionMiddleware.cs:line 24
 System.Exception: bad error
-   at GadjIT_ClientAPI.Controllers.SmartflowController.GetAllChapters() in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI_02\Controllers\SmartflowController.cs:line 68
+   at GadjIT_ClientAPI.Controllers.SmartflowController.GetAllSmartflows() in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI_02\Controllers\SmartflowController.cs:line 68
+   at lambda_method166(Closure , Object )
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at GadjIT_ClientAPI_02.Middlewares.ExceptionMiddleware.InvokeAsync(HttpContext context) in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI_02\Middlewares\ExceptionMiddleware.cs:line 24
+2022-11-17 17:33:26.156 +00:00 [ERR] Controller Error - method: GadjIT_ClientAPI.Controllers.SmartflowController+<GetAllSmartflows>d__7; message: bad error; stack trace:    at GadjIT_ClientAPI.Controllers.SmartflowController.GetAllSmartflows() in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI_02\Controllers\SmartflowController.cs:line 68
+   at lambda_method166(Closure , Object )
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at GadjIT_ClientAPI_02.Middlewares.ExceptionMiddleware.InvokeAsync(HttpContext context) in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI_02\Middlewares\ExceptionMiddleware.cs:line 24
+System.Exception: bad error
+   at GadjIT_ClientAPI.Controllers.SmartflowController.GetAllSmartflows() in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI_02\Controllers\SmartflowController.cs:line 68
+   at lambda_method166(Closure , Object )
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at GadjIT_ClientAPI_02.Middlewares.ExceptionMiddleware.InvokeAsync(HttpContext context) in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI_02\Middlewares\ExceptionMiddleware.cs:line 24
+2022-11-17 18:02:03.338 +00:00 [ERR] Controller Error - method: GadjIT_ClientAPI.Controllers.SmartflowController+<GetAllSmartflows>d__7; message: bad error; stack trace:    at GadjIT_ClientAPI.Controllers.SmartflowController.GetAllSmartflows() in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI_02\Controllers\SmartflowController.cs:line 68
+   at lambda_method166(Closure , Object )
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at GadjIT_ClientAPI_02.Middlewares.ExceptionMiddleware.InvokeAsync(HttpContext context) in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI_02\Middlewares\ExceptionMiddleware.cs:line 24
+System.Exception: bad error
+   at GadjIT_ClientAPI.Controllers.SmartflowController.GetAllSmartflows() in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI_02\Controllers\SmartflowController.cs:line 68
+   at lambda_method166(Closure , Object )
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at GadjIT_ClientAPI_02.Middlewares.ExceptionMiddleware.InvokeAsync(HttpContext context) in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI_02\Middlewares\ExceptionMiddleware.cs:line 24
+2022-11-17 18:03:35.540 +00:00 [ERR] Controller Error - method: GadjIT_ClientAPI.Controllers.SmartflowController+<GetAllSmartflows>d__7; message: bad error; stack trace:    at GadjIT_ClientAPI.Controllers.SmartflowController.GetAllSmartflows() in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI_02\Controllers\SmartflowController.cs:line 68
+   at lambda_method166(Closure , Object )
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at GadjIT_ClientAPI_02.Middlewares.ExceptionMiddleware.InvokeAsync(HttpContext context) in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI_02\Middlewares\ExceptionMiddleware.cs:line 24
+System.Exception: bad error
+   at GadjIT_ClientAPI.Controllers.SmartflowController.GetAllSmartflows() in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI_02\Controllers\SmartflowController.cs:line 68
+   at lambda_method166(Closure , Object )
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at GadjIT_ClientAPI_02.Middlewares.ExceptionMiddleware.InvokeAsync(HttpContext context) in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI_02\Middlewares\ExceptionMiddleware.cs:line 24
+2022-11-17 18:14:39.590 +00:00 [ERR] Controller Error - method: GadjIT_ClientAPI.Controllers.SmartflowController+<GetAllSmartflows>d__7; message: bad error; stack trace:    at GadjIT_ClientAPI.Controllers.SmartflowController.GetAllSmartflows() in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI_02\Controllers\SmartflowController.cs:line 68
+   at lambda_method166(Closure , Object )
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at GadjIT_ClientAPI_02.Middlewares.ExceptionMiddleware.InvokeAsync(HttpContext context) in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI_02\Middlewares\ExceptionMiddleware.cs:line 24
+System.Exception: bad error
+   at GadjIT_ClientAPI.Controllers.SmartflowController.GetAllSmartflows() in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI_02\Controllers\SmartflowController.cs:line 68
    at lambda_method166(Closure , Object )
    at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)

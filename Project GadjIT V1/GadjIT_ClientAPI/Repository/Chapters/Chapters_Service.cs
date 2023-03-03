@@ -9,22 +9,22 @@ namespace GadjIT_ClientAPI.Repository.Chapters
 {
     public interface IChapters_Service
     {
-        Task<UsrOrsfSmartflows> Add(UsrOrsfSmartflows item);
+        Task<Client_SmartflowRecord> Add(Client_SmartflowRecord item);
         Task<bool> CreateStep(string JSON);
-        Task<UsrOrsfSmartflows> Delete(int id);
-        Task<UsrOrsfSmartflows> DeleteChapter(int id);
-        Task<List<UsrOrsfSmartflows>> GetAllChapters();
+        Task<Client_SmartflowRecord> Delete(int id);
+        Task<Client_SmartflowRecord> DeleteChapter(int id);
+        Task<List<Client_SmartflowRecord>> GetAllSmartflows();
         Task<int?> GetCaseTypeCode(string caseType, int? caseTypeGroup);
         Task<List<string>> GetCaseTypeGroup();
         Task<int?> GetCaseTypeGroupRef();
         Task<List<string>> GetCaseTypes();
-        Task<UsrOrsfSmartflows> GetChapterItemById(int id);
-        Task<List<UsrOrsfSmartflows>> GetChapterListByCaseType(string caseType);
+        Task<Client_SmartflowRecord> GetChapterItemById(int id);
+        Task<List<Client_SmartflowRecord>> GetSmartflowListByCaseType(string caseType);
         Task<List<DmDocuments>> GetDocumentList(string caseType);
         Task<List<DmDocuments>> GetDocumentListByCaseTypeGroupRef(int caseTypeGroupRef);
-        Task<UsrOrsfSmartflows> Update(UsrOrsfSmartflows item);
-        Task<List<UsrOrsfSmartflows>> UpdateCaseType(string newCaseType, string originalCaseType, string caseTypeGroup);
-        Task<List<UsrOrsfSmartflows>> UpdateCaseTypeGroups(string newCaseTypeGroup, string originalCaseTypeGroup);
+        Task<Client_SmartflowRecord> Update(Client_SmartflowRecord item);
+        Task<List<Client_SmartflowRecord>> UpdateCaseType(string newCaseType, string originalCaseType, string caseTypeGroup);
+        Task<List<Client_SmartflowRecord>> UpdateCaseTypeGroups(string newCaseTypeGroup, string originalCaseTypeGroup);
         Task<List<TableDate>> GetDatabaseTableDateFields();
     }
 
@@ -48,28 +48,28 @@ namespace GadjIT_ClientAPI.Repository.Chapters
         }
 
 
-        public async Task<List<UsrOrsfSmartflows>> GetAllChapters()
+        public async Task<List<Client_SmartflowRecord>> GetAllSmartflows()
         {
 
 
-            return await _context.UsrOrsfSmartflows.ToListAsync();
+            return await _context.Client_SmartflowRecord.ToListAsync();
         }
 
-        public async Task<UsrOrsfSmartflows> GetChapterItemById(int id)
+        public async Task<Client_SmartflowRecord> GetChapterItemById(int id)
         {
-            return await _context.UsrOrsfSmartflows.SingleOrDefaultAsync(C => C.Id == id);
+            return await _context.Client_SmartflowRecord.SingleOrDefaultAsync(C => C.Id == id);
         }
 
-        public async Task<UsrOrsfSmartflows> Add(UsrOrsfSmartflows item)
+        public async Task<Client_SmartflowRecord> Add(Client_SmartflowRecord item)
         {
-            _context.UsrOrsfSmartflows.Add(item);
+            _context.Client_SmartflowRecord.Add(item);
             await _context.SaveChangesAsync();
             return item;
         }
 
-        public async Task<UsrOrsfSmartflows> Update(UsrOrsfSmartflows item)
+        public async Task<Client_SmartflowRecord> Update(Client_SmartflowRecord item)
         {
-            var updatedItem = await _context.UsrOrsfSmartflows.SingleOrDefaultAsync(U => U.Id == item.Id);
+            var updatedItem = await _context.Client_SmartflowRecord.SingleOrDefaultAsync(U => U.Id == item.Id);
 
             updatedItem.SmartflowName = item.SmartflowName;
             updatedItem.SeqNo = item.SeqNo;
@@ -84,9 +84,9 @@ namespace GadjIT_ClientAPI.Repository.Chapters
             return item;
         }
 
-        public async Task<List<UsrOrsfSmartflows>> UpdateCaseType(string newCaseType, string originalCaseType, string caseTypeGroup)
+        public async Task<List<Client_SmartflowRecord>> UpdateCaseType(string newCaseType, string originalCaseType, string caseTypeGroup)
         {
-            var updatedItems = await _context.UsrOrsfSmartflows
+            var updatedItems = await _context.Client_SmartflowRecord
                                                                     .Where(C => C.CaseTypeGroup == caseTypeGroup)
                                                                     .Where(C => C.CaseType == originalCaseType)
                                                                     .ToListAsync();
@@ -102,9 +102,9 @@ namespace GadjIT_ClientAPI.Repository.Chapters
         }
 
 
-        public async Task<List<UsrOrsfSmartflows>> UpdateCaseTypeGroups(string newCaseTypeGroup, string originalCaseTypeGroup)
+        public async Task<List<Client_SmartflowRecord>> UpdateCaseTypeGroups(string newCaseTypeGroup, string originalCaseTypeGroup)
         {
-            var updatedItems = await _context.UsrOrsfSmartflows.Where(C => C.CaseTypeGroup == originalCaseTypeGroup).ToListAsync();
+            var updatedItems = await _context.Client_SmartflowRecord.Where(C => C.CaseTypeGroup == originalCaseTypeGroup).ToListAsync();
 
             if (updatedItems.Count() > 0)
             {
@@ -116,26 +116,26 @@ namespace GadjIT_ClientAPI.Repository.Chapters
             return updatedItems;
         }
 
-        public async Task<UsrOrsfSmartflows> DeleteChapter(int id)
+        public async Task<Client_SmartflowRecord> DeleteChapter(int id)
         {
-            var toDo = await _context.UsrOrsfSmartflows.FindAsync(id);
+            var toDo = await _context.Client_SmartflowRecord.FindAsync(id);
 
-            _context.UsrOrsfSmartflows.Remove(toDo);
+            _context.Client_SmartflowRecord.Remove(toDo);
             await _context.SaveChangesAsync();
             return toDo;
         }
 
-        public async Task<UsrOrsfSmartflows> Delete(int id)
+        public async Task<Client_SmartflowRecord> Delete(int id)
         {
-            var toDo = await _context.UsrOrsfSmartflows.FindAsync(id);
-            _context.UsrOrsfSmartflows.Remove(toDo);
+            var toDo = await _context.Client_SmartflowRecord.FindAsync(id);
+            _context.Client_SmartflowRecord.Remove(toDo);
             await _context.SaveChangesAsync();
             return toDo;
         }
 
         public async Task<List<string>> GetCaseTypeGroup()
         {
-            return await _context.UsrOrsfSmartflows
+            return await _context.Client_SmartflowRecord
                 .Select(s => s.CaseTypeGroup)
                 .Distinct()
                 .ToListAsync();
@@ -143,15 +143,15 @@ namespace GadjIT_ClientAPI.Repository.Chapters
 
         public async Task<List<string>> GetCaseTypes()
         {
-            return await _context.UsrOrsfSmartflows
+            return await _context.Client_SmartflowRecord
                 .Select(s => s.CaseType)
                 .Distinct()
                 .ToListAsync();
         }
 
-        public async Task<List<UsrOrsfSmartflows>> GetChapterListByCaseType(string caseType)
+        public async Task<List<Client_SmartflowRecord>> GetSmartflowListByCaseType(string caseType)
         {
-            List<UsrOrsfSmartflows> Test = await _context.UsrOrsfSmartflows
+            List<Client_SmartflowRecord> Test = await _context.Client_SmartflowRecord
                 .Where(C => C.CaseType == caseType)
                 .OrderBy(C => C.SeqNo)
                 .ToListAsync();

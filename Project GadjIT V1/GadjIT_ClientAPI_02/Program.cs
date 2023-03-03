@@ -1,12 +1,8 @@
 using GadjIT_ClientAPI.Services.Partner;
 using GadjIT_ClientAPI.Services.Smartflow;
 using GadjIT_ClientAPI_02.Middlewares;
-using GadjIT_ClientContext.P4W;
-using Microsoft.AspNetCore.Builder;
+using GadjIT_ClientContext.Data;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Serilog;
 using System;
 

@@ -60,9 +60,9 @@ namespace GadjIT_ClientAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> GetAllChapters()
+        public async Task<ActionResult> GetAllSmartflows()
         {
-            return Ok(await chapterRepository.GetAllChapters());
+            return Ok(await chapterRepository.GetAllSmartflows());
 
         }
 
@@ -87,11 +87,11 @@ namespace GadjIT_ClientAPI.Controllers
         //}
 
         [HttpGet("{caseType}")]
-        public async Task<ActionResult> GetChapterListByCaseType(string caseType)
+        public async Task<ActionResult> GetSmartflowListByCaseType(string caseType)
         {
             try
             {
-                return Ok(await chapterRepository.GetChapterListByCaseType(caseType));
+                return Ok(await chapterRepository.GetSmartflowListByCaseType(caseType));
             } catch (Exception)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
@@ -125,7 +125,7 @@ namespace GadjIT_ClientAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Add(UsrOrsfSmartflows item)
+        public async Task<ActionResult> Add(Client_SmartflowRecord item)
         {
 
             try
@@ -146,7 +146,7 @@ namespace GadjIT_ClientAPI.Controllers
         }
 
         [HttpPut("{id:int}")]
-        public async Task<ActionResult<UsrOrsfSmartflows>> Update(int Id, UsrOrsfSmartflows item)
+        public async Task<ActionResult<Client_SmartflowRecord>> Update(int Id, Client_SmartflowRecord item)
         {
             try
             {
@@ -172,7 +172,7 @@ namespace GadjIT_ClientAPI.Controllers
 
 
         [HttpPut("{newCaseType}/{originalCaseType}/{caseTypeGroup}")]
-        public async Task<ActionResult<List<UsrOrsfSmartflows>>> UpdateCaseType(string newCaseType, string originalCaseType, string caseTypeGroup)
+        public async Task<ActionResult<List<Client_SmartflowRecord>>> UpdateCaseType(string newCaseType, string originalCaseType, string caseTypeGroup)
         {
             try
             {
@@ -185,7 +185,7 @@ namespace GadjIT_ClientAPI.Controllers
         }
 
         [HttpPut("{newCaseTypeGroup}/{originalCaseTypeGroup}")]
-        public async Task<ActionResult<List<UsrOrsfSmartflows>>> UpdateCaseTypeGroups(string newCaseTypeGroup, string originalCaseTypeGroup)
+        public async Task<ActionResult<List<Client_SmartflowRecord>>> UpdateCaseTypeGroups(string newCaseTypeGroup, string originalCaseTypeGroup)
         {
             try
             {
@@ -241,7 +241,7 @@ namespace GadjIT_ClientAPI.Controllers
 
 
         [HttpPost()]
-        public async Task<ActionResult<bool>> CreateStep(VmSmartflowP4WStepSchemaJSONObject schemaJSONObject)
+        public async Task<ActionResult<bool>> CreateStep(P4W_SmartflowStepSchemaJSONObject schemaJSONObject)
         {
             try
             {
