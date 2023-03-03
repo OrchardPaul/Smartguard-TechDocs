@@ -1,0 +1,25 @@
+﻿@if (WorkTypeMapping.workType is null)
+{
+    <h3>Work Type Mapping</h3>
+}
+else
+{
+    <div class="tran-block rounded ">
+          <h3><NavLink href="admin">Admin</NavLink>/<label @onclick="(() => ReturnToDetailsScreen())">Company Details</label><label>/</label><label @onclick="(() => OpenWorkTypeMappingOverview())">Mapping Overview</label><label>/</label><label>@WorkTypeMapping.workType.TypeName</label></h3>
+    </div>
+}
+
+
+@if (WorkTypeMapping.caseTypeAssignments is null)
+{
+    <span class="spinner"></span>
+}
+else
+{
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 p-2">
+        @foreach (var caseTypeAssignment in WorkTypeMapping.caseTypeAssignments)
+        {
+            <div class="shadow card rounded form-group" @onclick="(() => UpdateMapping(caseTypeAssignment))">@caseTypeAssignment.CaseType.Description  <p>@(caseTypeAssignment.IsAssigned ? "selected" : "not Selected") </p> </div>
+        }
+    </div>
+}

@@ -1,0 +1,12 @@
+﻿@page "/admin/manageusers"
+
+@attribute [Authorize(Roles ="Super User,Site Admin")]
+
+@if (!showDetail)
+{
+    <ManageUsersOverview ToggleDetail="@ToggleDetail"></ManageUsersOverview>
+}
+else
+{
+    <ManageUsersDetail ToggleDetail="@ToggleDetail"></ManageUsersDetail>
+}

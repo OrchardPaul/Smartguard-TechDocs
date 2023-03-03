@@ -1,0 +1,1 @@
+{"CaseTypeGroup":"Test Group","CaseType":"Test Type","Name":"Test 11","SeqNo":11,"P4WCaseTypeGroup":null,"StepName":"","BackgroundColour":null,"BackgroundColourName":null,"BackgroundImage":null,"BackgroundImageName":null,"ShowPartnerNotes":"N","GeneralNotes":null,"DeveloperNotes":null,"SelectedView":null,"SelectedStep":null,"Items":[],"DataViews":[],"TickerMessages":[],"Fees":[]}

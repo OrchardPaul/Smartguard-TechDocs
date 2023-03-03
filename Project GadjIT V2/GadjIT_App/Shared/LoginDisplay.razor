@@ -1,0 +1,55 @@
+﻿@using GadjIT_App.Pages._Shared.Modals
+
+@inject IJSRuntime jsRuntime
+
+<AuthorizeView>
+    <Authorized>
+
+        <div class="btn-uprofile">
+            <span class=""><span class="fa fa-user"></span></span>
+            <div class="uprofile-menu">
+                <ul>
+                    <li class="col-main" @onclick='() => NavigateToUserProfile()'>
+                        <span>Your Profile</span>
+                    </li>
+                    <li class="">
+                        <form method="post" action="Identity/Account/LogOut">
+                            <button id="btn-logout" type="submit" class="nav-link btn btn-link">Log out</button>
+                        </form>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+
+
+        @if (!(UserSession.User is null))
+        {
+            <div id="user-login-dets" class="nav-login-dets">
+                <div title="Name: @UserSession.User.FullName"><span class="nav-dets-top">@UserSession.User.FullName</span></div>
+                <div title="Username: @UserSession.User.Email"><span class="nav-dets-bottom">@UserSession.User.Email</span></div>
+            </div>
+
+            <NavLink class="nav-link" @onclick="ShowSystemSelectModel">
+                <span class="fa fa-cog"></span>
+            </NavLink>
+            @if (!(UserSession.Company is null))
+            {
+                <div id="company-login-dets" class="nav-login-dets ">
+                    <div title="Company: @UserSession.Company.CompanyName"><span class="nav-dets-top">@UserSession.Company.CompanyName</span></div>
+                    <div title="System: @UserSession.SelectedSystem"><span class="nav-dets-bottom">@UserSession.SelectedSystem</span></div>
+                </div>
+            }
+
+        }
+
+
+
+    </Authorized>
+    <NotAuthorized>
+        <a class="nav-link" href="Identity/Account/Register">Register</a>
+        <a class="nav-link" href="Identity/Account/Login">Log in</a>
+    </NotAuthorized>
+</AuthorizeView>
+
+

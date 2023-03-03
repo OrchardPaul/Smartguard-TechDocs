@@ -1,0 +1,27 @@
+﻿<div class="mb-1 grid-tran grid-chapter-nav">
+    <div class="tran-block rounded">
+        <div class="grid-nav">
+            <h3>Release @Version</h3>
+
+            <h5>
+                From @FromDate
+                @(ToDate != "" ? $" to {ToDate}" : "")
+            </h5>
+            <h5><b>@Notes</b></h5>
+        </div>
+    </div>
+</div>
+@code {
+    [Parameter]
+    public string Version { get; set; }
+
+    [Parameter]
+    public string FromDate { get; set; }
+
+    [Parameter]
+    public string ToDate { get; set; }
+
+    [Parameter]
+    public string Notes { get; set; }
+
+}

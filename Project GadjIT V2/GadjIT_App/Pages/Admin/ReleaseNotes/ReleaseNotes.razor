@@ -1,0 +1,81 @@
+﻿@using GadjIT_App.Pages.Admin.ReleaseNotes.Components
+
+@page "/Admin/Release"
+
+<div class="tran-block page-header-block ">
+    <div>
+        @if (CurrentVersion != "")
+        {
+            <div class="float-left back-link pt-3" @onclick="SelectHome">
+                <span class="col-alt fa fa-angle-double-left"></span>
+            </div>
+        }else{
+            <div class="float-left back-link pt-3" @onclick="SelectAdminHome">
+                <span class="col-alt fa fa-angle-double-left"></span>
+            </div>
+        }
+        <h3>Release Notes</h3>
+        <p class="hidden-md-down">GadjIT Release Notes and Product Updates</p>
+    </div>
+</div>
+
+
+
+@if (CurrentVersion == "")
+{
+    <div class="mb-4 grid-tran grid-chapter-nav"> 
+        <div class="tran-block rounded">
+            <div class="grid-nav">
+                @foreach (var version in ListVersions)
+                {
+                    <div class="grid-row-md nav-row-3 no-border ">
+                        <div class="data-item">
+
+                            <div class="data-item-sub">@version.VersionName</div>
+                            <div class="data-item-sub">@(!version.FromDate.HasValue ? "In Development" : version.FromDate?.ToString("dd MMM yyyy") + (!version.ToDate.HasValue ? " -> current" : $" to {@version.ToDate?.ToString("dd MMM yyyy")}"))</div>
+
+                            <div title="Click to edit" class="data-item-right link-direction" @onclick="() => SelectVersion(version.VersionName)">
+                                <i class="fa fa-folder-open"></i> View
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+}
+else
+{
+
+    <ReleaseHeader Version="@CurrentVersion"
+                   FromDate="@(SelectedVersion.FromDate.HasValue ? SelectedVersion.FromDate?.ToString("dd MMM yyyy") : "")"
+                   ToDate="@(SelectedVersion.ToDate.HasValue ? SelectedVersion.ToDate?.ToString("dd MMM yyyy") : "")"
+                   Notes="@SelectedVersion.Notes">
+    </ReleaseHeader>
+
+    <div class="tran-block rounded">
+        <div class="tran-navbar hidden-lg-down">
+
+                @switch (CurrentVersion)
+                {
+                    case "V01_05":
+                        <ReleaseV01_05></ReleaseV01_05>
+                        break;
+                    case "V01_04":
+                        <ReleaseV01_04></ReleaseV01_04>
+                        break;
+                    case "V01_03":
+                        <ReleaseV01_03></ReleaseV01_03>
+                        break;
+                    case "V01_02":
+                        <ReleaseV01_02></ReleaseV01_02>
+                        break;
+
+                }
+
+        </div>
+    </div>
+}
+
+

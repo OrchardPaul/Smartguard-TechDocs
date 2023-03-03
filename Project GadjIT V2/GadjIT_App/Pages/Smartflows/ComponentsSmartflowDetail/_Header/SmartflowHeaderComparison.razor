@@ -1,0 +1,192 @@
+﻿@if (_Alt_Smartflow != null)
+{
+    <div class="modal-body" tabindex="0">
+        <table class="table-basic table-left-header table-borderless">
+            <thead>
+
+                <tr>
+                    <td style="width: 150px">
+                    </td>
+                    <td style="width: 250px">
+                        <div class=" d-flex justify-content-center">
+                            @(UserSession.SelectedSystem == "Dev" ? "Dev" : "Live")
+                        </div>
+                    </td>
+                    <td style="width: 250px">
+                        <div class=" d-flex justify-content-center">
+                            @UserSession.AltSystem
+                        </div>
+                    </td>
+                    <td style="width: 30px">
+                    </td>
+                    <td></td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        Case Type Group
+                    </td>
+                    <td>
+                        @_SelectedSmartflow.P4WCaseTypeGroup
+                    </td>
+                    <td>
+                        @_Alt_Smartflow.P4WCaseTypeGroup
+                    </td>
+                    <td>
+                        <span class="fa fa-@(_SelectedSmartflow.P4WCaseTypeGroup != @_Alt_Smartflow.P4WCaseTypeGroup ? "exclamation" : "check")"></span>
+                    </td>
+                    <td>
+                        @if (_SelectedSmartflow.P4WCaseTypeGroup != @_Alt_Smartflow.P4WCaseTypeGroup)
+                        {
+                            <input type="checkbox" class="ml-1 mt-1" @bind="@syncCaseTypeGroup" />
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Smartflow View
+                    </td>
+                    <td>
+                        @_SelectedSmartflow.SelectedView
+                    </td>
+                    <td>
+                        @_Alt_Smartflow.SelectedView
+                    </td>
+                    <td>
+                        <span class="fa fa-@(_SelectedSmartflow.SelectedView != @_Alt_Smartflow.SelectedView ? "exclamation" : "check")"></span>
+                    </td>
+                    <td>
+                        @if (_SelectedSmartflow.SelectedView != @_Alt_Smartflow.SelectedView)
+                        {
+                            <input type="checkbox" class="ml-1 mt-1" @bind="@syncView" />
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Step Name
+                    </td>
+                    <td>
+                        @_SelectedSmartflow.StepName
+                    </td>
+                    <td>
+                        @_Alt_Smartflow.StepName
+                    </td>
+                    <td>
+                        <span class="fa fa-@(_SelectedSmartflow.StepName != @_Alt_Smartflow.StepName ? "exclamation" : "check")"></span>
+                    </td>
+                    <td>
+                        @if (_SelectedSmartflow.StepName != @_Alt_Smartflow.StepName)
+                        {
+                            <input type="checkbox" class="ml-1 mt-1" @bind="@syncStepName" />
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Background Colour
+                    </td>
+                    <td>
+                        @_SelectedSmartflow.BackgroundColour
+                    </td>
+                    <td>
+                        @_Alt_Smartflow.BackgroundColour
+                    </td>
+                    <td>
+                        <span class="fa fa-@(_SelectedSmartflow.BackgroundColour != @_Alt_Smartflow.BackgroundColour ? "exclamation" : "check")"></span>
+                    </td>
+                    <td>
+                        @if (_SelectedSmartflow.BackgroundColour != @_Alt_Smartflow.BackgroundColour)
+                        {
+                            <input type="checkbox" class="ml-1 mt-1" @bind="@syncBgColour" />
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Background Image
+                    </td>
+                    <td>
+                        @_SelectedSmartflow.BackgroundImageName
+                    </td>
+                    <td>
+                        @_Alt_Smartflow.BackgroundImageName
+                    </td>
+                    <td>
+                        <span class="fa fa-@(_SelectedSmartflow.BackgroundImage != @_Alt_Smartflow.BackgroundImage ? "exclamation" : "check")"></span>
+                    </td>
+                    <td>
+                        @if (_SelectedSmartflow.BackgroundImage != @_Alt_Smartflow.BackgroundImage)
+                        {
+                            <input type="checkbox" class="ml-1 mt-1" @bind="@syncBgImage" />
+                        }
+
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Show Notes
+                    </td>
+                    <td>
+                        @_SelectedSmartflow.ShowPartnerNotes
+                    </td>
+                    <td>
+                        @_Alt_Smartflow.ShowPartnerNotes
+                    </td>
+                    <td>
+                        <span class="fa fa-@(_SelectedSmartflow.ShowPartnerNotes != @_Alt_Smartflow.ShowPartnerNotes ? "exclamation" : "check")"></span>
+                    </td>
+                    <td>
+                        @if (_SelectedSmartflow.ShowPartnerNotes != @_Alt_Smartflow.ShowPartnerNotes)
+                        {
+                            <input type="checkbox" class="ml-1 mt-1" @bind="@syncShowPartnerNotes" />
+                        }
+
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Track Documents
+                    </td>
+                    <td>
+                        @_SelectedSmartflow.ShowDocumentTracking
+                    </td>
+                    <td>
+                        @_Alt_Smartflow.ShowDocumentTracking
+                    </td>
+                    <td>
+                        <span class="fa fa-@(_SelectedSmartflow.ShowDocumentTracking != @_Alt_Smartflow.ShowDocumentTracking ? "exclamation" : "check")"></span>
+                    </td>
+                    <td>
+                        @if (_SelectedSmartflow.ShowDocumentTracking != @_Alt_Smartflow.ShowDocumentTracking)
+                        {
+                            <input type="checkbox" class="ml-1 mt-1" @bind="@syncShowDocumentTracking" />
+                        }
+
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td>
+                    </td>
+                    <td>
+                        <div class=" d-flex justify-content-center">
+                            <button type="submit" autofocus class="btn btn-main" @onclick="() => HandleValidSubmit()">@(UserSession.SelectedSystem == "Dev" ? ">> Live" : ">> Dev")</button>
+                        </div>
+                    </td>
+                    <td>
+                        @* <div class=" d-flex justify-content-center">
+                            <button type="submit" autofocus class="btn btn-main" @onclick="() => HandleValidSubmit(true)">@(UserSession.SelectedSystem == "Dev" ? "Dev <<" : "Live <<")</button>
+                        </div> *@
+                    </td>
+                    <td>
+                    </td>
+                    <td>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+}

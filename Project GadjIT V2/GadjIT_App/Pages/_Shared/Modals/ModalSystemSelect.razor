@@ -1,0 +1,43 @@
+﻿@inject IJSRuntime jsRuntime
+@using GadjIT_App.Data.CustomFormObjects
+
+
+<div class="modal-body">
+    @if (currentUser != null)
+    {
+        <EditForm Model="@currentUser" OnValidSubmit="@HandleValidSubmit">
+            <div class="form-group">
+                <InputSelectInteger ValueExpression="@(() => currentUser.SelectedCompanyId)"
+                                    Value="@currentUser.SelectedCompanyId"
+                                    ValueChanged="@((int value) => ToggleCompany(value))"
+                                    id="Summary" class="form-control">
+                    @foreach (var company in sessionState.AllAssignedCompanies)
+                    {
+                        <option value="@company.Id">
+                            @company.CompanyName
+                        </option>
+                    }
+                </InputSelectInteger>
+            </div>
+
+
+            <div class="form-group">
+                <label for="@currentUser.SelectedUri">System</label>
+                <InputSelect class="form-control" style="width: 200px;" @bind-Value="currentUser.SelectedUri">
+                    <option selected value="Live">
+                        Live
+                    </option>
+                    <option value="Dev">
+                        Dev
+                    </option>
+                </InputSelect>
+            </div>
+
+            <div class="detail-group-box ">
+                <button type="submit" class="float-left btn btn-alt">Save Changes</button>
+                <button type="button" class="float-left ml-2 btn btn-secondary" @onclick="Close">Cancel</button>
+            </div>
+        </EditForm>
+    }
+
+</div>

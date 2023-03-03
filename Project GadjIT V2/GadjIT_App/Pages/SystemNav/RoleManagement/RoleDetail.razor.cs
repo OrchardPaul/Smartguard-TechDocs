@@ -1,0 +1,39 @@
+﻿using Blazored.Modal;
+using GadjIT_AppContext.GadjIT_App;
+using GadjIT_App.Data.Admin;
+using Microsoft.AspNetCore.Components;
+using System;
+using System.Threading.Tasks;
+
+namespace GadjIT_App.Pages.SystemNav.RoleManagement
+{
+    public partial class RoleDetail
+    {
+        [CascadingParameter]
+        BlazoredModalInstance ModalInstance { get; set; }
+
+        [Parameter]
+        public AspNetRoles TaskObject { get; set; }
+
+        [Parameter]
+        public Action DataChanged { get; set; }
+
+        [Inject]
+        private IIdentityRoleAccess service { get; set; }
+
+        private async Task HandleValidSubmit()
+        {
+            await service.SubmitChanges(TaskObject);
+
+            DataChanged?.Invoke();
+            Close();
+        }
+
+        private async void Close()
+        {
+            await ModalInstance.CloseAsync();
+        }
+
+
+    }
+}

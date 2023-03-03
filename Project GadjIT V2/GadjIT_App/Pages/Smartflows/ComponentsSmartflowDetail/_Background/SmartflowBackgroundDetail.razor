@@ -1,0 +1,109 @@
+
+
+<div class="grid-chapter grid-chapter-background">
+
+    <div class="detail-group-box">
+        @if(SmartflowIsSelected)
+        {
+            <div id="selected-bg-items">
+            
+                <div id="selected-image">
+                    <div class="selected-thumbnail ">
+                        @if (!string.IsNullOrEmpty(_SelectedSmartflow.BackgroundImageName))
+                        {
+                            <div>Selected Image: <span class="font-85">@_SelectedSmartflow.BackgroundImageName</span></div>
+                            <img src="@_SelectedSmartflow.BackgroundImage.Replace("/wwwroot","")" alt="" class="img-thumbnail ml-2" />
+                        }
+                        else
+                        {
+                            <label class="d-block col-grey">No Image Selected</label>
+                            <img src="/images/BackgroundImages/NoImage.jpg" alt="" class="img-thumbnail ml-2" />
+
+                        }
+                    </div>
+                    <div class="hidden-lg-down form-group-inline">
+                        <label style="margin-right: 10px">Preview Image</label>
+                        <label class="switch">
+                            <input type="checkbox" @bind="PreviewSmartflowImage">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div style="margin-left: 50px">
+                    <label>Background Colour</label>
+                    <select @bind="SelectColour"
+                            style="background-color: @getHTMLColourFromAndroid(ListChapterColours.Where(C => C.ColourName == SelectColour).Select(C => C.ColourCode).FirstOrDefault())"
+                            class="form-control form-control-lg">
+                        @if(ListChapterColours != null)
+                        {
+                            foreach (var colour in ListChapterColours)
+                            {
+                                <option style="background-color: @getHTMLColourFromAndroid(colour.ColourCode)" value="@(colour.ColourCode.Contains("#") ? colour.ColourName : colour.ColourCode)">
+                                    @colour.ColourName
+
+                                </option>
+                            }
+                        }
+                    </select>
+
+
+                </div>
+            
+            </div>
+        }
+        @if(_SmartflowLockedForEdit || !SmartflowIsSelected)
+        {
+            <div class="custom-file">
+                <BlazorInputFile.InputFile multiple OnChange="HandleBgImageFileSelection" class="custom-file-input" id="customFileInput"></BlazorInputFile.InputFile>
+                <label class="custom-file-label" for="customInput">Upload images</label>
+            </div>
+        }
+
+
+
+        <div class="grid-can-edit chapter-scroll-list">
+            <div class="thumbnail-list">
+                @if(ListFilesForBgImages != null)
+                {
+                    foreach (var fileDesc in ListFilesForBgImages.ToList().OrderBy(F => F.FileName))
+                    {
+                    }
+
+                    foreach (var fileDesc in ListFilesForBgImages.ToList().OrderBy(F => F.FileName))
+                    {
+                        
+                        <div class="thumbnail-item @(!string.IsNullOrEmpty(_SelectedSmartflow.BackgroundImageName) && fileDesc.FileName == _SelectedSmartflow.BackgroundImageName ? "active" : "")">
+                            <img src="@fileDesc.FileURL.Replace("/wwwroot","")" alt="" class="img-thumbnail" />
+                            <label title="@fileDesc.FileName">@fileDesc.FileName</label>
+                            
+                                @if(_SmartflowLockedForEdit || !SmartflowIsSelected)
+                                {
+                                    <div class="thumbnail-options">
+                                        <button @onclick='(() => PrepareBgImageForDelete(fileDesc))' class="btn btn-icon col-grey" title="Delete this image"><i class="fa fa-trash"></i></button>
+                                        
+                                        @if(SmartflowIsSelected)
+                                        {
+                                            @if (!string.IsNullOrEmpty(_SelectedSmartflow.BackgroundImageName) && fileDesc.FileName == _SelectedSmartflow.BackgroundImageName)
+                                                {
+                                                    <button @onclick='() => SelectBgImage(new FileManagement.FileClassObjects.FileDesc { FileName = "", FileURL = "" })' class="btn btn-icon" title="Deselect this image"><i class="fa fa-times"></i></button>
+                                                }
+                                                else
+                                                {
+                                                    <button @onclick='() => SelectBgImage(fileDesc)' class="btn btn-icon" title="Use this image"><i class="fa fa-square-check"></i></button>
+                                                }
+                                        }
+                                    </div>
+                                }
+                        </div>
+                    }
+                    
+                }
+                
+            </div>
+        </div>
+
+
+
+    </div>
+</div>
