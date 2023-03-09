@@ -91,15 +91,14 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsCaseTypeDetail._Documents
 
                     foreach(Client_VmSmartflowRecord Client_VmSmartflowRecord in lstCaseTypeSmartflows)
                     {
-                        Smartflow smartflow = JsonConvert.DeserializeObject<Smartflow>(Client_VmSmartflowRecord.ClientSmartflowRecord.SmartflowData);
+                        SmartflowV2 smartflow = JsonConvert.DeserializeObject<SmartflowV2>(Client_VmSmartflowRecord.ClientSmartflowRecord.SmartflowData);
                         smartflow.CaseTypeGroup = Client_VmSmartflowRecord.ClientSmartflowRecord.CaseTypeGroup;
                         smartflow.CaseType = Client_VmSmartflowRecord.ClientSmartflowRecord.CaseType;
                         //vmSmartflows.Smartflows.Add(smartflow);
                         //List<GenSmartflowItem> docs = smartflow.Items.
 
                         Dictionary<int?, string> docTypes = new Dictionary<int?, string> { { 1, "Doc" }, { 4, "Form" }, { 6, "Step" }, { 8, "Date" }, { 9, "Email" }, { 11, "Doc" }, { 12, "Email" }, { 13, "Csv" } };
-                        List<GenSmartflowItem> docs = smartflow.Items
-                                        .Where(I => I.Type == "Doc")
+                        List<SmartflowDocument> docs = smartflow.Documents
                                         .Where(I => I.CustomItem != "Y")
                                         .ToList();
                         
@@ -117,7 +116,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsCaseTypeDetail._Documents
 
                             if(doc.LinkedItems != null && doc.LinkedItems.Count() > 0)
                             {
-                                List<LinkedItem> attachments = doc.LinkedItems
+                                List<LinkedDocument> attachments = doc.LinkedItems
                                             .Where(LI => LI.CustomItem != "Y")
                                             .ToList();
 
@@ -201,7 +200,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsCaseTypeDetail._Documents
                                         .Where(C => C.ClientSmartflowRecord.SmartflowName == _selectedLinkedCaseItem.SmartflowName)
                                         .FirstOrDefault();
 
-                Smartflow selectedSmartflow = JsonConvert.DeserializeObject<Smartflow>(selectedVmUsrClientSmartflowRecord.ClientSmartflowRecord.SmartflowData);
+                SmartflowV2 selectedSmartflow = JsonConvert.DeserializeObject<SmartflowV2>(selectedVmUsrClientSmartflowRecord.ClientSmartflowRecord.SmartflowData);
                 
                 LinkedCaseItem copyLinkedCaseItem = new LinkedCaseItem{
                                                     ItemName = _selectedLinkedCaseItem.ItemName

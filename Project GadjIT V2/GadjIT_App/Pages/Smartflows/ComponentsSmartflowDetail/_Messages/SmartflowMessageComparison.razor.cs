@@ -32,7 +32,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Messages
         public Client_SmartflowRecord _Alt_ClientSmartflowRecord { get; set; }
 
         [Parameter]
-        public Smartflow _Alt_Smartflow { get; set; }
+        public SmartflowV2 _Alt_Smartflow { get; set; }
 
         private async void Close()
         {
@@ -47,10 +47,10 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Messages
         private async Task SyncItem()
         {
             
-            var taskObject = _Alt_Smartflow.TickerMessages.Where(C => C.Message == _Object.Message.Message).SingleOrDefault();
+            var taskObject = _Alt_Smartflow.Messages.Where(C => C.Message == _Object.Message.Message).SingleOrDefault();
 
-            _Alt_Smartflow.TickerMessages.Remove(taskObject);
-            _Alt_Smartflow.TickerMessages.Add(_Object.Message);
+            _Alt_Smartflow.Messages.Remove(taskObject);
+            _Alt_Smartflow.Messages.Add(_Object.Message);
 
             bool gotLock = UserSession.Lock;
             while (gotLock)
@@ -79,7 +79,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Messages
 
         private async Task AddItem()
         {
-            _Alt_Smartflow.TickerMessages.Add(_Object.Message);
+            _Alt_Smartflow.Messages.Add(_Object.Message);
 
             bool gotLock = UserSession.Lock;
             while (gotLock)

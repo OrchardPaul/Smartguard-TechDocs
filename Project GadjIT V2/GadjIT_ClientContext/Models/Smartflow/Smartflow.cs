@@ -4,7 +4,7 @@ using System.Text;
 
 namespace GadjIT_ClientContext.Models.Smartflow
 {
-    public class Smartflow
+    public class SmartflowV1
     {
         public string CaseTypeGroup { get; set; }
         public string CaseType { get; set; }
@@ -28,7 +28,7 @@ namespace GadjIT_ClientContext.Models.Smartflow
         public List<SmartflowMessage> TickerMessages { get; set; } = new List<SmartflowMessage>();
     }
 
-    public class Smartflow2
+    public class SmartflowV2
     {
         public string CaseTypeGroup { get; set; }
         public string CaseType { get; set; }

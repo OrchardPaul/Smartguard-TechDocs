@@ -27,13 +27,13 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Documents
 
 
         [Parameter]
-        public VmGenSmartflowItem _Object { get; set; }
+        public VmSmartflowDocument _Object { get; set; }
 
         [Parameter]
         public Client_SmartflowRecord _Alt_ClientSmartflowRecord { get; set; }
 
         [Parameter]
-        public Smartflow _Alt_Smartflow { get; set; }
+        public SmartflowV2 _Alt_Smartflow { get; set; }
 
        
 
@@ -50,14 +50,13 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Documents
         private async Task SyncItem()
         {
             
-            var taskObject = _Alt_Smartflow.Items
-                                        .Where(C => C.Type == _Object.AltObject.Type)
+            var taskObject = _Alt_Smartflow.Documents
                                         .Where(C => C.Name == _Object.AltObject.Name)
                                         .FirstOrDefault();
 
 
-            _Alt_Smartflow.Items.Remove(taskObject);
-            _Alt_Smartflow.Items.Add(_Object.ChapterObject);
+            _Alt_Smartflow.Documents.Remove(taskObject);
+            _Alt_Smartflow.Documents.Add(_Object.ChapterObject);
 
 
             bool gotLock = UserSession.Lock;
@@ -88,7 +87,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Documents
 
         private async Task AddItem()
         {
-            _Alt_Smartflow.Items.Add(_Object.ChapterObject);
+            _Alt_Smartflow.Documents.Add(_Object.ChapterObject);
 
             bool gotLock = UserSession.Lock;
             while (gotLock)

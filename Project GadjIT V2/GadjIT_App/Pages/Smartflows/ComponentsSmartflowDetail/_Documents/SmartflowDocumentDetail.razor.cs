@@ -27,23 +27,26 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Documents
 
 
         [Parameter]
-        public List<VmGenSmartflowItem> _LstDocs { get; set; } 
+        public List<VmSmartflowDocument> _LstDocs { get; set; } 
 
         [Parameter]
-        public List<VmGenSmartflowItem> _LstStatus { get; set; } 
+        public List<VmSmartflowStatus> _LstStatus { get; set; } 
+        
+        [Parameter]
+        public List<VmSmartflowAgenda> _LstAgendas { get; set; }
 
         [Parameter]
         public Client_SmartflowRecord _Selected_ClientSmartflowRecord { get; set; }
 
         [Parameter]
-        public Smartflow _SelectedSmartflow { get; set; }
+        public SmartflowV2 _SelectedSmartflow { get; set; }
 
 
         [Parameter]
-        public LinkedItem _AttachObject {get; set;}
+        public LinkedDocument _AttachObject {get; set;}
 
         [Parameter]
-        public EventCallback<Smartflow> _SmartflowUpdated {get; set;}
+        public EventCallback<SmartflowV2> _SmartflowUpdated {get; set;}
 
         [Parameter]
         public EventCallback<string> _RefreshSmartflowItems {get; set;}
@@ -56,9 +59,6 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Documents
 
         [Parameter]
         public List<P4W_DmDocuments> _LibraryDocumentsAndSteps {get; set;}
-        
-        [Parameter]
-        public List<VmGenSmartflowItem> _LstAgendas { get; set; }
 
         [Parameter]
         public List<P4W_TableDate> _TableDates {get; set;}
@@ -95,11 +95,11 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Documents
 
         private Client_SmartflowRecord Alt_ClientSmartflowRecord { get; set; } = new Client_SmartflowRecord(); //as saved on client site with serialised VmSmartflow
 
-        private Smartflow AltSmartflow {get; set;} //Smartflow Schema
+        private SmartflowV2 AltSmartflow {get; set;} //Smartflow Schema
 
-        public List<VmGenSmartflowItem> LstAltSystemItems { get; set; } 
+        public List<VmSmartflowDocument> LstAltSystemItems { get; set; } 
 
-        private VmGenSmartflowItem EditObject {get; set;}
+        private VmSmartflowDocument EditObject {get; set;}
 
         public bool SeqMoving {get; set;}
 
@@ -130,8 +130,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Documents
             try
             {
                 
-                EditObject = new VmGenSmartflowItem { ChapterObject = new GenSmartflowItem() };
-                EditObject.ChapterObject.Type = "Doc";
+                EditObject = new VmSmartflowDocument { ChapterObject = new SmartflowDocument() };
                 EditObject.ChapterObject.Action = "INSERT"; //default item to INSERT, user can opt for a TAKE on the form if required
                 
                 if(_LstDocs != null && _LstDocs.Count > 0)
@@ -158,7 +157,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Documents
         }
 
 
-        protected void PrepareForEdit(VmGenSmartflowItem _selectedObject)
+        protected void PrepareForEdit(VmSmartflowDocument _selectedObject)
         {
             EditObject = _selectedObject;
 
@@ -174,13 +173,11 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Documents
                 Action refreshSelectedList = HandleUpdate;
                 Action refreshLibraryDocumentsAndSteps = RefreshLibraryDocumentsAndSteps;
 
-                var copyObject = new GenSmartflowItem
+                var copyObject = new SmartflowDocument
                 {
-                    Type = EditObject.ChapterObject.Type,
                     Name = EditObject.ChapterObject.Name,
                     EntityType = EditObject.ChapterObject.EntityType,
                     SeqNo = EditObject.ChapterObject.SeqNo,
-                    SuppressStep = EditObject.ChapterObject.SuppressStep,
                     CompleteName = EditObject.ChapterObject.CompleteName,
                     AsName = EditObject.ChapterObject.AsName,
                     RescheduleDays = EditObject.ChapterObject.RescheduleDays,
@@ -192,7 +189,6 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Documents
                     TrackingMethod = EditObject.ChapterObject.TrackingMethod,
                     ChaserDesc = EditObject.ChapterObject.ChaserDesc,
                     RescheduleDataItem = EditObject.ChapterObject.RescheduleDataItem,
-                    MilestoneStatus = EditObject.ChapterObject.MilestoneStatus,
                     OptionalDocument = EditObject.ChapterObject.OptionalDocument,
                     Agenda = EditObject.ChapterObject.Agenda,
                     CustomItem = EditObject.ChapterObject.CustomItem
@@ -217,7 +213,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Documents
                     Class = "blazored-custom-modal modal-smartflow-doc" 
                 };
 
-                Modal.Show<ModalSmartflowDetail>("Steps and Documents", parameters, options);
+                Modal.Show<ModalSmartflowDocumentDetail>("Steps and Documents", parameters, options);
             }
             catch(Exception e)
             {
@@ -231,20 +227,19 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Documents
             await ChapterItemsUpdated();
         }
 
-        protected void ShowSmartflowDetailViewModal(VmGenSmartflowItem _selectedObject)
+        protected void ShowSmartflowDetailViewModal(VmSmartflowDocument _selectedObject)
         {
             try
             {
                 var parameters = new ModalParameters();
                 parameters.Add("_Object", _selectedObject);
-                parameters.Add("_SelectedList", "Steps and Documents"); 
 
                 var options = new ModalOptions()
                 {
                     Class = "blazored-custom-modal modal-smartflow-comparison"
                 };
 
-                Modal.Show<ModalSmartflowDetailView>("Steps and Documents", parameters, options);
+                Modal.Show<ModalSmartflowDocumentView>("Steps and Documents", parameters, options);
             }
             catch(Exception e)
             {
@@ -252,31 +247,30 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Documents
             }
         }
 
-        protected void ShowSmartflowDetailDelete(VmGenSmartflowItem _SelectedSmartflowItem) 
+        protected void ShowSmartflowDetailDelete(VmSmartflowDocument _selectedSmartflowItem) 
         {
-            EditObject = _SelectedSmartflowItem;
+            EditObject = _selectedSmartflowItem;
 
-            string itemName = (string.IsNullOrEmpty(_SelectedSmartflowItem.ChapterObject.AltDisplayName) ? _SelectedSmartflowItem.ChapterObject.Name : _SelectedSmartflowItem.ChapterObject.AltDisplayName);
-            string itemType = _SelectedSmartflowItem.ChapterObject.Type;
-
+            string itemName = (string.IsNullOrEmpty(_selectedSmartflowItem.ChapterObject.AltDisplayName) ? _selectedSmartflowItem.ChapterObject.Name : _selectedSmartflowItem.ChapterObject.AltDisplayName);
+            
             Action SelectedDeleteAction = HandleDelete;
             var parameters = new ModalParameters();
             parameters.Add("_ItemName", itemName);
             parameters.Add("_DeleteAction", SelectedDeleteAction);
-            parameters.Add("_InfoText", $"Are you sure you wish to delete the '{itemName}' {itemType.ToLower()}? ");
+            parameters.Add("_InfoText", $"Are you sure you wish to delete the Document: '{itemName}'? ");
 
             var options = new ModalOptions()
             {
                 Class = "blazored-custom-modal"
             };
 
-            Modal.Show<ModalSmartflowDetailDelete>($"Delete {itemType}", parameters, options);
+            Modal.Show<ModalSmartflowDetailDelete>($"Delete Document", parameters, options);
         }
 
         private async void HandleDelete() 
         {
             //<ModalDelete> simply invokes this method when user cicks OK. No need for the modal to handle this action as we do not require any details from the Modal. 
-            _SelectedSmartflow.Items.Remove(EditObject.ChapterObject);
+            _SelectedSmartflow.Documents.Remove(EditObject.ChapterObject);
             
             await ChapterItemsUpdated();
 
@@ -299,7 +293,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Documents
         /// 
         /// ##################################################################################
     
-        private void PrepareAttachmentForAdd(VmGenSmartflowItem _item)
+        private void PrepareAttachmentForAdd(VmSmartflowDocument _item)
         {
             SelectedList = "New Attachement";
             EditObject = _item;
@@ -308,7 +302,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Documents
             ShowSmartflowAttachmentModal();
         }
 
-        private void PrepareAttachmentForEdit(VmGenSmartflowItem _item, LinkedItem _linkedItems)
+        private void PrepareAttachmentForEdit(VmSmartflowDocument _item, LinkedDocument _linkedItems)
         {
             SelectedList = "Edit Attachement";
             EditObject = _item;
@@ -317,7 +311,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Documents
             ShowSmartflowAttachmentModal();
         }
 
-        private void PrepareAttachmentForView(VmGenSmartflowItem _item, LinkedItem _linkedItems)
+        private void PrepareAttachmentForView(VmSmartflowDocument _item, LinkedDocument _linkedItems)
         {
             SelectedList = "Edit Attachement";
             EditObject = _item;
@@ -332,13 +326,11 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Documents
             Action refreshSelectedList = HandleUpdate;
             Action refreshLibraryDocumentsAndSteps = RefreshLibraryDocumentsAndSteps;
 
-            var copyObject = new GenSmartflowItem
+            var copyObject = new SmartflowDocument
             {
-                Type = EditObject.ChapterObject.Type,
                 Name = EditObject.ChapterObject.Name,
                 EntityType = EditObject.ChapterObject.EntityType,
                 SeqNo = EditObject.ChapterObject.SeqNo,
-                SuppressStep = EditObject.ChapterObject.SuppressStep,
                 CompleteName = EditObject.ChapterObject.CompleteName,
                 AsName = EditObject.ChapterObject.AsName,
                 RescheduleDays = EditObject.ChapterObject.RescheduleDays,
@@ -346,12 +338,12 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Documents
                 UserMessage = EditObject.ChapterObject.UserMessage,
                 PopupAlert = EditObject.ChapterObject.PopupAlert,
                 NextStatus = EditObject.ChapterObject.NextStatus,
-                LinkedItems = EditObject.ChapterObject.LinkedItems is null ? new List<LinkedItem>() : EditObject.ChapterObject.LinkedItems
+                LinkedItems = EditObject.ChapterObject.LinkedItems is null ? new List<LinkedDocument>() : EditObject.ChapterObject.LinkedItems
             };
 
             
             var attachment = _AttachObject is null 
-                ? new LinkedItem
+                ? new LinkedDocument
                 {
                     Action = "INSERT",
                     ChaserDesc = "",
@@ -389,7 +381,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Documents
 
         protected void ShowSmartflowAttachmentViewModal()
         {
-            var attachment = _AttachObject is null ? new LinkedItem { Action = "INSERT" } : _AttachObject;
+            var attachment = _AttachObject is null ? new LinkedDocument { Action = "INSERT" } : _AttachObject;
 
             var parameters = new ModalParameters();
             parameters.Add("_Attachment", attachment);
@@ -475,7 +467,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Documents
                     {
                         CompareSystems_ = true;
 
-                        AltSmartflow = JsonConvert.DeserializeObject<Smartflow>(Alt_AppSmartflowRecord.SmartflowData);
+                        AltSmartflow = JsonConvert.DeserializeObject<SmartflowV2>(Alt_AppSmartflowRecord.SmartflowData);
 
                         Alt_AppSmartflowRecord.SmartflowData = JsonConvert.SerializeObject(AltSmartflow);
                         Alt_ClientSmartflowRecord = new Client_SmartflowRecord {
@@ -489,14 +481,13 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Documents
 
                         Alt_AppSmartflowRecord.SmartflowData = JsonConvert.SerializeObject(AltSmartflow);
 
-                        var cItems = AltSmartflow.Items;
+                        var cItems = AltSmartflow.Documents;
 
-                        LstAltSystemItems = cItems.Select(T => new VmGenSmartflowItem { ChapterObject = T, Compared = false }).ToList();
+                        LstAltSystemItems = cItems.Select(T => new VmSmartflowDocument { ChapterObject = T, Compared = false }).ToList();
                         
                         foreach (var item in _LstDocs)
                         {
                             var altObject = LstAltSystemItems
-                                        .Where(A => A.ChapterObject.Type == item.ChapterObject.Type)
                                         .Where(A => A.ChapterObject.Name == item.ChapterObject.Name)
                                         .FirstOrDefault();
 
@@ -580,12 +571,12 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Documents
         {
             try
             {
-                foreach (var item in AltSmartflow.Items.Where(I => I.Type == "Doc").ToList())
+                foreach (var item in AltSmartflow.Documents.ToList())
                 {
-                    AltSmartflow.Items.Remove(item);
+                    AltSmartflow.Documents.Remove(item);
                 }
 
-                AltSmartflow.Items.AddRange(_SelectedSmartflow.Items.Where(I => I.Type == "Doc").ToList());
+                AltSmartflow.Documents.AddRange(_SelectedSmartflow.Documents.ToList());
 
                 Alt_AppSmartflowRecord.SmartflowData = JsonConvert.SerializeObject(AltSmartflow);
                 Client_SmartflowRecord altSmartflow = new Client_SmartflowRecord {
@@ -614,7 +605,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Documents
             }
         }
 
-        private void ShowSmartflowComparisonModal(VmGenSmartflowItem _selectedItem) 
+        private void ShowSmartflowComparisonModal(VmSmartflowDocument _selectedItem) 
         {
             try
             {
@@ -649,7 +640,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Documents
         }
 
 
-        protected void ShowSmartflowDeleteAlt(VmGenSmartflowItem _selectedItem)
+        protected void ShowSmartflowDeleteAlt(VmSmartflowDocument _selectedItem)
         {
             try
             {
@@ -666,7 +657,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Documents
                     Class = "blazored-custom-modal"
                 };
 
-                Modal.Show<ModalSmartflowDetailDelete>($"Delete Status", parameters, options);
+                Modal.Show<ModalSmartflowDetailDelete>($"Delete Document", parameters, options);
             }
             catch(Exception e)
             {
@@ -683,7 +674,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Documents
         {
             await UserSession.SwitchSelectedSystem();
 
-            AltSmartflow.Items.Remove(EditObject.ChapterObject);
+            AltSmartflow.Documents.Remove(EditObject.ChapterObject);
             LstAltSystemItems.Remove(EditObject);
 
             Alt_AppSmartflowRecord.SmartflowData = JsonConvert.SerializeObject(AltSmartflow);
@@ -717,7 +708,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Documents
         /// <param name="listType">: Docs or Fees</param>
         /// <param name="direction">: Up or Down</param>
         /// <returns>No return</returns>
-        protected async Task MoveSeq(GenSmartflowItem _selectobject, string _direction)
+        protected async Task MoveSeq(SmartflowDocument _selectobject, string _direction)
         {
             try
             {

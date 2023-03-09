@@ -1,3 +1,4 @@
+@using GadjIT_App.Pages._Shared.Modals
 @using GadjIT_ClientContext.Models.Smartflow.Client
 
 @implements IDisposable
@@ -12,10 +13,10 @@
     {
       
         <div class="grid-actions">
-
-            
+            <div class="btn-group">
+                <button @onclick='ShowCreateSmartflowModal' class="btn btn-main btn-shadow" title="Add new Smartflow"><i class="fa fa-plus pr-1"></i><span>New</span></button>
+            </div>
         </div>
-
 
 
         <div class="grid-can-edit">
@@ -30,7 +31,61 @@
                 
                     <div class="row grid-row grid-row-lg @(context.ClientSmartflowRecord.SmartflowName.Contains("GROUP") ? "data-item-group" : "") @(RowChanged == context.ClientSmartflowRecord.SeqNo && !SeqMoving ? "row-changed" : "" )">
                         <div class="data-item ">
+                            @if (UserSession.IsAdminUser)
+                            {
+                                @if (!CompareSystems)
+                                {
+                                    <div class="btn-ellipses float-left ">
+                                        <span class="fa fa-ellipsis-v"></span>
+                                        <div class="ellipsis-menu">
+                                            <ul>
+                                                <li class="col-main" @onclick="() => SelectSmartflow(context.ClientSmartflowRecord)" title="">
+                                                    <span class="fa fa-pencil-alt mr-2"></span>
+                                                    <span>Edit</span>
+                                                </li>
+                                                @if (!IsSmartflowLocked(context))
+                                                {
+                                                    <li class="col-main" @onclick='() => ShowSmartflowEditModal(context)' title="">
+                                                        <span class="fa fa-font mr-2"></span>
+                                                        <span>Rename</span>
+                                                    </li>
+                                                    <li class="col-red" @onclick='() => ShowSmartflowDeleteModal(context)' title="">
+                                                        <span class="fa fa-trash-alt mr-2"></span>
+                                                        <span>Delete</span>
+                                                    </li>
+                                                }
+                                            </ul>
+                                        </div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="btn-ellipses float-left">
+                                        @if (!(context.ComparisonIcon is null))
+                                        {
+                                            @if (!(context.ComparisonResult == "Exact match"))
+                                            {
+                                                <ModalTooltip Direction="right" Text=@(context.ComparisonResult == "Partial match" ? "Differences found, click to sync" : "Does not exist, click to create") Class="w-2">
+                                                    <div class="btn-dashed" @onclick="() => ShowSmartflowSyncOnAltModal(context.ClientSmartflowRecord)"><span class="fa fa-@context.ComparisonIcon"></span></div>
+                                                </ModalTooltip>
 
+                                            }
+                                            else
+                                            {
+                                                <ModalTooltip Direction="right" Text="Exact Match" Class="w-1">
+                                                    <span class="fa fa-@context.ComparisonIcon"></span>
+                                                </ModalTooltip>
+
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <div class="spinner"></div>
+                                        }
+                                    </div>
+                                }
+
+                            }
                             <div class="data-item-sub">
                                 @context.ClientSmartflowRecord.SmartflowName
                                 

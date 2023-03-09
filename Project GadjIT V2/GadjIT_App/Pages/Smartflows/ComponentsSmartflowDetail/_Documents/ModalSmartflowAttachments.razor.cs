@@ -45,7 +45,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Documents
 
 
         [Parameter]
-        public LinkedItem _Attachment { get; set; }
+        public LinkedDocument _Attachment { get; set; }
 
         [Parameter]
         public RenderFragment _CustomHeader { get; set; }
@@ -63,13 +63,13 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Documents
         public Client_SmartflowRecord _Selected_ClientSmartflowRecord { get; set; }
 
         [Parameter]
-        public Smartflow _SelectedSmartflow { get; set; }
+        public SmartflowV2 _SelectedSmartflow { get; set; }
 
         [Parameter]
-        public GenSmartflowItem _TaskObject { get; set; }
+        public SmartflowDocument _TaskObject { get; set; }
 
         [Parameter]
-        public GenSmartflowItem _CopyObject { get; set; }
+        public SmartflowDocument _CopyObject { get; set; }
 
 
         [Parameter]
@@ -85,10 +85,10 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Documents
         public List<P4W_CaseTypeGroups> _P4WCaseTypeGroups { get; set; }
 
         [Parameter]
-        public List<VmGenSmartflowItem> _ListOfStatus { get; set; }
+        public List<VmSmartflowStatus> _ListOfStatus { get; set; }
         
         [Parameter]
-        public List<VmGenSmartflowItem> _ListOfAgenda { get; set; }
+        public List<VmSmartflowAgenda> _ListOfAgenda { get; set; }
 
 
 
@@ -210,7 +210,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Documents
 
         private async void Close()
         {
-            _TaskObject = new GenSmartflowItem();
+            _TaskObject = new SmartflowDocument();
             await ModalInstance.CloseAsync();
 
 
@@ -228,7 +228,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Documents
 
                 if (_CopyObject.LinkedItems is null)
                 {
-                    _CopyObject.LinkedItems = new List<LinkedItem> { _Attachment };
+                    _CopyObject.LinkedItems = new List<LinkedDocument> { _Attachment };
                 }
                 else
                 {
@@ -239,12 +239,9 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Documents
                 }
 
 
-                _TaskObject.Type = _CopyObject.Type;
                 _TaskObject.Name = _CopyObject.Name;
                 _TaskObject.EntityType = _CopyObject.EntityType;
                 _TaskObject.SeqNo = _CopyObject.SeqNo;
-                _TaskObject.SuppressStep = _CopyObject.SuppressStep;
-                _TaskObject.CompleteName = _CopyObject.CompleteName;
                 _TaskObject.AsName = _CopyObject.AsName;
                 _TaskObject.RescheduleDays = _CopyObject.RescheduleDays;
                 _TaskObject.AltDisplayName = _CopyObject.AltDisplayName;
@@ -257,7 +254,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Documents
                 _Selected_ClientSmartflowRecord.SmartflowData = JsonConvert.SerializeObject(_SelectedSmartflow);
                 ClientApiManagementService.Update(_Selected_ClientSmartflowRecord).ConfigureAwait(false);
 
-                _TaskObject = new GenSmartflowItem();
+                _TaskObject = new SmartflowDocument();
                 FilterText = "";
 
 
@@ -301,7 +298,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Documents
 
                 await CompanyDbAccess.SaveSmartFlowRecord(_Selected_ClientSmartflowRecord, UserSession);
 
-                _TaskObject = new GenSmartflowItem();
+                _TaskObject = new SmartflowDocument();
                 FilterText = "";
 
 

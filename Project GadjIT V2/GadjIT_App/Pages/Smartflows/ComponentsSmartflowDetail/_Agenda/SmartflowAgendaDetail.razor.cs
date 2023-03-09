@@ -25,16 +25,16 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Agenda
     {
 
         [Parameter]
-        public List<VmGenSmartflowItem> _LstAgendas { get; set; }
+        public List<VmSmartflowAgenda> _LstAgendas { get; set; }
         
         [Parameter]
         public Client_SmartflowRecord _Selected_ClientSmartflowRecord { get; set; }
 
         [Parameter]
-        public Smartflow _SelectedSmartflow { get; set; }
+        public SmartflowV2 _SelectedSmartflow { get; set; }
 
         [Parameter]
-        public EventCallback<Smartflow> _SmartflowUpdated {get; set;}
+        public EventCallback<SmartflowV2> _SmartflowUpdated {get; set;}
 
         [Parameter]
         public EventCallback<string> _RefreshSmartflowItems {get; set;}
@@ -57,8 +57,6 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Agenda
         [Inject]
         private ICompanyDbAccess CompanyDbAccess { get; set; }
 
-        [Inject]
-        public IAppSmartflowsState AppSmartflowsState { get; set; }
 
         [Inject]
         public IUserSessionState UserSession { get; set; }
@@ -70,11 +68,11 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Agenda
 
         private Client_SmartflowRecord Alt_ClientSmartflowRecord { get; set; } = new Client_SmartflowRecord(); //as saved on client site with serialised VmSmartflow
 
-        private Smartflow AltSmartflow {get; set;} //Smartflow Schema
+        private SmartflowV2 AltSmartflow {get; set;} //Smartflow Schema
 
-        public List<VmGenSmartflowItem> LstAltSystemItems { get; set; } 
+        public List<VmSmartflowAgenda> LstAltSystemItems { get; set; } 
 
-        public VmGenSmartflowItem EditObject = new VmGenSmartflowItem { ChapterObject = new GenSmartflowItem() };
+        public VmSmartflowAgenda EditObject = new VmSmartflowAgenda { ChapterObject = new SmartflowAgenda() };
 
 
         private bool CompareSystems_;
@@ -96,11 +94,8 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Agenda
             try
             {
                 
-                EditObject = new VmGenSmartflowItem { ChapterObject = new GenSmartflowItem() };
+                EditObject = new VmSmartflowAgenda { ChapterObject = new SmartflowAgenda() };
                 
-                EditObject.ChapterObject.Type = "Agenda";   //Required for both Edit Object 
-                EditObject.ChapterObject.SeqNo = 0;         //and Copy Object for validation
-
                 ShowSmartflowDetailModal("Insert");
                 
             }
@@ -112,7 +107,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Agenda
         }
 
 
-        protected void PrepareForEdit(VmGenSmartflowItem _selectedObject)
+        protected void PrepareForEdit(VmSmartflowAgenda _selectedObject)
         {
             EditObject = _selectedObject;
 
@@ -130,17 +125,13 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Agenda
                 Action dataChanged = HandleUpdate;
 
                 
-                var copyObject = new GenSmartflowItem
+                var copyObject = new SmartflowAgenda
                 {
-                    Type = EditObject.ChapterObject.Type,
-                    SeqNo = EditObject.ChapterObject.SeqNo,
-                    Name = EditObject.ChapterObject.Name,
-                    Agenda = EditObject.ChapterObject.Agenda,
+                    Name = EditObject.ChapterObject.Name
                 };
 
                 var parameters = new ModalParameters();
                 parameters.Add("_Option", _option);
-                parameters.Add("_Selected_ClientSmartflowRecord", _Selected_ClientSmartflowRecord);
                 parameters.Add("_SelectedSmartflow", _SelectedSmartflow);
                 parameters.Add("_TaskObject", EditObject.ChapterObject);
                 parameters.Add("_CopyObject", copyObject);
@@ -151,7 +142,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Agenda
                     Class = "blazored-custom-modal modal-smartflow-agenda" 
                 };
 
-                Modal.Show<ModalSmartflowDetail>("Agenda", parameters, options);
+                Modal.Show<ModalSmartflowAgendaDetail>("Agenda", parameters, options);
             }
             catch(Exception e)
             {
@@ -167,7 +158,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Agenda
         }
 
 
-        protected void ShowSmartflowDetailViewModal(VmGenSmartflowItem _selectedObject)//moved partial
+        protected void ShowSmartflowDetailViewModal(VmSmartflowAgenda _selectedObject)//moved partial
         {
             try
             {
@@ -180,7 +171,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Agenda
                     Class = "blazored-custom-modal modal-smartflow-agenda"
                 };
 
-                Modal.Show<ModalSmartflowDetailView>("Agenda", parameters, options);
+                Modal.Show<ModalSmartflowAgendaDetail>("Agenda", parameters, options);
             }
             catch(Exception e)
             {
@@ -188,31 +179,30 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Agenda
             }
         }
 
-        protected void ShowSmartflowDetailDelete(VmGenSmartflowItem _SelectedSmartflowItem) 
+        protected void ShowSmartflowDetailDelete(VmSmartflowAgenda _selectedSmartflowItem) 
         {
-            EditObject = _SelectedSmartflowItem;
+            EditObject = _selectedSmartflowItem;
 
-            string itemName = _SelectedSmartflowItem.ChapterObject.Name;
-            string itemType = _SelectedSmartflowItem.ChapterObject.Type;
+            string itemName = _selectedSmartflowItem.ChapterObject.Name;
 
             Action SelectedDeleteAction = HandleDelete;
             var parameters = new ModalParameters();
             parameters.Add("_ItemName", itemName);
             parameters.Add("_DeleteAction", SelectedDeleteAction);
-            parameters.Add("_InfoText", $"Are you sure you wish to delete the '{itemName}' {itemType.ToLower()}? ");
+            parameters.Add("_InfoText", $"Are you sure you wish to delete the Agenda item: '{itemName}'? ");
 
             var options = new ModalOptions()
             {
                 Class = "blazored-custom-modal"
             };
 
-            Modal.Show<ModalSmartflowDetailDelete>($"Delete {itemType}", parameters, options);
+            Modal.Show<ModalSmartflowDetailDelete>($"Delete Agenda", parameters, options);
         }
 
         private async void HandleDelete() 
         {
             //<ModalDelete> simply invokes this method when user cicks OK. No need for the modal to handle this action as we do not require any details from the Modal. 
-            _SelectedSmartflow.Items.Remove(EditObject.ChapterObject);
+            _SelectedSmartflow.Agendas.Remove(EditObject.ChapterObject);
            
             await ChapterItemsUpdated();
 
@@ -276,7 +266,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Agenda
                     else
                     {
                         CompareSystems_ = true;
-                        AltSmartflow = JsonConvert.DeserializeObject<Smartflow>(Alt_AppSmartflowRecord.SmartflowData);
+                        AltSmartflow = JsonConvert.DeserializeObject<SmartflowV2>(Alt_AppSmartflowRecord.SmartflowData);
 
                         Alt_AppSmartflowRecord.SmartflowData = JsonConvert.SerializeObject(AltSmartflow);
                         Alt_ClientSmartflowRecord = new Client_SmartflowRecord {
@@ -290,14 +280,13 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Agenda
 
                         Alt_AppSmartflowRecord.SmartflowData = JsonConvert.SerializeObject(AltSmartflow);
 
-                        var cItems = AltSmartflow.Items;
+                        var cItems = AltSmartflow.Agendas;
 
-                        LstAltSystemItems = cItems.Select(T => new VmGenSmartflowItem { ChapterObject = T, Compared = false }).ToList();
+                        LstAltSystemItems = cItems.Select(T => new VmSmartflowAgenda { ChapterObject = T, Compared = false }).ToList();
                         
                         foreach (var item in _LstAgendas)
                         {
                             var altObject = LstAltSystemItems
-                                        .Where(A => A.ChapterObject.Type == item.ChapterObject.Type)
                                         .Where(A => A.ChapterObject.Name == item.ChapterObject.Name)
                                         .FirstOrDefault();
 
@@ -372,12 +361,12 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Agenda
         {
             try
             {
-                foreach (var item in AltSmartflow.Items.Where(I => I.Type == "Agenda").ToList())
+                foreach (var item in AltSmartflow.Agendas.ToList())
                 {
-                    AltSmartflow.Items.Remove(item);
+                    AltSmartflow.Agendas.Remove(item);
                 }
 
-                AltSmartflow.Items.AddRange(_SelectedSmartflow.Items.Where(I => I.Type == "Agenda").ToList());
+                AltSmartflow.Agendas.AddRange(_SelectedSmartflow.Agendas.ToList());
 
                 Alt_AppSmartflowRecord.SmartflowData = JsonConvert.SerializeObject(AltSmartflow);
                 Client_SmartflowRecord altSmartflow = new Client_SmartflowRecord {
@@ -408,7 +397,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Agenda
 
 
 
-        private void ShowSmartflowComparisonModal(VmGenSmartflowItem _selectedItem) 
+        private void ShowSmartflowComparisonModal(VmSmartflowAgenda _selectedItem) 
         {
             try
             {
@@ -441,7 +430,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Agenda
             await CompareToAltSystem(true);
         }
 
-        protected void ShowSmartflowDeleteAlt(VmGenSmartflowItem _selectedItem)
+        protected void ShowSmartflowDeleteAlt(VmSmartflowAgenda _selectedItem)
         {
             try
             {
@@ -476,7 +465,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Agenda
         {
             await UserSession.SwitchSelectedSystem();
 
-            AltSmartflow.Items.Remove(EditObject.ChapterObject);
+            AltSmartflow.Agendas.Remove(EditObject.ChapterObject);
             LstAltSystemItems.Remove(EditObject);
 
             Alt_AppSmartflowRecord.SmartflowData = JsonConvert.SerializeObject(AltSmartflow);

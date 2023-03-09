@@ -643,7 +643,7 @@ Newtonsoft.Json.JsonReaderException: Unexpected character encountered while pars
    at Microsoft.AspNetCore.Components.Rendering.RendererSynchronizationContext.ExecuteBackground(WorkItem item)
 2022-11-17 16:51:36.550 +00:00 [ERR] [null]
 2022-11-17 17:02:20.494 +00:00 [ERR] bad error
-2022-11-17 17:25:31.230 +00:00 [ERR] API Error - Method: GadjIT_ClientAPI.Controllers.SmartflowController+<GetAllChapters>d__7, Message: bad error; Stack Trace:    at GadjIT_ClientAPI.Controllers.SmartflowController.GetAllChapters() in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI_02\Controllers\SmartflowController.cs:line 68
+2022-11-17 17:25:31.230 +00:00 [ERR] API Error - Method: GadjIT_ClientAPI.Controllers.SmartflowController+<GetAllChapters>d__7, Message: bad error; Stack Trace:    at GadjIT_ClientAPI.Controllers.SmartflowController.GetAllChapters() in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI\Controllers\SmartflowController.cs:line 68
    at lambda_method166(Closure , Object )
    at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
@@ -656,8 +656,8 @@ Newtonsoft.Json.JsonReaderException: Unexpected character encountered while pars
    at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
    at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
-   at GadjIT_ClientAPI_02.Middlewares.ExceptionMiddleware.InvokeAsync(HttpContext context) in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI_02\Middlewares\ExceptionMiddleware.cs:line 24
-2022-11-17 17:31:45.505 +00:00 [ERR] API Error - Method: GadjIT_ClientAPI.Controllers.SmartflowController+<GetAllChapters>d__7, Message: bad error; Stack Trace:    at GadjIT_ClientAPI.Controllers.SmartflowController.GetAllChapters() in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI_02\Controllers\SmartflowController.cs:line 68
+   at GadjIT_ClientAPI.Middlewares.ExceptionMiddleware.InvokeAsync(HttpContext context) in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI\Middlewares\ExceptionMiddleware.cs:line 24
+2022-11-17 17:31:45.505 +00:00 [ERR] API Error - Method: GadjIT_ClientAPI.Controllers.SmartflowController+<GetAllChapters>d__7, Message: bad error; Stack Trace:    at GadjIT_ClientAPI.Controllers.SmartflowController.GetAllChapters() in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI\Controllers\SmartflowController.cs:line 68
    at lambda_method166(Closure , Object )
    at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
@@ -670,8 +670,8 @@ Newtonsoft.Json.JsonReaderException: Unexpected character encountered while pars
    at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
    at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
-   at GadjIT_ClientAPI_02.Middlewares.ExceptionMiddleware.InvokeAsync(HttpContext context) in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI_02\Middlewares\ExceptionMiddleware.cs:line 24
-2022-11-17 17:33:26.316 +00:00 [ERR] API Error - Method: GadjIT_ClientAPI.Controllers.SmartflowController+<GetAllChapters>d__7, Message: bad error; Stack Trace:    at GadjIT_ClientAPI.Controllers.SmartflowController.GetAllChapters() in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI_02\Controllers\SmartflowController.cs:line 68
+   at GadjIT_ClientAPI.Middlewares.ExceptionMiddleware.InvokeAsync(HttpContext context) in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI\Middlewares\ExceptionMiddleware.cs:line 24
+2022-11-17 17:33:26.316 +00:00 [ERR] API Error - Method: GadjIT_ClientAPI.Controllers.SmartflowController+<GetAllChapters>d__7, Message: bad error; Stack Trace:    at GadjIT_ClientAPI.Controllers.SmartflowController.GetAllChapters() in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI\Controllers\SmartflowController.cs:line 68
    at lambda_method166(Closure , Object )
    at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
@@ -684,8 +684,8 @@ Newtonsoft.Json.JsonReaderException: Unexpected character encountered while pars
    at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
    at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
-   at GadjIT_ClientAPI_02.Middlewares.ExceptionMiddleware.InvokeAsync(HttpContext context) in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI_02\Middlewares\ExceptionMiddleware.cs:line 24
-2022-11-17 18:02:03.508 +00:00 [ERR] API Error - Method: GadjIT_ClientAPI.Controllers.SmartflowController+<GetAllChapters>d__7, Message: bad error; Stack Trace:    at GadjIT_ClientAPI.Controllers.SmartflowController.GetAllChapters() in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI_02\Controllers\SmartflowController.cs:line 68
+   at GadjIT_ClientAPI.Middlewares.ExceptionMiddleware.InvokeAsync(HttpContext context) in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI\Middlewares\ExceptionMiddleware.cs:line 24
+2022-11-17 18:02:03.508 +00:00 [ERR] API Error - Method: GadjIT_ClientAPI.Controllers.SmartflowController+<GetAllChapters>d__7, Message: bad error; Stack Trace:    at GadjIT_ClientAPI.Controllers.SmartflowController.GetAllChapters() in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI\Controllers\SmartflowController.cs:line 68
    at lambda_method166(Closure , Object )
    at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
@@ -698,8 +698,8 @@ Newtonsoft.Json.JsonReaderException: Unexpected character encountered while pars
    at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
    at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
-   at GadjIT_ClientAPI_02.Middlewares.ExceptionMiddleware.InvokeAsync(HttpContext context) in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI_02\Middlewares\ExceptionMiddleware.cs:line 24
-2022-11-17 18:03:35.825 +00:00 [ERR] API Error - Method: GadjIT_ClientAPI.Controllers.SmartflowController+<GetAllChapters>d__7, Message: bad error; Stack Trace:    at GadjIT_ClientAPI.Controllers.SmartflowController.GetAllChapters() in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI_02\Controllers\SmartflowController.cs:line 68
+   at GadjIT_ClientAPI.Middlewares.ExceptionMiddleware.InvokeAsync(HttpContext context) in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI\Middlewares\ExceptionMiddleware.cs:line 24
+2022-11-17 18:03:35.825 +00:00 [ERR] API Error - Method: GadjIT_ClientAPI.Controllers.SmartflowController+<GetAllChapters>d__7, Message: bad error; Stack Trace:    at GadjIT_ClientAPI.Controllers.SmartflowController.GetAllChapters() in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI\Controllers\SmartflowController.cs:line 68
    at lambda_method166(Closure , Object )
    at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
@@ -712,9 +712,9 @@ Newtonsoft.Json.JsonReaderException: Unexpected character encountered while pars
    at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
    at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
-   at GadjIT_ClientAPI_02.Middlewares.ExceptionMiddleware.InvokeAsync(HttpContext context) in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI_02\Middlewares\ExceptionMiddleware.cs:line 24
+   at GadjIT_ClientAPI.Middlewares.ExceptionMiddleware.InvokeAsync(HttpContext context) in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI\Middlewares\ExceptionMiddleware.cs:line 24
 2022-11-17 18:03:35.950 +00:00 [ERR] ChapterList Error - Method: SyncSmartFlowSystems, Message: Error retrieving Smartflows from the client
-2022-11-17 18:14:39.753 +00:00 [ERR] API Error - Method: GadjIT_ClientAPI.Controllers.SmartflowController+<GetAllChapters>d__7, Message: bad error; Stack Trace:    at GadjIT_ClientAPI.Controllers.SmartflowController.GetAllChapters() in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI_02\Controllers\SmartflowController.cs:line 68
+2022-11-17 18:14:39.753 +00:00 [ERR] API Error - Method: GadjIT_ClientAPI.Controllers.SmartflowController+<GetAllChapters>d__7, Message: bad error; Stack Trace:    at GadjIT_ClientAPI.Controllers.SmartflowController.GetAllChapters() in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI\Controllers\SmartflowController.cs:line 68
    at lambda_method166(Closure , Object )
    at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
@@ -727,7 +727,7 @@ Newtonsoft.Json.JsonReaderException: Unexpected character encountered while pars
    at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
    at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
-   at GadjIT_ClientAPI_02.Middlewares.ExceptionMiddleware.InvokeAsync(HttpContext context) in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI_02\Middlewares\ExceptionMiddleware.cs:line 24
+   at GadjIT_ClientAPI.Middlewares.ExceptionMiddleware.InvokeAsync(HttpContext context) in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_ClientAPI\Middlewares\ExceptionMiddleware.cs:line 24
 2022-11-21 10:42:16.725 +00:00 [ERR] Error - Method: OnTimerInterval, Message: Database operation expected to affect 1 row(s) but actually affected 0 row(s). Data may have been modified or deleted since entities were loaded. See http://go.microsoft.com/fwlink/?LinkId=527962 for information on understanding and handling optimistic concurrency exceptions.
 Microsoft.EntityFrameworkCore.DbUpdateConcurrencyException: Database operation expected to affect 1 row(s) but actually affected 0 row(s). Data may have been modified or deleted since entities were loaded. See http://go.microsoft.com/fwlink/?LinkId=527962 for information on understanding and handling optimistic concurrency exceptions.
    at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ThrowAggregateUpdateConcurrencyException(Int32 commandIndex, Int32 expectedRowsAffected, Int32 rowsAffected)

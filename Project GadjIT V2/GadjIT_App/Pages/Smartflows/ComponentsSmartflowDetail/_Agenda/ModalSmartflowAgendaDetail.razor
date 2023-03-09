@@ -1,0 +1,38 @@
+﻿@using GadjIT_App.Data.CustomFormObjects;
+
+<EditForm Model="@_CopyObject" OnValidSubmit="HandleValidSubmit">
+    <div class="modal-body">
+
+        <DataAnnotationsValidator />
+        @if (Error == 0)
+        {
+            <div class="form-group">
+                <label for="Name">Name</label>
+                <InputText class="form-control" @bind-Value="@_CopyObject.Name" />
+            </div>
+            
+        }
+        else
+        {
+            <div class="form-group">
+                <label>An Agenda item already exists with this name.</label>
+            </div>
+        }
+
+    </div>
+
+    <div class="button-container">
+        @if (Error == 0)
+        {
+            <button type="submit" class="btn btn-main">Save</button>
+            <button type="button" class="btn btn-secondary" @onclick="Close">Cancel</button>
+        }
+        else
+        {
+            <button type="button" class="btn btn-main" @onclick="ResetError">Return</button>
+            <button type="button" class="btn btn-secondary" @onclick="Close">Cancel</button>
+        }
+
+    </div>
+    <ValidationSummary></ValidationSummary>
+</EditForm>

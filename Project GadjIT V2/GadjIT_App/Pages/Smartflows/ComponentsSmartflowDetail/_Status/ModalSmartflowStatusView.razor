@@ -1,0 +1,57 @@
+﻿
+<div class="modal-body" tabindex="0">
+    <table class="table-basic table-top-header table-left-header table-borderless">
+        <thead>
+
+            <tr>
+                <td style="width: 150px">
+                </td>
+                <td style="width: 500px">
+                </td>
+            </tr>
+        </thead>
+        <tbody>
+            
+            <tr>
+                <td>
+                    Seq Number
+                </td>
+                <td>
+                    @_Object.ChapterObject.SeqNo
+                </td>
+            </tr>
+            
+            <tr>
+                <td>
+                        Name:
+                </td>
+                <td>
+                    <input type="text" class="read-only" readonly value="@_Object.ChapterObject.Name" />
+                </td>
+            </tr>
+                
+            <tr>
+                <td>
+                        Milestone:
+                </td>
+                <td>
+                    <input type="text" class="read-only" readonly value="@_Object.ChapterObject.MilestoneStatus" />
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                        Supress Step (End Smartflow):
+                </td>
+                <td>
+                    <input type="text" class="read-only" readonly value="@(_Object.ChapterObject.SuppressStep == "Y" ? "Yes" : "No")" />
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+</div>
+
+<div class="button-container">
+    <button type="button" class="btn btn-secondary" @onclick="() => Close()">Close</button>
+</div>

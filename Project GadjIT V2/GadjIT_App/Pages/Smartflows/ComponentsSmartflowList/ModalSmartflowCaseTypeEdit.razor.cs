@@ -62,7 +62,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowList
 
                 foreach (var chapter in chapters)
                 {
-                    var updateJson = JsonConvert.DeserializeObject<Smartflow>(chapter.ClientSmartflowRecord.SmartflowData);
+                    var updateJson = JsonConvert.DeserializeObject<SmartflowV2>(chapter.ClientSmartflowRecord.SmartflowData);
                     updateJson.CaseType = TaskObject;
                     chapter.ClientSmartflowRecord.CaseType = TaskObject;
                     chapter.ClientSmartflowRecord.SmartflowData = JsonConvert.SerializeObject(updateJson);
@@ -75,7 +75,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowList
 
                 foreach (var chapter in chapters)
                 {
-                    var updateJson = JsonConvert.DeserializeObject<Smartflow>(chapter.ClientSmartflowRecord.SmartflowData);
+                    var updateJson = JsonConvert.DeserializeObject<SmartflowV2>(chapter.ClientSmartflowRecord.SmartflowData);
                     updateJson.CaseTypeGroup = TaskObject;
                     chapter.ClientSmartflowRecord.CaseTypeGroup = TaskObject;
                     chapter.ClientSmartflowRecord.SmartflowData = JsonConvert.SerializeObject(updateJson);
@@ -84,7 +84,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowList
             }
             else
             {
-                var updateJson = JsonConvert.DeserializeObject<Smartflow>(Smartflow.SmartflowData);
+                var updateJson = JsonConvert.DeserializeObject<SmartflowV2>(Smartflow.SmartflowData);
                 updateJson.Name = Smartflow.SmartflowName;
                 Smartflow.SmartflowData = JsonConvert.SerializeObject(updateJson);
                 await ClientApiManagementService.UpdateMainItem(Smartflow).ConfigureAwait(false);

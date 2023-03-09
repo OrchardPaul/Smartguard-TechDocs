@@ -1,6 +1,6 @@
 using GadjIT_ClientAPI.Services.Partner;
 using GadjIT_ClientAPI.Services.Smartflow;
-using GadjIT_ClientAPI_02.Middlewares;
+using GadjIT_ClientAPI.Middlewares;
 using GadjIT_ClientContext.Data;
 using Microsoft.EntityFrameworkCore;
 using Serilog;

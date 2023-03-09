@@ -9,7 +9,7 @@
     }
   },
   "profiles": {
-    "GadjIT_ClientAPI_02": {
+    "GadjIT_ClientAPI": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,

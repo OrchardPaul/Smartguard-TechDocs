@@ -1,0 +1,281 @@
+﻿@using GadjIT_App.Data.CustomFormObjects;
+
+<EditForm Model="@_CopyObject" OnValidSubmit="HandleValidSubmit">
+    <div class="modal-body">
+
+        <DataAnnotationsValidator />
+        @if (Error == 0)
+        {
+            
+            @if (_LibraryDocumentsAndSteps is null)
+            {
+                <div class="spinner"></div>
+            }
+            else
+            {
+                <div class="form-group">
+                    <label for="DocType">P4W Case Type Group</label>
+                    <InputSelectInteger class="form-control form-control-lg"
+                                        @bind-Value="SelectedCaseTypeGroup">
+                        <option value="-2">Select</option>
+                        @foreach (var group in _P4WCaseTypeGroups.Where(C => C.Name == _SelectedSmartflow.P4WCaseTypeGroup).ToList())
+                        {
+                            <option value="@group.Id">
+                                @group.Name
+                            </option>
+                        }
+                        <option value="0">Global Documents</option>
+                        @if (_SelectedSmartflow.P4WCaseTypeGroup == "Entity Documents")
+                        {
+                            <option value="-1">Entity Documents</option>
+                        }
+                    </InputSelectInteger>
+                </div>
+
+                <div class="form-group">
+                    <label for="DocName">Document / Step</label>
+
+                    @if (SelectedCaseTypeGroup == -2 & _CopyObject.Name is null)
+                    {
+                        <select class="form-control form-control-xl" disabled />
+                    }
+                    else
+                    {
+                        <div class="form-label-check" style="margin-right: 13px">
+                            @if (UseCustomItem)
+                            {
+                                <label>Custom Item</label><input type="checkbox" checked="checked" @bind-value="@UseCustomItem" />
+                            }
+                            else
+                            {
+                                <label>Custom Item</label><input type="checkbox" @bind-value="@UseCustomItem" />
+                            }
+
+                        </div>
+                        @if (!UseCustomItem)
+                        {
+
+
+                            <div class="form-group">
+                                <label for="AltDisplayName">Filter</label>
+                                <InputText class="form-control form-control-md form-control-filter" @bind-Value="@FilterText" />
+                            </div>
+
+
+                            <div class="form-group control-with-button">
+                                <div class="control-main">
+                                    <InputSelect class="form-control form-control-xl" @bind-Value="_CopyObject.Name">
+                                        @if (_CopyObject.Name is null)
+                                        {
+                                            <option value="">Select</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@_CopyObject.Name">@_CopyObject.Name</option>
+                                        }
+
+
+                                        @foreach (var doc in _LibraryDocumentsAndSteps.Where(D => D.CaseTypeGroupRef == SelectedCaseTypeGroup).Where(C => C.Name.ToUpper().Contains(FilterText.ToUpper())).OrderBy(D => D.Name).ToList())
+                                        {
+                                            <option value="@doc.Name">
+                                                @doc.Name
+                                            </option>
+                                        }
+                                    </InputSelect>
+                                </div>
+                                <div class="control-button btn" @onclick="() => RefreshDocListOnModel()" title="Refresh List">
+                                    <i class="fa fa-sync"></i>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="AltDisplayName">Display Name</label>
+                                <InputText class="form-control form-control-xl" @bind-Value="@_CopyObject.AltDisplayName" />
+                            </div>
+                        }
+                        else
+                        {
+
+                            <InputText class="form-control form-control-xl" @bind-Value="@_CopyObject.Name"></InputText>
+                        }
+                        <ValidationMessage For="@(() => _CopyObject.Name)" />
+
+                    }
+                    
+                </div>
+
+            }
+            
+            <div class="form-group">
+                <label for="Action">Action</label>
+                <InputSelect class="form-control form-control-sm"
+                                @bind-Value="_CopyObject.Action">
+                    <option value=""></option>
+                    @foreach (var a in Actions)
+                    {
+                        <option value="@a">
+                            @a
+                        </option>
+                    }
+                </InputSelect>
+                <ValidationMessage For="@(() => _CopyObject.Action)" />
+            </div>
+
+
+            <div class="form-group">
+                <label for="AsName">Schedule As Name</label>
+                <InputText class="form-control form-control-xl" @bind-Value="@_CopyObject.AsName" />
+            </div>
+
+            <div class="form-group">
+                <label for="RescheduleDays">Reschedule Days</label>
+
+                <div class="form-label-check" style="margin-right: 13px">
+                    @if (UseCustomReschedule)
+                    {
+
+                        <label>From Data Item</label>
+                        <input type="checkbox" checked="checked" @bind-value="@UseCustomReschedule" />
+
+                    }
+                    else
+                    {
+                        <label>From Data Item</label>
+                        <input type="checkbox" @bind-value="@UseCustomReschedule" />
+                    }
+
+                </div>
+                <InputNumber class="form-control form-control-xs" @bind-Value="RescheduleDays" />
+            </div>
+
+            @if (UseCustomReschedule)
+            {
+                <div class="form-group">
+                    <label>Reschedule From Data Item</label><br>
+                    <label>Filter</label>
+                    <InputText class="form-control form-control-md form-control-filter" @bind-Value="@FilterTextDataItem" />
+                </div>
+
+                <div class="form-group mb-3">
+                    <InputSelect class="form-control form-control-xl"
+                                    @bind-Value="_CopyObject.RescheduleDataItem">
+                        <option value=""></option>
+                        @if(_TableDates != null)
+                        {
+                            @foreach (var a in _TableDates.Where(F => F.TableField.ToUpper().Contains(FilterTextDataItem.ToUpper())))
+                            {
+                                <option value="@a.TableField">
+                                    @a.TableField
+                                </option>
+                            }
+                        }
+                    </InputSelect>
+                    <ValidationMessage For="@(() => _CopyObject.RescheduleDataItem)" />
+                </div>
+            }
+        
+            <div class="form-group">
+                <label for="CompleteName">Complete As Name</label>
+                <InputText class="form-control form-control-xl" @bind-Value="@_CopyObject.CompleteName" />
+            </div>
+
+            <div class="form-group">
+                <label for="NextStatus">Next Status</label>
+                <InputSelect class="form-control form-control-lg"
+                                @bind-Value="_CopyObject.NextStatus">
+                    <option value=""></option>
+                    @foreach (var s in _ListOfStatus)
+                    {
+                        <option value="@s.ChapterObject.Name">
+                            @s.ChapterObject.Name
+                        </option>
+                    }
+                </InputSelect>
+                <ValidationMessage For="@(() => _CopyObject.NextStatus)" />
+            </div>
+
+            @if(!UseCustomItem)
+            {
+                <div class="form-group">        
+                    <label for="Agenda">Agenda</label>
+                    <InputSelect class="form-control form-control-lg"
+                                @bind-Value="_CopyObject.Agenda">
+                        <option value=""></option>
+                        @foreach (var a in _ListOfAgenda)
+                        {
+                            <option value="@a.ChapterObject.Name">
+                                @a.ChapterObject.Name
+                            </option>
+                        }
+                    </InputSelect>
+                    <ValidationMessage For="@(() => _CopyObject.Agenda)" />
+                </div>
+            }
+
+            <div class="form-group">
+                <label for="UserMessage">User Message</label>
+                <InputTextArea class="form-control form-control-xl" @bind-Value="@_CopyObject.UserMessage" />
+            </div>
+
+            <div class="form-group">
+                <label for="PopupAlert">Pop Up Message(Alert)</label>
+                <InputTextArea class="form-control form-control-xl" @bind-Value="@_CopyObject.PopupAlert" />
+            </div>
+
+            <div class="form-group">
+                <label for="Suppress">Is an Optional Document?</label>
+                <InputCheckbox class="form-control" @bind-Value="OptionalDocument" />
+            </div>
+
+            @if (_SelectedSmartflow.ShowDocumentTracking == "Y")
+            {
+                <div class="form-group">
+                    <label for="TrackMethod">Tracking Method</label>
+                    <InputSelect class="form-control form-control-md"
+                                    @bind-Value="_CopyObject.TrackingMethod">
+                        <option value=""></option>
+                        @foreach (var s in TrackMethodList)
+                        {
+                            <option value="@s">
+                                @s
+                            </option>
+                        }
+                    </InputSelect>
+                    <ValidationMessage For="@(() => _CopyObject.TrackingMethod)" />
+                </div>
+                @if (_CopyObject.TrackingMethod == "Response Required")
+                {
+                    <div class="form-group">
+                        <label for="ChaserDesc">Chaser Description</label>
+                        <InputText class="form-control form-control-xl" @bind-Value="@_CopyObject.ChaserDesc" />
+                    </div>
+                }
+
+
+            }
+
+    
+        }else
+        {
+            <div class="form-group">
+                <label>A Document already exists with this name.</label>
+            </div>
+        }
+
+    </div>
+
+    <div class="button-container">
+        @if (Error == 0)
+        {
+            <button type="submit" class="btn btn-main">Save</button>
+            <button type="button" class="btn btn-secondary" @onclick="Close">Cancel</button>
+        }
+        else
+        {
+            <button type="button" class="btn btn-main" @onclick="ResetError">Return</button>
+            <button type="button" class="btn btn-secondary" @onclick="Close">Cancel</button>
+        }
+
+    </div>
+    <ValidationSummary></ValidationSummary>
+</EditForm>

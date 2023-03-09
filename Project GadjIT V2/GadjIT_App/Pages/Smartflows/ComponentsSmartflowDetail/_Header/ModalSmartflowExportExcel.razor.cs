@@ -17,7 +17,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Header
         public ISmartflowFileHelper SmartflowFileHelper { get; set; }
 
         [Parameter]
-        public Smartflow SelectedChapter { get; set; }
+        public SmartflowV2 SelectedChapter { get; set; }
 
         [Parameter]
         public List<P4W_DmDocuments> Documents { get; set; }

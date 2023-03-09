@@ -65,7 +65,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowList
                 TaskObject.SmartflowName = name;
                 TaskObject.CaseType = caseType;
                 TaskObject.CaseTypeGroup = caseTypeGroup;
-                TaskObject.SmartflowData = JsonConvert.SerializeObject(new Smartflow
+                TaskObject.SmartflowData = JsonConvert.SerializeObject(new SmartflowV2
                 {
                     CaseTypeGroup = caseTypeGroup,
                     CaseType = caseType,
@@ -73,10 +73,12 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowList
                     SeqNo = TaskObject.SeqNo.GetValueOrDefault(),
                     StepName = "",
                     ShowPartnerNotes = "N",
-                    Items = new List<GenSmartflowItem>(),
+                    Agendas = new List<SmartflowAgenda>(),
+                    Status = new List<SmartflowStatus>(),
+                    Documents = new List<SmartflowDocument>(),
                     Fees = new List<SmartflowFee>(),
                     DataViews = new List<SmartflowDataView>(),
-                    TickerMessages = new List<SmartflowMessage>()
+                    Messages = new List<SmartflowMessage>()
                 });
 
 

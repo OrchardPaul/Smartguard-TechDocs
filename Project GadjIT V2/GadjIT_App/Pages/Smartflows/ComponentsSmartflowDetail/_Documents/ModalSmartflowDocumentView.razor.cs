@@ -5,20 +5,22 @@ using System.Threading.Tasks;
 
 namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Documents
 {
-    public partial class ModalSmartflowAttachmentsView
+    public partial class ModalSmartflowDocumentView
     {
         [CascadingParameter]
         BlazoredModalInstance ModalInstance { get; set; }
 
         [Parameter]
-        public LinkedItem _Attachment { get; set; }
+        public VmSmartflowDocument _Object { get; set; }
 
         [Parameter]
-        public SmartflowV2 _SelectedSmartflow { get; set; }
+        public string _SelectedList { get; set; }
 
         private async Task Close()
         {
             await ModalInstance.CloseAsync();
         }
+
+
     }
 }

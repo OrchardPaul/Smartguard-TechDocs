@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Diagnostics;
 using System.Diagnostics;
 using GadjIT_ClientContext.Models;
 
-namespace GadjIT_ClientAPI_02.Middlewares
+namespace GadjIT_ClientAPI.Middlewares
 {
     public class ExceptionMiddleware
     {

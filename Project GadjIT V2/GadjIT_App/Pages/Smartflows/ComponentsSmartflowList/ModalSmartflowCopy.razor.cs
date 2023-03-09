@@ -37,7 +37,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowList
         public List<Client_VmSmartflowRecord> AllChapters { get; set; }
 
         [Parameter]
-        public Smartflow currentChapter { get; set; }
+        public SmartflowV2 currentChapter { get; set; }
 
         [Parameter]
         public bool addNewCaseTypeGroupOption { get; set; } = false;
@@ -123,57 +123,59 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowList
 
         private async Task HandleValidSubmit()
         {
-            var copyToChapter = new Smartflow {
-                Items = new List<GenSmartflowItem>(),
+            var copyToChapter = new SmartflowV2 {
+                Agendas = new List<SmartflowAgenda>(),
+                Status = new List<SmartflowStatus>(),
+                Documents = new List<SmartflowDocument>(),
                 Fees = new List<SmartflowFee>(),
                 DataViews = new List<SmartflowDataView>(),
-                TickerMessages = new List<SmartflowMessage>()
+                Messages = new List<SmartflowMessage>()
             };
 
             if (!(TaskObject.SmartflowData is null))
             {
-                copyToChapter = JsonConvert.DeserializeObject<Smartflow>(TaskObject.SmartflowData);
+                copyToChapter = JsonConvert.DeserializeObject<SmartflowV2>(TaskObject.SmartflowData);
             }
 
 
             if(CopyOptions.Where(C => C.Option == "Agenda").Select(C => C.Selected).FirstOrDefault())
             {
-                if (copyToChapter.Items is null)
+                if (copyToChapter.Agendas is null)
                 {
-                    copyToChapter.Items = new List<GenSmartflowItem>();
+                    copyToChapter.Agendas = new List<SmartflowAgenda>();
                 }
 
-                if (currentChapter.Items is null)
+                if (currentChapter.Agendas is null)
                 {
-                    currentChapter.Items = new List<GenSmartflowItem>();
+                    currentChapter.Agendas = new List<SmartflowAgenda>();
                 }
 
-                foreach (var item in copyToChapter.Items.Where(C => C.Type == "Agenda").ToList())
+                foreach (var item in copyToChapter.Agendas.ToList())
                 {
-                    copyToChapter.Items.Remove(item);
+                    copyToChapter.Agendas.Remove(item);
                 }
 
-                copyToChapter.Items.AddRange(currentChapter.Items.Where(C => C.Type == "Agenda").ToList());
+                copyToChapter.Agendas.AddRange(currentChapter.Agendas.ToList());
             }
 
             if (CopyOptions.Where(C => C.Option == "Status").Select(C => C.Selected).FirstOrDefault())
             {
-                foreach (var item in copyToChapter.Items.Where(C => C.Type == "Status").ToList())
+                foreach (var item in copyToChapter.Status.ToList())
                 {
-                    copyToChapter.Items.Remove(item);
+                    copyToChapter.Status.Remove(item);
                 }
 
-                copyToChapter.Items.AddRange(currentChapter.Items.Where(C => C.Type == "Status").ToList());
+                copyToChapter.Status.AddRange(currentChapter.Status.ToList());
             }
 
             if (CopyOptions.Where(C => C.Option == "Documents/Steps").Select(C => C.Selected).FirstOrDefault())
             {
-                foreach (var item in copyToChapter.Items.Where(C => C.Type == "Doc").ToList())
+                foreach (var item in copyToChapter.Documents.ToList())
                 {
-                    copyToChapter.Items.Remove(item);
+                    copyToChapter.Documents.Remove(item);
                 }
 
-                copyToChapter.Items.AddRange(currentChapter.Items.Where(C => C.Type == "Doc").ToList());
+                copyToChapter.Documents.AddRange(currentChapter.Documents.ToList());
             }
 
             if (CopyOptions.Where(C => C.Option == "Fees").Select(C => C.Selected).FirstOrDefault())
@@ -219,26 +221,26 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowList
             if (CopyOptions.Where(C => C.Option == "Messages").Select(C => C.Selected).FirstOrDefault())
             {
                 //Temp measure until all Smartflows have been Serialised: post 22/4/2021
-                if(copyToChapter.TickerMessages is null)
+                if(copyToChapter.Messages is null)
                 {
-                    copyToChapter.TickerMessages = new List<SmartflowMessage>();
+                    copyToChapter.Messages = new List<SmartflowMessage>();
                 }
 
 
-                if (currentChapter.TickerMessages is null)
+                if (currentChapter.Messages is null)
                 {
-                    currentChapter.TickerMessages = new List<SmartflowMessage>();
+                    currentChapter.Messages = new List<SmartflowMessage>();
                 }
 
-                foreach (var item in copyToChapter.TickerMessages.ToList())
+                foreach (var item in copyToChapter.Messages.ToList())
                 {
-                    copyToChapter.TickerMessages.Remove(item);
+                    copyToChapter.Messages.Remove(item);
                 }
 
-                copyToChapter.TickerMessages.AddRange(currentChapter.TickerMessages.ToList());
+                copyToChapter.Messages.AddRange(currentChapter.Messages.ToList());
             }
 
-            TaskObject.SmartflowData = JsonConvert.SerializeObject(new Smartflow
+            TaskObject.SmartflowData = JsonConvert.SerializeObject(new SmartflowV2
             {
                 CaseTypeGroup = TaskObject.CaseTypeGroup,
                 CaseType = TaskObject.CaseType,
@@ -252,10 +254,12 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowList
                 BackgroundImage = copyToChapter.BackgroundImage,
                 BackgroundImageName = copyToChapter.BackgroundImageName,
                 ShowPartnerNotes = copyToChapter.ShowPartnerNotes,
-                Items = copyToChapter.Items,
+                Agendas = copyToChapter.Agendas,
+                Status = copyToChapter.Status,
+                Documents = copyToChapter.Documents,
                 Fees = copyToChapter.Fees,
                 DataViews = copyToChapter.DataViews,
-                TickerMessages = copyToChapter.TickerMessages
+                Messages = copyToChapter.Messages
             });
 
             if (TaskObject.Id == 0)

@@ -1,0 +1,19 @@
+﻿<EditForm Model="@_Smartflow" OnValidSubmit="@HandleValidSubmit">
+    <div class="modal-body ">
+        <div class="form-group">
+            
+            <div class="form-group">
+                <label>@_TaskType Smartflow</label>
+                <InputText class="form-control" @bind-Value="_Smartflow.SmartflowName"></InputText>
+            </div>
+            
+
+        </div>
+
+
+    </div>
+    <div class="button-container">
+        <button type="submit" class="float-left btn btn-main">@(_TaskType == "Edit" ? "Save Changes" : "Create" )</button>
+        <button type="button" class="float-left ml-2 btn btn-secondary" @onclick="Close">Cancel</button>
+    </div>
+</EditForm>

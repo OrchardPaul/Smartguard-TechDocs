@@ -32,7 +32,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Background
         public Client_SmartflowRecord _Selected_ClientSmartflowRecord { get; set; } 
 
         [Parameter]
-        public Smartflow _SelectedSmartflow { get; set; } 
+        public SmartflowV2 _SelectedSmartflow { get; set; } 
 
         [Parameter]
         public bool _SmartflowLockedForEdit {get; set;}
@@ -88,7 +88,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Background
                 //the following objects are not required but need to exist 
                 //to prevent issues within the page
                 _Selected_ClientSmartflowRecord = new Client_SmartflowRecord();
-                _SelectedSmartflow = new Smartflow();
+                _SelectedSmartflow = new SmartflowV2();
                 SmartflowIsSelected = false;
             }
             else

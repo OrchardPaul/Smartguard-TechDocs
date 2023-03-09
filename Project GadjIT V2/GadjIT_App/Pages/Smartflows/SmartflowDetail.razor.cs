@@ -69,11 +69,10 @@ namespace GadjIT_App.Pages.Smartflows
         private int ValidTicketMessageCount { get; set; } 
 
 
-        private List<VmGenSmartflowItem> LstAgendas { get; set; } = new List<VmGenSmartflowItem>();
+        private List<VmSmartflowAgenda> LstAgendas { get; set; } = new List<VmSmartflowAgenda>();
         private List<VmSmartflowFee> LstFees { get; set; } = new List<VmSmartflowFee>();
-        private List<VmGenSmartflowItem> LstDocs { get; set; } = new List<VmGenSmartflowItem>();
-        private List<VmGenSmartflowItem> LstStatus { get; set; } = new List<VmGenSmartflowItem>();
-
+        private List<VmSmartflowDocument> LstDocs { get; set; } = new List<VmSmartflowDocument>();
+        private List<VmSmartflowStatus> LstStatus { get; set; } = new List<VmSmartflowStatus>();
         private List<VmSmartflowDataView> LstDataViews { get; set; } = new List<VmSmartflowDataView>();
         private List<VmSmartflowMessage> LstMessages { get; set; } = new List<VmSmartflowMessage>();
 
@@ -84,10 +83,10 @@ namespace GadjIT_App.Pages.Smartflows
 
         public String UserGuideURL => Configuration["AppSettings:UserGuideURL"];
         
-        public LinkedItem AttachObject = new LinkedItem();
+        public LinkedDocument AttachObject = new LinkedDocument();
 
 
-        public Smartflow SelectedSmartflow { get; set; } = new Smartflow { Items = new List<GenSmartflowItem>() }; //SmartflowData
+        public SmartflowV2 SelectedSmartflow { get; set; } = new SmartflowV2(); //SmartflowData
 
         int RowChanged { get; set; } = 0; //moved partial
 
@@ -367,22 +366,21 @@ namespace GadjIT_App.Pages.Smartflows
 
                 if (!(_Selected_VmClientSmartflowRecord.ClientSmartflowRecord.SmartflowData is null))
                 {
-                    SelectedSmartflow = JsonConvert.DeserializeObject<Smartflow>(_Selected_VmClientSmartflowRecord.ClientSmartflowRecord.SmartflowData);
+                    SelectedSmartflow = JsonConvert.DeserializeObject<SmartflowV2>(_Selected_VmClientSmartflowRecord.ClientSmartflowRecord.SmartflowData);
 
                 }
                 else
                 {
 
                     //Initialise the VmSmartflow in case of null Json
-                    SelectedSmartflow = new Smartflow
+                    SelectedSmartflow = new SmartflowV2
                     {
-                        Items = new List<GenSmartflowItem>()
-                                                     ,
-                        DataViews = new List<SmartflowDataView>()
-                                                     ,
-                        TickerMessages = new List<SmartflowMessage>()
-                                                     ,
-                        Fees = new List<SmartflowFee>()
+                        Agendas = new List<SmartflowAgenda>()
+                        , Status = new List<SmartflowStatus>()
+                        , Documents = new List<SmartflowDocument>()                     
+                        , DataViews = new List<SmartflowDataView>()                     
+                        , Messages = new List<SmartflowMessage>()                             
+                        , Fees = new List<SmartflowFee>()
                     };
                     SelectedSmartflow.CaseTypeGroup = _Selected_VmClientSmartflowRecord.ClientSmartflowRecord.CaseTypeGroup;
                     SelectedSmartflow.CaseType = _Selected_VmClientSmartflowRecord.ClientSmartflowRecord.CaseType;
@@ -457,10 +455,10 @@ namespace GadjIT_App.Pages.Smartflows
         }
 
 
-        private async Task SmartflowUpdated(Smartflow _SelectedSmartflow)
+        private async Task SmartflowUpdated(SmartflowV2 _selectedSmartflow)
         {
 
-            SelectedSmartflow = _SelectedSmartflow;
+            SelectedSmartflow = _selectedSmartflow;
 
             _Selected_VmClientSmartflowRecord.ClientSmartflowRecord.SmartflowData = JsonConvert.SerializeObject(SelectedSmartflow);
             await ClientApiManagementService.Update(_Selected_VmClientSmartflowRecord.ClientSmartflowRecord);
@@ -487,9 +485,8 @@ namespace GadjIT_App.Pages.Smartflows
                 */
                 if (listType == "Agenda" | listType == "All")
                 {
-                    LstAgendas = SelectedSmartflow.Items
-                                        .Select(L => new VmGenSmartflowItem { ChapterObject = L })
-                                        .Where(L => L.ChapterObject.Type == "Agenda")
+                    LstAgendas = SelectedSmartflow.Agendas
+                                        .Select(L => new VmSmartflowAgenda { ChapterObject = L })
                                         .OrderBy(L => L.ChapterObject.Name)
                                         .ToList();
 
@@ -498,9 +495,8 @@ namespace GadjIT_App.Pages.Smartflows
                 {
 
                     Dictionary<int?, string> docTypes = new Dictionary<int?, string> { { 1, "Doc" }, { 4, "Form" }, { 6, "Step" }, { 8, "Date" }, { 9, "Email" }, { 11, "Doc" }, { 12, "Email" }, { 13, "Csv" } };
-                    LstDocs = SelectedSmartflow.Items
-                                        .Select(L => new VmGenSmartflowItem { ChapterObject = L })
-                                        .Where(L => L.ChapterObject.Type == "Doc")
+                    LstDocs = SelectedSmartflow.Documents
+                                        .Select(L => new VmSmartflowDocument{ ChapterObject = L })
                                         .OrderBy(L => L.ChapterObject.SeqNo)
                                         .Select(A => {
                                         //Make sure all Items have the DocType set by comparing against dm_documents for matches
@@ -548,9 +544,8 @@ namespace GadjIT_App.Pages.Smartflows
                 }
                 if (listType == "Status" | listType == "All")
                 {
-                    LstStatus = SelectedSmartflow.Items
-                                        .Select(L => new VmGenSmartflowItem { ChapterObject = L })
-                                        .Where(L => L.ChapterObject.Type == "Status")
+                    LstStatus = SelectedSmartflow.Status
+                                        .Select(L => new VmSmartflowStatus { ChapterObject = L })
                                         .OrderBy(L => L.ChapterObject.SeqNo)
                                         .ToList();
                     
@@ -577,10 +572,10 @@ namespace GadjIT_App.Pages.Smartflows
                 }
                 if (listType == "TickerMessages" | listType == "All")
                 {
-                    LstMessages = (SelectedSmartflow.TickerMessages is null)
+                    LstMessages = (SelectedSmartflow.Messages is null)
                                                     ? new List<VmSmartflowMessage>()
                                                     : SelectedSmartflow
-                                                            .TickerMessages
+                                                            .Messages
                                                             .Select(D => new VmSmartflowMessage { Message = D })
                                                             .OrderBy(D => D.Message.SeqNo)
                                                             .ToList();

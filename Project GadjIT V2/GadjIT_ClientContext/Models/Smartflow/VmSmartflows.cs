@@ -4,7 +4,7 @@ namespace GadjIT_ClientContext.Models.Smartflow
 {
     public class VmSmartflows
     {
-        public List<Smartflow> Smartflows { get; set; } = new List<Smartflow>();
+        public List<SmartflowV2> Smartflows { get; set; } = new List<SmartflowV2>();
         
     }
 }

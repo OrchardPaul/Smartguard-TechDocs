@@ -27,7 +27,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Fees
         public Client_SmartflowRecord _Selected_ClientSmartflowRecord { get; set; }
 
         [Parameter]
-        public Smartflow _SelectedSmartflow { get; set; }
+        public SmartflowV2 _SelectedSmartflow { get; set; }
 
         [Parameter]
         public SmartflowFee _TaskObject { get; set; }

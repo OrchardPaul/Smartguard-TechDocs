@@ -32,7 +32,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Fees
         public Client_SmartflowRecord _Alt_ClientSmartflowRecord { get; set; }
 
         [Parameter]
-        public Smartflow _Alt_Smartflow { get; set; }
+        public SmartflowV2 _Alt_Smartflow { get; set; }
 
 
         private async void Close()

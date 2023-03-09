@@ -30,10 +30,10 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Backup
         public Client_SmartflowRecord _Selected_ClientSmartflowRecord { get; set; }
 
         [Parameter]
-        public Smartflow _SelectedSmartflow { get; set; }
+        public SmartflowV2 _SelectedSmartflow { get; set; }
 
         [Parameter]
-        public EventCallback<Smartflow> _SmartflowUpdated {get; set;}
+        public EventCallback<SmartflowV2> _SmartflowUpdated {get; set;}
 
         [Parameter]
         public bool _SmartflowLockedForEdit {get; set;}
@@ -137,7 +137,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Backup
 
            if(ValidateJson(_Selected_ClientSmartflowRecord.SmartflowData))
            {
-                _SelectedSmartflow = JsonConvert.DeserializeObject<Smartflow>(Json);
+                _SelectedSmartflow = JsonConvert.DeserializeObject<SmartflowV2>(Json);
 
                 await ChapterUpdated();
            }

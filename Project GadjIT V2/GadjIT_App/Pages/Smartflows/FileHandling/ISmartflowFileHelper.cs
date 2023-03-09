@@ -21,8 +21,8 @@ namespace GadjIT_App.Pages.Smartflows.FileHandling
         void WriteSmartflowToFile(string JSON, string fileName);
         string ReadJson(string path);
         IList<string> ValidateSmartflowJSON(string JSON);
-        Task<string> WriteSmartflowDataToExcel(Smartflow selectedChapter, List<P4W_DmDocuments> documents, List<P4W_CaseTypeGroups> caseTypeGroups);
-        Smartflow ReadSmartflowItemsFromExcel(string path);
+        Task<string> WriteSmartflowDataToExcel(SmartflowV2 selectedChapter, List<P4W_DmDocuments> documents, List<P4W_CaseTypeGroups> caseTypeGroups);
+        SmartflowV2 ReadSmartflowItemsFromExcel(string path);
         byte[] ReadFileToByteArray(string path);
         string DeleteFile(string path);
         List<string> ValidateSmartflowExcel(string filePath);

@@ -57,10 +57,10 @@
                                                 <span class="fa fa-pencil-alt mr-2"></span>
                                                 <span>Edit</span>
                                             </li>
-                                            <li class="col-main" @onclick='(() => ShowSmartflowDetailViewModal(agenda))'>
+                                            @* <li class="col-main" @onclick='(() => ShowSmartflowDetailViewModal(agenda))'>
                                                 <span class="fa fa-binoculars mr-2"></span>
                                                 <span>View</span>
-                                            </li>
+                                            </li> *@
                                             <li class="col-red" @onclick="() => ShowSmartflowDetailDelete(agenda)">
                                                 <span class="fa fa-trash-alt mr-2"></span>
                                                 <span>Delete</span>
@@ -125,7 +125,7 @@
 
             @if (CompareSystems && !(LstAltSystemItems is null))
             {
-                @foreach (var agenda in LstAltSystemItems.Where(D => D.ChapterObject.Type == "Agenda").Where(D => !D.Compared).ToList())
+                @foreach (var agenda in LstAltSystemItems.Where(D => !D.Compared).ToList())
                 {
 
                     <div class="row grid-row">

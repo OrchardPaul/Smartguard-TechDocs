@@ -30,11 +30,11 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Fees
         public Client_SmartflowRecord _Selected_ClientSmartflowRecord { get; set; }
 
         [Parameter]
-        public Smartflow _SelectedSmartflow { get; set; }
+        public SmartflowV2 _SelectedSmartflow { get; set; }
 
 
         [Parameter]
-        public EventCallback<Smartflow> _SmartflowUpdated {get; set;}
+        public EventCallback<SmartflowV2> _SmartflowUpdated {get; set;}
 
         [Parameter]
         public EventCallback<string> _RefreshSmartflowItems {get; set;}
@@ -69,7 +69,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Fees
 
         private Client_SmartflowRecord Alt_ClientSmartflowRecord { get; set; } = new Client_SmartflowRecord(); //as saved on client site with serialised VmSmartflow
 
-        private Smartflow AltSmartflow {get; set;} //Smartflow Schema
+        private SmartflowV2 AltSmartflow {get; set;} //Smartflow Schema
 
         public List<VmSmartflowFee> LstAltSystemItems { get; set; } 
 
@@ -284,7 +284,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Fees
                     else
                     {
                         CompareSystems_ = true;
-                        AltSmartflow = JsonConvert.DeserializeObject<Smartflow>(Alt_AppSmartflowRecord.SmartflowData);
+                        AltSmartflow = JsonConvert.DeserializeObject<SmartflowV2>(Alt_AppSmartflowRecord.SmartflowData);
 
                         Alt_AppSmartflowRecord.SmartflowData = JsonConvert.SerializeObject(AltSmartflow);
                         Alt_ClientSmartflowRecord = new Client_SmartflowRecord {

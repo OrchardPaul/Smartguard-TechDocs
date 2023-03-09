@@ -43,7 +43,7 @@
                 InstantReplace="true"
                 OnItemDrop="@((s)=>ReSequence(_LstStatus.IndexOf(s) + 1))"
                 OnDragStartParam="() => ResetRowChanged()"
-                TItem="VmGenSmartflowItem"
+                TItem="VmSmartflowStatus"
                 UseCustomImage="true"> 
 
                 <div class="row grid-row @(RowChanged == context.ChapterObject.SeqNo && !SeqMoving ? "row-changed" : "" )">
@@ -153,7 +153,7 @@
 
             @if (CompareSystems && !(LstAltSystemItems is null))
             {
-                @foreach (var status in LstAltSystemItems.Where(D => D.ChapterObject.Type == "Status").Where(D => !D.Compared).ToList())
+                @foreach (var status in LstAltSystemItems.Where(D => !D.Compared).ToList())
                 {
                     <div class="row grid-row @(RowChanged == status.ChapterObject.SeqNo ? "row-changed" : "" )">
                         <div class="data-item">

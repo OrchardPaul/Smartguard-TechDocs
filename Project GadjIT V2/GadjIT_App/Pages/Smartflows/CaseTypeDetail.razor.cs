@@ -60,15 +60,11 @@ namespace GadjIT_App.Pages.Smartflows
         [Inject]
         public IConfiguration Configuration { get; set;}
 
-        
-        
+    
 
         public String UserGuideURL => Configuration["AppSettings:UserGuideURL"];
         
-        
 
-
-        public Smartflow SelectedSmartflow { get; set; } = new Smartflow { Items = new List<GenSmartflowItem>() }; //SmartflowData
 
         int RowChanged { get; set; } = 0; //moved partial
 

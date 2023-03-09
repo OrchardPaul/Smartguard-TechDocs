@@ -499,7 +499,7 @@ namespace GadjIT_App.FileManagement.FileProcessing.Implementation
             return isExcelValid;
         }
 
-        public async Task<string> WriteSmartflowDataToExcel(Smartflow selectedChapter, List<P4W_DmDocuments> documents, List<P4W_CaseTypeGroups> caseTypeGroups)
+        public async Task<string> WriteSmartflowDataToExcel(SmartflowV2 selectedChapter, List<P4W_DmDocuments> documents, List<P4W_CaseTypeGroups> caseTypeGroups)
         {
             List<string> docTypes = new List<string> { "Doc", "Letter", "Form", "Step", "Date", "Email" };
             Dictionary<int?, string> docP4WTypes = new Dictionary<int?, string> { { 1, "Doc" }, { 4, "Form" }, { 6, "Step" }, { 8, "Date" }, { 9, "Email" }, { 11, "Doc" }, { 12, "Email" }, { 13, "Doc" }, { 19, "Doc" } };
@@ -572,7 +572,7 @@ namespace GadjIT_App.FileManagement.FileProcessing.Implementation
 
             //Body of table
             int recordIndex = 3;
-            foreach (var chapterItem in selectedChapter.Items.Where(C => C.Type == "Agenda").OrderBy(C => C.SeqNo).ToList())
+            foreach (var chapterItem in selectedChapter.Agendas.OrderBy(C => C.Name).ToList())
             {
                 workSheetAgenda.Cells[recordIndex, 1].Value = string.IsNullOrEmpty(chapterItem.Name) ? "" : chapterItem.Name;
 
@@ -615,7 +615,7 @@ namespace GadjIT_App.FileManagement.FileProcessing.Implementation
 
             //Body of table
             recordIndex = 3;
-            foreach (var chapterItem in selectedChapter.Items.Where(C => C.Type == "Status").OrderBy(C => C.SeqNo).ToList())
+            foreach (var chapterItem in selectedChapter.Status.OrderBy(C => C.SeqNo).ToList())
             {
                 workSheetStatus.Cells[recordIndex, 1].Value = string.IsNullOrEmpty(chapterItem.Name) ? "" : chapterItem.Name;
                 workSheetStatus.Cells[recordIndex, 2].Value = string.IsNullOrEmpty(chapterItem.MilestoneStatus) ? "" : chapterItem.MilestoneStatus;
@@ -761,7 +761,7 @@ namespace GadjIT_App.FileManagement.FileProcessing.Implementation
 
             //Body of table
             recordIndex = 3;
-            foreach (var chapterItem in selectedChapter.Items.Where(C => docTypes.Contains(C.Type)).OrderBy(C => C.SeqNo).ToList())
+            foreach (var chapterItem in selectedChapter.Documents.OrderBy(C => C.SeqNo).ToList())
             {
                 workSheetDocument.Cells[recordIndex, 1].Value = string.IsNullOrEmpty(chapterItem.Name) ? "" : chapterItem.Name;
                 workSheetDocument.Cells[recordIndex, 2].Value = string.IsNullOrEmpty(chapterItem.AltDisplayName) ? "" : chapterItem.AltDisplayName;
@@ -865,7 +865,7 @@ namespace GadjIT_App.FileManagement.FileProcessing.Implementation
             //Body of table
             recordIndex = 3;
             foreach (var chapterItem in selectedChapter
-                                            .Items
+                                            .Documents
                                             .Where(C => !(C.LinkedItems is null) && C.LinkedItems.Count() > 0)
                                             .OrderBy(C => C.SeqNo)
                                             .ToList())
@@ -904,7 +904,7 @@ namespace GadjIT_App.FileManagement.FileProcessing.Implementation
 
             /*
            * 
-           * Status
+           * Data Views
            * 
            * 
            */
@@ -1031,10 +1031,16 @@ namespace GadjIT_App.FileManagement.FileProcessing.Implementation
         }
 
 
-        public Smartflow ReadChapterDataFromExcel(string FilePath)
+        public SmartflowV2 ReadChapterDataFromExcel(string FilePath)
         {
-            Smartflow readChapters = new Smartflow { Items = new List<GenSmartflowItem>(), Fees = new List<SmartflowFee>(), DataViews = new List<SmartflowDataView>() };
-            GenSmartflowItem readObject;
+            SmartflowV2 readChapters = new SmartflowV2 { Agendas = new List<SmartflowAgenda>()
+                                                        , Status = new List<SmartflowStatus>()
+                                                        , Documents = new List<SmartflowDocument>()
+                                                        , Fees = new List<SmartflowFee>()
+                                                        , DataViews = new List<SmartflowDataView>() };
+            SmartflowAgenda agendaObject;
+            SmartflowStatus statusObject;
+            SmartflowDocument documentObject;
             SmartflowFee feeObject;
             SmartflowDataView readView;
 
@@ -1065,74 +1071,74 @@ namespace GadjIT_App.FileManagement.FileProcessing.Implementation
                                             : "N";
 
 
+                //Agenda
                 ExcelWorksheet worksheetAgenda = excelPackage.Workbook.Worksheets.Where(W => W.Name == "Agenda").SingleOrDefault();
                 totalColumns = worksheetAgenda.Dimension.End.Column;
                 totalRows = worksheetAgenda.Dimension.End.Row;
 
                 for (int row = 3; row <= totalRows; row++)
                 {
-                    readObject = new GenSmartflowItem();
+                    agendaObject = new SmartflowAgenda();
 
                     for (int column = 1; column <= totalColumns; column++)
                     {
-                        if (column == 1) readObject.Name = worksheetAgenda.Cells[row, column].FirstOrDefault() is null
+                        if (column == 1) agendaObject.Name = worksheetAgenda.Cells[row, column].FirstOrDefault() is null
                                             ? ""
                                             : worksheetAgenda.Cells[row, column].Value is null
                                             ? ""
                                             : worksheetAgenda.Cells[row, column].Value.ToString();
                     }
 
-                    readObject.Type = "Agenda";
-                    readObject.SeqNo = row - 2;
+                    
 
-
-                    if (!string.IsNullOrEmpty(readObject.Name))
+                    if (!string.IsNullOrEmpty(agendaObject.Name))
                     {
-                        readChapters.Items.Add(readObject);
+                        readChapters.Agendas.Add(agendaObject);
                     }
                 }
 
+                //Status
                 ExcelWorksheet worksheetStatus = excelPackage.Workbook.Worksheets.Where(W => W.Name == "Status").SingleOrDefault();
                 totalColumns = worksheetStatus.Dimension.End.Column;
                 totalRows = worksheetStatus.Dimension.End.Row;
 
                 for (int row = 3; row <= totalRows; row++)
                 {
-                    readObject = new GenSmartflowItem();
+                    statusObject = new SmartflowStatus();
 
                     for (int column = 1; column <= totalColumns; column++)
                     {
-                        if (column == 1) readObject.Name = worksheetStatus.Cells[row, column].FirstOrDefault() is null
+                        if (column == 1) statusObject.Name = worksheetStatus.Cells[row, column].FirstOrDefault() is null
                                             ? ""
                                             : worksheetStatus.Cells[row, column].Value is null
                                             ? ""
                                             : Regex.Replace(worksheetStatus.Cells[row, column].Value.ToString(), "[^0-9a-zA-Z-_ (){}!£$%^&*,./#?@<>`:]+", "");
-                        if (column == 2) readObject.MilestoneStatus = worksheetStatus.Cells[row, column].FirstOrDefault() is null
+                        if (column == 2) statusObject.MilestoneStatus = worksheetStatus.Cells[row, column].FirstOrDefault() is null
                                             ? ""
                                             : worksheetStatus.Cells[row, column].Value is null
                                             ? ""
                                             : Regex.Replace(worksheetStatus.Cells[row, column].Value.ToString(), "[^0-9a-zA-Z-_ (){}!£$%^&*,./#?@<>`:]+", "");
-                        if (column == 3) readObject.SuppressStep = worksheetStatus.Cells[row, column].FirstOrDefault() is null
+                        if (column == 3) statusObject.SuppressStep = worksheetStatus.Cells[row, column].FirstOrDefault() is null
                                             ? ""
                                             : worksheetStatus.Cells[row, column].Value is null
                                             ? ""
                                             : worksheetStatus.Cells[row, column].Value.ToString();
                     }
 
-                    readObject.Type = "Status";
-                    readObject.SeqNo = row - 2;
+                    statusObject.SeqNo = row - 2;
 
-                    if (!string.IsNullOrEmpty(readObject.Name))
+                    if (!string.IsNullOrEmpty(statusObject.Name))
                     {
-                        if (readChapters.Items.Where(I => I.Name == readObject.Name).Count() == 0)
+                        if (readChapters.Status.Where(I => I.Name == statusObject.Name).Count() == 0)
                         {
-                            readChapters.Items.Add(readObject);
+                            readChapters.Status.Add(statusObject);
                         }
                     }
 
 
                 }
 
+                //Fees
                 ExcelWorksheet worksheetFees = excelPackage.Workbook.Worksheets.Where(W => W.Name == "Fees").SingleOrDefault();
                 totalColumns = worksheetFees.Dimension.End.Column;
                 totalRows = worksheetFees.Dimension.End.Row;
@@ -1182,36 +1188,36 @@ namespace GadjIT_App.FileManagement.FileProcessing.Implementation
                     readChapters.Fees.Add(feeObject);
                 }
 
-
+                //Documents
                 ExcelWorksheet worksheetDocuments = excelPackage.Workbook.Worksheets.Where(W => W.Name == "Documents").FirstOrDefault();
                 totalColumns = worksheetDocuments.Dimension.End.Column;
                 totalRows = worksheetDocuments.Dimension.End.Row;
 
                 for (int row = 3; row <= totalRows; row++)
                 {
-                    readObject = new GenSmartflowItem();
+                    documentObject = new SmartflowDocument();
 
                     for (int column = 1; column <= totalColumns; column++)
                     {
 
-                        if (column == 1) readObject.Name = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
+                        if (column == 1) documentObject.Name = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
                                             ? ""
                                             : worksheetDocuments.Cells[row, column].Value is null
                                             ? ""
                                             : Regex.Replace(worksheetDocuments.Cells[row, column].Value.ToString(), "[^0-9a-zA-Z-_ (){}!£$%^&*,./#?@<>`:]+", "");
-                        if (column == 2) readObject.AltDisplayName = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
+                        if (column == 2) documentObject.AltDisplayName = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
                                             ? ""
                                             : worksheetDocuments.Cells[row, column].Value is null
                                             ? ""
                                             : Regex.Replace(worksheetDocuments.Cells[row, column].Value.ToString(), "[^0-9a-zA-Z-_ (){}!£$%^&*,./#?@<>`:]+", "");
-                        if (column == 3) readObject.CustomItem = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
+                        if (column == 3) documentObject.CustomItem = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
                                             ? "N"
                                             : worksheetDocuments.Cells[row, column].Value is null
                                             ? "N"
                                             : worksheetDocuments.Cells[row, column].Value.ToString() == "Y"
                                             ? "Y"
                                             : "N";
-                        if (column == 4) readObject.AsName = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
+                        if (column == 4) documentObject.AsName = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
                                             ? ""
                                             : worksheetDocuments.Cells[row, column].Value is null
                                             ? ""
@@ -1219,7 +1225,7 @@ namespace GadjIT_App.FileManagement.FileProcessing.Implementation
 
                         try
                         {
-                            if (column == 5) readObject.RescheduleDays = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
+                            if (column == 5) documentObject.RescheduleDays = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
                                                                             ? 0
                                                                             : worksheetDocuments.Cells[row, column].Value is null
                                                                             ? 0
@@ -1227,59 +1233,59 @@ namespace GadjIT_App.FileManagement.FileProcessing.Implementation
                         }
                         catch
                         {
-                            readObject.RescheduleDays = null;
+                            documentObject.RescheduleDays = null;
                         }
-                        if (column == 6) readObject.RescheduleDataItem = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
+                        if (column == 6) documentObject.RescheduleDataItem = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
                                             ? ""
                                             : worksheetDocuments.Cells[row, column].Value is null
                                             ? ""
                                             : Regex.Replace(worksheetDocuments.Cells[row, column].Value.ToString(), "[^0-9a-zA-Z-_ (){}!£$%^&*,./#?@<>`:]+", "");
-                        if (column == 7) readObject.CompleteName = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
+                        if (column == 7) documentObject.CompleteName = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
                                             ? ""
                                             : worksheetDocuments.Cells[row, column].Value is null
                                             ? ""
                                             : Regex.Replace(worksheetDocuments.Cells[row, column].Value.ToString(), "[^0-9a-zA-Z-_ (){}!£$%^&*,./#?@<>`:]+", "");
-                        if (column == 8) readObject.NextStatus = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
+                        if (column == 8) documentObject.NextStatus = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
                                             ? ""
                                             : worksheetDocuments.Cells[row, column].Value is null
                                             ? ""
                                             : worksheetDocuments.Cells[row, column].Value.ToString();
-                        if (column == 9) readObject.Agenda = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
+                        if (column == 9) documentObject.Agenda = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
                                             ? ""
                                             : worksheetDocuments.Cells[row, column].Value is null
                                             ? ""
                                             : worksheetDocuments.Cells[row, column].Value.ToString();                                            
-                        if (column == 10) readObject.Action = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
+                        if (column == 10) documentObject.Action = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
                                             ? "INSERT"
                                             : worksheetDocuments.Cells[row, column].Value is null
                                             ? "INSERT"
                                             : worksheetDocuments.Cells[row, column].Value.ToString().ToUpper();
-                        if (column == 11) readObject.TrackingMethod = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
+                        if (column == 11) documentObject.TrackingMethod = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
                                             ? ""
                                             : worksheetDocuments.Cells[row, column].Value is null
                                             ? ""
                                             : worksheetDocuments.Cells[row, column].Value.ToString();
-                        if (column == 12) readObject.ChaserDesc = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
+                        if (column == 12) documentObject.ChaserDesc = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
                                             ? ""
                                             : worksheetDocuments.Cells[row, column].Value is null
                                             ? ""
                                             : worksheetDocuments.Cells[row, column].Value.ToString();
-                        if (column == 13) readObject.UserMessage = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
+                        if (column == 13) documentObject.UserMessage = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
                                             ? ""
                                             : worksheetDocuments.Cells[row, column].Value is null
                                             ? ""
                                             : worksheetDocuments.Cells[row, column].Value.ToString();
-                        if (column == 14) readObject.PopupAlert = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
+                        if (column == 14) documentObject.PopupAlert = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
                                             ? ""
                                             : worksheetDocuments.Cells[row, column].Value is null
                                             ? ""
                                             : worksheetDocuments.Cells[row, column].Value.ToString();
-                        if (column == 15) readObject.DeveloperNotes = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
+                        if (column == 15) documentObject.DeveloperNotes = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
                                             ? ""
                                             : worksheetDocuments.Cells[row, column].Value is null
                                             ? ""
                                             : worksheetDocuments.Cells[row, column].Value.ToString();
-                        if (column == 16) readObject.OptionalDocument = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
+                        if (column == 16) documentObject.OptionalDocument = worksheetDocuments.Cells[row, column].FirstOrDefault() is null
                                             ? "N"
                                             : worksheetDocuments.Cells[row, column].Value is null
                                             ? "N"
@@ -1288,58 +1294,53 @@ namespace GadjIT_App.FileManagement.FileProcessing.Implementation
                                             : "N";
                     }
 
+                    documentObject.SeqNo = row - 2;
 
-                    readObject.Type = "Doc";
 
-                    readObject.SeqNo = row - 2;
-
-                    if (!string.IsNullOrEmpty(readObject.Agenda))
+                    //
+                    //Add Agenda not set on Agenda tab but exists on Documents tab
+                    //
+                    if (!string.IsNullOrEmpty(documentObject.Agenda))
                     {
-                        if(!readChapters.Items.Where(I => I.Type == "Agenda").Select(I => I.Name).Contains(readObject.Agenda)){
-                            var seqNo = readChapters.Items.Where(I => I.Type == "Agenda").Select(I => I.SeqNo)
-                                        .OrderByDescending(I => I)
-                                        .FirstOrDefault();
-
-                            seqNo = seqNo ?? -1;            
-                            seqNo += 1;
-
-                            readChapters.Items.Add(new GenSmartflowItem 
+                        if(!readChapters.Agendas.Select(I => I.Name).Contains(documentObject.Agenda)){
+                            
+                            readChapters.Agendas.Add(new SmartflowAgenda 
                                                     { 
-                                                        Name = readObject.Agenda, 
-                                                        SeqNo = seqNo,
-                                                        Type = "Agenda"
+                                                        Name = documentObject.Agenda, 
                                                     });
                         }
                     }
 
-                    if (!string.IsNullOrEmpty(readObject.NextStatus))
+                    //
+                    //Add Status not set on Status tab but exists on Documents tab
+                    //
+                    if (!string.IsNullOrEmpty(documentObject.NextStatus))
                     {
-                        if(!readChapters.Items.Where(I => I.Type == "Status").Select(I => I.Name).Contains(readObject.NextStatus)){
-                            var seqNo = readChapters.Items.Where(I => I.Type == "Status").Select(I => I.SeqNo)
+                        if(!readChapters.Status.Select(I => I.Name).Contains(documentObject.NextStatus)){
+                            var seqNo = readChapters.Status.Select(I => I.SeqNo)
                                         .OrderByDescending(I => I)
                                         .FirstOrDefault();
 
                             seqNo = seqNo ?? -1;            
                             seqNo += 1;
 
-                            readChapters.Items.Add(new GenSmartflowItem 
+                            readChapters.Status.Add(new SmartflowStatus 
                                                     { 
-                                                        Name = readObject.NextStatus, 
+                                                        Name = documentObject.NextStatus, 
                                                         SeqNo = seqNo,
-                                                        Type = "Status",
                                                         MilestoneStatus = ""
                                                     });
                         }
                     }
 
-                    if (!string.IsNullOrEmpty(readObject.Name))
+                    if (!string.IsNullOrEmpty(documentObject.Name))
                     {
-                        readChapters.Items.Add(readObject);
+                        readChapters.Documents.Add(documentObject);
                     }
 
                 }
 
-
+                //Attachments
                 ExcelWorksheet worksheetAttachments = excelPackage.Workbook.Worksheets.Where(W => W.Name == "Linked Items").SingleOrDefault();
                 totalColumns = worksheetAttachments.Dimension.End.Column;
                 totalRows = worksheetAttachments.Dimension.End.Row;
@@ -1348,8 +1349,8 @@ namespace GadjIT_App.FileManagement.FileProcessing.Implementation
 
                 for (int row = 3; row <= totalRows; row++)
                 {
-                    readObject = null;
-                    LinkedItem newAttachment = new LinkedItem();
+                    documentObject = null;
+                    LinkedDocument newAttachment = new LinkedDocument();
 
                     for (int column = 1; column <= totalColumns; column++)
                     {
@@ -1361,21 +1362,21 @@ namespace GadjIT_App.FileManagement.FileProcessing.Implementation
                                             ? ""
                                             : worksheetAttachments.Cells[row, column].Value.ToString();
 
-                            readObject = readChapters
-                                .Items
+                            documentObject = readChapters
+                                .Documents
                                 .Where(C => !string.IsNullOrEmpty(C.AltDisplayName) & C.AltDisplayName == documentName)
                                 .FirstOrDefault();
 
-                            if (readObject is null)
+                            if (documentObject is null)
                             {
-                                readObject = readChapters
-                                .Items
+                                documentObject = readChapters
+                                .Documents
                                 .Where(C => C.Name == documentName)
                                 .FirstOrDefault();
                             }
                         }
 
-                        if (!(readObject is null))
+                        if (!(documentObject is null))
                         {
                             if (column == 2) newAttachment.DocName = worksheetAttachments.Cells[row, column].FirstOrDefault() is null
                                             ? ""
@@ -1444,32 +1445,24 @@ namespace GadjIT_App.FileManagement.FileProcessing.Implementation
                         }
                     }
 
-                    if (!(readObject is null))
+                    if (!(documentObject is null))
                     {
                         if (!string.IsNullOrEmpty(newAttachment.Agenda))
                         {
-                            if(!readChapters.Items.Where(I => I.Type == "Agenda").Select(I => I.Name).Contains(newAttachment.Agenda)){
-                                var seqNo = readChapters.Items.Where(I => I.Type == "Agenda").Select(I => I.SeqNo)
-                                            .OrderByDescending(I => I)
-                                            .FirstOrDefault();
-
-                                seqNo = seqNo ?? -1;            
-                                seqNo += 1;
-
-                                readChapters.Items.Add(new GenSmartflowItem 
+                            if(!readChapters.Agendas.Select(A => A.Name).Contains(newAttachment.Agenda)){
+                                
+                                readChapters.Agendas.Add(new SmartflowAgenda 
                                                         { 
                                                             Name = newAttachment.Agenda, 
-                                                            SeqNo = seqNo,
-                                                            Type = "Agenda"
                                                         });
                             }
                         }
 
-                        if (readObject.LinkedItems is null)
+                        if (documentObject.LinkedItems is null)
                         {
-                            readObject.LinkedItems = new List<LinkedItem>();
+                            documentObject.LinkedItems = new List<LinkedDocument>();
                         }
-                        readObject.LinkedItems.Add(newAttachment);
+                        documentObject.LinkedItems.Add(newAttachment);
                     }
 
                 }

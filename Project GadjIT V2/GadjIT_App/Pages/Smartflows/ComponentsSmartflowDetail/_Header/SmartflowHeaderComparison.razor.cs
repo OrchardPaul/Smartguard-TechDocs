@@ -17,10 +17,10 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Header
 
 
         [Parameter]
-        public Smartflow _SelectedSmartflow { get; set; }
+        public SmartflowV2 _SelectedSmartflow { get; set; }
 
         [Parameter]
-        public Smartflow _Alt_Smartflow { get; set; }
+        public SmartflowV2 _Alt_Smartflow { get; set; }
 
         [Parameter]
         public App_SmartflowRecord _Alt_SmartflowRecord {get; set;} //as saved on Company

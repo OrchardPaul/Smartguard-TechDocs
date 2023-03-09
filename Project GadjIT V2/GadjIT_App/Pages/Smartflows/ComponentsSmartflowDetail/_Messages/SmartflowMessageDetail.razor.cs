@@ -30,10 +30,10 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Messages
         public Client_SmartflowRecord _Selected_ClientSmartflowRecord { get; set; }
 
         [Parameter]
-        public Smartflow _SelectedSmartflow { get; set; }
+        public SmartflowV2 _SelectedSmartflow { get; set; }
 
         [Parameter]
-        public EventCallback<Smartflow> _SmartflowUpdated {get; set;}
+        public EventCallback<SmartflowV2> _SmartflowUpdated {get; set;}
 
         [Parameter]
         public EventCallback<string> _RefreshSmartflowItems {get; set;}
@@ -69,7 +69,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Messages
 
         private Client_SmartflowRecord Alt_ClientSmartflowRecord { get; set; } = new Client_SmartflowRecord(); //as saved on client site with serialised VmSmartflow
 
-        private Smartflow AltSmartflow {get; set;} //Smartflow Schema
+        private SmartflowV2 AltSmartflow {get; set;} //Smartflow Schema
 
         public List<VmSmartflowMessage> LstAltSystemItems { get; set; } 
 
@@ -220,7 +220,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Messages
         {
             
             //<ModalDelete> simply invokes this method when user clicks OK. No need for the modal to handle this action as we do not require any details from the Modal. 
-            _SelectedSmartflow.TickerMessages.Remove(EditObject.Message);
+            _SelectedSmartflow.Messages.Remove(EditObject.Message);
            
             await ChapterItemsUpdated();
 
@@ -288,7 +288,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Messages
                     else
                     {
                         CompareSystems_ = true;
-                        AltSmartflow = JsonConvert.DeserializeObject<Smartflow>(Alt_AppSmartflowRecord.SmartflowData);
+                        AltSmartflow = JsonConvert.DeserializeObject<SmartflowV2>(Alt_AppSmartflowRecord.SmartflowData);
 
                         Alt_AppSmartflowRecord.SmartflowData = JsonConvert.SerializeObject(AltSmartflow);
                         Alt_ClientSmartflowRecord = new Client_SmartflowRecord {
@@ -303,7 +303,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Messages
 
                         Alt_AppSmartflowRecord.SmartflowData = JsonConvert.SerializeObject(AltSmartflow);
                         
-                        var cItems = AltSmartflow.TickerMessages;
+                        var cItems = AltSmartflow.Messages;
 
                         LstAltSystemItems = cItems.Select(T => new VmSmartflowMessage { Message = T, Compared = false }).ToList();
                         
@@ -381,9 +381,9 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Messages
         {
             try
             {
-                AltSmartflow.TickerMessages.Clear();
+                AltSmartflow.Messages.Clear();
                 
-                AltSmartflow.TickerMessages.AddRange(_SelectedSmartflow.TickerMessages.ToList());
+                AltSmartflow.Messages.AddRange(_SelectedSmartflow.Messages.ToList());
 
                 Alt_AppSmartflowRecord.SmartflowData = JsonConvert.SerializeObject(AltSmartflow);
                 Client_SmartflowRecord altSmartflow = new Client_SmartflowRecord {
@@ -482,7 +482,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Messages
         {
             await UserSession.SwitchSelectedSystem();
 
-            AltSmartflow.TickerMessages.Remove(EditObject.Message);
+            AltSmartflow.Messages.Remove(EditObject.Message);
             LstAltSystemItems.Remove(EditObject);
 
             Alt_AppSmartflowRecord.SmartflowData = JsonConvert.SerializeObject(AltSmartflow);

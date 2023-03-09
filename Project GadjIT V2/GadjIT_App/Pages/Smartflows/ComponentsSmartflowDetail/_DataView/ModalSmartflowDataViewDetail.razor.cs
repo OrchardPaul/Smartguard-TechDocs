@@ -29,7 +29,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._DataView
         public Client_SmartflowRecord _Selected_ClientSmartflowRecord { get; set; }
 
         [Parameter]
-        public Smartflow _SelectedSmartflow { get; set; }
+        public SmartflowV2 _SelectedSmartflow { get; set; }
 
         [Parameter]
         public SmartflowDataView _TaskObject { get; set; }

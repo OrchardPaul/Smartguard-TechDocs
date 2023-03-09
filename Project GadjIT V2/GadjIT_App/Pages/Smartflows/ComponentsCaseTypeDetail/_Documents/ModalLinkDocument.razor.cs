@@ -27,7 +27,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsCaseTypeDetail._Documents
         public Client_SmartflowRecord _Selected_ClientSmartflowRecord { get; set; }
 
         [Parameter]
-        public Smartflow _SelectedSmartflow { get; set; }
+        public SmartflowV2 _SelectedSmartflow { get; set; }
 
 
         [Parameter]
@@ -153,8 +153,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsCaseTypeDetail._Documents
 
                 _DataChanged.Invoke();
 
-                GenSmartflowItem docItem = _SelectedSmartflow.Items
-                                            .Where(I => I.Type == "Doc")
+                SmartflowDocument docItem = _SelectedSmartflow.Documents
                                             .Where(I => I.SeqNo == _TaskObject.OrigSeqNo)
                                             .FirstOrDefault();
                 
@@ -165,7 +164,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsCaseTypeDetail._Documents
                 }
                 else
                 {
-                    LinkedItem attachItem = docItem.LinkedItems
+                    LinkedDocument attachItem = docItem.LinkedItems
                                             .Where(LI => LI.DocName == _TaskObject.OrigItemName)
                                             .FirstOrDefault();
 

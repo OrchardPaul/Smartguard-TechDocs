@@ -13,10 +13,10 @@ using GadjIT_ClientContext.Models.Smartflow;
 using GadjIT_ClientContext.Models.P4W;
 using GadjIT_ClientContext.Models.Smartflow.Client;
 
-namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._SharedItems
+namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Documents
 {
 
-    public partial class ModalSmartflowDetail : ComponentBase
+    public partial class ModalSmartflowDocumentDetail : ComponentBase
     {
 
         [CascadingParameter]
@@ -33,10 +33,10 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._SharedItems
         public SmartflowV2 _SelectedSmartflow { get; set; }
 
         [Parameter]
-        public GenSmartflowItem _TaskObject { get; set; }
+        public SmartflowDocument _TaskObject { get; set; }
 
         [Parameter]
-        public GenSmartflowItem _CopyObject { get; set; }
+        public SmartflowDocument _CopyObject { get; set; }
 
 
         [Parameter]
@@ -55,15 +55,15 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._SharedItems
         public List<P4W_DmDocuments> _LibraryDocumentsAndSteps { get; set; } = new List<P4W_DmDocuments>();
         
         [Parameter]
-        public List<VmGenSmartflowItem> _ListOfStatus { get; set; } = new List<VmGenSmartflowItem>();
+        public List<VmSmartflowStatus> _ListOfStatus { get; set; } = new List<VmSmartflowStatus>();
 
         [Parameter]
-        public List<VmGenSmartflowItem> _ListOfAgenda { get; set; } = new List<VmGenSmartflowItem>();
+        public List<VmSmartflowAgenda> _ListOfAgenda { get; set; } = new List<VmSmartflowAgenda>();
 
 
         
         [Inject]
-        ILogger<ModalSmartflowDetail> Logger {get; set;}
+        ILogger<ModalSmartflowDocumentDetail> Logger {get; set;}
 
         [Inject]
         INotificationManager NotificationManager {get; set;}
@@ -127,21 +127,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._SharedItems
             }
         }
 
-        public bool SuppressStep
-        {
-            get { return (_CopyObject.SuppressStep == "Y" ? true : false); }
-            set
-            {
-                if (value)
-                {
-                    _CopyObject.SuppressStep = "Y";
-                }
-                else
-                {
-                    _CopyObject.SuppressStep = "N";
-                }
-            }
-        }
+        
 
         public bool OptionalDocument
         {
@@ -232,7 +218,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._SharedItems
 
         private async void Close()
         {
-            _TaskObject = new GenSmartflowItem();
+            _TaskObject = new SmartflowDocument();
             await ModalInstance.CloseAsync();
 
 
@@ -244,7 +230,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._SharedItems
             {
 
                 
-                if (_SelectedSmartflow.Documents.Where(I => I.Name != _CopyObject.Name).Select(I => I.Name).Contains(_CopyObject.Name))
+                if (_SelectedSmartflow.Documents.Where(D => D.Name != _CopyObject.Name).Select(D => D.Name).Contains(_CopyObject.Name))
                 {
                     Error = 1;
                     StateHasChanged();
@@ -252,29 +238,11 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._SharedItems
                 else
                 {
 
-                    if (!(new string[] { "Agenda", "Status" }.Any(s => _TaskObject.Type.ToString().Contains(s))))
-                    {
-                        //clears lagacy value of "Letter" and revert it back to "Doc"
-                        _TaskObject.Type = "Doc";
-                    }
-                    else
-                    {
-                        _TaskObject.Type = _CopyObject.Type;
-                    }
 
-                    if (_TaskObject.Type == "Agenda")
-                    {
-                        _TaskObject.Name = _CopyObject.Name;
-                    }
-                    else
-                    {
-                        _TaskObject.Name = Regex.Replace(_CopyObject.Name, "[^0-9a-zA-Z-_ (){}!£$%^&*,./#?@<>`:]+", "");
-                    }
-
-
+                    _TaskObject.Name = Regex.Replace(_CopyObject.Name, "[^0-9a-zA-Z-_ (){}!£$%^&*,./#?@<>`:]+", "");
+                    
                     _TaskObject.EntityType = _CopyObject.EntityType;
                     _TaskObject.SeqNo = _CopyObject.SeqNo;
-                    _TaskObject.SuppressStep = _CopyObject.SuppressStep;
                     _TaskObject.CompleteName = _CopyObject.CompleteName is null ? "" : Regex.Replace(_CopyObject.CompleteName, "[^0-9a-zA-Z-_ (){}!£$%^&*,./#?@<>`:]+", "");
                     _TaskObject.AsName = _CopyObject.AsName is null ? "" : Regex.Replace(_CopyObject.AsName, "[^0-9a-zA-Z-_ (){}!£$%^&*,./#?@<>`:]+", "");
                     _TaskObject.RescheduleDays = _CopyObject.RescheduleDays is null ? 0 : _CopyObject.RescheduleDays;
@@ -286,17 +254,16 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._SharedItems
                     _TaskObject.TrackingMethod = _CopyObject.TrackingMethod;
                     _TaskObject.ChaserDesc = _CopyObject.ChaserDesc;
                     _TaskObject.RescheduleDataItem = _CopyObject.RescheduleDataItem;
-                    _TaskObject.MilestoneStatus = _CopyObject.MilestoneStatus;
                     _TaskObject.OptionalDocument = _CopyObject.OptionalDocument;
                     _TaskObject.Agenda = _CopyObject.Agenda;
                     _TaskObject.CustomItem = _CopyObject.CustomItem;
 
-                    // if (_Option == "Insert")
-                    // {
-                    //     _SelectedSmartflow.Documents.Add(_TaskObject);
-                    // }
+                    if (_Option == "Insert")
+                    {
+                        _SelectedSmartflow.Documents.Add(_TaskObject);
+                    }
 
-                    _TaskObject = new GenSmartflowItem();
+                    _TaskObject = new SmartflowDocument();
                     FilterText = "";
 
                     _DataChanged.Invoke();
@@ -334,7 +301,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._SharedItems
             using (LogContext.PushProperty("SourceSystem", UserSession.SelectedSystem))
             using (LogContext.PushProperty("SourceCompanyId", UserSession.Company.Id))
             using (LogContext.PushProperty("SourceUserId", UserSession.User.Id))
-            using (LogContext.PushProperty("SourceContext", nameof(ModalSmartflowDetail)))
+            using (LogContext.PushProperty("SourceContext", nameof(ModalSmartflowDocumentDetail)))
             {
                 Logger.LogError(e,"Error - Method: {0}, Message: {1}",_method, _message);
             }

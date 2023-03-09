@@ -65,11 +65,11 @@
                             InstantReplace="true"
                             OnItemDrop="@((d)=>ReSequence(_LstDocs.IndexOf(d) + 1))"
                             OnDragStartParam="() => ResetRowChanged()"
-                            TItem="VmGenSmartflowItem"
+                            TItem="VmSmartflowDocument"
                             UseCustomImage="true">
                     <div class="row grid-row grid-row-lg @(RowChanged == context.ChapterObject.SeqNo && !SeqMoving ? "row-changed" : "" )">
                         @{
-                            var optionalDoc = (context.ChapterObject.OptionalDocument == "Y" && !(string.IsNullOrEmpty(context.DocType) && context.ChapterObject.CustomItem == "N")) ? "optional" : "";   
+                            var optionalDoc = (context.ChapterObject.OptionalDocument == "Y" && context.ChapterObject.CustomItem == "N") ? "optional" : "";   
                         }
                         <div class="data-item @optionalDoc">
 
@@ -364,7 +364,7 @@
 
                 @if (CompareSystems && !(LstAltSystemItems is null))
                 {
-                    @foreach (var doc in LstAltSystemItems.Where(D => D.ChapterObject.Type == "Doc").Where(D => !D.Compared).ToList())
+                    @foreach (var doc in LstAltSystemItems.Where(D => !D.Compared).ToList())
                     {
 
                         <div class="row grid-row grid-row-lg @(RowChanged == doc.ChapterObject.SeqNo ? "row-changed" : "" )">

@@ -109,7 +109,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsCaseTypeDetail._Backup
                     
                     foreach(var vmSmartflow in lstCaseTypeSmartflows)
                     {
-                        Smartflow smartflow = JsonConvert.DeserializeObject<Smartflow>(vmSmartflow.ClientSmartflowRecord.SmartflowData);
+                        SmartflowV2 smartflow = JsonConvert.DeserializeObject<SmartflowV2>(vmSmartflow.ClientSmartflowRecord.SmartflowData);
                         vmSmartflows.Smartflows.Add(smartflow);
 
                     }
@@ -221,7 +221,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsCaseTypeDetail._Backup
                                                             .OrderByDescending(C => C.ClientSmartflowRecord.SeqNo)
                                                             .Count();
 
-                        foreach(Smartflow vmSmartflow in vmSmartflows.Smartflows.OrderBy(S => S.SeqNo))
+                        foreach(SmartflowV2 vmSmartflow in vmSmartflows.Smartflows.OrderBy(S => S.SeqNo))
                         {
                             //Check if already exists
                             Client_VmSmartflowRecord existingSmartflow = _LstVmClientSmartflowRecord

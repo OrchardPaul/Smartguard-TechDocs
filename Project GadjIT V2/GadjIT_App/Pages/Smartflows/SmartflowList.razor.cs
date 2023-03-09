@@ -109,7 +109,7 @@ namespace GadjIT_App.Pages.Smartflows
         public Client_VmSmartflowRecord Alt_VmClientSmartflowRecord { get; set; } = new Client_VmSmartflowRecord();
 
 
-        public Smartflow SelectedSmartflow { get; set; } = new Smartflow { Items = new List<GenSmartflowItem>() }; //SmartflowData
+        public SmartflowV2 SelectedSmartflow { get; set; } = new SmartflowV2(); //SmartflowData
 
         protected string SelectedCaseTypeGroup { get; set;} = "";
         protected string SelectedCaseType { get; set;} = "";
@@ -1187,9 +1187,9 @@ namespace GadjIT_App.Pages.Smartflows
                 {
                     try
                     {
-                        Smartflow smartflow = JsonConvert.DeserializeObject<Smartflow>(vmClientSmartflowRecord.ClientSmartflowRecord.SmartflowData);
+                        SmartflowV1 smartflow = JsonConvert.DeserializeObject<SmartflowV1>(vmClientSmartflowRecord.ClientSmartflowRecord.SmartflowData);
 
-                        Smartflow2 smarflow2 = new Smartflow2{
+                        SmartflowV2 smarflow2 = new SmartflowV2{
                                                         CaseTypeGroup = smartflow.CaseTypeGroup
                                                         , CaseType  = smartflow.CaseType
                                                         , Name  = smartflow.Name
@@ -1390,7 +1390,7 @@ namespace GadjIT_App.Pages.Smartflows
                 foreach (var clientSmartflowRecord in LstAll_VmClientSmartflowRecord)
                 {
 
-                    var decodedSmartflow = JsonConvert.DeserializeObject<Smartflow>(clientSmartflowRecord.ClientSmartflowRecord.SmartflowData);
+                    var decodedSmartflow = JsonConvert.DeserializeObject<SmartflowV2>(clientSmartflowRecord.ClientSmartflowRecord.SmartflowData);
 
                     if (!string.IsNullOrEmpty(decodedSmartflow.SelectedStep) 
                         && !string.IsNullOrEmpty(decodedSmartflow.SelectedView)

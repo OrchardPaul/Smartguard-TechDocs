@@ -35,7 +35,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Messages
         public Client_SmartflowRecord _Selected_ClientSmartflowRecord { get; set; }
 
         [Parameter]
-        public Smartflow _SelectedSmartflow { get; set; }
+        public SmartflowV2 _SelectedSmartflow { get; set; }
 
         [Parameter]
         public SmartflowMessage _TaskObject { get; set; }
@@ -87,12 +87,12 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Messages
 
             if (_Option == "Insert")
             {
-                if (_SelectedSmartflow.TickerMessages is null)
+                if (_SelectedSmartflow.Messages is null)
                 {
-                    _SelectedSmartflow.TickerMessages = new List<SmartflowMessage>();
+                    _SelectedSmartflow.Messages = new List<SmartflowMessage>();
                 }
 
-                _SelectedSmartflow.TickerMessages.Add(_TaskObject);
+                _SelectedSmartflow.Messages.Add(_TaskObject);
             }
 
 

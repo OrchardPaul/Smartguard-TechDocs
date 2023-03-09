@@ -42,15 +42,27 @@ namespace GadjIT_ClientContext.Models.Smartflow.Client
             {
                 if(!string.IsNullOrEmpty(ClientSmartflowRecord.SmartflowData))
                 {
-                    var vmSmartflow = JsonConvert.DeserializeObject<Smartflow>(ClientSmartflowRecord.SmartflowData);
+                    var vmSmartflow = JsonConvert.DeserializeObject<SmartflowV2>(ClientSmartflowRecord.SmartflowData);
 
                     if(vmSmartflow != null)
                     {
-                        if(vmSmartflow.Items != null)
+                        // if(vmSmartflow.Items != null)
+                        // {
+                        //     NumAgenda = vmSmartflow.Items.Where(I => I.Type == "Agenda").Count();
+                        //     NumStatus = vmSmartflow.Items.Where(I => I.Type == "Status").Count();
+                        //     NumDocs = vmSmartflow.Items.Where(I => I.Type == "Doc").Count();
+                        // }
+                        if(vmSmartflow.Agendas != null)
                         {
-                            NumAgenda = vmSmartflow.Items.Where(I => I.Type == "Agenda").Count();
-                            NumStatus = vmSmartflow.Items.Where(I => I.Type == "Status").Count();
-                            NumDocs = vmSmartflow.Items.Where(I => I.Type == "Doc").Count();
+                            NumAgenda = vmSmartflow.Agendas.Count();
+                        }
+                        if(vmSmartflow.Status != null)
+                        {
+                            NumStatus = vmSmartflow.Status.Count();
+                        }
+                        if(vmSmartflow.Documents != null)
+                        {
+                            NumDocs = vmSmartflow.Documents.Count();
                         }
                         if(vmSmartflow.Fees != null)
                         {
@@ -60,9 +72,9 @@ namespace GadjIT_ClientContext.Models.Smartflow.Client
                         {
                             NumDataViews = vmSmartflow.DataViews.Count();
                         }
-                        if(vmSmartflow.TickerMessages != null)
+                        if(vmSmartflow.Messages != null)
                         {
-                            NumMessages = vmSmartflow.TickerMessages.Count();
+                            NumMessages = vmSmartflow.Messages.Count();
                         }
 
                         StatisticsStatus = "Set";

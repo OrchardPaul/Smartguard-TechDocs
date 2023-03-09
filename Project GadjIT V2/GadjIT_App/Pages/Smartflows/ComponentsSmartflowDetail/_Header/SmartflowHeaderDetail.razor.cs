@@ -33,7 +33,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Header
         public Client_SmartflowRecord _Selected_ClientSmartflowRecord { get; set; }
 
         [Parameter]
-        public Smartflow _SelectedSmartflow { get; set; }
+        public SmartflowV2 _SelectedSmartflow { get; set; }
 
         [Parameter]
         public List<P4W_CaseTypeGroups> _P4WCaseTypeGroups {get; set;}
@@ -503,7 +503,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Header
                 else
                 {
 
-                    var AltSmartflow = JsonConvert.DeserializeObject<Smartflow>(Alt_AppSmartflowRecord.SmartflowData);
+                    var AltSmartflow = JsonConvert.DeserializeObject<SmartflowV2>(Alt_AppSmartflowRecord.SmartflowData);
 
                     var parameters = new ModalParameters();
                     parameters.Add("_SelectedSmartflow", _SelectedSmartflow);
@@ -633,11 +633,13 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Header
             {
                 try
                 {
-                    var chapterData = JsonConvert.DeserializeObject<Smartflow>(Json);
-                    _SelectedSmartflow.Items = chapterData.Items;
+                    var chapterData = JsonConvert.DeserializeObject<SmartflowV2>(Json);
+                    _SelectedSmartflow.Agendas = chapterData.Agendas;
+                    _SelectedSmartflow.Status = chapterData.Status;
+                    _SelectedSmartflow.Documents = chapterData.Documents;
                     _SelectedSmartflow.DataViews = chapterData.DataViews;
                     _SelectedSmartflow.Fees = chapterData.Fees;
-                    _SelectedSmartflow.TickerMessages = chapterData.TickerMessages;
+                    _SelectedSmartflow.Messages = chapterData.Messages;
                     _SelectedSmartflow.P4WCaseTypeGroup = chapterData.P4WCaseTypeGroup;
                     _SelectedSmartflow.SelectedStep = chapterData.SelectedStep;
                     _SelectedSmartflow.SelectedView = chapterData.SelectedView;
@@ -680,6 +682,11 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Header
                 string caseType = _Selected_ClientSmartflowRecord.CaseType;
                 string smartflow = _Selected_ClientSmartflowRecord.SmartflowName;
                 string status = "Awaiting";
+
+                //Cater for single quotes in variable names
+                caseTypeGroup = caseTypeGroup.Replace("'","''");
+                caseType = caseType.Replace("'","''");
+                smartflow = smartflow.Replace("'","''");
 
                 string sqlCommand = $"[SQL: SELECT Chasing_Description FROM Usr_ORSF_MT_Document_Status WHERE EntityRef = '{entityRef}' AND MatterNo = {matterNo} AND CaseTypeGroup = '{caseTypeGroup}' AND CaseType = '{caseType}' AND Smartflow = '{smartflow}' AND ISNULL(Document_Status,'') = '{status}']";
 

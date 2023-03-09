@@ -12,6 +12,8 @@ namespace GadjIT_ClientContext.Models.Smartflow
 
         public SmartflowDocument AltObject { get; set; }
 
+        public string DocType { get; set; }
+
         public string ComparisonResult { get; set; }
         public string ComparisonIcon { get; set; }
 

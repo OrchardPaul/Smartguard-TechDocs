@@ -6,22 +6,22 @@ namespace GadjIT_ClientContext.Models.Smartflow.Custom
 {
     public partial class VmSmartflowComparison
     {
-        public Smartflow CurrentChapter { get; set; }
+        public SmartflowV2 CurrentChapter { get; set; }
 
-        public Smartflow AltSmartflow { get; set; }
+        public SmartflowV2 AltSmartflow { get; set; }
 
       
         public string ComparisonResult { get; set; }
         public string ComparisonIcon { get; set; }
         public List<string> ComparisonList { get; set; } = new List<string>();
 
-        public bool IsChapterMatch(Smartflow vmCompItem)
+        public bool IsChapterMatch(SmartflowV2 vmCompItem)
         {
             AltSmartflow = vmCompItem;
 
             ComparisonList = new List<string>();
             bool isSame = true;
-            Smartflow compItem = vmCompItem;
+            SmartflowV2 compItem = vmCompItem;
 
             if (CurrentChapter.CaseTypeGroup != compItem.CaseTypeGroup)
             {

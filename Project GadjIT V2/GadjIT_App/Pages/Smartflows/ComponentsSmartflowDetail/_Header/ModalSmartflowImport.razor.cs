@@ -64,7 +64,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Header
 
         private string ImportedJSON { get; set; }
 
-        private Smartflow ChapterItems { get; set; }
+        private SmartflowV2 ChapterItems { get; set; }
 
         [Parameter]
         public List<VmSmartflowDataView> OriginalDataViews { get; set; }
@@ -148,9 +148,9 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Header
                     ChapterItems = SmartflowFileHelper.ReadSmartflowItemsFromExcel(ListFileDescriptions.Where(F => F.FileName == fileName).FirstOrDefault().FilePath);
                     CopyOptions = new List<CopyOption>
                                                 {
-                                                    new CopyOption { Option = "Agenda", Selected = false, OptionCount = ChapterItems.Items.Where(C => C.Type == "Agenda").ToList().Count() },
-                                                    new CopyOption { Option = "Status", Selected = false, OptionCount = ChapterItems.Items.Where(C => C.Type == "Status").ToList().Count() },
-                                                    new CopyOption { Option = "Documents/Steps", Selected = false, OptionCount = ChapterItems.Items.Where(C => C.Type == "Doc").ToList().Count() },
+                                                    new CopyOption { Option = "Agenda", Selected = false, OptionCount = ChapterItems.Agendas.ToList().Count() },
+                                                    new CopyOption { Option = "Status", Selected = false, OptionCount = ChapterItems.Status.ToList().Count() },
+                                                    new CopyOption { Option = "Documents/Steps", Selected = false, OptionCount = ChapterItems.Documents.ToList().Count() },
                                                     new CopyOption { Option = "Fees", Selected = false, OptionCount = ChapterItems.Fees.Count() },
                                                     new CopyOption { Option = "Data Views", Selected = false, OptionCount = ChapterItems.DataViews.Count() },
                                                 };
@@ -173,44 +173,48 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Header
         private async Task HandleValidSubmit()
         {
             var originalJson = new string(TaskObject.SmartflowData);
-            var SelectedCopyItems = new Smartflow { Items = new List<GenSmartflowItem>(), Fees = new List<SmartflowFee>(), DataViews = new List<SmartflowDataView>() };
+            var SelectedCopyItems = new SmartflowV2 { Agendas = new List<SmartflowAgenda>()
+                                                    , Status = new List<SmartflowStatus>()
+                                                    , Documents = new List<SmartflowDocument>()
+                                                    , Fees = new List<SmartflowFee>()
+                                                    , DataViews = new List<SmartflowDataView>() };
 
             ToggleSuccess = false;
 
             if (!(TaskObject.SmartflowData is null))
             {
-                SelectedCopyItems = JsonConvert.DeserializeObject<Smartflow>(TaskObject.SmartflowData);
+                SelectedCopyItems = JsonConvert.DeserializeObject<SmartflowV2>(TaskObject.SmartflowData);
             }
 
 
             if (CopyOptions.Where(C => C.Option == "Agenda").Select(C => C.Selected).FirstOrDefault())
             {
-                foreach (var item in SelectedCopyItems.Items.Where(C => C.Type == "Agenda").ToList())
+                foreach (var item in SelectedCopyItems.Agendas.ToList())
                 {
-                    SelectedCopyItems.Items.Remove(item);
+                    SelectedCopyItems.Agendas.Remove(item);
                 }
 
-                SelectedCopyItems.Items.AddRange(ChapterItems.Items.Where(C => C.Type == "Agenda").ToList());
+                SelectedCopyItems.Agendas.AddRange(ChapterItems.Agendas.ToList());
             }
 
             if (CopyOptions.Where(C => C.Option == "Status").Select(C => C.Selected).FirstOrDefault())
             {
-                foreach (var item in SelectedCopyItems.Items.Where(C => C.Type == "Status").ToList())
+                foreach (var item in SelectedCopyItems.Status.ToList())
                 {
-                    SelectedCopyItems.Items.Remove(item);
+                    SelectedCopyItems.Status.Remove(item);
                 }
 
-                SelectedCopyItems.Items.AddRange(ChapterItems.Items.Where(C => C.Type == "Status").ToList());
+                SelectedCopyItems.Status.AddRange(ChapterItems.Status.ToList());
             }
 
             if (CopyOptions.Where(C => C.Option == "Documents/Steps").Select(C => C.Selected).FirstOrDefault())
             {
-                foreach (var item in SelectedCopyItems.Items.Where(C => C.Type == "Doc").ToList())
+                foreach (var item in SelectedCopyItems.Documents.ToList())
                 {
-                    SelectedCopyItems.Items.Remove(item);
+                    SelectedCopyItems.Documents.Remove(item);
                 }
 
-                SelectedCopyItems.Items.AddRange(ChapterItems.Items.Where(C => C.Type == "Doc").ToList());
+                SelectedCopyItems.Documents.AddRange(ChapterItems.Documents.ToList());
             }
 
             if (CopyOptions.Where(C => C.Option == "Fees").Select(C => C.Selected).FirstOrDefault())
@@ -243,7 +247,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Header
                 SelectedCopyItems.DataViews.AddRange(ChapterItems.DataViews);
             }
 
-            ImportedJSON = JsonConvert.SerializeObject(new Smartflow
+            ImportedJSON = JsonConvert.SerializeObject(new SmartflowV2
             {
                 CaseTypeGroup = TaskObject.CaseTypeGroup,
                 CaseType = TaskObject.CaseType,
@@ -258,7 +262,9 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Header
                 BackgroundColourName = SelectedCopyItems.BackgroundColourName,
                 BackgroundImage = SelectedCopyItems.BackgroundImage,
                 BackgroundImageName = SelectedCopyItems.BackgroundImageName,
-                Items = SelectedCopyItems.Items,
+                Agendas = SelectedCopyItems.Agendas,
+                Status = SelectedCopyItems.Status,
+                Documents = SelectedCopyItems.Documents,
                 Fees = SelectedCopyItems.Fees,
                 DataViews = SelectedCopyItems.DataViews
             });

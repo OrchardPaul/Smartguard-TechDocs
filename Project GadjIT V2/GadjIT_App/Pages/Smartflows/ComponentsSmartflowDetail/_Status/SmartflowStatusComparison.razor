@@ -41,7 +41,7 @@
 
                 <tr>
                     <td>
-                        @_Object.ChapterObject.Type Name:
+                        Status Name:
                     </td>
                     <td>
                         <input type="text" class="read-only" readonly value="@_Object.ChapterObject.Name" />
@@ -55,182 +55,36 @@
                 </tr>
 
 
-                @if (_Object.ChapterObject.Type != "Status")
-                {
-                    <tr>
-                        <td>
-                            Display Name:
-                        </td>
-                        <td>
-                            <input type="text" class="read-only" readonly value="@_Object.ChapterObject.AltDisplayName" />
-                        </td>
-                        <td>
-                            <input type="text" class="read-only" value="@_Object.AltObject.AltDisplayName" />
-                        </td>
-                        <td>
-                            <span class="fa fa-@(_Object.ComparisonList.Contains("AltDisplayName") ? "exclamation" : "check")"></span>
-                        </td>
-                    </tr>
-
-
-                    <tr>
-                        <td>
-                            Schedule As Name:
-                        </td>
-                        <td>
-                            <input type="text" class="read-only" value="@_Object.ChapterObject.AsName" />
-                        </td>
-                        <td>
-                            <input type="text" class="read-only" value="@_Object.AltObject.AsName" />
-                        </td>
-                        <td>
-                            <span class="fa fa-@(_Object.ComparisonList.Contains("AsName") ? "exclamation" : "check")"></span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Complete As Name
-                        </td>
-                        <td>
-                            <input type="text" class="read-only" value="@_Object.ChapterObject.CompleteName" />
-                        </td>
-                        <td>
-                            <input type="text" class="read-only" value="@_Object.AltObject.CompleteName" />
-                        </td>
-                        <td>
-                            <span class="fa fa-@(_Object.ComparisonList.Contains("CompleteName") ? "exclamation" : "check")"></span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Next Status
-                        </td>
-                        <td>
-                            <input type="text" class="read-only" value="@_Object.ChapterObject.NextStatus" />
-                        </td>
-                        <td>
-                            <input type="text" class="read-only" value="@_Object.AltObject.NextStatus" />
-                        </td>
-                        <td>
-                            <span class="fa fa-@(_Object.ComparisonList.Contains("NextStatus") ? "exclamation" : "check")"></span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Action
-                        </td>
-                        <td>
-                            <input type="text" class="read-only" value="@_Object.ChapterObject.Action" />
-                        </td>
-                        <td>
-                            <input type="text" class="read-only" value="@_Object.AltObject.Action" />
-                        </td>
-                        <td>
-                            <span class="fa fa-@(_Object.ComparisonList.Contains("Action") ? "exclamation" : "check")"></span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Reschedule Days
-                        </td>
-                        <td>
-                            @_Object.ChapterObject.RescheduleDays
-                        </td>
-                        <td>
-                            @_Object.AltObject.RescheduleDays
-                        </td>
-                        <td>
-                            <span class="fa fa-@(_Object.ComparisonList.Contains("RescheduleDays") ? "exclamation" : "check")"></span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Reschedule Data Item
-                        </td>
-                        <td>
-                            <input type="text" class="read-only" value="@_Object.ChapterObject.RescheduleDataItem" />
-                        </td>
-                        <td>
-                            <input type="text" class="read-only" value="@_Object.AltObject.RescheduleDataItem" />
-                        </td>
-                        <td>
-                            <span class="fa fa-@(_Object.ComparisonList.Contains("RescheduleDataItem") ? "exclamation" : "check")"></span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            User Message
-                        </td>
-                        <td>
-                            <input type="text" class="read-only" value="@_Object.ChapterObject.UserMessage" />
-                        </td>
-                        <td>
-                            <input type="text" class="read-only" value="@_Object.AltObject.UserMessage" />
-                        </td>
-                        <td>
-                            <span class="fa fa-@(_Object.ComparisonList.Contains("UserMessage") ? "exclamation" : "check")"></span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Popup Alert
-                        </td>
-                        <td>
-                            <input type="text" class="read-only" value="@_Object.ChapterObject.PopupAlert" />
-                        </td>
-                        <td>
-                            <input type="text" class="read-only" value="@_Object.AltObject.PopupAlert" />
-                        </td>
-                        <td>
-                            <span class="fa fa-@(_Object.ComparisonList.Contains("PopupAlert") ? "exclamation" : "check")"></span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Attachments
-                        </td>
-                        <td>
-                            <input type="text" class="read-only" value="@(_Object.ChapterObject.LinkedItems is null ? "0" : _Object.ChapterObject.LinkedItems.Count().ToString())" />
-                        </td>
-                        <td>
-                            <input type="text" class="read-only" value="@(_Object.AltObject.LinkedItems is null ? "0" : _Object.AltObject.LinkedItems.Count().ToString())" />
-                        </td>
-                        <td>
-                            <span class="fa fa-@(_Object.ComparisonList.Contains("LinkedItems") ? "exclamation" : "check")"></span>
-                        </td>
-                    </tr>
-                }
-                @if (_Object.ChapterObject.Type == "Status")
-                {
-                    <tr>
-                        <td>
-                            Milestone Status:
-                        </td>
-                        <td>
-                            <input type="text" class="read-only" value="@_Object.ChapterObject.MilestoneStatus" />
-                        </td>
-                        <td>
-                            <input type="text" class="read-only" value="@_Object.AltObject.MilestoneStatus" />
-                        </td>
-                        <td>
-                            <span class="fa fa-@(_Object.ComparisonList.Contains("MilestoneStatus") ? "exclamation" : "check")"></span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Suppress Step:
-                        </td>
-                        <td>
-                            <input type="text" class="read-only" value="@_Object.ChapterObject.SuppressStep" />
-                        </td>
-                        <td>
-                            <input type="text" class="read-only" value="@_Object.AltObject.SuppressStep" />
-                        </td>
-                        <td>
-                            <span class="fa fa-@(_Object.ComparisonList.Contains("SuppressStep") ? "exclamation" : "check")"></span>
-                        </td>
-                    </tr>
-                }
+            
+                <tr>
+                    <td>
+                        Milestone Status:
+                    </td>
+                    <td>
+                        <input type="text" class="read-only" value="@_Object.ChapterObject.MilestoneStatus" />
+                    </td>
+                    <td>
+                        <input type="text" class="read-only" value="@_Object.AltObject.MilestoneStatus" />
+                    </td>
+                    <td>
+                        <span class="fa fa-@(_Object.ComparisonList.Contains("MilestoneStatus") ? "exclamation" : "check")"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Suppress Step:
+                    </td>
+                    <td>
+                        <input type="text" class="read-only" value="@_Object.ChapterObject.SuppressStep" />
+                    </td>
+                    <td>
+                        <input type="text" class="read-only" value="@_Object.AltObject.SuppressStep" />
+                    </td>
+                    <td>
+                        <span class="fa fa-@(_Object.ComparisonList.Contains("SuppressStep") ? "exclamation" : "check")"></span>
+                    </td>
+                </tr>
+                
             </tbody>
             <tfoot>
                 <tr>
