@@ -14,8 +14,19 @@
       
         <div class="grid-actions">
             <div class="btn-group">
-                <button @onclick='ShowCreateSmartflowModal' class="btn btn-main btn-shadow" title="Add new Smartflow"><i class="fa fa-plus pr-1"></i><span>New</span></button>
+                @if (!CompareSystems)
+                {
+                    <button @onclick='ShowCreateSmartflowModal' class="btn btn-main btn-shadow" title="Add new Smartflow"><i class="fa fa-plus pr-1"></i><span>New</span></button>
+                }
             </div>
+            <div class="spacer"></div>
+            @if (UserSession.IsAdminUser)
+            {
+                <div class="btn-group sync-group invisible-sm-down">
+                    <input type="checkbox" class="ml-1 mt-1" @bind-value="SmartflowComparison"/><span class="ml-2 font-75">Compare to @UserSession.AltSystem </span>
+                </div>
+
+            }
         </div>
 
 
