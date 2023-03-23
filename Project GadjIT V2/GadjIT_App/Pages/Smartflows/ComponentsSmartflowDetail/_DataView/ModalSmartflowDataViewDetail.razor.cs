@@ -80,7 +80,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._DataView
             }
 
             _Selected_ClientSmartflowRecord.SmartflowData = JsonConvert.SerializeObject(_SelectedSmartflow);
-            var returnChapterObject =  ClientApiManagementService.Update(_Selected_ClientSmartflowRecord);
+            var returnSmartflowObject =  ClientApiManagementService.Update(_Selected_ClientSmartflowRecord);
 
             _CopyObject = new SmartflowDataView();
             FilterText = "";

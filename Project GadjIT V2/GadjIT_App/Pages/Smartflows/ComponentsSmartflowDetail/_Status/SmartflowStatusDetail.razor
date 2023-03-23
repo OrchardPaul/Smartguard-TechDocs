@@ -46,7 +46,7 @@
                 TItem="VmSmartflowStatus"
                 UseCustomImage="true"> 
 
-                <div class="row grid-row @(RowChanged == context.ChapterObject.SeqNo && !SeqMoving ? "row-changed" : "" )">
+                <div class="row grid-row @(RowChanged == context.SmartflowObject.SeqNo && !SeqMoving ? "row-changed" : "" )">
                     <div class="data-item">
                         @if (UserSession.IsAdminUser && _SmartflowLockedForEdit)
                         {
@@ -117,10 +117,10 @@
                             </div>
                         }
                         <div class="data-item-sub draggable">
-                            <span class="font-100"><span class="fa fa-battery-half mr-2"></span></span>@context.ChapterObject.Name
+                            <span class="font-100"><span class="fa fa-battery-half mr-2"></span></span>@context.SmartflowObject.Name
                         </div>
 
-                        @if (context.ChapterObject.SuppressStep == "Y")
+                        @if (context.SmartflowObject.SuppressStep == "Y")
                         {
                             <div class="data-item-right suppress-step">
                                 <ModalTooltip Direction="left" Text="This status will end the Smartflow." Class="w-3">
@@ -133,15 +133,15 @@
                         {
 
                             <div class="data-item-right seq-change">
-                                <div @onclick='() => MoveSeq(context.ChapterObject, "Up")' class="@(@context.ChapterObject.SeqNo == 1 ? "invisible" : "")"><span class="fa fa-angle-up"></span></div>
-                                <div class="seq-no">@context.ChapterObject.SeqNo</div>
-                                <div @onclick='() => MoveSeq(context.ChapterObject, "Down")' class="@(@context.ChapterObject.SeqNo == @_LstStatus.Count() ? "invisible" : "")"><span class="fa fa-angle-down"></span></div>
+                                <div @onclick='() => MoveSeq(context.SmartflowObject, "Up")' class="@(@context.SmartflowObject.SeqNo == 1 ? "invisible" : "")"><span class="fa fa-angle-up"></span></div>
+                                <div class="seq-no">@context.SmartflowObject.SeqNo</div>
+                                <div @onclick='() => MoveSeq(context.SmartflowObject, "Down")' class="@(@context.SmartflowObject.SeqNo == @_LstStatus.Count() ? "invisible" : "")"><span class="fa fa-angle-down"></span></div>
                             </div>
                         }
                         else
                         {
                             <div class="data-item-right seq-change">
-                                <div class="seq-no">@context.ChapterObject.SeqNo</div>
+                                <div class="seq-no">@context.SmartflowObject.SeqNo</div>
                             </div>
                         }
 
@@ -155,7 +155,7 @@
             {
                 @foreach (var status in LstAltSystemItems.Where(D => !D.Compared).ToList())
                 {
-                    <div class="row grid-row @(RowChanged == status.ChapterObject.SeqNo ? "row-changed" : "" )">
+                    <div class="row grid-row @(RowChanged == status.SmartflowObject.SeqNo ? "row-changed" : "" )">
                         <div class="data-item">
                             <div class="btn-ellipses float-left">
                                 <ModalTooltip Direction="right" Text=@("Exists on alternate system, Do you wish to delete?") Class="w-2">
@@ -165,10 +165,10 @@
 
 
                             <div class="data-item-sub">
-                                <span class="font-100"><span class="fa fa-battery-half mr-2"></span></span>@status.ChapterObject.Name
+                                <span class="font-100"><span class="fa fa-battery-half mr-2"></span></span>@status.SmartflowObject.Name
                             </div>
 
-                            @if (status.ChapterObject.SuppressStep == "Y")
+                            @if (status.SmartflowObject.SuppressStep == "Y")
                             {
                                 <div class="data-item-right suppress-step">
                                     <ModalTooltip Direction="left" Text="This status will end the Smartflow." Class="w-3">
@@ -178,7 +178,7 @@
                             }
 
                             <div class="data-item-right seq-change">
-                                <div class="seq-no">@status.ChapterObject.SeqNo</div>
+                                <div class="seq-no">@status.SmartflowObject.SeqNo</div>
                             </div>
 
                         </div>

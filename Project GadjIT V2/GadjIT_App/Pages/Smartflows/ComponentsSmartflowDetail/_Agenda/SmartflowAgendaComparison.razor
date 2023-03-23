@@ -1,4 +1,4 @@
-﻿@if (!(_Object.AltObject is null | _Object.ChapterObject is null))
+﻿@if (!(_Object.AltObject is null | _Object.SmartflowObject is null))
 {
     <div class="modal-body" tabindex="0">
         <table class="table-basic table-top-header table-left-header table-borderless">
@@ -31,7 +31,7 @@
                         Name:
                     </td>
                     <td>
-                        <input type="text" class="read-only" readonly value="@_Object.ChapterObject.Name" />
+                        <input type="text" class="read-only" readonly value="@_Object.SmartflowObject.Name" />
                     </td>
                     <td>
                         <input type="text" class="read-only" value="@_Object.AltObject.Name" />

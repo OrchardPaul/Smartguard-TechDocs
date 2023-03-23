@@ -1,10 +1,9 @@
 ﻿
-using GadjIT_App.Services.SessionState;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using GadjIT_ClientContext.Models.Smartflow;
+
 using GadjIT_AppContext.GadjIT_App;
 
 namespace GadjIT_App.Services.AppState

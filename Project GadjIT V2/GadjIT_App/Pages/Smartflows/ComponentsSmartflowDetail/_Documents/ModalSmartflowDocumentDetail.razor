@@ -101,7 +101,7 @@
                         <ValidationMessage For="@(() => _CopyObject.Name)" />
 
                     }
-                    
+
                 </div>
 
             }
@@ -186,8 +186,8 @@
                     <option value=""></option>
                     @foreach (var s in _ListOfStatus)
                     {
-                        <option value="@s.ChapterObject.Name">
-                            @s.ChapterObject.Name
+                        <option value="@s.SmartflowObject.Name">
+                            @s.SmartflowObject.Name
                         </option>
                     }
                 </InputSelect>
@@ -203,8 +203,8 @@
                         <option value=""></option>
                         @foreach (var a in _ListOfAgenda)
                         {
-                            <option value="@a.ChapterObject.Name">
-                                @a.ChapterObject.Name
+                            <option value="@a.SmartflowObject.Name">
+                                @a.SmartflowObject.Name
                             </option>
                         }
                     </InputSelect>

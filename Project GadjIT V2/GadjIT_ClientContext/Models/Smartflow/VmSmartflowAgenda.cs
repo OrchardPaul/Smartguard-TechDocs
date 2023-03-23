@@ -8,7 +8,7 @@ namespace GadjIT_ClientContext.Models.Smartflow
     public partial class VmSmartflowAgenda
     {
 
-        public SmartflowAgenda ChapterObject { get; set; }
+        public SmartflowAgenda SmartflowObject { get; set; }
 
         public SmartflowAgenda AltObject { get; set; }
 
@@ -27,12 +27,12 @@ namespace GadjIT_ClientContext.Models.Smartflow
 
         public bool IsChapterItemMatch(VmSmartflowAgenda vmCompItem)
         {
-            AltObject = vmCompItem.ChapterObject;
+            AltObject = vmCompItem.SmartflowObject;
             vmCompItem.Compared = true;
 
             ComparisonList = new List<string>();
             bool isSame = true;
-            SmartflowAgenda compItem = vmCompItem.ChapterObject;
+            SmartflowAgenda compItem = vmCompItem.SmartflowObject;
 
             
             

@@ -286,101 +286,78 @@ namespace GadjIT_App.Pages.Smartflows
         // }
         
     
-        public async Task ReSequenceSmartFlows(int seq)
-        {
-            RowChanged = seq;
-            await ReSequenceSmartFlows();
 
-            // ResetRowChangedDelayed();
-        }
+        // public async Task ReSequenceSmartFlows()
+        // {
+        //     try
+        //     {
+        //         if(LstSelected_VmClientSmartflowRecord.Select(C => C.ClientSmartflowRecord.SeqNo != LstSelected_VmClientSmartflowRecord.IndexOf(C) + 1).Count() > 0) //If any SeqNos are out of sequence
+        //         { 
+        //             SeqMoving = true;
 
-        public async Task ReSequenceSmartFlows()
-        {
-            try
-            {
-                if(LstSelected_VmClientSmartflowRecord.Select(C => C.ClientSmartflowRecord.SeqNo != LstSelected_VmClientSmartflowRecord.IndexOf(C) + 1).Count() > 0) //If any SeqNos are out of sequence
-                { 
-                    LstSelected_VmClientSmartflowRecord.Select(C => { C.ClientSmartflowRecord.SeqNo = LstSelected_VmClientSmartflowRecord.IndexOf(C) + 1; return C; }).ToList(); //update all SeqNo by setting to the Index (+1)
+        //             LstSelected_VmClientSmartflowRecord.Select(C => { C.ClientSmartflowRecord.SeqNo = LstSelected_VmClientSmartflowRecord.IndexOf(C) + 1; return C; }).ToList(); //update all SeqNo by setting to the Index (+1)
 
-                    foreach (var smartflowToChange in LstSelected_VmClientSmartflowRecord)
-                    {
-                        await ClientApiManagementService.UpdateMainItem(smartflowToChange.ClientSmartflowRecord).ConfigureAwait(false);
+        //             foreach (var smartflowToChange in LstSelected_VmClientSmartflowRecord)
+        //             {
+        //                 await ClientApiManagementService.UpdateMainItem(smartflowToChange.ClientSmartflowRecord);
 
-                    }
+        //             }
 
-                    await InvokeAsync(() =>
-                    {
-                        StateHasChanged();
-                    });
-                }
+                    
+        //         }
 
                 
-            }
-            catch
-            {
-                
-            }
+        //     }
+        //     catch(Exception e)
+        //     {
+        //         GenericErrorLog(true,e, "ReSequenceSmartFlows", $"Resequencing smartflows: {e.Message}");
+        //     }
+        //     finally
+        //     {
+        //         SeqMoving = false;
+        //     }
 
-        }
+        // }
 
-        protected async void MoveSmartFlowSeq(Client_SmartflowRecord selectobject, string listType, string direction)
-        {
-            await MoveSmartFlowSeqTask(selectobject, listType, direction);
-        }
+        
 
-        protected async Task MoveSmartFlowSeqTask(Client_SmartflowRecord selectobject, string listType, string direction)
-        {
-            try
-            {
-                SeqMoving = true; //prevents changes to the form whilst process of changing seq is carried out
+        // protected async Task MoveSmartFlowSeqTask(Client_SmartflowRecord _selectSmartflow, string _direction)
+        // {
+        //     try
+        //     {
+        //         var lstItems = new List<Client_VmSmartflowRecord>();
+        //         int incrementBy;
 
-                var lstItems = new List<Client_VmSmartflowRecord>();
-                int incrementBy;
+        //         incrementBy = (_direction.ToLower() == "up" ? -1 : 1);
 
-                incrementBy = (direction.ToLower() == "up" ? -1 : 1);
+        //         RowChanged = (int)(_selectSmartflow.SeqNo + incrementBy);
 
-                RowChanged = (int)(selectobject.SeqNo + incrementBy);
+        //         var swapItem = LstSelected_VmClientSmartflowRecord.Where(S => S.ClientSmartflowRecord.SeqNo == RowChanged).FirstOrDefault();
+        //         if (!(swapItem is null))
+        //         {
+        //             _selectSmartflow.SeqNo += incrementBy;
+        //             swapItem.ClientSmartflowRecord.SeqNo = RowChanged + (incrementBy * -1);
 
-                lstItems = LstSelected_VmClientSmartflowRecord
-                            .OrderBy(A => A.ClientSmartflowRecord.SeqNo)
-                            .ToList();
+        //             //re-index the list
+        //             LstSelected_VmClientSmartflowRecord = LstSelected_VmClientSmartflowRecord
+        //                                 .Where(C => C.ClientSmartflowRecord.CaseTypeGroup == SelectedCaseTypeGroup)
+        //                                 .Where(C => C.ClientSmartflowRecord.CaseType == SelectedCaseType)
+        //                                 .OrderBy(C => C.ClientSmartflowRecord.SeqNo)
+        //                                 .ToList();
 
-
-                var swapItem = lstItems.Where(D => D.ClientSmartflowRecord.SeqNo == (selectobject.SeqNo + incrementBy)).SingleOrDefault();
-                if (!(swapItem is null))
-                {
-                    selectobject.SeqNo += incrementBy;
-                    swapItem.ClientSmartflowRecord.SeqNo = swapItem.ClientSmartflowRecord.SeqNo + (incrementBy * -1);
-
-                    await ClientApiManagementService.UpdateMainItem(selectobject);
-                    await ClientApiManagementService.UpdateMainItem(swapItem.ClientSmartflowRecord);
-                }
-
-                await RefreshSelectedSmartflows();
-
-                
-                await InvokeAsync(() =>
-                {
-                    StateHasChanged();
-                });
-                
-                //ResetRowChangedDelayed();
+        //             await ClientApiManagementService.UpdateMainItem(_selectSmartflow);
+        //             await ClientApiManagementService.UpdateMainItem(swapItem.ClientSmartflowRecord);
+        //         }
                 
 
-            }
-            catch (Exception e)
-            {
-                GenericErrorLog(true,e, "MoveSmartFlowSeq", $"Moving smartflow: {e.Message}");
+        //     }
+        //     catch (Exception e)
+        //     {
+        //         GenericErrorLog(true,e, "MoveSmartFlowSeq", $"Moving smartflow: {e.Message}");
 
-            }
-            finally
-            {
-                SeqMoving = false;
-            }
-
-
-
-        }
+        //     }
+            
+        // }
 
 
         /// <summary>
@@ -448,14 +425,19 @@ namespace GadjIT_App.Pages.Smartflows
                 LstAll_VmClientSmartflowRecord = lstAppSmartflowRecords.Select(A => new Client_VmSmartflowRecord { ClientSmartflowRecord = Mapper.Map(A, new Client_SmartflowRecord()) }).ToList();
                 
 
-                LstSelected_VmClientSmartflowRecord = LstAll_VmClientSmartflowRecord
-                                        .Where(C => C.ClientSmartflowRecord.CaseTypeGroup == SelectedSmartflow.CaseTypeGroup)
-                                        .Where(C => C.ClientSmartflowRecord.CaseType == SelectedSmartflow.CaseType)
-                                        .OrderBy(C => C.ClientSmartflowRecord.SeqNo)
-                                        .ToList();
+                // LstSelected_VmClientSmartflowRecord = LstAll_VmClientSmartflowRecord
+                //                         .Where(C => C.ClientSmartflowRecord.CaseTypeGroup == SelectedCaseTypeGroup)
+                //                         .Where(C => C.ClientSmartflowRecord.CaseType == SelectedCaseType)
+                //                         .OrderBy(C => C.ClientSmartflowRecord.SeqNo)
+                //                         .ToList();
 
-                await ReSequenceSmartFlows(); //makes sure the sequence numbers are all sequential, corrects any issues
-                await RefreshSmartflowIssues();
+                // //await ReSequenceSmartFlows(); //makes sure the sequence numbers are all sequential, corrects any issues
+                // await RefreshSmartflowIssues();
+
+                // foreach(Client_VmSmartflowRecord vmSmartflow in LstSelected_VmClientSmartflowRecord)
+                // {
+                //     vmSmartflow.SetSmartflowStatistics();
+                // }
 
             }
             catch(Exception e)
@@ -479,84 +461,12 @@ namespace GadjIT_App.Pages.Smartflows
             
         }
 
-        private async Task RefreshSelectedSmartflows()
-        {
-                       
-            ListSmartflowIsLoaded = false;
+        
 
-            bool gotLock = CompanyDbAccess.Lock;
-            while (gotLock)
-            {
-                await Task.Yield();
-                gotLock = CompanyDbAccess.Lock;
-            }
+            
 
-            try
-            {
-                LstSelected_VmClientSmartflowRecord = LstAll_VmClientSmartflowRecord.Where(C => C.ClientSmartflowRecord.CaseType == SelectedSmartflow.CaseType)
-                                        .Where(C => C.ClientSmartflowRecord.CaseTypeGroup == SelectedSmartflow.CaseTypeGroup)
-                                        .OrderBy(C => C.ClientSmartflowRecord.SeqNo)
-                                        .ToList();
 
-                await ReSequenceSmartFlows(); //makes sure the sequence numbers are all sequential, corrects any issues
-                await RefreshSmartflowIssues();
-
-            }
-            catch(Exception e)
-            {
-                GenericErrorLog(true,e, "RefreshSmartflows", $"Refreshing Smartflow list: {e.Message}");
-            }
-
-            ListSmartflowIsLoaded = true;
-
-            // await InvokeAsync(() =>
-            // {
-            //     StateHasChanged();
-            // });
-        }
-
-        private async Task<bool> RefreshSmartflowIssues()
-        {
-            try
-            {
-                
-                if(!(LstSelected_VmClientSmartflowRecord is null) && LstSelected_VmClientSmartflowRecord.Count > 0)
-                {
-                    foreach (var smartflow in LstSelected_VmClientSmartflowRecord)
-                    {
-                        smartflow.ComparisonList.Clear();
-
-                        //check for duplicate Smartflow names
-                        var numDuplicates = LstSelected_VmClientSmartflowRecord
-                                            .Where(A => A.ClientSmartflowRecord.SmartflowName == smartflow.ClientSmartflowRecord.SmartflowName)
-                                            .Where(A => A.ClientSmartflowRecord.CaseType == smartflow.ClientSmartflowRecord.CaseType)
-                                            .Where(A => A.ClientSmartflowRecord.CaseTypeGroup == smartflow.ClientSmartflowRecord.CaseTypeGroup)
-                                            .Where(A => A.ClientSmartflowRecord.SeqNo < smartflow.ClientSmartflowRecord.SeqNo)
-                                            .Count();
-                                            
-                        if (numDuplicates > 0)
-                        {
-                            smartflow.ComparisonList.Add("Duplicate name");
-                            smartflow.ComparisonResult = "Duplicate name";
-                            smartflow.ComparisonIcon = "exclamation";
-                        }
-                            
-                            
-                        
-                    }
-                }
-                
-            }
-            catch(Exception e)
-            {
-                GenericErrorLog(true,e, "RefreshSmartflowIssues", $"Checking Smartflows for basic issues from current listing: {e.Message}");
-
-                return false;
-            }
-
-            return true;
-        }
-
+        
 
         public void SelectCaseTypeGroup(string caseTypeGroup)
         {
@@ -573,40 +483,37 @@ namespace GadjIT_App.Pages.Smartflows
             }
         }
 
-        public async Task SelectCaseType(string caseType)
-        {
-            try
-            {
-                SelectedSmartflow.CaseType = (SelectedSmartflow.CaseType == caseType) ? "" : caseType; 
+        // public async Task SelectCaseType(string caseType)
+        // {
+        //     try
+        //     {
+        //         SelectedSmartflow.CaseType = (SelectedSmartflow.CaseType == caseType) ? "" : caseType; 
                 
-                LstSelected_VmClientSmartflowRecord = LstAll_VmClientSmartflowRecord.Where(C => C.ClientSmartflowRecord.CaseType == SelectedSmartflow.CaseType)
-                                        .Where(C => C.ClientSmartflowRecord.CaseTypeGroup == SelectedSmartflow.CaseTypeGroup)
-                                        .OrderBy(C => C.ClientSmartflowRecord.SeqNo)
-                                        .ToList(); 
+        //         LstSelected_VmClientSmartflowRecord = LstAll_VmClientSmartflowRecord.Where(C => C.ClientSmartflowRecord.CaseType == SelectedSmartflow.CaseType)
+        //                                 .Where(C => C.ClientSmartflowRecord.CaseTypeGroup == SelectedSmartflow.CaseTypeGroup)
+        //                                 .OrderBy(C => C.ClientSmartflowRecord.SeqNo)
+        //                                 .ToList(); 
                 
 
-                SelectedSmartflow.Name = "";
+        //         SelectedSmartflow.Name = "";
 
-                if(LstSelected_VmClientSmartflowRecord.Count > 0)
-                {
-                    await ReSequenceSmartFlows();
+        //         if(LstSelected_VmClientSmartflowRecord.Count > 0)
+        //         {
+        //             //await ReSequenceSmartFlows();
                     
-                    if(SmartflowComparison)
-                    {
-                        CompareSelectedSmartflows();
-                    }
-                    else
-                    {
-                        await RefreshSmartflowIssues();
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                GenericErrorLog(false,e, "SelectCaseType", e.Message);
-            }
+        //             if(SmartflowComparison)
+        //             {
+        //                 CompareSelectedSmartflows();
+        //             }
+                    
+        //         }
+        //     }
+        //     catch (Exception e)
+        //     {
+        //         GenericErrorLog(false,e, "SelectCaseType", e.Message);
+        //     }
 
-        }
+        // }
 
 
         private async Task SelectSmartflowFromHome(Client_SmartflowRecord clientSmartflowRecord)
@@ -737,7 +644,6 @@ namespace GadjIT_App.Pages.Smartflows
         {
             try
             {
-
                 ScrollPosition = await JSRuntime.InvokeAsync<float>("getElementPosition");
 
                 SelectedCaseTypeGroup = caseTypeGroup;
@@ -1183,7 +1089,7 @@ namespace GadjIT_App.Pages.Smartflows
 
                 var intRecords = 0;
 
-                foreach(Client_VmSmartflowRecord vmClientSmartflowRecord in lst_VmClientSmartflowRecord)
+                foreach(Client_VmSmartflowRecord vmClientSmartflowRecord in lst_VmClientSmartflowRecord.OrderBy(S => S.ClientSmartflowRecord.SmartflowName))
                 {
                     try
                     {

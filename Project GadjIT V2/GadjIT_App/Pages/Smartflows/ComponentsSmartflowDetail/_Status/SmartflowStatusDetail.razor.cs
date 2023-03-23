@@ -69,7 +69,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Status
 
         public List<VmSmartflowStatus> LstAltSystemItems { get; set; } 
 
-        public VmSmartflowStatus EditObject = new VmSmartflowStatus { ChapterObject = new SmartflowStatus() };
+        public VmSmartflowStatus EditObject = new VmSmartflowStatus { SmartflowObject = new SmartflowStatus() };
 
         public bool SeqMoving {get; set;}
 
@@ -93,19 +93,19 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Status
             try
             {
                 
-                EditObject = new VmSmartflowStatus { ChapterObject = new SmartflowStatus() };
+                EditObject = new VmSmartflowStatus { SmartflowObject = new SmartflowStatus() };
                 
                 
                 if(_LstStatus != null && _LstStatus.Count > 0)
                 {
-                    EditObject.ChapterObject.SeqNo = _LstStatus
-                                                            .OrderByDescending(A => A.ChapterObject.SeqNo)
-                                                            .Select(A => A.ChapterObject.SeqNo)
+                    EditObject.SmartflowObject.SeqNo = _LstStatus
+                                                            .OrderByDescending(A => A.SmartflowObject.SeqNo)
+                                                            .Select(A => A.SmartflowObject.SeqNo)
                                                             .FirstOrDefault() + 1;
                 }
                 else
                 {
-                    EditObject.ChapterObject.SeqNo = 1;
+                    EditObject.SmartflowObject.SeqNo = 1;
                 }
                 
 
@@ -138,16 +138,16 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Status
                 
                 var copyObject = new SmartflowStatus
                 {
-                    Name = EditObject.ChapterObject.Name,
-                    SeqNo = EditObject.ChapterObject.SeqNo,
-                    SuppressStep = EditObject.ChapterObject.SuppressStep,
-                    MilestoneStatus = EditObject.ChapterObject.MilestoneStatus,
+                    Name = EditObject.SmartflowObject.Name,
+                    SeqNo = EditObject.SmartflowObject.SeqNo,
+                    SuppressStep = EditObject.SmartflowObject.SuppressStep,
+                    MilestoneStatus = EditObject.SmartflowObject.MilestoneStatus,
                 };
 
                 var parameters = new ModalParameters();
                 parameters.Add("_Option", _option);
                 parameters.Add("_SelectedSmartflow", _SelectedSmartflow);
-                parameters.Add("_TaskObject", EditObject.ChapterObject);
+                parameters.Add("_TaskObject", EditObject.SmartflowObject);
                 parameters.Add("_CopyObject", copyObject);
                 parameters.Add("_DataChanged", refreshSelectedList);
                 parameters.Add("_ListOfStatus", _LstStatus);
@@ -199,7 +199,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Status
         {
             EditObject = _selectedSmartflowItem;
 
-            string itemName = _selectedSmartflowItem.ChapterObject.Name;
+            string itemName = _selectedSmartflowItem.SmartflowObject.Name;
             
             Action SelectedDeleteAction = HandleDelete;
             var parameters = new ModalParameters();
@@ -217,7 +217,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Status
 
         private async void HandleDelete() 
         {
-            _SelectedSmartflow.Status.Remove(EditObject.ChapterObject);
+            _SelectedSmartflow.Status.Remove(EditObject.SmartflowObject);
 
             await ChapterItemsUpdated();
             
@@ -300,12 +300,12 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Status
 
                         var cItems = AltSmartflow.Status;
 
-                        LstAltSystemItems = cItems.Select(T => new VmSmartflowStatus { ChapterObject = T, Compared = false }).ToList();
+                        LstAltSystemItems = cItems.Select(T => new VmSmartflowStatus { SmartflowObject = T, Compared = false }).ToList();
                         
                         foreach (var item in _LstStatus)
                         {
                             var altObject = LstAltSystemItems
-                                        .Where(A => A.ChapterObject.Name == item.ChapterObject.Name)
+                                        .Where(A => A.SmartflowObject.Name == item.SmartflowObject.Name)
                                         .FirstOrDefault();
 
                             if (altObject is null)
@@ -453,9 +453,9 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Status
                 
                 Action SelectedDeleteAction = HandleAltDelete;
                 var parameters = new ModalParameters();
-                parameters.Add("_ItemName", _selectedItem.ChapterObject.Name);
+                parameters.Add("_ItemName", _selectedItem.SmartflowObject.Name);
                 parameters.Add("_DeleteAction", SelectedDeleteAction);
-                parameters.Add("_InfoText", $"Are you sure you wish to delete the '{_selectedItem.ChapterObject.Name}' item from {UserSession.AltSystem} system?");
+                parameters.Add("_InfoText", $"Are you sure you wish to delete the '{_selectedItem.SmartflowObject.Name}' item from {UserSession.AltSystem} system?");
 
                 var options = new ModalOptions()
                 {
@@ -480,7 +480,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Status
         {
             await UserSession.SwitchSelectedSystem();
 
-            AltSmartflow.Status.Remove(EditObject.ChapterObject);
+            AltSmartflow.Status.Remove(EditObject.SmartflowObject);
             LstAltSystemItems.Remove(EditObject);
 
             Alt_AppSmartflowRecord.SmartflowData = JsonConvert.SerializeObject(AltSmartflow);
@@ -530,11 +530,11 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Status
                 RowChanged = (int)(_selectobject.SeqNo + incrementBy);
 
                 
-                var swapItem = _LstStatus.Where(D => D.ChapterObject.SeqNo == (_selectobject.SeqNo + incrementBy)).SingleOrDefault();
+                var swapItem = _LstStatus.Where(D => D.SmartflowObject.SeqNo == (_selectobject.SeqNo + incrementBy)).SingleOrDefault();
                 if (!(swapItem is null))
                 {
                     _selectobject.SeqNo += incrementBy;
-                    swapItem.ChapterObject.SeqNo = swapItem.ChapterObject.SeqNo + (incrementBy * -1);
+                    swapItem.SmartflowObject.SeqNo = swapItem.SmartflowObject.SeqNo + (incrementBy * -1);
 
                 }
 
@@ -558,7 +558,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Status
         {
             RowChanged = _seq;
 
-            _LstStatus.Select(C => { C.ChapterObject.SeqNo = _LstStatus.IndexOf(C) + 1; return C; }).ToList();
+            _LstStatus.Select(C => { C.SmartflowObject.SeqNo = _LstStatus.IndexOf(C) + 1; return C; }).ToList();
 
             await ChapterItemsUpdated();
         }

@@ -1,4 +1,4 @@
-﻿@if (!(_Object.AltObject is null | _Object.ChapterObject is null))
+﻿@if (!(_Object.AltObject is null | _Object.SmartflowObject is null))
 {
     <div class="modal-body" tabindex="0">
         <table class="table-basic table-top-header table-left-header table-borderless">
@@ -29,7 +29,7 @@
                         Seq Number
                     </td>
                     <td>
-                        @_Object.ChapterObject.SeqNo
+                        @_Object.SmartflowObject.SeqNo
                     </td>
                     <td>
                         @_Object.AltObject.SeqNo
@@ -44,7 +44,7 @@
                         Status Name:
                     </td>
                     <td>
-                        <input type="text" class="read-only" readonly value="@_Object.ChapterObject.Name" />
+                        <input type="text" class="read-only" readonly value="@_Object.SmartflowObject.Name" />
                     </td>
                     <td>
                         <input type="text" class="read-only" value="@_Object.AltObject.Name" />
@@ -61,7 +61,7 @@
                         Milestone Status:
                     </td>
                     <td>
-                        <input type="text" class="read-only" value="@_Object.ChapterObject.MilestoneStatus" />
+                        <input type="text" class="read-only" value="@_Object.SmartflowObject.MilestoneStatus" />
                     </td>
                     <td>
                         <input type="text" class="read-only" value="@_Object.AltObject.MilestoneStatus" />
@@ -75,7 +75,7 @@
                         Suppress Step:
                     </td>
                     <td>
-                        <input type="text" class="read-only" value="@_Object.ChapterObject.SuppressStep" />
+                        <input type="text" class="read-only" value="@_Object.SmartflowObject.SuppressStep" />
                     </td>
                     <td>
                         <input type="text" class="read-only" value="@_Object.AltObject.SuppressStep" />

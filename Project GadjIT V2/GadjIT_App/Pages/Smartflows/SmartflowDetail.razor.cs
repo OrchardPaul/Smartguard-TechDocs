@@ -83,9 +83,7 @@ namespace GadjIT_App.Pages.Smartflows
 
         public String UserGuideURL => Configuration["AppSettings:UserGuideURL"];
         
-        public LinkedDocument AttachObject = new LinkedDocument();
-
-
+        
         public SmartflowV2 SelectedSmartflow { get; set; } = new SmartflowV2(); //SmartflowData
 
         int RowChanged { get; set; } = 0; //moved partial
@@ -219,12 +217,12 @@ namespace GadjIT_App.Pages.Smartflows
         {
             if(!Disposed && _Selected_VmClientSmartflowRecord.ClientSmartflowRecord != null && UserSession.User != null)
             {
-                bool isLocked = AppSmartflowsState.IsSmartflowLockedByUser(
+                bool isLocked = AppSmartflowsState.IsSmartflowLockedByOtherUser(
                                                 UserSession.User
                                                 , _Selected_VmClientSmartflowRecord.ClientSmartflowRecord.Id
                                             );
                     
-                if(!isLocked)
+                if(isLocked)
                 {
                     bool dataChanged = false;
 
@@ -399,7 +397,8 @@ namespace GadjIT_App.Pages.Smartflows
 
                 try
                 {
-                    LibraryDocumentsAndSteps = await ClientApiManagementService.GetDocumentList(SelectedSmartflow.CaseType);
+                    await RefreshLibraryDocumentsAndSteps();
+                    
                     //LibraryDocumentsAndSteps = LibraryDocumentsAndSteps.Where(D => !(D.Name is null)).ToList();
                     TableDates = await ClientApiManagementService.GetDatabaseTableDateFields();
                     ListP4WViews = await PartnerAccessService.GetPartnerViews();
@@ -454,6 +453,21 @@ namespace GadjIT_App.Pages.Smartflows
 
         }
 
+        private async Task RefreshLibraryDocumentsAndSteps()
+        {
+            try
+            {
+                LibraryDocumentsAndSteps = await ClientApiManagementService.GetDocumentList(SelectedSmartflow.CaseType);
+            }
+            catch (Exception ex)
+            {
+
+                GenericErrorLog(true,ex, "RefreshLibraryDocumentsAndSteps", $"Refreshing LibraryDocumentsAndSteps: {ex.Message}");
+
+            }
+        }
+        
+
 
         private async Task SmartflowUpdated(SmartflowV2 _selectedSmartflow)
         {
@@ -486,8 +500,8 @@ namespace GadjIT_App.Pages.Smartflows
                 if (listType == "Agenda" | listType == "All")
                 {
                     LstAgendas = SelectedSmartflow.Agendas
-                                        .Select(L => new VmSmartflowAgenda { ChapterObject = L })
-                                        .OrderBy(L => L.ChapterObject.Name)
+                                        .Select(L => new VmSmartflowAgenda { SmartflowObject = L })
+                                        .OrderBy(L => L.SmartflowObject.Name)
                                         .ToList();
 
                 }
@@ -496,19 +510,19 @@ namespace GadjIT_App.Pages.Smartflows
 
                     Dictionary<int?, string> docTypes = new Dictionary<int?, string> { { 1, "Doc" }, { 4, "Form" }, { 6, "Step" }, { 8, "Date" }, { 9, "Email" }, { 11, "Doc" }, { 12, "Email" }, { 13, "Csv" } };
                     LstDocs = SelectedSmartflow.Documents
-                                        .Select(L => new VmSmartflowDocument{ ChapterObject = L })
-                                        .OrderBy(L => L.ChapterObject.SeqNo)
+                                        .Select(L => new VmSmartflowDocument{ SmartflowObject = L })
+                                        .OrderBy(L => L.SmartflowObject.SeqNo)
                                         .Select(A => {
                                         //Make sure all Items have the DocType set by comparing against dm_documents for matches
-                                        A.DocType = LibraryDocumentsAndSteps.Where(D => D.Name.ToUpper() == A.ChapterObject.Name.ToUpper())
+                                        A.DocType = LibraryDocumentsAndSteps.Where(D => D.Name.ToUpper() == A.SmartflowObject.Name.ToUpper())
                                                                                     .Select(D => docTypes.ContainsKey(D.DocumentType) ? docTypes[D.DocumentType] : "Doc")
                                                                                     .FirstOrDefault();
-                                            A.ChapterObject.RescheduleDays = !string.IsNullOrEmpty(A.ChapterObject.AsName) && A.ChapterObject.RescheduleDays is null ? 0 : A.ChapterObject.RescheduleDays;
-                                            A.ChapterObject.Action = (A.ChapterObject.Action == "" ? "INSERT" : A.ChapterObject.Action);
+                                            A.SmartflowObject.RescheduleDays = !string.IsNullOrEmpty(A.SmartflowObject.AsName) && A.SmartflowObject.RescheduleDays is null ? 0 : A.SmartflowObject.RescheduleDays;
+                                            A.SmartflowObject.Action = (A.SmartflowObject.Action == "" ? "INSERT" : A.SmartflowObject.Action);
                                         //Make sure all Linked Items have the DocType set by comparing against dm_documents for matches
-                                        A.ChapterObject.LinkedItems = A.ChapterObject.LinkedItems == null
+                                        A.SmartflowObject.LinkedItems = A.SmartflowObject.LinkedItems == null
                                                                                     ? null
-                                                                                    : A.ChapterObject.LinkedItems
+                                                                                    : A.SmartflowObject.LinkedItems
                                                                                                     .Select(LI => {
                                                                                                         LI.DocType = LibraryDocumentsAndSteps
                                                                                                                 .Where(D => D.Name.ToUpper() == LI.DocName.ToUpper())
@@ -521,9 +535,9 @@ namespace GadjIT_App.Pages.Smartflows
                                         })
                                         .ToList();
 
-                    if(LstDocs.Where(C => C.ChapterObject.SeqNo != LstDocs.IndexOf(C) + 1).Count() > 0) //If any SeqNos are out of sequence
+                    if(LstDocs.Where(C => C.SmartflowObject.SeqNo != LstDocs.IndexOf(C) + 1).Count() > 0) //If any SeqNos are out of sequence
                     { 
-                        LstDocs.Select(C => { C.ChapterObject.SeqNo = LstDocs.IndexOf(C) + 1; return C; }).ToList();
+                        LstDocs.Select(C => { C.SmartflowObject.SeqNo = LstDocs.IndexOf(C) + 1; return C; }).ToList();
                     }
 
 
@@ -545,13 +559,13 @@ namespace GadjIT_App.Pages.Smartflows
                 if (listType == "Status" | listType == "All")
                 {
                     LstStatus = SelectedSmartflow.Status
-                                        .Select(L => new VmSmartflowStatus { ChapterObject = L })
-                                        .OrderBy(L => L.ChapterObject.SeqNo)
+                                        .Select(L => new VmSmartflowStatus { SmartflowObject = L })
+                                        .OrderBy(L => L.SmartflowObject.SeqNo)
                                         .ToList();
                     
-                    if(LstStatus.Where(C => C.ChapterObject.SeqNo != LstStatus.IndexOf(C) + 1).Count() > 0) //If any SeqNos are out of sequence
+                    if(LstStatus.Where(C => C.SmartflowObject.SeqNo != LstStatus.IndexOf(C) + 1).Count() > 0) //If any SeqNos are out of sequence
                     { 
-                        LstStatus.Select(C => { C.ChapterObject.SeqNo = LstStatus.IndexOf(C) + 1; return C; }).ToList();
+                        LstStatus.Select(C => { C.SmartflowObject.SeqNo = LstStatus.IndexOf(C) + 1; return C; }).ToList();
                     }
                 }
                 if (listType == "DataViews" | listType == "All")

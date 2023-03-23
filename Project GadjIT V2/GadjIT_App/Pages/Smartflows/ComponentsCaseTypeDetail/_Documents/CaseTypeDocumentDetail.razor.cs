@@ -136,12 +136,14 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsCaseTypeDetail._Documents
                             }
                         }
                                         
-                        // Order the list
-                        LstDocs = LstDocs
-                                .OrderBy(D => D.SmartflowName)
-                                .OrderBy(D => D.IsAttachment ? 1 : 0)
-                                .ToList();
+                        
                     }
+
+                    // Order the list
+                    LstDocs = LstDocs
+                            .OrderBy(D => D.IsAttachment ? 1 : 0)
+                            .OrderBy(D => D.SmartflowName)
+                            .ToList();
 
                     
                 }

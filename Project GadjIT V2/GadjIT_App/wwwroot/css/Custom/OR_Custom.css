@@ -244,25 +244,108 @@ app {
     }
 }
 
+/*--------------------------------------------------*/
+/*  PAGE ERROR HANDLING                             */
+/*--------------------------------------------------*/
+
 #blazor-error-ui {
-    background: none;
+    background: #000;
     bottom: 0;
     box-shadow: none;
     display: none;
     left: 0;
-    padding: 0.6rem 1.25rem 0.7rem 1.25rem;
+    padding: 0.6rem 1.25rem 2rem 1.25rem;
     position: fixed;
     width: 100%;
     z-index: 99999;
-    font-size: 0.7rem;
-    color: #aaa;
+    color: #000;
+    align-content: center;
+    align-items: center;
 }
 
-#blazor-error-ui span {
+
+#blazor-error-ui>div {
+    padding: 20px;
+    background: #000;
+    color: #fff;
+    border-radius: 0px;
+    box-shadow: 0 8px 12px 0 rgba(0,0,0,0.5);
+    width: 300px;
+    height: 150px;
+    margin-left: auto;
+    margin-right: auto;
+}
+#blazor-error-ui>div>div {
+    padding: 15px 25px 15px 0px;
+    font-size: 0.9rem;
+
+}
+
+#blazor-error-ui a.dismiss {
+    position: relative !important;
+    top: -80px !important;
+    right: -125px !important;
+    color: #fff;
+    font-size: 20px;
+}
+
+
+
+.my-reconnect-modal > div{
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 999990;
+    overflow: hidden;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(0,0,0,0.5);
+    text-align: center;
+    font-weight: bold;
+}
+
+.my-reconnect-modal > div > div{
+    height: 200px;
+    position: absolute;
+    bottom: 0;
+    margin-top: auto;
+    width: 100%;
+    background: #000;
+    color: #fff;
     
-    margin-left: 250px;
-
 }
+
+.my-reconnect-modal > div > div > div:first-of-type{
+    font-weight: normal;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 20px;
+}
+
+.components-reconnect-hide > div{    display: none;}
+
+.components-reconnect-show > div{    display: none;}
+.components-reconnect-show > .show{    display: block;}
+.components-reconnect-show > .show .spinner{    
+    color: #fff !important;
+    width: 50px !important;
+    height: 50px !important;
+    background-color: #fff !important;
+    position: absolute !important;
+    top: 30px !important;
+    left: calc(50% - 25px);
+}
+
+.components-reconnect-failed > div{    display: none;}
+.components-reconnect-failed > .failed{    display: block;}
+
+.components-reconnect-rejected >div{   display: none;}
+.components-reconnect-rejected > .rejected{    display: block;}
+
+/*--------------------------------------------------*/
 
 .localhost {
     border: 3pt dotted purple;
@@ -1229,6 +1312,28 @@ app {
     display: flex;
     justify-content: center !important;
     align-items: center;
+}
+
+@media(max-width: 1199px){
+    .grid-casetype-smartflows .row .data-item:nth-of-type(1) {
+        width: 80%;
+    }
+    
+    .grid-casetype-smartflows .row .data-item:nth-of-type(2) {
+        width: 0%;
+        position: absolute;
+        top: -3000px;
+    }
+    
+    .grid-casetype-smartflows .row .data-item:nth-of-type(3) {
+        width: 0%;
+        position: absolute;
+        top: -3000px;
+    }
+    
+    .grid-casetype-smartflows .row .data-item:nth-of-type(4) {
+        width: 20%;
+    }
 }
 
 

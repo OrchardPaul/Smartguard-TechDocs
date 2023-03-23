@@ -8,7 +8,7 @@ namespace GadjIT_ClientContext.Models.Smartflow
     public partial class VmSmartflowDocument
     {
 
-        public SmartflowDocument ChapterObject { get; set; }
+        public SmartflowDocument SmartflowObject { get; set; }
 
         public SmartflowDocument AltObject { get; set; }
 
@@ -27,13 +27,13 @@ namespace GadjIT_ClientContext.Models.Smartflow
         {
             get
             {
-                if (string.IsNullOrEmpty(ChapterObject.AltDisplayName))
+                if (string.IsNullOrEmpty(SmartflowObject.AltDisplayName))
                 {
-                    return ChapterObject.Name;
+                    return SmartflowObject.Name;
                 }
                 else
                 {
-                    return ChapterObject.AltDisplayName;
+                    return SmartflowObject.AltDisplayName;
                 }
             }
         }
@@ -42,13 +42,13 @@ namespace GadjIT_ClientContext.Models.Smartflow
         {
             get
             {
-                if (string.IsNullOrEmpty(ChapterObject.AltDisplayName))
+                if (string.IsNullOrEmpty(SmartflowObject.AltDisplayName))
                 {
                     return "";
                 }
                 else
                 {
-                    return ChapterObject.Name;
+                    return SmartflowObject.Name;
                 }
             }
         }
@@ -57,90 +57,90 @@ namespace GadjIT_ClientContext.Models.Smartflow
 
         public bool IsChapterItemMatch(VmSmartflowDocument vmCompItem)
         {
-            AltObject = vmCompItem.ChapterObject;
+            AltObject = vmCompItem.SmartflowObject;
             vmCompItem.Compared = true;
 
             ComparisonList = new List<string>();
             bool isSame = true;
-            SmartflowDocument compItem = vmCompItem.ChapterObject;
+            SmartflowDocument compItem = vmCompItem.SmartflowObject;
 
-            if ((ChapterObject.SeqNo ?? 0) != (compItem.SeqNo ?? 0))
+            if ((SmartflowObject.SeqNo ?? 0) != (compItem.SeqNo ?? 0))
             {
                 isSame = false;
                 ComparisonList.Add("SeqNo");
             }
 
-            if ((ChapterObject.AsName ?? "") != (compItem.AsName ?? ""))
+            if ((SmartflowObject.AsName ?? "") != (compItem.AsName ?? ""))
             {
                 isSame = false;
                 ComparisonList.Add("AsName");
             }
 
-            if ((ChapterObject.RescheduleDays ?? 0) != (compItem.RescheduleDays ?? 0))
+            if ((SmartflowObject.RescheduleDays ?? 0) != (compItem.RescheduleDays ?? 0))
             {
                 isSame = false;
                 ComparisonList.Add("RescheduleDays");
             }
 
-            if ((ChapterObject.RescheduleDataItem ?? "") != (compItem.RescheduleDataItem ?? ""))
+            if ((SmartflowObject.RescheduleDataItem ?? "") != (compItem.RescheduleDataItem ?? ""))
             {
                 isSame = false;
                 ComparisonList.Add("RescheduleDataItem");
             }
 
-            if ((ChapterObject.CompleteName ?? "") != (compItem.CompleteName ?? ""))
+            if ((SmartflowObject.CompleteName ?? "") != (compItem.CompleteName ?? ""))
             {
                 isSame = false;
                 ComparisonList.Add("CompleteName");
             }
 
-            if ((ChapterObject.EntityType ?? "") != (compItem.EntityType ?? ""))
+            if ((SmartflowObject.EntityType ?? "") != (compItem.EntityType ?? ""))
             {
                 isSame = false;
                 ComparisonList.Add("EntityType");
             }
 
-            if ((ChapterObject.AltDisplayName ?? "") != (compItem.AltDisplayName ?? ""))
+            if ((SmartflowObject.AltDisplayName ?? "") != (compItem.AltDisplayName ?? ""))
             {
                 isSame = false;
                 ComparisonList.Add("AltDisplayName");
             }
 
-            if ((ChapterObject.UserMessage ?? "") != (compItem.UserMessage ?? ""))
+            if ((SmartflowObject.UserMessage ?? "") != (compItem.UserMessage ?? ""))
             {
                 isSame = false;
                 ComparisonList.Add("UserMessage");
             }
 
-            if ((ChapterObject.PopupAlert ?? "") != (compItem.PopupAlert ?? ""))
+            if ((SmartflowObject.PopupAlert ?? "") != (compItem.PopupAlert ?? ""))
             {
                 isSame = false;
                 ComparisonList.Add("PopupAlert");
             }
 
-            if ((ChapterObject.NextStatus ?? "") != (compItem.NextStatus ?? ""))
+            if ((SmartflowObject.NextStatus ?? "") != (compItem.NextStatus ?? ""))
             {
                 isSame = false;
                 ComparisonList.Add("NextStatus");
             }
 
-            if ((ChapterObject.Action ?? "") != (compItem.Action ?? ""))
+            if ((SmartflowObject.Action ?? "") != (compItem.Action ?? ""))
             {
                 isSame = false;
                 ComparisonList.Add("Action");
             }
 
            
-            if(!(ChapterObject.LinkedItems is null) && !(compItem.LinkedItems is null))
+            if(!(SmartflowObject.LinkedItems is null) && !(compItem.LinkedItems is null))
             {
-                if(!(ChapterObject.LinkedItems is null))
+                if(!(SmartflowObject.LinkedItems is null))
                 {
                     if(!(compItem.LinkedItems is null))
                     {
-                        if (ChapterObject.LinkedItems.Count == compItem.LinkedItems.Count)
+                        if (SmartflowObject.LinkedItems.Count == compItem.LinkedItems.Count)
                         {
                             
-                            foreach (var doc in ChapterObject.LinkedItems)
+                            foreach (var doc in SmartflowObject.LinkedItems)
                             {
                                 var compDoc = compItem.LinkedItems.Where(F => F.DocName == doc.DocName).FirstOrDefault();
 

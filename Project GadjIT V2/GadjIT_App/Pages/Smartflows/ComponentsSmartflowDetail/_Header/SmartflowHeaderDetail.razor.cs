@@ -54,6 +54,9 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Header
         public EventCallback<bool> _UpdatePreviewImage {get; set;}
 
         [Parameter]
+        public EventCallback _RefreshLibraryDocumentsAndSteps {get; set;}
+
+        [Parameter]
         public bool _SmartflowLockedForEdit {get; set;}
         
 
@@ -357,6 +360,10 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Header
         /// <returns></returns>
         private async void CreateStep()
         {
+            await CreateStepTask();
+        }
+        private async Task CreateStepTask()
+        {
             try
             {
                 SmartflowP4WStepSchema SmartflowP4WStep;
@@ -438,7 +445,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Header
 
                 if (creationSuccess)
                 {
-                    _LibraryDocumentsAndSteps = await ClientApiManagementService.GetDocumentList(_SelectedSmartflow.CaseType);
+                    await _RefreshLibraryDocumentsAndSteps.InvokeAsync();
                     
                     _SelectedSmartflow.SelectedStep = _SelectedSmartflow.StepName;
 
@@ -453,7 +460,10 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Header
 
                     await ClientApiManagementService.Update(_Selected_ClientSmartflowRecord);
 
-                    StateHasChanged();
+                    await InvokeAsync(() =>
+                    {
+                        StateHasChanged();
+                    });
                 }
             }
             catch (Exception e)

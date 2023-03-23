@@ -17,7 +17,7 @@ else
     {
         <div class="tran-block page-header-block ">
             <div class="page-header-title">
-                <div>
+                <div tabindex="1">
                     <h3>Smartflow</h3>
                     <p class="hidden-md-down">Create and maintain Smartflows for all case types. <em>Note: please make sure you are pointing to the appropriate system.</em></p>
                 </div>  
@@ -36,6 +36,7 @@ else
                     <div class="grid-actions">
                         <div class="btn-group">
                             <button @onclick='PrepareSmartflowForInsert' class="btn btn-main btn-shadow" title="Add new Smartflow"><i class="fa fa-plus pr-1"></i><span>New</span></button>
+                            
                             @if (!(string.IsNullOrEmpty(SelectedSmartflow.CaseType)))
                             {
                                 @* @if (!(SequenceIsValid("Chapters")))
@@ -53,13 +54,13 @@ else
                         }
 
                         <div class="spacer"></div>
-                        @if (UserSession.IsAdminUser)
+                        @* @if (UserSession.IsAdminUser)
                         {
                             <div class="btn-group sync-group invisible-sm-down">
                                 <input type="checkbox" class="ml-1 mt-1" @bind-value="SmartflowComparison"/><span class="ml-2 font-75">Compare to @UserSession.AltSystem </span>
                             </div>
 
-                        }
+                        } *@
                     </div>
 
                 }
@@ -76,8 +77,8 @@ else
                                                   .ToList())
                         {
 
-                            <div class="grid-row-lg mt-3 nav-row-1">
-                                <div class="data-item" title="Group: click to see case types assigned to @caseTypeGroup">
+                            <div class="grid-row-lg mt-3 nav-row-1" tabindex="-1" >
+                                <div class="data-item" tabindex="-1" title="Group: click to see case types assigned to @caseTypeGroup">
                                     @if (UserSession.IsAdminUser)
                                     {
                                         <div class="btn-ellipses float-left">
@@ -94,9 +95,9 @@ else
                                         </div>
                                     }
 
-                                    <div class="data-item-nav" @onclick='() => SelectCaseTypeGroup(caseTypeGroup)'>
+                                    <div class="data-item-nav" tabindex="-1" @onclick='() => SelectCaseTypeGroup(caseTypeGroup)'>
                                         <div class="data-item-sub" tabindex="-1"><span class="fa fa-boxes mr-2"></span>@caseTypeGroup</div>
-                                        <div class="data-item-right col-alt" tabindex="-1"><div class="link-direction @(caseTypeGroup == SelectedSmartflow.CaseTypeGroup ? "triangle-up " : "triangle-down")"></div></div>
+                                        <div class="data-item-right col-alt" tabindex="-1"><div tabindex="-1" class="link-direction @(caseTypeGroup == SelectedSmartflow.CaseTypeGroup ? "triangle-up " : "triangle-down")"></div></div>
                                     </div>
                                 </div>
 
@@ -146,36 +147,23 @@ else
                                                     </div>
                                                 </div>
                                             }
-                                            <div class="data-item-nav " tabindex="-1" @onclick='() => SelectCaseType(caseType)'>
-                                                @if (caseType == SelectedSmartflow.CaseType)
-                                                {
-                                                    <div class="data-item-sub" tabindex="-1">
-                                                        <span class="fa fa-folder-open mr-2"></span>@caseType
-                                                    </div>
-                                                }
-                                                else
-                                                {
-                                                    <div class="data-item-sub" tabindex="-1">
-                                                        <span class="fa fa-folder mr-2"></span>@caseType
-                                                    </div>
-                                                }
-
-
-                                                <div class="data-item-right col-alt " tabindex="-1"><div tabindex="-1" class="link-direction @(caseType == SelectedSmartflow.CaseType ? "triangle-up " : "triangle-down")"></div></div>
-
+                                            <div class="data-item " tabindex="-1" >
                                                 
-                                            </div>
-                                            @if (UserSession.IsAdminUser)
-                                            {
-                                                <div title="Click to edit " tabindex="-1" class="data-item-right link-direction invisible-lg-down" @onclick="() =>  ShowCaseTypeDetail(caseTypeGroup,caseType)">
-                                                    <div class="fa fa-pencil-alt"></div>
+                                                <div class="data-item-sub" tabindex="-1">
+                                                    <span class="fa fa-folder mr-2"></span>@caseType
                                                 </div>
-                                            }
+                                                                                                
+                                            </div>
+                                            
+                                            <div title="Click to edit " tabindex="-1" class="data-item-right link-direction" @onclick="() =>  ShowCaseTypeDetail(caseTypeGroup,caseType)">
+                                                <div class="fa fa-pencil-alt"></div>
+                                            </div>
+                                            
                                         </div>
                                     
 
                                     </div>
-                                    @if (caseType == SelectedSmartflow.CaseType)
+                                    @* @if (caseType == SelectedSmartflow.CaseType)
                                     {
 
 
@@ -283,7 +271,7 @@ else
 
                                         </div>
 
-                                    }
+                                    } *@
 
                                 }
                             }
@@ -295,7 +283,7 @@ else
     }
 }
 
-@if (SelectedCaseType != "")
+@if (SelectedCaseType != "" && ListSmartflowIsLoaded)
 {
 
     <CaseTypeDetail
@@ -317,7 +305,7 @@ else
         _SelectHome=SelectHome
     ></SmartflowDetail>
 
-}
+} 
 
 <div id="exp"></div>
 

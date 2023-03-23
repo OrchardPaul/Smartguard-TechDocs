@@ -39,7 +39,7 @@
 
         <div class="@((UserSession.IsAdminUser && _SmartflowLockedForEdit) ? "grid-can-edit" : "") ">
 
-            @foreach (var agenda in _LstAgendas.OrderBy(A => A.ChapterObject.Name))
+            @foreach (var agenda in _LstAgendas.OrderBy(A => A.SmartflowObject.Name))
             {
 
                 <div class="row grid-row">
@@ -115,7 +115,7 @@
                             </div>
                         }
                         <div class="data-item-sub ">
-                            <span class="font-100"><span class="fa fa-folder-open mr-2"></span></span>@agenda.ChapterObject.Name
+                            <span class="font-100"><span class="fa fa-folder-open mr-2"></span></span>@agenda.SmartflowObject.Name
                         </div>
                     </div>
 
@@ -141,7 +141,7 @@
 
 
                             <div class="data-item-sub">
-                                <span class="font-100"><span class="fa fa-folder-open mr-2"></span></span>@agenda.ChapterObject.Name
+                                <span class="font-100"><span class="fa fa-folder-open mr-2"></span></span>@agenda.SmartflowObject.Name
                             </div>
                         </div>
 

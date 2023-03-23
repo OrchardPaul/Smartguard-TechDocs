@@ -79,7 +79,8 @@ namespace GadjIT_App
             services.AddScoped<IMappingSessionState, MappingSessionState>();
             services.AddScoped<IPageAuthorisationState, PageAuthorisationState>();
             services.AddScoped<IUserManagementSelectedUserState, UserManagementSelectedUserState>();
-            services.AddScoped<IChapterState, ChapterState>();
+            services.AddSingleton<IAppSmartflowsState, AppSmartflowsStateList>();
+            //services.AddScoped<ISmartflowState, SmartflowState>();
             services.AddBlazoredModal();
             services.AddScoped<IFileHelper, FileHelper>();
             services.AddScoped<IPDFHelper, PDFHelper>();
@@ -90,7 +91,6 @@ namespace GadjIT_App
             services.AddScoped<JsConsole>();
             services.AddScoped(typeof(DragDropService<>));
 
-            services.AddSingleton<IAppSmartflowsState, AppSmartflowsStateList>();
 
             var keysFolder = Path.Combine(environment.ContentRootPath, "Keys");
 

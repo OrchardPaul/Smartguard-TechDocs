@@ -72,7 +72,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Agenda
 
         public List<VmSmartflowAgenda> LstAltSystemItems { get; set; } 
 
-        public VmSmartflowAgenda EditObject = new VmSmartflowAgenda { ChapterObject = new SmartflowAgenda() };
+        public VmSmartflowAgenda EditObject = new VmSmartflowAgenda { SmartflowObject = new SmartflowAgenda() };
 
 
         private bool CompareSystems_;
@@ -94,7 +94,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Agenda
             try
             {
                 
-                EditObject = new VmSmartflowAgenda { ChapterObject = new SmartflowAgenda() };
+                EditObject = new VmSmartflowAgenda { SmartflowObject = new SmartflowAgenda() };
                 
                 ShowSmartflowDetailModal("Insert");
                 
@@ -127,13 +127,13 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Agenda
                 
                 var copyObject = new SmartflowAgenda
                 {
-                    Name = EditObject.ChapterObject.Name
+                    Name = EditObject.SmartflowObject.Name
                 };
 
                 var parameters = new ModalParameters();
                 parameters.Add("_Option", _option);
                 parameters.Add("_SelectedSmartflow", _SelectedSmartflow);
-                parameters.Add("_TaskObject", EditObject.ChapterObject);
+                parameters.Add("_TaskObject", EditObject.SmartflowObject);
                 parameters.Add("_CopyObject", copyObject);
                 parameters.Add("_DataChanged", dataChanged);
 
@@ -183,7 +183,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Agenda
         {
             EditObject = _selectedSmartflowItem;
 
-            string itemName = _selectedSmartflowItem.ChapterObject.Name;
+            string itemName = _selectedSmartflowItem.SmartflowObject.Name;
 
             Action SelectedDeleteAction = HandleDelete;
             var parameters = new ModalParameters();
@@ -202,7 +202,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Agenda
         private async void HandleDelete() 
         {
             //<ModalDelete> simply invokes this method when user cicks OK. No need for the modal to handle this action as we do not require any details from the Modal. 
-            _SelectedSmartflow.Agendas.Remove(EditObject.ChapterObject);
+            _SelectedSmartflow.Agendas.Remove(EditObject.SmartflowObject);
            
             await ChapterItemsUpdated();
 
@@ -282,12 +282,12 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Agenda
 
                         var cItems = AltSmartflow.Agendas;
 
-                        LstAltSystemItems = cItems.Select(T => new VmSmartflowAgenda { ChapterObject = T, Compared = false }).ToList();
+                        LstAltSystemItems = cItems.Select(T => new VmSmartflowAgenda { SmartflowObject = T, Compared = false }).ToList();
                         
                         foreach (var item in _LstAgendas)
                         {
                             var altObject = LstAltSystemItems
-                                        .Where(A => A.ChapterObject.Name == item.ChapterObject.Name)
+                                        .Where(A => A.SmartflowObject.Name == item.SmartflowObject.Name)
                                         .FirstOrDefault();
 
                             if (altObject is null)
@@ -438,9 +438,9 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Agenda
                 
                 Action SelectedDeleteAction = HandleAltDelete;
                 var parameters = new ModalParameters();
-                parameters.Add("_ItemName", _selectedItem.ChapterObject.Name);
+                parameters.Add("_ItemName", _selectedItem.SmartflowObject.Name);
                 parameters.Add("_DeleteAction", SelectedDeleteAction);
-                parameters.Add("_InfoText", $"Are you sure you wish to delete the '{_selectedItem.ChapterObject.Name}' item from {UserSession.AltSystem} system?");
+                parameters.Add("_InfoText", $"Are you sure you wish to delete the '{_selectedItem.SmartflowObject.Name}' item from {UserSession.AltSystem} system?");
 
                 var options = new ModalOptions()
                 {
@@ -465,7 +465,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Agenda
         {
             await UserSession.SwitchSelectedSystem();
 
-            AltSmartflow.Agendas.Remove(EditObject.ChapterObject);
+            AltSmartflow.Agendas.Remove(EditObject.SmartflowObject);
             LstAltSystemItems.Remove(EditObject);
 
             Alt_AppSmartflowRecord.SmartflowData = JsonConvert.SerializeObject(AltSmartflow);

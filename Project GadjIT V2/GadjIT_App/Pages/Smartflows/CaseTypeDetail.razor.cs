@@ -35,8 +35,6 @@ namespace GadjIT_App.Pages.Smartflows
         [Parameter]
         public EventCallback<Client_SmartflowRecord> _SelectSmartflow {get; set;}
 
-        [Parameter]
-        public EventCallback _SaveSelectedCaseType {get; set;}
 
         [Inject]
         private IJSRuntime JSRuntime {get; set;}
@@ -153,8 +151,6 @@ namespace GadjIT_App.Pages.Smartflows
          
         }
         
-
-
     
 
 #endregion

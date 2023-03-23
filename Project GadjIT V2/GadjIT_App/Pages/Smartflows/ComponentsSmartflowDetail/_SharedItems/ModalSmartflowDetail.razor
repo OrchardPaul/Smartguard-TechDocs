@@ -204,8 +204,8 @@
                         <option value=""></option>
                         @foreach (var s in _ListOfStatus)
                         {
-                            <option value="@s.ChapterObject.Name">
-                                @s.ChapterObject.Name
+                            <option value="@s.SmartflowObject.Name">
+                                @s.SmartflowObject.Name
                             </option>
                         }
                     </InputSelect>
@@ -221,8 +221,8 @@
                             <option value=""></option>
                             @foreach (var a in _ListOfAgenda)
                             {
-                                <option value="@a.ChapterObject.Name">
-                                    @a.ChapterObject.Name
+                                <option value="@a.SmartflowObject.Name">
+                                    @a.SmartflowObject.Name
                                 </option>
                             }
                         </InputSelect>
@@ -306,21 +306,21 @@
                              @bind-Value="_CopyObject.MilestoneStatus">
                     <option value=""></option>
                     @foreach (var s in _ListOfStatus
-                    .Where(S => !string.IsNullOrEmpty(S.ChapterObject.MilestoneStatus))
-                    .Where(S => !_ListOfStatus.Select(L => L.ChapterObject.Name).Contains(S.ChapterObject.MilestoneStatus))
-                    .GroupBy(S => S.ChapterObject.MilestoneStatus.ToLower())
+                    .Where(S => !string.IsNullOrEmpty(S.SmartflowObject.MilestoneStatus))
+                    .Where(S => !_ListOfStatus.Select(L => L.SmartflowObject.Name).Contains(S.SmartflowObject.MilestoneStatus))
+                    .GroupBy(S => S.SmartflowObject.MilestoneStatus.ToLower())
                     .Select(S => S.First())
                     .ToList()
                     )
                     {
-                        <option value="@s.ChapterObject.MilestoneStatus">
-                            @s.ChapterObject.MilestoneStatus
+                        <option value="@s.SmartflowObject.MilestoneStatus">
+                            @s.SmartflowObject.MilestoneStatus
                         </option>
                     }
                     @foreach (var s in _ListOfStatus)
                     {
-                        <option value="@s.ChapterObject.Name">
-                            @s.ChapterObject.Name
+                        <option value="@s.SmartflowObject.Name">
+                            @s.SmartflowObject.Name
                         </option>
                     }
                 </InputSelect>

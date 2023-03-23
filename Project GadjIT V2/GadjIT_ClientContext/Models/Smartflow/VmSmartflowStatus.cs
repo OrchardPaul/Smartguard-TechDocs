@@ -8,7 +8,7 @@ namespace GadjIT_ClientContext.Models.Smartflow
     public partial class VmSmartflowStatus
     {
 
-        public SmartflowStatus ChapterObject { get; set; }
+        public SmartflowStatus SmartflowObject { get; set; }
 
         public SmartflowStatus AltObject { get; set; }
 
@@ -26,26 +26,26 @@ namespace GadjIT_ClientContext.Models.Smartflow
 
         public bool IsChapterItemMatch(VmSmartflowStatus vmCompItem)
         {
-            AltObject = vmCompItem.ChapterObject;
+            AltObject = vmCompItem.SmartflowObject;
             vmCompItem.Compared = true;
 
             ComparisonList = new List<string>();
             bool isSame = true;
-            SmartflowStatus compItem = vmCompItem.ChapterObject;
+            SmartflowStatus compItem = vmCompItem.SmartflowObject;
 
-            if ((ChapterObject.SeqNo ?? 0) != (compItem.SeqNo ?? 0))
+            if ((SmartflowObject.SeqNo ?? 0) != (compItem.SeqNo ?? 0))
             {
                 isSame = false;
                 ComparisonList.Add("SeqNo");
             }
 
-            if ((ChapterObject.SuppressStep ?? "") != (compItem.SuppressStep ?? ""))
+            if ((SmartflowObject.SuppressStep ?? "") != (compItem.SuppressStep ?? ""))
             {
                 isSame = false;
                 ComparisonList.Add("SuppressStep");
             }
 
-            if ((ChapterObject.MilestoneStatus ?? "") != (compItem.MilestoneStatus ?? ""))
+            if ((SmartflowObject.MilestoneStatus ?? "") != (compItem.MilestoneStatus ?? ""))
             {
                 isSame = false;
                 ComparisonList.Add("MilestoneStatus");

@@ -67,9 +67,9 @@
                             OnDragStartParam="() => ResetRowChanged()"
                             TItem="VmSmartflowDocument"
                             UseCustomImage="true">
-                    <div class="row grid-row grid-row-lg @(RowChanged == context.ChapterObject.SeqNo && !SeqMoving ? "row-changed" : "" )">
+                    <div class="row grid-row grid-row-lg @(RowChanged == context.SmartflowObject.SeqNo && !SeqMoving ? "row-changed" : "" )">
                         @{
-                            var optionalDoc = (context.ChapterObject.OptionalDocument == "Y" && context.ChapterObject.CustomItem == "N") ? "optional" : "";   
+                            var optionalDoc = (context.SmartflowObject.OptionalDocument == "Y" && context.SmartflowObject.CustomItem == "N") ? "optional" : "";   
                         }
                         <div class="data-item @optionalDoc">
 
@@ -101,9 +101,9 @@
                                                     
                                                     
                                                     <ul class="attach-list">
-                                                        @if (!(context.ChapterObject.LinkedItems is null) && context.ChapterObject.LinkedItems.Count > 0)
+                                                        @if (!(context.SmartflowObject.LinkedItems is null) && context.SmartflowObject.LinkedItems.Count > 0)
                                                         {
-                                                            foreach (var attach in context.ChapterObject.LinkedItems)
+                                                            foreach (var attach in context.SmartflowObject.LinkedItems)
                                                             {
                                                                 
                                                                 var optionalAttach = (attach.OptionalDocument == "Y" && !(string.IsNullOrEmpty(attach.DocType) && attach.CustomItem == "N") ? "optional-row" : "");   
@@ -198,13 +198,13 @@
                                 </div>
                             }
                                                     
-                            <ModalTooltip Direction="right" Text="@((optionalDoc == "optional" ? "Optional " : "") + context.ChapterObject.Action)" Class="w-1">
-                                @if(context.ChapterObject.Action == "INSERT"){<span class="doc-icon" title="INSERT: action"><span class="fa fa-arrow-down mr-2"></span></span>}
-                                @if(context.ChapterObject.Action == "TAKE"){<span class="doc-icon" title="TAKE: action"><span class="fa fa-running mr-2"></span></span>}
+                            <ModalTooltip Direction="right" Text="@((optionalDoc == "optional" ? "Optional " : "") + context.SmartflowObject.Action)" Class="w-1">
+                                @if(context.SmartflowObject.Action == "INSERT"){<span class="doc-icon" title="INSERT: action"><span class="fa fa-arrow-down mr-2"></span></span>}
+                                @if(context.SmartflowObject.Action == "TAKE"){<span class="doc-icon" title="TAKE: action"><span class="fa fa-running mr-2"></span></span>}
                             </ModalTooltip>
 
                             <ModalTooltip Direction="right" Text="@((optionalDoc == "optional" ? "Optional " : "")
-                                + (string.IsNullOrEmpty(context.DocType) && context.ChapterObject.CustomItem == "N" ? "Item not found" : context.DocType))" Class="w-2">
+                                + (string.IsNullOrEmpty(context.DocType) && context.SmartflowObject.CustomItem == "N" ? "Item not found" : context.DocType))" Class="w-2">
                                 
                                 @if(context.DocType == "Doc"){<span class="doc-icon" title="Document"><span class="fa fa-file mr-2"></span></span>}
                                 @if(context.DocType == "Form"){<span class="doc-icon" title="Form"><span class="fa fa-file-pdf mr-2"></span></span>}
@@ -212,17 +212,17 @@
                                 @if(context.DocType == "Step"){<span class="doc-icon" title="Step"><span class="fa fa-list-ol mr-2"></span></span>}
                                 @if(context.DocType == "Date"){<span class="doc-icon" title="Diary"><span class="fa fa-calendar mr-2"></span></span>}
                                 @if(context.DocType == "Csv"){<span class="doc-icon" title="Spreadsheet"><span class="fa fa-file-csv mr-2"></span></span>}
-                                @if(string.IsNullOrEmpty(context.DocType) && context.ChapterObject.CustomItem == "N"){<span class="doc-icon" title="Missing Item"><span class="fa fa-exclamation col-red mr-2"></span></span>}
-                                @if(string.IsNullOrEmpty(context.DocType) && context.ChapterObject.CustomItem == "Y"){<span class="doc-icon" ><span class="mr-2"></span></span>}
+                                @if(string.IsNullOrEmpty(context.DocType) && context.SmartflowObject.CustomItem == "N"){<span class="doc-icon" title="Missing Item"><span class="fa fa-exclamation col-red mr-2"></span></span>}
+                                @if(string.IsNullOrEmpty(context.DocType) && context.SmartflowObject.CustomItem == "Y"){<span class="doc-icon" ><span class="mr-2"></span></span>}
                                     
                             </ModalTooltip>
                             <div class="data-item-sub draggable">
                                 @context.DocDisplayName
-                                @if(!(string.IsNullOrEmpty(context.ChapterObject.Agenda)))
+                                @if(!(string.IsNullOrEmpty(context.SmartflowObject.Agenda)))
                                 {
-                                    <div class="secondary-item" title="Once completed, the document will be moved to the folder @context.ChapterObject.Agenda.">
+                                    <div class="secondary-item" title="Once completed, the document will be moved to the folder @context.SmartflowObject.Agenda.">
                                         <span class="fa fa-folder-open"></span>
-                                        @context.ChapterObject.Agenda
+                                        @context.SmartflowObject.Agenda
                                     </div>
                                 }
 
@@ -238,26 +238,26 @@
                                 </div>
                             }
 
-                            @if (!string.IsNullOrEmpty(context.ChapterObject.PopupAlert))
+                            @if (!string.IsNullOrEmpty(context.SmartflowObject.PopupAlert))
                             {
                                 <div class="data-item-right hidden-md-down">
-                                    <ModalTooltip Direction="left" Text=@("POPUP: " + context.ChapterObject.PopupAlert) Class="w-3">
+                                    <ModalTooltip Direction="left" Text=@("POPUP: " + context.SmartflowObject.PopupAlert) Class="w-3">
                                         <span class="fa fa-exclamation-triangle"></span>
                                     </ModalTooltip>
                                 </div>
                             }
 
 
-                            @if (!string.IsNullOrEmpty(context.ChapterObject.UserMessage))
+                            @if (!string.IsNullOrEmpty(context.SmartflowObject.UserMessage))
                             {
                                 <div class="data-item-right hidden-md-down">
-                                    <ModalTooltip Direction="left" Text=@("NOTES: " + context.ChapterObject.UserMessage) Class="w-3">
+                                    <ModalTooltip Direction="left" Text=@("NOTES: " + context.SmartflowObject.UserMessage) Class="w-3">
                                         <span class="fa fa-comment"></span>
                                     </ModalTooltip>
                                 </div>
                             }
 
-                            @if (!(context.ChapterObject.LinkedItems is null) && context.ChapterObject.LinkedItems.Count > 0)
+                            @if (!(context.SmartflowObject.LinkedItems is null) && context.SmartflowObject.LinkedItems.Count > 0)
                             {
                                 <div class="data-item-right hidden-md-down">
                                     <ModalTooltip Direction="left" Text=@($"This item has attachments.") Class="w-2">
@@ -266,10 +266,10 @@
                                 </div>
                             }
 
-                            @if (@_SelectedSmartflow.ShowDocumentTracking == "Y" && !(string.IsNullOrEmpty(context.ChapterObject.TrackingMethod)) && "Send Only|Response Required".Contains(context.ChapterObject.TrackingMethod))
+                            @if (@_SelectedSmartflow.ShowDocumentTracking == "Y" && !(string.IsNullOrEmpty(context.SmartflowObject.TrackingMethod)) && "Send Only|Response Required".Contains(context.SmartflowObject.TrackingMethod))
                             {
                                 <div class="data-item-right hidden-md-down">
-                                    <ModalTooltip Direction="left" Text=@($"This item is tracked: {context.ChapterObject.TrackingMethod}") Class="w-2">
+                                    <ModalTooltip Direction="left" Text=@($"This item is tracked: {context.SmartflowObject.TrackingMethod}") Class="w-2">
                                         <span class="fa fa-map-marker-alt"></span>
                                     </ModalTooltip>
                                 </div>
@@ -278,36 +278,36 @@
                             @if (UserSession.IsAdminUser && _SmartflowLockedForEdit && !CompareSystems)
                             {
                                 <div class="data-item-right seq-change">
-                                    <div @onclick='() => MoveSeq(context.ChapterObject, "Up")' class="@(@context.ChapterObject.SeqNo == 1 ? "hidden" : "")"><span class="fa fa-angle-up"></span></div>
-                                    <div class="seq-no">@context.ChapterObject.SeqNo</div>
-                                    <div @onclick='() => MoveSeq(context.ChapterObject, "Down")' class="@(@context.ChapterObject.SeqNo == _LstDocs.Count() ? "hidden" : "")"><span class="fa fa-angle-down"></span></div>
+                                    <div @onclick='() => MoveSeq(context.SmartflowObject, "Up")' class="@(@context.SmartflowObject.SeqNo == 1 ? "hidden" : "")"><span class="fa fa-angle-up"></span></div>
+                                    <div class="seq-no">@context.SmartflowObject.SeqNo</div>
+                                    <div @onclick='() => MoveSeq(context.SmartflowObject, "Down")' class="@(@context.SmartflowObject.SeqNo == _LstDocs.Count() ? "hidden" : "")"><span class="fa fa-angle-down"></span></div>
                                 </div>
                             }
                             else
                             {
                                 <div class="data-item-right mr-2 seq-change">
-                                    <div class="seq-no">@context.ChapterObject.SeqNo</div>
+                                    <div class="seq-no">@context.SmartflowObject.SeqNo</div>
                                 </div>
                             }
                         </div>
                         <div class="hidden-md-down data-item ">
-                            <div class="data-item-sub font-85 pl-3" title="@(string.IsNullOrEmpty(context.ChapterObject.AsName) ? "" : context.ChapterObject.AsName)">@(string.IsNullOrEmpty(context.ChapterObject.AsName) ? "" : context.ChapterObject.AsName)</div>
+                            <div class="data-item-sub font-85 pl-3" title="@(string.IsNullOrEmpty(context.SmartflowObject.AsName) ? "" : context.SmartflowObject.AsName)">@(string.IsNullOrEmpty(context.SmartflowObject.AsName) ? "" : context.SmartflowObject.AsName)</div>
 
-                            @if (!string.IsNullOrEmpty(context.ChapterObject.AsName)) // && (doc.ChapterObject.RescheduleDays.HasValue && ) //(doc.ChapterObject.RescheduleDays != 0 | !string.IsNullOrEmpty(doc.ChapterObject.RescheduleDataItem)))
+                            @if (!string.IsNullOrEmpty(context.SmartflowObject.AsName)) // && (doc.SmartflowObject.RescheduleDays.HasValue && ) //(doc.SmartflowObject.RescheduleDays != 0 | !string.IsNullOrEmpty(doc.SmartflowObject.RescheduleDataItem)))
                             {
                                 <div class="data-item-right schedule-days">
-                                    <ModalTooltip Direction="left" Text="@(string.IsNullOrEmpty(context.ChapterObject.AsName) ? "" : "The step named " + context.ChapterObject.AsName + " will be scheduled for " + context.ChapterObject.RescheduleDays.ToString() + " days" + (!string.IsNullOrEmpty(context.ChapterObject.RescheduleDataItem) ? " from " + context.ChapterObject.RescheduleDataItem : ""))" Class="w-3">
-                                        <span class="badge rounded-square">@(!string.IsNullOrEmpty(context.ChapterObject.RescheduleDataItem) ? "* " : "") @context.ChapterObject.RescheduleDays.ToString()d</span>
+                                    <ModalTooltip Direction="left" Text="@(string.IsNullOrEmpty(context.SmartflowObject.AsName) ? "" : "The step named " + context.SmartflowObject.AsName + " will be scheduled for " + context.SmartflowObject.RescheduleDays.ToString() + " days" + (!string.IsNullOrEmpty(context.SmartflowObject.RescheduleDataItem) ? " from " + context.SmartflowObject.RescheduleDataItem : ""))" Class="w-3">
+                                        <span class="badge rounded-square">@(!string.IsNullOrEmpty(context.SmartflowObject.RescheduleDataItem) ? "* " : "") @context.SmartflowObject.RescheduleDays.ToString()d</span>
                                     </ModalTooltip>
                                 </div>
                             }
 
                         </div>
                         <div class="hidden-md-down data-item ">
-                            @if (!(string.IsNullOrEmpty(context.ChapterObject.CompleteName)))
+                            @if (!(string.IsNullOrEmpty(context.SmartflowObject.CompleteName)))
                             {
-                                <div class="data-item-sub font-85 pl-3" title="The smartflow step will be saved as @context.ChapterObject.CompleteName when complete.">
-                                    @context.ChapterObject.CompleteName
+                                <div class="data-item-sub font-85 pl-3" title="The smartflow step will be saved as @context.SmartflowObject.CompleteName when complete.">
+                                    @context.SmartflowObject.CompleteName
                                 </div>
                             }
                             else
@@ -318,9 +318,9 @@
 
 
 
-                            @if (!(string.IsNullOrEmpty(context.ChapterObject.NextStatus)))
+                            @if (!(string.IsNullOrEmpty(context.SmartflowObject.NextStatus)))
                             {
-                                @if (_LstStatus.Where(S => S.ChapterObject.Name == context.ChapterObject.NextStatus).Select(S => S.ChapterObject.SuppressStep).SingleOrDefault() == "Y")
+                                @if (_LstStatus.Where(S => S.SmartflowObject.Name == context.SmartflowObject.NextStatus).Select(S => S.SmartflowObject.SuppressStep).SingleOrDefault() == "Y")
                                 {
                                     <div class="data-item-right suppress-step">
                                         <ModalTooltip Direction="left" Text="This document will end the Smartflow when taken." Class="w-2">
@@ -332,11 +332,11 @@
 
                                 <div class="data-item-right suppress-step">
 
-                                        @if (_LstStatus.Select(s => s.ChapterObject.Name).Contains(context.ChapterObject.NextStatus))
+                                        @if (_LstStatus.Select(s => s.SmartflowObject.Name).Contains(context.SmartflowObject.NextStatus))
 
                                         {
 
-                                            <ModalTooltip Direction="left" Text=@("Status Change: " + context.ChapterObject.NextStatus) Class="w-2">
+                                            <ModalTooltip Direction="left" Text=@("Status Change: " + context.SmartflowObject.NextStatus) Class="w-2">
 
                                                 <span class="fa fa-battery-half"></span>
 
@@ -344,7 +344,7 @@
 
                                         }else{
 
-                                            <ModalTooltip Direction="left" Text=@("Status: [" + context.ChapterObject.NextStatus + "] is not a valid option.") Class="w-2">
+                                            <ModalTooltip Direction="left" Text=@("Status: [" + context.SmartflowObject.NextStatus + "] is not a valid option.") Class="w-2">
 
                                                 <span class="fa fa-battery-half col-red" ></span>
 
@@ -367,7 +367,7 @@
                     @foreach (var doc in LstAltSystemItems.Where(D => !D.Compared).ToList())
                     {
 
-                        <div class="row grid-row grid-row-lg @(RowChanged == doc.ChapterObject.SeqNo ? "row-changed" : "" )">
+                        <div class="row grid-row grid-row-lg @(RowChanged == doc.SmartflowObject.SeqNo ? "row-changed" : "" )">
                             <div class="data-item ">
 
                                 <div class="btn-ellipses float-left">
@@ -400,25 +400,25 @@
                                     </div>
                                 }
 
-                                @if (!string.IsNullOrEmpty(doc.ChapterObject.PopupAlert))
+                                @if (!string.IsNullOrEmpty(doc.SmartflowObject.PopupAlert))
                                 {
                                     <div class="data-item-right hidden-md-down">
-                                        <ModalTooltip Direction="left" Text=@("POPUP: " + doc.ChapterObject.PopupAlert) Class="w-3">
+                                        <ModalTooltip Direction="left" Text=@("POPUP: " + doc.SmartflowObject.PopupAlert) Class="w-3">
                                             <span class="fa fa-exclamation-triangle"></span>
                                         </ModalTooltip>
                                     </div>
                                 }
 
-                                @if (!string.IsNullOrEmpty(doc.ChapterObject.UserMessage))
+                                @if (!string.IsNullOrEmpty(doc.SmartflowObject.UserMessage))
                                 {
                                     <div class="data-item-right hidden-md-down">
-                                        <ModalTooltip Direction="left" Text=@("NOTES: " + doc.ChapterObject.UserMessage) Class="w-3">
+                                        <ModalTooltip Direction="left" Text=@("NOTES: " + doc.SmartflowObject.UserMessage) Class="w-3">
                                             <span class="fa fa-comment"></span>
                                         </ModalTooltip>
                                     </div>
                                 }
 
-                                @if (!(doc.ChapterObject.LinkedItems is null) && doc.ChapterObject.LinkedItems.Count > 0)
+                                @if (!(doc.SmartflowObject.LinkedItems is null) && doc.SmartflowObject.LinkedItems.Count > 0)
                                 {
                                     <div class="data-item-right hidden-md-down">
                                         <ModalTooltip Direction="left" Text=@($"This item has attachments.") Class="w-2">
@@ -429,28 +429,28 @@
 
 
                                 <div class="data-item-right mr-2 ">
-                                    <div class="seq-no">@doc.ChapterObject.SeqNo</div>
+                                    <div class="seq-no">@doc.SmartflowObject.SeqNo</div>
                                 </div>
 
                             </div>
                             <div class="hidden-md-down data-item ">
-                                <div class="data-item-sub font-85 pl-3" title="@(string.IsNullOrEmpty(doc.ChapterObject.AsName) ? "" : doc.ChapterObject.AsName)">@(string.IsNullOrEmpty(doc.ChapterObject.AsName) ? "" : doc.ChapterObject.AsName)</div>
+                                <div class="data-item-sub font-85 pl-3" title="@(string.IsNullOrEmpty(doc.SmartflowObject.AsName) ? "" : doc.SmartflowObject.AsName)">@(string.IsNullOrEmpty(doc.SmartflowObject.AsName) ? "" : doc.SmartflowObject.AsName)</div>
 
-                                @if (doc.ChapterObject.RescheduleDays.HasValue)
+                                @if (doc.SmartflowObject.RescheduleDays.HasValue)
                                 {
                                     <div class="data-item-right schedule-days">
-                                        <ModalTooltip Direction="left" Text="@(string.IsNullOrEmpty(doc.ChapterObject.AsName) ? "" : "The step named " + doc.ChapterObject.AsName + " will be scheduled for " + doc.ChapterObject.RescheduleDays.ToString() + " days" + (!string.IsNullOrEmpty(doc.ChapterObject.RescheduleDataItem) ? " from " + doc.ChapterObject.RescheduleDataItem : ""))" Class="w-3">
-                                            <span class="badge rounded-square">@(!string.IsNullOrEmpty(doc.ChapterObject.RescheduleDataItem) ? "*" : "") @doc.ChapterObject.RescheduleDays.ToString()d</span>
+                                        <ModalTooltip Direction="left" Text="@(string.IsNullOrEmpty(doc.SmartflowObject.AsName) ? "" : "The step named " + doc.SmartflowObject.AsName + " will be scheduled for " + doc.SmartflowObject.RescheduleDays.ToString() + " days" + (!string.IsNullOrEmpty(doc.SmartflowObject.RescheduleDataItem) ? " from " + doc.SmartflowObject.RescheduleDataItem : ""))" Class="w-3">
+                                            <span class="badge rounded-square">@(!string.IsNullOrEmpty(doc.SmartflowObject.RescheduleDataItem) ? "*" : "") @doc.SmartflowObject.RescheduleDays.ToString()d</span>
                                         </ModalTooltip>
                                     </div>
                                 }
 
                             </div>
                             <div class="hidden-md-down data-item ">
-                                @if (!(string.IsNullOrEmpty(doc.ChapterObject.CompleteName)))
+                                @if (!(string.IsNullOrEmpty(doc.SmartflowObject.CompleteName)))
                                 {
-                                    <div class="data-item-sub font-85 pl-3" title="This document will be saved in the agenda as @doc.ChapterObject.CompleteName.">
-                                        @doc.ChapterObject.CompleteName
+                                    <div class="data-item-sub font-85 pl-3" title="This document will be saved in the agenda as @doc.SmartflowObject.CompleteName.">
+                                        @doc.SmartflowObject.CompleteName
                                     </div>
 
                                 }
@@ -460,18 +460,18 @@
                                     </div>
                                 }
 
-                                @if (!(string.IsNullOrEmpty(doc.ChapterObject.Agenda)))
+                                @if (!(string.IsNullOrEmpty(doc.SmartflowObject.Agenda)))
                                 {
                                     <div class="data-item-right">
-                                        <ModalTooltip Direction="left" Text=@("Agenda: " + doc.ChapterObject.Agenda) Class="w-2">
+                                        <ModalTooltip Direction="left" Text=@("Agenda: " + doc.SmartflowObject.Agenda) Class="w-2">
                                             <span class="fa fa-folder-open"></span>
                                         </ModalTooltip>
                                     </div>
                                 }
 
-                                @if (!(string.IsNullOrEmpty(doc.ChapterObject.NextStatus)))
+                                @if (!(string.IsNullOrEmpty(doc.SmartflowObject.NextStatus)))
                                 {
-                                    @if (_LstStatus.Where(S => S.ChapterObject.Name == doc.ChapterObject.NextStatus).Select(S => S.ChapterObject.SuppressStep).SingleOrDefault() == "Y")
+                                    @if (_LstStatus.Where(S => S.SmartflowObject.Name == doc.SmartflowObject.NextStatus).Select(S => S.SmartflowObject.SuppressStep).SingleOrDefault() == "Y")
                                     {
                                         <div class="data-item-right suppress-step">
                                             <ModalTooltip Direction="left" Text="This document will end the Smartflow when taken." Class="w-2">
@@ -482,7 +482,7 @@
 
 
                                     <div class="data-item-right suppress-step">
-                                        <ModalTooltip Direction="left" Text=@("Status Change: " + doc.ChapterObject.NextStatus) Class="w-2">
+                                        <ModalTooltip Direction="left" Text=@("Status Change: " + doc.SmartflowObject.NextStatus) Class="w-2">
                                             <span class="fa fa-battery-half"></span>
                                         </ModalTooltip>
                                     </div>

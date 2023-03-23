@@ -17,7 +17,7 @@
                     Seq Number
                 </td>
                 <td>
-                    @_Object.ChapterObject.SeqNo
+                    @_Object.SmartflowObject.SeqNo
                 </td>
             </tr>
             
@@ -26,7 +26,7 @@
                         Name:
                 </td>
                 <td>
-                    <input type="text" class="read-only" readonly value="@_Object.ChapterObject.Name" />
+                    <input type="text" class="read-only" readonly value="@_Object.SmartflowObject.Name" />
                 </td>
             </tr>
                 
@@ -35,7 +35,7 @@
                         Milestone:
                 </td>
                 <td>
-                    <input type="text" class="read-only" readonly value="@_Object.ChapterObject.MilestoneStatus" />
+                    <input type="text" class="read-only" readonly value="@_Object.SmartflowObject.MilestoneStatus" />
                 </td>
             </tr>
 
@@ -44,7 +44,7 @@
                         Supress Step (End Smartflow):
                 </td>
                 <td>
-                    <input type="text" class="read-only" readonly value="@(_Object.ChapterObject.SuppressStep == "Y" ? "Yes" : "No")" />
+                    <input type="text" class="read-only" readonly value="@(_Object.SmartflowObject.SuppressStep == "Y" ? "Yes" : "No")" />
                 </td>
             </tr>
 

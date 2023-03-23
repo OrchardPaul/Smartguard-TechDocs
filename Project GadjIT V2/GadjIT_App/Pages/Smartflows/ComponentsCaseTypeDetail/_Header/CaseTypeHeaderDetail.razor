@@ -17,6 +17,7 @@
                 @if (!CompareSystems)
                 {
                     <button @onclick='ShowCreateSmartflowModal' class="btn btn-main btn-shadow" title="Add new Smartflow"><i class="fa fa-plus pr-1"></i><span>New</span></button>
+                    <button @onclick='RefreshAllSmartflows' class="btn btn-main btn-shadow" title="Add new Smartflow"><i class="fa-solid fa-arrows-rotate"></i><span>Refresh</span></button>
                 }
             </div>
             <div class="spacer"></div>
@@ -102,13 +103,13 @@
                                 
                             </div>
                             <div class="data-item-right seq-change">
-                                <div @onclick='() => MoveSmartFlowSeq(context.ClientSmartflowRecord, "Chapters", "Up")' class="@(@context.ClientSmartflowRecord.SeqNo == 1 ? "hidden" : "")"><span class="fa fa-angle-up"></span></div>
+                                <div @onclick='() => MoveSmartFlowSeq(context.ClientSmartflowRecord, "Up")' class="@(SeqMoving | context.ClientSmartflowRecord.SeqNo == 1 ? "hidden" : "")"><span class="fa fa-angle-up"></span></div>
                                 <div class="seq-no">@context.ClientSmartflowRecord.SeqNo</div>
-                                <div @onclick='() => MoveSmartFlowSeq(context.ClientSmartflowRecord, "Chapters", "Down")' class="@(@context.ClientSmartflowRecord.SeqNo == LstSmartflows.Count() ? "hidden" : "")"><span class="fa fa-angle-down"></span></div>
+                                <div @onclick='() => MoveSmartFlowSeq(context.ClientSmartflowRecord, "Down")' class="@(SeqMoving | context.ClientSmartflowRecord.SeqNo == LstSmartflows.Count() ? "hidden" : "")"><span class="fa fa-angle-down"></span></div>
                             </div>
 
                         </div>
-                        <div class="data-item ">
+                        <div class="data-item">
 
                                 @if(context.StatisticsStatus == "Set")
                                 {
@@ -153,7 +154,7 @@
                             
 
                         </div>
-                        <div class="data-item ">
+                        <div class="data-item">
                             @if(context.BackgroundImageName != null)
                             {
                                 <img src="@context.BackgroundImage.Replace("/wwwroot","")" alt="" class="img-thumbnail" />
@@ -163,15 +164,22 @@
                         </div>
                         
                         <div class="data-item ">
-                            @if(!IsSmartflowLocked(context))
+                            @if(UserSession.IsAdminUser)
                             {
-                                <button class="btn btn-success" @onclick='() => SelectSmartflow(context.ClientSmartflowRecord)'>Edit</button>
+                                @if(!IsSmartflowLocked(context))
+                                {
+                                    <button class="btn btn-success" @onclick='() => SelectSmartflow(context.ClientSmartflowRecord)'>Edit</button>
+                                }
+                                else
+                                {
+                                    <button title="Unlock Smartflow" class="btn btn-warning mr-2" @onclick='() => UnlockSmartflow(context)'><i class="fa-solid fa-lock-open"></i></button>
+                                    <button title="Smartflow is locked: view only" class="btn btn-success" @onclick='() => SelectSmartflow(context.ClientSmartflowRecord)'><i class="fa-solid fa-magnifying-glass"></i></button>
+                                }
                             }
                             else
                             {
-                                <button title="Unlock Smartflow" class="btn btn-warning mr-2" @onclick='() => UnlockSmartflow(context)'><i class="fa-solid fa-lock-open"></i></button>
-                                <button title="Smartflow is locked: view only" class="btn btn-success" @onclick='() => SelectSmartflow(context.ClientSmartflowRecord)'><i class="fa-solid fa-magnifying-glass"></i></button>
-                            }
+                                <button class="btn btn-success" @onclick='() => SelectSmartflow(context.ClientSmartflowRecord)'>View</button>
+                            }    
 
                         </div>
                         

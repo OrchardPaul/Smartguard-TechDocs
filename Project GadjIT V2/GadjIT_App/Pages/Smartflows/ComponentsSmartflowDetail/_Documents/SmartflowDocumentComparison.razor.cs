@@ -56,7 +56,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Documents
 
 
             _Alt_Smartflow.Documents.Remove(taskObject);
-            _Alt_Smartflow.Documents.Add(_Object.ChapterObject);
+            _Alt_Smartflow.Documents.Add(_Object.SmartflowObject);
 
 
             bool gotLock = UserSession.Lock;
@@ -87,7 +87,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Documents
 
         private async Task AddItem()
         {
-            _Alt_Smartflow.Documents.Add(_Object.ChapterObject);
+            _Alt_Smartflow.Documents.Add(_Object.SmartflowObject);
 
             bool gotLock = UserSession.Lock;
             while (gotLock)

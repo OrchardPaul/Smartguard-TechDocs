@@ -42,8 +42,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Documents
         public SmartflowV2 _SelectedSmartflow { get; set; }
 
 
-        [Parameter]
-        public LinkedDocument _AttachObject {get; set;}
+        
 
         [Parameter]
         public EventCallback<SmartflowV2> _SmartflowUpdated {get; set;}
@@ -59,6 +58,9 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Documents
 
         [Parameter]
         public List<P4W_DmDocuments> _LibraryDocumentsAndSteps {get; set;}
+
+        [Parameter]
+        public EventCallback _RefreshLibraryDocumentsAndSteps {get; set;}
 
         [Parameter]
         public List<P4W_TableDate> _TableDates {get; set;}
@@ -101,6 +103,9 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Documents
 
         private VmSmartflowDocument EditObject {get; set;}
 
+        [Parameter]
+        public LinkedDocument EditLinkedObject {get; set;}
+
         public bool SeqMoving {get; set;}
 
         private string RowChangedClass { get; set; } = "row-changed-nav3";
@@ -122,27 +127,33 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Documents
         
         private string SelectedList = "";
 
-       
 
+        protected override async Task OnInitializedAsync()
+        {
+            await _RefreshLibraryDocumentsAndSteps.InvokeAsync();
+            await _RefreshSmartflowItems.InvokeAsync("Agenda");
+            await _RefreshSmartflowItems.InvokeAsync("Status");
+        }
+       
         
         protected void PrepareForInsert() 
         {
             try
             {
                 
-                EditObject = new VmSmartflowDocument { ChapterObject = new SmartflowDocument() };
-                EditObject.ChapterObject.Action = "INSERT"; //default item to INSERT, user can opt for a TAKE on the form if required
+                EditObject = new VmSmartflowDocument { SmartflowObject = new SmartflowDocument() };
+                EditObject.SmartflowObject.Action = "INSERT"; //default item to INSERT, user can opt for a TAKE on the form if required
                 
                 if(_LstDocs != null && _LstDocs.Count > 0)
                 {
-                    EditObject.ChapterObject.SeqNo = _LstDocs
-                                                            .OrderByDescending(A => A.ChapterObject.SeqNo)
-                                                            .Select(A => A.ChapterObject.SeqNo)
+                    EditObject.SmartflowObject.SeqNo = _LstDocs
+                                                            .OrderByDescending(A => A.SmartflowObject.SeqNo)
+                                                            .Select(A => A.SmartflowObject.SeqNo)
                                                             .FirstOrDefault() + 1;
                 }
                 else
                 {
-                    EditObject.ChapterObject.SeqNo = 1;
+                    EditObject.SmartflowObject.SeqNo = 1;
                 }
 
                 
@@ -175,30 +186,30 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Documents
 
                 var copyObject = new SmartflowDocument
                 {
-                    Name = EditObject.ChapterObject.Name,
-                    EntityType = EditObject.ChapterObject.EntityType,
-                    SeqNo = EditObject.ChapterObject.SeqNo,
-                    CompleteName = EditObject.ChapterObject.CompleteName,
-                    AsName = EditObject.ChapterObject.AsName,
-                    RescheduleDays = EditObject.ChapterObject.RescheduleDays,
-                    AltDisplayName = EditObject.ChapterObject.AltDisplayName,
-                    UserMessage = EditObject.ChapterObject.UserMessage,
-                    PopupAlert = EditObject.ChapterObject.PopupAlert,
-                    NextStatus = EditObject.ChapterObject.NextStatus,
-                    Action = EditObject.ChapterObject.Action,
-                    TrackingMethod = EditObject.ChapterObject.TrackingMethod,
-                    ChaserDesc = EditObject.ChapterObject.ChaserDesc,
-                    RescheduleDataItem = EditObject.ChapterObject.RescheduleDataItem,
-                    OptionalDocument = EditObject.ChapterObject.OptionalDocument,
-                    Agenda = EditObject.ChapterObject.Agenda,
-                    CustomItem = EditObject.ChapterObject.CustomItem
+                    Name = EditObject.SmartflowObject.Name,
+                    EntityType = EditObject.SmartflowObject.EntityType,
+                    SeqNo = EditObject.SmartflowObject.SeqNo,
+                    CompleteName = EditObject.SmartflowObject.CompleteName,
+                    AsName = EditObject.SmartflowObject.AsName,
+                    RescheduleDays = EditObject.SmartflowObject.RescheduleDays,
+                    AltDisplayName = EditObject.SmartflowObject.AltDisplayName,
+                    UserMessage = EditObject.SmartflowObject.UserMessage,
+                    PopupAlert = EditObject.SmartflowObject.PopupAlert,
+                    NextStatus = EditObject.SmartflowObject.NextStatus,
+                    Action = EditObject.SmartflowObject.Action,
+                    TrackingMethod = EditObject.SmartflowObject.TrackingMethod,
+                    ChaserDesc = EditObject.SmartflowObject.ChaserDesc,
+                    RescheduleDataItem = EditObject.SmartflowObject.RescheduleDataItem,
+                    OptionalDocument = EditObject.SmartflowObject.OptionalDocument,
+                    Agenda = EditObject.SmartflowObject.Agenda,
+                    CustomItem = EditObject.SmartflowObject.CustomItem
             };
 
                 var parameters = new ModalParameters();
                 parameters.Add("_Option", _option);
                 parameters.Add("_SelectedSmartflow", _SelectedSmartflow);
                 parameters.Add("_Selected_ClientSmartflowRecord", _Selected_ClientSmartflowRecord);
-                parameters.Add("_TaskObject", EditObject.ChapterObject);
+                parameters.Add("_TaskObject", EditObject.SmartflowObject);
                 parameters.Add("_CopyObject", copyObject);
                 parameters.Add("_DataChanged", refreshSelectedList);
                 parameters.Add("_RefreshLibraryDocumentsAndSteps", refreshLibraryDocumentsAndSteps);
@@ -251,7 +262,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Documents
         {
             EditObject = _selectedSmartflowItem;
 
-            string itemName = (string.IsNullOrEmpty(_selectedSmartflowItem.ChapterObject.AltDisplayName) ? _selectedSmartflowItem.ChapterObject.Name : _selectedSmartflowItem.ChapterObject.AltDisplayName);
+            string itemName = (string.IsNullOrEmpty(_selectedSmartflowItem.SmartflowObject.AltDisplayName) ? _selectedSmartflowItem.SmartflowObject.Name : _selectedSmartflowItem.SmartflowObject.AltDisplayName);
             
             Action SelectedDeleteAction = HandleDelete;
             var parameters = new ModalParameters();
@@ -270,7 +281,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Documents
         private async void HandleDelete() 
         {
             //<ModalDelete> simply invokes this method when user cicks OK. No need for the modal to handle this action as we do not require any details from the Modal. 
-            _SelectedSmartflow.Documents.Remove(EditObject.ChapterObject);
+            _SelectedSmartflow.Documents.Remove(EditObject.SmartflowObject);
             
             await ChapterItemsUpdated();
 
@@ -297,25 +308,25 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Documents
         {
             SelectedList = "New Attachement";
             EditObject = _item;
-            _AttachObject = null;
+            EditLinkedObject = null;
 
             ShowSmartflowAttachmentModal();
         }
 
-        private void PrepareAttachmentForEdit(VmSmartflowDocument _item, LinkedDocument _linkedItems)
+        private void PrepareAttachmentForEdit(VmSmartflowDocument _item, LinkedDocument _linkedItem)
         {
             SelectedList = "Edit Attachement";
             EditObject = _item;
-            _AttachObject = _linkedItems;
+            EditLinkedObject = _linkedItem;
 
             ShowSmartflowAttachmentModal();
         }
 
-        private void PrepareAttachmentForView(VmSmartflowDocument _item, LinkedDocument _linkedItems)
+        private void PrepareAttachmentForView(VmSmartflowDocument _item, LinkedDocument _linkedItem)
         {
             SelectedList = "Edit Attachement";
             EditObject = _item;
-            _AttachObject = _linkedItems;
+            EditLinkedObject = _linkedItem;
 
             ShowSmartflowAttachmentViewModal();
         }
@@ -328,21 +339,21 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Documents
 
             var copyObject = new SmartflowDocument
             {
-                Name = EditObject.ChapterObject.Name,
-                EntityType = EditObject.ChapterObject.EntityType,
-                SeqNo = EditObject.ChapterObject.SeqNo,
-                CompleteName = EditObject.ChapterObject.CompleteName,
-                AsName = EditObject.ChapterObject.AsName,
-                RescheduleDays = EditObject.ChapterObject.RescheduleDays,
-                AltDisplayName = EditObject.ChapterObject.AltDisplayName,
-                UserMessage = EditObject.ChapterObject.UserMessage,
-                PopupAlert = EditObject.ChapterObject.PopupAlert,
-                NextStatus = EditObject.ChapterObject.NextStatus,
-                LinkedItems = EditObject.ChapterObject.LinkedItems is null ? new List<LinkedDocument>() : EditObject.ChapterObject.LinkedItems
+                Name = EditObject.SmartflowObject.Name,
+                EntityType = EditObject.SmartflowObject.EntityType,
+                SeqNo = EditObject.SmartflowObject.SeqNo,
+                CompleteName = EditObject.SmartflowObject.CompleteName,
+                AsName = EditObject.SmartflowObject.AsName,
+                RescheduleDays = EditObject.SmartflowObject.RescheduleDays,
+                AltDisplayName = EditObject.SmartflowObject.AltDisplayName,
+                UserMessage = EditObject.SmartflowObject.UserMessage,
+                PopupAlert = EditObject.SmartflowObject.PopupAlert,
+                NextStatus = EditObject.SmartflowObject.NextStatus,
+                LinkedItems = EditObject.SmartflowObject.LinkedItems is null ? new List<LinkedDocument>() : EditObject.SmartflowObject.LinkedItems
             };
 
             
-            var attachment = _AttachObject is null 
+            var attachment = EditLinkedObject is null 
                 ? new LinkedDocument
                 {
                     Action = "INSERT",
@@ -353,11 +364,11 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Documents
                     TrackingMethod = "",
                     CustomItem = "N"
                 } 
-                : copyObject.LinkedItems.Where(F => F.DocName == _AttachObject.DocName).FirstOrDefault(); 
+                : copyObject.LinkedItems.Where(F => F.DocName == EditLinkedObject.DocName).FirstOrDefault(); 
 
 
             var parameters = new ModalParameters();
-            parameters.Add("_TaskObject", EditObject.ChapterObject);
+            parameters.Add("_TaskObject", EditObject.SmartflowObject);
             parameters.Add("_CopyObject", copyObject);
             parameters.Add("_DataChanged", refreshSelectedList);
             parameters.Add("_RefreshLibraryDocumentsAndSteps", refreshLibraryDocumentsAndSteps);
@@ -381,7 +392,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Documents
 
         protected void ShowSmartflowAttachmentViewModal()
         {
-            var attachment = _AttachObject is null ? new LinkedDocument { Action = "INSERT" } : _AttachObject;
+            var attachment = EditLinkedObject is null ? new LinkedDocument { Action = "INSERT" } : EditLinkedObject;
 
             var parameters = new ModalParameters();
             parameters.Add("_Attachment", attachment);
@@ -404,9 +415,12 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Documents
         {
             try
             {
-                _LibraryDocumentsAndSteps = await ClientApiManagementService.GetDocumentList(_SelectedSmartflow.CaseType);
-                _LibraryDocumentsAndSteps = _LibraryDocumentsAndSteps.Where(D => !(D.Name is null)).ToList();
-                //StateHasChanged();
+                await _RefreshLibraryDocumentsAndSteps.InvokeAsync();
+                
+                await InvokeAsync(() =>
+                {
+                    StateHasChanged();
+                });
             }
             catch (Exception ex)
             {
@@ -483,12 +497,12 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Documents
 
                         var cItems = AltSmartflow.Documents;
 
-                        LstAltSystemItems = cItems.Select(T => new VmSmartflowDocument { ChapterObject = T, Compared = false }).ToList();
+                        LstAltSystemItems = cItems.Select(T => new VmSmartflowDocument { SmartflowObject = T, Compared = false }).ToList();
                         
                         foreach (var item in _LstDocs)
                         {
                             var altObject = LstAltSystemItems
-                                        .Where(A => A.ChapterObject.Name == item.ChapterObject.Name)
+                                        .Where(A => A.SmartflowObject.Name == item.SmartflowObject.Name)
                                         .FirstOrDefault();
 
                             if (altObject is null)
@@ -648,9 +662,9 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Documents
                 
                 Action SelectedDeleteAction = HandleAltDelete;
                 var parameters = new ModalParameters();
-                parameters.Add("_ItemName", _selectedItem.ChapterObject.Name);
+                parameters.Add("_ItemName", _selectedItem.SmartflowObject.Name);
                 parameters.Add("_DeleteAction", SelectedDeleteAction);
-                parameters.Add("_InfoText", $"Are you sure you wish to delete the '{_selectedItem.ChapterObject.Name}' item from {UserSession.AltSystem} system?");
+                parameters.Add("_InfoText", $"Are you sure you wish to delete the '{_selectedItem.SmartflowObject.Name}' item from {UserSession.AltSystem} system?");
 
                 var options = new ModalOptions()
                 {
@@ -674,7 +688,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Documents
         {
             await UserSession.SwitchSelectedSystem();
 
-            AltSmartflow.Documents.Remove(EditObject.ChapterObject);
+            AltSmartflow.Documents.Remove(EditObject.SmartflowObject);
             LstAltSystemItems.Remove(EditObject);
 
             Alt_AppSmartflowRecord.SmartflowData = JsonConvert.SerializeObject(AltSmartflow);
@@ -721,11 +735,11 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Documents
                 RowChanged = (int)(_selectobject.SeqNo + incrementBy);
 
                 
-                var swapItem = _LstDocs.Where(D => D.ChapterObject.SeqNo == (_selectobject.SeqNo + incrementBy)).SingleOrDefault();
+                var swapItem = _LstDocs.Where(D => D.SmartflowObject.SeqNo == (_selectobject.SeqNo + incrementBy)).SingleOrDefault();
                 if (!(swapItem is null))
                 {
                     _selectobject.SeqNo += incrementBy;
-                    swapItem.ChapterObject.SeqNo = swapItem.ChapterObject.SeqNo + (incrementBy * -1);
+                    swapItem.SmartflowObject.SeqNo = swapItem.SmartflowObject.SeqNo + (incrementBy * -1);
 
                 }
 
@@ -749,7 +763,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Documents
         {
             RowChanged = _seq;
 
-            _LstDocs.Select(C => { C.ChapterObject.SeqNo = _LstDocs.IndexOf(C) + 1; return C; }).ToList();
+            _LstDocs.Select(C => { C.SmartflowObject.SeqNo = _LstDocs.IndexOf(C) + 1; return C; }).ToList();
 
             await ChapterItemsUpdated();
         }
