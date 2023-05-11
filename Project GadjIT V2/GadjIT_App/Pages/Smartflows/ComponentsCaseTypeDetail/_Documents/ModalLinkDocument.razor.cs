@@ -164,7 +164,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsCaseTypeDetail._Documents
                 }
                 else
                 {
-                    LinkedDocument attachItem = docItem.LinkedItems
+                    LinkedItem attachItem = docItem.LinkedItems
                                             .Where(LI => LI.DocName == _TaskObject.OrigItemName)
                                             .FirstOrDefault();
 

@@ -33,11 +33,11 @@
                 <div style="margin-left: 50px">
                     <label>Background Colour</label>
                     <select @bind="SelectColour"
-                            style="background-color: @getHTMLColourFromAndroid(ListChapterColours.Where(C => C.ColourName == SelectColour).Select(C => C.ColourCode).FirstOrDefault())"
+                            style="background-color: @getHTMLColourFromAndroid(ListSmartflowColours.Where(C => C.ColourName == SelectColour).Select(C => C.ColourCode).FirstOrDefault())"
                             class="form-control form-control-lg">
-                        @if(ListChapterColours != null)
+                        @if(ListSmartflowColours != null)
                         {
-                            foreach (var colour in ListChapterColours)
+                            foreach (var colour in ListSmartflowColours)
                             {
                                 <option style="background-color: @getHTMLColourFromAndroid(colour.ColourCode)" value="@(colour.ColourCode.Contains("#") ? colour.ColourName : colour.ColourCode)">
                                     @colour.ColourName

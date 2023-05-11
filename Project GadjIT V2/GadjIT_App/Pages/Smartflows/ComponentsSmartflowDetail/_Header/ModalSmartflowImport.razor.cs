@@ -64,7 +64,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Header
 
         private string ImportedJSON { get; set; }
 
-        private SmartflowV2 ChapterItems { get; set; }
+        private SmartflowV2 SmartflowItems { get; set; }
 
         [Parameter]
         public List<VmSmartflowDataView> OriginalDataViews { get; set; }
@@ -145,14 +145,14 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Header
                 }
                 else if (files != null && files.Count > 0)
                 {
-                    ChapterItems = SmartflowFileHelper.ReadSmartflowItemsFromExcel(ListFileDescriptions.Where(F => F.FileName == fileName).FirstOrDefault().FilePath);
+                    SmartflowItems = SmartflowFileHelper.ReadSmartflowItemsFromExcel(ListFileDescriptions.Where(F => F.FileName == fileName).FirstOrDefault().FilePath);
                     CopyOptions = new List<CopyOption>
                                                 {
-                                                    new CopyOption { Option = "Agenda", Selected = false, OptionCount = ChapterItems.Agendas.ToList().Count() },
-                                                    new CopyOption { Option = "Status", Selected = false, OptionCount = ChapterItems.Status.ToList().Count() },
-                                                    new CopyOption { Option = "Documents/Steps", Selected = false, OptionCount = ChapterItems.Documents.ToList().Count() },
-                                                    new CopyOption { Option = "Fees", Selected = false, OptionCount = ChapterItems.Fees.Count() },
-                                                    new CopyOption { Option = "Data Views", Selected = false, OptionCount = ChapterItems.DataViews.Count() },
+                                                    new CopyOption { Option = "Agenda", Selected = false, OptionCount = SmartflowItems.Agendas.ToList().Count() },
+                                                    new CopyOption { Option = "Status", Selected = false, OptionCount = SmartflowItems.Status.ToList().Count() },
+                                                    new CopyOption { Option = "Documents/Steps", Selected = false, OptionCount = SmartflowItems.Documents.ToList().Count() },
+                                                    new CopyOption { Option = "Fees", Selected = false, OptionCount = SmartflowItems.Fees.Count() },
+                                                    new CopyOption { Option = "Data Views", Selected = false, OptionCount = SmartflowItems.DataViews.Count() },
                                                 };
 
                     StateHasChanged();
@@ -194,7 +194,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Header
                     SelectedCopyItems.Agendas.Remove(item);
                 }
 
-                SelectedCopyItems.Agendas.AddRange(ChapterItems.Agendas.ToList());
+                SelectedCopyItems.Agendas.AddRange(SmartflowItems.Agendas.ToList());
             }
 
             if (CopyOptions.Where(C => C.Option == "Status").Select(C => C.Selected).FirstOrDefault())
@@ -204,7 +204,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Header
                     SelectedCopyItems.Status.Remove(item);
                 }
 
-                SelectedCopyItems.Status.AddRange(ChapterItems.Status.ToList());
+                SelectedCopyItems.Status.AddRange(SmartflowItems.Status.ToList());
             }
 
             if (CopyOptions.Where(C => C.Option == "Documents/Steps").Select(C => C.Selected).FirstOrDefault())
@@ -214,7 +214,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Header
                     SelectedCopyItems.Documents.Remove(item);
                 }
 
-                SelectedCopyItems.Documents.AddRange(ChapterItems.Documents.ToList());
+                SelectedCopyItems.Documents.AddRange(SmartflowItems.Documents.ToList());
             }
 
             if (CopyOptions.Where(C => C.Option == "Fees").Select(C => C.Selected).FirstOrDefault())
@@ -229,7 +229,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Header
                     SelectedCopyItems.Fees.Remove(item);
                 }
 
-                SelectedCopyItems.Fees.AddRange(ChapterItems.Fees);
+                SelectedCopyItems.Fees.AddRange(SmartflowItems.Fees);
             }
 
             if (CopyOptions.Where(C => C.Option == "Data Views").Select(C => C.Selected).FirstOrDefault())
@@ -244,7 +244,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Header
                     SelectedCopyItems.DataViews.Remove(item);
                 }
 
-                SelectedCopyItems.DataViews.AddRange(ChapterItems.DataViews);
+                SelectedCopyItems.DataViews.AddRange(SmartflowItems.DataViews);
             }
 
             ImportedJSON = JsonConvert.SerializeObject(new SmartflowV2
@@ -253,8 +253,8 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Header
                 CaseType = TaskObject.CaseType,
                 Name = TaskObject.SmartflowName,
                 SeqNo = TaskObject.SeqNo.GetValueOrDefault(),
-                ShowDocumentTracking = ChapterItems.ShowDocumentTracking,
-                ShowPartnerNotes = ChapterItems.ShowPartnerNotes,
+                ShowDocumentTracking = SmartflowItems.ShowDocumentTracking,
+                ShowPartnerNotes = SmartflowItems.ShowPartnerNotes,
                 P4WCaseTypeGroup = SelectedCopyItems.P4WCaseTypeGroup,
                 SelectedStep = SelectedCopyItems.SelectedStep,
                 SelectedView = SelectedCopyItems.SelectedView,

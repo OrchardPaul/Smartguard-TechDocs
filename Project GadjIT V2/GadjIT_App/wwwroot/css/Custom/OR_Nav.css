@@ -579,7 +579,7 @@
 .btn-ellipses .ellipsis-menu {
     position: absolute;
     display: block;
-    width: 130px;
+    width: 0px;
     top: 0;
     left: 10px;
     margin: 0;
@@ -588,19 +588,20 @@
     z-index: 100;
     opacity: 0;
     visibility: hidden;
-    transition: opacity 0.1s linear;
-    transition: visibility 0.1s linear, opacity 0.1s linear;
+    /* transition: opacity 0.1s linear;
+    transition: visibility 0.1s linear, opacity 0.1s linear; */
 }
 
 
 
 .btn-ellipses:hover .ellipsis-menu {
     top: 20px;
+    width: 130px;
     visibility: visible;
     opacity: 1;
-    transition-property: opacity;
+    /* transition-property: opacity;
     transition-duration: 0.1s;
-    transition-delay: 0.05s;
+    transition-delay: 0.05s; */
 }
 
 

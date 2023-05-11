@@ -56,22 +56,24 @@
 
                     </li>
                     
-                    <li class="nav-item @(NavDisplay == "Background" ? "active" : "")" @onclick='() => ShowNav("Background")'>
-                        <span class="font-120"><span class="fa fa-image" Title="Background - set background colour or image"></span></span>
-                        <div class="subtitle">Background</div>
-                    </li>
+                    @if (UserSession.IsAdminUser)
+                    {
+                        <li class="nav-item @(NavDisplay == "Background" ? "active" : "")" @onclick='() => ShowNav("Background")'>
+                            <span class="font-120"><span class="fa fa-image" Title="Background - set background colour or image"></span></span>
+                            <div class="subtitle">Background</div>
+                        </li>
 
-                    <li class="nav-item @(NavDisplay == "Backups" ? "active" : "")" @onclick='() => ShowNav("Backups")'>
-                        <span class="font-120"><span class="fa fa-save" Title="Backups - save, download and restore"></span></span>
-                        <div class="subtitle">Backups</div>
-                    </li>
+                        <li class="nav-item @(NavDisplay == "Backups" ? "active" : "")" @onclick='() => ShowNav("Backups")'>
+                            <span class="font-120"><span class="fa fa-save" Title="Backups - save, download and restore"></span></span>
+                            <div class="subtitle">Backups</div>
+                        </li>
 
-                    
-                    <li class="nav-item @(NavDisplay == "Docs" ? "active" : "")" @onclick='() => ShowNav("Docs")'>
-                        <span class="font-120"><span class="fa fa-file" Title="Document maintenance"></span></span>
-                        <div class="subtitle">Docs</div>
-                    </li>
-                    
+                        
+                        <li class="nav-item @(NavDisplay == "Docs" ? "active" : "")" @onclick='() => ShowNav("Docs")'>
+                            <span class="font-120"><span class="fa fa-file" Title="Document maintenance"></span></span>
+                            <div class="subtitle">Docs</div>
+                        </li>
+                    }
 
                 </ul>
 

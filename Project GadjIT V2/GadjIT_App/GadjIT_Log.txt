@@ -4881,12 +4881,12 @@ System.ArgumentNullException: Value cannot be null. (Parameter 'source')
    at System.Linq.ThrowHelper.ThrowArgumentNullException(ExceptionArgument argument)
    at System.Linq.Enumerable.Where[TSource](IEnumerable`1 source, Func`2 predicate)
    at GadjIT_App.Pages.Smartflows.Modals.ChapterDetail.OnInitializedAsync() in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_App\Pages\Chapters\Modals\ChapterDetail.razor.cs:line 193
-2023-01-03 12:38:01.920 +00:00 [ERR] Error - Method: RefreshCompararisonSelectedChapters, Message: Comparing all Smartflows from current listing: Object reference not set to an instance of an object.
+2023-01-03 12:38:01.920 +00:00 [ERR] Error - Method: RefreshCompararisonSelectedSmartflows, Message: Comparing all Smartflows from current listing: Object reference not set to an instance of an object.
 System.NullReferenceException: Object reference not set to an instance of an object.
-   at GadjIT_App.Pages.Smartflows.ChapterList.RefreshCompararisonSelectedChapters() in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_App\Pages\Chapters\ChapterList.razor.cs:line 2267
-2023-01-03 12:38:48.742 +00:00 [ERR] Error - Method: RefreshCompararisonSelectedChapters, Message: Comparing all Smartflows from current listing: Object reference not set to an instance of an object.
+   at GadjIT_App.Pages.Smartflows.ChapterList.RefreshCompararisonSelectedSmartflows() in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_App\Pages\Chapters\ChapterList.razor.cs:line 2267
+2023-01-03 12:38:48.742 +00:00 [ERR] Error - Method: RefreshCompararisonSelectedSmartflows, Message: Comparing all Smartflows from current listing: Object reference not set to an instance of an object.
 System.NullReferenceException: Object reference not set to an instance of an object.
-   at GadjIT_App.Pages.Smartflows.ChapterList.RefreshCompararisonSelectedChapters() in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_App\Pages\Chapters\ChapterList.razor.cs:line 2267
+   at GadjIT_App.Pages.Smartflows.ChapterList.RefreshCompararisonSelectedSmartflows() in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_App\Pages\Chapters\ChapterList.razor.cs:line 2267
 2023-01-03 12:51:00.724 +00:00 [ERR] Unhandled exception in circuit 'IjwMp-lfUOL8j1ajCmVJZ8G22kX6pCdAMoN9rhuiGY4'.
 System.InvalidOperationException: Unable to set property 'TaskObject' on object of type 'GadjIT_App.Pages.Smartflows.Modals.ChapterImport'. The error was: Unable to cast object of type 'GadjIT_ClientContext.P4W.Custom.Client_VmOrsfSmartflow' to type 'GadjIT_ClientContext.P4W.Client_OrsfSmartflow'.
  ---> System.InvalidCastException: Unable to cast object of type 'GadjIT_ClientContext.P4W.Custom.Client_VmOrsfSmartflow' to type 'GadjIT_ClientContext.P4W.Client_OrsfSmartflow'.
@@ -4907,9 +4907,9 @@ System.InvalidOperationException: Unable to set property 'TaskObject' on object 
    at Microsoft.AspNetCore.Components.Rendering.ComponentState.RenderIntoBatch(RenderBatchBuilder batchBuilder, RenderFragment renderFragment)
    at Microsoft.AspNetCore.Components.RenderTree.Renderer.RenderInExistingBatch(RenderQueueEntry renderQueueEntry)
    at Microsoft.AspNetCore.Components.RenderTree.Renderer.ProcessRenderQueue()
-2023-01-03 12:51:20.118 +00:00 [ERR] Error - Method: CreateSelectedChapterOnAlt, Message: Object reference not set to an instance of an object.
+2023-01-03 12:51:20.118 +00:00 [ERR] Error - Method: CreateSelectedSmartflowOnAlt, Message: Object reference not set to an instance of an object.
 System.NullReferenceException: Object reference not set to an instance of an object.
-   at GadjIT_App.Pages.Smartflows.ChapterList.SyncSelectedChapterOnAlt() in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_App\Pages\Chapters\ChapterList.razor.cs:line 2361
+   at GadjIT_App.Pages.Smartflows.ChapterList.SyncSelectedSmartflowOnAlt() in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_App\Pages\Chapters\ChapterList.razor.cs:line 2361
 2023-01-04 10:44:26.130 +00:00 [ERR] An unhandled exception has occurred while executing the request.
 System.InvalidOperationException: Object of type 'GadjIT_App.Pages.Smartflows.ChapterList' does not have a property matching the name 'UrlCaseTypeGroup'.
    at Microsoft.AspNetCore.Components.Reflection.ComponentProperties.ThrowForUnknownIncomingParameterName(Type targetType, String parameterName)
@@ -5475,8 +5475,8 @@ System.InvalidOperationException: Collection was modified; enumeration operation
    at System.Linq.Enumerable.WhereListIterator`1.MoveNext()
    at System.Linq.Enumerable.TryGetFirst[TSource](IEnumerable`1 source, Boolean& found)
    at System.Linq.Enumerable.FirstOrDefault[TSource](IEnumerable`1 source)
-   at GadjIT_App.Services.AppState.AppSmartflowsStateList.GetSmartflowItemState(IUserSessionState sessionState, VmSmartflow selectedChapter) in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_App\Services\AppState\AppSmartflowsState.cs:line 121
-   at GadjIT_App.Services.AppState.AppSmartflowsStateList.SetUsersCurrentChapter(IUserSessionState sessionState, VmSmartflow selectedChapter) in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_App\Services\AppState\AppSmartflowsState.cs:line 155
+   at GadjIT_App.Services.AppState.AppSmartflowsStateList.GetSmartflowItemState(IUserSessionState sessionState, VmSmartflow selectedSmartflow) in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_App\Services\AppState\AppSmartflowsState.cs:line 121
+   at GadjIT_App.Services.AppState.AppSmartflowsStateList.SetUsersCurrentChapter(IUserSessionState sessionState, VmSmartflow selectedSmartflow) in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_App\Services\AppState\AppSmartflowsState.cs:line 155
    at GadjIT_App.Pages.Smartflows.ChapterList.OnTimerInterval(Object sender, ElapsedEventArgs eventArgs) in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_App\Pages\Chapters\ChapterList.razor.cs:line 218
 2023-01-05 14:13:11.550 +00:00 [ERR] Error - Method: OnAfterRenderAsync, Message: A task was canceled.
 System.Threading.Tasks.TaskCanceledException: A task was canceled.
@@ -6400,8 +6400,8 @@ System.InvalidOperationException: Collection was modified; enumeration operation
    at System.Linq.Enumerable.WhereListIterator`1.MoveNext()
    at System.Linq.Enumerable.TryGetFirst[TSource](IEnumerable`1 source, Boolean& found)
    at System.Linq.Enumerable.FirstOrDefault[TSource](IEnumerable`1 source)
-   at GadjIT_App.Services.AppState.AppSmartflowsStateList.GetSmartflowItemState(IUserSessionState sessionState, VmSmartflow selectedChapter) in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_App\Services\AppState\AppSmartflowsState.cs:line 121
-   at GadjIT_App.Services.AppState.AppSmartflowsStateList.SetUsersCurrentChapter(IUserSessionState sessionState, VmSmartflow selectedChapter) in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_App\Services\AppState\AppSmartflowsState.cs:line 155
+   at GadjIT_App.Services.AppState.AppSmartflowsStateList.GetSmartflowItemState(IUserSessionState sessionState, VmSmartflow selectedSmartflow) in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_App\Services\AppState\AppSmartflowsState.cs:line 121
+   at GadjIT_App.Services.AppState.AppSmartflowsStateList.SetUsersCurrentChapter(IUserSessionState sessionState, VmSmartflow selectedSmartflow) in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_App\Services\AppState\AppSmartflowsState.cs:line 155
    at GadjIT_App.Pages.Smartflows.ChapterList.OnTimerInterval(Object sender, ElapsedEventArgs eventArgs) in F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\GadjIT_App\Pages\Chapters\ChapterList.razor.cs:line 218
 2023-01-23 12:50:42.091 +00:00 [ERR] Unhandled exception in circuit 'aHBalnJ6kBkAAtGNetG8Mrtqk53gdWBVqypWUSlFy3A'.
 System.InvalidOperationException: Object of type 'GadjIT_App.Pages.Smartflows.ComponentsChapterDetail._Backup.ChapterBackupDetail' does not have a property matching the name '_SelectedCaseTypeGroup'.

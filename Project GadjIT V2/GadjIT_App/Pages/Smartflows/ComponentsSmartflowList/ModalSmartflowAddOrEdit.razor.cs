@@ -28,7 +28,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowList
         public Action DataChanged { get; set; }
 
         [Parameter]
-        public List<Client_VmSmartflowRecord> AllObjects { get; set; }
+        public List<Client_VmSmartflowRecord> LstAll_VmClientSmartflowRecord { get; set; }
 
         [Parameter]
         public bool addNewCaseTypeGroupOption { get; set; } = false;
@@ -61,16 +61,20 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowList
                 var name = Regex.Replace(TaskObject.SmartflowName, "[^0-9a-zA-Z-_ (){}!£$%^&*,.#?@<>`: ]+", "");
                 var caseType = Regex.Replace(TaskObject.CaseType, "[^0-9a-zA-Z-_ (){}!£$%^&*,.#?@<>`: ]+", "");
                 var caseTypeGroup = Regex.Replace(TaskObject.CaseTypeGroup, "[^0-9a-zA-Z-_ (){}!£$%^&*,.#?@<>`: ]+", "");
+                int seqNo = LstAll_VmClientSmartflowRecord.Where(S => S.ClientSmartflowRecord.CaseTypeGroup == caseTypeGroup)
+                                                            .Where(S => S.ClientSmartflowRecord.CaseType == caseType)
+                                                            .Count() + 1;
 
                 TaskObject.SmartflowName = name;
                 TaskObject.CaseType = caseType;
                 TaskObject.CaseTypeGroup = caseTypeGroup;
+                TaskObject.SeqNo = seqNo;
                 TaskObject.SmartflowData = JsonConvert.SerializeObject(new SmartflowV2
                 {
                     CaseTypeGroup = caseTypeGroup,
                     CaseType = caseType,
                     Name = name,
-                    SeqNo = TaskObject.SeqNo.GetValueOrDefault(),
+                    SeqNo = seqNo,
                     StepName = "",
                     ShowPartnerNotes = "N",
                     Agendas = new List<SmartflowAgenda>(),
@@ -98,7 +102,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowList
 
         private void HandleValidSubmit()
         {
-            if (AllObjects
+            if (LstAll_VmClientSmartflowRecord
                 .Where(A => A.ClientSmartflowRecord.CaseTypeGroup == TaskObject.CaseTypeGroup)
                 .Select(A => A.ClientSmartflowRecord.SmartflowName)
                 .Contains(TaskObject.SmartflowName))
@@ -116,7 +120,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowList
 
         private async void HandleValidDelete()
         {
-            await ClientApiManagementService.DeleteChapter(TaskObject.Id);
+            await ClientApiManagementService.DeleteSmartflow(TaskObject.Id);
 
             DataChanged?.Invoke();
             Close();

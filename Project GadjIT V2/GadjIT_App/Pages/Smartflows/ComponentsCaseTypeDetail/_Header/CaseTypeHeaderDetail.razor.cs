@@ -109,9 +109,8 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsCaseTypeDetail._Header
         protected override async Task OnInitializedAsync()
         {
             
-            await RefreshSmartflowListTask();
+            await RefreshSmartflowListTask(false);
 
-            await ReSequenceSmartFlows();
             
         }
 
@@ -157,18 +156,19 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsCaseTypeDetail._Header
         {
             await _RefreshSmartflowsTask.InvokeAsync();
 
-            await RefreshSmartflowListTask();
+            await RefreshSmartflowListTask(false);
 
-            await ReSequenceSmartFlows();
+            await NotificationManager.ShowNotification("Success", $"Smartflow list refreshed");
 
         }
 
         private async void RefreshSmartflowList()
         {
-            await RefreshSmartflowListTask();
+            await RefreshSmartflowListTask(true);
         }
 
-        private async Task RefreshSmartflowListTask()
+
+        private async Task RefreshSmartflowListTask(bool forceChange)
         {
             //_LstVmClientSmartflowRecord may change if other users are making updates
             // these changes will be refreshed within SmartflowList during a timer event
@@ -181,16 +181,9 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsCaseTypeDetail._Header
                                         .ToList();
 
 
-            if(LstSmartflows.Count == 0)
+            if(LstSmartflows.Count > 0)
             {
-                await InvokeAsync(() =>
-                {
-                    StateHasChanged();
-                });
-            }
-            else
-            {
-                
+                             
                 await ReSequenceSmartFlows();
 
                 await RefreshSmartflowIssues();
@@ -200,6 +193,14 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsCaseTypeDetail._Header
                     vmSmartflow.SetSmartflowStatistics();
                 }
 
+            }
+
+            if(forceChange)
+            {
+                await InvokeAsync(() =>
+                {
+                    StateHasChanged();
+                });
             }
             
         }
@@ -336,7 +337,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsCaseTypeDetail._Header
                 
                 await NotificationManager.ShowNotification("Success", $"Smartflow successfully deleted.");
                     
-                await RefreshSmartflowListTask();    
+                await RefreshSmartflowListTask(false);    
 
             }
             catch(Exception e)

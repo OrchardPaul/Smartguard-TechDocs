@@ -22,6 +22,7 @@ using GadjIT_App.Pages.Smartflows.ComponentsSmartflowList;
 using GadjIT_ClientContext.Models.Smartflow;
 using GadjIT_ClientContext.Models.Smartflow.Client;
 using GadjIT_ClientContext.Models.P4W;
+using GadjIT_AppContext.GadjIT_App;
 
 namespace GadjIT_App.Pages.Smartflows
 {
@@ -147,7 +148,7 @@ namespace GadjIT_App.Pages.Smartflows
 
                 try
                 {
-                    await RefreshSmartflowsTask();
+                    await RefreshSmartflowsTask(false);
 
                     //P4WCaseTypeGroups = await PartnerAccessService.GetPartnerCaseTypeGroups();
                     //ListP4WViews = await PartnerAccessService.GetPartnerViews();
@@ -402,11 +403,22 @@ namespace GadjIT_App.Pages.Smartflows
             /// Must be a standard void method so it can be assigned as an Action to Modals
             /// </summary>
             
-            await RefreshSmartflowsTask();
+            await RefreshSmartflowsTask(true);
             
         }
 
         public async Task RefreshSmartflowsTask()
+        {
+            await RefreshSmartflowsTask(false);
+
+            if(ListSmartflowIsLoaded)
+            {
+                await NotificationManager.ShowNotification("Success", $"Smartflows refreshed");
+            }
+
+        }
+
+        public async Task RefreshSmartflowsTask(bool forceChange)
         {
                        
             ListSmartflowIsLoaded = false;
@@ -420,24 +432,19 @@ namespace GadjIT_App.Pages.Smartflows
 
             try
             {
-                var lstAppSmartflowRecords = await CompanyDbAccess.GetAllAppSmartflowRecords(UserSession);
+                //Note: Orig version took Smartflow list from Application as this was potentially quicker and may improved user experience. Now take from client for better accuracy.
+                //
+                //List<App_SmartflowRecord> lstAppSmartflowRecords = await CompanyDbAccess.GetAllAppSmartflowRecords(UserSession);
                 //generate a copy of the Smartflow Records but converted to Client_VmSmartflowRecord 
-                LstAll_VmClientSmartflowRecord = lstAppSmartflowRecords.Select(A => new Client_VmSmartflowRecord { ClientSmartflowRecord = Mapper.Map(A, new Client_SmartflowRecord()) }).ToList();
+                //LstAll_VmClientSmartflowRecord = lstAppSmartflowRecords.Select(A => new Client_VmSmartflowRecord { ClientSmartflowRecord = Mapper.Map(A, new Client_SmartflowRecord()) }).ToList();
                 
+                //Get Smartflow records from Client API
+                //Note: originally sourced from Application but this may not be a true reflection of the client data so updated to take direct from the client [PT: 27/03/2023]
+                List<Client_SmartflowRecord> lstClientSmartflowRecords = await ClientApiManagementService.GetAllSmartflows();
 
-                // LstSelected_VmClientSmartflowRecord = LstAll_VmClientSmartflowRecord
-                //                         .Where(C => C.ClientSmartflowRecord.CaseTypeGroup == SelectedCaseTypeGroup)
-                //                         .Where(C => C.ClientSmartflowRecord.CaseType == SelectedCaseType)
-                //                         .OrderBy(C => C.ClientSmartflowRecord.SeqNo)
-                //                         .ToList();
+                LstAll_VmClientSmartflowRecord = lstClientSmartflowRecords.Select(A => new Client_VmSmartflowRecord { ClientSmartflowRecord = A }).ToList();
 
-                // //await ReSequenceSmartFlows(); //makes sure the sequence numbers are all sequential, corrects any issues
-                // await RefreshSmartflowIssues();
-
-                // foreach(Client_VmSmartflowRecord vmSmartflow in LstSelected_VmClientSmartflowRecord)
-                // {
-                //     vmSmartflow.SetSmartflowStatistics();
-                // }
+                
 
             }
             catch(Exception e)
@@ -449,16 +456,21 @@ namespace GadjIT_App.Pages.Smartflows
 
                 GenericErrorLog(false,e, "RefreshSmartflows", $"Refreshing Smartflow list: {e.Message}");
             }
-
-            ListSmartflowIsLoaded = true;
-
-            //may have been called from a void (not direct on a UI thread) following a modal so will need to call a StateHasChanged
-            await InvokeAsync(() =>
+            finally
             {
-                StateHasChanged();
-            });
+                ListSmartflowIsLoaded = true;
+                
+                if(forceChange)
+                {
+                    //may have been called from a void (not direct on a UI thread) following a modal so will need to call a StateHasChanged
+                    await InvokeAsync(() =>
+                    {
+                        StateHasChanged();
+                    });
+                }
+            }
 
-            
+
         }
 
         
@@ -607,7 +619,7 @@ namespace GadjIT_App.Pages.Smartflows
                     Edit_ClientSmartflowRecord.SeqNo = 1;
                 }
 
-                ShowSmartflowAddOrEditModel();
+                ShowSmartflowAddModel();
 
             }
             catch(Exception e)
@@ -638,6 +650,24 @@ namespace GadjIT_App.Pages.Smartflows
 
                 ShowCaseTypeEditModal();
             }
+        }
+
+        /// <summary>
+        /// Selects the current Case Type. Based on the Smartflow just created (Edit Smartflow)
+        /// </summary>
+        /// <param name="caseTypeGroup"></param>
+        /// <param name="caseType"></param>
+        /// <returns></returns>
+        protected async void ShowSelectedCaseTypeDetail()
+        {
+            await ShowSelectedCaseTypeDetailTask();
+        }
+
+        protected async Task ShowSelectedCaseTypeDetailTask()
+        {
+            await RefreshSmartflowsTask(false); //refresh the list of Smartflows but do not refresh the page. This will be handled within ShowCaseTypeDetail
+
+            ShowCaseTypeDetail(Edit_ClientSmartflowRecord.CaseTypeGroup, Edit_ClientSmartflowRecord.CaseType);
         }
 
         protected async void ShowCaseTypeDetail(string caseTypeGroup, string caseType)
@@ -762,14 +792,14 @@ namespace GadjIT_App.Pages.Smartflows
             
         }
 
-        protected void ShowSmartflowAddOrEditModel()
+        protected void ShowSmartflowAddModel()
         {
-            Action action = RefreshSmartflows;
+            Action action = ShowSelectedCaseTypeDetail;
 
             var parameters = new ModalParameters();
             parameters.Add("TaskObject", Edit_ClientSmartflowRecord);
             parameters.Add("DataChanged", action);
-            parameters.Add("AllObjects", LstAll_VmClientSmartflowRecord);
+            parameters.Add("LstAll_VmClientSmartflowRecord", LstAll_VmClientSmartflowRecord);
             parameters.Add("UserSession", UserSession);
             parameters.Add("CompanyDbAccess", CompanyDbAccess);
 
@@ -1077,173 +1107,177 @@ namespace GadjIT_App.Pages.Smartflows
         
         public async void UpdateToSmartflowV2()
         {
-            try
-            {
-                var lstAppRecords = await CompanyDbAccess.GetAllAppSmartflowRecords(UserSession);
-                List<Client_VmSmartflowRecord> lst_VmClientSmartflowRecord = new List<Client_VmSmartflowRecord>();
+            // try
+            // {
+            //     //var lstAppRecords = await CompanyDbAccess.GetAllAppSmartflowRecords(UserSession);
+            //     //List<Client_VmSmartflowRecord> lst_VmClientSmartflowRecord = new List<Client_VmSmartflowRecord>();
 
-                if(!(lstAppRecords is null))
-                {
-                    lst_VmClientSmartflowRecord = lstAppRecords.Select(A => new Client_VmSmartflowRecord { ClientSmartflowRecord = Mapper.Map(A, new Client_SmartflowRecord()) }).ToList();
-                }
+            //     List<Client_SmartflowRecord> lstClientSmartflowRecords = await ClientApiManagementService.GetAllSmartflows();
+            //     List<Client_VmSmartflowRecord> lst_VmClientSmartflowRecord = new List<Client_VmSmartflowRecord>();
 
-                var intRecords = 0;
+            //     if(!(lstClientSmartflowRecords is null))
+            //     {
+            //         //lst_VmClientSmartflowRecord = lstAppRecords.Select(A => new Client_VmSmartflowRecord { ClientSmartflowRecord = Mapper.Map(A, new Client_SmartflowRecord()) }).ToList();
+            //         lst_VmClientSmartflowRecord = lstClientSmartflowRecords.Select(A => new Client_VmSmartflowRecord { ClientSmartflowRecord = A }).ToList();
+            //     }
 
-                foreach(Client_VmSmartflowRecord vmClientSmartflowRecord in lst_VmClientSmartflowRecord.OrderBy(S => S.ClientSmartflowRecord.SmartflowName))
-                {
-                    try
-                    {
-                        SmartflowV1 smartflow = JsonConvert.DeserializeObject<SmartflowV1>(vmClientSmartflowRecord.ClientSmartflowRecord.SmartflowData);
+            //     var intRecords = 0;
 
-                        SmartflowV2 smarflow2 = new SmartflowV2{
-                                                        CaseTypeGroup = smartflow.CaseTypeGroup
-                                                        , CaseType  = smartflow.CaseType
-                                                        , Name  = smartflow.Name
-                                                        , SeqNo  = smartflow.SeqNo
-                                                        , P4WCaseTypeGroup  = smartflow.P4WCaseTypeGroup
-                                                        , StepName  = smartflow.StepName
-                                                        , BackgroundColour  = smartflow.BackgroundColour
-                                                        , BackgroundColourName  = smartflow.BackgroundColourName
-                                                        , BackgroundImage  = smartflow.BackgroundImage
-                                                        , BackgroundImageName  = smartflow.BackgroundImageName
-                                                        , ShowPartnerNotes  = smartflow.ShowPartnerNotes
-                                                        , ShowDocumentTracking  = smartflow.ShowDocumentTracking
-                                                        , GeneralNotes  = smartflow.GeneralNotes
-                                                        , DeveloperNotes  = smartflow.DeveloperNotes
-                                                        , SelectedView  = smartflow.SelectedView
-                                                        , SelectedStep  = smartflow.SelectedStep
-                                                        , Agendas  = new List<SmartflowAgenda>()
-                                                        , Status  = new List<SmartflowStatus>()
-                                                        , Documents  = new List<SmartflowDocument>()
-                                                        , DataViews  = new List<SmartflowDataView>()
-                                                        , Fees  = new List<SmartflowFee>()
-                                                        , Messages  = new List<SmartflowMessage>()
-                        };
+            //     foreach(Client_VmSmartflowRecord vmClientSmartflowRecord in lst_VmClientSmartflowRecord.OrderBy(S => S.ClientSmartflowRecord.SmartflowName))
+            //     {
+            //         try
+            //         {
+            //             SmartflowV1 smartflow = JsonConvert.DeserializeObject<SmartflowV1>(vmClientSmartflowRecord.ClientSmartflowRecord.SmartflowData);
+
+            //             SmartflowV2 smarflow2 = new SmartflowV2{
+            //                                             CaseTypeGroup = smartflow.CaseTypeGroup
+            //                                             , CaseType  = smartflow.CaseType
+            //                                             , Name  = smartflow.Name
+            //                                             , SeqNo  = smartflow.SeqNo
+            //                                             , P4WCaseTypeGroup  = smartflow.P4WCaseTypeGroup
+            //                                             , StepName  = smartflow.StepName
+            //                                             , BackgroundColour  = smartflow.BackgroundColour
+            //                                             , BackgroundColourName  = smartflow.BackgroundColourName
+            //                                             , BackgroundImage  = smartflow.BackgroundImage
+            //                                             , BackgroundImageName  = smartflow.BackgroundImageName
+            //                                             , ShowPartnerNotes  = smartflow.ShowPartnerNotes
+            //                                             , ShowDocumentTracking  = smartflow.ShowDocumentTracking
+            //                                             , GeneralNotes  = smartflow.GeneralNotes
+            //                                             , DeveloperNotes  = smartflow.DeveloperNotes
+            //                                             , SelectedView  = smartflow.SelectedView
+            //                                             , SelectedStep  = smartflow.SelectedStep
+            //                                             , Agendas  = new List<SmartflowAgenda>()
+            //                                             , Status  = new List<SmartflowStatus>()
+            //                                             , Documents  = new List<SmartflowDocument>()
+            //                                             , DataViews  = new List<SmartflowDataView>()
+            //                                             , Fees  = new List<SmartflowFee>()
+            //                                             , Messages  = new List<SmartflowMessage>()
+            //             };
                         
-                        if(smartflow.Items != null)
-                        {
+            //             if(smartflow.Items != null)
+            //             {
 
-                            foreach(GenSmartflowItem smartflowItem in smartflow.Items.Where(I => I.Type == "Agenda").ToList())
-                            {
-                                smarflow2.Agendas.Add(new SmartflowAgenda{ Name = smartflowItem.Name});
-                            }
+            //                 foreach(GenSmartflowItem smartflowItem in smartflow.Items.Where(I => I.Type == "Agenda").ToList())
+            //                 {
+            //                     smarflow2.Agendas.Add(new SmartflowAgenda{ Name = smartflowItem.Name});
+            //                 }
 
-                            foreach(GenSmartflowItem smartflowItem in smartflow.Items.Where(I => I.Type == "Status").ToList())
-                            {
-                                smarflow2.Status.Add(new SmartflowStatus{ Name = smartflowItem.Name
-                                                                            , SuppressStep = smartflowItem.SuppressStep
-                                                                            , MilestoneStatus = smartflowItem.MilestoneStatus
-                                                                            , SeqNo = smartflowItem.SeqNo
-                                                                        });
-                            }
+            //                 foreach(GenSmartflowItem smartflowItem in smartflow.Items.Where(I => I.Type == "Status").ToList())
+            //                 {
+            //                     smarflow2.Status.Add(new SmartflowStatus{ Name = smartflowItem.Name
+            //                                                                 , SuppressStep = smartflowItem.SuppressStep
+            //                                                                 , MilestoneStatus = smartflowItem.MilestoneStatus
+            //                                                                 , SeqNo = smartflowItem.SeqNo
+            //                                                             });
+            //                 }
                             
-                            foreach(GenSmartflowItem smartflowItem in smartflow.Items.Where(I => I.Type == "Doc").ToList())
-                            {
-                                SmartflowDocument smartflowDocument = new SmartflowDocument{ Name = smartflowItem.Name
-                                                                            , SeqNo = smartflowItem.SeqNo
-                                                                            , AsName = smartflowItem.AsName
-                                                                            , CompleteName = smartflowItem.CompleteName
-                                                                            , RescheduleDays = smartflowItem.RescheduleDays
-                                                                            , RescheduleDataItem = smartflowItem.RescheduleDataItem
-                                                                            , AltDisplayName = smartflowItem.AltDisplayName
-                                                                            , NextStatus = smartflowItem.NextStatus
-                                                                            , Action = smartflowItem.Action
-                                                                            , UserMessage = smartflowItem.UserMessage
-                                                                            , PopupAlert = smartflowItem.PopupAlert
-                                                                            , DeveloperNotes = smartflowItem.DeveloperNotes
-                                                                            , StoryNotes = smartflowItem.StoryNotes
-                                                                            , TrackingMethod = smartflowItem.TrackingMethod
-                                                                            , ChaserDesc = smartflowItem.ChaserDesc
-                                                                            , OptionalDocument = smartflowItem.OptionalDocument
-                                                                            , CustomItem = smartflowItem.CustomItem
-                                                                            , Agenda = smartflowItem.Agenda
-                                                                            , LinkedItems = new List<LinkedDocument>()
-                                                                        };
+            //                 foreach(GenSmartflowItem smartflowItem in smartflow.Items.Where(I => I.Type == "Doc").ToList())
+            //                 {
+            //                     SmartflowDocument smartflowDocument = new SmartflowDocument{ Name = smartflowItem.Name
+            //                                                                 , SeqNo = smartflowItem.SeqNo
+            //                                                                 , AsName = smartflowItem.AsName
+            //                                                                 , CompleteName = smartflowItem.CompleteName
+            //                                                                 , RescheduleDays = smartflowItem.RescheduleDays
+            //                                                                 , RescheduleDataItem = smartflowItem.RescheduleDataItem
+            //                                                                 , AltDisplayName = smartflowItem.AltDisplayName
+            //                                                                 , NextStatus = smartflowItem.NextStatus
+            //                                                                 , Action = smartflowItem.Action
+            //                                                                 , UserMessage = smartflowItem.UserMessage
+            //                                                                 , PopupAlert = smartflowItem.PopupAlert
+            //                                                                 , DeveloperNotes = smartflowItem.DeveloperNotes
+            //                                                                 , StoryNotes = smartflowItem.StoryNotes
+            //                                                                 , TrackingMethod = smartflowItem.TrackingMethod
+            //                                                                 , ChaserDesc = smartflowItem.ChaserDesc
+            //                                                                 , OptionalDocument = smartflowItem.OptionalDocument
+            //                                                                 , CustomItem = smartflowItem.CustomItem
+            //                                                                 , Agenda = smartflowItem.Agenda
+            //                                                                 , LinkedItems = new List<LinkedItem>()
+            //                                                             };
 
-                                if(smartflowItem.LinkedItems != null)
-                                {
-                                    foreach(LinkedItem linkedItem in smartflowItem.LinkedItems.ToList())
-                                    {
-                                        smartflowDocument.LinkedItems.Add(new LinkedDocument{
-                                                                        DocName = linkedItem.DocName
-                                                                        , DocAsName = linkedItem.DocAsName
-                                                                        , DocType = linkedItem.DocType
-                                                                        , Action = linkedItem.Action
-                                                                        , TrackingMethod = linkedItem.TrackingMethod
-                                                                        , ChaserDesc = linkedItem.ChaserDesc
-                                                                        , ScheduleDays = linkedItem.ScheduleDays
-                                                                        , OptionalDocument = linkedItem.OptionalDocument
-                                                                        , CustomItem = linkedItem.CustomItem
-                                                                        , Agenda = linkedItem.Agenda
-                                                                        , ScheduleDataItem = linkedItem.ScheduleDataItem
+            //                     if(smartflowItem.LinkedItems != null)
+            //                     {
+            //                         foreach(LinkedItem linkedItem in smartflowItem.LinkedItems.ToList())
+            //                         {
+            //                             smartflowDocument.LinkedItems.Add(new LinkedItem{
+            //                                                             DocName = linkedItem.DocName
+            //                                                             , DocAsName = linkedItem.DocAsName
+            //                                                             , DocType = linkedItem.DocType
+            //                                                             , Action = linkedItem.Action
+            //                                                             , TrackingMethod = linkedItem.TrackingMethod
+            //                                                             , ChaserDesc = linkedItem.ChaserDesc
+            //                                                             , ScheduleDays = linkedItem.ScheduleDays
+            //                                                             , OptionalDocument = linkedItem.OptionalDocument
+            //                                                             , CustomItem = linkedItem.CustomItem
+            //                                                             , Agenda = linkedItem.Agenda
+            //                                                             , ScheduleDataItem = linkedItem.ScheduleDataItem
 
-                                        });
-                                    }
-                                }
+            //                             });
+            //                         }
+            //                     }
                                 
-                                smarflow2.Documents.Add(smartflowDocument);
-                            }
-                        }
+            //                     smarflow2.Documents.Add(smartflowDocument);
+            //                 }
+            //             }
 
-                        if(smartflow.Fees != null)
-                        {
-                            foreach(SmartflowFee smartflowItem in smartflow.Fees.ToList())
-                            {
-                                smarflow2.Fees.Add(new SmartflowFee{ 
-                                                                FeeName = smartflowItem.FeeName
-                                                                , SeqNo = smartflowItem.SeqNo
-                                                                , FeeCategory = smartflowItem.FeeCategory
-                                                                , Amount = smartflowItem.Amount
-                                                                , VATable = smartflowItem.VATable
-                                                                , PostingType = smartflowItem.PostingType
-                                });
-                            }
-                        }
+            //             if(smartflow.Fees != null)
+            //             {
+            //                 foreach(SmartflowFee smartflowItem in smartflow.Fees.ToList())
+            //                 {
+            //                     smarflow2.Fees.Add(new SmartflowFee{ 
+            //                                                     FeeName = smartflowItem.FeeName
+            //                                                     , SeqNo = smartflowItem.SeqNo
+            //                                                     , FeeCategory = smartflowItem.FeeCategory
+            //                                                     , Amount = smartflowItem.Amount
+            //                                                     , VATable = smartflowItem.VATable
+            //                                                     , PostingType = smartflowItem.PostingType
+            //                     });
+            //                 }
+            //             }
 
-                        if(smartflow.DataViews != null)
-                        {
-                            foreach(SmartflowDataView smartflowItem in smartflow.DataViews.ToList())
-                            {
-                                smarflow2.DataViews.Add(new SmartflowDataView{ 
-                                                                ViewName = smartflowItem.ViewName
-                                                                , SeqNo = smartflowItem.BlockNo
-                                                                , DisplayName = smartflowItem.DisplayName
-                                                    });
-                            }
-                        }
+            //             if(smartflow.DataViews != null)
+            //             {
+            //                 foreach(SmartflowDataView smartflowItem in smartflow.DataViews.ToList())
+            //                 {
+            //                     smarflow2.DataViews.Add(new SmartflowDataView{ 
+            //                                                     ViewName = smartflowItem.ViewName
+            //                                                     , SeqNo = smartflowItem.BlockNo ?? smartflowItem.SeqNo
+            //                                                     , DisplayName = smartflowItem.DisplayName
+            //                                         });
+            //                 }
+            //             }
 
-                        if(smartflow.TickerMessages != null)
-                        {
-                            foreach(SmartflowMessage smartflowItem in smartflow.TickerMessages.ToList())
-                            {
-                                smarflow2.Messages.Add(new SmartflowMessage{ 
-                                                                Message = smartflowItem.Message
-                                                                , SeqNo = smartflowItem.SeqNo
-                                                                , FromDate = smartflowItem.FromDate
-                                                                , ToDate = smartflowItem.ToDate
+            //             if(smartflow.TickerMessages != null)
+            //             {
+            //                 foreach(SmartflowMessage smartflowItem in smartflow.TickerMessages.ToList())
+            //                 {
+            //                     smarflow2.Messages.Add(new SmartflowMessage{ 
+            //                                                     Message = smartflowItem.Message
+            //                                                     , SeqNo = smartflowItem.SeqNo
+            //                                                     , FromDate = smartflowItem.FromDate
+            //                                                     , ToDate = smartflowItem.ToDate
                                                                 
-                                                            });
-                            }
-                        }
+            //                                                 });
+            //                 }
+            //             }
 
-                        //save back
-                        vmClientSmartflowRecord.ClientSmartflowRecord.SmartflowData = JsonConvert.SerializeObject(smarflow2);
-                        await ClientApiManagementService.Update(vmClientSmartflowRecord.ClientSmartflowRecord);
+            //             //save back
+            //             vmClientSmartflowRecord.ClientSmartflowRecord.SmartflowData = JsonConvert.SerializeObject(smarflow2);
+            //             await ClientApiManagementService.Update(vmClientSmartflowRecord.ClientSmartflowRecord);
 
-                        intRecords += 1;
-                    }
-                    catch(Exception e)
-                    {
-                        //possibly already converted
-                        GenericErrorLog(false,e, "UpdateToSmartflowV2", e.Message);
-                    }
-                }
-                await NotificationManager.ShowNotification("Success", $"{intRecords} converted");
-            }
-            catch(Exception e)
-            {
-                GenericErrorLog(true,e, "UpdateToSmartflowV2", e.Message);
-            }
+            //             intRecords += 1;
+            //         }
+            //         catch(Exception e)
+            //         {
+            //             //possibly already converted
+            //             GenericErrorLog(false,e, "UpdateToSmartflowV2", e.Message);
+            //         }
+            //     }
+            //     await NotificationManager.ShowNotification("Success", $"{intRecords} converted");
+            // }
+            // catch(Exception e)
+            // {
+            //     GenericErrorLog(true,e, "UpdateToSmartflowV2", e.Message);
+            // }
         }
        
         public async void UploadSmartFlowsFromClient()

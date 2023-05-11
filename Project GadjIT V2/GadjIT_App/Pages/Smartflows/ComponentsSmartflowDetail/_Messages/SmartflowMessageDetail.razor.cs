@@ -169,7 +169,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Messages
 
         private async void HandleUpdate()
         {
-            await ChapterItemsUpdated();
+            await SmartflowItemsUpdated();
 
         }
 
@@ -222,11 +222,11 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Messages
             //<ModalDelete> simply invokes this method when user clicks OK. No need for the modal to handle this action as we do not require any details from the Modal. 
             _SelectedSmartflow.Messages.Remove(EditObject.Message);
            
-            await ChapterItemsUpdated();
+            await SmartflowItemsUpdated();
 
         }
         
-        private async Task ChapterItemsUpdated()
+        private async Task SmartflowItemsUpdated()
         {
             await _SmartflowUpdated.InvokeAsync(_SelectedSmartflow);
             await _RefreshSmartflowItems.InvokeAsync("TickerMessages");
@@ -538,7 +538,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Messages
 
                 SeqMoving = false;
 
-                await ChapterItemsUpdated();
+                await SmartflowItemsUpdated();
 
             }
             catch(Exception e)
@@ -558,7 +558,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Messages
 
             _LstMessages.Select(C => { C.Message.SeqNo = _LstMessages.IndexOf(C) + 1; return C; }).ToList(); //update all SeqNo by setting to the Index (+1)
 
-            await ChapterItemsUpdated();
+            await SmartflowItemsUpdated();
         }
    
 

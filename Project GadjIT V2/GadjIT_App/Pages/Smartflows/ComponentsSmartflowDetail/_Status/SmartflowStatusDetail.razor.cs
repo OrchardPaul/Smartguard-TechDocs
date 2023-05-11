@@ -169,7 +169,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Status
         private async void HandleUpdate()
         {
             
-            await ChapterItemsUpdated();
+            await SmartflowItemsUpdated();
 
         }
 
@@ -219,13 +219,13 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Status
         {
             _SelectedSmartflow.Status.Remove(EditObject.SmartflowObject);
 
-            await ChapterItemsUpdated();
+            await SmartflowItemsUpdated();
             
         }
 
 
         
-        private async Task ChapterItemsUpdated()
+        private async Task SmartflowItemsUpdated()
         {
             await _SmartflowUpdated.InvokeAsync(_SelectedSmartflow);
             await _RefreshSmartflowItems.InvokeAsync("Status");
@@ -540,7 +540,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Status
 
                 SeqMoving = false;
 
-                await ChapterItemsUpdated();
+                await SmartflowItemsUpdated();
                 
             }
             catch(Exception e)
@@ -560,7 +560,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Status
 
             _LstStatus.Select(C => { C.SmartflowObject.SeqNo = _LstStatus.IndexOf(C) + 1; return C; }).ToList();
 
-            await ChapterItemsUpdated();
+            await SmartflowItemsUpdated();
         }
 
         

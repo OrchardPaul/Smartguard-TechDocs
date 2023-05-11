@@ -3,7 +3,7 @@
 
 <div class="grid-chapter grid-casetype-docs">
 
-    @if (LstDocs == null)
+    @if (LstDocs == null || LstDocs.Count() == 0)
     {
         <div class="spinner"></div>
     }
@@ -11,8 +11,10 @@
     {
       
         <div class="grid-actions">
-
-            
+            <div class="btn-group">
+                <button @onclick='() => DownloadDocumentPermissionsSQL()' class="btn btn-main btn-shadow" title="Download SQL to update Dm_DocumentPermissions"><i class="fa fa-download"></i><span>Doc Permissions</span></button>
+                <button @onclick='() => DownloadDocumentRenameCommands()' class="btn btn-main btn-shadow" title="Download SQL and DOS commands to rename Wprd documents to be the same as P4W"><i class="fa fa-download"></i><span>Sync Doc Names</span></button>
+            </div>
         </div>
 
 

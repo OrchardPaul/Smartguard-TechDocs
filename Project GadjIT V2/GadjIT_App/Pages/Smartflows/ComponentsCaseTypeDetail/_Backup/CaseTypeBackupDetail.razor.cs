@@ -223,6 +223,10 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsCaseTypeDetail._Backup
 
                         foreach(SmartflowV2 vmSmartflow in vmSmartflows.Smartflows.OrderBy(S => S.SeqNo))
                         {
+                            //make sure the Smartflow objects Case Type Group and Case Type are saved as current selected Case Type
+                            vmSmartflow.CaseTypeGroup = _SelectedCaseTypeGroup;
+                            vmSmartflow.CaseType = _SelectedCaseType;
+
                             //Check if already exists
                             Client_VmSmartflowRecord existingSmartflow = _LstVmClientSmartflowRecord
                                                             .Where(C => C.ClientSmartflowRecord.CaseTypeGroup == _SelectedCaseTypeGroup)
@@ -243,7 +247,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsCaseTypeDetail._Backup
                                 newSmartflow.SeqNo = vmSmartflow.SeqNo + lastSeqNo;
                                 newSmartflow.SmartflowData = JsonConvert.SerializeObject(vmSmartflow);
 
-
+                                
                                 var returnObject = await ClientApiManagementService.Add(newSmartflow);
                                 newSmartflow.Id = returnObject.Id;
                                 await CompanyDbAccess.SaveSmartFlowRecord(newSmartflow, UserSession);
@@ -256,11 +260,12 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsCaseTypeDetail._Backup
                                 await ClientApiManagementService.UpdateMainItem(existingSmartflow.ClientSmartflowRecord);
                             }
 
-                            await NotificationManager.ShowNotification("Success", $"Backup fully restored to {_SelectedCaseType}.");
-
-                            await _RefreshSmartflowsTask.InvokeAsync();
 
                         }
+
+                        await NotificationManager.ShowNotification("Success", $"Backup fully restored to {_SelectedCaseType}.");
+
+                        await _RefreshSmartflowsTask.InvokeAsync();
                     }
                 }
                 catch (Exception ex)

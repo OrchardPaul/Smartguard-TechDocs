@@ -25,13 +25,18 @@ public class SmartflowController : ControllerBase
     [HttpGet]
     public ActionResult TestApi()
     {
+        //e.g http://live.orarizonadebt.co.uk:8393/api/smartflow/testapi
+
         Logger.LogInformation("API Test: {0}",$"Application is working");
         return Ok("Test Complete: Application is working");
+
     }
     
     [HttpGet]
     public async Task<ActionResult> TestGet()
     {
+        //http://live.orarizonadebt.co.uk:8393/api/smartflow/testget
+
         var caseTypeGroups = await SmartflowService.GetCaseTypeGroup();
             
         if(caseTypeGroups.Count > 0){
@@ -120,7 +125,7 @@ public class SmartflowController : ControllerBase
             return BadRequest("Id missmatch");
         }
 
-        var selectedItem = await SmartflowService.GetChapterItemById(item.Id);
+        var selectedItem = await SmartflowService.GetSmartflowItemById(item.Id);
 
         if (selectedItem is null)
         {
@@ -150,7 +155,7 @@ public class SmartflowController : ControllerBase
     [HttpDelete("{id:int}")]
     public async Task<ActionResult> Delete(int id)
     {
-        var selectedItem = await SmartflowService.GetChapterItemById(id);
+        var selectedItem = await SmartflowService.GetSmartflowItemById(id);
 
         if (selectedItem is null)
         {
@@ -162,16 +167,16 @@ public class SmartflowController : ControllerBase
     }
 
     [HttpDelete("{id:int}")]
-    public async Task<ActionResult> DeleteChapter(int id)
+    public async Task<ActionResult> DeleteSmartflow(int id)
     {
-        var selectedItem = await SmartflowService.GetChapterItemById(id);
+        var selectedItem = await SmartflowService.GetSmartflowItemById(id);
 
         if (selectedItem is null)
         {
             return NotFound($"Item with ID = {selectedItem.Id} not found");
         }
 
-        return Ok(await SmartflowService.DeleteChapter(id));
+        return Ok(await SmartflowService.DeleteSmartflow(id));
         
     }
 

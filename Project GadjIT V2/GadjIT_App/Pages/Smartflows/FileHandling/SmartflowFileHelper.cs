@@ -94,14 +94,14 @@ namespace GadjIT_App.Pages.Smartflows.FileHandling
             return FileHelper.DeleteFile(path);
         }
 
-        public async Task<string> WriteSmartflowDataToExcel(SmartflowV2 selectedChapter, List<P4W_DmDocuments> documents, List<P4W_CaseTypeGroups> caseTypeGroups)
+        public async Task<string> WriteSmartflowDataToExcel(SmartflowV2 selectedSmartflow, List<P4W_DmDocuments> documents, List<P4W_CaseTypeGroups> caseTypeGroups)
         {
-            return await FileHelper.WriteSmartflowDataToExcel(selectedChapter, documents, caseTypeGroups);
+            return await FileHelper.WriteSmartflowDataToExcel(selectedSmartflow, documents, caseTypeGroups);
         }
 
         public SmartflowV2 ReadSmartflowItemsFromExcel(string path)
         {
-            return FileHelper.ReadChapterDataFromExcel(path);
+            return FileHelper.ReadSmartflowDataFromExcel(path);
         }
 
         public IList<string> ValidateSmartflowJSON(string JSON)

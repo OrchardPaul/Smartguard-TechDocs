@@ -1,0 +1,14 @@
+﻿<h3>UPGRADE: Upgrade JSON Schema to V2</h3>
+<h5>Released: 20/02/2023</h5>
+<p>Whilst users of the system will not notice any changes, this upgrade was quite substantial.</p>
+<p>The data for each Smartflow is stored as JSON. Storing data as JSON allows us to changes the schema (e.g. add new data items) without having to upgrade Smartflow at the client site.</p>
+<p>However, whilst new items to the schema can be added, changing the names of items requires the client system to be upgraded to read the data with the new names.</p>
+<p>This new structure should be the last major change. Only new items are likely from now on as the application evolves.</p>
+<br />
+<h3>UPGRADE: API Available over HTTPS</h3>
+<h5>Released: 17/04/2023</h5>
+<p>A new SSL certificate is available, created by Orchard Rock as a Self Certification Certificate. This can be installed on a client site and repurposing the open Port on the Firewall, the binding can now be over HTTPS.</p>
+<h3>UPGRADE: Smartflow Schedule from Date Item</h3>
+<p>Smartflow will now present the user with the ability to update/check the date within a P4W data item when a Next Action is selected. This is in the form of a popup field update exactly the same as if the user is updating a data item from a Data View tab.</p>
+<p>This only applies to Actions that have a schedule based on a Data Item and where the Data Item is available on a Data View.</p>
+<br />

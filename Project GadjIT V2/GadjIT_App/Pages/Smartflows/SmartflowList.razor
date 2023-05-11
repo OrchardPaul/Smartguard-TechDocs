@@ -36,21 +36,14 @@ else
                     <div class="grid-actions">
                         <div class="btn-group">
                             <button @onclick='PrepareSmartflowForInsert' class="btn btn-main btn-shadow" title="Add new Smartflow"><i class="fa fa-plus pr-1"></i><span>New</span></button>
-                            
-                            @if (!(string.IsNullOrEmpty(SelectedSmartflow.CaseType)))
-                            {
-                                @* @if (!(SequenceIsValid("Chapters")))
-                                {
-                                     <button @onclick='() => CondenseChapterSeq()' class="btn btn-main btn-shadow" title="Re-order Sequence Numbers"><i class="fa fa-sort-numeric-down"></i></button>
+                            <button @onclick='RefreshSmartflowsTask' class="btn btn-main btn-shadow" title="Refresh Smartflow List"><i class="fa-solid fa-arrows-rotate"></i><span>Refresh</span></button>
 
-                                } *@
-                            }
                         </div>
                         @if (UserSession.IsSuperUser)
                         {
-                            <button @onclick='UploadSmartFlowsFromClient' class="btn btn-main btn-shadow" title="Upload and refresh with Client data"><i class="fa fa-sync pr-1"></i><span>Upload</span></button>
-                            <button @onclick='UpdateSteps' class="btn btn-main btn-shadow" title="Update Steps"><i class="fa fa-download pr-1"></i><span>Update Steps</span></button>
-                            <button @onclick='UpdateToSmartflowV2' class="btn btn-main btn-shadow" title="Update to V2"><i class="fa fa-download pr-1"></i><span>Update to V2</span></button>
+                            <button @onclick='UploadSmartFlowsFromClient' class="btn btn-main btn-shadow" title="Upload and refresh with Client data"><i class="fa-solid fa-upload"></i><span>Upload</span></button>
+                            <button @onclick='UpdateSteps' class="btn btn-main btn-shadow" title="Update Steps"><i class="fa fa-list pr-1"></i><span>Steps</span></button>
+                            @* <button @onclick='UpdateToSmartflowV2' class="btn btn-main btn-shadow" title="Update to V2"><span>Update to V2</span></button> *@
                         }
 
                         <div class="spacer"></div>
@@ -302,6 +295,8 @@ else
 
     <SmartflowDetail
         _Selected_VmClientSmartflowRecord=Selected_VmClientSmartflowRecord
+        _SelectedCaseTypeGroup=@SelectedCaseTypeGroupPrev
+        _SelectedCaseType=@SelectedCaseTypePrev
         _SelectHome=SelectHome
     ></SmartflowDetail>
 

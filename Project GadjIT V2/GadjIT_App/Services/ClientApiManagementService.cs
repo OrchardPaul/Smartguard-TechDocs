@@ -18,7 +18,7 @@ namespace GadjIT_App.Services
     {
         Task<Client_SmartflowRecord> Add(Client_SmartflowRecord item);
         Task<Task<HttpResponseMessage>> Delete(int id);
-        Task<Task<HttpResponseMessage>> DeleteChapter(int id);
+        Task<Task<HttpResponseMessage>> DeleteSmartflow(int id);
         Task<List<Client_SmartflowRecord>> GetAllSmartflows();
         Task<List<string>> GetCaseTypeGroup();
         Task<List<string>> GetCaseTypes();
@@ -148,11 +148,11 @@ namespace GadjIT_App.Services
             return HttpClient.DeleteAsync($"{UserSession.BaseUri}api/Smartflow/Delete/{id}");
         }
 
-        public async Task<Task<HttpResponseMessage>> DeleteChapter(int id)
+        public async Task<Task<HttpResponseMessage>> DeleteSmartflow(int id)
         {
             await CompanyDbAccess.RemoveSmartFlowRecord(id, UserSession);
 
-            return HttpClient.DeleteAsync($"{UserSession.BaseUri}api/Smartflow/DeleteChapter/{id}");
+            return HttpClient.DeleteAsync($"{UserSession.BaseUri}api/Smartflow/DeleteSmartflow/{id}");
         }
 
         public async Task<List<Client_SmartflowRecord>> GetAllSmartflows()
@@ -188,6 +188,7 @@ namespace GadjIT_App.Services
             }
 
         }
+
 
         public async Task<List<Client_SmartflowRecord>> GetAllChapters()
         {

@@ -126,7 +126,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Header
                     _SelectedSmartflow.ShowPartnerNotes = "N";
                 }
                 
-                SaveChapterDetails(true).ConfigureAwait(false);
+                SaveSmartflowDetails(true).ConfigureAwait(false);
             }
 
         }
@@ -145,7 +145,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Header
                     _SelectedSmartflow.ShowDocumentTracking = "N";
                 }
 
-                SaveChapterDetails(true).ConfigureAwait(false);
+                SaveSmartflowDetails(true).ConfigureAwait(false);
             }
 
         }
@@ -180,16 +180,16 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Header
 
         
 
-        private async Task SaveChapterDetails()
+        private async Task SaveSmartflowDetails()
         {
-            await SaveChapterDetails(false);
+            await SaveSmartflowDetails(false);
         }
 
         /// <summary>
         /// Saves the Smartflow main details after changes to the Home tab
         /// </summary>
         /// <returns></returns>
-        private async Task SaveChapterDetails(bool showNotification)
+        private async Task SaveSmartflowDetails(bool showNotification)
         {
             try
             {
@@ -207,7 +207,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Header
             }
             catch (Exception e)
             {
-                GenericErrorLog(true,e, "SaveChapterDetails", $"Saving Smartflow base details: {e.Message}");
+                GenericErrorLog(true,e, "SaveSmartflowDetails", $"Saving Smartflow base details: {e.Message}");
             }
 
             await InvokeAsync(() =>
@@ -643,18 +643,18 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Header
             {
                 try
                 {
-                    var chapterData = JsonConvert.DeserializeObject<SmartflowV2>(Json);
-                    _SelectedSmartflow.Agendas = chapterData.Agendas;
-                    _SelectedSmartflow.Status = chapterData.Status;
-                    _SelectedSmartflow.Documents = chapterData.Documents;
-                    _SelectedSmartflow.DataViews = chapterData.DataViews;
-                    _SelectedSmartflow.Fees = chapterData.Fees;
-                    _SelectedSmartflow.Messages = chapterData.Messages;
-                    _SelectedSmartflow.P4WCaseTypeGroup = chapterData.P4WCaseTypeGroup;
-                    _SelectedSmartflow.SelectedStep = chapterData.SelectedStep;
-                    _SelectedSmartflow.SelectedView = chapterData.SelectedView;
-                    _SelectedSmartflow.ShowPartnerNotes = chapterData.ShowPartnerNotes;
-                    _SelectedSmartflow.ShowDocumentTracking = chapterData.ShowDocumentTracking;
+                    var smartflowData = JsonConvert.DeserializeObject<SmartflowV2>(Json);
+                    _SelectedSmartflow.Agendas = smartflowData.Agendas;
+                    _SelectedSmartflow.Status = smartflowData.Status;
+                    _SelectedSmartflow.Documents = smartflowData.Documents;
+                    _SelectedSmartflow.DataViews = smartflowData.DataViews;
+                    _SelectedSmartflow.Fees = smartflowData.Fees;
+                    _SelectedSmartflow.Messages = smartflowData.Messages;
+                    _SelectedSmartflow.P4WCaseTypeGroup = smartflowData.P4WCaseTypeGroup;
+                    _SelectedSmartflow.SelectedStep = smartflowData.SelectedStep;
+                    _SelectedSmartflow.SelectedView = smartflowData.SelectedView;
+                    _SelectedSmartflow.ShowPartnerNotes = smartflowData.ShowPartnerNotes;
+                    _SelectedSmartflow.ShowDocumentTracking = smartflowData.ShowDocumentTracking;
 
                     _Selected_ClientSmartflowRecord.SmartflowData = JsonConvert.SerializeObject(_SelectedSmartflow);
                     

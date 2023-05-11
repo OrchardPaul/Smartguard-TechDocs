@@ -55,30 +55,30 @@ namespace GadjIT_ClientContext.Models.Smartflow
         public string OptionalDocument { get; set; } = "N";
         public string CustomItem { get; set; } = "N";
         public string Agenda { get; set; } = "";
-        public List<LinkedItem> LinkedItems { get; set; }
+        //public List<LinkedItem> LinkedItems { get; set; }
 
 
     }
 
-    public class LinkedItem
-    {
-        [Required (ErrorMessage = "Name field is required")]
-        public string DocName { get; set; }
-        public string DocAsName { get; set; }
-        public string DocType { get; set; } = "";
+    // public class LinkedItem
+    // {
+    //     [Required (ErrorMessage = "Name field is required")]
+    //     public string DocName { get; set; }
+    //     public string DocAsName { get; set; }
+    //     public string DocType { get; set; } = "";
 
-        [Required]
-        public string Action { get; set; }
+    //     [Required]
+    //     public string Action { get; set; }
 
-        public string TrackingMethod { get; set; }
-        public string ChaserDesc { get; set; }
-        public int ScheduleDays { get; set; }
-        public string OptionalDocument { get; set; } = "N";
+    //     public string TrackingMethod { get; set; }
+    //     public string ChaserDesc { get; set; }
+    //     public int ScheduleDays { get; set; }
+    //     public string OptionalDocument { get; set; } = "N";
 
-        public string CustomItem { get; set; } = "N";
-        public string Agenda { get; set; } = "";
+    //     public string CustomItem { get; set; } = "N";
+    //     public string Agenda { get; set; } = "";
 
-        [StringLength(250)]
-        public string ScheduleDataItem { get; set; }
-    }
+    //     [StringLength(250)]
+    //     public string ScheduleDataItem { get; set; }
+    // }
 }

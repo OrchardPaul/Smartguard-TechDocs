@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Text;
 using Blazored.Modal;
 using Blazored.Modal.Services;
 using GadjIT_App.Services;
@@ -9,6 +10,10 @@ using GadjIT_App.Services.SessionState;
 using GadjIT_ClientContext.Models.P4W;
 using GadjIT_ClientContext.Models.Smartflow;
 using GadjIT_ClientContext.Models.Smartflow.Client;
+using GadjIT_App.Pages.Smartflows.FileHandling;
+using GadjIT_App.FileManagement.FileClassObjects.FileOptions;
+using GadjIT_App.FileManagement.FileProcessing.Interface;
+using GadjIT_App.Shared.StaticObjects;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -51,6 +56,14 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsCaseTypeDetail._Documents
         [Inject]
         IModalService Modal { get; set; }
 
+        [Inject]
+        private ISmartflowFileHelper SmartflowFileHelper { get; set; }
+
+        [Inject]
+        public IFileHelper FileHelper { get; set; }
+
+
+
         private List<P4W_DmDocuments> LibraryDocumentsAndSteps {get; set;}
 
         protected List<LinkedCaseItem> LstDocs {get; set;} = new List<LinkedCaseItem>();
@@ -65,10 +78,11 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsCaseTypeDetail._Documents
         {
             await RefreshLibraryDocumentsAndStepsTask();
 
+            P4WCaseTypeGroups = await PartnerAccessService.GetPartnerCaseTypeGroups();
+
             await RefreshDocumentList();
 
 
-            P4WCaseTypeGroups = await PartnerAccessService.GetPartnerCaseTypeGroups();
 
         }
         
@@ -99,12 +113,14 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsCaseTypeDetail._Documents
 
                         Dictionary<int?, string> docTypes = new Dictionary<int?, string> { { 1, "Doc" }, { 4, "Form" }, { 6, "Step" }, { 8, "Date" }, { 9, "Email" }, { 11, "Doc" }, { 12, "Email" }, { 13, "Csv" } };
                         List<SmartflowDocument> docs = smartflow.Documents
-                                        .Where(I => I.CustomItem != "Y")
+                                        //.Where(I => I.CustomItem != "Y")
                                         .ToList();
                         
                         foreach(var doc in docs)
                         {
-                            LstDocs.Add(new LinkedCaseItem{
+                            if(doc.CustomItem != "Y")
+                            {
+                                LstDocs.Add(new LinkedCaseItem{
                                                 ItemName=doc.Name
                                                 ,AltName=doc.AltDisplayName
                                                 ,IsAttachment = false
@@ -112,11 +128,21 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsCaseTypeDetail._Documents
                                                 ,OrigSeqNo = doc.SeqNo
                                                 ,IsItemLinked=CheckIsItemLinked(doc.Name)
                                                 ,SmartflowName=smartflow.Name
+                                                ,P4WCaseTypeGroup = string.IsNullOrEmpty(smartflow.P4WCaseTypeGroup)
+                                                                    ? -2
+                                                                    : smartflow.P4WCaseTypeGroup == "Global Documents"
+                                                                    ? 0
+                                                                    : smartflow.P4WCaseTypeGroup == "Entity Documents"
+                                                                    ? -1
+                                                                    : P4WCaseTypeGroups == null ? -2 : P4WCaseTypeGroups
+                                                                        .Where(P => P.Name == smartflow.P4WCaseTypeGroup)
+                                                                        .Select(P => P.Id)
+                                                                        .FirstOrDefault()
                                                     });
-
+                            }
                             if(doc.LinkedItems != null && doc.LinkedItems.Count() > 0)
                             {
-                                List<LinkedDocument> attachments = doc.LinkedItems
+                                List<LinkedItem> attachments = doc.LinkedItems
                                             .Where(LI => LI.CustomItem != "Y")
                                             .ToList();
 
@@ -239,6 +265,182 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsCaseTypeDetail._Documents
         {
             await InvokeAsync(StateHasChanged);
         }
+
+
+        protected void DownloadDocumentPermissionsSQL()
+        {
+            try
+            {
+                string sqlTemplate = "INSERT INTO Dm_DocumentsPermissions (doccode, casetype) "
+                                + " SELECT Code, @CaseTypeCode "
+                                + " FROM Dm_Documents "
+                                + " WHERE CaseTypeGroupRef = @CaseTypeGroupCode "
+                                + " AND Name = '#DocName#' "
+                                + " AND Code NOT IN "
+                                + " ( "
+                                + " SELECT doccode FROM DM_DocumentsPermissions WHERE CaseType = @CaseTypeCode "
+                                + " )";
+
+                string sqlCommand = "/*"
+                                + "Replace the following before running in:"
+                                + Environment.NewLine     
+                                + "*/"
+                                + Environment.NewLine     
+                                + Environment.NewLine + " DECLARE @CaseTypeGroupCode int = ??     -- (SELECT * FROM CaseTypeGroups ORDER BY Name)"
+                                + Environment.NewLine + " DECLARE @CaseTypeCode int = ??          -- (SELECT * FROM CaseTypes ORDER BY Description)"
+                                + Environment.NewLine     
+                                + Environment.NewLine     
+                                ;
+                string sqlCommandAll = sqlCommand;
+
+                foreach(LinkedCaseItem doc in LstDocs)
+                {
+                    sqlCommand = sqlTemplate.Replace("#DocName#",doc.ItemName);
+                    sqlCommand = sqlCommand.Replace(@"\n","");
+                    sqlCommand = sqlCommand.Replace(@"\r","");
+                    sqlCommandAll += sqlCommand + Environment.NewLine;
+                }
+                
+                byte[] fileData = Encoding.ASCII.GetBytes(sqlCommandAll);
+
+                var fileName = "DocumentPermissions_" + _SelectedCaseType + "_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".txt";
+
+                FileOptions chapterFileOption;
+
+                chapterFileOption = new FileOptions
+                {
+                    Company = UserSession.Company.CompanyName,
+                    SelectedSystem = UserSession.SelectedSystem,
+                    CaseTypeGroup = _SelectedCaseTypeGroup,
+                    CaseType = _SelectedCaseType,
+                };
+
+                SmartflowFileHelper.SetFileHelperCustomPath(chapterFileOption,FileStorageType.TempUploads);
+
+                FileHelper.DownloadFile(fileName, fileData);
+            }
+            catch (Exception e)
+            {
+                GenericErrorLog(true,e, "DownloadDocumentPermissionsSQL", $"Downloading Document Permissions SQL command: {e.Message}");
+            }
+        }
+
+
+        protected void DownloadDocumentRenameCommands()
+        {
+            try
+            {
+                //UPDATE dm_Documents SET Location = 'F:\Partner\RESI_V6.4_DEV\Templates\OR Resi\ZTest.4_DEV\Templates\OR Resi\2412.docx' WHERE CODE = 2412
+                string docFileLocation = "";
+                string docFileName = "";
+                string fileExtention = "";
+                string dosCommand = "";
+                string dosCommands = "";
+                string docErrors = "";
+
+                string sqlCommands = "";
+
+                P4W_DmDocuments p4WDoc;
+                foreach(LinkedCaseItem doc in LstDocs)
+                {
+                    if(doc.P4WCaseTypeGroup > 0) //not Global or Entity doc
+                    {
+                        p4WDoc = LibraryDocumentsAndSteps.Where(d => d.CaseTypeGroupRef == doc.P4WCaseTypeGroup)
+                                                            .Where(d => d.Name == doc.ItemName)
+                                                            .Where(d => d.DocumentType == 1) //Word Docs
+                                                            .FirstOrDefault();
+
+                        if(p4WDoc != null) 
+                        {
+                            try
+                            {   
+                                if(string.IsNullOrEmpty(p4WDoc.Location))
+                                    throw new Exception("Location is empty");
+                                
+                                docFileName = System.IO.Path.GetFileName(p4WDoc.Location);
+                                if(docFileName == "")
+                                    throw new Exception("Cannot establish file name");
+
+                                docFileLocation =  System.IO.Path.GetDirectoryName(p4WDoc.Location);
+
+                                docFileName = System.IO.Path.GetFileName(p4WDoc.Location);
+
+                                fileExtention = System.IO.Path.GetExtension(docFileName);
+                                if(fileExtention == "")
+                                    throw new Exception("Cannot establish file extension");
+
+                                if(docFileName != (doc.ItemName + fileExtention)) //only create update commands if the document file name does not match the P4W item name
+                                {
+                                    dosCommand = "REN \"" + docFileName + "\"" + " \"" + doc.ItemName + fileExtention + "\"";
+                                    dosCommands += dosCommand + Environment.NewLine;
+
+                                    sqlCommands += "UPDATE dm_Documents SET Location = '" + docFileLocation + "\\" + doc.ItemName + fileExtention + "' WHERE CODE = " + p4WDoc.Code.ToString() + Environment.NewLine;
+                                }
+                                
+                            }
+                            catch(Exception e)
+                            {
+                                docErrors += doc.ItemName + " - " + e.Message + Environment.NewLine;
+                                dosCommand = "";
+                            }
+                        }
+
+                    }
+                }
+                
+                
+                FileOptions chapterFileOption;
+
+                chapterFileOption = new FileOptions
+                {
+                    Company = UserSession.Company.CompanyName,
+                    SelectedSystem = UserSession.SelectedSystem,
+                    CaseTypeGroup = _SelectedCaseTypeGroup,
+                    CaseType = _SelectedCaseType,
+                };
+
+                var curTime = DateTime.Now.ToString("yyyyMMdd_HHmmss");
+                SmartflowFileHelper.SetFileHelperCustomPath(chapterFileOption,FileStorageType.TempUploads);
+
+                if(dosCommands == "")
+                {
+                    dosCommands = "No documents to update. All documents used in the Smartflows within this Case Type are named correctly.";
+                    sqlCommands = dosCommands;
+                }
+                //DOS commands to rename the actual Word document
+                byte[] fileDataCmd = Encoding.ASCII.GetBytes(dosCommands);
+
+                var fileName = "CMD_DocumentNameSync_" + _SelectedCaseType + "_" + curTime + ".txt";
+
+                FileHelper.DownloadFile(fileName, fileDataCmd);
+
+
+                //SQL commands to update the Location field within the DM_Documents table
+                byte[] fileDataSql = Encoding.ASCII.GetBytes(sqlCommands);
+
+                fileName = "SQL_DocumentNameSync_" + _SelectedCaseType + "_" + curTime + ".sql";
+
+                FileHelper.DownloadFile(fileName, fileDataSql);
+
+
+                //if any errors occured
+                if(docErrors != "")
+                {
+                    byte[] fileDataErrors = Encoding.ASCII.GetBytes(docErrors);
+
+                    fileName = "Issues_DocumentNameSync_" + _SelectedCaseType + "_" + curTime + ".txt";
+
+                    FileHelper.DownloadFile(fileName, fileDataErrors);
+                }
+
+            }
+            catch (Exception e)
+            {
+                GenericErrorLog(true,e, "DownloadDocumentRenameCommands", $"Downloading Document Rename Commands: {e.Message}");
+            }
+        }
+
+
 
 
 

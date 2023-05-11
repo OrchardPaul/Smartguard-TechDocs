@@ -171,7 +171,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Fees
 
         private async void HandleUpdate()
         {
-            await ChapterItemsUpdated();
+            await SmartflowItemsUpdated();
         }
 
         protected void ShowSmartflowFeesViewModal(VmSmartflowFee _selectedObject)//moved partial
@@ -223,11 +223,11 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Fees
             //<ModalDelete> simply invokes this method when user clicks OK. No need for the modal to handle this action as we do not require any details from the Modal. 
             _SelectedSmartflow.Fees.Remove(EditObject.FeeObject);
             
-            await ChapterItemsUpdated();
+            await SmartflowItemsUpdated();
 
         }
         
-        private async Task ChapterItemsUpdated()
+        private async Task SmartflowItemsUpdated()
         {
             await _SmartflowUpdated.InvokeAsync(_SelectedSmartflow);
             await _RefreshSmartflowItems.InvokeAsync("Fees");
@@ -537,7 +537,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Fees
 
                 SeqMoving = false;
 
-                await ChapterItemsUpdated();
+                await SmartflowItemsUpdated();
 
             }
             catch(Exception e)
@@ -557,7 +557,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Fees
 
             _LstFees.Select(C => { C.FeeObject.SeqNo = _LstFees.IndexOf(C) + 1; return C; }).ToList();
 
-            await ChapterItemsUpdated();
+            await SmartflowItemsUpdated();
         }
 
         

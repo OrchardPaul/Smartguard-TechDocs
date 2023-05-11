@@ -7,7 +7,9 @@
 
     @if (LstSmartflows == null)
     {
-        <div class="spinner"></div>
+        <div class="spinner">
+            
+        </div>
     }
     else
     {
@@ -17,7 +19,7 @@
                 @if (!CompareSystems)
                 {
                     <button @onclick='ShowCreateSmartflowModal' class="btn btn-main btn-shadow" title="Add new Smartflow"><i class="fa fa-plus pr-1"></i><span>New</span></button>
-                    <button @onclick='RefreshAllSmartflows' class="btn btn-main btn-shadow" title="Add new Smartflow"><i class="fa-solid fa-arrows-rotate"></i><span>Refresh</span></button>
+                    <button @onclick='RefreshAllSmartflows' class="btn btn-main btn-shadow" title="Refresh Smartflow List"><i class="fa-solid fa-arrows-rotate"></i><span>Refresh</span></button>
                 }
             </div>
             <div class="spacer"></div>

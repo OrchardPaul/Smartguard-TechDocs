@@ -18,6 +18,9 @@ namespace GadjIT_App.Data.MapperProfiles
 
             CreateMap<SmartflowV2, SmartflowV2>();
 
+            CreateMap<LinkedItem, LinkedItem>();
+
+
         }
     }
 

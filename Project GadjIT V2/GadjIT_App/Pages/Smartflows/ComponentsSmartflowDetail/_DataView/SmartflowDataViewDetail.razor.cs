@@ -186,7 +186,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._DataView
 
         private async void HandleUpdate()
         {
-            await ChapterItemsUpdated();
+            await SmartflowItemsUpdated();
         }
 
         protected void ShowSmartflowDataViewDisplayModal(VmSmartflowDataView _selectedObject)//moved partial
@@ -237,11 +237,11 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._DataView
             //<ModalDelete> simply invokes this method when user clicks OK. No need for the modal to handle this action as we do not require any details from the Modal. 
             _SelectedSmartflow.DataViews.Remove(EditObject.DataView);
            
-            await ChapterItemsUpdated();
+            await SmartflowItemsUpdated();
 
         }
         
-        private async Task ChapterItemsUpdated()
+        private async Task SmartflowItemsUpdated()
         {
             await _SmartflowUpdated.InvokeAsync(_SelectedSmartflow);
             await _RefreshSmartflowItems.InvokeAsync("DataViews");
@@ -555,7 +555,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._DataView
 
                 SeqMoving = false;
 
-                await ChapterItemsUpdated();
+                await SmartflowItemsUpdated();
 
                 
             }
@@ -576,7 +576,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._DataView
 
             _LstDataViews.Select(C => { C.DataView.SeqNo = _LstDataViews.IndexOf(C) + 1; return C; }).ToList(); //update all SeqNo by setting to the Index (+1)
 
-            await ChapterItemsUpdated();
+            await SmartflowItemsUpdated();
         }
    
 

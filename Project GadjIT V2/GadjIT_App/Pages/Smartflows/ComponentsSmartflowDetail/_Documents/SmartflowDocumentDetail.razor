@@ -92,15 +92,16 @@
                                                 <span>View</span>
                                             </li>
 
-                                            <li class="col-main">
+                                            <li class="col-main" @onclick='() => ShowAttachmentModal(context)'>
                                                 <span class="fa fa-paperclip fa-sm mr-2"></span>
-                                                <span>Links</span>
-                                                <div class="menu-toggle @(_SelectedSmartflow.ShowDocumentTracking == "Y" ? "tracking" : "")">
-                                                    
-                                                    <span class="fa fa-chevron-right fa-sm"></span>
+                                                <span>Links (@context.SmartflowObject.LinkedItems.Count)</span>
+                                                @* <div class="menu-toggle @(_SelectedSmartflow.ShowDocumentTracking == "Y" ? "tracking" : "")">
                                                     
                                                     
-                                                    <ul class="attach-list">
+                                                    <span class="">(@context.SmartflowObject.LinkedItems.Count)</span> 
+                                                    
+                                                    
+                                                     <ul class="attach-list">
                                                         @if (!(context.SmartflowObject.LinkedItems is null) && context.SmartflowObject.LinkedItems.Count > 0)
                                                         {
                                                             foreach (var attach in context.SmartflowObject.LinkedItems)
@@ -117,13 +118,24 @@
                                                                     </span>
 
                                                                     <span class="font-85 @optionalAttach">
+                                                                        
                                                                         @if(attach.DocType == "Doc"){<span class="doc-icon" title="Document"><span class="fa fa-file mr-2"></span></span>}
                                                                         @if(attach.DocType == "Form"){<span class="doc-icon" title="Form"><span class="fa fa-file-pdf mr-2"></span></span>}
                                                                         @if(attach.DocType == "Email"){<span class="doc-icon" title="Email"><span class="fa fa-envelope mr-2"></span></span>}
                                                                         @if(attach.DocType == "Step"){<span class="doc-icon" title="Step"><span class="fa fa-list-ol mr-2"></span></span>}
                                                                         @if(attach.DocType == "Date"){<span class="doc-icon" title="Diary Item"><span class="fa fa-calendar mr-2"></span></span>}
                                                                         @if(attach.DocType == "Csv"){<span class="doc-icon" title="Spreadsheet"><span class="fa fa-file-csv mr-2"></span></span>}
-                                                                        @if(string.IsNullOrEmpty(attach.DocType)){<span class="doc-icon" title="Custom Item: will insert a step to run the current Smartflow"><span class="fa fa-retweet mr-2"></span></span>}
+                                                                        @if(string.IsNullOrEmpty(attach.DocType)){
+                                                                            @if(attach.CustomItem == "Y"){
+                                                                                 <span class="doc-icon" title="Custom Item"><span class="fa fa-draw-polygon mr-2"></span></span>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                 <span class="doc-icon" title="Missing Item"><span class="fa fa-exclamation col-red mr-2"></span></span>
+                                                                            }
+                                                                        }
+                                                                        
+
                                                                     </span>
                                                                     <span class="attach-name" title="@(string.IsNullOrEmpty(attach.DocAsName) ? attach.DocName : attach.DocAsName)">
                                                                         @(string.IsNullOrEmpty(attach.DocAsName) ? attach.DocName : attach.DocAsName) 
@@ -156,10 +168,14 @@
                                                         @if(UserSession.IsAdminUser && _SmartflowLockedForEdit)
                                                         {
                                                             <li class="ellipsis-menu-divider"></li>
-                                                            <li class="font-85" @onclick='(() => PrepareAttachmentForAdd(context))'><span><span class="fa fa-plus"></span></span><span class="ml-2">Add New</span></li>
+                                                            <div class="button-container">
+                                                                <button @onclick='() => ShowAttachmentModal(context)' class="btn btn-main btn-shadow" title="Edit attachments"><i class="fa fa-pencil"></i><span>Edit</span></button>
+                                                            </div>
                                                         }
-                                                    </ul>
+                                                    </ul> 
+                                                    
                                                 </div>
+                                                *@
                                             </li>
                                             @if(UserSession.IsAdminUser && _SmartflowLockedForEdit)
                                             {
@@ -212,8 +228,16 @@
                                 @if(context.DocType == "Step"){<span class="doc-icon" title="Step"><span class="fa fa-list-ol mr-2"></span></span>}
                                 @if(context.DocType == "Date"){<span class="doc-icon" title="Diary"><span class="fa fa-calendar mr-2"></span></span>}
                                 @if(context.DocType == "Csv"){<span class="doc-icon" title="Spreadsheet"><span class="fa fa-file-csv mr-2"></span></span>}
-                                @if(string.IsNullOrEmpty(context.DocType) && context.SmartflowObject.CustomItem == "N"){<span class="doc-icon" title="Missing Item"><span class="fa fa-exclamation col-red mr-2"></span></span>}
-                                @if(string.IsNullOrEmpty(context.DocType) && context.SmartflowObject.CustomItem == "Y"){<span class="doc-icon" ><span class="mr-2"></span></span>}
+                                @if(string.IsNullOrEmpty(context.DocType)){
+                                    @if(context.SmartflowObject.CustomItem == "Y"){
+                                            <span class="doc-icon" title="Custom Item"><span class="fa fa-draw-polygon mr-2"></span></span>
+                                    }
+                                    else
+                                    {
+                                            <span class="doc-icon" title="Missing Item"><span class="fa fa-exclamation col-red mr-2"></span></span>
+                                    }
+                                }
+                                
                                     
                             </ModalTooltip>
                             <div class="data-item-sub draggable">

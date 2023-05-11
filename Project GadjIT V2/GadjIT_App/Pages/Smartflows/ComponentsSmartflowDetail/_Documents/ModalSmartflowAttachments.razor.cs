@@ -14,6 +14,8 @@ using Microsoft.Extensions.Logging;
 using GadjIT_ClientContext.Models.P4W;
 using GadjIT_ClientContext.Models.Smartflow;
 using GadjIT_ClientContext.Models.Smartflow.Client;
+using AutoMapper;
+
 
 namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Documents
 {
@@ -42,22 +44,12 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Documents
         [Inject]
         public IUserSessionState UserSession { get; set; }
 
-
-
-        [Parameter]
-        public LinkedDocument _Attachment { get; set; }
-
-        [Parameter]
-        public RenderFragment _CustomHeader { get; set; }
-
-        [Parameter]
-        public string _SelectedList { get; set; }
+        [Inject]
+        IMapper Mapper {get; set;}
 
         [Parameter]
         public List<P4W_TableDate> _TableDates { get; set; }
 
-        [Parameter]
-        public string _Option { get; set; }
 
         [Parameter]
         public Client_SmartflowRecord _Selected_ClientSmartflowRecord { get; set; }
@@ -66,10 +58,8 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Documents
         public SmartflowV2 _SelectedSmartflow { get; set; }
 
         [Parameter]
-        public SmartflowDocument _TaskObject { get; set; }
+        public SmartflowDocument _SelectedDocument { get; set; }
 
-        [Parameter]
-        public SmartflowDocument _CopyObject { get; set; }
 
 
         [Parameter]
@@ -91,6 +81,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Documents
         public List<VmSmartflowAgenda> _ListOfAgenda { get; set; }
 
 
+        protected string CurrentAction {get; set; } = "List";
 
         private int SelectedCaseTypeGroup { get; set; } = -1;
 
@@ -98,33 +89,45 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Documents
         
         public string FilterTextDataItem { get; set; } = "";
 
+        protected LinkedItem Attachment { get; set; }
+        protected LinkedItem CopyAttachment { get; set; }
+        
+        private int RowChanged = 0;
+
+        public bool SeqMoving {get; set;}
+
+
+        protected bool DataChanged = false;
+         
+
         public bool UseCustomItem 
-        { get { return _Attachment.CustomItem == "Y" ? true : false; }
+        { get { return Attachment.CustomItem == "Y" ? true : false; }
             set {
                 if (value)
                 {
-                    _Attachment.CustomItem = "Y";
-                    _Attachment.Agenda = "";
+                    Attachment.CustomItem = "Y";
+                    Attachment.Agenda = "";
+                    Attachment.DocAsName = "";
                 }
                 else
                 {
-                    _Attachment.CustomItem = "N";
+                    Attachment.CustomItem = "N";
                 }
             }
         }
 
         public bool OptionalDocument
         {
-            get { return (_Attachment.OptionalDocument == "Y" ? true : false); }
+            get { return (Attachment.OptionalDocument == "Y" ? true : false); }
             set
             {
                 if (value)
                 {
-                    _Attachment.OptionalDocument = "Y";
+                    Attachment.OptionalDocument = "Y";
                 }
                 else
                 {
-                    _Attachment.OptionalDocument = "N";
+                    Attachment.OptionalDocument = "N";
                 }
             }
         }
@@ -142,7 +145,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Documents
             get { return _useCustomReschedule; }
             set
             {
-                _Attachment.ScheduleDataItem = !value ? "" : _Attachment.ScheduleDataItem;
+                Attachment.ScheduleDataItem = !value ? "" : Attachment.ScheduleDataItem;
                 _useCustomReschedule = value;
             }
         }
@@ -151,6 +154,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Documents
 
         protected override async Task OnInitializedAsync()
         {
+            
             if (!(string.IsNullOrEmpty(_SelectedSmartflow.P4WCaseTypeGroup)) && (_SelectedSmartflow.P4WCaseTypeGroup != "Select"))
             {
                 SelectedCaseTypeGroup = _P4WCaseTypeGroups.Where(CT => CT.Name == _SelectedSmartflow.P4WCaseTypeGroup).Select(CT => CT.Id).FirstOrDefault();
@@ -167,27 +171,12 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Documents
                 }
             }
 
-            if (!(_LibraryDocumentsAndSteps.ToList() is null)
-                    && _Attachment.DocName != ""
-                    && !(_Attachment.DocName is null)
-                    && !_LibraryDocumentsAndSteps.ToList().Select(D => D.Name).Contains(_Attachment.DocName))
-            {
-                UseCustomItem = true;
-            }
-            else
-            {
-                UseCustomItem = false;
+            if(_SelectedDocument.LinkedItems.Where(C => C.SeqNo != _SelectedDocument.LinkedItems.IndexOf(C) + 1).Count() > 0) //If any SeqNos are out of sequence
+            { 
+                await ReSequence();
             }
 
-            if (!string.IsNullOrEmpty(_Attachment.ScheduleDataItem)
-                && _TableDates.ToList().Select(D => D.TableField).Contains(_Attachment.ScheduleDataItem))
-            {
-                UseCustomReschedule = true;
-            }
-            else
-            {
-                UseCustomReschedule = false;
-            }
+            
         }
 
 
@@ -195,10 +184,17 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Documents
         {
             try
             {
+                //refresh the dm_documents list here so it is immediately available when displaying the Attachments list
                 _LibraryDocumentsAndSteps = await ClientApiManagementService.GetDocumentList(_SelectedSmartflow.CaseType);
-                StateHasChanged();
-
+                
                 _RefreshLibraryDocumentsAndSteps.Invoke();
+
+                CurrentAction = "List";
+
+                await InvokeAsync(() =>
+                {
+                    StateHasChanged();
+                });
             
             }
             catch(Exception e)
@@ -208,9 +204,57 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Documents
             }
         }
 
+        private void CancelUpdate()
+        {
+            CurrentAction = "List";
+        }
+
+        private void PrepareAttachmentForEdit(LinkedItem _attachment)
+        {
+            Attachment = _attachment;
+
+            CopyAttachment = new LinkedItem();
+            Mapper.Map(Attachment, CopyAttachment);
+
+            //Check if document exists in P4W Library
+            if (_LibraryDocumentsAndSteps.ToList() is null
+                    && Attachment.DocName != ""
+                    && !(Attachment.DocName is null)
+                    && !_LibraryDocumentsAndSteps.ToList().Select(D => D.Name).Contains(Attachment.DocName))
+            {
+                //Match found
+                UseCustomItem = false;
+            }
+
+            if (!string.IsNullOrEmpty(Attachment.ScheduleDataItem)
+                && _TableDates.ToList().Select(D => D.TableField).Contains(Attachment.ScheduleDataItem))
+            {
+                UseCustomReschedule = true;
+            }
+            else
+            {
+                UseCustomReschedule = false;
+            }
+
+            CurrentAction = "Edit";
+        }
+
+        private void PrepareAttachmentForAdd()
+        {
+            Attachment = new LinkedItem();
+            
+            Attachment.Action = "INSERT";
+            
+            CurrentAction = "Add";
+        }
+
         private async void Close()
         {
-            _TaskObject = new SmartflowDocument();
+            if(DataChanged)
+            {
+                _DataChanged?.Invoke();
+            }
+
             await ModalInstance.CloseAsync();
 
 
@@ -222,52 +266,38 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Documents
             {
                 Dictionary<int?, string> docTypes = new Dictionary<int?, string> { { 1, "Doc" }, { 4, "Form" }, { 6, "Step" }, { 8, "Date" }, { 9, "Email" }, { 11, "Doc" }, { 12, "Email" }, { 13, "Csv" } };
 
-                _Attachment.DocType = _LibraryDocumentsAndSteps.Where(D => D.Name.ToUpper() == _Attachment.DocName.ToUpper())
+                Attachment.DocType = _LibraryDocumentsAndSteps.Where(D => D.Name.ToUpper() == Attachment.DocName.ToUpper())
                                                                                             .Select(D => docTypes.ContainsKey(D.DocumentType) ? docTypes[D.DocumentType] : "Doc")
                                                                                             .FirstOrDefault();
 
-                if (_CopyObject.LinkedItems is null)
+                if (_SelectedDocument.LinkedItems is null)
                 {
-                    _CopyObject.LinkedItems = new List<LinkedDocument> { _Attachment };
+                    _SelectedDocument.LinkedItems = new List<LinkedItem> { Attachment };
                 }
                 else
                 {
-                    if (_SelectedList != "Edit Attachement")
+                    if (CurrentAction != "Edit")
                     {
-                        _CopyObject.LinkedItems.Add(_Attachment);
+                        _SelectedDocument.LinkedItems.Add(Attachment);
                     }
                 }
 
 
-                _TaskObject.Name = _CopyObject.Name;
-                _TaskObject.EntityType = _CopyObject.EntityType;
-                _TaskObject.SeqNo = _CopyObject.SeqNo;
-                _TaskObject.AsName = _CopyObject.AsName;
-                _TaskObject.RescheduleDays = _CopyObject.RescheduleDays;
-                _TaskObject.AltDisplayName = _CopyObject.AltDisplayName;
-                _TaskObject.UserMessage = _CopyObject.UserMessage;
-                _TaskObject.PopupAlert = _CopyObject.PopupAlert;
-                _TaskObject.NextStatus = _CopyObject.NextStatus;
-
-                _TaskObject.LinkedItems = _CopyObject.LinkedItems;
-
                 _Selected_ClientSmartflowRecord.SmartflowData = JsonConvert.SerializeObject(_SelectedSmartflow);
                 ClientApiManagementService.Update(_Selected_ClientSmartflowRecord).ConfigureAwait(false);
 
-                _TaskObject = new SmartflowDocument();
                 FilterText = "";
 
+                RefreshDocListOnModel();
 
-                _DataChanged?.Invoke();
+                DataChanged = true;
+
             }
             catch(Exception e)
             {
                 GenericErrorLog(true,e, "HandleValidSubmit", e.Message);
             }
-            finally
-            {
-                Close();
-            }
+            
 
         }
 
@@ -280,40 +310,56 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Documents
         {
             try
             {
-                if (!(_CopyObject.LinkedItems is null))
-                {
-                    if (_CopyObject.LinkedItems.Select(F => F.DocName).ToList().Contains(_Attachment.DocName))
-                    {
-                        var updateItem = _CopyObject.LinkedItems.Where(F => F.DocName == _Attachment.DocName).FirstOrDefault();
+                _SelectedDocument.LinkedItems.Remove(Attachment);
 
-                        _CopyObject.LinkedItems.Remove(updateItem);
-                    }
-                }
-
-
-                _TaskObject.LinkedItems = _CopyObject.LinkedItems;
-
-                _Selected_ClientSmartflowRecord.SmartflowData = JsonConvert.SerializeObject(_SelectedSmartflow);
-                await ClientApiManagementService.Update(_Selected_ClientSmartflowRecord).ConfigureAwait(false);
-
-                await CompanyDbAccess.SaveSmartFlowRecord(_Selected_ClientSmartflowRecord, UserSession);
-
-                _TaskObject = new SmartflowDocument();
+                await SaveUpdatedSmartflow();
+                
                 FilterText = "";
 
+                RefreshDocListOnModel();
 
-                _DataChanged?.Invoke();
             }
             catch(Exception e)
             {
                 GenericErrorLog(true,e, "RemoveAttachmentTask", e.Message);
             }
-            finally
-            {
-                Close();
-            }
+            
+        }
+
+        private async Task SaveUpdatedSmartflow()
+        {
+            _Selected_ClientSmartflowRecord.SmartflowData = JsonConvert.SerializeObject(_SelectedSmartflow);
+            await ClientApiManagementService.Update(_Selected_ClientSmartflowRecord).ConfigureAwait(false);
 
         }
+
+        
+
+        /****************************************/
+        /* LIST ORDERING                        */
+        /****************************************/
+        public async Task ReSequence(int _seq)
+        {
+            RowChanged = _seq;
+
+            await ReSequence();
+        }
+
+        public async Task ReSequence()
+        {
+            _SelectedDocument.LinkedItems.Select(C => { C.SeqNo = _SelectedDocument.LinkedItems.IndexOf(C) + 1; return C; }).ToList();
+
+            await SaveUpdatedSmartflow();
+        }
+
+        public void ResetRowChanged() 
+        {
+            RowChanged = 0;
+            SeqMoving = false;
+
+            StateHasChanged();
+
+        }  
 
         /****************************************/
         /* ERROR HANDLING */

@@ -89,7 +89,7 @@ namespace GadjIT_App
             services.AddScoped<INotificationManager,NotificationManager>();
 
             services.AddScoped<JsConsole>();
-            services.AddScoped(typeof(DragDropService<>));
+            services.AddScoped(typeof(DragDropService<>)); 
 
 
             var keysFolder = Path.Combine(environment.ContentRootPath, "Keys");

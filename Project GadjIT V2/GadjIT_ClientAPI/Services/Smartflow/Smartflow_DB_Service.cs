@@ -11,13 +11,13 @@ namespace GadjIT_ClientAPI.Services.Smartflow
         Task<Client_SmartflowRecord> Add(Client_SmartflowRecord item);
         Task<bool> CreateStep(string JSON);
         Task<Client_SmartflowRecord> Delete(int id);
-        Task<Client_SmartflowRecord> DeleteChapter(int id);
+        Task<Client_SmartflowRecord> DeleteSmartflow(int id);
         Task<List<Client_SmartflowRecord>> GetAllSmartflows();
         Task<int?> GetCaseTypeCode(string caseType, int? caseTypeGroup);
         Task<List<string>> GetCaseTypeGroup();
         Task<int?> GetCaseTypeGroupRef();
         Task<List<string>> GetCaseTypes();
-        Task<Client_SmartflowRecord> GetChapterItemById(int id);
+        Task<Client_SmartflowRecord> GetSmartflowItemById(int id);
         Task<List<Client_SmartflowRecord>> GetSmartflowListByCaseType(string caseType);
         Task<List<P4W_DmDocuments>> GetDocumentList(string caseType);
         Task<List<P4W_DmDocuments>> GetDocumentListByCaseTypeGroupRef(int caseTypeGroupRef);
@@ -51,7 +51,7 @@ namespace GadjIT_ClientAPI.Services.Smartflow
             
         }
 
-        public async Task<Client_SmartflowRecord> GetChapterItemById(int id)
+        public async Task<Client_SmartflowRecord> GetSmartflowItemById(int id)
         {
             return await DBContext.Client_SmartflowRecord.SingleOrDefaultAsync(C => C.Id == id);
             
@@ -119,7 +119,7 @@ namespace GadjIT_ClientAPI.Services.Smartflow
             
         }
 
-        public async Task<Client_SmartflowRecord> DeleteChapter(int id)
+        public async Task<Client_SmartflowRecord> DeleteSmartflow(int id)
         {
             
             var toDo = await DBContext.Client_SmartflowRecord.FindAsync(id);

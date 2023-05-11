@@ -153,7 +153,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Agenda
 
         private async void HandleUpdate()
         {
-            await ChapterItemsUpdated();
+            await SmartflowItemsUpdated();
 
         }
 
@@ -204,11 +204,11 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Agenda
             //<ModalDelete> simply invokes this method when user cicks OK. No need for the modal to handle this action as we do not require any details from the Modal. 
             _SelectedSmartflow.Agendas.Remove(EditObject.SmartflowObject);
            
-            await ChapterItemsUpdated();
+            await SmartflowItemsUpdated();
 
         }
         
-        private async Task ChapterItemsUpdated()
+        private async Task SmartflowItemsUpdated()
         {
             await _SmartflowUpdated.InvokeAsync(_SelectedSmartflow);
             await _RefreshSmartflowItems.InvokeAsync("Agenda");

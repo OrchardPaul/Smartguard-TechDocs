@@ -104,7 +104,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Documents
         private VmSmartflowDocument EditObject {get; set;}
 
         [Parameter]
-        public LinkedDocument EditLinkedObject {get; set;}
+        public LinkedItem EditLinkedObject {get; set;}
 
         public bool SeqMoving {get; set;}
 
@@ -235,7 +235,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Documents
 
         private async void HandleUpdate()
         {
-            await ChapterItemsUpdated();
+            await SmartflowItemsUpdated();
         }
 
         protected void ShowSmartflowDetailViewModal(VmSmartflowDocument _selectedObject)
@@ -283,11 +283,11 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Documents
             //<ModalDelete> simply invokes this method when user cicks OK. No need for the modal to handle this action as we do not require any details from the Modal. 
             _SelectedSmartflow.Documents.Remove(EditObject.SmartflowObject);
             
-            await ChapterItemsUpdated();
+            await SmartflowItemsUpdated();
 
         }
 
-        private async Task ChapterItemsUpdated()
+        private async Task SmartflowItemsUpdated()
         {
             await InvokeAsync(() =>
             {
@@ -304,6 +304,35 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Documents
         /// 
         /// ##################################################################################
     
+        protected void ShowAttachmentModal(VmSmartflowDocument _item)
+        {
+            Action refreshSelectedList = HandleUpdate;
+            Action refreshLibraryDocumentsAndSteps = RefreshLibraryDocumentsAndSteps;
+
+            EditObject = _item;
+            EditLinkedObject = null;
+            
+            var parameters = new ModalParameters();
+            parameters.Add("_SelectedDocument", EditObject.SmartflowObject);
+            parameters.Add("_DataChanged", refreshSelectedList);
+            parameters.Add("_RefreshLibraryDocumentsAndSteps", refreshLibraryDocumentsAndSteps);
+            parameters.Add("_LibraryDocumentsAndSteps", _LibraryDocumentsAndSteps);
+            parameters.Add("_P4WCaseTypeGroups", _P4WCaseTypeGroups);
+            parameters.Add("_ListOfStatus", _LstStatus);
+            parameters.Add("_ListOfAgenda", _LstAgendas);
+            parameters.Add("_SelectedSmartflow", _SelectedSmartflow);
+            parameters.Add("_Selected_ClientSmartflowRecord", _Selected_ClientSmartflowRecord);
+            parameters.Add("_TableDates", _TableDates);
+
+            var options = new ModalOptions()
+            {
+                Class = "blazored-custom-modal modal-smartflow-doc"
+            };
+
+            Modal.Show<ModalSmartflowAttachments>("Linked Item", parameters, options);
+        }
+
+       
         private void PrepareAttachmentForAdd(VmSmartflowDocument _item)
         {
             SelectedList = "New Attachement";
@@ -313,7 +342,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Documents
             ShowSmartflowAttachmentModal();
         }
 
-        private void PrepareAttachmentForEdit(VmSmartflowDocument _item, LinkedDocument _linkedItem)
+        private void PrepareAttachmentForEdit(VmSmartflowDocument _item, LinkedItem _linkedItem)
         {
             SelectedList = "Edit Attachement";
             EditObject = _item;
@@ -322,7 +351,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Documents
             ShowSmartflowAttachmentModal();
         }
 
-        private void PrepareAttachmentForView(VmSmartflowDocument _item, LinkedDocument _linkedItem)
+        private void PrepareAttachmentForView(VmSmartflowDocument _item, LinkedItem _linkedItem)
         {
             SelectedList = "Edit Attachement";
             EditObject = _item;
@@ -349,12 +378,12 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Documents
                 UserMessage = EditObject.SmartflowObject.UserMessage,
                 PopupAlert = EditObject.SmartflowObject.PopupAlert,
                 NextStatus = EditObject.SmartflowObject.NextStatus,
-                LinkedItems = EditObject.SmartflowObject.LinkedItems is null ? new List<LinkedDocument>() : EditObject.SmartflowObject.LinkedItems
+                LinkedItems = EditObject.SmartflowObject.LinkedItems is null ? new List<LinkedItem>() : EditObject.SmartflowObject.LinkedItems
             };
 
             
             var attachment = EditLinkedObject is null 
-                ? new LinkedDocument
+                ? new LinkedItem
                 {
                     Action = "INSERT",
                     ChaserDesc = "",
@@ -362,7 +391,8 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Documents
                     DocName = "",
                     ScheduleDataItem = "",
                     TrackingMethod = "",
-                    CustomItem = "N"
+                    CustomItem = "N",
+                    SeqNo = 0
                 } 
                 : copyObject.LinkedItems.Where(F => F.DocName == EditLinkedObject.DocName).FirstOrDefault(); 
 
@@ -392,7 +422,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Documents
 
         protected void ShowSmartflowAttachmentViewModal()
         {
-            var attachment = EditLinkedObject is null ? new LinkedDocument { Action = "INSERT" } : EditLinkedObject;
+            var attachment = EditLinkedObject is null ? new LinkedItem { Action = "INSERT" } : EditLinkedObject;
 
             var parameters = new ModalParameters();
             parameters.Add("_Attachment", attachment);
@@ -745,7 +775,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Documents
 
                 SeqMoving = false;
 
-                await ChapterItemsUpdated();
+                await SmartflowItemsUpdated();
 
             }
             catch(Exception e)
@@ -765,7 +795,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Documents
 
             _LstDocs.Select(C => { C.SmartflowObject.SeqNo = _LstDocs.IndexOf(C) + 1; return C; }).ToList();
 
-            await ChapterItemsUpdated();
+            await SmartflowItemsUpdated();
         }
     
 

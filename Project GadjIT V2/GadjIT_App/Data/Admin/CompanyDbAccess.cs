@@ -44,8 +44,8 @@ namespace GadjIT_App.Data.Admin
         Task<AppCompanyDetails> DeleteCompany(AppCompanyDetails company);
         Task<AppCompanyDetails> AssignWorkTypeGroupToCompany(AppCompanyDetails company, AppWorkTypeGroups workTypeGroup);
         Task<AppCompanyDetails> RemoveWorkTypeGroupFromCompany(AppCompanyDetails company, AppWorkTypeGroups workTypeGroup);
-        Task<App_SmartflowRecord> SaveSmartFlowRecord(Client_SmartflowRecord chapter, IUserSessionState sessionState);
-        Task<App_SmartflowRecord> SaveSmartFlowRecordData(Client_SmartflowRecord chapter, IUserSessionState sessionState);
+        Task<App_SmartflowRecord> SaveSmartFlowRecord(Client_SmartflowRecord smartflowRecord, IUserSessionState sessionState);
+        Task<App_SmartflowRecord> SaveSmartFlowRecordData(Client_SmartflowRecord smartflowRecord, IUserSessionState sessionState);
         Task<App_SmartflowRecord> RemoveSmartFlowRecord(int id, IUserSessionState sessionState);
         Task<List<App_SmartflowRecord>> SyncAdminSysToClient(List<Client_SmartflowRecord> clientObjects, IUserSessionState sessionState);
         Task<List<App_SmartflowRecord>> GetAllAppSmartflowRecords(IUserSessionState sessionState);
@@ -844,7 +844,7 @@ namespace GadjIT_App.Data.Admin
         }
 
 
-        public async Task<App_SmartflowRecord> SaveSmartFlowRecord(Client_SmartflowRecord chapter, IUserSessionState sessionState)
+        public async Task<App_SmartflowRecord> SaveSmartFlowRecord(Client_SmartflowRecord smartflowRecord, IUserSessionState sessionState)
         {
             using (var context = contextFactory.CreateDbContext())
             {
@@ -852,13 +852,13 @@ namespace GadjIT_App.Data.Admin
 
                 
                 var existingRecord = await context.App_SmartflowRecord
-                                                    .Where(R => R.RowId == chapter.Id && R.CompanyId == sessionState.Company.Id)
+                                                    .Where(R => R.RowId == smartflowRecord.Id && R.CompanyId == sessionState.Company.Id)
                                                     .Where(R => R.System == sessionState.SelectedSystem)
                                                     .SingleOrDefaultAsync();
 
                 if (existingRecord is null)
                 {
-                    mapper.Map(chapter, record);
+                    mapper.Map(smartflowRecord, record);
 
                     record.System = sessionState.SelectedSystem;
                     record.CreatedByUserId = sessionState.User.Id;
@@ -870,7 +870,7 @@ namespace GadjIT_App.Data.Admin
                 }
                 else
                 {
-                    mapper.Map(chapter, existingRecord);
+                    mapper.Map(smartflowRecord, existingRecord);
 
                     existingRecord.LastModifiedByUserId = sessionState.User.Id;
                     existingRecord.LastModifiedDate = DateTime.Now;
@@ -883,7 +883,7 @@ namespace GadjIT_App.Data.Admin
 
         }
 
-        public async Task<App_SmartflowRecord> SaveSmartFlowRecordData(Client_SmartflowRecord chapter, IUserSessionState sessionState)
+        public async Task<App_SmartflowRecord> SaveSmartFlowRecordData(Client_SmartflowRecord smartflowRecord, IUserSessionState sessionState)
         {
             using (var context = contextFactory.CreateDbContext())
             {
@@ -893,13 +893,13 @@ namespace GadjIT_App.Data.Admin
 
 
                 var existingRecord = await context.App_SmartflowRecord
-                                                    .Where(R => R.RowId == chapter.Id && R.CompanyId == sessionState.Company.Id)
+                                                    .Where(R => R.RowId == smartflowRecord.Id && R.CompanyId == sessionState.Company.Id)
                                                     .Where(R => R.System == sessionState.SelectedSystem)
                                                     .SingleOrDefaultAsync();
 
                 if (existingRecord is null)
                 {
-                    record.SmartflowData = chapter.SmartflowData;
+                    record.SmartflowData = smartflowRecord.SmartflowData;
 
                     record.System = sessionState.SelectedSystem;
                     record.CreatedByUserId = sessionState.User.Id;
@@ -911,7 +911,7 @@ namespace GadjIT_App.Data.Admin
                 }
                 else
                 {
-                    existingRecord.SmartflowData = chapter.SmartflowData;
+                    existingRecord.SmartflowData = smartflowRecord.SmartflowData;
 
                     existingRecord.LastModifiedByUserId = sessionState.User.Id;
                     existingRecord.LastModifiedDate = DateTime.Now;

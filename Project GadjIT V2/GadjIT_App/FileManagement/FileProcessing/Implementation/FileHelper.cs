@@ -499,7 +499,7 @@ namespace GadjIT_App.FileManagement.FileProcessing.Implementation
             return isExcelValid;
         }
 
-        public async Task<string> WriteSmartflowDataToExcel(SmartflowV2 selectedChapter, List<P4W_DmDocuments> documents, List<P4W_CaseTypeGroups> caseTypeGroups)
+        public async Task<string> WriteSmartflowDataToExcel(SmartflowV2 selectedSmartflow, List<P4W_DmDocuments> documents, List<P4W_CaseTypeGroups> caseTypeGroups)
         {
             List<string> docTypes = new List<string> { "Doc", "Letter", "Form", "Step", "Date", "Email" };
             Dictionary<int?, string> docP4WTypes = new Dictionary<int?, string> { { 1, "Doc" }, { 4, "Form" }, { 6, "Step" }, { 8, "Date" }, { 9, "Email" }, { 11, "Doc" }, { 12, "Email" }, { 13, "Doc" }, { 19, "Doc" } };
@@ -519,31 +519,31 @@ namespace GadjIT_App.FileManagement.FileProcessing.Implementation
 
             workSheetHeader.Cells[1, 1].Style.Font.Name = "Arial Black";
             workSheetHeader.Cells[1, 1].Style.Font.Size = 16;
-            workSheetHeader.Cells[1, 1].Value = selectedChapter.Name;
+            workSheetHeader.Cells[1, 1].Value = selectedSmartflow.Name;
 
             workSheetHeader.Column(1).Width = 40;
             workSheetHeader.Column(1).Style.Font.Bold = true;
 
             workSheetHeader.Cells[2, 1].Value = "Case Type Group:";
-            workSheetHeader.Cells[2, 2].Value = selectedChapter.CaseTypeGroup;
+            workSheetHeader.Cells[2, 2].Value = selectedSmartflow.CaseTypeGroup;
 
             workSheetHeader.Cells[3, 1].Value = "Case Type:";
-            workSheetHeader.Cells[3, 2].Value = selectedChapter.CaseType;
+            workSheetHeader.Cells[3, 2].Value = selectedSmartflow.CaseType;
 
             workSheetHeader.Cells[4, 1].Value = "Smartflow Name:";
-            workSheetHeader.Cells[4, 2].Value = selectedChapter.Name;
+            workSheetHeader.Cells[4, 2].Value = selectedSmartflow.Name;
 
             workSheetHeader.Cells[6, 1].Value = "Colour:";
-            workSheetHeader.Cells[6, 2].Value = selectedChapter.BackgroundColourName;
+            workSheetHeader.Cells[6, 2].Value = selectedSmartflow.BackgroundColourName;
 
             workSheetHeader.Cells[7, 1].Value = "General Notes: ";
-            workSheetHeader.Cells[7, 2].Value = selectedChapter.GeneralNotes;
+            workSheetHeader.Cells[7, 2].Value = selectedSmartflow.GeneralNotes;
 
             workSheetHeader.Cells[8, 1].Value = "Show Partner Notes: ";
-            workSheetHeader.Cells[8, 2].Value = selectedChapter.ShowPartnerNotes;
+            workSheetHeader.Cells[8, 2].Value = selectedSmartflow.ShowPartnerNotes;
 
             workSheetHeader.Cells[9, 1].Value = "Show Document Tracking: ";
-            workSheetHeader.Cells[9, 2].Value = selectedChapter.ShowDocumentTracking;
+            workSheetHeader.Cells[9, 2].Value = selectedSmartflow.ShowDocumentTracking;
 
             /*
              * 
@@ -572,7 +572,7 @@ namespace GadjIT_App.FileManagement.FileProcessing.Implementation
 
             //Body of table
             int recordIndex = 3;
-            foreach (var chapterItem in selectedChapter.Agendas.OrderBy(C => C.Name).ToList())
+            foreach (var chapterItem in selectedSmartflow.Agendas.OrderBy(C => C.Name).ToList())
             {
                 workSheetAgenda.Cells[recordIndex, 1].Value = string.IsNullOrEmpty(chapterItem.Name) ? "" : chapterItem.Name;
 
@@ -615,7 +615,7 @@ namespace GadjIT_App.FileManagement.FileProcessing.Implementation
 
             //Body of table
             recordIndex = 3;
-            foreach (var chapterItem in selectedChapter.Status.OrderBy(C => C.SeqNo).ToList())
+            foreach (var chapterItem in selectedSmartflow.Status.OrderBy(C => C.SeqNo).ToList())
             {
                 workSheetStatus.Cells[recordIndex, 1].Value = string.IsNullOrEmpty(chapterItem.Name) ? "" : chapterItem.Name;
                 workSheetStatus.Cells[recordIndex, 2].Value = string.IsNullOrEmpty(chapterItem.MilestoneStatus) ? "" : chapterItem.MilestoneStatus;
@@ -665,7 +665,7 @@ namespace GadjIT_App.FileManagement.FileProcessing.Implementation
 
             //Body of table
             recordIndex = 3;
-            foreach (var feeItem in selectedChapter.Fees.OrderBy(C => C.SeqNo).ToList())
+            foreach (var feeItem in selectedSmartflow.Fees.OrderBy(C => C.SeqNo).ToList())
             {
                 workSheetFees.Cells[recordIndex, 1].Value = string.IsNullOrEmpty(feeItem.FeeName) ? "" : feeItem.FeeName;
                 workSheetFees.Cells[recordIndex, 2].Value = string.IsNullOrEmpty(feeItem.FeeName) ? "" : feeItem.FeeCategory;
@@ -761,7 +761,7 @@ namespace GadjIT_App.FileManagement.FileProcessing.Implementation
 
             //Body of table
             recordIndex = 3;
-            foreach (var chapterItem in selectedChapter.Documents.OrderBy(C => C.SeqNo).ToList())
+            foreach (var chapterItem in selectedSmartflow.Documents.OrderBy(C => C.SeqNo).ToList())
             {
                 workSheetDocument.Cells[recordIndex, 1].Value = string.IsNullOrEmpty(chapterItem.Name) ? "" : chapterItem.Name;
                 workSheetDocument.Cells[recordIndex, 2].Value = string.IsNullOrEmpty(chapterItem.AltDisplayName) ? "" : chapterItem.AltDisplayName;
@@ -783,7 +783,7 @@ namespace GadjIT_App.FileManagement.FileProcessing.Implementation
                 workSheetDocument.Cells[recordIndex, 16].Value = string.IsNullOrEmpty(chapterItem.OptionalDocument) ? "" : chapterItem.OptionalDocument;
 
 
-                //workSheetDocument.Cells[recordIndex, 6].DataValidation.AddListDataValidation().Formula.ExcelFormula = $"= Status!A3:A{selectedChapter.Items.Where(C => C.Type == "Status").ToList().Count() + 3}";
+                //workSheetDocument.Cells[recordIndex, 6].DataValidation.AddListDataValidation().Formula.ExcelFormula = $"= Status!A3:A{selectedSmartflow.Items.Where(C => C.Type == "Status").ToList().Count() + 3}";
 
                 recordIndex++;
             }
@@ -864,7 +864,7 @@ namespace GadjIT_App.FileManagement.FileProcessing.Implementation
 
             //Body of table
             recordIndex = 3;
-            foreach (var chapterItem in selectedChapter
+            foreach (var chapterItem in selectedSmartflow
                                             .Documents
                                             .Where(C => !(C.LinkedItems is null) && C.LinkedItems.Count() > 0)
                                             .OrderBy(C => C.SeqNo)
@@ -932,7 +932,7 @@ namespace GadjIT_App.FileManagement.FileProcessing.Implementation
 
             //Body of table
             recordIndex = 3;
-            foreach (var viewItem in selectedChapter.DataViews.OrderBy(C => C.SeqNo).ToList())
+            foreach (var viewItem in selectedSmartflow.DataViews.OrderBy(C => C.SeqNo).ToList())
             {
                 workSheetDataViews.Cells[recordIndex, 1].Value = string.IsNullOrEmpty(viewItem.ViewName) ? "" : viewItem.ViewName;
                 workSheetDataViews.Cells[recordIndex, 2].Value = string.IsNullOrEmpty(viewItem.DisplayName) ? "" : viewItem.DisplayName;
@@ -964,7 +964,7 @@ namespace GadjIT_App.FileManagement.FileProcessing.Implementation
             workSheetLookUp.Cells[1, 1, 1, 2].Merge = true;
 
             workSheetLookUp.Cells[1, 1].Style.Fill.SetBackground(System.Drawing.Color.Black);
-            workSheetLookUp.Cells[1, 1].Value = $"Documents for Case Type Group: '{selectedChapter.P4WCaseTypeGroup}'";
+            workSheetLookUp.Cells[1, 1].Value = $"Documents for Case Type Group: '{selectedSmartflow.P4WCaseTypeGroup}'";
             workSheetLookUp.Cells[2, 1].Value = "Document Type";
             workSheetLookUp.Cells[2, 2].Value = "Document Name";
 
@@ -985,7 +985,7 @@ namespace GadjIT_App.FileManagement.FileProcessing.Implementation
             recordIndex = 3;
             foreach (var doc in documents
                 .Where(D => D.CaseTypeGroupRef == caseTypeGroups
-                                                    .Where(C => C.Name == selectedChapter.P4WCaseTypeGroup)
+                                                    .Where(C => C.Name == selectedSmartflow.P4WCaseTypeGroup)
                                                     .Select(C => C.Id)
                                                     .SingleOrDefault()
                                                     ||
@@ -1020,7 +1020,7 @@ namespace GadjIT_App.FileManagement.FileProcessing.Implementation
             workSheetLookUp.Column(8).AutoFit();
 
             //Download SpreadSheet
-            string excelName = $"{selectedChapter.Name}.xlsx";
+            string excelName = $"{selectedSmartflow.Name}.xlsx";
 
             await jsRuntime.InvokeAsync<object>(
                  "DownloadTextFile",
@@ -1031,9 +1031,9 @@ namespace GadjIT_App.FileManagement.FileProcessing.Implementation
         }
 
 
-        public SmartflowV2 ReadChapterDataFromExcel(string FilePath)
+        public SmartflowV2 ReadSmartflowDataFromExcel(string FilePath)
         {
-            SmartflowV2 readChapters = new SmartflowV2 { Agendas = new List<SmartflowAgenda>()
+            SmartflowV2 readSmartflows = new SmartflowV2 { Agendas = new List<SmartflowAgenda>()
                                                         , Status = new List<SmartflowStatus>()
                                                         , Documents = new List<SmartflowDocument>()
                                                         , Fees = new List<SmartflowFee>()
@@ -1053,7 +1053,7 @@ namespace GadjIT_App.FileManagement.FileProcessing.Implementation
                 int totalColumns = workSheetHeader.Dimension.End.Column;
                 int totalRows = workSheetHeader.Dimension.End.Row;
 
-                readChapters.ShowPartnerNotes = workSheetHeader.Cells[8, 2].FirstOrDefault() is null
+                readSmartflows.ShowPartnerNotes = workSheetHeader.Cells[8, 2].FirstOrDefault() is null
                                             ? "N"
                                             : workSheetHeader.Cells[8, 2].Value is null
                                             ? "N"
@@ -1062,7 +1062,7 @@ namespace GadjIT_App.FileManagement.FileProcessing.Implementation
                                             : "N";
 
 
-                readChapters.ShowDocumentTracking = workSheetHeader.Cells[9, 2].FirstOrDefault() is null
+                readSmartflows.ShowDocumentTracking = workSheetHeader.Cells[9, 2].FirstOrDefault() is null
                                             ? "N"
                                             : workSheetHeader.Cells[9, 2].Value is null
                                             ? "N"
@@ -1093,7 +1093,7 @@ namespace GadjIT_App.FileManagement.FileProcessing.Implementation
 
                     if (!string.IsNullOrEmpty(agendaObject.Name))
                     {
-                        readChapters.Agendas.Add(agendaObject);
+                        readSmartflows.Agendas.Add(agendaObject);
                     }
                 }
 
@@ -1129,9 +1129,9 @@ namespace GadjIT_App.FileManagement.FileProcessing.Implementation
 
                     if (!string.IsNullOrEmpty(statusObject.Name))
                     {
-                        if (readChapters.Status.Where(I => I.Name == statusObject.Name).Count() == 0)
+                        if (readSmartflows.Status.Where(I => I.Name == statusObject.Name).Count() == 0)
                         {
-                            readChapters.Status.Add(statusObject);
+                            readSmartflows.Status.Add(statusObject);
                         }
                     }
 
@@ -1185,7 +1185,7 @@ namespace GadjIT_App.FileManagement.FileProcessing.Implementation
 
                     feeObject.SeqNo = row - 2;
 
-                    readChapters.Fees.Add(feeObject);
+                    readSmartflows.Fees.Add(feeObject);
                 }
 
                 //Documents
@@ -1302,9 +1302,9 @@ namespace GadjIT_App.FileManagement.FileProcessing.Implementation
                     //
                     if (!string.IsNullOrEmpty(documentObject.Agenda))
                     {
-                        if(!readChapters.Agendas.Select(I => I.Name).Contains(documentObject.Agenda)){
+                        if(!readSmartflows.Agendas.Select(I => I.Name).Contains(documentObject.Agenda)){
                             
-                            readChapters.Agendas.Add(new SmartflowAgenda 
+                            readSmartflows.Agendas.Add(new SmartflowAgenda 
                                                     { 
                                                         Name = documentObject.Agenda, 
                                                     });
@@ -1316,15 +1316,15 @@ namespace GadjIT_App.FileManagement.FileProcessing.Implementation
                     //
                     if (!string.IsNullOrEmpty(documentObject.NextStatus))
                     {
-                        if(!readChapters.Status.Select(I => I.Name).Contains(documentObject.NextStatus)){
-                            var seqNo = readChapters.Status.Select(I => I.SeqNo)
+                        if(!readSmartflows.Status.Select(I => I.Name).Contains(documentObject.NextStatus)){
+                            var seqNo = readSmartflows.Status.Select(I => I.SeqNo)
                                         .OrderByDescending(I => I)
                                         .FirstOrDefault();
 
                             seqNo = seqNo ?? -1;            
                             seqNo += 1;
 
-                            readChapters.Status.Add(new SmartflowStatus 
+                            readSmartflows.Status.Add(new SmartflowStatus 
                                                     { 
                                                         Name = documentObject.NextStatus, 
                                                         SeqNo = seqNo,
@@ -1335,7 +1335,7 @@ namespace GadjIT_App.FileManagement.FileProcessing.Implementation
 
                     if (!string.IsNullOrEmpty(documentObject.Name))
                     {
-                        readChapters.Documents.Add(documentObject);
+                        readSmartflows.Documents.Add(documentObject);
                     }
 
                 }
@@ -1350,7 +1350,7 @@ namespace GadjIT_App.FileManagement.FileProcessing.Implementation
                 for (int row = 3; row <= totalRows; row++)
                 {
                     documentObject = null;
-                    LinkedDocument newAttachment = new LinkedDocument();
+                    LinkedItem newAttachment = new LinkedItem();
 
                     for (int column = 1; column <= totalColumns; column++)
                     {
@@ -1362,14 +1362,14 @@ namespace GadjIT_App.FileManagement.FileProcessing.Implementation
                                             ? ""
                                             : worksheetAttachments.Cells[row, column].Value.ToString();
 
-                            documentObject = readChapters
+                            documentObject = readSmartflows
                                 .Documents
                                 .Where(C => !string.IsNullOrEmpty(C.AltDisplayName) & C.AltDisplayName == documentName)
                                 .FirstOrDefault();
 
                             if (documentObject is null)
                             {
-                                documentObject = readChapters
+                                documentObject = readSmartflows
                                 .Documents
                                 .Where(C => C.Name == documentName)
                                 .FirstOrDefault();
@@ -1449,9 +1449,9 @@ namespace GadjIT_App.FileManagement.FileProcessing.Implementation
                     {
                         if (!string.IsNullOrEmpty(newAttachment.Agenda))
                         {
-                            if(!readChapters.Agendas.Select(A => A.Name).Contains(newAttachment.Agenda)){
+                            if(!readSmartflows.Agendas.Select(A => A.Name).Contains(newAttachment.Agenda)){
                                 
-                                readChapters.Agendas.Add(new SmartflowAgenda 
+                                readSmartflows.Agendas.Add(new SmartflowAgenda 
                                                         { 
                                                             Name = newAttachment.Agenda, 
                                                         });
@@ -1460,7 +1460,7 @@ namespace GadjIT_App.FileManagement.FileProcessing.Implementation
 
                         if (documentObject.LinkedItems is null)
                         {
-                            documentObject.LinkedItems = new List<LinkedDocument>();
+                            documentObject.LinkedItems = new List<LinkedItem>();
                         }
                         documentObject.LinkedItems.Add(newAttachment);
                     }
@@ -1491,7 +1491,7 @@ namespace GadjIT_App.FileManagement.FileProcessing.Implementation
 
                     readView.SeqNo = row - 2;
 
-                    readChapters.DataViews.Add(readView);
+                    readSmartflows.DataViews.Add(readView);
                 }
 
             }
@@ -1499,7 +1499,7 @@ namespace GadjIT_App.FileManagement.FileProcessing.Implementation
 
 
 
-            return readChapters;
+            return readSmartflows;
         }
 
     }

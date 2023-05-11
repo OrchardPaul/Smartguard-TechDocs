@@ -44,13 +44,16 @@ namespace GadjIT_ClientContext.Models.Smartflow
         public string OptionalDocument { get; set; } = "N";
         public string CustomItem { get; set; } = "N";
         public string Agenda { get; set; } = "";
-        public List<LinkedDocument> LinkedItems { get; set; }
+        public List<LinkedItem> LinkedItems { get; set; }
 
 
     }
 
-    public class LinkedDocument
+    public class LinkedItem
     {
+        [Required]
+        public int? SeqNo { get; set; } = 0;
+
         [Required (ErrorMessage = "Name field is required")]
         public string DocName { get; set; }
         public string DocAsName { get; set; }

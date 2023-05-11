@@ -17,7 +17,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Header
         public ISmartflowFileHelper SmartflowFileHelper { get; set; }
 
         [Parameter]
-        public SmartflowV2 SelectedChapter { get; set; }
+        public SmartflowV2 SelectedSmartflow { get; set; }
 
         [Parameter]
         public List<P4W_DmDocuments> Documents { get; set; }
@@ -38,7 +38,7 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Header
 
         private async Task WriteToExcel()
         {
-            await SmartflowFileHelper.WriteSmartflowDataToExcel(SelectedChapter, Documents, CaseTypeGroups); //CustomPath set in Parent Component
+            await SmartflowFileHelper.WriteSmartflowDataToExcel(SelectedSmartflow, Documents, CaseTypeGroups); //CustomPath set in Parent Component
             Close();
         }
 

@@ -29,6 +29,12 @@ namespace GadjIT_App.Pages.Smartflows
         public Client_VmSmartflowRecord _Selected_VmClientSmartflowRecord { get; set; }
 
         [Parameter]
+        public string _SelectedCaseTypeGroup { get; set; }
+
+        [Parameter]
+        public string _SelectedCaseType { get; set; }
+
+        [Parameter]
         public EventCallback _SelectHome {get; set;}
 
         [Inject]
@@ -366,6 +372,27 @@ namespace GadjIT_App.Pages.Smartflows
                 {
                     SelectedSmartflow = JsonConvert.DeserializeObject<SmartflowV2>(_Selected_VmClientSmartflowRecord.ClientSmartflowRecord.SmartflowData);
 
+                    //It may be that some Smartflows have been copied/moved from other Case Types
+                    //We need to perform a quick validation chaeck to make sure that the Smartflow 
+                    //object refers to the correct Case Type Group and Case Type. i.e. the one it is listed against
+                    if(SelectedSmartflow.CaseTypeGroup != _SelectedCaseTypeGroup || SelectedSmartflow.CaseType != _SelectedCaseType)
+                    {
+                        SelectedSmartflow.CaseTypeGroup = _SelectedCaseTypeGroup;
+                        SelectedSmartflow.CaseType = _SelectedCaseType;
+
+                        try
+                        {
+                            _Selected_VmClientSmartflowRecord.ClientSmartflowRecord.SmartflowData = JsonConvert.SerializeObject(SelectedSmartflow);
+                            await ClientApiManagementService.Update(_Selected_VmClientSmartflowRecord.ClientSmartflowRecord);
+                        }
+                        catch (Exception e)
+                        {
+                            GenericErrorLog(true,e, "SelectSmartflow", $"Updating Smartflow Case Type details: {e.Message}");
+                        }
+
+
+                    }
+
                 }
                 else
                 {
@@ -380,15 +407,15 @@ namespace GadjIT_App.Pages.Smartflows
                         , Messages = new List<SmartflowMessage>()                             
                         , Fees = new List<SmartflowFee>()
                     };
-                    SelectedSmartflow.CaseTypeGroup = _Selected_VmClientSmartflowRecord.ClientSmartflowRecord.CaseTypeGroup;
-                    SelectedSmartflow.CaseType = _Selected_VmClientSmartflowRecord.ClientSmartflowRecord.CaseType;
+                    SelectedSmartflow.CaseTypeGroup = _SelectedCaseTypeGroup;
+                    SelectedSmartflow.CaseType = _SelectedCaseType;
                     SelectedSmartflow.Name = _Selected_VmClientSmartflowRecord.ClientSmartflowRecord.SmartflowName;
 
                 }
 
                 SelectedSmartflow.StepName = $"SF {_Selected_VmClientSmartflowRecord.ClientSmartflowRecord.SmartflowName} Smartflow";
                 SelectedSmartflow.SelectedStep = SelectedSmartflow.SelectedStep is null || SelectedSmartflow.SelectedStep == "Create New" ? "" : SelectedSmartflow.SelectedStep;
-                 SelectedSmartflowId = _Selected_VmClientSmartflowRecord.ClientSmartflowRecord.Id;
+                SelectedSmartflowId = _Selected_VmClientSmartflowRecord.ClientSmartflowRecord.Id;
                 CompareSystems = false;
                 RowChanged = 0;
                 NavDisplay = "Chapter";
@@ -521,7 +548,7 @@ namespace GadjIT_App.Pages.Smartflows
                                             A.SmartflowObject.Action = (A.SmartflowObject.Action == "" ? "INSERT" : A.SmartflowObject.Action);
                                         //Make sure all Linked Items have the DocType set by comparing against dm_documents for matches
                                         A.SmartflowObject.LinkedItems = A.SmartflowObject.LinkedItems == null
-                                                                                    ? null
+                                                                                    ? new List<LinkedItem>()
                                                                                     : A.SmartflowObject.LinkedItems
                                                                                                     .Select(LI => {
                                                                                                         LI.DocType = LibraryDocumentsAndSteps

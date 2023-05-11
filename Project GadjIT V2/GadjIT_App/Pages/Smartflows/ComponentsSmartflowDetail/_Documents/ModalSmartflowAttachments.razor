@@ -1,246 +1,348 @@
 ﻿@using GadjIT_App.Data.CustomFormObjects;
-
-<EditForm Model="@_Attachment" OnValidSubmit="HandleValidSubmit">
-    <div class="modal-body">
-
-        <DataAnnotationsValidator />
-
-        @if (_LibraryDocumentsAndSteps is null)
-        {
-            <div class="spinner"></div>
-        }
-        else
-        {
-
-            <div class="form-group">
-                <label for="NextStatus">Action</label>
-                <InputSelect class="form-control form-control-sm"
-                             @bind-Value="_Attachment.Action">
-                    <option value=""></option>
-                    @foreach (var s in ActionList)
-                        {
-                        <option value="@s">
-                            @s
-                        </option>
-                        }
-                </InputSelect>
-                <ValidationMessage For="@(() => _Attachment.Action)" />
-            </div>
+@using GadjIT_ClientContext.Models.Smartflow;
 
 
-            <div class="form-group">
-                <label for="DocType">Case Type Group</label>
-                <InputSelectInteger class="form-control form-control-lg"
-                                    @bind-Value="SelectedCaseTypeGroup">
-                    <option value="-2">Select</option>
-                    @foreach (var group in _P4WCaseTypeGroups.Where(C => C.Name == _SelectedSmartflow.P4WCaseTypeGroup).ToList())
-                        {
-                        <option value="@group.Id">
-                            @group.Name
-                        </option>
-                        }
-                    <option value="0">Global Documents</option>
-                    @if (_SelectedSmartflow.P4WCaseTypeGroup == "Entity Documents")
-                        {
-                        <option value="-1">Entity Documents</option>
-                        }
-                </InputSelectInteger>
-            </div>
+@if(CurrentAction == "List")
+{
+    <div class="grid-chapter grid-chapter-attachments">
 
-            <div class="form-group">
-                <label for="DocName">Document / Step</label>
-                @if (SelectedCaseTypeGroup == -2 & _Attachment.DocName is null)
-                {
-                    <select class="form-control" disabled />
-                }
-                else
-                {
-                    @if ((_Attachment.Action != null && _Attachment.Action == "SCHEDULE") || (_SelectedSmartflow.ShowDocumentTracking != null && _SelectedSmartflow.ShowDocumentTracking == "Y"))
-                    {
-                        <div class="form-label-check" style="margin-right: 13px">
-                            @if (UseCustomItem)
-                            {
-                                <label>Custom Item</label><input type="checkbox" checked="checked" @bind-value="@UseCustomItem" />
-                            }
-                            else
-                            {
-                                <label>Custom Item</label><input type="checkbox" @bind-value="@UseCustomItem" />
-                            }
-
-                        </div>
-                    }
-
-
-                    @if (!UseCustomItem || (((_SelectedSmartflow.ShowDocumentTracking is null) || _SelectedSmartflow.ShowDocumentTracking == "N") && _Attachment.Action != "SCHEDULE"))
-                    {
-
-                        <div class="form-group">
-                            <label for="AltDisplayName">Filter</label>
-                            <InputText class="form-control form-control-md form-control-filter" @bind-Value="@FilterText" />
-                        </div>
-
-
-
-                        <div class="form-group control-with-button">
-                            <div class="control-main">
-                                <InputSelect class="form-control form-control-xl" @bind-Value="_Attachment.DocName">
-                                    @if (_Attachment.DocName is null)
-                                                {
-                                        <option value="">Select</option>
-                                                }
-                                                else
-                                                {
-                                        <option value="@_Attachment.DocName">@_Attachment.DocName</option>
-                                                }
-
-
-                                    @foreach (var doc in _LibraryDocumentsAndSteps.Where(D => D.CaseTypeGroupRef == SelectedCaseTypeGroup).Where(C => C.Name.ToUpper().Contains(FilterText.ToUpper())).OrderBy(D => D.Name).ToList())
-                                                {
-                                        <option value="@doc.Name">
-                                            @doc.Name
-                                        </option>
-                                                }
-                                </InputSelect>
-
-                            </div>
-                            <div class="control-button btn" @onclick="() => RefreshDocListOnModel()" title="Refresh List">
-                                <i class="fa fa-sync"></i>
-                            </div>
-                        </div>
-
-
-                        <div class="form-group">
-                            <label for="CompleteName">Display Name</label>
-                            <InputText class="form-control form-control-xl" @bind-Value="@_Attachment.DocAsName" />
-                        </div>
-                    }
-                    else
-                    {
-
-                        <InputText class="form-control form-control-xl" @bind-Value="@_Attachment.DocName"></InputText>
-                    }
-                }
-                <ValidationMessage For="@(() => _Attachment.DocName)" />
-            </div>
-
+        <div class="grid-data grid-can-edit">
             
-            if(!UseCustomItem)
-            {
-                <div class="form-group">        
-                    <label for="Agenda">Agenda</label>
-                    <InputSelect class="form-control form-control-lg"
-                                @bind-Value="_Attachment.Agenda">
-                        <option value=""></option>
-                        @foreach (var a in _ListOfAgenda)
-                        {
-                            <option value="@a.SmartflowObject.Name">
-                                @a.SmartflowObject.Name
-                            </option>
+                @if (!(_SelectedDocument.LinkedItems is null) && _SelectedDocument.LinkedItems.Count > 0)
+                {
+                    
+                    <Dropzone Items="_SelectedDocument.LinkedItems"
+                        InstantReplace="true"
+                        OnItemDrop="@((d)=>ReSequence(_SelectedDocument.LinkedItems.IndexOf(d) + 1))"
+                        OnDragStartParam="() => ResetRowChanged()"
+                        TItem="LinkedItem"
+                        UseCustomImage="true">
+                        
+                        @{
+                            var optionalAttach = (context.OptionalDocument == "Y" && !(string.IsNullOrEmpty(context.DocType) && context.CustomItem == "N") ? "optional-row" : "");   
                         }
-                    </InputSelect>
-                    <ValidationMessage For="@(() => _Attachment.Agenda)" />
-                </div>
-            }
 
-            <div class="form-group">
-                <label for="Suppress">Is an Optional Document?</label>
-                <InputCheckbox class="form-control" @bind-Value="OptionalDocument" />
-            </div>
-        }
+                        <div class="row grid-row @(RowChanged == context.SeqNo && !SeqMoving ? "row-changed" : "" )">
+                            <div class="data-item">
+                                
+                                <div class="data-item-sub font-85" @onclick="() => PrepareAttachmentForEdit(context)">
+                                
+                                    <span class="font-85 @optionalAttach" title="@context.Action">
+                                        @if(context.Action == "TAKE"){<span class="doc-icon" title="TAKE: action"><span class="fa fa-running mr-2"></span></span>}
+                                        @if(context.Action == "INSERT"){<span class="doc-icon" title="INSERT: action"><span class="fa fa-arrow-down mr-2"></span></span>}
+                                        @if(context.Action == "SCHEDULE"){<span class="doc-icon" title="SCHEDULE: action"><span class="fa fa-calendar-check mr-2"></span></span>}
+                                    </span>
 
+                                    <span class="font-85 @optionalAttach">
+                                        
+                                        @if(context.DocType == "Doc"){<span class="doc-icon" title="Document"><span class="fa fa-file mr-2"></span></span>}
+                                        @if(context.DocType == "Form"){<span class="doc-icon" title="Form"><span class="fa fa-file-pdf mr-2"></span></span>}
+                                        @if(context.DocType == "Email"){<span class="doc-icon" title="Email"><span class="fa fa-envelope mr-2"></span></span>}
+                                        @if(context.DocType == "Step"){<span class="doc-icon" title="Step"><span class="fa fa-list-ol mr-2"></span></span>}
+                                        @if(context.DocType == "Date"){<span class="doc-icon" title="Diary Item"><span class="fa fa-calendar mr-2"></span></span>}
+                                        @if(context.DocType == "Csv"){<span class="doc-icon" title="Spreadsheet"><span class="fa fa-file-csv mr-2"></span></span>}
+                                        @if(string.IsNullOrEmpty(context.DocType)){
+                                            @if(context.CustomItem == "Y"){
+                                                    <span class="doc-icon" title="Custom Item"><span class="fa fa-draw-polygon mr-2"></span></span>
+                                            }
+                                            else
+                                            {
+                                                    <span class="doc-icon" title="Missing Item"><span class="fa fa-exclamation col-red mr-2"></span></span>
+                                            }
+                                        }
+                                        
 
+                                    </span>
+                                    <span class="attach-name" title="@(string.IsNullOrEmpty(context.DocAsName) ? context.DocName : context.DocAsName)">
+                                        @(string.IsNullOrEmpty(context.DocAsName) ? context.DocName : context.DocAsName) 
+                                    </span>
 
-        @if (_Attachment.Action == "SCHEDULE")
-        {
-
-            <div class="form-group">
-                <label for="ScheduleDays">Schedule Days</label>
-                <div class="form-label-check" style="margin-right: 13px">
-                    @if (UseCustomReschedule)
-                    {
-
-                        <label>From Data Item</label>
-                        <input type="checkbox" checked="checked" @bind-value="@UseCustomReschedule" />
-
-                    }
-                    else
-                    {
-                        <label>From Data Item</label>
-                        <input type="checkbox" @bind-value="@UseCustomReschedule" />
-                    }
-
-                </div>
-
-                <InputNumber class="form-control form-control-xs" @bind-Value="_Attachment.ScheduleDays"></InputNumber>
-                <ValidationMessage For="@(() => _Attachment.ScheduleDays)" />
-            </div>
-
-            @if (UseCustomReschedule)
-            {
-                <div class="form-group">
-                    <label>Reschedule From Data Item</label><br>
-                    <label>Filter</label>
-                    <InputText class="form-control form-control-md form-control-filter" @bind-Value="@FilterTextDataItem" />
-                </div>
-
-                <div class="form-group mb-3">
-                    <InputSelect class="form-control form-control-xl"
-                                 @bind-Value="_Attachment.ScheduleDataItem">
-                        <option value=""></option>
-                        @foreach (var a in _TableDates
-                            .Where(T => (T.TableType == 1 && _SelectedSmartflow.P4WCaseTypeGroup != "Entity Documents")
-                                        ||
-                                        (T.TableType == 0 && _SelectedSmartflow.P4WCaseTypeGroup == "Entity Documents"))
-                            .Where(F => F.TableField.ToUpper().Contains(FilterTextDataItem.ToUpper())))
-                                {
-                            <option value="@a.TableField">
-                                @a.TableField
-                            </option>
-                                }
-                    </InputSelect>
-                    <ValidationMessage For="@(() => _Attachment.ScheduleDataItem)" />
-                </div>
-            }
-        }
+                                    <span class="doc-icon hidden-sm-down @(!string.IsNullOrEmpty(context.DocAsName) ? "" : "hidden")">
+                                        <span class="fa fa-clone" title="Template: @context.DocName"></span>
+                                    </span>
 
 
-        @if (_SelectedSmartflow.ShowDocumentTracking == "Y" && _Attachment.Action != "SCHEDULE")
-        {
-            <div class="form-group">
-                <label for="TrackMethod">Tracking Method</label>
-                <InputSelect class="form-control form-control-md"
-                             @bind-Value="_Attachment.TrackingMethod">
-                    <option value=""></option>
-                    @foreach (var s in TrackMethodList)
-                        {
-                        <option value="@s">
-                            @s
-                        </option>
-                        }
-                </InputSelect>
-                <ValidationMessage For="@(() => _Attachment.TrackingMethod)" />
-            </div>
-            @if (_Attachment.TrackingMethod == "Response Required")
-            {
-                <div class="form-group">
-                    <label for="ChaserDesc">Chaser Description</label>
-                    <InputText class="form-control form-control-xl" @bind-Value="@_Attachment.ChaserDesc" />
-                </div>
-            }
+                                    <span class="doc-icon hidden-sm-down @(@_SelectedSmartflow.ShowDocumentTracking == "Y" && !(string.IsNullOrEmpty(context.TrackingMethod)) && "Send Only|Response Required".Contains(context.TrackingMethod) ? "" : "hidden")">
+
+                                        <span title="@($"This item is tracked: {context.TrackingMethod}")" class="fa fa-map-marker-alt"></span>
+                                    </span>
+
+                                    <span class="doc-icon hidden-sm-down @(!(string.IsNullOrEmpty(context.Agenda)) ? "" : "hidden")">
+                                        <span title="@($"This item will be saved in the following folder: {context.Agenda}")" class="fa fa-folder"></span>
+                                    </span>
 
 
-        }
+                                    <span class="doc-icon-lg hidden-sm-down @(context.Action == "SCHEDULE" ? "" : "hidden")">
+                                        <span class="" title="@("Will be scheduled for " + context.ScheduleDays.ToString() + " days" + (!string.IsNullOrEmpty(context.ScheduleDataItem) ? " from " + context.ScheduleDataItem : ""))">@(!string.IsNullOrEmpty(context.ScheduleDataItem) ? "* " : "") @context.ScheduleDays.ToString()d</span>
+                                    </span>
 
 
+                                </div>
 
-    </div>
+                            </div>
+                            
+                                          
+                            <div class="data-item">
+                                <button @onclick='() => PrepareAttachmentForEdit(context)' class="btn btn-main btn-sm" title="Edit attachment"><i class="fa fa-pencil"></i><span></span></button>
+                            </div>
+                            
+                        </div>
+                    </Dropzone>
+                }
+                        
+        </div>
+    </div>  
 
     <div class="button-container">
-        @if (_CopyObject.LinkedItems.Select(F => F.DocName).ToList().Contains(_Attachment.DocName))
-        {
-            <button type="button" class="btn btn-secondary" title="Delete Attachment" @onclick="RemoveAttachment"><span class="fa fa-trash"></span></button>
-        }
-        <button type="submit" class="btn btn-main ml-auto"><span class="fa fa-save"></span> <span class="ml-2">Save</span></button>
-        <button type="button" class="btn btn-secondary" @onclick="Close">Cancel</button>
-    </div>
-</EditForm>
+        <button type="button" class="btn btn-main" @onclick="PrepareAttachmentForAdd"><span class="fa fa-plus"></span> <span class="ml-2">Add</span></button>
+        <button type="button" class="btn btn-secondary" @onclick="Close">Close</button>
+    </div>         
+}
+else
+{
+
+    <EditForm Model="@Attachment" OnValidSubmit="HandleValidSubmit">
+        <div class="modal-body">
+
+            <DataAnnotationsValidator />
+
+            @if (_LibraryDocumentsAndSteps is null)
+            {
+                <div class="spinner"></div>
+            }
+            else
+            {
+
+                <div class="form-group">
+                    <label for="NextStatus">Action</label>
+                    <InputSelect class="form-control form-control-sm"
+                                @bind-Value="Attachment.Action">
+                        <option value=""></option>
+                        @foreach (var s in ActionList)
+                            {
+                            <option value="@s">
+                                @s
+                            </option>
+                            }
+                    </InputSelect>
+                    <ValidationMessage For="@(() => Attachment.Action)" />
+                </div>
+
+
+                <div class="form-group">
+                    <label for="DocType">Case Type Group</label>
+                    <InputSelectInteger class="form-control form-control-lg"
+                                        @bind-Value="SelectedCaseTypeGroup">
+                        <option value="-2">Select</option>
+                        @foreach (var group in _P4WCaseTypeGroups.Where(C => C.Name == _SelectedSmartflow.P4WCaseTypeGroup).ToList())
+                            {
+                            <option value="@group.Id">
+                                @group.Name
+                            </option>
+                            }
+                        <option value="0">Global Documents</option>
+                        @if (_SelectedSmartflow.P4WCaseTypeGroup == "Entity Documents")
+                            {
+                            <option value="-1">Entity Documents</option>
+                            }
+                    </InputSelectInteger>
+                </div>
+
+                <div class="form-group">
+                    <label for="DocName">Document / Step</label>
+                    @if (SelectedCaseTypeGroup == -2 & Attachment.DocName is null)
+                    {
+                        <select class="form-control" disabled />
+                    }
+                    else
+                    {
+                        @if ((Attachment.Action != null && Attachment.Action == "SCHEDULE") || (_SelectedSmartflow.ShowDocumentTracking != null && _SelectedSmartflow.ShowDocumentTracking == "Y"))
+                        {
+                            <div class="form-label-check" style="margin-right: 13px">
+                                @if (UseCustomItem)
+                                {
+                                    <label>Custom Item</label><input type="checkbox" checked="checked" @bind-value="@UseCustomItem" />
+                                }
+                                else
+                                {
+                                    <label>Custom Item</label><input type="checkbox" @bind-value="@UseCustomItem" />
+                                }
+
+                            </div>
+                        }
+
+
+                        @if (!UseCustomItem || (((_SelectedSmartflow.ShowDocumentTracking is null) || _SelectedSmartflow.ShowDocumentTracking == "N") && Attachment.Action != "SCHEDULE"))
+                        {
+
+                            <div class="form-group">
+                                <label for="AltDisplayName">Filter</label>
+                                <InputText class="form-control form-control-md form-control-filter" @bind-Value="@FilterText" />
+                            </div>
+
+
+
+                            <div class="form-group control-with-button">
+                                <div class="control-main">
+                                    <InputSelect class="form-control form-control-xl" @bind-Value="Attachment.DocName">
+                                        @if (Attachment.DocName is null)
+                                                    {
+                                            <option value="">Select</option>
+                                                    }
+                                                    else
+                                                    {
+                                            <option value="@Attachment.DocName">@Attachment.DocName</option>
+                                                    }
+
+
+                                        @foreach (var doc in _LibraryDocumentsAndSteps.Where(D => D.CaseTypeGroupRef == SelectedCaseTypeGroup).Where(C => C.Name.ToUpper().Contains(FilterText.ToUpper())).OrderBy(D => D.Name).ToList())
+                                                    {
+                                            <option value="@doc.Name">
+                                                @doc.Name
+                                            </option>
+                                                    }
+                                    </InputSelect>
+
+                                </div>
+                                <div class="control-button btn" @onclick="() => RefreshDocListOnModel()" title="Refresh List">
+                                    <i class="fa fa-sync"></i>
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                <label for="CompleteName">Display Name</label>
+                                <InputText class="form-control form-control-xl" @bind-Value="@Attachment.DocAsName" />
+                            </div>
+                        }
+                        else
+                        {
+
+                            <InputText class="form-control form-control-xl" @bind-Value="@Attachment.DocName"></InputText>
+                        }
+                    }
+                    <ValidationMessage For="@(() => Attachment.DocName)" />
+                </div>
+
+                
+                if(!UseCustomItem)
+                {
+                    <div class="form-group">        
+                        <label for="Agenda">Agenda</label>
+                        <InputSelect class="form-control form-control-lg"
+                                    @bind-Value="Attachment.Agenda">
+                            <option value=""></option>
+                            @foreach (var a in _ListOfAgenda)
+                            {
+                                <option value="@a.SmartflowObject.Name">
+                                    @a.SmartflowObject.Name
+                                </option>
+                            }
+                        </InputSelect>
+                        <ValidationMessage For="@(() => Attachment.Agenda)" />
+                    </div>
+                }
+
+                <div class="form-group">
+                    <label for="Suppress">Is an Optional Document?</label>
+                    <InputCheckbox class="form-control" @bind-Value="OptionalDocument" />
+                </div>
+            }
+
+
+
+            @if (Attachment.Action == "SCHEDULE")
+            {
+
+                <div class="form-group">
+                    <label for="ScheduleDays">Schedule Days</label>
+                    <div class="form-label-check" style="margin-right: 13px">
+                        @if (UseCustomReschedule)
+                        {
+
+                            <label>From Data Item</label>
+                            <input type="checkbox" checked="checked" @bind-value="@UseCustomReschedule" />
+
+                        }
+                        else
+                        {
+                            <label>From Data Item</label>
+                            <input type="checkbox" @bind-value="@UseCustomReschedule" />
+                        }
+
+                    </div>
+
+                    <InputNumber class="form-control form-control-xs" @bind-Value="Attachment.ScheduleDays"></InputNumber>
+                    <ValidationMessage For="@(() => Attachment.ScheduleDays)" />
+                </div>
+
+                @if (UseCustomReschedule)
+                {
+                    <div class="form-group">
+                        <label>Reschedule From Data Item</label><br>
+                        <label>Filter</label>
+                        <InputText class="form-control form-control-md form-control-filter" @bind-Value="@FilterTextDataItem" />
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <InputSelect class="form-control form-control-xl"
+                                    @bind-Value="Attachment.ScheduleDataItem">
+                            <option value=""></option>
+                            @foreach (var a in _TableDates
+                                .Where(T => (T.TableType == 1 && _SelectedSmartflow.P4WCaseTypeGroup != "Entity Documents")
+                                            ||
+                                            (T.TableType == 0 && _SelectedSmartflow.P4WCaseTypeGroup == "Entity Documents"))
+                                .Where(F => F.TableField.ToUpper().Contains(FilterTextDataItem.ToUpper())))
+                                    {
+                                <option value="@a.TableField">
+                                    @a.TableField
+                                </option>
+                                    }
+                        </InputSelect>
+                        <ValidationMessage For="@(() => Attachment.ScheduleDataItem)" />
+                    </div>
+                }
+            }
+
+
+            @if (_SelectedSmartflow.ShowDocumentTracking == "Y" && Attachment.Action != "SCHEDULE")
+            {
+                <div class="form-group">
+                    <label for="TrackMethod">Tracking Method</label>
+                    <InputSelect class="form-control form-control-md"
+                                @bind-Value="Attachment.TrackingMethod">
+                        <option value=""></option>
+                        @foreach (var s in TrackMethodList)
+                            {
+                            <option value="@s">
+                                @s
+                            </option>
+                            }
+                    </InputSelect>
+                    <ValidationMessage For="@(() => Attachment.TrackingMethod)" />
+                </div>
+                @if (Attachment.TrackingMethod == "Response Required")
+                {
+                    <div class="form-group">
+                        <label for="ChaserDesc">Chaser Description</label>
+                        <InputText class="form-control form-control-xl" @bind-Value="@Attachment.ChaserDesc" />
+                    </div>
+                }
+
+
+            }
+
+
+
+        </div>
+
+        <div class="button-container">
+            @if (_SelectedDocument.LinkedItems.Select(F => F.DocName).ToList().Contains(Attachment.DocName))
+            {
+                <button type="button" class="btn btn-secondary" title="Delete Attachment" @onclick="RemoveAttachment"><span class="fa fa-trash"></span></button>
+            }
+            <button type="submit" class="btn btn-main ml-auto"><span class="fa fa-save"></span> <span class="ml-2">Save</span></button>
+            <button type="button" class="btn btn-secondary" @onclick="CancelUpdate">Cancel</button>
+        </div>
+    </EditForm>
+}

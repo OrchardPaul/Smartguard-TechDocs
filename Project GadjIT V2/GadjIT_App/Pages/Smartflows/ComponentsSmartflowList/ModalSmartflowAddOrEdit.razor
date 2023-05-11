@@ -12,7 +12,7 @@
                 </div>
                 @if (!addNewCaseTypeGroupOption)
                 {
-                    @if (AllObjects is null)
+                    @if (LstAll_VmClientSmartflowRecord is null)
                     {
                         <div class="spinner"></div>
                     }
@@ -22,7 +22,7 @@
                         <InputSelect class="form-control" @bind-Value="TaskObject.CaseTypeGroup">
 
                             <option value=""></option>
-                            @foreach (var c in AllObjects
+                            @foreach (var c in LstAll_VmClientSmartflowRecord
                                            .Where(C => !(C.ClientSmartflowRecord.CaseTypeGroup is null))
                                            .Select(C => C.ClientSmartflowRecord.CaseTypeGroup)
                                            .Distinct()
@@ -56,7 +56,7 @@
                 @if (!addNewCaseTypeOption)
                 {
 
-                    @if (AllObjects is null)
+                    @if (LstAll_VmClientSmartflowRecord is null)
                     {
                         <div class="spinner"></div>
                     }
@@ -67,7 +67,7 @@
                             </option>
                             @if (string.IsNullOrEmpty(TaskObject.CaseTypeGroup))
                                         {
-                                @foreach (var c in AllObjects
+                                @foreach (var c in LstAll_VmClientSmartflowRecord
                                         .Where(C => !(C.ClientSmartflowRecord.CaseType is null))
                                         .Select(C => C.ClientSmartflowRecord.CaseType)
                                         .Distinct()
@@ -80,7 +80,7 @@
                                         }
                                         else
                                         {
-                                @foreach (var c in AllObjects
+                                @foreach (var c in LstAll_VmClientSmartflowRecord
                                           .Where(C => !(C.ClientSmartflowRecord.CaseType is null) && (C.ClientSmartflowRecord.CaseTypeGroup == TaskObject.CaseTypeGroup))
                                           .Select(C => C.ClientSmartflowRecord.CaseType)
                                           .Distinct()
