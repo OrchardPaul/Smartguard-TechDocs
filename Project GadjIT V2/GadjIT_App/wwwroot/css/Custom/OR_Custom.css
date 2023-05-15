@@ -1274,6 +1274,11 @@ app {
     width: 15%;
 }
 
+.grid-chapter-attachments .grid-data{
+    overflow-y: auto;
+    height: 400px !important;
+}
+
 .grid-chapter-attachments .row .data-item:nth-of-type(1) {
     width: 85%;
 }

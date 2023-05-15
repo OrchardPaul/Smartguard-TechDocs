@@ -52,26 +52,36 @@
 
                             <div class="data-item-sub">
                                 @docItem.SmartflowName
-                                
+                                @if(docItem.ItemName != docItem.OrigItemName)
+                                {
+                                    <div class="secondary-item" title="Original Document Name before the change">
+                                        Original Doc: @docItem.OrigItemName
+                                    </div>
+                                }
                             </div>
 
                         </div>
                         <div class="data-item ">
 
-                            @if (docItem.IsAttachment)
-                            {
-                                <div class="">
-                                    <ModalTooltip Direction="left" Text=@("Attachment") Class="w-3">
-                                        <span class="fa fa-paperclip"></span>
-                                    </ModalTooltip>
-                                </div>
-                            }
                             <div class="data-item-sub">
+                                @if(docItem.DocType == "Doc"){<span class="doc-icon" title="@docItem.DocType" ><span class="fa fa-file mr-2"></span></span>}
+                                @if(docItem.DocType == "Form"){<span class="doc-icon" title="@docItem.DocType" ><span class="fa fa-file-pdf mr-2"></span></span>}
+                                @if(docItem.DocType == "Email"){<span class="doc-icon" title="@docItem.DocType" ><span class="fa fa-envelope mr-2"></span></span>}
+                                @if(docItem.DocType == "Step"){<span class="doc-icon" title="@docItem.DocType" ><span class="fa fa-list-ol mr-2"></span></span>}
+                                @if(docItem.DocType == "Date"){<span class="doc-icon" title="@docItem.DocType" ><span class="fa fa-calendar mr-2"></span></span>}
+                                @if(docItem.DocType == "Csv"){<span class="doc-icon" title="@docItem.DocType" ><span class="fa fa-file-csv mr-2"></span></span>}     
+                                
                                 @docItem.ItemName
-                                @if(docItem.ItemName != docItem.OrigItemName)
+                                @if (docItem.IsAttachment)
                                 {
-                                    <div class="secondary-item" title="Original Document Name before the change">
-                                        Original Name: @docItem.OrigItemName
+                                    <span class="font-85 font-grey">
+                                        <span class="ml-1 fa fa-paperclip"></span>
+                                    </span>
+                                }
+                                @if(docItem.DocType == "Doc" && docItem.FileName != "")
+                                {
+                                    <div class="secondary-item" title="Location: @docItem.Location">
+                                        File Name: @docItem.FileName
                                     </div>
                                 }
                             </div>
@@ -79,7 +89,7 @@
 
                             @if (docItem.IsItemLinked)
                             {
-                                <div class="data-item-right hidden-md-down font-green">
+                                <div class="data-item-right hidden-md-down font-green" title="Location: @docItem.Location">
                                     <ModalTooltip Direction="left" Text=@("Linked to " + @docItem.ItemName) Class="w-3">
                                         <span class="fa fa-check"></span>
                                     </ModalTooltip>
@@ -99,6 +109,7 @@
 
                             <div class="data-item-sub">
                                 @docItem.AltName
+                                
                             </div>
 
                         </div>

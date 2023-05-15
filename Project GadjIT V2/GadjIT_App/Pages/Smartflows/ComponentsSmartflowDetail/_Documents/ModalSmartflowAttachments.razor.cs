@@ -80,6 +80,11 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Documents
         [Parameter]
         public List<VmSmartflowAgenda> _ListOfAgenda { get; set; }
 
+         [Parameter]
+        public bool _SmartflowLockedForEdit {get; set;}
+
+
+
 
         protected string CurrentAction {get; set; } = "List";
 
@@ -289,6 +294,8 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Documents
                 FilterText = "";
 
                 RefreshDocListOnModel();
+
+                RowChanged = Attachment.SeqNo ?? 0;
 
                 DataChanged = true;
 

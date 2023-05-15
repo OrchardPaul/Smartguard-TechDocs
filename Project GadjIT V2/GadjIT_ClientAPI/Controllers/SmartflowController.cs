@@ -26,6 +26,7 @@ public class SmartflowController : ControllerBase
     public ActionResult TestApi()
     {
         //e.g http://live.orarizonadebt.co.uk:8393/api/smartflow/testapi
+        //    https://livewilliamsons.gadjit.co.uk:8393/api/smartflow/testapi
 
         Logger.LogInformation("API Test: {0}",$"Application is working");
         return Ok("Test Complete: Application is working");

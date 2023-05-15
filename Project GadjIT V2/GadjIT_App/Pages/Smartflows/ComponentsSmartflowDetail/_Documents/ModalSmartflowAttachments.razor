@@ -1,4 +1,5 @@
 ﻿@using GadjIT_App.Data.CustomFormObjects;
+@using GadjIT_App.Pages._Shared.Modals
 @using GadjIT_ClientContext.Models.Smartflow;
 
 
@@ -18,22 +19,24 @@
                         TItem="LinkedItem"
                         UseCustomImage="true">
                         
-                        @{
-                            var optionalAttach = (context.OptionalDocument == "Y" && !(string.IsNullOrEmpty(context.DocType) && context.CustomItem == "N") ? "optional-row" : "");   
-                        }
+                        
 
                         <div class="row grid-row @(RowChanged == context.SeqNo && !SeqMoving ? "row-changed" : "" )">
-                            <div class="data-item">
+                            @{
+                                var optionalDoc = (context.OptionalDocument == "Y") ? "optional" : "";   
+                            }
+                            <div class="data-item @optionalDoc">
                                 
-                                <div class="data-item-sub font-85" @onclick="() => PrepareAttachmentForEdit(context)">
+                                <div class="data-item-sub font-85">
                                 
-                                    <span class="font-85 @optionalAttach" title="@context.Action">
-                                        @if(context.Action == "TAKE"){<span class="doc-icon" title="TAKE: action"><span class="fa fa-running mr-2"></span></span>}
-                                        @if(context.Action == "INSERT"){<span class="doc-icon" title="INSERT: action"><span class="fa fa-arrow-down mr-2"></span></span>}
-                                        @if(context.Action == "SCHEDULE"){<span class="doc-icon" title="SCHEDULE: action"><span class="fa fa-calendar-check mr-2"></span></span>}
+                                    
+                                    <span class="font-85 " title="@context.Action">
+                                        @if(context.Action == "TAKE"){<span class="doc-icon" ><span class="fa fa-running mr-2"></span></span>}
+                                        @if(context.Action == "INSERT"){<span class="doc-icon" ><span class="fa fa-arrow-down mr-2"></span></span>}
+                                        @if(context.Action == "SCHEDULE"){<span class="doc-icon" ><span class="fa fa-calendar-check mr-2"></span></span>}
                                     </span>
 
-                                    <span class="font-85 @optionalAttach">
+                                    <span class="font-85 ">
                                         
                                         @if(context.DocType == "Doc"){<span class="doc-icon" title="Document"><span class="fa fa-file mr-2"></span></span>}
                                         @if(context.DocType == "Form"){<span class="doc-icon" title="Form"><span class="fa fa-file-pdf mr-2"></span></span>}
@@ -83,7 +86,10 @@
                             
                                           
                             <div class="data-item">
-                                <button @onclick='() => PrepareAttachmentForEdit(context)' class="btn btn-main btn-sm" title="Edit attachment"><i class="fa fa-pencil"></i><span></span></button>
+                                @if(UserSession.IsAdminUser && _SmartflowLockedForEdit)
+                                {
+                                    <button @onclick='() => PrepareAttachmentForEdit(context)' class="btn btn-main btn-sm" title="Edit attachment"><i class="fa fa-pencil"></i><span></span></button>
+                                }
                             </div>
                             
                         </div>
@@ -94,7 +100,10 @@
     </div>  
 
     <div class="button-container">
-        <button type="button" class="btn btn-main" @onclick="PrepareAttachmentForAdd"><span class="fa fa-plus"></span> <span class="ml-2">Add</span></button>
+        @if(UserSession.IsAdminUser && _SmartflowLockedForEdit)
+        {
+            <button type="button" class="btn btn-main" @onclick="PrepareAttachmentForAdd"><span class="fa fa-plus"></span> <span class="ml-2">Add</span></button>
+        }
         <button type="button" class="btn btn-secondary" @onclick="Close">Close</button>
     </div>         
 }

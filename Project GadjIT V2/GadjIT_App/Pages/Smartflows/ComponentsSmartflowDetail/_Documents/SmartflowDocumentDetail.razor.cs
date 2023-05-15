@@ -323,13 +323,15 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsSmartflowDetail._Documents
             parameters.Add("_SelectedSmartflow", _SelectedSmartflow);
             parameters.Add("_Selected_ClientSmartflowRecord", _Selected_ClientSmartflowRecord);
             parameters.Add("_TableDates", _TableDates);
+            parameters.Add("_SmartflowLockedForEdit", _SmartflowLockedForEdit);
+            
 
             var options = new ModalOptions()
             {
-                Class = "blazored-custom-modal modal-smartflow-doc"
+                Class = "blazored-custom-modal modal-smartflow-attachments"
             };
 
-            Modal.Show<ModalSmartflowAttachments>("Linked Item", parameters, options);
+            Modal.Show<ModalSmartflowAttachments>("Linked Items", parameters, options);
         }
 
        

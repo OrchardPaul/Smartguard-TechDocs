@@ -413,6 +413,9 @@
 .modal-smartflow-doc, .modal-smartflow-status, .modal-smartflow-data {
     width: 550px;
 }
+.modal-smartflow-attachments{
+    width: 600px;
+}
 
 .modal-smartflow-doc .modal-body {
     height: 400px;

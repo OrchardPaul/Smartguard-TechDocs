@@ -90,6 +90,8 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsCaseTypeDetail._Documents
         {
             try
             {
+                Dictionary<int?, string> docTypes = new Dictionary<int?, string> { { 1, "Doc" }, { 4, "Form" }, { 6, "Step" }, { 8, "Date" }, { 9, "Email" }, { 11, "Doc" }, { 12, "Email" }, { 13, "Csv" } };
+
                 LstDocs = new List<LinkedCaseItem>();
 
                 List<Client_VmSmartflowRecord> lstCaseTypeSmartflows = _LstVmClientSmartflowRecord
@@ -111,33 +113,29 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsCaseTypeDetail._Documents
                         //vmSmartflows.Smartflows.Add(smartflow);
                         //List<GenSmartflowItem> docs = smartflow.Items.
 
-                        Dictionary<int?, string> docTypes = new Dictionary<int?, string> { { 1, "Doc" }, { 4, "Form" }, { 6, "Step" }, { 8, "Date" }, { 9, "Email" }, { 11, "Doc" }, { 12, "Email" }, { 13, "Csv" } };
                         List<SmartflowDocument> docs = smartflow.Documents
                                         //.Where(I => I.CustomItem != "Y")
                                         .ToList();
                         
+                        P4W_DmDocuments matchingDoc;
+
                         foreach(var doc in docs)
                         {
                             if(doc.CustomItem != "Y")
                             {
+                                matchingDoc = GetLinkedP4WDoc(doc.Name);
+
                                 LstDocs.Add(new LinkedCaseItem{
                                                 ItemName=doc.Name
                                                 ,AltName=doc.AltDisplayName
                                                 ,IsAttachment = false
                                                 ,OrigItemName=doc.Name
                                                 ,OrigSeqNo = doc.SeqNo
-                                                ,IsItemLinked=CheckIsItemLinked(doc.Name)
+                                                ,IsItemLinked=(matchingDoc == null ? false : true)
+                                                ,Location = (matchingDoc == null ? "" : matchingDoc.Location ?? "")
                                                 ,SmartflowName=smartflow.Name
-                                                ,P4WCaseTypeGroup = string.IsNullOrEmpty(smartflow.P4WCaseTypeGroup)
-                                                                    ? -2
-                                                                    : smartflow.P4WCaseTypeGroup == "Global Documents"
-                                                                    ? 0
-                                                                    : smartflow.P4WCaseTypeGroup == "Entity Documents"
-                                                                    ? -1
-                                                                    : P4WCaseTypeGroups == null ? -2 : P4WCaseTypeGroups
-                                                                        .Where(P => P.Name == smartflow.P4WCaseTypeGroup)
-                                                                        .Select(P => P.Id)
-                                                                        .FirstOrDefault()
+                                                ,P4WCaseTypeGroupName = smartflow.P4WCaseTypeGroup
+
                                                     });
                             }
                             if(doc.LinkedItems != null && doc.LinkedItems.Count() > 0)
@@ -148,14 +146,18 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsCaseTypeDetail._Documents
 
                                 foreach(var attach in attachments)
                                 {
+                                    matchingDoc = GetLinkedP4WDoc(attach.DocName);
+
                                     LstDocs.Add(new LinkedCaseItem{
                                             ItemName=attach.DocName
                                             ,AltName=attach.DocAsName
                                             ,IsAttachment = true
                                             ,OrigItemName=attach.DocName
                                             ,OrigSeqNo = doc.SeqNo
-                                            ,IsItemLinked=CheckIsItemLinked(attach.DocName)
+                                            ,IsItemLinked=(matchingDoc == null ? false : true)
+                                            ,Location = (matchingDoc == null ? "" : matchingDoc.Location ?? "")
                                             ,SmartflowName=smartflow.Name
+                                            ,P4WCaseTypeGroupName = smartflow.P4WCaseTypeGroup
                                                 });
                                 }
 
@@ -165,8 +167,34 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsCaseTypeDetail._Documents
                         
                     }
 
+
+                    //Set 
+                    //    File Names from Location paths
+                    //    Doc Type (Doc, Form, Email, Step, etc) from P4W document library
+                    //    P4W Case Type Group code for each Smartflow
+                    LstDocs.Select(D => { 
+                                        D.FileName = D.Location != "" ? System.IO.Path.GetFileName(D.Location) ?? "" : ""; 
+                                        D.DocType = LibraryDocumentsAndSteps.Where(L => L.Name.ToUpper() == D.ItemName.ToUpper())
+                                                                .Select(L => docTypes.ContainsKey(L.DocumentType) ? docTypes[L.DocumentType] : "Doc")
+                                                                .FirstOrDefault();
+                                        D.P4WCaseTypeGroup = string.IsNullOrEmpty(D.P4WCaseTypeGroupName)
+                                                                    ? -2
+                                                                    : D.P4WCaseTypeGroupName == "Global Documents"
+                                                                    ? 0
+                                                                    : D.P4WCaseTypeGroupName == "Entity Documents"
+                                                                    ? -1
+                                                                    : P4WCaseTypeGroups == null ? -2 : P4WCaseTypeGroups
+                                                                        .Where(P => P.Name == D.P4WCaseTypeGroupName)
+                                                                        .Select(P => P.Id)
+                                                                        .FirstOrDefault();
+                                        return D; 
+                                        }).ToList();
+            
+
+
                     // Order the list
                     LstDocs = LstDocs
+                            .OrderBy(D => D.ItemName)
                             .OrderBy(D => D.IsAttachment ? 1 : 0)
                             .OrderBy(D => D.SmartflowName)
                             .ToList();
@@ -184,15 +212,15 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsCaseTypeDetail._Documents
             }
         }
         
-        private bool CheckIsItemLinked(string docName)
+        private P4W_DmDocuments GetLinkedP4WDoc(string docName)
         {
-            int numMatches = 0;
-            numMatches = LibraryDocumentsAndSteps
+            P4W_DmDocuments matchingDoc;
+            matchingDoc = LibraryDocumentsAndSteps
                                                 .Where(D => !(D.Name is null))
                                                 .Where(D => D.Name == docName)
-                                                .Count();
+                                                .FirstOrDefault();
             
-            return numMatches > 0 ? true : false;
+            return matchingDoc;
 
         }
 
@@ -341,50 +369,64 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsCaseTypeDetail._Documents
                 string sqlCommands = "";
 
                 P4W_DmDocuments p4WDoc;
-                foreach(LinkedCaseItem doc in LstDocs)
+                foreach(LinkedCaseItem doc in LstDocs
+                                                .Where(D => D.IsItemLinked && D.DocType == "Doc")
+                                                .OrderBy(D => D.ItemName)
+                                                .OrderBy(D => D.IsAttachment ? 1 : 0)
+                                                .OrderBy(D => D.SmartflowName)
+                                                .ToList())
                 {
                     if(doc.P4WCaseTypeGroup > 0) //not Global or Entity doc
                     {
                         p4WDoc = LibraryDocumentsAndSteps.Where(d => d.CaseTypeGroupRef == doc.P4WCaseTypeGroup)
                                                             .Where(d => d.Name == doc.ItemName)
-                                                            .Where(d => d.DocumentType == 1) //Word Docs
+                                                            //.Where(d => d.DocumentType == 1) //Word Docs
                                                             .FirstOrDefault();
 
-                        if(p4WDoc != null) 
+                        if(p4WDoc == null) 
                         {
-                            try
-                            {   
-                                if(string.IsNullOrEmpty(p4WDoc.Location))
-                                    throw new Exception("Location is empty");
-                                
-                                docFileName = System.IO.Path.GetFileName(p4WDoc.Location);
-                                if(docFileName == "")
-                                    throw new Exception("Cannot establish file name");
-
-                                docFileLocation =  System.IO.Path.GetDirectoryName(p4WDoc.Location);
-
-                                docFileName = System.IO.Path.GetFileName(p4WDoc.Location);
-
-                                fileExtention = System.IO.Path.GetExtension(docFileName);
-                                if(fileExtention == "")
-                                    throw new Exception("Cannot establish file extension");
-
-                                if(docFileName != (doc.ItemName + fileExtention)) //only create update commands if the document file name does not match the P4W item name
-                                {
-                                    dosCommand = "REN \"" + docFileName + "\"" + " \"" + doc.ItemName + fileExtention + "\"";
-                                    dosCommands += dosCommand + Environment.NewLine;
-
-                                    sqlCommands += "UPDATE dm_Documents SET Location = '" + docFileLocation + "\\" + doc.ItemName + fileExtention + "' WHERE CODE = " + p4WDoc.Code.ToString() + Environment.NewLine;
-                                }
-                                
-                            }
-                            catch(Exception e)
-                            {
-                                docErrors += doc.ItemName + " - " + e.Message + Environment.NewLine;
-                                dosCommand = "";
-                            }
+                            docErrors += $"Cannot locate the document [{doc.ItemName}] in dm_Documents, Case Type Group [{doc.P4WCaseTypeGroup}]: Is Linked = {doc.IsItemLinked}" + Environment.NewLine;
                         }
+                        else
+                        {
 
+                            if(p4WDoc.DocumentType == 1) //Only compare Word Docs
+                            {
+
+                                try
+                                {   
+                                    if(string.IsNullOrEmpty(p4WDoc.Location))
+                                        throw new Exception("Location is empty");
+                                    
+                                    docFileName = System.IO.Path.GetFileName(p4WDoc.Location);
+                                    if(docFileName == "")
+                                        throw new Exception("Cannot establish file name");
+
+                                    docFileLocation =  System.IO.Path.GetDirectoryName(p4WDoc.Location);
+
+                                    docFileName = System.IO.Path.GetFileName(p4WDoc.Location);
+
+                                    fileExtention = System.IO.Path.GetExtension(docFileName);
+                                    if(fileExtention == "")
+                                        throw new Exception("Cannot establish file extension");
+
+                                    if(docFileName != (doc.ItemName + fileExtention)) //only create update commands if the document file name does not match the P4W item name
+                                    {
+                                        dosCommand = "REN \"" + docFileName + "\"" + " \"" + doc.ItemName + fileExtention + "\"";
+                                        dosCommands += dosCommand + Environment.NewLine;
+
+                                        sqlCommands += "UPDATE dm_Documents SET Location = '" + docFileLocation + "\\" + doc.ItemName + fileExtention + "' WHERE CODE = " + p4WDoc.Code.ToString() + Environment.NewLine;
+                                    }
+                                    
+                                }
+                                catch(Exception e)
+                                {
+                                    docErrors += doc.ItemName + " - " + e.Message + Environment.NewLine;
+                                    dosCommand = "";
+                                }
+                            }
+                            
+                        }
                     }
                 }
                 

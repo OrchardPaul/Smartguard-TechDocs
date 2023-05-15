@@ -69,7 +69,7 @@
                             UseCustomImage="true">
                     <div class="row grid-row grid-row-lg @(RowChanged == context.SmartflowObject.SeqNo && !SeqMoving ? "row-changed" : "" )">
                         @{
-                            var optionalDoc = (context.SmartflowObject.OptionalDocument == "Y" && context.SmartflowObject.CustomItem == "N") ? "optional" : "";   
+                            var optionalDoc = (context.SmartflowObject.OptionalDocument == "Y") ? "optional" : "";   
                         }
                         <div class="data-item @optionalDoc">
 
@@ -215,19 +215,19 @@
                             }
                                                     
                             <ModalTooltip Direction="right" Text="@((optionalDoc == "optional" ? "Optional " : "") + context.SmartflowObject.Action)" Class="w-1">
-                                @if(context.SmartflowObject.Action == "INSERT"){<span class="doc-icon" title="INSERT: action"><span class="fa fa-arrow-down mr-2"></span></span>}
-                                @if(context.SmartflowObject.Action == "TAKE"){<span class="doc-icon" title="TAKE: action"><span class="fa fa-running mr-2"></span></span>}
+                                @if(context.SmartflowObject.Action == "INSERT"){<span class="doc-icon" ><span class="fa fa-arrow-down mr-2"></span></span>}
+                                @if(context.SmartflowObject.Action == "TAKE"){<span class="doc-icon" ><span class="fa fa-running mr-2"></span></span>}
                             </ModalTooltip>
 
                             <ModalTooltip Direction="right" Text="@((optionalDoc == "optional" ? "Optional " : "")
                                 + (string.IsNullOrEmpty(context.DocType) && context.SmartflowObject.CustomItem == "N" ? "Item not found" : context.DocType))" Class="w-2">
                                 
-                                @if(context.DocType == "Doc"){<span class="doc-icon" title="Document"><span class="fa fa-file mr-2"></span></span>}
-                                @if(context.DocType == "Form"){<span class="doc-icon" title="Form"><span class="fa fa-file-pdf mr-2"></span></span>}
-                                @if(context.DocType == "Email"){<span class="doc-icon" title="Email"><span class="fa fa-envelope mr-2"></span></span>}
-                                @if(context.DocType == "Step"){<span class="doc-icon" title="Step"><span class="fa fa-list-ol mr-2"></span></span>}
-                                @if(context.DocType == "Date"){<span class="doc-icon" title="Diary"><span class="fa fa-calendar mr-2"></span></span>}
-                                @if(context.DocType == "Csv"){<span class="doc-icon" title="Spreadsheet"><span class="fa fa-file-csv mr-2"></span></span>}
+                                @if(context.DocType == "Doc"){<span class="doc-icon" ><span class="fa fa-file mr-2"></span></span>}
+                                @if(context.DocType == "Form"){<span class="doc-icon" ><span class="fa fa-file-pdf mr-2"></span></span>}
+                                @if(context.DocType == "Email"){<span class="doc-icon" ><span class="fa fa-envelope mr-2"></span></span>}
+                                @if(context.DocType == "Step"){<span class="doc-icon" ><span class="fa fa-list-ol mr-2"></span></span>}
+                                @if(context.DocType == "Date"){<span class="doc-icon" ><span class="fa fa-calendar mr-2"></span></span>}
+                                @if(context.DocType == "Csv"){<span class="doc-icon" ><span class="fa fa-file-csv mr-2"></span></span>}
                                 @if(string.IsNullOrEmpty(context.DocType)){
                                     @if(context.SmartflowObject.CustomItem == "Y"){
                                             <span class="doc-icon" title="Custom Item"><span class="fa fa-draw-polygon mr-2"></span></span>

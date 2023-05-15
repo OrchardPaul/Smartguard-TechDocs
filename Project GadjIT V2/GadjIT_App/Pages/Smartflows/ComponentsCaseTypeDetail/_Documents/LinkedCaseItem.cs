@@ -6,8 +6,12 @@ namespace GadjIT_App.Pages.Smartflows.ComponentsCaseTypeDetail._Documents
         public string ItemName { get; set; }
         public string AltName { get; set; }
         public string OrigItemName { get; set; }
+        public string Location { get; set; }
+        public string FileName {get; set; }
+        public string DocType {get; set; }
         public bool IsAttachment { get; set; } 
         public int? OrigSeqNo { get; set; }
+        public string P4WCaseTypeGroupName { get; set; }
         public int? P4WCaseTypeGroup { get; set; }
         
 
