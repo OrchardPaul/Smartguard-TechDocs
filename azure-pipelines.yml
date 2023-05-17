@@ -7,7 +7,7 @@ trigger:
 - master
 
 pool:
-  vmImage: 'Self-hosted Gizmo'
+  vmImage: 'Self-hosted GadjIT'
 
 variables:
   solution: '**/*.sln'
