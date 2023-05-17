@@ -1,5 +1,0 @@
-﻿EntityFrameWorkCore\add-migration ChangeCompanyDetails -Context ApplicationDbContext
-
-EntityFrameWorkCore\remove-migration -Context ApplicationDbContext
-
-EntityFrameWorkCore\update-database -Context ApplicationDbContext

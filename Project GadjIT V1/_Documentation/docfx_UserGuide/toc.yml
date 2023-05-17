@@ -1,8 +1,0 @@
-- name: About
-  homepage: index.md
-- name: User Guide
-  href: articles/smartflow/
-  homepage: articles/smartflow/workflow.md
-- name: Development
-  href: articles/gadjit/
-  homepage: articles/gadjit/intro.md

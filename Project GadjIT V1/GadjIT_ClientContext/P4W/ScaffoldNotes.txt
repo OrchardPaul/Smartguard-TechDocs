@@ -1,5 +1,0 @@
-﻿18/01/2021
-Scaffold-DbContext “Data Source=dev\SQLEXPRESS;Initial Catalog=P4W_OR_Debt_V5_DEV;Integrated Security=True” Microsoft.EntityFrameworkCore.SqlServer -OutputDir P4W_Scaffold -Tables Usr_ORSF_Smartflows, Dm_Documents, DM_DocumentsPermissions, CaseTypes, CaseTypeGroups, Mp_Sys_Views -DataAnnotations -Force
-
-
-Scaffold-DbContext “Data Source=dev\SQLEXPRESS;Initial Catalog=OR_GadjIT_Web;Integrated Security=True” Microsoft.EntityFrameworkCore.SqlServer -OutputDir P4W_Scaffold -Tables GadjIT_Log -DataAnnotations -Force
