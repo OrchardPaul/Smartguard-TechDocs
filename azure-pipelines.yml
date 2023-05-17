@@ -6,8 +6,7 @@
 trigger:
 - master
 
-pool:
-  vmImage: 'Self-hosted GadjIT'
+pool: 'Self-hosted GadjIT'
 
 variables:
   solution: '**/*.sln'
