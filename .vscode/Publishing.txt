@@ -4,7 +4,7 @@ GADJIT
 dotnet publish -c Release -r win-x64 -p:PublishReadyToRun=true --self-contained true
 
 take the publish folder e.g.
-F:\WorkSpaces\PT\Git - GadjIT VS\Project GadjIT\gadjIT_App\bin\Release\net5.0\win-x64\publish\
+F:\WorkSpaces\PT\ORWeb\gadjIT_App\bin\Release\net5.0\win-x64\publish\
 
 In AppSettings.json copy over the following values from live (published)
     ConnectionStrings>DefaultConnection
