@@ -1,11 +1,26 @@
-# Clone your repository
-git clone https://github.com/OrchardPaul/Smartguard-TechDocs.git
-cd Smartguard-TechDocs
+# SmartGuard Documentation Publishing Guide
 
-# Copy your DocFX content to the repository
-# (Copy from c:\Development\ORWeb\GadjIT\_Documentation\docfx_SmartguardDesign\ to _Documentation/docfx_SmartguardDesign/)
+# Local Development & Testing
+cd c:\Development\ORWeb\GadjIT\_Documentation\docfx_SmartguardDesign
+docfx docfx.json --serve
 
-# Add and commit
-git add .
-git commit -m "Add DocFX documentation and Azure Static Web Apps workflow"
-git push origin main
+# Publishing to Azure Static Web Apps
+# 1. Make documentation changes in local folder
+# 2. Test locally using command above
+# 3. Run sync script to push to GitHub:
+cd c:\Development\ORWeb\GadjIT\_Documentation\
+sync-docs-to-github.bat
+
+# Manual sync (alternative to script):
+cd c:\Development\ORWeb\GadjIT
+git add _Documentation/docfx_SmartguardDesign/
+git commit -m "Update documentation"
+git subtree push --prefix=_Documentation/docfx_SmartguardDesign github-docs main
+
+# Deployment Status:
+# - GitHub Actions: https://github.com/OrchardPaul/Smartguard-TechDocs/actions
+# - Live Site: [Your Azure Static Web App URL]
+
+# Main Solution Sync:
+# Continue using your existing Azure DevOps sync process for main solution
+# Documentation sync is independent and uses GitHub
