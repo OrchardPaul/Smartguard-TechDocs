@@ -1,0 +1,292 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Architecture Overview </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Architecture Overview ">
+    <meta name="generator" content="docfx 2.59.3.0">
+    
+    <link rel="shortcut icon" href="../../favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="../../toc.html">
+    
+    
+    
+  
+    <!--FontAwesome-->
+    <script src="../../styles/fontawesomev6/js/all.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  
+  
+    <style>
+      .shadow { box-shadow: 0px 0px 8px #888; margin-top: 5px; margin-bottom: 5px;}
+  
+    </style>
+      
+  </head>
+  
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../logo.jpg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        <div class="article row grid">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="architecture-overview">Architecture Overview</h1>
+
+<h2 id="inheritance-hierarchy">Inheritance Hierarchy</h2>
+<pre><code class="lang-mermaid">graph TD
+    A[ORSG_QuestionDetail&lt;br/&gt;Abstract Base] --&gt; B[ORSG_QuestionDetailEmpty&lt;br/&gt;Null Object]
+    A --&gt; C[ORSG_QuestionDetailList&lt;br/&gt;Multi-option Questions]
+    A --&gt; D[ORSG_QuestionDetailToggle&lt;br/&gt;Binary Questions]
+    
+    subgraph &quot;Factory Support&quot;
+        E[ORSG_QuestionDetailFactory]
+        F[ORSG_QuestionDetailBuilder]
+    end
+    
+    subgraph &quot;Container Layer&quot;
+        G[ORSG_Questionnaire]
+        H[ORSG_QuestionDefault]
+    end
+    
+    E -.-&gt; A
+    F -.-&gt; A
+    G --&gt; H
+    H --&gt; A
+    
+    style A fill:#e1f5fe
+    style E fill:#fff3e0
+    style F fill:#fff3e0
+</code></pre>
+<h2 id="component-relationships">Component Relationships</h2>
+<pre><code class="lang-mermaid">graph LR
+    subgraph &quot;Client Layer&quot;
+        A[UI Components]
+        B[Controllers]
+    end
+    
+    subgraph &quot;Service Layer&quot;
+        C[QuestionnaireService]
+        D[QuestionService]
+    end
+    
+    subgraph &quot;Model Layer&quot;
+        E[ORSG_Questionnaire]
+        F[ORSG_QuestionDefault]
+        G[ORSG_QuestionDetail]
+    end
+    
+    subgraph &quot;Factory Layer&quot;
+        H[ORSG_QuestionDetailFactory]
+        I[ORSG_QuestionDetailBuilder]
+    end
+    
+    subgraph &quot;Data Layer&quot;
+        J[Repository]
+        K[Database]
+    end
+    
+    A --&gt; C
+    B --&gt; C
+    C --&gt; E
+    C --&gt; H
+    D --&gt; F
+    F --&gt; G
+    H --&gt; G
+    I --&gt; G
+    C --&gt; J
+    J --&gt; K
+</code></pre>
+<h2 id="data-flow-diagrams">Data Flow Diagrams</h2>
+<h3 id="question-creation-flow">Question Creation Flow</h3>
+<pre><code class="lang-mermaid">sequenceDiagram
+    participant UI as User Interface
+    participant SVC as Question Service
+    participant FAC as Factory
+    participant BLD as Builder
+    participant MODEL as Question Model
+    participant DB as Database
+    
+    UI-&gt;&gt;SVC: Create Question Request
+    SVC-&gt;&gt;BLD: Builder.Empty()
+    BLD-&gt;&gt;BLD: OfType(QuestionType)
+    BLD-&gt;&gt;BLD: WithOptions(...)
+    BLD-&gt;&gt;MODEL: Build()
+    MODEL-&gt;&gt;MODEL: SerializeToJson()
+    SVC-&gt;&gt;DB: Save QuestionDetailJson
+    DB--&gt;&gt;SVC: Confirmation
+    SVC--&gt;&gt;UI: Question Created
+</code></pre>
+<h3 id="question-deserialization-flow">Question Deserialization Flow</h3>
+<pre><code class="lang-mermaid">sequenceDiagram
+    participant DB as Database
+    participant SVC as Service
+    participant FAC as Factory
+    participant DETAIL as QuestionDetail
+    participant MODEL as Concrete Type
+    
+    SVC-&gt;&gt;DB: Fetch QuestionDetailJson
+    DB--&gt;&gt;SVC: JSON String
+    SVC-&gt;&gt;FAC: CreateDetailFromJson(json)
+    FAC-&gt;&gt;FAC: GetTypeFromJson(json)
+    FAC-&gt;&gt;DETAIL: DeserializeFromJson(json)
+    DETAIL-&gt;&gt;MODEL: Create Concrete Instance
+    MODEL--&gt;&gt;DETAIL: Concrete Object
+    DETAIL--&gt;&gt;FAC: Question Detail
+    FAC--&gt;&gt;SVC: Typed Question Detail
+</code></pre>
+<h3 id="question-update-flow">Question Update Flow</h3>
+<pre><code class="lang-mermaid">flowchart TD
+    A[Update Request] --&gt; B{Question Exists?}
+    B --&gt;|No| C[Create New]
+    B --&gt;|Yes| D[Load Existing]
+    D --&gt; E[LoadContentsFrom]
+    E --&gt; F[Update Properties]
+    F --&gt; G[SerializeToJson]
+    G --&gt; H[Save to Database]
+    C --&gt; I[Use Builder Pattern]
+    I --&gt; G
+    H --&gt; J[Update Complete]
+</code></pre>
+<h2 id="architectural-decisions">Architectural Decisions</h2>
+<h3 id="1-abstract-base-class-design">1. Abstract Base Class Design</h3>
+<p><strong>Decision</strong>: Use abstract base class with template methods
+<strong>Rationale</strong>:</p>
+<ul>
+<li>Provides consistent interface across all question types</li>
+<li>Enables polymorphic behavior</li>
+<li>Centralizes common serialization logic</li>
+<li>Enforces implementation contracts</li>
+</ul>
+<h3 id="2-factory-pattern-implementation">2. Factory Pattern Implementation</h3>
+<p><strong>Decision</strong>: Static factory with type detection
+<strong>Rationale</strong>:</p>
+<ul>
+<li>Centralizes object creation logic</li>
+<li>Supports dynamic type determination from JSON</li>
+<li>Maintains single responsibility principle</li>
+<li>Enables easy extension for new question types</li>
+</ul>
+<h3 id="3-json-serialization-strategy">3. JSON Serialization Strategy</h3>
+<p><strong>Decision</strong>: Embedded JSON in database entities
+<strong>Rationale</strong>:</p>
+<ul>
+<li>Supports complex polymorphic structures</li>
+<li>Maintains type safety in application code</li>
+<li>Enables schema flexibility</li>
+<li>Simplifies database design</li>
+</ul>
+<h3 id="4-builder-pattern-usage">4. Builder Pattern Usage</h3>
+<p><strong>Decision</strong>: Fluent builder for complex object construction
+<strong>Rationale</strong>:</p>
+<ul>
+<li>Improves code readability</li>
+<li>Supports step-by-step object building</li>
+<li>Enables method chaining</li>
+<li>Provides validation points</li>
+</ul>
+<h2 id="design-principles-applied">Design Principles Applied</h2>
+<h3 id="solid-principles">SOLID Principles</h3>
+<ul>
+<li><strong>Single Responsibility</strong>: Each class has one reason to change</li>
+<li><strong>Open/Closed</strong>: Open for extension (new question types), closed for modification</li>
+<li><strong>Liskov Substitution</strong>: Derived classes can replace base class instances</li>
+<li><strong>Interface Segregation</strong>: Focused, cohesive interfaces</li>
+<li><strong>Dependency Inversion</strong>: Depend on abstractions, not concretions</li>
+</ul>
+<h3 id="design-patterns">Design Patterns</h3>
+<ul>
+<li><strong>Template Method</strong>: <code>SerializeToJson()</code> provides common algorithm</li>
+<li><strong>Factory Method</strong>: Dynamic object creation based on type</li>
+<li><strong>Builder</strong>: Complex object construction with fluent interface</li>
+<li><strong>Null Object</strong>: Safe default behavior without null checks</li>
+<li><strong>Strategy</strong>: Different behaviors for different question types</li>
+</ul>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong><a href="https://www.orchardrock.co.uk" target="_blank" title="Orchard Rock Development website">Orchard Rock Development</a></strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    
+    <script>
+    mermaid.initialize({
+    startOnLoad: false
+    });
+    mermaid.init(undefined, ".lang-mermaid");
+    </script>  </body>
+</html>

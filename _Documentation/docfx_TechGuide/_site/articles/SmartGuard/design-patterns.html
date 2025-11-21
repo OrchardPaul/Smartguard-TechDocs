@@ -1,0 +1,387 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Design Patterns </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Design Patterns ">
+    <meta name="generator" content="docfx 2.59.3.0">
+    
+    <link rel="shortcut icon" href="../../favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="../../toc.html">
+    
+    
+    
+  
+    <!--FontAwesome-->
+    <script src="../../styles/fontawesomev6/js/all.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  
+  
+    <style>
+      .shadow { box-shadow: 0px 0px 8px #888; margin-top: 5px; margin-bottom: 5px;}
+  
+    </style>
+      
+  </head>
+  
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../logo.jpg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        <div class="article row grid">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="design-patterns">Design Patterns</h1>
+
+<h2 id="template-method-pattern">Template Method Pattern</h2>
+<h3 id="implementation">Implementation</h3>
+<pre><code class="lang-csharp">public abstract class ORSG_QuestionDetail
+{
+    // Template method defining the algorithm structure
+    public virtual string SerializeToJson()
+    {
+        DetailAsJson = JsonSerializer.Serialize(this, GetSerializerOptions());
+        return DetailAsJson;
+    }
+    
+    // Hook method for customization
+    protected virtual JsonSerializerOptions GetSerializerOptions() =&gt;
+        new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true,
+            Converters = { new JsonStringEnumConverter() },
+        };
+    
+    // Abstract methods that subclasses must implement
+    public abstract ORSG_QuestionDetail DeserializeFromJson(string json);
+    public abstract ORSG_QuestionDetail LoadContentsFrom(ORSG_QuestionDetail source);
+}
+</code></pre>
+<h3 id="pattern-diagram">Pattern Diagram</h3>
+<pre><code class="lang-mermaid">classDiagram
+    class ORSG_QuestionDetail {
+        &lt;&lt;abstract&gt;&gt;
+        +SerializeToJson() string
+        #GetSerializerOptions() JsonSerializerOptions
+        +DeserializeFromJson(json)* ORSG_QuestionDetail
+        +LoadContentsFrom(source)* ORSG_QuestionDetail
+    }
+    
+    class ORSG_QuestionDetailList {
+        +SerializeToJson() string
+        +DeserializeFromJson(json) ORSG_QuestionDetailList
+        +LoadContentsFrom(source) ORSG_QuestionDetailList
+    }
+    
+    class ORSG_QuestionDetailEmpty {
+        +SerializeToJson() string
+        +DeserializeFromJson(json) ORSG_QuestionDetailEmpty
+        +LoadContentsFrom(source) ORSG_QuestionDetailEmpty
+    }
+    
+    ORSG_QuestionDetail &lt;|-- ORSG_QuestionDetailList
+    ORSG_QuestionDetail &lt;|-- ORSG_QuestionDetailEmpty
+    
+    note for ORSG_QuestionDetail &quot;Template Method:\nSerializeToJson() provides\ncommon algorithm structure&quot;
+</code></pre>
+<h2 id="factory-pattern">Factory Pattern</h2>
+<h3 id="implementation-1">Implementation</h3>
+<pre><code class="lang-csharp">public static class ORSG_QuestionDetailFactory
+{
+    public static ORSG_QuestionDetail CreateDetailFromJson(string json)
+    {
+        if (string.IsNullOrEmpty(json))
+            return new ORSG_QuestionDetailEmpty();
+
+        try
+        {
+            QuestionType type = GetTypeFromJson(json);
+            
+            return type switch
+            {
+                QuestionType.List =&gt; new ORSG_QuestionDetailList().DeserializeFromJson(json),
+                QuestionType.ToggleOption =&gt; new ORSG_QuestionDetailToggle().DeserializeFromJson(json),
+                _ =&gt; new ORSG_QuestionDetailEmpty()
+            };
+        }
+        catch (JsonException)
+        {
+            return new ORSG_QuestionDetailEmpty();
+        }
+    }
+    
+    public static QuestionType GetTypeFromJson(string json)
+    {
+        // Implementation for extracting type from JSON
+    }
+}
+</code></pre>
+<h3 id="factory-pattern-flow">Factory Pattern Flow</h3>
+<pre><code class="lang-mermaid">flowchart TD
+    A[JSON Input] --&gt; B[ORSG_QuestionDetailFactory]
+    B --&gt; C{Parse Type}
+    C --&gt;|List| D[Create ORSG_QuestionDetailList]
+    C --&gt;|ToggleOption| E[Create ORSG_QuestionDetailToggle]
+    C --&gt;|Empty/Unknown| F[Create ORSG_QuestionDetailEmpty]
+    D --&gt; G[Deserialize JSON]
+    E --&gt; G
+    F --&gt; G
+    G --&gt; H[Return Concrete Instance]
+    
+    style B fill:#fff3e0
+    style H fill:#e8f5e8
+</code></pre>
+<h2 id="builder-pattern">Builder Pattern</h2>
+<h3 id="implementation-2">Implementation</h3>
+<pre><code class="lang-csharp">public class ORSG_QuestionDetailBuilder
+{
+    private QuestionType _type;
+    private ListOption[] _listOptions;
+    private string _listDefault;
+    
+    private ORSG_QuestionDetailBuilder() { }
+    
+    public static ORSG_QuestionDetailBuilder Empty() =&gt; new ORSG_QuestionDetailBuilder();
+    
+    public ORSG_QuestionDetailBuilder OfType(QuestionType type)
+    {
+        _type = type;
+        return this;
+    }
+    
+    public ORSG_QuestionDetailBuilder WithListOptions(ListOption[] options, string defaultValue)
+    {
+        _listOptions = options;
+        _listDefault = defaultValue;
+        return this;
+    }
+    
+    public ORSG_QuestionDetail Build()
+    {
+        return _type switch
+        {
+            QuestionType.List =&gt; new ORSG_QuestionDetailList
+            {
+                Options = _listOptions ?? Array.Empty&lt;ListOption&gt;(),
+                Default = _listDefault ?? string.Empty
+            },
+            _ =&gt; new ORSG_QuestionDetailEmpty()
+        };
+    }
+}
+</code></pre>
+<h3 id="builder-pattern-sequence">Builder Pattern Sequence</h3>
+<pre><code class="lang-mermaid">sequenceDiagram
+    participant Client as Client Code
+    participant Builder as QuestionDetailBuilder
+    participant Product as Question Detail
+    
+    Client-&gt;&gt;Builder: Empty()
+    Builder--&gt;&gt;Client: Builder Instance
+    Client-&gt;&gt;Builder: OfType(QuestionType.List)
+    Builder--&gt;&gt;Client: Builder Instance
+    Client-&gt;&gt;Builder: WithListOptions(options, default)
+    Builder--&gt;&gt;Client: Builder Instance
+    Client-&gt;&gt;Builder: Build()
+    Builder-&gt;&gt;Product: new ORSG_QuestionDetailList()
+    Product--&gt;&gt;Builder: Concrete Instance
+    Builder--&gt;&gt;Client: Question Detail
+</code></pre>
+<h2 id="null-object-pattern">Null Object Pattern</h2>
+<h3 id="implementation-3">Implementation</h3>
+<pre><code class="lang-csharp">public class ORSG_QuestionDetailEmpty : ORSG_QuestionDetail
+{
+    public ORSG_QuestionDetailEmpty()
+    {
+        Type = QuestionType.Empty;
+    }
+
+    public override ORSG_QuestionDetailEmpty DeserializeFromJson(string json) =&gt;
+        JsonSerializer.Deserialize&lt;ORSG_QuestionDetailEmpty&gt;(json, GetSerializerOptions()) 
+        ?? new ORSG_QuestionDetailEmpty();
+
+    public override ORSG_QuestionDetailEmpty LoadContentsFrom(ORSG_QuestionDetail source) =&gt; this;
+}
+</code></pre>
+<h3 id="null-object-benefits">Null Object Benefits</h3>
+<pre><code class="lang-mermaid">graph LR
+    subgraph &quot;Without Null Object&quot;
+        A[Client Code] --&gt; B{null check}
+        B --&gt;|null| C[Handle null case]
+        B --&gt;|not null| D[Use object]
+    end
+    
+    subgraph &quot;With Null Object&quot;
+        E[Client Code] --&gt; F[Always valid object]
+        F --&gt; G[Safe operations]
+    end
+    
+    style C fill:#ffebee
+    style G fill:#e8f5e8
+</code></pre>
+<h2 id="strategy-pattern">Strategy Pattern</h2>
+<h3 id="implementation-through-inheritance">Implementation Through Inheritance</h3>
+<pre><code class="lang-csharp">// Different strategies for different question types
+public class ORSG_QuestionDetailList : ORSG_QuestionDetail
+{
+    public override ORSG_QuestionDetailList DeserializeFromJson(string json)
+    {
+        // List-specific deserialization strategy
+    }
+}
+
+public class ORSG_QuestionDetailToggle : ORSG_QuestionDetail
+{
+    public override ORSG_QuestionDetailToggle DeserializeFromJson(string json)
+    {
+        // Toggle-specific deserialization strategy
+    }
+}
+</code></pre>
+<h3 id="strategy-context">Strategy Context</h3>
+<pre><code class="lang-mermaid">classDiagram
+    class QuestionContext {
+        -ORSG_QuestionDetail strategy
+        +ProcessQuestion()
+        +SetStrategy(strategy)
+    }
+    
+    class ORSG_QuestionDetail {
+        &lt;&lt;interface&gt;&gt;
+        +DeserializeFromJson(json)
+        +LoadContentsFrom(source)
+    }
+    
+    class ListStrategy {
+        +DeserializeFromJson(json)
+        +LoadContentsFrom(source)
+    }
+    
+    class ToggleStrategy {
+        +DeserializeFromJson(json)
+        +LoadContentsFrom(source)
+    }
+    
+    QuestionContext --&gt; ORSG_QuestionDetail
+    ORSG_QuestionDetail &lt;|.. ListStrategy
+    ORSG_QuestionDetail &lt;|.. ToggleStrategy
+</code></pre>
+<h2 id="pattern-interactions">Pattern Interactions</h2>
+<pre><code class="lang-mermaid">graph TB
+    subgraph &quot;Factory Layer&quot;
+        A[Factory Pattern]
+    end
+    
+    subgraph &quot;Construction Layer&quot;
+        B[Builder Pattern]
+    end
+    
+    subgraph &quot;Behavior Layer&quot;
+        C[Template Method]
+        D[Strategy Pattern]
+    end
+    
+    subgraph &quot;Safety Layer&quot;
+        E[Null Object Pattern]
+    end
+    
+    A --&gt; B
+    A --&gt; E
+    B --&gt; C
+    C --&gt; D
+    E --&gt; D
+    
+    style A fill:#fff3e0
+    style B fill:#e3f2fd
+    style C fill:#f3e5f5
+    style D fill:#e8f5e8
+    style E fill:#ffebee
+</code></pre>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong><a href="https://www.orchardrock.co.uk" target="_blank" title="Orchard Rock Development website">Orchard Rock Development</a></strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    
+    <script>
+    mermaid.initialize({
+    startOnLoad: false
+    });
+    mermaid.init(undefined, ".lang-mermaid");
+    </script>  </body>
+</html>

@@ -1,0 +1,1489 @@
+{
+  "homepages": [],
+  "source_base_path": "C:/Development/ORWeb/GadjIT/_documentation/docfx_TechGuide",
+  "xrefmap": "xrefmap.yml",
+  "files": [
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/SmartGuard/api-reference.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/SmartGuard/api-reference.html",
+          "hash": "EFUWwyO05+Ko93+iJ43fG+m8bNTZ1dDUgW3WYiR28gw="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/SmartGuard/architecture.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/SmartGuard/architecture.html",
+          "hash": "8wFk1QM4p4hNAeb/HPbJij9aQ/KY64JW6LSw8VAs+dg="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/SmartGuard/design-patterns.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/SmartGuard/design-patterns.html",
+          "hash": "fw3T5n2Y6uvKIw3MeSO6Pb2KBjD71ACy1+gLcmhaHLE="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/SmartGuard/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/SmartGuard/index.html",
+          "hash": "G6nvicCPFz5D4/renuOXxtLHafUWQDPsMcTi3zwqVhM="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/SmartGuard/serialization.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/SmartGuard/serialization.html",
+          "hash": "+Xt8qW2S5MRKI7mdoJ0uZuf8NucMkAmpYBX5YiQMMBA="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/SmartGuard/usage-examples.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/SmartGuard/usage-examples.html",
+          "hash": "CJ6navMQmI05eD27lqBHpyndcxi6dAtzs/jK0NeZ8gc="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/TechGuide/Concepts.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/TechGuide/Concepts.html",
+          "hash": "A70+yvBTVR0LxbRBn3cuoDBwUsWD6HxEXDidGZroUBQ="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/TechGuide/Configuration.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/TechGuide/Configuration.html",
+          "hash": "3AXXwntJmnZaQ/IpanPlv92DnV0cAn54G9Mh9HT9zhA="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/TechGuide/Feedback.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/TechGuide/Feedback.html",
+          "hash": "Sok5Eh78EtrI0dweeLcAWUNXl3NF1ruQHD4C7VG17oM="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/TechGuide/References.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/TechGuide/References.html",
+          "hash": "DffH5KeeQJhW3owdXxVgZj81/5Gdd9VK8++u7dDl8Es="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/TechGuide/Release-Notes.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/TechGuide/Release-Notes.html",
+          "hash": "8a6hsGqrZEuBNTLszKzVyfiRvfZuuQBlJe2GVxNzU1M="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/TechGuide/Resources.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/TechGuide/Resources.html",
+          "hash": "uMWJp0gq2ZMdvHPUoVPnoA0/aLb8dqnPVrbk8WyO/AM="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/TechGuide/Roadmap.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/TechGuide/Roadmap.html",
+          "hash": "LV3aBtCxRQ6iFRb8VJXatYezTxXw8jARBJhVjapkRA8="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/TechGuide/Samples.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/TechGuide/Samples.html",
+          "hash": "CAlXb5S9oxsijXp9Aq9kIIMGvzq31bWJqoqxWSm77bc="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/TechGuide/Security.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/TechGuide/Security.html",
+          "hash": "FtIc6R3LL3uyzdtQ/Qe99P0fDHdenxsBc+Np2KZqUoM="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/TechGuide/Troubleshooting.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/TechGuide/Troubleshooting.html",
+          "hash": "OMMNw1iPyPr89ZRLKtMqky/ST8Z1FWlO5+AQYiPAh9Q="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/TechGuide/Tutorials.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/TechGuide/Tutorials.html",
+          "hash": "38CdvqziYojtQxYc1WZ3BEUfzmqriGQtGp/Wkna9N7s="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/TechGuide/Versioning.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/TechGuide/Versioning.html",
+          "hash": "aymDfirrCvjYBciSsuIHcysEJdkS2Fdjf0F4K9kpr7I="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/TechGuide/installation.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/TechGuide/installation.html",
+          "hash": "ZqfZbmqh+Ae4/d2Ujn9fvhNuh+W0Bg3eloQJH2Fu7Eo="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/TechGuide/intro.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/TechGuide/intro.html",
+          "hash": "5Uiz7lBP+3HAm3pMtnehHDeohMdOYApRw8cTJ77o5yE="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/TechGuide/license.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/TechGuide/license.html",
+          "hash": "EHszUPbjaa4zTJOle/o5hvcpzP2WsUAInw753QMuKf0="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "articles/TechGuide/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "articles/TechGuide/toc.html",
+          "hash": "sh+1Id3Kl7llKqhYiT1Wqz4StggNBWBCkfexYwopr9o="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/TechGuide/usage.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/TechGuide/usage.html",
+          "hash": "Sj9F9W8DYxWPHNOP6mC9r+1wLWjNzCowIRLtI0vtduY="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/readme.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/readme.html",
+          "hash": "20kJDW6nDG+WB03GY5DQQ8Bh4kGYUP2JeyPUIxpbAvQ="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/DocReports/DocReports_CaseType.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/DocReports/DocReports_CaseType.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/DocReports/DocReports_CodeButton.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/DocReports/DocReports_CodeButton.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/DocReports/DocReports_CreateNew.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/DocReports/DocReports_CreateNew.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/DocReports/DocReports_DefaultOptions.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/DocReports/DocReports_DefaultOptions.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/DocReports/DocReports_DefaultOptionsButton.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/DocReports/DocReports_DefaultOptionsButton.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/DocReports/DocReports_DocCode.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/DocReports/DocReports_DocCode.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/DocReports/DocReports_DocDownload.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/DocReports/DocReports_DocDownload.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/DocReports/DocReports_DocumentOptions.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/DocReports/DocReports_DocumentOptions.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/DocReports/DocReports_LinkButton.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/DocReports/DocReports_LinkButton.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/DocReports/DocReports_LinkForm.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/DocReports/DocReports_LinkForm.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/DocReports/DocReports_MatterEnquires.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/DocReports/DocReports_MatterEnquires.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/DocReports/DocReports_NewParagraph.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/DocReports/DocReports_NewParagraph.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/DocReports/DocReports_NewParagraph2.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/DocReports/DocReports_NewParagraph2.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/DocReports/DocReports_Paragraphs1.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/DocReports/DocReports_Paragraphs1.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/DocReports/DocReports_Paragraphs2.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/DocReports/DocReports_Paragraphs2.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/DocReports/DocReports_Preview1.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/DocReports/DocReports_Preview1.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/DocReports/DocReports_Preview2.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/DocReports/DocReports_Preview2.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/DocReports/DocReports_Preview3.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/DocReports/DocReports_Preview3.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/DocReports/DocReports_QandAButton.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/DocReports/DocReports_QandAButton.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/DocReports/DocReports_Reorder1.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/DocReports/DocReports_Reorder1.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/DocReports/DocReports_Reorder2.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/DocReports/DocReports_Reorder2.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/DocReports/DocReports_Reorder3.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/DocReports/DocReports_Reorder3.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/DocReports/DocReports_SectionOptions.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/DocReports/DocReports_SectionOptions.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/DocReports/DocReports_SectionOptionsButton.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/DocReports/DocReports_SectionOptionsButton.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/DocReports/DocReports_Sections.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/DocReports/DocReports_Sections.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/DocReports/DocReports_SelectParagraphs.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/DocReports/DocReports_SelectParagraphs.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/DocReports/DocReports_Tags1.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/DocReports/DocReports_Tags1.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/DocReports/DocReports_Tags2.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/DocReports/DocReports_Tags2.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/DocReports/DocReports_WordEnquiries.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/DocReports/DocReports_WordEnquiries.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/DocReports/DocReports_WordNumberFormat.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/DocReports/DocReports_WordNumberFormat.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/GadjIT-BGLinks.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/GadjIT-BGLinks.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/GadjIT-BGSelected.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/GadjIT-BGSelected.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/GadjIT-BGTabLink.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/GadjIT-BGTabLink.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/GadjIT-CaseTypes.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/GadjIT-CaseTypes.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/GadjIT-CreateNewStep.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/GadjIT-CreateNewStep.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/GadjIT-GroupScreenAddStatusView.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/GadjIT-GroupScreenAddStatusView.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/GadjIT-GroupScreenCreateStatusView.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/GadjIT-GroupScreenCreateStatusView.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/GadjIT-GroupScreenDocs.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/GadjIT-GroupScreenDocs.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/GadjIT-GroupScreenListing.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/GadjIT-GroupScreenListing.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/GadjIT-GroupScreenStatus.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/GadjIT-GroupScreenStatus.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/GadjIT-MovingSmartflowInList.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/GadjIT-MovingSmartflowInList.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/GadjIT-NewCaseType.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/GadjIT-NewCaseType.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/GadjIT-NewCaseTypeOptions.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/GadjIT-NewCaseTypeOptions.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/GadjIT-SettingCaseTypeGroup.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/GadjIT-SettingCaseTypeGroup.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/GadjIT_TrackingAttachments.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/GadjIT_TrackingAttachments.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/GadjIT_TrackingChaserCode.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/GadjIT_TrackingChaserCode.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/GadjIT_TrackingChaserCodeDownload.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/GadjIT_TrackingChaserCodeDownload.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/GadjIT_TrackingDocuments.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/GadjIT_TrackingDocuments.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/GadjIT_TrackingIcon.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/GadjIT_TrackingIcon.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/GadjIT_TrackingMethod1.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/GadjIT_TrackingMethod1.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/GadjIT_TrackingMethodResponseRequired.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/GadjIT_TrackingMethodResponseRequired.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/GadjIT_TrackingToggle1.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/GadjIT_TrackingToggle1.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/GadjIT_TrackingToggle2.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/GadjIT_TrackingToggle2.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/P4W_InsertStep.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/P4W_InsertStep.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/P4W_ProcessStep.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/P4W_ProcessStep.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/SmartflowAddFee.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/SmartflowAddFee.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/SmartflowAttachmentTab.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/SmartflowAttachmentTab.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/SmartflowCareLetterSelected.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/SmartflowCareLetterSelected.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/SmartflowCarePackChaserDescriptions.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/SmartflowCarePackChaserDescriptions.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/SmartflowCarePackChaserLetterContents.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/SmartflowCarePackChaserLetterContents.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/SmartflowCarePackChaserLetterSelected.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/SmartflowCarePackChaserLetterSelected.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/SmartflowCarePackItemsReceived.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/SmartflowCarePackItemsReceived.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/SmartflowCaseDetailsSection.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/SmartflowCaseDetailsSection.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/SmartflowCompleteSection.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/SmartflowCompleteSection.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/SmartflowContacts.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/SmartflowContacts.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/SmartflowFeeAddedToLedger.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/SmartflowFeeAddedToLedger.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/SmartflowFeesSection.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/SmartflowFeesSection.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/SmartflowFullScreen.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/SmartflowFullScreen.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/SmartflowGroupScreen.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/SmartflowGroupScreen.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/SmartflowGroupScreenStatus.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/SmartflowGroupScreenStatus.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/SmartflowMessage.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/SmartflowMessage.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/SmartflowNotesSection.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/SmartflowNotesSection.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/SmartflowOptionalDocumentToggle.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/SmartflowOptionalDocumentToggle.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/SmartflowOtherFeatures.JPG",
+      "output": {
+        "resource": {
+          "relative_path": "images/SmartflowOtherFeatures.JPG"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/SmartflowSelectCareLetterAttachments.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/SmartflowSelectCareLetterAttachments.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/SmartflowSelectLetter.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/SmartflowSelectLetter.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/SmartflowSelectedActionInfo.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/SmartflowSelectedActionInfo.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/SmartflowSelectedActionInfoIcon.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/SmartflowSelectedActionInfoIcon.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/SmartflowSheduleSection.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/SmartflowSheduleSection.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/SmartflowSheduledSection.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/SmartflowSheduledSection.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/SmartflowTickerMessage.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/SmartflowTickerMessage.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/SmartflowTrackingItems1.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/SmartflowTrackingItems1.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/gadjIT_AddData.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/gadjIT_AddData.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/gadjIT_AddFee.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/gadjIT_AddFee.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/gadjIT_AddTickerMessage.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/gadjIT_AddTickerMessage.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/gadjIT_Add_Document.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/gadjIT_Add_Document.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/gadjIT_AdditionalFeatures.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/gadjIT_AdditionalFeatures.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/gadjIT_AgendaBasic.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/gadjIT_AgendaBasic.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/gadjIT_AgendaChild.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/gadjIT_AgendaChild.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/gadjIT_AgendaEntityNameCode.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/gadjIT_AgendaEntityNameCode.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/gadjIT_Attachments.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/gadjIT_Attachments.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/gadjIT_DocumentsIcon.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/gadjIT_DocumentsIcon.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/gadjIT_NewIcon.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/gadjIT_NewIcon.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/gadjIT_NewLinkedItem.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/gadjIT_NewLinkedItem.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/gadjIT_ReorderingLists.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/gadjIT_ReorderingLists.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/gadjIT_SelectDocument.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/gadjIT_SelectDocument.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/gadjIT_StatusCreation.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/gadjIT_StatusCreation.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/gadjit-logo-light.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/gadjit-logo-light.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/gadjit-logo.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/gadjit-logo.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/smartflow-logo copy.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/smartflow-logo copy.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/smartflow-logo.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "images/smartflow-logo.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "index.md",
+      "output": {
+        ".html": {
+          "relative_path": "index.html",
+          "hash": "sv/CCKNTEbk9BbaN48Mx68yT1Ygqs+n6lKC5zE8I4gY="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "logo.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "logo.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "toc.html",
+          "hash": "AFO3i8Ye4DkSMc6Tjh5FysHK3oMG88Y3v683718N9H0="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    }
+  ],
+  "incremental_info": [
+    {
+      "status": {
+        "can_incremental": true,
+        "incrementalPhase": "build",
+        "total_file_count": 0,
+        "skipped_file_count": 0
+      },
+      "processors": {
+        "ConceptualDocumentProcessor": {
+          "can_incremental": true,
+          "incrementalPhase": "build",
+          "total_file_count": 24,
+          "skipped_file_count": 24
+        },
+        "ResourceDocumentProcessor": {
+          "can_incremental": false,
+          "details": "Processor ResourceDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
+          "incrementalPhase": "build",
+          "total_file_count": 0,
+          "skipped_file_count": 0
+        },
+        "TocDocumentProcessor": {
+          "can_incremental": false,
+          "details": "Processor TocDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
+          "incrementalPhase": "build",
+          "total_file_count": 0,
+          "skipped_file_count": 0
+        }
+      }
+    },
+    {
+      "status": {
+        "can_incremental": true,
+        "details": "Can support incremental post processing.",
+        "incrementalPhase": "postProcessing",
+        "total_file_count": 0,
+        "skipped_file_count": 0
+      },
+      "processors": {}
+    }
+  ],
+  "version_info": {},
+  "groups": [
+    {
+      "xrefmap": "xrefmap.yml"
+    }
+  ]
+}

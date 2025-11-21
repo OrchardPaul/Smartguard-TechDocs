@@ -1,0 +1,453 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Usage Examples </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Usage Examples ">
+    <meta name="generator" content="docfx 2.59.3.0">
+    
+    <link rel="shortcut icon" href="../../favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="../../toc.html">
+    
+    
+    
+  
+    <!--FontAwesome-->
+    <script src="../../styles/fontawesomev6/js/all.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  
+  
+    <style>
+      .shadow { box-shadow: 0px 0px 8px #888; margin-top: 5px; margin-bottom: 5px;}
+  
+    </style>
+      
+  </head>
+  
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../logo.jpg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        <div class="article row grid">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="usage-examples">Usage Examples</h1>
+
+<h2 id="creating-questions">Creating Questions</h2>
+<h3 id="using-builder-pattern">Using Builder Pattern</h3>
+<pre><code class="lang-csharp">// Create a list question with multiple options
+var ageQuestion = ORSG_QuestionDetailBuilder
+    .Empty()
+    .OfType(QuestionType.List)
+    .WithListOptions(new[]
+    {
+        new ListOption(&quot;18-24&quot;, &quot;Young adults&quot;, &quot;18-24&quot;, 1),
+        new ListOption(&quot;25-34&quot;, &quot;Early career&quot;, &quot;25-34&quot;, 2),
+        new ListOption(&quot;35-44&quot;, &quot;Mid career&quot;, &quot;35-44&quot;, 3),
+        new ListOption(&quot;45+&quot;, &quot;Experienced&quot;, &quot;45+&quot;, 4)
+    }, &quot;25-34&quot;)
+    .Build();
+
+// Create question default container
+var questionDefault = new ORSG_QuestionDefault
+{
+    Section = &quot;Demographics&quot;,
+    SectionOrder = 1,
+    SeqNo = 1,
+    Title = &quot;What is your age range?&quot;,
+    Description = &quot;Please select your age range from the options below&quot;,
+    QuestionDetail = ageQuestion,
+    QuestionWeight = 1
+};
+</code></pre>
+<h3 id="direct-instantiation">Direct Instantiation</h3>
+<pre><code class="lang-csharp">// Create list question directly
+var listQuestion = new ORSG_QuestionDetailList
+{
+    Options = new[]
+    {
+        new ListOption { Title = &quot;Yes&quot;, Value = &quot;yes&quot;, Weight = 1 },
+        new ListOption { Title = &quot;No&quot;, Value = &quot;no&quot;, Weight = 0 }
+    },
+    Default = &quot;no&quot;,
+    SelectionMode = ListSelectionMode.Single,
+    ControlType = ListControlType.Radio,
+    Direction = ListDirection.Horizontal
+};
+</code></pre>
+<h2 id="serialization-examples">Serialization Examples</h2>
+<h3 id="object-to-json">Object to JSON</h3>
+<pre><code class="lang-csharp">var question = new ORSG_QuestionDetailList
+{
+    Options = new[]
+    {
+        new ListOption(&quot;Option 1&quot;, &quot;First option&quot;, &quot;opt1&quot;, 1),
+        new ListOption(&quot;Option 2&quot;, &quot;Second option&quot;, &quot;opt2&quot;, 2)
+    },
+    Default = &quot;opt1&quot;,
+    SelectionMode = ListSelectionMode.Single
+};
+
+string json = question.SerializeToJson();
+Console.WriteLine(json);
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code class="lang-json">{
+  &quot;Options&quot;: [
+    {
+      &quot;Title&quot;: &quot;Option 1&quot;,
+      &quot;Description&quot;: &quot;First option&quot;, 
+      &quot;Value&quot;: &quot;opt1&quot;,
+      &quot;Weight&quot;: 1
+    },
+    {
+      &quot;Title&quot;: &quot;Option 2&quot;,
+      &quot;Description&quot;: &quot;Second option&quot;,
+      &quot;Value&quot;: &quot;opt2&quot;, 
+      &quot;Weight&quot;: 2
+    }
+  ],
+  &quot;Default&quot;: &quot;opt1&quot;,
+  &quot;SelectionMode&quot;: &quot;Single&quot;,
+  &quot;ControlType&quot;: &quot;Buttons&quot;,
+  &quot;Direction&quot;: &quot;Vertical&quot;,
+  &quot;Type&quot;: &quot;List&quot;,
+  &quot;Position&quot;: &quot;Below&quot;
+}
+</code></pre>
+<h3 id="json-to-object">JSON to Object</h3>
+<pre><code class="lang-csharp">string json = @&quot;{
+    &quot;&quot;Type&quot;&quot;: &quot;&quot;List&quot;&quot;,
+    &quot;&quot;Options&quot;&quot;: [
+        {&quot;&quot;Title&quot;&quot;: &quot;&quot;Yes&quot;&quot;, &quot;&quot;Value&quot;&quot;: &quot;&quot;yes&quot;&quot;, &quot;&quot;Weight&quot;&quot;: 1},
+        {&quot;&quot;Title&quot;&quot;: &quot;&quot;No&quot;&quot;, &quot;&quot;Value&quot;&quot;: &quot;&quot;no&quot;&quot;, &quot;&quot;Weight&quot;&quot;: 0}
+    ],
+    &quot;&quot;Default&quot;&quot;: &quot;&quot;no&quot;&quot;,
+    &quot;&quot;SelectionMode&quot;&quot;: &quot;&quot;Single&quot;&quot;
+}&quot;;
+
+var questionDetail = ORSG_QuestionDetailFactory.CreateDetailFromJson(json);
+if (questionDetail is ORSG_QuestionDetailList listQuestion)
+{
+    Console.WriteLine($&quot;Question has {listQuestion.Options.Length} options&quot;);
+    Console.WriteLine($&quot;Default value: {listQuestion.Default}&quot;);
+}
+</code></pre>
+<h2 id="working-with-questionnaires">Working with Questionnaires</h2>
+<h3 id="creating-a-complete-questionnaire">Creating a Complete Questionnaire</h3>
+<pre><code class="lang-csharp">var questionnaire = new ORSG_Questionnaire
+{
+    Title = &quot;Customer Satisfaction Survey&quot;,
+    Description = &quot;Help us improve our services&quot;,
+    Questions = new[]
+    {
+        // Demographics section
+        new ORSG_QuestionDefault
+        {
+            Section = &quot;Demographics&quot;,
+            SectionOrder = 1,
+            SeqNo = 1,
+            Title = &quot;Age Range&quot;,
+            Description = &quot;Select your age range&quot;,
+            QuestionDetail = ORSG_QuestionDetailBuilder
+                .Empty()
+                .OfType(QuestionType.List)
+                .WithListOptions(AgeRangeOptions(), &quot;25-34&quot;)
+                .Build()
+        },
+        
+        // Satisfaction section
+        new ORSG_QuestionDefault
+        {
+            Section = &quot;Satisfaction&quot;,
+            SectionOrder = 2,
+            SeqNo = 1,
+            Title = &quot;Overall Satisfaction&quot;,
+            Description = &quot;How satisfied are you with our service?&quot;,
+            QuestionDetail = ORSG_QuestionDetailBuilder
+                .Empty()
+                .OfType(QuestionType.List)
+                .WithListOptions(SatisfactionOptions(), &quot;satisfied&quot;)
+                .Build()
+        }
+    },
+    CreatedDate = DateTime.UtcNow,
+    IsActive = true
+};
+
+static ListOption[] AgeRangeOptions() =&gt; new[]
+{
+    new ListOption(&quot;18-24&quot;, &quot;18 to 24 years&quot;, &quot;18-24&quot;, 1),
+    new ListOption(&quot;25-34&quot;, &quot;25 to 34 years&quot;, &quot;25-34&quot;, 2),
+    new ListOption(&quot;35-44&quot;, &quot;35 to 44 years&quot;, &quot;35-44&quot;, 3),
+    new ListOption(&quot;45-54&quot;, &quot;45 to 54 years&quot;, &quot;45-54&quot;, 4),
+    new ListOption(&quot;55+&quot;, &quot;55 years and above&quot;, &quot;55+&quot;, 5)
+};
+
+static ListOption[] SatisfactionOptions() =&gt; new[]
+{
+    new ListOption(&quot;Very Satisfied&quot;, &quot;Extremely happy&quot;, &quot;very-satisfied&quot;, 5),
+    new ListOption(&quot;Satisfied&quot;, &quot;Generally happy&quot;, &quot;satisfied&quot;, 4),
+    new ListOption(&quot;Neutral&quot;, &quot;Neither satisfied nor dissatisfied&quot;, &quot;neutral&quot;, 3),
+    new ListOption(&quot;Dissatisfied&quot;, &quot;Generally unhappy&quot;, &quot;dissatisfied&quot;, 2),
+    new ListOption(&quot;Very Dissatisfied&quot;, &quot;Extremely unhappy&quot;, &quot;very-dissatisfied&quot;, 1)
+};
+</code></pre>
+<h2 id="error-handling">Error Handling</h2>
+<h3 id="safe-deserialization">Safe Deserialization</h3>
+<pre><code class="lang-csharp">public ORSG_QuestionDetail SafeDeserialize(string json)
+{
+    try
+    {
+        var questionDetail = ORSG_QuestionDetailFactory.CreateDetailFromJson(json);
+        
+        // Validate the result
+        if (questionDetail is ORSG_QuestionDetailEmpty)
+        {
+            logger.LogWarning(&quot;Failed to deserialize question detail, using empty fallback&quot;);
+        }
+        
+        return questionDetail;
+    }
+    catch (Exception ex)
+    {
+        logger.LogError(ex, &quot;Error deserializing question detail&quot;);
+        return new ORSG_QuestionDetailEmpty();
+    }
+}
+</code></pre>
+<h3 id="validation-before-use">Validation Before Use</h3>
+<pre><code class="lang-csharp">public bool ValidateQuestionDetail(ORSG_QuestionDetail detail)
+{
+    return detail switch
+    {
+        ORSG_QuestionDetailList list =&gt; ValidateListQuestion(list),
+        ORSG_QuestionDetailEmpty =&gt; true, // Always valid
+        _ =&gt; false
+    };
+}
+
+private bool ValidateListQuestion(ORSG_QuestionDetailList list)
+{
+    if (list.Options == null || list.Options.Length == 0)
+        return false;
+        
+    if (list.SelectionMode == ListSelectionMode.Single &amp;&amp; 
+        list.Options.Length == 1)
+        return false; // Single selection needs multiple options
+        
+    return list.Options.All(opt =&gt; 
+        !string.IsNullOrEmpty(opt.Title) &amp;&amp; 
+        !string.IsNullOrEmpty(opt.Value));
+}
+</code></pre>
+<h2 id="performance-best-practices">Performance Best Practices</h2>
+<h3 id="caching-serialized-json">Caching Serialized JSON</h3>
+<pre><code class="lang-csharp">public class CachedQuestionDetail
+{
+    private ORSG_QuestionDetail _detail;
+    private string _cachedJson;
+    private bool _isDirty = true;
+    
+    public ORSG_QuestionDetail Detail
+    {
+        get =&gt; _detail;
+        set
+        {
+            _detail = value;
+            _isDirty = true;
+        }
+    }
+    
+    public string ToJson()
+    {
+        if (_isDirty || _cachedJson == null)
+        {
+            _cachedJson = _detail?.SerializeToJson() ?? &quot;{}&quot;;
+            _isDirty = false;
+        }
+        return _cachedJson;
+    }
+}
+</code></pre>
+<h3 id="bulk-operations">Bulk Operations</h3>
+<pre><code class="lang-csharp">public void ProcessQuestions(IEnumerable&lt;ORSG_QuestionDefault&gt; questions)
+{
+    var groupedQuestions = questions.GroupBy(q =&gt; q.Section);
+    
+    foreach (var section in groupedQuestions)
+    {
+        Console.WriteLine($&quot;Processing section: {section.Key}&quot;);
+        
+        // Process questions in parallel where safe
+        var listQuestions = section
+            .Where(q =&gt; q.QuestionDetail is ORSG_QuestionDetailList)
+            .ToList();
+            
+        Parallel.ForEach(listQuestions, ProcessListQuestion);
+    }
+}
+
+private void ProcessListQuestion(ORSG_QuestionDefault question)
+{
+    if (question.QuestionDetail is ORSG_QuestionDetailList list)
+    {
+        // Process list-specific logic
+        ValidateOptions(list.Options);
+        CalculateWeights(list.Options);
+    }
+}
+</code></pre>
+<h2 id="integration-examples">Integration Examples</h2>
+<h3 id="entity-framework-integration">Entity Framework Integration</h3>
+<pre><code class="lang-csharp">public class QuestionContext : DbContext
+{
+    public DbSet&lt;ORSG_Questionnaire&gt; Questionnaires { get; set; }
+    public DbSet&lt;ORSG_QuestionDefault&gt; Questions { get; set; }
+    
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity&lt;ORSG_QuestionDefault&gt;(entity =&gt;
+        {
+            entity.HasKey(e =&gt; e.Id);
+            entity.Property(e =&gt; e.QuestionDetailJson).HasColumnType(&quot;nvarchar(max)&quot;);
+            
+            // Configure the ignored navigation property
+            entity.Ignore(e =&gt; e.QuestionDetail);
+            entity.Ignore(e =&gt; e.AllowOrdering);
+        });
+        
+        modelBuilder.Entity&lt;ORSG_Questionnaire&gt;(entity =&gt;
+        {
+            entity.HasKey(e =&gt; e.Id);
+            entity.HasMany(e =&gt; e.Questions)
+                  .WithOne()
+                  .HasForeignKey(&quot;QuestionnaireId&quot;);
+        });
+    }
+}
+</code></pre>
+<h3 id="repository-pattern">Repository Pattern</h3>
+<pre><code class="lang-csharp">public class QuestionRepository
+{
+    private readonly QuestionContext _context;
+    
+    public QuestionRepository(QuestionContext context)
+    {
+        _context = context;
+    }
+    
+    public async Task&lt;ORSG_QuestionDefault&gt; GetQuestionAsync(int id)
+    {
+        var question = await _context.Questions.FindAsync(id);
+        if (question != null)
+        {
+            // Deserialize the question detail
+            question.QuestionDetail = ORSG_QuestionDetailFactory
+                .CreateDetailFromJson(question.QuestionDetailJson);
+        }
+        return question;
+    }
+    
+    public async Task SaveQuestionAsync(ORSG_QuestionDefault question)
+    {
+        // Serialize the question detail before saving
+        question.QuestionDetailJson = question.QuestionDetail?.SerializeToJson() ?? &quot;{}&quot;;
+        
+        if (question.Id == 0)
+            _context.Questions.Add(question);
+        else
+            _context.Questions.Update(question);
+            
+        await _context.SaveChangesAsync();
+    }
+}
+</code></pre>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong><a href="https://www.orchardrock.co.uk" target="_blank" title="Orchard Rock Development website">Orchard Rock Development</a></strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    
+    <script>
+    mermaid.initialize({
+    startOnLoad: false
+    });
+    mermaid.init(undefined, ".lang-mermaid");
+    </script>  </body>
+</html>

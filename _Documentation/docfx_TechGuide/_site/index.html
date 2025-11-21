@@ -1,0 +1,155 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>GadjIT Technical Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="GadjIT Technical Documentation ">
+    <meta name="generator" content="docfx 2.59.3.0">
+    
+    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="stylesheet" href="styles/docfx.vendor.css">
+    <link rel="stylesheet" href="styles/docfx.css">
+    <link rel="stylesheet" href="styles/main.css">
+    <meta property="docfx:navrel" content="toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  
+    <!--FontAwesome-->
+    <script src="styles/fontawesomev6/js/all.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  
+  
+    <style>
+      .shadow { box-shadow: 0px 0px 8px #888; margin-top: 5px; margin-bottom: 5px;}
+  
+    </style>
+      
+  </head>
+  
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="index.html">
+                <img id="logo" class="svg" src="logo.jpg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        <div class="article row grid">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="gadjit-technical-documentation">GadjIT Technical Documentation</h1>
+
+<h2 id="overview">Overview</h2>
+<p>GadjIT is a .net solution made up of several applications that together provide tools for clients to manage their business processes. The solution is made up of the following applications:</p>
+<ul>
+<li><a href="#gadjit">GadjITx</a></li>
+<li><a href="#gadjit-client-api">GadjIT Client API</a></li>
+<li><a href="#gadjit-email-service">GadjIT Email Service</a></li>
+<li><a href="#gadjit-authentication-service">GadjIT Authentication Service</a></li>
+<li><a href="#gadjit-api">GadjIT API</a></li>
+<li><a href="#gadjit-status-worker-service">GadjIT Status Worker Service</a></li>
+</ul>
+<h2 id="gadjit">GadjIT</h2>
+<p>GadjIT is the main application in the solution. It is a web application that provides a user interface for clients to manage their business processes. The application is built using the ASP.NET Core framework and is hosted on Arizona (TODO: move to Azure).</p>
+<p>There are several tools available for clients including Smartflow and DocReports.</p>
+<h2 id="gadjit-client-api">GadjIT Client API</h2>
+<p>The GadjIT Client API is a RESTful API that provides access to the GadjIT client database. The API is built using the ASP.NET Core framework and is hosted on each client. The API backs onto the client database, primarily the P4W database in SQL Server.</p>
+<p>All client data is stored in the client database and is accessed via the Client API. The API is secured using a dedicated port which is provides inbound access from our Alaska servers IP addess.</p>
+<h2 id="gadjit-email-service">GadjIT Email Service</h2>
+<p>Micro API that provides email services to the GadjIT application. The Email Service is built using the ASP.NET Core framework and is hosted on Arizona (TODO: move to Azure).</p>
+<p>This service is used to send emails from anu of Orchard Rock's applications. It utilises Microsoft's MS Graph API to send emails.</p>
+<p>It is secured using OAuth2.0 and requires a valid JWT access token which is provided by the GadjIT Authentication API.</p>
+<h2 id="gadjit-authentication-service">GadjIT Authentication Service</h2>
+<p>The GadjIT Authentication Service is a RESTful API that provides authentication services to the GadjIT application. The API is built using the ASP.NET Core framework and is hosted on Arizona (TODO: move to Azure).</p>
+<p>A JWT authentication token is provided by this API which is used to authenticate users and provide access to the other applications in the GadjIT solution. The API shares the same Secret as all other APIs and applications in the solution as well as the main company website solution, so the same JWT token is trusted by multiple applications.</p>
+<h2 id="gadjit-api">GadjIT API</h2>
+<p>The GadjIT API is a RESTful API that provides access to the GadjIT database. The API is built using the ASP.NET Core framework and is hosted on Arizona (TODO: move to Azure).</p>
+<p>The API provides access to GadjIT application data as well as Client API configuration data. This is the main API that gives open access to other APIs in the solution such as Client APIs and Email Service.</p>
+<p>This API is accessible to clients and other applications in the solution. It is secured using OAuth2.0 and requires a valid JWT access token which is provided by the GadjIT Authentication API.</p>
+<h2 id="gadjit-status-worker-service">GadjIT Status Worker Service</h2>
+<p>The GadjIT Status Worker Service is a background service that runs on Arizona.</p>
+<p>The service is responsible for monitoring the status of the GadjIT application and its dependencies.</p>
+<p>Should the service detect a problem with the application or its dependencies, it will send an alert to the GadjIT team via email.</p>
+<p>Daily status reports are also sent to the GadjIT team to keep them informed of the status of the application and its dependencies especially the health of Client APIs.</p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong><a href="https://www.orchardrock.co.uk" target="_blank" title="Orchard Rock Development website">Orchard Rock Development</a></strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
+    
+    <script type="text/javascript" src="styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="styles/docfx.js"></script>
+    <script type="text/javascript" src="styles/main.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    
+    <script>
+    mermaid.initialize({
+    startOnLoad: false
+    });
+    mermaid.init(undefined, ".lang-mermaid");
+    </script>  </body>
+</html>

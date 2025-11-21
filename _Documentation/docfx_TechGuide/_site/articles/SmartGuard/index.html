@@ -1,0 +1,266 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>SmartGuard Models Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="SmartGuard Models Documentation ">
+    <meta name="generator" content="docfx 2.59.3.0">
+    
+    <link rel="shortcut icon" href="../../favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="../../toc.html">
+    
+    
+    
+  
+    <!--FontAwesome-->
+    <script src="../../styles/fontawesomev6/js/all.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  
+  
+    <style>
+      .shadow { box-shadow: 0px 0px 8px #888; margin-top: 5px; margin-bottom: 5px;}
+  
+    </style>
+      
+  </head>
+  
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../logo.jpg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        <div class="article row grid">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="smartguard-models-documentation">SmartGuard Models Documentation</h1>
+
+<h2 id="overview">Overview</h2>
+<p>The SmartGuard models implement a flexible, extensible questionnaire system designed for dynamic survey creation and management. The system leverages object-oriented design principles including inheritance, polymorphism, and multiple design patterns to provide type-safe, serializable question implementations.</p>
+<h3 id="key-features">Key Features</h3>
+<ul>
+<li><strong>Polymorphic Question Types</strong>: Extensible hierarchy supporting different question implementations</li>
+<li><strong>JSON Serialization</strong>: Automatic bidirectional conversion between objects and JSON</li>
+<li><strong>Factory Pattern</strong>: Dynamic object creation based on question type detection</li>
+<li><strong>Builder Pattern</strong>: Fluent API for complex object construction</li>
+<li><strong>Template Method</strong>: Consistent serialization behavior across all question types</li>
+<li><strong>Type Safety</strong>: Compile-time guarantees through strong typing</li>
+</ul>
+<h2 id="system-architecture">System Architecture</h2>
+<pre><code class="lang-mermaid">graph TB
+    subgraph &quot;Application Layer&quot;
+        A[ORSG_Questionnaire]
+    end
+    
+    subgraph &quot;Question Management Layer&quot;
+        B[ORSG_QuestionDefault]
+        C[ORSG_QuestionDetailFactory]
+        D[ORSG_QuestionDetailBuilder]
+    end
+    
+    subgraph &quot;Question Implementation Layer&quot;
+        E[ORSG_QuestionDetail]
+        F[ORSG_QuestionDetailEmpty]
+        G[ORSG_QuestionDetailList]
+        H[ORSG_QuestionDetailToggle]
+    end
+    
+    subgraph &quot;Supporting Types&quot;
+        I[ListOption]
+        J[Enums]
+    end
+    
+    A --&gt; B
+    B --&gt; E
+    C --&gt; E
+    D --&gt; E
+    E --&gt; F
+    E --&gt; G
+    E --&gt; H
+    G --&gt; I
+    B --&gt; J
+    G --&gt; J
+</code></pre>
+<h2 id="class-hierarchy">Class Hierarchy</h2>
+<pre><code class="lang-mermaid">classDiagram
+    class ORSG_Questionnaire {
+        +int Id
+        +string Title
+        +string Description
+        +ORSG_QuestionDefault[] Questions
+        +DateTime CreatedDate
+        +DateTime ModifiedDate
+        +bool IsActive
+        +GetQuestionsBySection(section) ORSG_QuestionDefault[]
+        +ValidateQuestionnaire() ValidationResult
+        +CalculateProgress() float
+    }
+
+    class ORSG_QuestionDefault {
+        +int Id
+        +string Section
+        +int SectionOrder
+        +int SeqNo
+        +string Group
+        +int GroupOrder
+        +int GroupSeqNo
+        +string Title
+        +string Description
+        +string DefaultTags
+        +ORSG_QuestionDetail QuestionDetail
+        +string QuestionDetailJson
+        +int QuestionWeight
+        +bool AllowOrdering
+    }
+
+    class ORSG_QuestionDetail {
+        &lt;&lt;abstract&gt;&gt;
+        +QuestionType Type
+        +ControlPosition Position
+        #string DetailAsJson
+        #GetSerializerOptions() JsonSerializerOptions
+        +SerializeToJson() string
+        +DeserializeFromJson(json)* ORSG_QuestionDetail
+        +LoadContentsFrom(source)* ORSG_QuestionDetail
+    }
+
+    class ORSG_QuestionDetailEmpty {
+        +ORSG_QuestionDetailEmpty()
+        +DeserializeFromJson(json) ORSG_QuestionDetailEmpty
+        +LoadContentsFrom(source) ORSG_QuestionDetailEmpty
+    }
+
+    class ORSG_QuestionDetailList {
+        +ListOption[] Options
+        +string Default
+        +ListSelectionMode SelectionMode
+        +ListControlType ControlType
+        +ListDirection Direction
+        +ORSG_QuestionDetailList()
+        +DeserializeFromJson(json) ORSG_QuestionDetailList
+        +LoadContentsFrom(source) ORSG_QuestionDetailList
+    }
+
+    class ListOption {
+        +string Title
+        +string Description
+        +string Value
+        +int Weight
+    }
+
+    class ORSG_QuestionDetailFactory {
+        &lt;&lt;static&gt;&gt;
+        +CreateDetailFromJson(json) ORSG_QuestionDetail
+        +GetTypeFromJson(json) QuestionType
+    }
+
+    class ORSG_QuestionDetailBuilder {
+        &lt;&lt;static&gt;&gt;
+        +Empty() ORSG_QuestionDetailBuilder
+        +OfType(type) ORSG_QuestionDetailBuilder
+        +WithListOptions(options, default) ORSG_QuestionDetailBuilder
+        +Build() ORSG_QuestionDetail
+    }
+
+    ORSG_Questionnaire &quot;1&quot; --&gt; &quot;*&quot; ORSG_QuestionDefault : contains
+    ORSG_QuestionDefault &quot;1&quot; --&gt; &quot;1&quot; ORSG_QuestionDetail : composition
+    ORSG_QuestionDetail &lt;|-- ORSG_QuestionDetailEmpty : inherits
+    ORSG_QuestionDetail &lt;|-- ORSG_QuestionDetailList : inherits
+    ORSG_QuestionDetailList &quot;1&quot; --&gt; &quot;*&quot; ListOption : aggregation
+    ORSG_QuestionDetailFactory ..&gt; ORSG_QuestionDetail : creates
+    ORSG_QuestionDetailBuilder ..&gt; ORSG_QuestionDetail : builds
+</code></pre>
+<h2 id="next-steps">Next Steps</h2>
+<ul>
+<li><a href="architecture.html">Architecture Details</a></li>
+<li><a href="api-reference.html">API Reference</a></li>
+<li><a href="design-patterns.html">Design Patterns</a></li>
+<li><a href="usage-examples.html">Usage Examples</a></li>
+<li><a href="serialization.html">Serialization Strategy</a></li>
+</ul>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong><a href="https://www.orchardrock.co.uk" target="_blank" title="Orchard Rock Development website">Orchard Rock Development</a></strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    
+    <script>
+    mermaid.initialize({
+    startOnLoad: false
+    });
+    mermaid.init(undefined, ".lang-mermaid");
+    </script>  </body>
+</html>

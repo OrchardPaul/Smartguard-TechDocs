@@ -1,0 +1,531 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>API Reference </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="API Reference ">
+    <meta name="generator" content="docfx 2.59.3.0">
+    
+    <link rel="shortcut icon" href="../../favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="../../toc.html">
+    
+    
+    
+  
+    <!--FontAwesome-->
+    <script src="../../styles/fontawesomev6/js/all.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  
+  
+    <style>
+      .shadow { box-shadow: 0px 0px 8px #888; margin-top: 5px; margin-bottom: 5px;}
+  
+    </style>
+      
+  </head>
+  
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../logo.jpg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        <div class="article row grid">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="api-reference">API Reference</h1>
+
+<h2 id="orsg_questionnaire">ORSG_Questionnaire</h2>
+<h3 id="properties">Properties</h3>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Id</code></td>
+<td><code>int</code></td>
+<td>Unique identifier</td>
+<td>-</td>
+</tr>
+<tr>
+<td><code>Title</code></td>
+<td><code>string</code></td>
+<td>Questionnaire title</td>
+<td>-</td>
+</tr>
+<tr>
+<td><code>Description</code></td>
+<td><code>string</code></td>
+<td>Detailed description</td>
+<td>-</td>
+</tr>
+<tr>
+<td><code>Questions</code></td>
+<td><code>ORSG_QuestionDefault[]</code></td>
+<td>Collection of questions</td>
+<td><code>[]</code></td>
+</tr>
+<tr>
+<td><code>CreatedDate</code></td>
+<td><code>DateTime</code></td>
+<td>Creation timestamp</td>
+<td>-</td>
+</tr>
+<tr>
+<td><code>ModifiedDate</code></td>
+<td><code>DateTime</code></td>
+<td>Last modification</td>
+<td>-</td>
+</tr>
+<tr>
+<td><code>IsActive</code></td>
+<td><code>bool</code></td>
+<td>Active status</td>
+<td><code>true</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="methods">Methods</h3>
+<h4 id="getquestionsbysection">GetQuestionsBySection</h4>
+<pre><code class="lang-csharp">public ORSG_QuestionDefault[] GetQuestionsBySection(string section)
+</code></pre>
+<p>Returns all questions belonging to the specified section.</p>
+<h4 id="validatequestionnaire">ValidateQuestionnaire</h4>
+<pre><code class="lang-csharp">public ValidationResult ValidateQuestionnaire()
+</code></pre>
+<p>Validates the questionnaire structure and content.</p>
+<h4 id="calculateprogress">CalculateProgress</h4>
+<pre><code class="lang-csharp">public float CalculateProgress()
+</code></pre>
+<p>Calculates completion progress as a percentage.</p>
+<h2 id="orsg_questiondefault">ORSG_QuestionDefault</h2>
+<h3 id="properties-1">Properties</h3>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Attributes</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Id</code></td>
+<td><code>int</code></td>
+<td><code>[Key]</code></td>
+<td>Primary key</td>
+</tr>
+<tr>
+<td><code>Section</code></td>
+<td><code>string</code></td>
+<td><code>[Required, StringLength(200)]</code></td>
+<td>Section name</td>
+</tr>
+<tr>
+<td><code>SectionOrder</code></td>
+<td><code>int</code></td>
+<td>-</td>
+<td>Section display order</td>
+</tr>
+<tr>
+<td><code>SeqNo</code></td>
+<td><code>int</code></td>
+<td>-</td>
+<td>Question sequence number</td>
+</tr>
+<tr>
+<td><code>Group</code></td>
+<td><code>string</code></td>
+<td><code>[StringLength(200)]</code></td>
+<td>Group name</td>
+</tr>
+<tr>
+<td><code>GroupOrder</code></td>
+<td><code>int</code></td>
+<td>-</td>
+<td>Group display order</td>
+</tr>
+<tr>
+<td><code>GroupSeqNo</code></td>
+<td><code>int</code></td>
+<td>-</td>
+<td>Group sequence number</td>
+</tr>
+<tr>
+<td><code>Title</code></td>
+<td><code>string</code></td>
+<td><code>[Required, StringLength(200)]</code></td>
+<td>Question title</td>
+</tr>
+<tr>
+<td><code>Description</code></td>
+<td><code>string</code></td>
+<td><code>[Required, StringLength(500)]</code></td>
+<td>Question description</td>
+</tr>
+<tr>
+<td><code>DefaultTags</code></td>
+<td><code>string</code></td>
+<td><code>[StringLength(200)]</code></td>
+<td>Default tags</td>
+</tr>
+<tr>
+<td><code>QuestionDetail</code></td>
+<td><code>ORSG_QuestionDetail</code></td>
+<td><code>[NotMapped, JsonIgnore]</code></td>
+<td>Polymorphic question implementation</td>
+</tr>
+<tr>
+<td><code>QuestionDetailJson</code></td>
+<td><code>string</code></td>
+<td>-</td>
+<td>Serialized question detail</td>
+</tr>
+<tr>
+<td><code>QuestionWeight</code></td>
+<td><code>int</code></td>
+<td>-</td>
+<td>Question weight for scoring</td>
+</tr>
+<tr>
+<td><code>AllowOrdering</code></td>
+<td><code>bool</code></td>
+<td><code>[NotMapped, JsonIgnore]</code></td>
+<td>Allow custom ordering</td>
+</tr>
+</tbody>
+</table>
+<h3 id="relationships">Relationships</h3>
+<pre><code class="lang-mermaid">erDiagram
+    ORSG_Questionnaire ||--o{ ORSG_QuestionDefault : contains
+    ORSG_QuestionDefault ||--|| ORSG_QuestionDetail : has
+</code></pre>
+<h2 id="orsg_questiondetail-abstract">ORSG_QuestionDetail (Abstract)</h2>
+<h3 id="properties-2">Properties</h3>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Access</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Type</code></td>
+<td><code>QuestionType</code></td>
+<td><code>public</code></td>
+<td>Question type discriminator</td>
+</tr>
+<tr>
+<td><code>Position</code></td>
+<td><code>ControlPosition</code></td>
+<td><code>public</code></td>
+<td>Control position</td>
+</tr>
+<tr>
+<td><code>DetailAsJson</code></td>
+<td><code>string</code></td>
+<td><code>protected</code></td>
+<td>Cached JSON representation</td>
+</tr>
+</tbody>
+</table>
+<h3 id="methods-1">Methods</h3>
+<h4 id="getserializeroptions">GetSerializerOptions</h4>
+<pre><code class="lang-csharp">protected JsonSerializerOptions GetSerializerOptions()
+</code></pre>
+<p>Returns standardized JSON serialization options.</p>
+<h4 id="serializetojson">SerializeToJson</h4>
+<pre><code class="lang-csharp">public virtual string SerializeToJson()
+</code></pre>
+<p>Template method for JSON serialization.</p>
+<h4 id="deserializefromjson-abstract">DeserializeFromJson (Abstract)</h4>
+<pre><code class="lang-csharp">public abstract ORSG_QuestionDetail DeserializeFromJson(string json)
+</code></pre>
+<p>Abstract method for type-specific deserialization.</p>
+<h4 id="loadcontentsfrom-abstract">LoadContentsFrom (Abstract)</h4>
+<pre><code class="lang-csharp">public abstract ORSG_QuestionDetail LoadContentsFrom(ORSG_QuestionDetail source)
+</code></pre>
+<p>Abstract method for copying content from another instance.</p>
+<h2 id="orsg_questiondetailempty">ORSG_QuestionDetailEmpty</h2>
+<h3 id="constructor">Constructor</h3>
+<pre><code class="lang-csharp">public ORSG_QuestionDetailEmpty()
+</code></pre>
+<p>Initializes with <code>QuestionType.Empty</code>.</p>
+<h3 id="methods-2">Methods</h3>
+<h4 id="deserializefromjson">DeserializeFromJson</h4>
+<pre><code class="lang-csharp">public override ORSG_QuestionDetailEmpty DeserializeFromJson(string json)
+</code></pre>
+<p>Deserializes JSON to empty question detail with fallback.</p>
+<h4 id="loadcontentsfrom">LoadContentsFrom</h4>
+<pre><code class="lang-csharp">public override ORSG_QuestionDetailEmpty LoadContentsFrom(ORSG_QuestionDetail source)
+</code></pre>
+<p>No-op implementation returning self.</p>
+<h2 id="orsg_questiondetaillist">ORSG_QuestionDetailList</h2>
+<h3 id="properties-3">Properties</h3>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Options</code></td>
+<td><code>ListOption[]</code></td>
+<td>Available options</td>
+<td><code>[]</code></td>
+</tr>
+<tr>
+<td><code>Default</code></td>
+<td><code>string</code></td>
+<td>Default selection</td>
+<td><code>&quot;&quot;</code></td>
+</tr>
+<tr>
+<td><code>SelectionMode</code></td>
+<td><code>ListSelectionMode</code></td>
+<td>Selection mode</td>
+<td><code>Single</code></td>
+</tr>
+<tr>
+<td><code>ControlType</code></td>
+<td><code>ListControlType</code></td>
+<td>UI control type</td>
+<td><code>Buttons</code></td>
+</tr>
+<tr>
+<td><code>Direction</code></td>
+<td><code>ListDirection</code></td>
+<td>Layout direction</td>
+<td><code>Vertical</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="constructor-1">Constructor</h3>
+<pre><code class="lang-csharp">public ORSG_QuestionDetailList()
+</code></pre>
+<p>Initializes with <code>QuestionType.List</code> and safe defaults.</p>
+<h3 id="methods-3">Methods</h3>
+<h4 id="deserializefromjson-1">DeserializeFromJson</h4>
+<pre><code class="lang-csharp">public override ORSG_QuestionDetailList DeserializeFromJson(string json)
+</code></pre>
+<p>Type-safe deserialization with error handling.</p>
+<h4 id="loadcontentsfrom-1">LoadContentsFrom</h4>
+<pre><code class="lang-csharp">public override ORSG_QuestionDetailList LoadContentsFrom(ORSG_QuestionDetail source)
+</code></pre>
+<p>Loads content using builder pattern with type checking.</p>
+<h2 id="listoption">ListOption</h2>
+<h3 id="properties-4">Properties</h3>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Title</code></td>
+<td><code>string</code></td>
+<td>Display text</td>
+<td><code>&quot;&quot;</code></td>
+</tr>
+<tr>
+<td><code>Description</code></td>
+<td><code>string</code></td>
+<td>Additional description</td>
+<td><code>&quot;&quot;</code></td>
+</tr>
+<tr>
+<td><code>Value</code></td>
+<td><code>string</code></td>
+<td>Stored value</td>
+<td><code>&quot;&quot;</code></td>
+</tr>
+<tr>
+<td><code>Weight</code></td>
+<td><code>int</code></td>
+<td>Numeric weight</td>
+<td><code>0</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="constructors">Constructors</h3>
+<pre><code class="lang-csharp">public ListOption()
+public ListOption(string title, string description, string value, int weight = 0)
+</code></pre>
+<h2 id="factory-classes">Factory Classes</h2>
+<h3 id="orsg_questiondetailfactory">ORSG_QuestionDetailFactory</h3>
+<h4 id="createdetailfromjson">CreateDetailFromJson</h4>
+<pre><code class="lang-csharp">public static ORSG_QuestionDetail CreateDetailFromJson(string json)
+</code></pre>
+<p>Creates appropriate concrete type based on JSON content.</p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>json</code> - JSON string containing question data</li>
+</ul>
+<p><strong>Returns:</strong> Concrete <code>ORSG_QuestionDetail</code> instance</p>
+<p><strong>Throws:</strong> Returns <code>ORSG_QuestionDetailEmpty</code> on error</p>
+<h4 id="gettypefromjson">GetTypeFromJson</h4>
+<pre><code class="lang-csharp">public static QuestionType GetTypeFromJson(string json)
+</code></pre>
+<p>Extracts question type from JSON without full deserialization.</p>
+<h3 id="orsg_questiondetailbuilder">ORSG_QuestionDetailBuilder</h3>
+<h4 id="empty">Empty</h4>
+<pre><code class="lang-csharp">public static ORSG_QuestionDetailBuilder Empty()
+</code></pre>
+<p>Creates new builder instance.</p>
+<h4 id="oftype">OfType</h4>
+<pre><code class="lang-csharp">public ORSG_QuestionDetailBuilder OfType(QuestionType type)
+</code></pre>
+<p>Sets the question type for building.</p>
+<h4 id="withlistoptions">WithListOptions</h4>
+<pre><code class="lang-csharp">public ORSG_QuestionDetailBuilder WithListOptions(ListOption[] options, string defaultValue)
+</code></pre>
+<p>Configures list options and default value.</p>
+<h4 id="build">Build</h4>
+<pre><code class="lang-csharp">public ORSG_QuestionDetail Build()
+</code></pre>
+<p>Constructs the final question detail instance.</p>
+<h2 id="enumerations">Enumerations</h2>
+<h3 id="questiontype">QuestionType</h3>
+<pre><code class="lang-csharp">public enum QuestionType
+{
+    Empty = 0,
+    List = 1,
+    ToggleOption = 2
+}
+</code></pre>
+<h3 id="listselectionmode">ListSelectionMode</h3>
+<pre><code class="lang-csharp">public enum ListSelectionMode
+{
+    Single,
+    Multiple
+}
+</code></pre>
+<h3 id="listcontroltype">ListControlType</h3>
+<pre><code class="lang-csharp">public enum ListControlType
+{
+    Buttons,
+    Dropdown,
+    Radio,
+    Checkbox
+}
+</code></pre>
+<h3 id="listdirection">ListDirection</h3>
+<pre><code class="lang-csharp">public enum ListDirection
+{
+    Vertical,
+    Horizontal
+}
+</code></pre>
+<h3 id="controlposition">ControlPosition</h3>
+<pre><code class="lang-csharp">public enum ControlPosition
+{
+    Above,
+    Below,
+    Left,
+    Right
+}
+</code></pre>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong><a href="https://www.orchardrock.co.uk" target="_blank" title="Orchard Rock Development website">Orchard Rock Development</a></strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    
+    <script>
+    mermaid.initialize({
+    startOnLoad: false
+    });
+    mermaid.init(undefined, ".lang-mermaid");
+    </script>  </body>
+</html>
