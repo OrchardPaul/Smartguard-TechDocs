@@ -1,0 +1,8 @@
+- name: About
+  homepage: index.md
+- name: Design - Gadjit
+  href: articles/gadjit/
+  homepage: articles/gadjit/intro.md
+- name: Design - Client
+  href: articles/client/
+  homepage: articles/client/FrameworkDesign.md
