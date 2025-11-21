@@ -1,0 +1,11 @@
+# Clone your repository
+git clone https://github.com/OrchardPaul/Smartguard-TechDocs.git
+cd Smartguard-TechDocs
+
+# Copy your DocFX content to the repository
+# (Copy from c:\Development\ORWeb\GadjIT\_Documentation\docfx_SmartguardDesign\ to _Documentation/docfx_SmartguardDesign/)
+
+# Add and commit
+git add .
+git commit -m "Add DocFX documentation and Azure Static Web Apps workflow"
+git push origin main
