@@ -263,6 +263,7 @@ __pycache__/
 # Azure and Application Secrets
 **/Secrets/
 **/*Secrets*
+**/Secrets/*
 appsettings.*.json
 !appsettings.json
 !appsettings.Development.json
