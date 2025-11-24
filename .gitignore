@@ -259,3 +259,18 @@ paket-files/
 # Python Tools for Visual Studio (PTVS)
 __pycache__/
 *.pyc
+
+# Azure and Application Secrets
+**/Secrets/
+**/*Secrets*
+appsettings.*.json
+!appsettings.json
+!appsettings.Development.json
+!appsettings.Template.json
+!**/appsettings.*.Template.json
+
+# Azure Key Vault and sensitive configuration files
+**/KeyVaultAdmin/Secrets/
+*.secrets.json
+*.config.json
+connectionstrings.*.json
